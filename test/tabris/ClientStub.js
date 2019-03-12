@@ -52,7 +52,7 @@ export default class ClientStub {
   }
 
   /**
-   * @param {NativeCallFilter} filterProperties
+   * @param {NativeCallFilter=} filterProperties
    * @return {NativeCallResult}
    */
   calls(filterProperties) {

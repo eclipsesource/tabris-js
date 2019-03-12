@@ -156,12 +156,17 @@
     "enabled": {
       "type": "boolean",
       "default": "true",
-      "description": "Whether the widget can be operated."
+      "description": "Whether the widget can be interacted with."
+    },
+    "excludeFromLayout": {
+      "type": "boolean",
+      "default": "false",
+      "description": "If set to true the widget will be invisible and ignored in the layout of the parent. Visually it is treated like it was not attached to its parent, but it will still included in the return value of `children()`."
     },
     "visible": {
       "type": "boolean",
       "default": "true",
-      "description": "Whether the widget is visible."
+      "description": "If set to false the widget will be invisible, but still occupy space in the parents layout. Visually it is treated like a widget with an `opacity` of `0`, but in addition the widget can also not be interacted with anymore."
     },
     "layoutData": {
       "type": "LayoutDataValue",

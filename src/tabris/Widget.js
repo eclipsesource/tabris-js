@@ -306,6 +306,22 @@ NativeObject.defineProperties(Widget.prototype, {
   padding: {
     type: 'boxDimensions',
     default: {left: 0, right: 0, top: 0, bottom: 0}
+  },
+  excludeFromLayout: {
+    type: 'boolean',
+    default: false,
+    set(name, value) {
+      if (this._excludeFromLayout !== !!value) {
+        this._excludeFromLayout = !!value;
+        if (this._parent) {
+          this._parent._scheduleRenderChildren();
+        }
+        this._triggerChangeEvent(name, this._excludeFromLayout);
+      }
+    },
+    get() {
+      return !!this._excludeFromLayout;
+    }
   }
 });
 

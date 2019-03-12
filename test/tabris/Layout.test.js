@@ -65,6 +65,27 @@ describe('Layout', function() {
       expect(call.properties.layoutData).to.eql({left: 23, top: 42});
     });
 
+    it('does not SET layoutData on children with excludeFromLayout', function() {
+      widget.excludeFromLayout = true;
+      widget.layoutData = {left: 23, top: 42};
+      client.resetCalls();
+
+      layout.render(parent);
+
+      expect(client.calls({op: 'set', id: widget.cid}).length).to.equal(0);
+    });
+
+    it('does not SET layoutData referencing children with excludeFromLayout', function() {
+      other.layoutData = {top: 'prev() 10'};
+      new TestWidget({excludeFromLayout: true}).insertBefore(other);
+      client.resetCalls();
+
+      layout.render(parent);
+
+      const call = client.calls({op: 'set', id: other.cid})[0];
+      expect(call.properties.layoutData).to.eql({top: [widget.cid, 10]});
+    });
+
     it('does not fail when there are no children', function() {
       expect(() => {
         layout.render(widget);
@@ -126,6 +147,27 @@ describe('Layout', function() {
       layout.render.resetHistory();
 
       widget.dispose();
+      queue.flush();
+
+      expect(layout.render).to.have.been.calledWith(parent);
+    });
+
+    it('triggers render when setting excludeFromLayout on child to true', function() {
+      queue.flush();
+      layout.render.resetHistory();
+
+      widget.excludeFromLayout = true;
+      queue.flush();
+
+      expect(layout.render).to.have.been.calledWith(parent);
+    });
+
+    it('triggers render when setting excludeFromLayout on child to false', function() {
+      widget.excludeFromLayout = true;
+      queue.flush();
+      layout.render.resetHistory();
+
+      widget.excludeFromLayout = false;
       queue.flush();
 
       expect(layout.render).to.have.been.calledWith(parent);

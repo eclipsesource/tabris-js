@@ -157,7 +157,7 @@ export default class Composite extends Widget {
 
   _flushChildren() {
     if (this.$children) {
-      this._nativeSet('children', this.$children.map(toCid));
+      this._nativeSet('children', this.$children.filter(notExcluded).map(toCid));
     }
   }
 
@@ -190,4 +190,8 @@ function asArray(value) {
 
 function toCid(widget) {
   return widget.cid;
+}
+
+function notExcluded(widget) {
+  return !widget.excludeFromLayout;
 }

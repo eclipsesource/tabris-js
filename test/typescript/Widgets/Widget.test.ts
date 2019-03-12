@@ -45,6 +45,7 @@ let classList: string[];
 let cornerRadius: number;
 let elevation: number;
 let enabled: boolean;
+let excludeFromLayout: boolean;
 let height: Dimension|'auto';
 let highlightOnTouch: boolean;
 let id: string;
@@ -67,6 +68,7 @@ baseline = widget.baseline;
 bottomMargin = widget.bottom;
 bounds = widget.bounds;
 boxDim = widget.padding;
+excludeFromLayout = widget.excludeFromLayout;
 centerX = widget.centerX;
 centerY = widget.centerY;
 _class = widget.class;
@@ -101,6 +103,7 @@ widget.data.foo = 42;
 widget.cornerRadius = cornerRadius;
 widget.elevation = elevation;
 widget.enabled = enabled;
+widget.excludeFromLayout = excludeFromLayout;
 widget.height = height;
 widget.highlightOnTouch = highlightOnTouch;
 widget.id = id;
@@ -123,6 +126,7 @@ const properties: Properties<Widget> = {
   cornerRadius,
   elevation,
   enabled,
+  excludeFromLayout,
   height,
   highlightOnTouch,
   id,

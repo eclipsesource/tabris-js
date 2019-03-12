@@ -29,6 +29,7 @@ describe('Widget', function() {
     }
   }
 
+  /** @type {ClientStub} */
   let client;
 
   beforeEach(function() {
@@ -648,6 +649,78 @@ describe('Widget', function() {
           expect(widget.children().toArray()).not.to.contain(child);
         });
 
+      });
+
+    });
+
+    describe('excludeFromLayout', function() {
+
+      /** @type {TestWidget} */
+      let parent;
+
+      /** @type {TestWidget[]} */
+      let children;
+
+      beforeEach(function() {
+        parent = new TestWidget();
+        children = [new TestWidget({id: 'child1'}), new TestWidget({id: 'child2'}), new TestWidget({id: 'child3'})];
+        client.resetCalls();
+      });
+
+      it('defaults to false', function() {
+        expect(parent.excludeFromLayout).to.be.false;
+      });
+
+      it('can be set to true', function() {
+        parent.excludeFromLayout = true;
+        expect(parent.excludeFromLayout).to.be.true;
+      });
+
+      it('set to true removes child from SET operation before append', function() {
+        children[1].excludeFromLayout = true;
+        parent.append(children);
+
+        tabris.flush();
+        expect(client.calls()[0]).to.eql({op: 'set', id: parent.cid, properties: {
+          children: [children[0].cid, children[2].cid]}
+        });
+      });
+
+      it('set to true removes child from SET operation after append', function() {
+        parent.append(children);
+        children[1].excludeFromLayout = true;
+
+        tabris.flush();
+        expect(client.calls()[0]).to.eql({op: 'set', id: parent.cid, properties: {
+          children: [children[0].cid, children[2].cid]}
+        });
+      });
+
+      it('set to true schedules children flush', function() {
+        parent.append(children);
+        tabris.flush();
+        client.resetCalls();
+
+        children[1].excludeFromLayout = true;
+
+        tabris.flush();
+        expect(client.calls()[0]).to.eql({op: 'set', id: parent.cid, properties: {
+          children: [children[0].cid, children[2].cid]}
+        });
+      });
+
+      it('set to false schedules children flush', function() {
+        children[1].excludeFromLayout = true;
+        parent.append(children);
+        tabris.flush();
+        client.resetCalls();
+
+        children[1].excludeFromLayout = false;
+
+        tabris.flush();
+        expect(client.calls()[0]).to.eql({op: 'set', id: parent.cid, properties: {
+          children: [children[0].cid, children[1].cid, children[2].cid]}
+        });
       });
 
     });

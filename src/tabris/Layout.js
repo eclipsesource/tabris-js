@@ -19,7 +19,8 @@ export default class Layout {
     }
     this._handleAddChildEvent = this._handleAddChildEvent.bind(this);
     this._handleRemoveChildEvent = this._handleRemoveChildEvent.bind(this);
-    this._handleChildLayoutDataChangedEvent = this._handleChildLayoutDataChangedEvent.bind(this);
+    this._handleChildPropertyChangedEvent = this._handleChildPropertyChangedEvent.bind(this);
+    this._getLayoutData = this._getLayoutData.bind(this);
     this._renderLayoutData = this._renderLayoutData.bind(this);
     this._addChild = this._addChild.bind(this);
     this._removeChild = this._removeChild.bind(this);
@@ -50,12 +51,12 @@ export default class Layout {
   }
 
   render(composite) {
-    if (composite.$children) {
-      const allLayoutData = composite.$children.map(
-        (child, index) => this._getLayoutData(child, index)
-      );
-      this._renderLayoutData(composite.$children, allLayoutData);
+    const children = getChildrenInLayout(composite);
+    if (!children.length) {
+      return;
     }
+    const allLayoutData = children.map(this._getLayoutData);
+    this._renderLayoutData(children, allLayoutData);
   }
 
   _handleAddChildEvent({child}) {
@@ -70,17 +71,19 @@ export default class Layout {
 
   _addChild(child) {
     child.on({
-      layoutDataChanged: this._handleChildLayoutDataChangedEvent
+      layoutDataChanged: this._handleChildPropertyChangedEvent,
+      excludeFromLayoutChanged: this._handleChildPropertyChangedEvent
     });
   }
 
   _removeChild(child) {
     child.off({
-      layoutDataChanged: this._handleChildLayoutDataChangedEvent
+      layoutDataChanged: this._handleChildPropertyChangedEvent,
+      excludeFromLayoutChanged: this._handleChildPropertyChangedEvent
     });
   }
 
-  _handleChildLayoutDataChangedEvent({target}) {
+  _handleChildPropertyChangedEvent({target}) {
     this._layoutQueue.add(target._parent);
   }
 
@@ -225,7 +228,7 @@ function resolveConstraint(constraint, widget) {
 
 function toCid(ref, widget) {
   if (ref === LayoutData.prev) {
-    const children = getParent(widget)._children();
+    const children = getChildrenInLayout(getParent(widget));
     const index = children.indexOf(widget);
     if (index > 0) {
       return types.NativeObject.encode(children[index - 1]) || 0;
@@ -233,7 +236,7 @@ function toCid(ref, widget) {
     return 0;
   }
   if (ref === LayoutData.next) {
-    const children = getParent(widget)._children();
+    const children = getChildrenInLayout(getParent(widget));
     const index = children.indexOf(widget);
     if (index + 1 < children.length) {
       return types.NativeObject.encode(children[index + 1]) || 0;
@@ -264,6 +267,14 @@ function makeAuto(layoutData, ...props) {
     override[props[i]] = 'auto';
   }
   return LayoutData.from(Object.assign({}, layoutData, override));
+}
+
+function getChildrenInLayout(parent) {
+  return parent.$children ? parent.$children.filter(notExcluded) : [];
+}
+
+function notExcluded(widget) {
+  return !widget.excludeFromLayout;
 }
 
 const emptyParent = {
