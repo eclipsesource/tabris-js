@@ -181,13 +181,9 @@ tabrisMain.on('start', (options) => {
   checkVersion(tabris.version, tabris.app._nativeGet('tabrisJsVersion'));
   if (!options || !options.headless) {
     tabris.contentView = createContentView();
-    createLegacyDelegate('contentView');
     tabris.drawer = createDrawer();
-    createLegacyDelegate('drawer');
     tabris.navigationBar = createNavigationBar();
-    createLegacyDelegate('navigationBar');
     tabris.statusBar = createStatusBar();
-    createLegacyDelegate('statusBar');
     tabris.printer = createPrinter();
   }
   tabris.device = createDevice();
@@ -209,13 +205,3 @@ tabrisMain.on('start', (options) => {
 addDOMDocument(global);
 addDOMEventTargetMethods(global);
 addWindowTimerMethods(global);
-
-function createLegacyDelegate(property) {
-  Object.defineProperty(tabrisMain.ui = tabrisMain.ui || {}, property, {
-    configurable: true,
-    get() {
-      console.warn(`ui.${property} is deprecated and will be removed in 3.0.0!`);
-      return tabrisMain[property];
-    }
-  });
-}
