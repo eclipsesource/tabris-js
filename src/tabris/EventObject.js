@@ -1,3 +1,5 @@
+import {format} from './Formatter';
+
 export default class EventObject {
 
   constructor() {
@@ -16,6 +18,18 @@ export default class EventObject {
 
   preventDefault() {
     this.$defaultPrevented = true;
+  }
+
+  toString() {
+    const header = this.constructor.name + ' { ';
+    const content = Object.getOwnPropertyNames(this)
+      .filter(prop => prop.indexOf('$') !== 0)
+      .map(prop =>
+        `${prop}: ${typeof this[prop] === 'string' ? JSON.stringify(this[prop]) : format(this[prop])}`
+      )
+      .join(', ');
+    const footer = ' }';
+    return header + content + footer;
   }
 
   _initEvent(type, target) {

@@ -6,7 +6,7 @@ describe('EventObject', function() {
   let target, event;
 
   beforeEach(function() {
-    target = {};
+    target = {toString: () => '"Foo"'};
     event = new EventObject();
   });
 
@@ -87,6 +87,24 @@ describe('EventObject', function() {
       it('sets defaultPrevented', function() {
         event.preventDefault();
         expect(event.defaultPrevented).to.be.true;
+      });
+
+    });
+
+    describe('toString', function() {
+
+      it('returns json-like with instance fields', function() {
+        event.foo = 'bar';
+        Object.defineProperty(event, 'bar', {value: true});
+
+        expect(event.toString()).to.match(/^EventObject\s{\s[a-z].*\s}$/);
+        expect(eval('(' + event.toString().slice(12) + ');')).to.deep.equal({
+          type: 'foo',
+          target: 'Foo',
+          timeStamp: event.timeStamp,
+          foo: 'bar',
+          bar: true
+        });
       });
 
     });
