@@ -17,7 +17,7 @@ describe('global object', function() {
   });
 
   it('contains $', function() {
-    expect(global.$).to.equal(tabris.WidgetCollection);
+    expect(global.$).to.equal(tabris.$);
   });
 
 });
@@ -186,7 +186,7 @@ describe('tabris', function() {
     expect(tabris.Layout).to.be.a('function');
     expect(tabris.StackLayout).to.be.a('function');
     expect(tabris.WidgetCollection).to.be.a('function');
-    expect(tabris.$).to.equal(tabris.WidgetCollection);
+    expect(tabris.$).to.be.a('function');
     expect(tabris.Percent).to.be.a('function');
     expect(tabris.LinearGradient).to.be.a('function');
   });

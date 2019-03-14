@@ -2,6 +2,7 @@ import {expect, mockTabris, spy, stub} from '../test';
 import ClientStub from './ClientStub';
 import {createJsxProcessor, jsxFactory} from '../../src/tabris/JsxProcessor';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
+import $ from '../../src/tabris/$';
 import Composite from '../../src/tabris/widgets/Composite';
 import Button from '../../src/tabris/widgets/Button';
 import CheckBox from '../../src/tabris/widgets/CheckBox';
@@ -418,6 +419,95 @@ describe('JsxProcessor', function() {
         expect(() => jsx.createElement('ins', {foo: 'bar'})).to.throw();
         expect(() => jsx.createElement('del', {foo: 'bar'})).to.throw();
         expect(() => jsx.createElement('a', {foo: 'bar'})).to.throw();
+      });
+
+    });
+
+    describe('with $', function() {
+
+      it('creates widgetCollection via children', function() {
+        const collection = jsx.createElement(
+          $,
+          null,
+          jsx.createElement(Button),
+          jsx.createElement(CheckBox),
+          jsx.createElement(Switch)
+        );
+
+        expect(collection).to.be.instanceOf(WidgetCollection);
+        expect(collection.length).to.equal(3);
+        expect(collection[0]).to.be.instanceof(Button);
+        expect(collection[1]).to.be.instanceof(CheckBox);
+        expect(collection[2]).to.be.instanceof(Switch);
+      });
+
+      it('creates widgetCollection from widget array', function() {
+        const collection = jsx.createElement(
+          $,
+          null,
+          [jsx.createElement(Button), jsx.createElement(CheckBox)],
+          jsx.createElement(Switch)
+        );
+
+        expect(collection).to.be.instanceOf(WidgetCollection);
+        expect(collection.length).to.equal(3);
+        expect(collection[0]).to.be.instanceof(Button);
+        expect(collection[1]).to.be.instanceof(CheckBox);
+        expect(collection[2]).to.be.instanceof(Switch);
+      });
+
+      it('creates widgetCollection with non-widget entries converted to TextView', function() {
+        const collection = jsx.createElement(
+          $,
+          null,
+          'foo',
+          [false, null],
+          jsx.createElement(Switch),
+          jsx.createElement(Button),
+          'bar'
+        );
+
+        expect(collection).to.be.instanceOf(WidgetCollection);
+        expect(collection.length).to.equal(4);
+        expect(collection[0]).to.be.instanceof(TextView);
+        expect(collection[0].text).to.equal('foo false null');
+        expect(collection[1]).to.be.instanceof(Switch);
+        expect(collection[2]).to.be.instanceof(Button);
+        expect(collection[3]).to.be.instanceof(TextView);
+        expect(collection[3].text).to.equal('bar');
+      });
+
+      it('creates string from string', function() {
+        const str = jsx.createElement(
+          $,
+          null,
+          'foo bar'
+        );
+
+        expect(str).to.equal('foo bar');
+      });
+
+      it('creates string from string array', function() {
+        const str = jsx.createElement(
+          $,
+          null,
+          'foo',
+          ['bar', '<br/>', 'baz']
+        );
+
+        expect(str).to.equal('foo bar<br/>baz');
+      });
+
+      it('creates string from mixed array without widgets', function() {
+        const str = jsx.createElement(
+          $,
+          null,
+          null,
+          'foo',
+          1
+        );
+
+        expect(str).to.equal('null foo 1');
       });
 
     });

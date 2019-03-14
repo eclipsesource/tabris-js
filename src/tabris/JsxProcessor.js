@@ -1,4 +1,5 @@
 import {omit} from './util';
+import {getCurrentLine} from './util-stacktrace';
 import Listeners from './Listeners';
 
 const MARKUP = {
@@ -54,7 +55,7 @@ export default class JsxProcessor {
       }
       return result;
     } catch (ex) {
-      throw new Error('JSX: ' + ex.message);
+      throw new Error(`JSX: "${ex.message}" ${getCurrentLine(ex)}`);
     }
   }
 
@@ -69,7 +70,7 @@ export default class JsxProcessor {
       if (children && children.length && !MARKUP[el].text) {
         throw new Error(`Element ${el} can not have children`);
       }
-      const text = this.joinTextContent(children, true);
+      const text = joinTextContent(children, true);
       const tagOpen = [el].concat(Object.keys(attributes || {}).map(
         attribute => `${attribute}='${attributes[attribute]}'`
       )).join(' ');
@@ -91,17 +92,7 @@ export default class JsxProcessor {
   }
 
   normalizeChildren(children) {
-    let result = [];
-    for (const child of (children || [])) {
-      if (child.toArray) {
-        result = result.concat(this.normalizeChildren(child.toArray()));
-      } else if (child instanceof Array) {
-        result = result.concat(this.normalizeChildren(child));
-      } else {
-        result.push(child);
-      }
-    }
-    return result;
+    return normalizeChildren(children);
   }
 
   registerListeners(obj, attributes) {
@@ -114,7 +105,7 @@ export default class JsxProcessor {
     }
     const text = attributes && attributes[property]
       ? attributes[property].toString()
-      : this.joinTextContent(content || [], markupEnabled);
+      : joinTextContent(content || [], markupEnabled);
     return Object.assign(attributes || {}, text ? {[property]: text} : {});
   }
 
@@ -145,12 +136,29 @@ export default class JsxProcessor {
     return attribute.startsWith('on') && attribute.charCodeAt(2) <= 90;
   }
 
-  joinTextContent(textArr, markupEnabled) {
-    if (markupEnabled) {
-      return textArr.map(str => str.trim()).join(' ').replace(/\s*<br\s*\/>\s*/g, '<br/>');
-    }
-    return textArr.join(' ');
-  }
-
 }
 
+export function normalizeChildren(children) {
+  let result = [];
+  for (const child of (children || [])) {
+    if (child && child.toArray) {
+      result = result.concat(normalizeChildren(child.toArray()));
+    } else if (child instanceof Array) {
+      result = result.concat(normalizeChildren(child));
+    } else {
+      result.push(child);
+    }
+  }
+  return result;
+}
+
+/**
+ * @param {string[]} textArr
+ * @param {boolean} markupEnabled
+ */
+export function joinTextContent(textArr, markupEnabled) {
+  if (markupEnabled) {
+    return textArr.map(str => (str + '').trim()).join(' ').replace(/\s*<br\s*\/>\s*/g, '<br/>');
+  }
+  return textArr.join(' ');
+}

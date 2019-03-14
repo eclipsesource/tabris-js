@@ -42,7 +42,7 @@ export function formatError(error) {
 
 export function getCurrentLine(error) {
   try {
-    return getStackArray(error)[0];
+    return getStackArray(error)[0].trim();
   } catch (ex) {
     return '';
   }

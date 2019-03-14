@@ -10,6 +10,7 @@ declare var RequestConstructor: typeof Request;
 declare var ResponseConstructor: typeof Response;
 declare var HeadersConstructor: typeof Headers;
 declare var fetchFunction: typeof fetch;
+declare var $Function: typeof $;
 
 export {
   ImageDataConstructor as ImageData,
@@ -22,5 +23,6 @@ export {
   ResponseConstructor as Response,
   HeadersConstructor as Headers,
   fetchFunction as fetch,
-  WidgetCollection as $
+  $Function as $
 };
+

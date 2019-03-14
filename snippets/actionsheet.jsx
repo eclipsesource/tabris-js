@@ -19,5 +19,5 @@ async function showActionSheet() {
     </ActionSheet>
   );
   const {action} = await actionSheet.onClose.promise();
-  contentView.find(TextView).first().text = `${action || 'Nothing'} selected`;
+  $(TextView).set({text: `${action || 'Nothing'} selected`});
 }

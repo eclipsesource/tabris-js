@@ -143,7 +143,8 @@ popover = <tabris.Popover onClose={() => {}} />;
 
 // markup
 
-const markup = <tabris.TextView markupEnabled>
+const markup: string =
+<$>
   normal text<br/><br/>
   <b>bold</b>
   <i>italic</i>
@@ -158,4 +159,4 @@ const markup = <tabris.TextView markupEnabled>
   </span>
   <a href='http://tabrisjs.com'>link</a>
   <a>href optional</a>
-</tabris.TextView>;
+</$>;

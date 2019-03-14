@@ -72,6 +72,7 @@ import Widget from './Widget';
 import WidgetCollection from './WidgetCollection';
 import Worker from './Worker';
 import XMLHttpRequest from './XMLHttpRequest';
+import $ from './$';
 
 import {fetch} from './fetch/fetch';
 import Headers from './fetch/Headers';
@@ -147,7 +148,7 @@ const tabrisMain = Object.assign(new Tabris(), {
   WebView,
   Widget,
   WidgetCollection,
-  $: WidgetCollection,
+  $,
   XMLHttpRequest,
   Worker,
   fetch,
@@ -173,7 +174,7 @@ Object.assign(global, {
   Response,
   JSX: createJsxProcessor(),
   Worker,
-  $: WidgetCollection
+  $
 });
 
 tabrisMain.on('start', (options) => {

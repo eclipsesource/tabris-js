@@ -1,0 +1,68 @@
+{
+  "title": "$",
+  "namespace": "global",
+  "description": "$ is a global helper function that may be used to create instances of `WidgetCollection`, to generate strings from JSX expressions, or to access specific `NativeObject` instances for debugging purposes.",
+  "methods": {
+    "$": [
+      {
+        "generics": "Result extends tabris.Widget = tabris.Widget",
+        "parameters": [
+          {
+            "name": "selector",
+            "type": "Selector",
+            "ts_type": "tabris.Selector<tabris.Widget, Result>",
+            "description": "A selector expression or a predicate function to filter the results."
+          }
+        ],
+        "returns": "WidgetCollection",
+        "ts_returns": "tabris.WidgetCollection<Result>",
+        "description": "A shortcut to [`tabris.contentView.find()`](./Composite.md#find). Returns a collection containing all descendants of contentView that match the given selector. This does *not* include any widgets in the drawer, a popover, or encapsulated in a custom component."
+      },
+      {
+        "parameters": [
+          {
+            "type": "{children: tabris.JSXChildren<tabris.Widget>}|null",
+            "name": "attributes",
+            "description": "This parameter needs to be null since <$> does not support any attributes"
+          },
+          {
+            "type": "tabris.JSXChildren<tabris.Widget>",
+            "name": "children",
+            "description": "The widgets to be included in the resulting WidgetCollection instance."
+          }
+        ],
+        "description": "A JSX stateless functional component that groups all given widgets in a WidgetCollection",
+        "returns": "WidgetCollection",
+        "ts_returns": "tabris.WidgetCollection<tabris.Widget>"
+      },
+      {
+        "ts_only": true,
+        "parameters": [
+          {
+            "type": "{children: string|number|boolean|Array<null|string|number|boolean>}|null",
+            "name": "attributes",
+            "description": "This parameter needs to be null since <$> does not support any attributes."
+          },
+          {
+            "type": "string|number|boolean|Array<null|string|number|boolean>",
+            "name": "children",
+            "description": "The content of the resulting string."
+          }
+        ],
+        "description": "A JSX stateless functional component that joins any given content in to a single string. The text is treated as markup, meaning that multiple whitespaces in succession (including `<br/>`) are reduced to a single one.",
+        "returns": "string"
+      },
+      {
+        "parameters": [
+          {
+            "name": "cidNumber",
+            "type": "number",
+            "description": "The cid number is the trailing part of the [cid](./NativeObject.md#cid) property string."
+          }
+        ],
+        "returns": "tabris.NativeObject",
+        "description": "Returns the non-disposed `NativeObject` instance (e.g. a widget) associated with the given cid number. The number can be obtained via the [cid](./NativeObject.md#cid) property. Example: If the cid of an object is `'$23'` it can be obtained by `$(23)`. The cid is visible in the log when passing a NativeObject to any log method, e.g. [`console.log(widget)`](./console.md#log), or [`console.dirxml(widget)`](./console.md#dirxml). The native object may then be obtained using the developer console or the interactive console feature for the tabris CLI serve command.\n\nThis feature is meant for debugging purposes only. **Using it in production code is dangerous since it allows interfering with the internals of the framework or encapsulated components.** Also, the `cid` of a NativeObject is not stable, meaning it can change each time the code is executed."
+      }
+    ]
+  }
+}

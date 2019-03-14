@@ -44,7 +44,7 @@ contentView.append(
   </WidgetCollection>
 );
 
-// "$" is an alias for WidgetCollection
+// <$> can be used as a shortcut of <WidgetCollection>
 contentView.append(
   <$>
     <Button />
@@ -60,6 +60,19 @@ This is not necessary inside JSX elements:
   <Button />
   <TextView />
 </Composite>
+```
+
+The `<$>` element can also create multiline markup strings:
+
+```jsx
+/** @type {string} **/
+const str =
+  <$>
+    This is <b>some text</b>
+    with multiple lines
+  </$>
+);
+contentView.append(<TextView>{str}</TextView>);
 ```
 
 ## Custom JSX Elements

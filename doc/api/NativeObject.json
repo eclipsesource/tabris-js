@@ -17,7 +17,7 @@
       "type": "string",
       "readonly": true,
       "const": true,
-      "description": "An application-wide unique identifier automatically assigned to all native objects on creation."
+      "description": "An application-wide unique identifier automatically assigned to all native objects on creation. It follows the pattern '$<number>', where the number is incremented for each new NativeObject instance."
     },
     "jsxProperties": {
       "const": true,
