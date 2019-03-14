@@ -163,7 +163,7 @@ thisReturnValue = widget.insertBefore(otherWidget);
 bool = widget.isDisposed();
 composite = widget.parent();
 composite = widget.parent('#foo');
-composite = widget.parent(parent => parent.id === 'foo');
+composite = widget.parent((parentComposite: Composite) => parentComposite.id === 'foo');
 const tf: TabFolder = widget.parent(TabFolder);
 widgetCollection = widget.siblings();
 widgetCollection = widget.siblings(selector);

@@ -8,13 +8,13 @@ Tabris.js offers APIs to find and manipulate widgets anywhere in the UI tree usi
 
 ### Type Selectors
 
-The simplest method to select widgets is to refer to their type. For example, the following statement would select all instances of `CheckBox`.
+The simplest method to select widgets is to refer to their type. For example, the following statement would select all instances of `CheckBox`. [This also works with JSX element names](./JSX.md#stateless-functional-components).
 
 ```js
 page.find('CheckBox')
 ```
 
-You may also give the type via the constructor instead of a string:
+You may also give the type via the constructor or [JSX Element](./JSX.md#stateless-functional-components) instead of a string:
 
 ```js
 page.find(CheckBox)

@@ -1,4 +1,4 @@
-import {WidgetCollection, Transformation, AnimationOptions, Composite, Selector, Widget, $} from 'tabris';
+import {WidgetCollection, Transformation, AnimationOptions, Composite, Selector, Widget, $, TextView} from 'tabris';
 
 let widgetCollection: WidgetCollection = new WidgetCollection([new Composite()]);
 
@@ -35,6 +35,7 @@ let anyReturnValue: any;
 let booleanReturnValue: boolean;
 let numberReturnValue: number;
 let undefinedValue: undefined;
+let textView: TextView|undefined;
 
 voidReturnValue = widgetCollection.animate(properties, options);
 thisReturnValue = fooCollection.appendTo(parent);
@@ -54,6 +55,7 @@ fooCollection = widgetCollection.find(Foo);
 widgetCollection = fooCollection.find();
 widgetCollection = fooCollection.find(selector);
 widget = widgetCollection.first();
+textView = widgetCollection.first(TextView);
 foo = fooCollection.first();
 widget = widgetCollection.first(selector);
 widget = widgetCollection.host;
@@ -65,6 +67,7 @@ widget = widgetCollection.last();
 foo = fooCollection.last();
 widget = widgetCollection.last(selector);
 foo = fooCollection.last(selector);
+textView = fooCollection.last(TextView);
 thisReturnValue = fooCollection.off(event, listener);
 thisReturnValue = fooCollection.on(event, listener);
 thisReturnValue = fooCollection.once(event, listener);

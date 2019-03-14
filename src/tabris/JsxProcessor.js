@@ -15,15 +15,17 @@ const MARKUP = {
 };
 
 export const jsxFactory = Symbol('jsxFactory');
+export const jsxType = Symbol('jsxType');
 
 export function createJsxProcessor() {
-  return new JsxProcessor(jsxFactory);
+  return new JsxProcessor(jsxFactory, jsxType);
 }
 
 export default class JsxProcessor {
 
-  constructor(jsxFactoryKey) {
+  constructor(jsxFactoryKey, jsxTypeKey) {
     this.jsxFactory = jsxFactoryKey;
+    this.jsxType = jsxTypeKey;
   }
 
   createElement(Type, attributes, ...children) {
@@ -45,7 +47,12 @@ export default class JsxProcessor {
       return Type.prototype[this.jsxFactory].call(this, Type, attributes, finalChildren);
     }
     try {
-      return Type.call(this, attributes, finalChildren);
+      const result = Type.call(this, attributes, finalChildren);
+      Type[jsxType] = true;
+      if (result instanceof Object) {
+        result[jsxType] = Type;
+      }
+      return result;
     } catch (ex) {
       throw new Error('JSX: ' + ex.message);
     }

@@ -7,9 +7,11 @@ import Button from '../../src/tabris/widgets/Button';
 import CheckBox from '../../src/tabris/widgets/CheckBox';
 import Switch from '../../src/tabris/widgets/Switch';
 import App from '../../src/tabris/App';
+import TextView from '../../src/tabris/widgets/TextView';
 
 describe('JsxProcessor', function() {
 
+  /** @type {import('../../src/tabris/JsxProcessor').default} */
   let jsx;
 
   beforeEach(function() {
@@ -281,6 +283,34 @@ describe('JsxProcessor', function() {
         jsx.createElement(Foo, null, 'a', 'b', 'c');
 
         expect(mySpy).to.have.been.calledWith(['a', 'b', 'c']);
+      });
+
+      it('supports function name as selector', function() {
+        function Foo() { return new TextView(); }
+        expect(
+          new WidgetCollection([jsx.createElement(Foo)]).first('Foo')
+        ).to.be.instanceOf(TextView);
+      });
+
+      it('supports function as selector', function() {
+        function Foo() { return new TextView(); }
+        expect(
+          new WidgetCollection([jsx.createElement(Foo)]).first(Foo)
+        ).to.be.instanceOf(TextView);
+      });
+
+      it('supports arrow function name as selector', function() {
+        const Foo = () => new TextView();
+        expect(
+          new WidgetCollection([jsx.createElement(Foo)]).first('Foo')
+        ).to.be.instanceOf(TextView);
+      });
+
+      it('supports arrow function as selector', function() {
+        const Foo = () => new TextView();
+        expect(
+          new WidgetCollection([jsx.createElement(Foo)]).first(Foo)
+        ).to.be.instanceOf(TextView);
       });
 
     });

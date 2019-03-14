@@ -93,6 +93,12 @@ const StyledText = (properties: TextView['jsxProperties']) =>
 
 > :point-right: `TextView['jsxProperties']` resolves to the attributes supported by `TextView`. Explained in the next section.
 
+A function that was used as a SFC can also be used as a selector, as can its name:
+
+```jsx
+console.log(contentView.find(StyledText).first() === contentView.find('StyledText').first());
+```
+
 ### Custom Components
 
 Any custom component (a user-defined class extending a built-in widget) can be used as a JSX element right away. The only requirement is that the constructor takes the `properties` object and passes it on to the base class in a `super(properties)` or `set(properties)` call. All attributes are interpreted as either a property or a listener as you would expect.

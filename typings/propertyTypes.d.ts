@@ -214,8 +214,12 @@ export type SelectorString = string;
 /**
  * An expression or a predicate function to select a set of widgets.
  */
-export type Selector<T extends Widget = Widget> = SelectorString | SelectorFunction<T>;
-export type SelectorFunction<T extends Widget> = (widget: T, index: number, collection: WidgetCollection<T>) => boolean;
+export type Selector<
+  Candidate extends Widget = Widget,
+  Result extends Candidate = Candidate
+> = SelectorString | SelectorFunction<Candidate> | Constructor<Result> | SFC<Result>;
+
+export type SelectorFunction<Candidate extends Widget> = (widget: Candidate, index: number, collection: WidgetCollection<Candidate>) => boolean;
 
 /**
  * A positive float, or 0, representing device independent pixels.

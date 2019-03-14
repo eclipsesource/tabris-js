@@ -55,31 +55,20 @@
     },
     "siblings": [
       {
+        "generics": "Result extends Widget = Action|Page",
         "parameters": [
           {
             "name": "selector",
             "type": "Selector",
+            "ts_type": "Selector<Widget, Result>",
             "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],
         "ts_only": true,
         "returns": "WidgetCollection",
-        "ts_returns": "WidgetCollection<Page|Action>",
+        "ts_returns": "WidgetCollection<Result>",
         "description": "Returns a (possibly empty) collection of all siblings of this widget that match the given selector."
-      },
-      {
-        "generics": "U extends Page|Action",
-        "parameters": [
-          {
-            "name": "constructor",
-            "type": "{ new (...args: any[]): U }",
-            "description": "A class to filter the results."
-          }
-        ],
-        "ts_only": true,
-        "returns": "WidgetCollection<U>",
-        "description": "Returns a (possibly empty) collection of all siblings of this widget that are instances of the given class."
       }
     ]
   },

@@ -26,9 +26,10 @@ const widgetB: Widget = new Button();
 let button: Button = new Button();
 let widgetCollection: WidgetCollection<Widget> = new Composite().find();
 let thisReturnValue: Composite;
-let fooCollection: WidgetCollection<Widget>;
+let fooCollection: WidgetCollection<Foo>;
 const selector: Selector = '';
-class Foo extends Composite {}
+class Foo extends Composite { public test: string; }
+const Bar = () => new Foo();
 
 thisReturnValue = widget.append(widgetA, widgetB);
 thisReturnValue = widget.append(widgets);
@@ -39,13 +40,14 @@ thisReturnValue = buttonsComposite.append(new WidgetCollection<Button>([button])
 thisReturnValue = widget.apply({selectorString: properties});
 widgetCollection = widget.children();
 button = buttonsComposite.children()[0];
-button = buttonsComposite.children(button => button.text === 'foo')[0];
+button = buttonsComposite.children((candidate: Button) => candidate.text === 'foo')[0];
 widgetCollection = widget.children(selector);
 fooCollection = widget.children(Foo);
 widgetCollection = widget.find();
 widgetCollection = widget.find(selector);
-widgetCollection = buttonsComposite.find(button => button.text === 'foo');
 fooCollection = widget.find(Foo);
+fooCollection = widget.find(Bar);
+const test: string = widget.find(Bar)[0].test;
 
 // Events
 const target: Composite = widget;

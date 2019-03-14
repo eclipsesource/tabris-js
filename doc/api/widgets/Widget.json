@@ -21,27 +21,16 @@
         "description": "Returns the parent of this widget or `null` if this widget is not appended to a parent."
       },
       {
+        "generics": "Result extends Composite = Composite",
         "parameters": [
           {
             "name": "selector",
             "type": "Selector",
+            "ts_type": "Selector<Composite, Result>",
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],
-        "returns": "Composite",
-        "description": "Returns the first (nearest) parent of this widget that matches the given selector, or `null` if no parent matches."
-      },
-      {
-        "ts_only": true,
-        "generics": "U extends Composite",
-        "parameters": [
-          {
-            "name": "constructor",
-            "type": "{ new (...args: any[]): U }",
-            "description": "A class to filter the results."
-          }
-        ],
-        "returns": "U",
+        "returns": "Result",
         "description": "Returns the first (nearest) parent of this widget that matches the given selector, or `null` if no parent matches."
       }
     ],
@@ -82,30 +71,19 @@
     },
     "siblings": [
       {
+        "generics": "Result extends Widget = Widget",
         "parameters": [
           {
             "name": "selector",
             "type": "Selector",
+            "ts_type": "Selector<Widget, Result>",
             "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],
         "returns": "WidgetCollection",
-        "ts_returns": "WidgetCollection<Widget>",
+        "ts_returns": "WidgetCollection<Result>",
         "description": "Returns a (possibly empty) collection of all siblings of this widget that match the given selector."
-      },
-      {
-        "ts_only": true,
-        "generics": "U extends Widget",
-        "parameters": [
-          {
-            "name": "constructor",
-            "type": "{ new (...args: any[]): U }",
-            "description": "A class to filter the results."
-          }
-        ],
-        "returns": "WidgetCollection<U>",
-        "description": "Returns a (possibly empty) collection of all siblings of this widget that are instances of the given class."
       }
     ],
     "animate": {

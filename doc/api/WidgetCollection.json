@@ -102,58 +102,36 @@
     ],
     "children": [
       {
+        "generics": "Result extends Widget = Widget",
         "parameters": [
           {
             "name": "selector",
             "type": "Selector",
+            "ts_type": "Selector<Widget, Result>",
             "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],
         "returns": "WidgetCollection",
-        "ts_returns": "WidgetCollection<Widget>",
+        "ts_returns": "WidgetCollection<Result>",
         "description": "Returns a collection containing all children of all widgets in this collection that match the given selector."
-      },
-      {
-        "ts_only": true,
-        "generics": "U extends Widget",
-        "parameters": [
-          {
-            "name": "constructor",
-            "type": "{ new (...args: any[]): U }",
-            "description": "A class to filter the results."
-          }
-        ],
-        "returns": "WidgetCollection<U>",
-        "description": "Returns a collection containing all children of all widgets in this collection that are instances of the given class."
       }
     ],
     "find": [
       {
+        "generics": "Result extends Widget = Widget",
         "parameters": [
           {
             "name": "selector",
             "type": "Selector",
+            "ts_type": "Selector<Widget, Result>",
             "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],
         "returns": "WidgetCollection",
-        "ts_returns": "WidgetCollection<Widget>",
+        "ts_returns": "WidgetCollection<Result>",
         "description": "Returns a collection containing all descendants of all widgets in this collection that match the given selector."
-      },
-      {
-        "ts_only": true,
-        "generics": "U extends Widget",
-        "parameters": [
-          {
-            "name": "constructor",
-            "type": "{ new (...args: any[]): U }",
-            "description": "A class to filter the results."
-          }
-        ],
-        "returns": "WidgetCollection<U>",
-        "description": "Returns a collection containing all descendants of all widgets in this collection that are instances of the given class."
       }
     ],
     "parent": {
@@ -194,44 +172,35 @@
     },
     "first": [
       {
+        "generics": "Result extends T = T",
         "parameters": [
           {
             "name": "selector",
             "type": "Selector",
+            "ts_type": "Selector<T, Result>",
             "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],
         "returns": "Widget",
-        "ts_returns": "T|undefined",
+        "ts_returns": "Result|undefined",
         "description": "Returns the first widget in the collection that is matched by the selector. Without selector, it is the same as `collection[0]`."
-      },
-      {
-        "ts_only": true,
-        "generics": "U extends Widget",
-        "parameters": [
-          {
-            "name": "constructor",
-            "type": "{ new (...args: any[]): U }|undefined",
-            "description": "A class to filter the results."
-          }
-        ],
-        "returns": "U",
-        "description": "Returns the first widget in the collection that is an instance of the given class."
       }
     ],
     "last": [
       {
+        "generics": "Result extends T = T",
         "parameters": [
           {
             "name": "selector",
             "type": "Selector",
+            "ts_type": "Selector<T, Result>",
             "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],
         "returns": "Widget",
-        "ts_returns": "T | undefined",
+        "ts_returns": "Result | undefined",
         "description": "Returns the last widget in the collection that is matched by the selector. Without selector, it is the same as `collection[collection.length - 1]`."
       },
       {
@@ -267,29 +236,17 @@
     },
     "filter": [
       {
+        "generics": "Result extends T = T",
         "parameters": [
           {
             "name": "selector",
-            "type": "Selector<T>",
+            "type": "Selector<T, Result>",
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],
         "returns": "WidgetCollection",
-        "ts_returns": "WidgetCollection<T>",
+        "ts_returns": "WidgetCollection<Result>",
         "description": "Returns a new *WidgetCollection* containing all widgets in this collection that match the given selector."
-      },
-      {
-        "ts_only": true,
-        "generics": "U extends Widget",
-        "parameters": [
-          {
-            "name": "constructor",
-            "type": "{ new (...args: any[]): U }",
-            "description": "A class to filter the results."
-          }
-        ],
-        "returns": "WidgetCollection<U>",
-        "description": "Returns a new *WidgetCollection* containing all widgets in this collection that are instances of the given class."
       }
     ],
     "indexOf": {

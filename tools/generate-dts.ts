@@ -48,6 +48,7 @@ export interface Listeners<EventData extends object = MinimalEventObject<object>
   (listener: Listener<ExtendedEvent<EventData>>): TargetType<EventData>;
 }
 export type JSXChildren<T extends Widget> = T|WidgetCollection<T>|Array<T|WidgetCollection<T>>|undefined;
+export type SFC<T> = (attributes: object|null, children: any[]) => T;
 type Flatten<T> = T|Array<T>|undefined;
 
 export as namespace tabris;

@@ -66,117 +66,71 @@
     ],
     "children": [
       {
+        "generics": "Result extends ChildType = ChildType",
         "parameters": [
           {
             "name": "selector",
-            "type": "Selector<ChildType>",
+            "type": "Selector",
+            "ts_type": "Selector<ChildType, Result>",
             "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],
         "returns": "WidgetCollection",
-        "ts_returns": "WidgetCollection<ChildType>",
+        "ts_returns": "WidgetCollection<Result>",
         "description": "Returns a (possibly empty) collection of all children of this widget that match the given selector.\n\nWhen writing custom UI components it may be useful to overwrite this method to prevent access to the internal children by external code. Doing so also affects `find` and `apply`, on this widget as well as on all parents, thereby preventing accidental clashes of widget id or class values. See also `_children`, `_find` and `_apply`."
-      },
-      {
-        "ts_only": true,
-        "generics": "U extends Widget",
-        "parameters": [
-          {
-            "name": "constructor",
-            "type": "{ new (...args: any[]): U }",
-            "description": "A class to filter the results."
-          }
-        ],
-        "returns": "WidgetCollection<U>",
-        "description": "Returns a collection containing all children of all widgets in this collection that are instances of the given class."
       }
     ],
     "_children": [
       {
+        "generics": "Result extends ChildType = ChildType",
         "protected": true,
         "parameters": [
           {
             "name": "selector",
-            "type": "Selector<ChildType>",
+            "type": "Selector",
+            "ts_type": "Selector<ChildType, Result>",
             "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],
         "returns": "WidgetCollection",
-        "ts_returns": "WidgetCollection<ChildType>",
-        "description": "Identical to the `children` method, but intended to be used by subclasses in case the `children` method was overwritten. See `children` for details."
-      },
-      {
-        "protected": true,
-        "ts_only": true,
-        "generics": "U extends Widget",
-        "parameters": [
-          {
-            "name": "constructor",
-            "type": "{ new (...args: any[]): U }",
-            "description": "A class to filter the results."
-          }
-        ],
-        "returns": "WidgetCollection<U>",
+        "ts_returns": "WidgetCollection<Result>",
         "description": "Identical to the `children` method, but intended to be used by subclasses in case the `children` method was overwritten. See `children` for details."
       }
     ],
     "find": [
       {
+        "generics": "Result extends Widget = Widget",
         "parameters": [
           {
             "name": "selector",
-            "type": "Selector<ChildType>",
+            "type": "Selector",
+            "ts_type": "Selector<Widget, Result>",
             "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],
         "returns": "WidgetCollection",
-        "ts_returns": "WidgetCollection<Widget>",
+        "ts_returns": "WidgetCollection<Result>",
         "description": "Returns a collection containing all descendants of all widgets in this collection that match the given selector.\n\nIf you wish to always exclude specific \"internal\" children from the result, overwrite the `children` method on their parent. See `children` for details."
-      },
-      {
-        "ts_only": true,
-        "generics": "U extends Widget",
-        "parameters": [
-          {
-            "name": "constructor",
-            "type": "{ new (...args: any[]): U }",
-            "description": "A class to filter the results."
-          }
-        ],
-        "returns": "WidgetCollection<U>",
-        "description": "Returns a collection containing all descendants of all widgets in this collection that match the given selector.\n\nIf you wish to always exclude  specific \"internal\" children from the result, overwrite the `children` method on their parent. See `children` for details."
       }
     ],
     "_find": [
       {
+        "generics": "Result extends Widget = Widget",
         "protected": true,
         "parameters": [
           {
             "name": "selector",
-            "type": "Selector<ChildType>",
+            "type": "Selector",
+            "ts_type": "Selector<Widget, Result>",
             "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],
         "returns": "WidgetCollection",
-        "ts_returns": "WidgetCollection<Widget>",
-        "description": "Identical to the `find` method, but intended to be used by subclasses in case the `children` method was overwritten. See `children` for details."
-      },
-      {
-        "ts_only": true,
-        "protected": true,
-        "generics": "U extends Widget",
-        "parameters": [
-          {
-            "name": "constructor",
-            "type": "{ new (...args: any[]): U }",
-            "description": "A class to filter the results."
-          }
-        ],
-        "returns": "WidgetCollection<U>",
+        "ts_returns": "WidgetCollection<Result>",
         "description": "Identical to the `find` method, but intended to be used by subclasses in case the `children` method was overwritten. See `children` for details."
       }
     ],
