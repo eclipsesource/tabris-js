@@ -83,6 +83,7 @@ let widgetCollection: tabris.WidgetCollection = <tabris.WidgetCollection><tabris
 widgetCollection = <tabris.WidgetCollection>{[new tabris.Button(), new tabris.TextView()]}</tabris.WidgetCollection>;
 widgetCollection = <tabris.WidgetCollection children={[new tabris.Button(), new tabris.TextView()]} />;
 widgetCollection = <tabris.$><tabris.Button/><tabris.TextView/></tabris.$>;
+widgetCollection = <$><tabris.Button/><tabris.TextView/></$>;
 
 // Popup
 

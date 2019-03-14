@@ -172,7 +172,8 @@ Object.assign(global, {
   Request,
   Response,
   JSX: createJsxProcessor(),
-  Worker
+  Worker,
+  $: WidgetCollection
 });
 
 tabrisMain.on('start', (options) => {

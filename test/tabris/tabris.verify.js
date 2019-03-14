@@ -16,6 +16,10 @@ describe('global object', function() {
     expect(global.fetch).to.be.a('function');
   });
 
+  it('contains $', function() {
+    expect(global.$).to.equal(tabris.WidgetCollection);
+  });
+
 });
 
 describe('window', function() {
