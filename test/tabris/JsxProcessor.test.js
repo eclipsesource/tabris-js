@@ -223,14 +223,14 @@ describe('JsxProcessor', function() {
       expect(() => jsx.createElement(class Foo {
         set() {}
         append() {}
-      }), null).to.throw(Error, 'JSX: Unsupported type Foo');
+      }), null).to.throw(Error, /^JSX: .+/);
     });
 
-    it('fails for non-widget named custom type', function() {
+    it('fails for non-widget anonymous custom type', function() {
       expect(() => jsx.createElement(class {
         set() {}
         append() {}
-      }, null)).to.throw(Error, 'JSX: Unsupported type');
+      }, null)).to.throw(Error, /^JSX: .+/);
     });
 
     it('fails for string pointing to non-function', function() {
@@ -240,6 +240,49 @@ describe('JsxProcessor', function() {
 
     it('fails for unrecognized string', function() {
       expect(() => jsx.createElement('unknownWidget', null)).to.throw();
+    });
+
+    describe('with stateless functional components', function() {
+
+      it('calls named non-constructor function', function() {
+        function Foo() {return new Date();}
+        expect(jsx.createElement(Foo)).to.be.instanceOf(Date);
+      });
+
+      it('calls anonymous non-constructor function', function() {
+        expect(jsx.createElement(function() {
+          return new Date();
+        })).to.be.instanceOf(Date);
+      });
+
+      it('calls anonymous non-constructor function', function() {
+        expect(jsx.createElement(function() {
+          return new Date();
+        })).to.be.instanceOf(Date);
+      });
+
+      it('calls arrow function', function() {
+        expect(jsx.createElement(() => new Date())).to.be.instanceOf(Date);
+      });
+
+      it('passes properties', function() {
+        const mySpy = spy();
+        function Foo(props) { mySpy(props); }
+
+        jsx.createElement(Foo, {foo: 'bar'});
+
+        expect(mySpy).to.have.been.calledWith({foo: 'bar'});
+      });
+
+      it('passes children', function() {
+        const mySpy = spy();
+        function Foo(props, children) { mySpy(children); }
+
+        jsx.createElement(Foo, null, 'a', 'b', 'c');
+
+        expect(mySpy).to.have.been.calledWith(['a', 'b', 'c']);
+      });
+
     });
 
     describe('with custom type', function() {

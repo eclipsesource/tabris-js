@@ -43,10 +43,12 @@ export default class JsxProcessor {
     }
     if (Type.prototype && Type.prototype[this.jsxFactory]) {
       return Type.prototype[this.jsxFactory].call(this, Type, attributes, finalChildren);
-    } else if (!Type.prototype) {
-      return Type.call(this, attributes, finalChildren);
     }
-    throw new Error(`JSX: Unsupported type ${Type.name}`);
+    try {
+      return Type.call(this, attributes, finalChildren);
+    } catch (ex) {
+      throw new Error('JSX: ' + ex.message);
+    }
   }
 
   createIntrinsicElement(el, attributes, children) {
