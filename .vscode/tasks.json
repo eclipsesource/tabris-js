@@ -47,14 +47,14 @@
         "args": [
           "-c",
           "cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris --no-save && tabris serve  -a -i -w -m ./dist/${fileBasenameNoExtension}.js"
-        ],
+        ]
       },
       "osx": {
         "command": "bash",
         "args": [
           "-c",
           "cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris --no-save && tabris serve  -a -i -w -m ./dist/${fileBasenameNoExtension}.js"
-        ],
+        ]
       },
       "windows": {
         "command": "cmd",
@@ -75,14 +75,14 @@
         "args": [
           "-c",
           "grunt clean build && cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris --no-save && tabris serve -a -i -w -m ./dist/${fileBasenameNoExtension}.js"
-        ],
+        ]
       },
       "linux": {
         "command": "bash",
         "args": [
           "-c",
           "grunt clean build && cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris --no-save && tabris serve -a -i -w -m ./dist/${fileBasenameNoExtension}.js"
-        ],
+        ]
       },
       "windows": {
         "command": "cmd",
@@ -104,14 +104,14 @@
         "args": [
           "-c",
           "cd ${fileDirname} && npm remove tabris && npm install tabris --no-save && tabris serve -a -i -w -m ./dist/${fileBasenameNoExtension}.js"
-        ],
+        ]
       },
       "linux": {
         "command": "bash",
         "args": [
           "-c",
           "cd ${fileDirname} && npm remove tabris && npm install tabris --no-save && tabris serve -a -i -w -m ./dist/${fileBasenameNoExtension}.js"
-        ],
+        ]
       },
       "windows": {
         "command": "cmd",
@@ -139,6 +139,19 @@
       "args": [
         "exec:test_spec",
         "--spec=${file}"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "test spec (bail)",
+      "command": "node",
+      "args": [
+        "node_modules/mocha/bin/mocha",
+        "--colors",
+        "--require",
+        "babel-core/register",
+        "--bail",
+        "${file}"
       ],
       "group": {
         "kind": "test",
