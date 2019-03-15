@@ -170,7 +170,7 @@ describe('JsxProcessor', function() {
 
       expect(collection).to.be.instanceof(WidgetCollection);
       expect(collection.length).to.equal(1);
-      expect(fn).to.have.been.calledWith({foo: 'bar'}, [{child: 1}, {child: 2}]);
+      expect(fn).to.have.been.calledWith({foo: 'bar', children: [{child: 1}, {child: 2}]});
     });
 
     it('creates widgetCollection with children', function() {
@@ -279,9 +279,9 @@ describe('JsxProcessor', function() {
 
       it('passes children', function() {
         const mySpy = spy();
-        function Foo(props, children) { mySpy(children); }
+        function Foo(props) { mySpy(props.children); }
 
-        jsx.createElement(Foo, null, 'a', 'b', 'c');
+        jsx.createElement(Foo, {children: ['a', 'b', 'c']});
 
         expect(mySpy).to.have.been.calledWith(['a', 'b', 'c']);
       });
@@ -323,7 +323,7 @@ describe('JsxProcessor', function() {
       beforeEach(function() {
         Foo = class {
           constructor(args) { this.args = args; }
-          [jsxFactory](type, props, children) { return new Foo([type, props, children]); }
+          [jsxFactory](type, props) { return new Foo([type, props]); }
         };
       });
 
@@ -333,7 +333,7 @@ describe('JsxProcessor', function() {
 
         jsx.createElement(Foo, props, 'a', 'b');
 
-        expect(Foo.prototype[jsxFactory]).to.have.been.calledWith(Foo, props, ['a', 'b']);
+        expect(Foo.prototype[jsxFactory]).to.have.been.calledWith(Foo, {foo: 'bar', children: ['a', 'b']});
       });
 
       it('calls factory with children from properties', function() {
@@ -342,7 +342,7 @@ describe('JsxProcessor', function() {
 
         jsx.createElement(Foo, props);
 
-        expect(Foo.prototype[jsxFactory]).to.have.been.calledWith(Foo, {foo: 'bar'}, ['a', 'b']);
+        expect(Foo.prototype[jsxFactory]).to.have.been.calledWith(Foo, {foo: 'bar', children: ['a', 'b']});
       });
 
       it('calls factory with processor context', function() {
@@ -361,13 +361,13 @@ describe('JsxProcessor', function() {
       it('factory supports super call', function() {
         class Bar extends Foo {
           [jsxFactory]() {
-            return super[jsxFactory](Bar, {a: 'b'}, ['a', 'b']);
+            return super[jsxFactory](Bar, {a: 'b', children: ['a', 'b']});
           }
         }
 
         const bar = jsx.createElement(Bar, {a: 'b'}, 'a', 'b');
 
-        expect(bar.args).to.deep.equal([Bar, {a: 'b'}, ['a', 'b']]);
+        expect(bar.args).to.deep.equal([Bar, {a: 'b', children: ['a', 'b']}]);
       });
 
     });

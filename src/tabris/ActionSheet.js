@@ -41,19 +41,20 @@ export default class ActionSheet extends Popup {
   }
 
   /** @this {import("../JsxProcessor").default} */
-  [jsxFactory](Type, props, children) {
-    const flatChildren = this.normalizeChildren(children);
-    const propsWithActions = this.withContentChildren(
-      props,
-      flatChildren.filter(child => child instanceof Object),
+  [jsxFactory](Type, attributes) {
+    const children = this.getChildren(attributes) || [];
+    let normalAttributes = this.withoutChildren(attributes);
+    normalAttributes = this.withContentChildren(
+      normalAttributes,
+      children.filter(child => child instanceof Object),
       'actions'
     );
-    const finalProps = this.withContentText(
-      propsWithActions,
-      flatChildren.filter(child => !(child instanceof Object)),
+    normalAttributes = this.withContentText(
+      normalAttributes,
+      children.filter(child => !(child instanceof Object)),
       'message'
     );
-    return this.createNativeObject(Type, finalProps);
+    return this.createNativeObject(Type, normalAttributes);
   }
 
 }
@@ -111,8 +112,10 @@ export class ActionSheetItem {
   }
 
   /** @this {import("./JsxProcessor").default} */
-  [jsxFactory](Type, props, children) {
-    return new Type(this.withContentText(props, children, 'title'));
+  [jsxFactory](Type, attributes) {
+    const children = this.getChildren(attributes);
+    const normalAttributes = this.withoutChildren(attributes);
+    return new Type(this.withContentText(normalAttributes, children, 'title'));
   }
 
 }

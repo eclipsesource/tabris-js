@@ -195,8 +195,8 @@ export default class Widget extends NativeObject {
   }
 
   /** @this {import("../JsxProcessor").default} */
-  [jsxFactory](Type, props, children) {
-    return this.createNativeObject(Type, props, children);
+  [jsxFactory](Type, attributes) {
+    return this.createNativeObject(Type, attributes);
   }
 
 }

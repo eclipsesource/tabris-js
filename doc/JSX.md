@@ -85,23 +85,23 @@ A "stateless function component" (SFC) is essentially a factory that can be used
 
 * Name starts with an upper case.
 * Returns a JSX supported value, e.g. a widget or array of widgets.
-* Takes a plain object as the first parameter. (This represents the attributes.)
-* Takes am array as the second parameter. (This represents the child elements.)
+* Takes a plain object as the first parameter. (This contains the attributes and children.)
 
 A SFC that initializes an existing widget with new default values could look like this:
 
 ```jsx
-const StyledText = properties => <TextView textColor='red' {...properties} />;
+const StyledText = attributes => <TextView textColor='red' {...attributes} />;
 
 // example usage:
 contentView.append(<StyledText>Hello World!</StyledText>);
 ```
+If the element has children (everything within the element's body) they are mapped to the attribute "children". Therefore `<Foo><Bar/></Foo>` is treated like `<Foo children={<Bar/>}/>`.
 
-In TypeScript you need to give the proper type of the properties object and children:
+In TypeScript you need to give the proper type of the attributes object:
 
 ```tsx
-const StyledText = (properties: TextView['jsxProperties']) =>
-  <TextView textColor='red' {...properties} />;
+const StyledText = (attributes: TextView['jsxProperties']) =>
+  <TextView textColor='red' {...attributes} />;
 ```
 
 > :point-right: `TextView['jsxProperties']` resolves to the attributes supported by `TextView`. Explained in the next section.

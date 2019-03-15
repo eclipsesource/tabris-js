@@ -39,10 +39,14 @@ export default class Popover extends Popup {
     }
   }
 
-  /** @this {import("./JsxProcessor").default} */
-  [jsxFactory](Type, props, children) {
-    const result = super[jsxFactory](Type, props);
-    result.contentView.append(this.normalizeChildren(children));
+  /** @this {import("../JsxProcessor").default} */
+  [jsxFactory](Type, attributes) {
+    const children = this.getChildren(attributes);
+    const normalAttributes = this.withoutChildren(attributes);
+    const result = super[jsxFactory](Type, normalAttributes);
+    if (children && children.length) {
+      result.contentView.append(children);
+    }
     return result;
   }
 

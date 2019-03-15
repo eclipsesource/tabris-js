@@ -48,19 +48,20 @@ export default class AlertDialog extends Popup {
   }
 
   /** @this {import("../JsxProcessor").default} */
-  [jsxFactory](Type, props, children) {
-    const flatChildren = this.normalizeChildren(children);
-    const propsWithTextInputs = this.withContentChildren(
-      props,
-      flatChildren.filter(child => child instanceof Object),
+  [jsxFactory](Type, attributes) {
+    const children = this.getChildren(attributes) || [];
+    let normalAttributes = this.withoutChildren(attributes);
+    normalAttributes = this.withContentChildren(
+      normalAttributes,
+      children.filter(child => child instanceof Object),
       'textInputs'
     );
-    const finalProps = this.withContentText(
-      propsWithTextInputs,
-      flatChildren.filter(child => !(child instanceof Object)),
+    normalAttributes = this.withContentText(
+      normalAttributes,
+      children.filter(child => !(child instanceof Object)),
       'message'
     );
-    return super[jsxFactory](Type, finalProps);
+    return super[jsxFactory](Type, normalAttributes);
   }
 
 }

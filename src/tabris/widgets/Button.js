@@ -34,8 +34,14 @@ export default class Button extends Widget {
   }
 
   /** @this {import("../JsxProcessor").default} */
-  [jsxFactory](Type, props, children) {
-    return super[jsxFactory](Type, this.withContentText(props, children, 'text'));
+  [jsxFactory](Type, attributes) {
+    const children = this.getChildren(attributes);
+    const normalAttributes = this.withoutChildren(attributes);
+    return super[jsxFactory](Type, this.withContentText(
+      normalAttributes,
+      children,
+      'text'
+    ));
   }
 
 }

@@ -40,12 +40,14 @@ export default class TextView extends Widget {
   }
 
   /** @this {import("../JsxProcessor").default} */
-  [jsxFactory](Type, props, children) {
+  [jsxFactory](Type, attributes) {
+    const children = this.getChildren(attributes);
+    const normalAttributes = this.withoutChildren(attributes);
     return super[jsxFactory](Type, this.withContentText(
-      props,
+      normalAttributes,
       children,
       'text',
-      props ? props.markupEnabled : false
+      attributes ? attributes.markupEnabled : false
     ));
   }
 

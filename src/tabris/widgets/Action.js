@@ -13,8 +13,14 @@ export default class Action extends Widget {
   }
 
   /** @this {import("../JsxProcessor").default} */
-  [jsxFactory](Type, props, children) {
-    return super[jsxFactory](Type, this.withContentText(props, children, 'title'));
+  [jsxFactory](Type, attributes) {
+    const children = this.getChildren(attributes);
+    const normalAttributes = this.withoutChildren(attributes);
+    return super[jsxFactory](Type, this.withContentText(
+      normalAttributes,
+      children,
+      'title'
+    ));
   }
 
 }

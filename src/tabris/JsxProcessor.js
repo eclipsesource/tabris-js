@@ -3,16 +3,16 @@ import {getCurrentLine} from './util-stacktrace';
 import Listeners from './Listeners';
 
 const MARKUP = {
-  br: {text: false, attributes: {}},
-  b: {text: true, attributes: {}},
-  span: {text: true, attributes: {}},
-  big: {text: true, attributes: {}},
-  i: {text: true, attributes: {}},
-  small: {text: true, attributes: {}},
-  strong: {text: true, attributes: {}},
-  ins: {text: true, attributes: {}},
-  del: {text: true, attributes: {}},
-  a: {text: true, attributes: {href: 'string'}}
+  br: {},
+  b: {children: 'object'},
+  span: {children: 'object'},
+  big: {children: 'object'},
+  i: {children: 'object'},
+  small: {children: 'object'},
+  strong: {children: 'object'},
+  ins: {children: 'object'},
+  del: {children: 'object'},
+  a: {href: 'string', children: 'object'}
 };
 
 export const jsxFactory = Symbol('jsxFactory');
@@ -36,19 +36,24 @@ export default class JsxProcessor {
     if (attributes && attributes.children && children && children.length) {
       throw new Error(`JSX: Children for type ${Type} given twice.`);
     }
+    // Children may be part of attributes or given as varargs or both.
+    // For JSX factories/functional components they should always be part of attributes
     const finalChildren = (children && children.length ? children : null)
-      || ((attributes && attributes.children && attributes.children.length) ? attributes.children : []);
-    if (attributes && attributes.children) {
-      delete attributes.children;
+      || ((attributes && attributes.children && attributes.children.length) ? attributes.children : null);
+    const finalAttributes = Object.assign({}, attributes || {});
+    if (finalChildren && finalChildren.length) {
+      finalAttributes.children = finalChildren;
+    } else {
+      delete finalAttributes.children;
     }
     if (typeof Type === 'string') {
-      return this.createIntrinsicElement(Type, attributes, finalChildren);
+      return this.createIntrinsicElement(Type, finalAttributes);
     }
     if (Type.prototype && Type.prototype[this.jsxFactory]) {
-      return Type.prototype[this.jsxFactory].call(this, Type, attributes, finalChildren);
+      return Type.prototype[this.jsxFactory].call(this, Type, finalAttributes);
     }
     try {
-      const result = Type.call(this, attributes, finalChildren);
+      const result = Type.call(this, finalAttributes);
       Type[jsxType] = true;
       if (result instanceof Object) {
         result[jsxType] = Type;
@@ -59,19 +64,20 @@ export default class JsxProcessor {
     }
   }
 
-  createIntrinsicElement(el, attributes, children) {
+  createIntrinsicElement(el, attributes) {
     if (el in MARKUP) {
       Object.keys(attributes || {}).forEach(attribute => {
         const attrType = typeof attributes[attribute];
-        if (attrType !== MARKUP[el].attributes[attribute]) {
-          throw new Error(`Element ${el} does not a support attribute ${attribute} of type ${attrType}`);
+        if (attrType !== MARKUP[el][attribute]) {
+          if (attribute === 'children') {
+            throw new Error(`Element ${el} can not have children`);
+          } else {
+            throw new Error(`Element ${el} does not a support attribute ${attribute} of type ${attrType}`);
+          }
         }
       });
-      if (children && children.length && !MARKUP[el].text) {
-        throw new Error(`Element ${el} can not have children`);
-      }
-      const text = joinTextContent(children, true);
-      const tagOpen = [el].concat(Object.keys(attributes || {}).map(
+      const text = joinTextContent(attributes.children, true);
+      const tagOpen = [el].concat(Object.keys(attributes || {}).filter(attr => attr !== 'children').map(
         attribute => `${attribute}='${attributes[attribute]}'`
       )).join(' ');
       if (text) {
@@ -82,17 +88,28 @@ export default class JsxProcessor {
     throw new Error(`JSX: Unsupported type ${el}`);
   }
 
-  createNativeObject(Type, attributes, children) {
-    if (children && children.length) {
+  createNativeObject(Type, attributes) {
+    if (attributes && 'children' in attributes) {
       throw new Error(`JSX: ${Type.name} can not have children`);
     }
-    const result = new Type(this.getProperties(attributes || {}));
+    const result = new Type(this.withoutListeners(attributes || {}));
     this.registerListeners(result, attributes);
     return result;
   }
 
-  normalizeChildren(children) {
-    return normalizeChildren(children);
+  getChildren(attributes) {
+    if (!attributes || !('children' in attributes)) {
+      return null;
+    }
+    return normalizeChildren(attributes.children);
+  }
+
+  withoutChildren(attributes) {
+    return omit(attributes, ['children']);
+  }
+
+  withoutListeners(attributes) {
+    return omit(attributes, Object.keys(attributes).filter(this.isEventAttribute));
   }
 
   registerListeners(obj, attributes) {
@@ -117,10 +134,6 @@ export default class JsxProcessor {
     return Object.assign(attributes || {}, children ? {[property]: children} : {});
   }
 
-  getProperties(attributes) {
-    return omit(attributes, Object.keys(attributes).filter(this.isEventAttribute));
-  }
-
   getListeners(attributes) {
     const listeners = {};
     for (const attribute in attributes) {
@@ -138,27 +151,36 @@ export default class JsxProcessor {
 
 }
 
+/**
+ * Converts any value to a flat array.
+ */
 export function normalizeChildren(children) {
-  let result = [];
-  for (const child of (children || [])) {
-    if (child && child.toArray) {
-      result = result.concat(normalizeChildren(child.toArray()));
-    } else if (child instanceof Array) {
-      result = result.concat(normalizeChildren(child));
-    } else {
-      result.push(child);
+  if (children instanceof Array) {
+    let result = [];
+    for (const child of children) {
+      if (child && child.toArray) {
+        result = result.concat(normalizeChildren(child.toArray()));
+      } else if (child instanceof Array) {
+        result = result.concat(normalizeChildren(child));
+      } else {
+        result.push(child);
+      }
     }
+    return result;
   }
-  return result;
+  return [children];
 }
 
 /**
- * @param {string[]} textArr
+ * @param {string[]} textArray
  * @param {boolean} markupEnabled
  */
-export function joinTextContent(textArr, markupEnabled) {
-  if (markupEnabled) {
-    return textArr.map(str => (str + '').trim()).join(' ').replace(/\s*<br\s*\/>\s*/g, '<br/>');
+export function joinTextContent(textArray, markupEnabled) {
+  if (!textArray) {
+    return null;
   }
-  return textArr.join(' ');
+  if (markupEnabled) {
+    return textArray.map(str => (str + '').trim()).join(' ').replace(/\s*<br\s*\/>\s*/g, '<br/>');
+  }
+  return textArray.join(' ');
 }

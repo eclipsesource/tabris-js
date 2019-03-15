@@ -125,11 +125,11 @@ export default class WidgetCollection {
   }
 
   /** @this {import("./JsxProcessor").default} */
-  [jsxFactory](Type, props, children) {
-    if (props) {
+  [jsxFactory](Type, attributes) {
+    if (Object.keys(this.withoutChildren(attributes)).length) {
       throw new Error('JSX: WidgetCollection can not have attributes');
     }
-    return new Type(this.normalizeChildren(children));
+    return new Type(this.getChildren(attributes) || []);
   }
 
 }
