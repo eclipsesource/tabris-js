@@ -14,11 +14,11 @@
     ]
   },
   "properties": {
-    "jsxProperties": {
+    "jsxAttributes": {
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXProperties<this> & {children?: never}"
+      "type": "JSXAttributes<this> & {children?: never}"
     },
     "url": {
       "type": "string",

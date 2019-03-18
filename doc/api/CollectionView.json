@@ -15,11 +15,11 @@
     ]
   },
   "properties": {
-    "jsxProperties": {
+    "jsxAttributes": {
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXProperties<this> & Partial<Pick<CollectionView<Cell>, 'cellHeight' | 'cellType' | 'createCell' | 'updateCell'>> & {children?: never}"
+      "type": "JSXAttributes<this> & Partial<Pick<CollectionView<Cell>, 'cellHeight' | 'cellType' | 'createCell' | 'updateCell'>> & {children?: never}"
     },
     "cellHeight": {
       "type": "number|\"auto\"|((index: number, cellType: string) => number|\"auto\")",

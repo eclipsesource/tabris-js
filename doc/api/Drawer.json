@@ -16,7 +16,7 @@
     }
   },
   "properties": {
-    "jsxProperties": {
+    "jsxAttributes": {
       "type": "never",
       "const": true,
       "readonly": true,

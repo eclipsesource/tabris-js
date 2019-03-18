@@ -19,10 +19,10 @@
       "const": true,
       "description": "An application-wide unique identifier automatically assigned to all native objects on creation. It follows the pattern '$<number>', where the number is incremented for each new NativeObject instance."
     },
-    "jsxProperties": {
+    "jsxAttributes": {
       "const": true,
       "readonly": true,
-      "type": "JSXProperties<this>",
+      "type": "JSXAttributes<this>",
       "description": "When using JSX with TypeScript (`.tsx` files), the type of this property determines which JSX attributes are valid for this object."
     }
   },

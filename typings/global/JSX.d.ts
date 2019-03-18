@@ -3,22 +3,22 @@ declare namespace JSX {
   type JsxFactory = (
     this: object,
     type: {new (...args: any[]): any },
-    properties: object
+    attributes: object
   ) => Element;
 
   type Element = any;
 
   const jsxFactory: unique symbol;
 
-  function createElement(type: Function|string, properties: object, ...children: Array<ElementClass>): ElementClass;
+  function createElement(type: Function|string, attributes: object, ...children: Array<ElementClass>): ElementClass;
 
   interface ElementClass {
-    jsxProperties?: object;
+    jsxAttributes?: object;
     [JSX.jsxFactory]: JsxFactory;
   }
 
   interface ElementAttributesProperty {
-    jsxProperties: any;
+    jsxAttributes: any;
   }
 
   interface ElementChildrenAttribute {

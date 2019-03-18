@@ -18,11 +18,11 @@
       "type": "Date",
       "description": "The time to be displayed in the dialog. The current time is used when no date object is provided."
     },
-    "jsxProperties": {
+    "jsxAttributes": {
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXProperties<this>"
+      "type": "JSXAttributes<this>"
     }
   },
   "events": {

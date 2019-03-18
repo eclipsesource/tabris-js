@@ -345,6 +345,6 @@ export class ActionSheetItem {
   readonly style?: 'default'|'cancel'|'destructive';
 
   readonly [JSX.jsxFactory]: JSX.JsxFactory;
-  readonly jsxProperties:  Partial<Pick<ActionSheetItem, 'title' | 'image' | 'style'>> & {children?: string};
+  readonly jsxAttributes:  Partial<Pick<ActionSheetItem, 'title' | 'image' | 'style'>> & {children?: string};
 
 }

@@ -100,11 +100,11 @@ If the element has children (everything within the element's body) they are mapp
 In TypeScript you need to give the proper type of the attributes object:
 
 ```tsx
-const StyledText = (attributes: TextView['jsxProperties']) =>
+const StyledText = (attributes: TextView['jsxAttributes']) =>
   <TextView textColor='red' {...attributes} />;
 ```
 
-> :point-right: `TextView['jsxProperties']` resolves to the attributes supported by `TextView`. Explained in the next section.
+> :point-right: `TextView['jsxAttributes']` resolves to the attributes supported by `TextView`. Explained in the next section.
 
 A function that was used as a SFC can also be used as a selector, as can its name:
 
@@ -146,14 +146,14 @@ The `tabris-decorators` module also provides two-way bindings and type conversio
 
 #### Adding Special Attributes
 
-In the *rare* case that the above behavior needs to be modified, you can do so by declaring a special (TypeScript-only) property called `jsxProperties`. The *type* of this property defines what JSX attributes are accepted. The value is irrelevant, it should not be assigned to anything.
+In the *rare* case that the above behavior needs to be modified, you can do so by declaring a special (TypeScript-only) property called `jsxAttributes`. The *type* of this property defines what JSX attributes are accepted. The value is irrelevant, it should not be assigned to anything.
 
 The following example defines a JSX component that takes a "foo" attribute even though there is no matching property:
 
 ```ts
 class CustomComponent extends tabris.Composite {
 
-  public jsxProperties: tabris.JSXProperties<this> & {foo: number};
+  public jsxAttributes: tabris.JSXAttributes<this> & {foo: number};
 
   constructor({foo, ...properties}: tabris.Properties<CustomComponent> & {foo: number}) {
     super(properties);
@@ -163,14 +163,14 @@ class CustomComponent extends tabris.Composite {
 }
 ```
 
-The type `JSXProperties<this>` part provides the default behavior for JSX attributes as described above. The second part `{foo: number}` is the additional attribute. In this case it would be a required attribute, but it can be made optional like this: `{foo?: number}`. The constructor properties parameter type should be extended in exactly the same way.
+The type `JSXAttributes<this>` part provides the default behavior for JSX attributes as described above. The second part `{foo: number}` is the additional attribute. In this case it would be a required attribute, but it can be made optional like this: `{foo?: number}`. The constructor properties parameter type should be extended in exactly the same way.
 
-Which elements are accepted as children is determined by a `children` entry of `jsxProperties`. If your custom component does not accept children you could disallow them like this:
+Which elements are accepted as children is determined by a `children` entry of `jsxAttributes`. If your custom component does not accept children you could disallow them like this:
 
 ```js
 class CustomComponent extends tabris.Composite {
 
-  public jsxProperties: tabris.JSXProperties<this> & {children?: never};
+  public jsxAttributes: tabris.JSXAttributes<this> & {children?: never};
 
 }
 ```

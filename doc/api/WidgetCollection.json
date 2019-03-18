@@ -275,11 +275,11 @@
     }
   },
   "properties": {
-    "jsxProperties": {
+    "jsxAttributes": {
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXProperties<this> & {children?: JSXChildren<T>}"
+      "type": "JSXAttributes<this> & {children?: JSXChildren<T>}"
     },
     "[JSX.jsxFactory]": {
       "description": "This function is called by the framework to create JSX elements from the WidgetCollection class.",

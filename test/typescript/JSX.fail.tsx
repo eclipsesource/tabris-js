@@ -29,7 +29,7 @@ const custom1: MyCustomWidget = <MyCustomWidget height={23} foo={23}/>;
 
 class MyCustomWidgetWithCustomJsx extends tabris.Composite {
 
-  public jsxProperties: tabris.Composite['jsxProperties'] & {
+  public jsxAttributes: tabris.Composite['jsxAttributes'] & {
     foo?: number;
     bar: string;
   };
@@ -43,7 +43,7 @@ class MyCustomWidgetWithUnpackedListeners extends tabris.Composite {
   public foo: number;
   public readonly bar: string;
   public onFooChanged = 23;
-  public jsxProperties: tabris.JSXProperties<this>;
+
 
 }
 
@@ -53,7 +53,7 @@ const custom3: MyCustomWidgetWithUnpackedListeners = <MyCustomWidgetWithUnpacked
 
 class MyCustomWidgetWithWrongJsx extends tabris.Composite {
 
-  public jsxProperties: {x: number};
+  public jsxAttributes: {x: number};
 
 }
 
@@ -123,7 +123,7 @@ const markup = <tabris.TextView markupEnabled>
 'string' is not assignable to type 'number'
 (51,
 (56,
-'jsxProperties' in type 'MyCustomWidgetWithWrongJsx' is not assignable
+'jsxAttributes' in type 'MyCustomWidgetWithWrongJsx' is not assignable
 (60,
 'textInput' does not exist
 (64,

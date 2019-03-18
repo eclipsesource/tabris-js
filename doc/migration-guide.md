@@ -189,7 +189,7 @@ Only widgets actually supporting different fonts now have a font property. Most 
 
 ### jsxProperties
 
-It used to be necessary to override this property to add JSX attributes to a custom component. This now happens automatically. You can still override it in case the outcome of that is not satisfactory. That may be the case because properties that are either functions or are marked as readonly are excluded.
+It used to be necessary to declare this property to add JSX attributes to a custom component. This now happens automatically. The mechanism itself is still present, but the property is now named `jsxAttributes` to make it distinct from the properties of the created object. Declaring `jsxAttributes` may sometimes be be necessary because properties that are either functions or are marked as readonly are not available as JSX attributes by default.
 
 ## Cordova plugins
 

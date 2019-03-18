@@ -26,11 +26,11 @@
       "type": "Date",
       "description": "Limits the selectable date range to the given future date. No limit is applied when not set."
     },
-    "jsxProperties": {
+    "jsxAttributes": {
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXProperties<this>"
+      "type": "JSXAttributes<this>"
     }
   },
   "events": {

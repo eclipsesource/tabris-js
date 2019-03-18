@@ -34,9 +34,9 @@ export type Properties<
 type ListenersKeysOf<T> = { [K in keyof T]: T[K] extends Listeners ? K : never }[keyof T];
 type UnpackListeners<T> = T extends Listeners<infer U> ? Listener<U> : T;
 type ListenersMap<T> = { [Key in ListenersKeysOf<T>]?: UnpackListeners<T[Key]>};
-export type JSXProperties<
-  T extends {set?: any; jsxProperties?: any},
-  U = Omit<T, 'set' | 'jsxProperties'> // prevent self-reference issues
+export type JSXAttributes<
+  T extends {set?: any; jsxAttributes?: any},
+  U = Omit<T, 'set' | 'jsxAttributes'> // prevent self-reference issues
 > = Properties<U> & ListenersMap<U>;
 type ExtendedEvent<EventData, Target = {}> = EventObject<Target> & EventData;
 type Listener<T = {}> = (ev: ExtendedEvent<T>) => any;

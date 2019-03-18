@@ -8,7 +8,7 @@
     "parameters": []
   },
   "properties": {
-    "jsxProperties": {
+    "jsxAttributes": {
       "type": "never",
       "ts_only": true,
       "const": true,

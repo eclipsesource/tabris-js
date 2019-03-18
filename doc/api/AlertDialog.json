@@ -33,11 +33,11 @@
       "type": "{ok?: string, cancel?: string, neutral?: string}",
       "description": "An object with the texts of the buttons to display. There are up to three buttons: `ok`, `cancel` and `neutral`. If no text is given for a button it will not be displayed. Example: `{ok: 'Yes', cancel: 'No'}` shows 'Yes' and 'No', but no 'neutral' button."
     },
-    "jsxProperties": {
+    "jsxAttributes": {
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXProperties<this> & {children?: Flatten<string|TextInput>}"
+      "type": "JSXAttributes<this> & {children?: Flatten<string|TextInput>}"
     }
   },
   "events": {

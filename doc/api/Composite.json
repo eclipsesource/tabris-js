@@ -15,11 +15,11 @@
     ]
   },
   "properties": {
-    "jsxProperties": {
+    "jsxAttributes": {
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXProperties<this> & {children?: JSXChildren<ChildType>}"
+      "type": "JSXAttributes<this> & {children?: JSXChildren<ChildType>}"
     },
     "layout": {
       "type": "Layout|null",
