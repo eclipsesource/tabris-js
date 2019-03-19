@@ -106,11 +106,11 @@
   },
   "links": [
     {
-      "title": "Snippet for creating actions",
+      "title": "Creating a simple `Action`",
       "path": "${GITHUB_BRANCH}/snippets/navigationview-action.js"
     },
     {
-      "title": "Actions - placement priorities",
+      "title": "Using placement priority on actions",
       "path": "${GITHUB_BRANCH}/snippets/navigationview-action-placementpriority.js"
     }
   ]

@@ -80,5 +80,11 @@
         "returns": "ActionSheet"
       }
     }
-  }
+  },
+  "links": [
+    {
+      "title": "Creating a simple `ActionSheet`",
+      "path": "${GITHUB_BRANCH}/snippets/actionsheet.jsx"
+    }
+  ]
 }

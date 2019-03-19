@@ -122,15 +122,19 @@
   },
   "links": [
     {
-      "title": "Simple WebView snippet",
+      "title": "Creating a simple `WebView`",
       "path": "${GITHUB_BRANCH}/snippets/webview.js"
     },
     {
-      "title": "WebView snippet demonstrating web messaging",
+      "title": "Creating browser-like navigation buttons in a `WebView`",
+      "path": "${GITHUB_BRANCH}/snippets/webview-navigation.js.js"
+    },
+    {
+      "title": "Demonstrating web messaging in a `WebView`",
       "path": "${GITHUB_BRANCH}/snippets/webview-webmessaging.js"
     },
     {
-      "title": "Web Messaging",
+      "title": "Web Messaging on Wikipedia",
       "path": "https://en.wikipedia.org/wiki/Web_Messaging"
     }
   ]

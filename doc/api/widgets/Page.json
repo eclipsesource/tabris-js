@@ -96,11 +96,11 @@
   },
   "links": [
     {
-      "title": "Simple snippet for displaying a single page",
+      "title": "Creating a simple `Page` in a `NavigationView`",
       "path": "${GITHUB_BRANCH}/snippets/navigationview-page.js"
     },
     {
-      "title": "Snippet for creating a stack of pages",
+      "title": "Creating a stack of pages",
       "path": "${GITHUB_BRANCH}/snippets/navigationview-page-stacked.js"
     }
   ]

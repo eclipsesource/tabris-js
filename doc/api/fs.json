@@ -112,5 +112,11 @@
       "returns": "Promise<void>",
       "description": "Removes the given file. Returns a promise that resolves on success and rejects with an Error in case of a failure."
     }
-  }
+  },
+  "links": [
+    {
+      "title": "Using the file system to read and write files",
+      "path": "${GITHUB_BRANCH}/snippets/fs.js"
+    }
+  ]
 }

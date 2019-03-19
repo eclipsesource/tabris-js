@@ -40,7 +40,7 @@
   },
   "links": [
     {
-      "title": "Simple RefreshComposite snippet",
+      "title": "Creating a simple `RefreshComposite`",
       "path": "${GITHUB_BRANCH}/snippets/refreshcomposite.js"
     }
   ]

@@ -585,6 +585,22 @@
     {
       "title": "Understanding gesture events in Tabris.js",
       "path": "../touch.md"
+    },
+    {
+      "title": "A `Widget` with padding",
+      "path": "${GITHUB_BRANCH}/snippets/widget-passing.jsx"
+    },
+    {
+      "title": "A card style `Widget` with corner radius and elevation",
+      "path": "${GITHUB_BRANCH}/snippets/widget-cornerradius.jsx"
+    },
+    {
+      "title": "A `Widget` with a linear-gradient background",
+      "path": "${GITHUB_BRANCH}/snippets/widget-lineargradient.jsx"
+    },
+    {
+      "title": "Using touch events on a `Widget`",
+      "path": "${GITHUB_BRANCH}/snippets/widget-longpress-to-drag.js"
     }
   ]
 }

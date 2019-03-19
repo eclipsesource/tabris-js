@@ -38,8 +38,12 @@
   },
   "links": [
     {
-      "title": "Example that shows animations and different shapes on a canvas",
-      "path": "https://github.com/eclipsesource/tabris-js/tree/master/examples/canvas"
+      "title": "Creating a `Canvas` with simple drawings",
+      "path": "${GITHUB_BRANCH}/snippets/canvas.js"
+    },
+    {
+      "title": "How to use animations and different shapes on a `Canvas`",
+      "path": "${GITHUB_BRANCH}/examples/canvas"
     }
   ]
 }

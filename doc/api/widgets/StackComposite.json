@@ -32,5 +32,19 @@
       "default": "'left'",
       "description": "Determines the horizontal placement of the children. For the `stretchX` value to work correctly the `StackComposite` needs to be given a width either by setting `width` or by setting `left` and `right`."
     }
-  }
+  },
+  "links": [
+    {
+      "title": "Creating a simple `StackComposite`",
+      "path": "${GITHUB_BRANCH}/snippets/stackcomposite.jsx"
+    },
+    {
+      "title": "Creating a `StackComposite` with horizontal alignment",
+      "path": "${GITHUB_BRANCH}/snippets/stackcomposite-alignment.jsx"
+    },
+    {
+      "title": "Creating a `StackComposite` with vertical alignment",
+      "path": "${GITHUB_BRANCH}/snippets/stackcomposite-valign.jsx"
+    }
+  ]
 }

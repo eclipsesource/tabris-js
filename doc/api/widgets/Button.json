@@ -76,8 +76,12 @@
   },
   "links": [
     {
-      "title": "Simple Button snippet",
+      "title": "Create a simple `Button`",
       "path": "${GITHUB_BRANCH}/snippets/button.js"
+    },
+    {
+      "title": "Create buttons with different styles",
+      "path": "${GITHUB_BRANCH}/snippets/button-style.jsx"
     }
   ]
 }

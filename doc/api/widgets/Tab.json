@@ -109,8 +109,8 @@
   },
   "links": [
     {
-      "title": "Snippet with a TabFolder and Tabs",
-      "path": "${GITHUB_BRANCH}/snippets/tabfolder.js"
+      "title": "Creating a `Tab` inside a `TabFolder`",
+      "path": "${GITHUB_BRANCH}/snippets/tabfolder.jsx"
     }
   ]
 }

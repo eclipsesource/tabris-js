@@ -81,5 +81,11 @@
       "description": "The device orientation. One of `portrait-primary`, `portrait-secondary`, `landscape-primary`, and `landscape-secondary`.",
       "changeEventDescription": "Fired when the `orientation` property has changed and the rotation animation has finished."
     }
-  }
+  },
+  "links": [
+    {
+      "title": "Reading various device properties",
+      "path": "${GITHUB_BRANCH}/snippets/device.js"
+    }
+  ]
 }

@@ -53,7 +53,7 @@
   },
   "links": [
     {
-      "title": "Simple Slider snippet",
+      "title": "Creating a simple `Slider`",
       "path": "${GITHUB_BRANCH}/snippets/slider.js"
     }
   ]

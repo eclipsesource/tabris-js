@@ -36,5 +36,11 @@
         "type": "StackLayout"
       }
     }
-  }
+  },
+  "links": [
+    {
+      "title": "Creating a simple `StackComposite` with an included `StackLayout`",
+      "path": "${GITHUB_BRANCH}/snippets/printer.js"
+    }
+  ]
 }

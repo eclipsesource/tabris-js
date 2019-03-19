@@ -62,5 +62,11 @@
       "type": "number",
       "description": "The number of items in the storage."
     }
-  }
+  },
+  "links": [
+    {
+      "title": "A example how to read and write from the `localStorage`",
+      "path": "${GITHUB_BRANCH}/snippets/local-storage.jsx"
+    }
+  ]
 }

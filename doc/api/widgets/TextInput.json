@@ -184,11 +184,31 @@
   },
   "links": [
     {
-      "title": "Simple TextInput snippet",
+      "title": "Creating a simple `TextInput`",
       "path": "${GITHUB_BRANCH}/snippets/textinput.js"
     },
     {
-      "title": "Example with Text and other input controls",
+      "title": "Handling selection on a `TextInput`",
+      "path": "${GITHUB_BRANCH}/snippets/textinput-selection.js"
+    },
+    {
+      "title": "Handling focus changes on a `TextInput`",
+      "path": "${GITHUB_BRANCH}/snippets/textinput.js"
+    },
+    {
+      "title": "Creating `TextInputs` with various enter key types",
+      "path": "${GITHUB_BRANCH}/snippets/textinput-enterkeytype.ts"
+    },
+    {
+      "title": "Creating `TextInputs` with various keyboards",
+      "path": "${GITHUB_BRANCH}/snippets/textinput-keyboard.ts"
+    },
+    {
+      "title": "Showing password in clear text on a `TextInput`",
+      "path": "${GITHUB_BRANCH}/snippets/textinput-revealpassword.js"
+    },
+    {
+      "title": "A form using `TextInput` and other input controls",
       "path": "${GITHUB_BRANCH}/examples/input/input.js"
     }
   ]

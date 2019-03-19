@@ -66,7 +66,7 @@
   },
   "links": [
     {
-      "title": "Snippet demonstrating various properties of the `NavigationBar`",
+      "title": "Demonstrating various properties of the `NavigationBar`",
       "path": "${GITHUB_BRANCH}/snippets/navigationbar.js"
     }
   ]

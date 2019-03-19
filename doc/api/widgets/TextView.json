@@ -79,12 +79,24 @@
   },
   "links": [
     {
-      "title": "Simple TextView snippet",
+      "title": "Creating a simple `TextView`",
       "path": "${GITHUB_BRANCH}/snippets/textview.js"
     },
     {
-      "title": "Snippet for TextView with markup",
-      "path": "${GITHUB_BRANCH}/snippets/textview-markupenabled.js"
+      "title": "Creating a `TextView` with support for markup",
+      "path": "${GITHUB_BRANCH}/snippets/textview-markupenabled.jsx"
+    },
+    {
+      "title": "Creating a `TextView` with support for text links",
+      "path": "${GITHUB_BRANCH}/snippets/textview-link.jsx"
+    },
+    {
+      "title": "Demonstrating various line spacing values on a `TextView`",
+      "path": "${GITHUB_BRANCH}/snippets/textview-link.jsx"
+    },
+    {
+      "title": "Creating a `TextView` with an external font",
+      "path": "${GITHUB_BRANCH}/snippets/textview-font-external.js"
     }
   ]
 }

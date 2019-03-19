@@ -264,5 +264,11 @@
     "trace": {
       "description": "Prints a stack trace in a platform-independent format. Framework internals are omitted.\n\nSource maps are supported when side-loading code via the tabris CLI."
     }
-  }
+  },
+  "links": [
+    {
+      "title": "Logging to the `console` with various log levels",
+      "path": "${GITHUB_BRANCH}/snippets/console.js"
+    }
+  ]
 }

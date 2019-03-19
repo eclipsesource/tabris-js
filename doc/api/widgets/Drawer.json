@@ -40,12 +40,12 @@
   },
   "links": [
     {
-      "title": "Snippet for creating a Drawer",
+      "title": "Simple example of using a `Drawer`",
       "path": "${GITHUB_BRANCH}/snippets/drawer.js"
     },
     {
-      "title": "Example for Drawer-based navigation",
-      "path": "${GITHUB_BRANCH}/snippets/drawer-pages.js"
+      "title": "Using a `Drawer` for app navigation",
+      "path": "${GITHUB_BRANCH}/snippets/drawer-pages.ts"
     }
   ]
 }

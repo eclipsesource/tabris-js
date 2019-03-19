@@ -56,7 +56,7 @@
   },
   "links": [
     {
-      "title": "Search action snippet",
+      "title": "Creating a `SearchAction`",
       "path": "${GITHUB_BRANCH}/snippets/navigationview-searchaction.js"
     }
   ]

@@ -55,7 +55,7 @@
   },
   "links": [
     {
-      "title": "Simple ProgressBar snippet",
+      "title": "Creating a simple `ProgressBar`",
       "path": "${GITHUB_BRANCH}/snippets/progressbar.js"
     }
   ]

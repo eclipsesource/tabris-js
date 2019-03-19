@@ -100,11 +100,11 @@
   },
   "links": [
     {
-      "title": "Simple ScrollView snippet",
+      "title": "Creating a simple `ScrollView`",
       "path": "${GITHUB_BRANCH}/snippets/scrollview.js"
     },
     {
-      "title": "Example using a ScrollView",
+      "title": "How to implement parallax scrolling with a `ScrollView`",
       "path": "${GITHUB_BRANCH}/examples/parallax/parallax.js"
     }
   ]

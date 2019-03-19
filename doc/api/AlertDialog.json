@@ -94,8 +94,8 @@
   },
   "links": [
     {
-      "title": "AlertDialog snippet",
-      "path": "${GITHUB_BRANCH}/snippets/alertdialog.js"
+      "title": "Creating various types of alert dialogs",
+      "path": "${GITHUB_BRANCH}/snippets/alertdialog.jsx"
     }
   ]
 }

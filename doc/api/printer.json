@@ -28,7 +28,7 @@
   },
   "links": [
     {
-      "title": "Snippet showing how to print a PDF document bundled in the app",
+      "title": "How to print a PDF document bundled with an app",
       "path": "${GITHUB_BRANCH}/snippets/printer.js"
     }
   ]

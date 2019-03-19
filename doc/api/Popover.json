@@ -69,7 +69,7 @@
   },
   "links": [
     {
-      "title": "Popover snippet using a NavigationView as its header bar",
+      "title": "Creating a `Popover` containing a `NavigationView`",
       "path": "${GITHUB_BRANCH}/snippets/popover.js"
     }
   ]

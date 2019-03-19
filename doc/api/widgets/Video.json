@@ -95,7 +95,7 @@
   },
   "links": [
     {
-      "title": "Snippet for creating a video widget",
+      "title": "Creating a `Video` widget",
       "path": "${GITHUB_BRANCH}/snippets/video.js"
     }
   ]

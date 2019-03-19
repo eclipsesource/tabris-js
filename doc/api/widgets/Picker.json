@@ -73,7 +73,7 @@
   },
   "links": [
     {
-      "title": "Simple Picker snippet",
+      "title": "Creating a simple `Picker`",
       "path": "${GITHUB_BRANCH}/snippets/picker.js"
     }
   ]

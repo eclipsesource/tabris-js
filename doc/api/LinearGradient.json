@@ -73,5 +73,11 @@
         "returns": "value is LinearGradientValue"
       }
     }
-  }
+  },
+  "links": [
+    {
+      "title": "Creating various types of linear gradients",
+      "path": "${GITHUB_BRANCH}/snippets/widget-lineargradient.js"
+    }
+  ]
 }

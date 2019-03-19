@@ -52,5 +52,11 @@
         }
       }
     }
-  }
+  },
+  "links": [
+    {
+      "title": "Creating a simple `Switch`",
+      "path": "${GITHUB_BRANCH}/snippets/switch.js"
+    }
+  ]
 }

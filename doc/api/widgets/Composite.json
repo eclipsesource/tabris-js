@@ -187,5 +187,11 @@
         }
       }
     }
-  }
+  },
+  "links": [
+    {
+      "title": "Creating a simple `Composite`",
+      "path": "${GITHUB_BRANCH}/snippets/composites.js"
+    }
+  ]
 }

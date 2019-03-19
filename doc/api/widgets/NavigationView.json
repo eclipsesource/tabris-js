@@ -94,15 +94,15 @@
   },
   "links": [
     {
-      "title": "Snippet with a NavigationView and Pages",
+      "title": "Creating a simple `NavigationView` with pages",
       "path": "${GITHUB_BRANCH}/snippets/navigationview-page-stacked.js"
     },
     {
-      "title": "Snippet with a NavigationView and its various properties",
+      "title": "Demonstrating a `NavigationView` with various interactive properties",
       "path": "${GITHUB_BRANCH}/snippets/navigationview-properties.js"
     },
     {
-      "title": "Snippet with NavigationViews embedded in Tabs of a TabFolder",
+      "title": "Using multiple `NavigationViews` in `TabFolder` `Tabs`",
       "path": "${GITHUB_BRANCH}/snippets/navigationview-tabfolder.js"
     }
   ]

@@ -103,5 +103,11 @@
         "returns": "value is FontValue"
       }
     }
-  }
+  },
+  "links": [
+    {
+      "title": "Applying multiple font styles to TextViews",
+      "path": "${GITHUB_BRANCH}/snippets/textview-font-bundled.js.js"
+    }
+  ]
 }

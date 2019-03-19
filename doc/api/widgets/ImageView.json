@@ -80,5 +80,31 @@
         }
       }
     }
-  }
+  },
+  "links": [
+    {
+      "title": "Using an `ImageView` as a button",
+      "path": "${GITHUB_BRANCH}/snippets/imageview-as-a-button.js"
+    },
+    {
+      "title": "Creating `ImageView`s with various scale modes",
+      "path": "${GITHUB_BRANCH}/snippets/imageview-scalemode.ts"
+    },
+    {
+      "title": "Creating an `ImageView` with support for pinch-to-zoom",
+      "path": "${GITHUB_BRANCH}/snippets/imageview-zoom.js"
+    },
+    {
+      "title": "Creating an `ImageView` with a tint color applied",
+      "path": "${GITHUB_BRANCH}/snippets/imageview-tintcolor.js"
+    },
+    {
+      "title": "Creating an `ImageView` with a load event callback",
+      "path": "${GITHUB_BRANCH}/snippets/imageview-load.js"
+    },
+    {
+      "title": "Using an `ImageView` to show a Base64 encoded image",
+      "path": "${GITHUB_BRANCH}/snippets/imageview-base64.js"
+    }
+  ]
 }
