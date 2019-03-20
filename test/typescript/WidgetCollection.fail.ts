@@ -25,7 +25,6 @@ textInput = fooCollection.last('selector');
 
 /*Expected
 (14,
-cid
 (18,
 (19,
 (20,
