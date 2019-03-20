@@ -43,12 +43,12 @@
 - title: API Reference
   pages:
     - title: Property Types
-      url: api/types.html
-  <%= api %>
+      url: types.html
+<%= api %>
 
 - title: Widgets
   pages:
-  <%= widgets %>
+<%= widgets %>
 
 - title: Custom Widgets
   pages:

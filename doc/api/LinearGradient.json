@@ -16,7 +16,7 @@
       }
     ]
   },
-  "description": "Represents a linear gradient. See also [LinearGradientValue](./types.html#LinearGradientValue)",
+  "description": "Represents a linear gradient. See also [LinearGradientValue](../types.html#lineargradientvalue)",
   "properties": {
     "colorStops": {
       "type": "(Color | [Color, Percent])[]",

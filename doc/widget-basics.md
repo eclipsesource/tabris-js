@@ -23,9 +23,9 @@ Let's look at each part of the app:
 
 Code | Explanation
 -----|------------
-`tabris.contentView`| uses the `tabris` namespace to access the [`contentView`](./api/contentview.md) widget instance, [which represents the main content of your app](./ui.md).
+`tabris.contentView`| uses the `tabris` namespace to access the [`contentView`](./api/ContentView.md) widget instance, [which represents the main content of your app](./ui.md).
 `.append(`|calls the append method to add something to that area.
-&nbsp;&nbsp;&nbsp;&nbsp;`<tabris.Button>`| creates the actual button via an [JSX](./jsx.md) expression, similar to an HTML element. This is only supported in  `.jsx` or `.tsx` files in a [compiled project setup](./getting-started.md#Create-your-first-app).
+&nbsp;&nbsp;&nbsp;&nbsp;`<tabris.Button>`| creates the actual button via an [JSX](./jsx.md) expression, similar to an HTML element. This is only supported in  `.jsx` or `.tsx` files in a [compiled project setup](./getting-started.md#create-your-first-app).
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`Hello World`| is the text that the button displays. Most widgets that can display text allow defining it that way, but you can also set the `text` attribute.
 &nbsp;&nbsp;&nbsp;&nbsp;`</tabris.Button>`|closes the `Button` element and ends the JSX expression.
 `);`|ends the `append` call.
@@ -43,7 +43,7 @@ contentView.append(
 );
 ```
 
-The text content of the button [can also be set as an attribute](./JSX.md#Usage):
+The text content of the button [can also be set as an attribute](./JSX.md#usage):
 
 ```app.jsx```
 ```jsx
@@ -65,7 +65,7 @@ contentView.append(
 );
 ```
 
-Finally, if you use a ["Vanilla"](./getting-started.md#Create-your-first-app) JS project setup without cross-compilation you can use neither JSX nor the ES6 `import` syntax:
+Finally, if you use a ["Vanilla"](./getting-started.md#create-your-first-app) JS project setup without cross-compilation you can use neither JSX nor the ES6 `import` syntax:
 
 ```app.js```
 ```js
@@ -92,7 +92,7 @@ contentView.append(
 );
 ```
 
-> :point_right: Details about the JSX syntax for attributes can be found [here](./api.md#Usage).
+> :point_right: Details about the JSX syntax for attributes can be found [here](./JSX.md#usage).
 
 ### Modifying Widgets
 
@@ -152,7 +152,7 @@ navigationView.append(
 If a widget that already has a parent is added to another, it is automatically removed from the old parent first.
 
 The current parent of a widget is returned by the [`parent`](api/Widget.md#parent) method,
-and the children by the [`children`](api/Widget.md#children) method.
+and the children by the [`children`](api/Composite.md#childrenselector) method.
 
 ## Event Handling
 
@@ -195,7 +195,7 @@ button.onSelect.removeListener(listener);
 
 All widgets support property change events that are fired when a property value changes. All change events are named after the property with `Changed` as a postfix, e.g. `myValue` fires `myValueChanged`, so listeners can be registered via `onMyValueChangd`.
 
-In addition to the common event properties, [change events](./types.md#changeevent) have a property `value` that contains the new value of the property.
+In addition to the common event properties, [change events](./types.md#propertychangedevent) have a property `value` that contains the new value of the property.
 
 Example:
 

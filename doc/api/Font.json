@@ -28,7 +28,7 @@
       }
     ]
   },
-  "description": "Represents a font. See also [FontValue](./types.html#FontValue)",
+  "description": "Represents a font. See also [FontValue](../types.html#fontvalue)",
   "properties": {
     "size": {
       "type": "number",
@@ -107,7 +107,7 @@
   "links": [
     {
       "title": "Applying multiple font styles to TextViews",
-      "path": "${GITHUB_BRANCH}/snippets/textview-font-bundled.js.js"
+      "path": "${GITHUB_BRANCH}/snippets/textview-font-bundled.js"
     }
   ]
 }

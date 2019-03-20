@@ -127,7 +127,7 @@
     },
     {
       "title": "Creating browser-like navigation buttons in a `WebView`",
-      "path": "${GITHUB_BRANCH}/snippets/webview-navigation.js.js"
+      "path": "${GITHUB_BRANCH}/snippets/webview-navigation.js"
     },
     {
       "title": "Demonstrating web messaging in a `WebView`",

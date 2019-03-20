@@ -2,7 +2,7 @@
 ---
 # TypeScript
 
-Tabris.js 3 targets TypeScript 3.3. TypeScript is a <em>type-safe</em> dialect of JavaScript/EcmaScript and also supports <em>ES6 module syntax</em> (`import` and `export` statements) and `async`/`await`. A complete guide to TypeScript can be found at [typescriptlang.org](http://www.typescriptlang.org/docs/home.html). As an IDE we can recommend [Visual Studio Code](https://code.visualstudio.com/) with the [tslint](https://marketplace.visualstudio.com/items?itemName=eg2.tslint) extension, but there are [many suitable TypeScript IDEs](https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support) out there.
+Tabris.js 3 targets TypeScript 3.3. TypeScript is a <em>type-safe</em> dialect of JavaScript/EcmaScript and also supports <em>ES6 module syntax</em> (`import` and `export` statements) and `async`/`await`. A complete guide to TypeScript can be found at [typescriptlang.org](http://www.typescriptlang.org/docs/home.html). As an IDE we can recommend [Visual Studio Code](https://code.visualstudio.com/) with the [tslint](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-typescript-tslint-plugin) extension, but there are [many suitable TypeScript IDEs](https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support) out there.
 
 ## Setup
 
@@ -100,19 +100,19 @@ Tabris.js specific recommendations:
 
 General TypeScript recommendations:
 * Avoid `any`. An implicit `any` may occur if you do not give a type for a variable, field or parameter, and none can be inferred by assignment.
-* Avoid explicit casting, Use [type guards](http://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types) instead. Tabris.js provides some for [`ColorValue`](./types.md#ColorValue),
+* Avoid explicit casting, Use [type guards](http://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types) instead. Tabris.js provides some for [`ColorValue`](./types.md#colorvalue),
 * When using third-party libraries you may have to <em>[manually install declaration files](http://www.typescriptlang.org/docs/handbook/declaration-files/consumption.html)</em> to be type safe.
 
 ## Interfaces
 
 When used in TypeScript the tabris module exports the following additional interfaces:
 
- * [`ImageValue`](./types.md#imageValue), a union of all types accepted as images
- * [`ColorValue`](./types.md#colorValue), a union of all types accepted as colors
- * [`FontValue`](./types.md#fontValue), a union of all types accepted as fonts
- * [`PercentValue`](./types.md#PercentValue), a union of all  types accepted as percentages
- * [`PercentValue`](./types.md#PercentValue), a union of all types accepted as percentages
- * [`LinearGradientValue`](./types.md#LinearGradientValue), a union of all types accepted as gradients
+ * [`ImageValue`](./types.md#imagevalue), a union of all types accepted as images
+ * [`ColorValue`](./types.md#colorvalue), a union of all types accepted as colors
+ * [`FontValue`](./types.md#fontvalue), a union of all types accepted as fonts
+ * [`PercentValue`](./types.md#percentvalue), a union of all  types accepted as percentages
+ * [`PercentValue`](./types.md#percentvalue), a union of all types accepted as percentages
+ * [`LinearGradientValue`](./types.md#lineargradientvalue), a union of all types accepted as gradients
  * [`Selector`](./selector.md), a union of all types accepted as gradients
  * [`Bounds`](./types.md#bounds)
  * [`Transformation`](./types.md#transformation)

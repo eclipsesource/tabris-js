@@ -54,5 +54,5 @@ The `target` attribute of the `<resource-file>` has to point to the exact path a
 
 ### Further resources
 
-* See the [build documentation](./build.md#Preferences) for more information on the available preferences.
+* See the [build documentation](./build.md#preferences) for more information on the available preferences.
 * See the [`tabris-plugin-lottie`](https://github.com/eclipsesource/tabris-plugin-lottie) for an example of custom Android theme applied in a Tabris.js app.

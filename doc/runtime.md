@@ -37,7 +37,7 @@ Feature|Example
 [Destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)|`[a, b] = [1, 2]`
 [Exponentiation operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators#Exponentiation_(**))|`a ** b`
 [for...of](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/statements/for...of)|`for (let a of b) { … }`
-[Generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators#Generators)|`function*() { … }`
+[Generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators#Generator_functions)|`function*() { … }`
 [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let)|`let a = 1;`
 [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)|`new Map(iterable)`
 [Methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions)|`{ a() { … } }`
@@ -60,7 +60,7 @@ Notable feature NOT supported:
 
 Feature|Example|Alternative
 --- | --- | ---
-[import/](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import])[export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export])|`import * as foo from 'foo';`|`const foo = require('foo');`
+[import/](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)[export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export)|`import * as foo from 'foo';`|`const foo = require('foo');`
 [async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function)|`await fn();`|`fn().then(cb);`
 [JSX](./JSX.md)|`<TextView />`|`new TextView()`
 [Types/Interfaces](./typescript.md)|`const foo: string;`|`const foo;`
@@ -69,7 +69,7 @@ Feature|Example|Alternative
 
 There are various tools that provide some kind of JavaScript pre-processing to allow the use of constructs (and sometimes APIs) that would otherwise not be supported at runtime, or to optimize the code in some way. Particularly popular in this category is [Babel](https://babeljs.io/), which  works fine with Tabris.js. However, using the `tabris init` command and choosing the "Compiled" option will create a project using the [TypeScript](http://typescriptlang.org/) compiler [`tsc`](http://www.typescriptlang.org/docs/handbook/compiler-options.html), which we recommend even for JavaScript projects. Not only is this a less complex setup than a comparable *Babel* configuration, it can also provide better auto completion support and eases migration to TypeScript should this be desired later on.
 
-With this kind of setup `.js` files now can use the ES6 module syntax ([import/](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import])[export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export])) and async functions ([async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function)). It also supports [JSX](./JSX.md) syntax in `.jsx` files.
+With this kind of setup `.js` files now can use the ES6 module syntax ([import/](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)[export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export)) and async functions ([async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function)). It also supports [JSX](./JSX.md) syntax in `.jsx` files.
 
 ### TypeScript Projects
 

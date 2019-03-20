@@ -18,7 +18,7 @@
       "type": "StackLayout",
       "default": "StackLayout",
       "const": true,
-      "description": "The stack layout manager responsible for interpreting the [`layoutData`](./Widget.md#layoutData) of the child widgets of this Composite."
+      "description": "The stack layout manager responsible for interpreting the [`layoutData`](./Widget.md#layoutdata) of the child widgets of this Composite."
     },
     "spacing": {
       "type": "number",

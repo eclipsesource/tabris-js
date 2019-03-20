@@ -26,7 +26,7 @@
       }
     ]
   },
-  "description": "Represents a color. See also [ColorValue](./types.html#ColorValue)",
+  "description": "Represents a color. See also [ColorValue](../types.html#colorvalue)",
   "properties": {
     "red": {
       "type": "number",

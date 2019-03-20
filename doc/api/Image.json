@@ -6,11 +6,11 @@
       {
         "name": "imageLike",
         "type": "ImageLikeObject",
-        "description": "An image configuration. See [ImageLikeObject](./types.html#imagelikeobject)"
+        "description": "An image configuration. See [ImageLikeObject](../types.html#imagelikeobject)"
       }
     ]
   },
-  "description": "Represents an image. See also [ImageValue](./types.html#ImageValue)",
+  "description": "Represents an image. See also [ImageValue](../types.html#imagevalue)",
   "properties": {
     "src": {
       "type": "string",
@@ -32,7 +32,7 @@
     },
     "scale": {
       "type": "number | 'auto'",
-      "description": "Image scale factor - the image will be scaled down by this factor. See [ImageLikeObject](../types.md#ImageLikeObject) for details",
+      "description": "Image scale factor - the image will be scaled down by this factor. See [ImageLikeObject](../types.md#imagelikeobject) for details",
       "const": true,
       "readonly": true
     }
@@ -43,7 +43,7 @@
         "parameters": [
           {
             "name": "imageValue",
-            "description": "The value to create an Image instance from. See [ImageValue](./types.html#ImageValue)",
+            "description": "The value to create an Image instance from. See [ImageValue](../types.html#imagevalue)",
             "type": "ImageValue"
           }
         ],

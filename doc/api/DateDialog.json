@@ -85,7 +85,7 @@
   "links": [
     {
       "title": "Creating a simple `DateDialog`",
-      "path": "${GITHUB_BRANCH}/snippets/datedialog.js"
+      "path": "${GITHUB_BRANCH}/snippets/datedialog.jsx"
     }
   ]
 }

@@ -10,7 +10,7 @@
       }
     ]
   },
-  "description": "Represents a percentage. See also [PercentValue](./types.html#PercentValue)",
+  "description": "Represents a percentage. See also [PercentValue](../types.html#percentvalue)",
   "properties": {
     "percent": {
       "type": "number",

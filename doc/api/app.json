@@ -10,7 +10,9 @@
   "properties": {
     "jsxProperties": {
       "type": "never",
-      "ts_only": true
+      "ts_only": true,
+      "const": true,
+      "readonly": true
     },
     "id": {
       "type": "string",

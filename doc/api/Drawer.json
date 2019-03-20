@@ -18,6 +18,8 @@
   "properties": {
     "jsxProperties": {
       "type": "never",
+      "const": true,
+      "readonly": true,
       "ts_only": true
     },
     "enabled": {

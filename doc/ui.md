@@ -30,7 +30,7 @@ tabris.NativeObject
 
 As can be seen here, most UI elements either inherit from `Widget` or `Popup`.
 
-**Widgets** can (with some exceptions) be freely [created](./widget-basics.md#Hello-World), [arranged](./layout.md) and [composed](./widget-basics.md#Composition) to form the main UI of your application.
+**Widgets** can (with some exceptions) be freely [created](./widget-basics.md#hello-world), [arranged](./layout.md) and [composed](./widget-basics.md#composition) to form the main UI of your application.
 
 **Popups** are floating on top of your main UI and are specialized for specific use cases. Unlike widgets they never need a parent to be visible and they can not be combined in any way.
 
@@ -82,7 +82,7 @@ tabris.drawer.enabled = true;
 
 ![Drawer](img/drawer.png)
 
-The drawer can be opened by a swipe from the left edge of the screen or by tapping the action on the left side of a `NavigationView` ( "hamburger button" or "[drawer action](./api/NavigationView.md#drawerActionVisible)"). To open and close the drawer programmatically, you can use its `open()` and `close()` methods, respectively.
+The drawer can be opened by a swipe from the left edge of the screen or by tapping the action on the left side of a `NavigationView` ( "hamburger button" or "[drawer action](./api/NavigationView.md#draweractionvisible)"). To open and close the drawer programmatically, you can use its `open()` and `close()` methods, respectively.
 
 Just like `tabris.contentView` a drawer may contain any kind of widgets:
 

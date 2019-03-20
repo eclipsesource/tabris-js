@@ -79,7 +79,7 @@ Tabris.js provides a JavaScript/TypeScript API to indirectly create and control 
 
 ### Does Tabris.js support declarative UI?
 
-Yes, [via JSX](../latest/lang.md#JSX).
+Yes, [via JSX](../latest/JSX.md).
 
 ### How to use the "nightly" Tabris.js build?
 
@@ -98,7 +98,7 @@ No, plug-ins that access the DOM of an HTML page won't work because Tabris.js us
 ### How can I test Cordova plug-ins?
 
 You can test several prepackaged plug-ins directly from the [Tabris.js developer app](../latest/developer-app.md).
-These include camera, device motion and more (see [Default Plug-ins](../latest/cordova.md#cordova-plugins-support)).
+These include camera, device motion and more (see [Default Plug-ins](../latest/cordova.md#cordova-plug-ins-support)).
 
 In order to test additional plug-ins you will need to [add them to your `config.xml`](../latest/build.md#integrating-cordova-plugins) and [build the app](build.md). If [you enable the debug option](../latest/build.md#settings), the developer console will still be available and allow you to load newer app code via [developer console](../latest/developer-app.md#the-developer-console) without re-building the entire app.
 
@@ -122,7 +122,7 @@ We don't store your credit card data. We use [Braintree](https://www.braintreepa
 
 If you are using Cordova plug-ins, the plug-ins themselves are responsible for adding all necessary permissions, in which case you don't need to handle them at all.
 
-If you are targeting pre Android 6 devices and you need to modify permissions yourself at build time, you can create a build hook ([official Cordova hooks guide](http://cordova.apache.org/docs/en/edge/guide_appdev_hooks_index.md.html#Hooks%20Guide)).
+If you are targeting pre Android 6 devices and you need to modify permissions yourself at build time, you can create a build hook ([official Cordova hooks guide](http://cordova.apache.org/docs/en/edge/guide_appdev_hooks_index.md.html)).
 
 ## iOS-specific Questions
 

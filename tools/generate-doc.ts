@@ -52,7 +52,7 @@ class DocumentationGenerator {
   private preProcessDefinitions() {
     Object.keys(this.defs).forEach(title => {
       if (this.defs[title].type) {
-        this.addTypeLink(this.defs[title].type, `${this.defs[title].type}.md`);
+        this.addTypeLink(this.defs[title].type, `${parse(this.defs[title].file).name}.md`);
       }
     });
   }
@@ -148,7 +148,7 @@ class DocumentRenderer {
         fs.readFileSync(exampleFile, 'utf-8')
       ].join('\n');
     } else {
-      console.warn('No description file for ' + this.title);
+      console.log('No description file for ' + this.title);
     }
   }
 
@@ -180,7 +180,7 @@ class DocumentRenderer {
       return `<div class="tabris-image">${result}</div>\n`;
     }
     if (this.def.type !== 'Widget' && (this.def.isWidget || this.def.extends === 'Popup')) {
-      console.warn('No image for ' + this.def.type);
+      console.log('No image for ' + this.def.type);
     }
     return '';
   }
@@ -246,7 +246,7 @@ class DocumentRenderer {
       }
       contentProps.forEach(propName => {
         if (this.def.properties[propName].jsxType) {
-          childTypes.push('[`<' + this.def.properties[propName].jsxType + '/>`](#' + propName + ')');
+          childTypes.push('[`<' + this.def.properties[propName].jsxType + '/>`](#' + propName.toLowerCase() + ')');
         }
       });
       if (!childTypes.length) {
@@ -256,7 +256,7 @@ class DocumentRenderer {
       let textContent = null;
       contentProps.forEach(propName => {
         if (!this.def.properties[propName].jsxType) {
-          textContent = '*Sets [' + propName + '](#' + propName + ') property*';
+          textContent = '*Sets [' + propName + '](#' + propName.toLowerCase() + ') property*';
         }
       });
       result.push('Text content: ', textContent || '*Not supported*', '<br/>');
@@ -333,7 +333,7 @@ class DocumentRenderer {
     if (method.description) {
       result.push('\n', method.description, '\n');
     } else {
-      console.warn('No description for ' + this.title + ' method ' + name);
+      console.log('No description for ' + this.title + ' method ' + name);
     }
     if (method.parameters && method.parameters.length) {
       result.push('\n\n', this.renderMethodParamList(method.parameters, true), '\n\n');
@@ -451,7 +451,7 @@ class DocumentRenderer {
     }
     if (!property.default && !property.readonly) {
       // TODO: how to handle non-primitives?
-      console.warn('No default value for ' + this.title + ' property ' + name);
+      console.log('No default value for ' + this.title + ' property ' + name);
     }
     return result.join('');
   }
@@ -488,7 +488,7 @@ class DocumentRenderer {
     return Object.keys(properties)
       .filter(name => !properties[name].const)
       .map(name => {
-        const standardDescription = `Fired when the [*${name}*](#${name}) property has changed.`;
+        const standardDescription = `Fired when the [*${name}*](#${name.toLowerCase()}) property has changed.`;
         return {
           name: `${name}Changed`,
           description: properties[name].changeEventDescription || standardDescription,
@@ -496,7 +496,7 @@ class DocumentRenderer {
             value: {
               name: 'value',
               type: properties[name].type,
-              description: `The new value of [*${name}*](#${name}).`
+              description: `The new value of [*${name}*](#${name.toLowerCase()}).`
             }
           }
         };
@@ -519,10 +519,10 @@ class DocumentRenderer {
       if (param.type) {
         type = this.renderTypeLink(this.decodeType(param.type, true));
       } else {
-        console.warn('No type for event parameter ' + key + ' in ' + this.title);
+        console.log('No type for event parameter ' + key + ' in ' + this.title);
       }
       if (!param.description) {
-        console.warn('No description for event parameter ' + key + ' in ' + this.title);
+        console.log('No description for event parameter ' + key + ' in ' + this.title);
       }
       return [key, type, param.description || ''].join(' | ');
     }).join('\n') + '\n\n';
@@ -534,10 +534,10 @@ class DocumentRenderer {
       if (param.type) {
         type = this.renderTypeLink(this.decodeType(param.type, hasContext));
       } else {
-        console.warn('No type for parameter ' + param.name + ' in ' + this.title);
+        console.log('No type for parameter ' + param.name + ' in ' + this.title);
       }
       if (!param.description) {
-        console.warn('No description for parameter ' + param.name + ' in ' + this.title);
+        console.log('No description for parameter ' + param.name + ' in ' + this.title);
       }
       return [param.name, type, param.optional ? 'Yes' : 'No', param.description || ''].join(' | ');
     }).join('\n');
@@ -560,7 +560,7 @@ class DocumentRenderer {
       .map(name => name.trim())
       .map(name => {
         if (!this.typeLinks[name] && name[0] !== '\'' && name[0] !== '[' && name[0] !== '{') {
-          console.warn('No type link for ' + name);
+          console.log('No type link for ' + name);
         }
         return this.typeLinks[name] ? `[\`${name}\`](${this.typeLinks[name]})` : '`' + name + '`';
       })

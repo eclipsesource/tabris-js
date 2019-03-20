@@ -59,4 +59,4 @@ The CLI will start an HTTP server and print an URL and QR code. In the Developer
 
 ![App URL](img/app-url.png)
 
-> :point_right: You may notice a some delay while the Developer App downloads the sources to the mobile device. Once you've [built](#publishing-your-app) the app, this delay will be gone, because the sources are then bundled with the app.
+> :point_right: You may notice a some delay while the Developer App downloads the sources to the mobile device. Once you've [built](./build.md) the app, this delay will be gone, because the sources are then bundled with the app.

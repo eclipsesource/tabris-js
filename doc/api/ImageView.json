@@ -75,7 +75,7 @@
       "description": "Fired when the user zooms the image in or out. The `zoom` event indicates a change to the `zoomLevel` property.",
       "parameters": {
         "zoomLevel": {
-          "description": "The new value of *[zoomLevel](#zoomLevel)*.",
+          "description": "The new value of *[zoomLevel](#zoomlevel)*.",
           "type": "number"
         }
       }

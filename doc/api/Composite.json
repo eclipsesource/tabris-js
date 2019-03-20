@@ -25,7 +25,7 @@
       "type": "Layout|null",
       "const": true,
       "default": "Layout",
-      "description": "The layout manager responsible for interpreting the [`layoutData`](./Widget.md#layoutData) of the child widgets of this Composite."
+      "description": "The layout manager responsible for interpreting the [`layoutData`](./Widget.md#layoutdata) of the child widgets of this Composite."
     }
   },
   "methods": {
@@ -191,7 +191,7 @@
   "links": [
     {
       "title": "Creating a simple `Composite`",
-      "path": "${GITHUB_BRANCH}/snippets/composites.js"
+      "path": "${GITHUB_BRANCH}/snippets/composite.js"
     }
   ]
 }

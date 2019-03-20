@@ -10,18 +10,18 @@ In Tabris.js there are 13 high-level gesture events based on 4 basic gesture typ
 Gesture | Description
 -|-
 [`tap`](./api/Widget.md#tap) | Fired once when a finger briefly touched the widget.
-[`longPress`](./api/Widget.md#longPress) | Fired when a finger touched the widget for a longer period of time (about a second, may depend on the platform), and again when lifting the finger.
+[`longPress`](./api/Widget.md#longpress) | Fired when a finger touched the widget for a longer period of time (about a second, may depend on the platform), and again when lifting the finger.
 [`pan`](./api/Widget.md#pan) | Starts firing continuously as soon as a finger moved in any direction for a certain distance (about 5px, may depend on the platform). The event is always fired on the widget where the finger first touched, even if the finger is moved outside the widget.
-[`panLeft`](./api/Widget.md#panLeft) | Starts firing continuously as soon as a finger moved to the left for a certain distance.
-[`panRight`](./api/Widget.md#panRight) | Starts firing continuously as soon as a finger moved to the right for a certain distance.
-[`panUp`](./api/Widget.md#panUp) | Starts firing continuously as soon as a finger moved upwards for a certain distance.
-[`panDown`](./api/Widget.md#panDown) | Starts firing continuously as soon as a finger moved downwards for a certain distance.
-[`panHorizontal`](./api/Widget.md#panHorizontal) | Starts firing continuously as soon as a finger moved to the left or right for a certain distance.
-[`panVertical`](./api/Widget.md#panVertical) | Starts firing continuously as soon as a finger moved upwards or downwards for a certain distance.
-[`swipeLeft`](./api/Widget.md#swipeLeft) | Fired once when a finger quickly moved to the left for a certain (longer) distance (may depend on platform).
-[`swipeRight`](./api/Widget.md#swipeRight) | Fired once when a finger quickly moved to the right for a certain (longer) distance (may depend on platform).
-[`swipeUp`](./api/Widget.md#swipeUp) | Fired once when a finger quickly moved upwards for a certain (longer) distance (may depend on platform).
-[`swipeDown`](./api/Widget.md#swipeDown) | Fired once when a finger quickly moved downwards for a certain (longer) distance (may depend on platform).
+[`panLeft`](./api/Widget.md#panleft) | Starts firing continuously as soon as a finger moved to the left for a certain distance.
+[`panRight`](./api/Widget.md#panright) | Starts firing continuously as soon as a finger moved to the right for a certain distance.
+[`panUp`](./api/Widget.md#panup) | Starts firing continuously as soon as a finger moved upwards for a certain distance.
+[`panDown`](./api/Widget.md#pandown) | Starts firing continuously as soon as a finger moved downwards for a certain distance.
+[`panHorizontal`](./api/Widget.md#panhorizontal) | Starts firing continuously as soon as a finger moved to the left or right for a certain distance.
+[`panVertical`](./api/Widget.md#panvertical) | Starts firing continuously as soon as a finger moved upwards or downwards for a certain distance.
+[`swipeLeft`](./api/Widget.md#swipeleft) | Fired once when a finger quickly moved to the left for a certain (longer) distance (may depend on platform).
+[`swipeRight`](./api/Widget.md#swiperight) | Fired once when a finger quickly moved to the right for a certain (longer) distance (may depend on platform).
+[`swipeUp`](./api/Widget.md#swipeup) | Fired once when a finger quickly moved upwards for a certain (longer) distance (may depend on platform).
+[`swipeDown`](./api/Widget.md#swipedown) | Fired once when a finger quickly moved downwards for a certain (longer) distance (may depend on platform).
 
 All gesture event objects provide (in addition to [EventObject API](./api/EventObject.md)) a `touches` property which is an array of coordinates, i.e. `{x: number, y: number}[]`. The x/y values values are DIP (device independent pixel) coordinates relative to the top-left corner of the widget that fires the event.
 
@@ -72,10 +72,10 @@ Touch events are a low-level alternative to gesture events. They should only be 
 
 Event | Description
 -|-
-[`touchStart`](./api/Widget.md#touchStart) | Fired when a finger touches the widget.
-[`touchMove`](./api/Widget.md#touchMove) | Fired repeatedly while swiping across the screen after initiating a `touchStart` event.
-[`touchEnd`](./api/Widget.md#touchEnd) | Fired when the touch interaction ends (i.e. the finger is lifted up) on the same widget that received the `touchStart` event.
-[`touchCancel`](./api/Widget.md#touchCancel) | Fired instead of `touchEnd` when the touch interaction ends on another widget than it started.
+[`touchStart`](./api/Widget.md#touchstart) | Fired when a finger touches the widget.
+[`touchMove`](./api/Widget.md#touchmove) | Fired repeatedly while swiping across the screen after initiating a `touchStart` event.
+[`touchEnd`](./api/Widget.md#touchend) | Fired when the touch interaction ends (i.e. the finger is lifted up) on the same widget that received the `touchStart` event.
+[`touchCancel`](./api/Widget.md#touchcancel) | Fired instead of `touchEnd` when the touch interaction ends on another widget than it started.
 
 All touch event objects provide (in addition to [EventObject API](./api/EventObject.md)) a `touches` property which is an array of "touch" objects providing multiple coordinates as `number` values representing DIP (device independent pixel).
 

@@ -42,7 +42,7 @@ You can debug your app using the Chrome Developer Tools. Detailed Instructions b
 * The Android device and running Tabris app should appear in Chrome. Click "inspect"
 * Go to the "Sources" tab and set a breakpoint.
 
-If the Android Device does not show up in Chrome you can try disable and re-enable USB debugging on your device or switch between connecting it as a media device ("MTP") or Camera ("PTP"). It can take a few seconds for the device to appear in Chrome. If nothing else helps use the `adb` tool (part of the [Android SDK platform tools]((https://developer.android.com/studio/releases/platform-tools.html))) and run `adb devices` to make sure the device is detected.
+If the Android Device does not show up in Chrome you can try disable and re-enable USB debugging on your device or switch between connecting it as a media device ("MTP") or Camera ("PTP"). It can take a few seconds for the device to appear in Chrome. If nothing else helps use the `adb` tool (part of the [Android SDK platform tools](https://developer.android.com/studio/releases/platform-tools.html))) and run `adb devices` to make sure the device is detected.
 
 
 ## iOS using Safari

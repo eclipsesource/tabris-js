@@ -148,7 +148,7 @@
     },
     "layoutData": {
       "type": "LayoutDataValue",
-      "description": "Provides information for a widget to be used by the parent when determining its size and position. While this property accepts any valid LayoutData expression (see [LayoutDataValue](./types.md#LayoutDataValue), it will always return an instance of the class [LayoutData](./LayoutData.md).\n\n Widget provides an alias property for each property of LayoutData. Setting these properties will change the value of the `layoutData` property, while getting them is the same as accessing them via the `layoutData` property. I.e. `widget.left === widget.layoutData.left`.",
+      "description": "Provides information for a widget to be used by the parent when determining its size and position. While this property accepts any valid LayoutData expression (see [LayoutDataValue](../types.md#layoutdatavalue), it will always return an instance of the class [LayoutData](./LayoutData.md).\n\n Widget provides an alias property for each property of LayoutData. Setting these properties will change the value of the `layoutData` property, while getting them is the same as accessing them via the `layoutData` property. I.e. `widget.left === widget.layoutData.left`.",
       "default": "LayoutData"
     },
     "left": {
@@ -588,15 +588,15 @@
     },
     {
       "title": "A `Widget` with padding",
-      "path": "${GITHUB_BRANCH}/snippets/widget-passing.jsx"
+      "path": "${GITHUB_BRANCH}/snippets/widget-padding.jsx"
     },
     {
       "title": "A card style `Widget` with corner radius and elevation",
-      "path": "${GITHUB_BRANCH}/snippets/widget-cornerradius.jsx"
+      "path": "${GITHUB_BRANCH}/snippets/widget-cornerradius.js"
     },
     {
       "title": "A `Widget` with a linear-gradient background",
-      "path": "${GITHUB_BRANCH}/snippets/widget-lineargradient.jsx"
+      "path": "${GITHUB_BRANCH}/snippets/widget-lineargradient.js"
     },
     {
       "title": "Using touch events on a `Widget`",

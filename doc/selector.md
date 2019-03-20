@@ -46,7 +46,7 @@ To select a widget by its ID, you can use the selector expression `'#id'` where 
 page.find('#submit')
 ```
 
-By convention IDs should be unique within the given subtree, although this is not enforced by the framework. See "[Encapsulation](#Encapsulation)".
+By convention IDs should be unique within the given subtree, although this is not enforced by the framework. See "[Encapsulation](#encapsulation)".
 
 ### Class Selectors
 
@@ -119,7 +119,7 @@ The `:host` selector refers specifically to the widget that applies the selector
 
 ### Star selector
 
-The character `'*'` matches all widgets. Sometimes useful in conjunction with the [`apply`](#apply) method or [Relationship Selectors](#relationship-selectors):
+The character `'*'` matches all widgets. Sometimes useful in conjunction with the [`apply`](#compositeapply) method or [Relationship Selectors](#relationship-selectors):
 
 ```js
 page.find(':host > * > Button')
@@ -283,7 +283,7 @@ widget.children().find('.bar'); // All descendants matching '.bar' EXCEPT direct
 widget.children().filter('.bar'); // The opposite: ONLY direct children matching '.bar'
 ```
 
-### composite#.apply()
+### composite.apply()
 
 A shortcut for setting different sets of properties for different selections in one method call. The method takes a plain object with selectors as keys and property objects as values:
 

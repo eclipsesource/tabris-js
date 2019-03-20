@@ -25,19 +25,19 @@ Type                 | Default            | Settable
 
 ## LayoutData Properties
 
-All widgets have a property [`layoutData`](./api/Widget.md#layoutData) that influence how the widget will be arranged. The exact syntax supported by `layoutData` is described [here](./types.md#LayoutDataValue), but most commonly it is set to a plain object containing any of these properties:
+All widgets have a property [`layoutData`](./api/Widget.md#layoutdata) that influence how the widget will be arranged. The exact syntax supported by `layoutData` is described [here](./types.md#layoutdatavalue), but most commonly it is set to a plain object containing any of these properties:
 
 Property  | Type
 ----------|--------------------------------------
-left      | [constraint/number](./types.md#ConstraintValue)
-top       | [constraint/number](./types.md#ConstraintValue)
-right     | [constraint/number](./types.md#ConstraintValue)
-bottom    | [constraint/number](./types.md#ConstraintValue)
-width     | [number](./types.md#Dimension)
-heigh     | [number](./types.md#Dimension)
-centerX   | [number](./types.md#Offset)
-centerY   | [number](./types.md#Offset)
-baseline  | [sibling](./types.md#SiblingReferenceValue)
+left      | [constraint/number](./types.md#constraintvalue)
+top       | [constraint/number](./types.md#constraintvalue)
+right     | [constraint/number](./types.md#constraintvalue)
+bottom    | [constraint/number](./types.md#constraintvalue)
+width     | [number](./types.md#dimension)
+heigh     | [number](./types.md#dimension)
+centerX   | [number](./types.md#offset)
+centerY   | [number](./types.md#offset)
+baseline  | [sibling](./types.md#siblingreferencevalue)
 
 Example:
 ```js
@@ -75,17 +75,7 @@ How `layoutData` is interpreted depends on the layout manager of the parent and 
 
 ## ConstraintLayout
 
-This is the default layout used by `Composite` and most of its subclasses like `ContentView`. It supports all `layoutData` properties and each child can be arranged freely based on its own content, the parent's dimensions and its sibling's sizes and positions.
-
-The only property of the `ConstraintLayout` is [`padding`](./api/ConstraintLayout.md#), which can simply be set on widget creation. [It can either be a single number for all edges or an object with different values for each edge.](./types.md#BoxDimensions)
-
-```js
-new Composite({padding: 23});
-// same as:
-new Composite({
-  layout: new ConstraintLayout({padding: {left: 23, top: 23, right: 23, bottom: 23})
-});
-```
+This is the default layout used by `Composite` and most of its subclasses like `ContentView`. It supports all `layoutData` properties and each child can be arranged freely based on its own content, the parent's dimensions and its sibling's sizes and positions. It has no properties and thus there is never a reason to change the default instance.
 
 ### Properties "width" and "height"
 
@@ -97,7 +87,7 @@ The same logic applies to `height`/`top`/`bottom`.
 
 ### Properties "top", "right", "bottom", "left"
 
-The `top`, `right`, `bottom` and `left` properties put a constraint on the the position of the child's edge. For detailed syntax see [ConstraintValue](./types.md#ConstraintValue). The position may be given as an absolute (`number`) or relative (percentage) distance in relation to either the parent's opposing edge or a sibling's opposing edge.
+The `top`, `right`, `bottom` and `left` properties put a constraint on the the position of the child's edge. For detailed syntax see [ConstraintValue](./types.md#constraintvalue). The position may be given as an absolute (`number`) or relative (percentage) distance in relation to either the parent's opposing edge or a sibling's opposing edge.
 
 Example Values  | Description
 ----------------|-------------
@@ -106,7 +96,7 @@ Example Values  | Description
 `'50%'`<br/>`{percent:`&nbsp;`50}` | The distance from the parent's opposing edge will be 50% of the parent's width/height. This in addition to the parent's padding value for that edge.<br/>The string notation is shorter, but the object notation (second example) provides better type-safety in TypeScript.
 `widget` | Attaches this edge to the opposing edge of the given sibling widget. Using a direct reference like this is often inconvenient, for that reason there are other ways to reference sibling widgets.
 `'#foo'` | Attaches this edge to the opposing edge of the sibling widget with the id `'bar'`.
-`'.bar'` | Attaches this edge to the opposing edge of the first sibling widget with a `'foo'` [class list entry](./api/Widget.md#classList).
+`'.bar'` | Attaches this edge to the opposing edge of the first sibling widget with a `'foo'` [class list entry](./api/Widget.md#classlist).
 `'prev()'`<br/>`LayoutData.prev` | Attaches this edge to the opposing edge of the preceding sibling widget.<br/>The string notation is shorter, but the symbol reference (second example) provides better type-safety in TypeScript.
 `'next()'`<br/>`LayoutData.next` | Attaches this edge to the opposing edge of the next sibling widget.<br/>The string notation is shorter, but the symbol reference (second example) provides better type-safety in TypeScript.
 `'50%`&nbsp;`23'`<br/>`[{percent:`&nbsp;`50},`&nbsp;`23]`| The distance from the parent's opposing edge will be 50% of the parent's width/height **plus** a fixed offset in pixels. This in addition to the parent's padding value for that edge..<br/>The string notation is shorter, butt the array notation provides better type-safety in TypeScript.
@@ -125,7 +115,7 @@ The same logic applies for `centerY`/`top`/`bottom`.
 
 ### Property "baseline"
 
-Defines the vertical position of the widget relative to another widget's text baseline. The value must be [a reference to a sibling widget](./types.md#SiblingReferenceValue), for example via `'prev()'` or `'#id'`.
+Defines the vertical position of the widget relative to another widget's text baseline. The value must be [a reference to a sibling widget](./types.md#siblingreferencevalue), for example via `'prev()'` or `'#id'`.
 (For more example see left/right/top/bottom properties above.)
 
 This property is only supported for widgets that contain text, i.e. both the actual and the referenced widget must be one of `TextView`, `TextInput`, or `Button`.
@@ -136,9 +126,9 @@ This property cannot be used in combination with either of `top`, `bottom`, and 
 
 ### Z-Order
 
-When the layout definition results in widgets overlapping one another, the z-order (drawing order) is defined by the order in which the widgets are appended to their parent. New widgets will be rendered on top of those widgets that have already been appended. This is the same order as given via the parent's [`children()`](./api/Composite.md#children) method, with the last child in the returned [`WidgetCollection`](./api/WidgetCollection.md) being placed on top of all other siblings.
+When the layout definition results in widgets overlapping one another, the z-order (drawing order) is defined by the order in which the widgets are appended to their parent. New widgets will be rendered on top of those widgets that have already been appended. This is the same order as given via the parent's [`children()`](./api/Composite.md#childrenselector) method, with the last child in the returned [`WidgetCollection`](./api/WidgetCollection.md) being placed on top of all other siblings.
 
-This order can be changed via the [`insertAfter`](./api/widget.md#insertAfter) and [`insertBefore`](./api/widget.md#insertMethods):
+This order can be changed via the [`insertAfter`](./api/widget.md#insertafterwidget) and [`insertBefore`](./api/widget.md#insertbeforewidget):
 
 ```js
 child.insertAfter(parent.children().last()); // now drawn on top of all other children
@@ -177,7 +167,7 @@ There are three properties of `StackLayout` that can be set via constructor, all
 
 Property | Value | Description
 ---------|-------|------------
-`padding` | [`number` or `object`](./types.md#BoxDimensions) | As used in [ConstraintLayout](#ConstraintLayout).
+`padding` | [`number` or `object`](./types.md#boxdimensions) | As used in [ConstraintLayout](#constraintlayout).
 `alignment` | `string`&nbsp;(`'left'`,&nbsp;`'centerX'`,&nbsp;`'stretchX'`&nbsp;or&nbsp;`'right'`) | Determines the horizontal placement of the children
 `spacing` | `number` | Additional space to add between the children in device independent pixel
 

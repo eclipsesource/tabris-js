@@ -54,7 +54,7 @@ interface BoxDimensions {
 }
 ```
 
-All properties are [`dimension`](#Dimension) and optional. Omitted properties are treated as `0`.
+All properties are [`dimension`](#dimension) and optional. Omitted properties are treated as `0`.
 
 As a shorthand a list of four dimensions is also accepted. This follow the order of `[top, right, bottom, left]`, with missing entries being filled in by the entry of the opposing dimension. If only one entry is given it is used for all dimensions:
 
@@ -103,7 +103,7 @@ widget.bottom = 0;
 
 #### Reference-only constraints
 
-Either a [`PercentValue`](#PercentValue) or a [`SiblingReferenceValue`](#SiblingReferenceValue).
+Either a [`PercentValue`](#percentvalue) or a [`SiblingReferenceValue`](#siblingreferencevalue).
 
 Examples:
 
@@ -116,7 +116,7 @@ widget.bottom = '#foo';
 
 #### Constraint instance
 
-An instance of the [`Constraint`](./api/Constraint.md) class naturally is also a valid `ConstraintValue`. It may be created via its [constructor](./api/Constraint.md#constructor) or the less strict [`Constraint.from`](./api/Constraint.md#from) factory.
+An instance of the [`Constraint`](./api/Constraint.md) class naturally is also a valid `ConstraintValue`. It may be created via its [constructor](./api/Constraint.md#constructor) or the less strict [`Constraint.from`](./api/Constraint.md#fromconstraintvalue) factory.
 
 #### ConstraintLikeObject
 
@@ -129,7 +129,7 @@ interface ConstraintLikeObject {
 }
 ```
 
-An instances of [`Constraint`](./api/Constraint.md) is a valid `ConstraintLikeObject`, but `ConstraintLikeObject` is less strict:  The `reference` property can be a [`PercentValue`](#PercentValue) or a [`SiblingReferenceValue`](#SiblingReferenceValue), or can be omitted if  [`offset`](#offset) is given. Either of the two entries may be omitted, but not both.
+An instances of [`Constraint`](./api/Constraint.md) is a valid `ConstraintLikeObject`, but `ConstraintLikeObject` is less strict:  The `reference` property can be a [`PercentValue`](#percentvalue) or a [`SiblingReferenceValue`](#siblingreferencevalue), or can be omitted if  [`offset`](#offset) is given. Either of the two entries may be omitted, but not both.
 
 Examples:
 
@@ -142,7 +142,7 @@ widget.bottom = {offset: 12};
 
 #### ConstraintArrayValue
 
-An array tuple in the format of `[reference, offset]`, where `reference` is either a [`PercentValue`](#PercentValue) or a [`SiblingReferenceValue`](#SiblingReferenceValue), and offset is an [`Offset`](#offset), i.e. a `number`.
+An array tuple in the format of `[reference, offset]`, where `reference` is either a [`PercentValue`](#percentvalue) or a [`SiblingReferenceValue`](#siblingreferencevalue), and offset is an [`Offset`](#offset), i.e. a `number`.
 
 Examples:
 
@@ -155,7 +155,7 @@ widget.bottom = [Constraint.prev, 12];
 
 #### Constraint String
 
-This is often the most compact way to express a constraint, but it may not be the preferred way in TypeScript projects if type safety is a priority. The string consists of a space separated list of two values in the pattern of `'reference offset'`. The reference part may be of any string as accepted by [`SiblingReferenceValue`](#SiblingReferenceValue) or [`PercentValue`](#PercentValue). The offset has to be a positive (including zero) float, just like [`Offset`](#offset).
+This is often the most compact way to express a constraint, but it may not be the preferred way in TypeScript projects if type safety is a priority. The string consists of a space separated list of two values in the pattern of `'reference offset'`. The reference part may be of any string as accepted by [`SiblingReferenceValue`](#siblingreferencevalue) or [`PercentValue`](#percentvalue). The offset has to be a positive (including zero) float, just like [`Offset`](#offset).
 
 Examples:
 
@@ -184,7 +184,7 @@ The following are all valid `LayoutDataValue` types:
 
 #### LayoutData instance
 
-An instance of the [`LayoutData`](./api/LayoutData.md) class naturally is also a valid `LayoutDataValue`. It may be created via its [constructor](./api/LayoutData.md#constructor) or the less strict [`LayoutData.from`](./api/LayoutData.md#from) factory.
+An instance of the [`LayoutData`](./api/LayoutData.md) class naturally is also a valid `LayoutDataValue`. It may be created via its [constructor](./api/LayoutData.md#constructor) or the less strict [`LayoutData.from`](./api/LayoutData.md#fromlayoutdatavalue) factory.
 
 #### LayoutDataLikeObject
 
@@ -204,7 +204,7 @@ interface LayoutDataLikeObject {
 }
 ```
 
-An instance of [`LayoutData`](./api/LayoutData.md) is a valid `LayoutDataLikeObject`, but in `LayoutDataLikeObject` all properties are optional and less strict. For example `left`, `top`, `right` and `bottom` accept [`ConstraintValue`](#ConstraintValue) (e.g. a `number`) in place of a [`Constraint`](./api/Constraint.md) instance.
+An instance of [`LayoutData`](./api/LayoutData.md) is a valid `LayoutDataLikeObject`, but in `LayoutDataLikeObject` all properties are optional and less strict. For example `left`, `top`, `right` and `bottom` accept [`ConstraintValue`](#constraintvalue) (e.g. a `number`) in place of a [`Constraint`](./api/Constraint.md) instance.
 
 Example:
 
@@ -238,11 +238,11 @@ A positive or negative float, or 0, representing device independent pixels (DIP)
 
 Represents a percentage. This type includes various expressions that can all be used in place of a [`Percent`](./api/Percent.md) instance for convenience. All APIs that accept these expressions will convert them to a `Percent` object.
 
-In TypeScript you can import this type as a union with `import {PercentValue} from 'tabris';` or use `tabris.PercentValue`. [Type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types) for `PercentValue` are available as [`Percent.isPercentValue`](./api/Percent.md#isPercentValue) and [`Percent.isValidPercentValue`](./api/Percent.md#isValidPercentValue).
+In TypeScript you can import this type as a union with `import {PercentValue} from 'tabris';` or use `tabris.PercentValue`. A [Type guard](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types) for `PercentValue` is available as  [`Percent.isValidPercentValue`](./api/Percent.md#isvalidpercentvaluevalue).
 
 #### Percent instance
 
-An instance of the [`Percent`](./api/Percent.md) class naturally is also a valid `PercentValue`. It may be created via its [constructor](./api/Percent.md#constructor) or the more versatile [`Percent.from`](./api/Percent.md#from) factory.
+An instance of the [`Percent`](./api/Percent.md) class naturally is also a valid `PercentValue`. It may be created via its [constructor](./api/Percent.md#constructor) or the more versatile [`Percent.from`](./api/Percent.md#frompercentvalue) factory.
 
 #### PercentLikeObject
 
@@ -265,7 +265,7 @@ Example: `'50%'`
 * JavaScript Type: `tabris.Widget`, `Symbol`, `string`
 * TypeScript Type: `tabris.SiblingReference`
 
-A `SiblingReference` indicates a single sibling of a given Widget. Differs from the type [`SiblingReferenceValue`](#SiblingReferenceValue) in that it does not include `'next()` and `'prev()'` as selectors strings. [It uses symbols instead](#Sibling-Reference-Symbol). There are three variants of `SiblingReference`:
+A `SiblingReference` indicates a single sibling of a given Widget. Differs from the type [`SiblingReferenceValue`](#siblingreferencevalue) in that it does not include `'next()` and `'prev()'` as selectors strings. [It uses symbols instead](#sibling-reference-symbol). There are three variants of `SiblingReference`:
 
 #### Sibling instance
 
@@ -277,14 +277,14 @@ A simple selector string of the format `'#Type'`, `'#id'`, `'.class'`. No child 
 
 #### Sibling Reference Symbol
 
-The constants [`Constraint.prev`]('./api/Constraint#prev') and [`Constraint.next`]('./api/Constraint#next') (also available as [`LayoutData.prev`]('./api/LayoutData#prev') and [`LayoutData.next`]('./api/LayoutData#next')) may be used to point to the sibling directly before/after the reference widget in the parents children list.
+The constants [`Constraint.prev`](./api/Constraint#prev) and [`Constraint.next`](./api/Constraint#next) (also available as [`LayoutData.prev`](./api/LayoutData#prev) and [`LayoutData.next`](./api/LayoutData#next)) may be used to point to the sibling directly before/after the reference widget in the parents children list.
 
 ### SiblingReferenceValue
 
 * JavaScript Type: `tabris.Widget`, `Symbol`, `string`
 * TypeScript Type: `tabris.SiblingReferenceValue`
 
-Same as [`SiblingReference`](#SiblingReference), but less strict in that it also allows the strings `'next()` and `'prev()'` in place of the [`prev`]('./api/Constraint#prev') and [`next`]('./api/Constraint#next') symbols.
+Same as [`SiblingReference`](#siblingreference), but less strict in that it also allows the strings `'next()` and `'prev()'` in place of the [`prev`](./api/Constraint#prev) and [`next`](./api/Constraint#next) symbols.
 
 ## Styling Related Types
 
@@ -297,13 +297,13 @@ Types related to the visual presentation of a widget.
 
 A `ColorValue` represents a 24 bit color, plus an alpha channel for opacity. This type allows various expressions that can all be used in place of a [`Color`](./api/Color.md) instance for convenience. All API that accept these expressions will convert them to a `Color` object. (With the exception of `CanvasContext`.) Setting a ColorValue property to null resets it to the default.
 
-In TypeScript you can import this type as a union with `import {ColorValue} from 'tabris';` or use `tabris.ColorValue`. [Type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types) for `ColorValue` are available as [`Color.isColorValue`](./api/Color.md#isColorValue) and [`Color.isValidColorValue`](./api/Color.md#isValidColorValue).
+In TypeScript you can import this type as a union with `import {ColorValue} from 'tabris';` or use `tabris.ColorValue`. [Type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types) for `ColorValue` are available as [`Color.isColorValue`](./api/Color.md#iscolorvaluevalue) and [`Color.isValidColorValue`](./api/Color.md#isvalidcolorvaluevalue).
 
 The following are all valid `ColorValue` types:
 
 #### Color instance
 
-An instance of the [`Color`](./api/Color.md) class may be created via its [constructor](./api/Color.md#constructor) or the less strict [`Color.from`](./api/Color.md#from) factory.
+An instance of the [`Color`](./api/Color.md) class may be created via its [constructor](./api/Color.md#constructor) or the less strict [`Color.from`](./api/Color.md#fromcolorvalue) factory.
 
 Examples:
 
@@ -361,7 +361,7 @@ Pattern              | Description
 `"transparent"`      | Sets a fully transparent color. Same as `rgba(0, 0, 0, 0)`.
 `"initial"`          | Resets the color to its (platform-dependent) default. Same as `null`.
 
-[Color names](http://www.w3.org/TR/css3-color/#html4) from the CSS3 specification are also accepted. They are available as static string properties of `Color`, e.g. `Color.lime`. These exist just to help with autocompletion.
+[Color names](https://www.w3.org/TR/css-color-3/#html4) from the CSS3 specification are also accepted. They are available as static string properties of `Color`, e.g. `Color.lime`. These exist just to help with autocompletion.
 
 Examples:
 
@@ -388,13 +388,13 @@ Supported **font weights** are `"light"`, `"thin"`, `"normal"`, `"medium"`, `"bo
 
 Supported **font styles** are `"italic"` and `"normal"`. The default is `"normal"`
 
-In TypeScript you can import this type as a union with `import {FontValue} from 'tabris';` or use `tabris.FontValue`. [Type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types) for `FontValue` are available as [`Font.isFontValue`](./api/Font.md#isFontValue) and [`Font.isValidFontValue`](./api/Font.md#isValidFontValue).
+In TypeScript you can import this type as a union with `import {FontValue} from 'tabris';` or use `tabris.FontValue`. [Type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types) for `FontValue` are available as [`Font.isFontValue`](./api/Font.md#isfontvaluevalue) and [`Font.isValidFontValue`](./api/Font.md#isvalidfontvaluevalue).
 
 The following are all valid `FontValue` types:
 
 #### Font instance
 
-An instance of the [`Font`](./api/Font.md) class may be created via its [constructor](./api/Font.md#constructor) or the less strict [`Font.from`](./api/Font.md#from) factory.
+An instance of the [`Font`](./api/Font.md) class may be created via its [constructor](./api/Font.md#constructor) or the less strict [`Font.from`](./api/Font.md#fromfontvalue) factory.
 
 Examples:
 
@@ -449,13 +449,13 @@ The **width** and **height** of an image are specified in DIP (device independen
 
 The **scale** is a positive float or `'auto'`. The image will be scaled down by this factor. Ignored if **width** or **height** are given. If neither **scale**, **width** or **height** are given the scale may be extracted from image file name if it follows the pattern "@\<scale\>x", e.g. `"image@2x.jpg"`. If the scale can not be determined by any of these methods it will be treated as `1`.
 
-The scale factor of the image is relevant when the intrinsic size (in DIP) of the image is needed for layouting. On high-density displays (i.e. [devices with a  scale factor higher than 1](./api/device.md#scaleFactor)) an undetermined image scale factor (or scale factor `1`) may make the image look blurry at full its full natural size.  It is the application developers responsibility to provide and use image files with the appropriate scale factor for any given device.
+The scale factor of the image is relevant when the intrinsic size (in DIP) of the image is needed for layouting. On high-density displays (i.e. [devices with a  scale factor higher than 1](./api/device.md#scalefactor)) an undetermined image scale factor (or scale factor `1`) may make the image look blurry at full its full natural size.  It is the application developers responsibility to provide and use image files with the appropriate scale factor for any given device.
 
 The following are all valid `ImageValue` types:
 
 #### Image instance
 
-An instance of the [`Image`](./api/Image.md) class may be created via its [constructor](./api/Image.md#constructor) or the less strict [`Image.from`](./api/Image.md#from) factory.
+An instance of the [`Image`](./api/Image.md) class may be created via its [constructor](./api/Image.md#constructor) or the less strict [`Image.from`](./api/Image.md#fromimagevalue) factory.
 
 Examples:
 
@@ -491,13 +491,13 @@ Examples:
 
 A `LinearGradientValue` specifies a set of colors, their relative position along a straight line, and the angle of that line. This describes a color gradient that can be drawn to fill any area, usually the background of a widget. This type allows various expressions that can all be used in place of a [`LinearGradient`](./api/LinearGradient.md) instance for convenience. All API that accept these expressions will convert them to a `LinearGradient` object.
 
-In TypeScript you can import this type as a union with `import {LinearGradientValue} from 'tabris';` or use `tabris.LinearGradientValue`. [Type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types) for `LinearGradientValue` are available as [`LinearGradient.isLinearGradientValue`](./api/LinearGradient.md#isLinearGradientValue) and [`LinearGradient.isValidLinearGradientValue`](./api/LinearGradient.md#isValidLinearGradientValue).
+In TypeScript you can import this type as a union with `import {LinearGradientValue} from 'tabris';` or use `tabris.LinearGradientValue`. [Type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types) for `LinearGradientValue` are available as [`LinearGradient.isLinearGradientValue`](./api/LinearGradient.md#islineargradientvaluevalue) and [`LinearGradient.isValidLinearGradientValue`](./api/LinearGradient.md#isvalidlineargradientvaluevalue).
 
 The following are all valid `LinearGradientValue` types:
 
 #### LinearGradient instance
 
-An instance of the [`LinearGradient`](./api/LinearGradient.md) class may be created via its [constructor](./api/LinearGradient.md#constructor) or the less strict [`LinearGradient.from`](./api/Image.md#from) factory.
+An instance of the [`LinearGradient`](./api/LinearGradient.md) class may be created via its [constructor](./api/LinearGradient.md#constructor) or the less strict [`LinearGradient.from`](./api/LinearGradient.md#fromlineargradientvalue) factory.
 
 Examples:
 
@@ -642,4 +642,4 @@ This transformation will make the widget twice as big and rotate it by 135&deg;.
 
 ### PropertyChangedEvent
 
-An event object fired when an object property changes. It is an instance of [`EventObject`](./types/EventObject.md) that provides an additional property `value` containing the new value.
+An event object fired when an object property changes. It is an instance of [`EventObject`](./api/EventObject.md) that provides an additional property `value` containing the new value.
