@@ -40,10 +40,7 @@
       "type": "string",
       "readonly": true,
       "const": true,
-      "description": "The name of the device set by owner. For example `\"John's iPhone\"`. This property is also available globally as `device.name`.",
-      "platforms": {
-        "android": false
-      }
+      "description": "The name of the device set by owner. For example `\"John's phone\"`. This property is also available globally as `device.name`.\n\n**Note:** On Android `name` is only available on Android 7.1+."
     },
     "language": {
       "type": "string",
