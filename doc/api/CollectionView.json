@@ -24,7 +24,7 @@
     "cellHeight": {
       "type": "number|\"auto\"|((index: number, cellType: string) => number|\"auto\")",
       "default": "auto",
-      "description": "The height of a collection cell. If set to `\"auto\"`, the cell height will be calculated individually for each cell. If set to a function, this function will be called for every item, providing the item index and the cell type as parameters, and must return the cell height for the given item."
+      "description": "The height of a collection cell. If set to `\"auto\"`, the cell height will be calculated individually for each cell. If set to a function, this function will be called for every item, providing the item index and the cell type as parameters, and must return the cell height for the given item.\nNote: On iOS `\"auto\"` may cause significant performance downgrade as it requires additional layouting passes to calculate cell height internally. If possible please use a combination of fixed `itemHeight` and `cellType` properties to specify different height for different cells."
     },
     "itemCount": {
       "type": "number",
