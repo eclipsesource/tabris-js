@@ -5,6 +5,8 @@ import { WidgetCollection, TextView, NativeObject } from 'tabris';
 let collection: WidgetCollection = $(null, [new TextView(), new TextView()]);
 collection = $(null, new TextView());
 collection = $('#foo');
+collection = $('*');
+collection = $();
 collection = $(TextView);
 collection = $((x: tabris.Widget) => x.cid === '$0');
 let str: string = $(null, ['foo', 'bar']);

@@ -26,16 +26,12 @@ describe('$', function() {
     expect(() => $({foo: 'bar'}, ['foo'])).to.throw(Error, '$ does not support attributes');
   });
 
-  it('throws no parameter are given', function() {
-    // @ts-ignore
-    expect(() => $()).to.throw(Error, '$ is missing arguments or content');
-  });
-
   describe('width selector parameter', function() {
 
     beforeEach(function () {
       const parent = new Composite();
       parent.append(new TextView({id: 'foo'}));
+      parent.append(new TextView({id: 'bar'}));
       contentView.append(parent);
     });
 
@@ -52,6 +48,10 @@ describe('$', function() {
     it('forwards string to tabris.contentView.find', function() {
       expect($('TextView').first()).to.equal(contentView.find('#foo').first());
       expect($('#foo').first()).to.equal(contentView.find('#foo').first());
+    });
+
+    it('falls back to "*"', function() {
+      expect($().toArray()).to.deep.equal(contentView.find('*').toArray());
     });
 
   });

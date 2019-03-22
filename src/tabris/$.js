@@ -4,21 +4,18 @@ import Widget from './Widget';
 import TextView from './widgets/TextView';
 
 /**
- * @param {any} param
+ * @param {any=} param
  * @param {Array=} arr
  * @returns {any}
  */
 export default function $(param) {
-  if (arguments.length === 0) {
-    throw new Error('$ is missing arguments or content');
-  }
   if (typeof param === 'number') {
     // @ts-ignore
     return tabris._nativeObjectRegistry.find('$' + param);
   }
-  if (typeof param === 'string' || param instanceof Function) {
+  if (typeof param === 'string' || param instanceof Function || arguments.length === 0) {
     // @ts-ignore
-    return tabris.contentView.find(param);
+    return tabris.contentView.find(param || '*');
   }
   if (!(param instanceof Object)) {
     return '' + param;

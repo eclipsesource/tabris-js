@@ -10,6 +10,7 @@
           {
             "name": "selector",
             "type": "Selector",
+            "optional": true,
             "ts_type": "tabris.Selector<tabris.Widget, Result>",
             "description": "A selector expression or a predicate function to filter the results."
           }
