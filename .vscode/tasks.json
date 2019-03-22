@@ -169,6 +169,11 @@
         "exec:verify_typings",
         "verify_typings_fail"
       ]
+    },
+    {
+      "type": "grunt",
+      "task": "quickverify",
+      "problemMatcher": []
     }
   ]
 }

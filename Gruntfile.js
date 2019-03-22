@@ -273,6 +273,12 @@ module.exports = function(grunt) {
     'doc'
   ]);
 
+  grunt.registerTask('quickverify', [
+    'clean',
+    'build',
+    'verify'
+  ]);
+
   function blockComment(text) {
     const commented = text.trim().split('\n').map(line => ' * ' + line).join('\n');
     return '/*!\n' + commented + '\n */\n';
