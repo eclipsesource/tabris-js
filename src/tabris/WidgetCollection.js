@@ -1,14 +1,23 @@
 import {select} from './util-widget-select';
 import {jsxFactory} from './JsxProcessor';
 
+/** @typedef {import('./Widget').default} Widget */
+/** @typedef {Widget[]|WidgetCollection} Widgets */
+/** @typedef {string|Function} Selector */
+
 export default class WidgetCollection {
 
+  /**
+   * @param {Widgets=} collection
+   * @param {{selector?: Selector, deep?: boolean, origin?: Widget|WidgetCollection}} internals
+   */
   constructor(collection, {selector, deep, origin} = {}) {
     if (selector && !origin) {
       throw new Error('WidgetCollection can not be constructed with an selector but no origin');
     }
     const arr = collection instanceof WidgetCollection ? collection.toArray() : collection;
-    Object.defineProperty(this, 'host', {value: getHost(origin)});
+    this._host = getHost(origin);
+    /** @type {Widget[]} */
     this._array = select(arr, selector || '*', deep, origin instanceof WidgetCollection ? origin : this);
     for (let i = 0; i < this._array.length; i++) {
       this[i] = this._array[i];
@@ -17,6 +26,10 @@ export default class WidgetCollection {
 
   get length() {
     return this._array.length;
+  }
+
+  get host() {
+    return this._host;
   }
 
   first(selector) {
@@ -82,37 +95,37 @@ export default class WidgetCollection {
     parent.append(this);
   }
 
-  set() {
-    this._array.forEach(widget => widget.set.apply(widget, arguments));
+  set(...args) {
+    this._array.forEach(widget => widget.set(...args));
     return this;
   }
 
-  on() {
-    this._array.forEach(widget => widget.on.apply(widget, arguments));
+  on(...args) {
+    this._array.forEach(widget => widget.on(...args));
     return this;
   }
 
-  off() {
-    this._array.forEach(widget => widget.off.apply(widget, arguments));
+  off(...args) {
+    this._array.forEach(widget => widget.off(...args));
     return this;
   }
 
-  once() {
-    this._array.forEach(widget => widget.once.apply(widget, arguments));
+  once(...args) {
+    this._array.forEach(widget => widget.once(...args));
     return this;
   }
 
-  trigger() {
-    this._array.forEach(widget => widget.trigger.apply(widget, arguments));
+  trigger(...args) {
+    this._array.forEach(widget => widget.trigger(...args));
     return this;
   }
 
-  animate() {
-    this._array.forEach(widget => widget.animate.apply(widget, arguments));
+  animate(...args) {
+    this._array.forEach(widget => widget.animate(...args));
   }
 
   dispose() {
-    this._array.forEach(widget => widget.dispose.apply(widget, arguments));
+    this._array.forEach(widget => widget.dispose());
   }
 
   [Symbol.iterator]() {
@@ -124,15 +137,18 @@ export default class WidgetCollection {
     };
   }
 
-  /** @this {import("./JsxProcessor").default} */
-  [jsxFactory](Type, attributes) {
-    if (Object.keys(this.withoutChildren(attributes)).length) {
-      throw new Error('JSX: WidgetCollection can not have attributes');
-    }
-    return new Type(this.getChildren(attributes) || []);
-  }
-
 }
+
+WidgetCollection.prototype[jsxFactory] = createElement;
+
+/** @this {import("./JsxProcessor").default} */
+function createElement(Type, attributes) {
+  if (Object.keys(this.withoutChildren(attributes)).length) {
+    throw new Error('JSX: WidgetCollection can not have attributes');
+  }
+  return new Type(this.getChildren(attributes) || []);
+}
+
 function getHost(origin) {
   if (origin instanceof WidgetCollection) {
     return origin.host;

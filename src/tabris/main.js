@@ -158,6 +158,9 @@ const tabrisMain = Object.assign(new Tabris(), {
   Response,
 });
 
+/** @typedef {typeof tabrisMain} TabrisMain */
+
+// @ts-ignore
 module.exports = tabrisMain;
 global.tabris = tabrisMain;
 

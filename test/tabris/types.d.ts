@@ -31,12 +31,12 @@ type ClientListenCall = {
   listen: {[key: string]: boolean}
 }
 
-type ClientListenCall = {
+type ClientDestroyCall = {
   op: 'destroy',
   id: string
 }
 
-type NativeCallFilter = Partial<ClientCreateCall | ClientGetCall | ClientSetCall | ClientCallCall | ClientListenCall | ClientListenCall>;
+type NativeCallFilter = Partial<ClientCreateCall | ClientGetCall | ClientSetCall | ClientCallCall | ClientListenCall | ClientListenCall | ClientDestroyCall>;
 type NativeCallResult =
   Array<Partial<
     ClientCreateCall & ClientGetCall & ClientSetCall & ClientCallCall & ClientListenCall & ClientListenCall

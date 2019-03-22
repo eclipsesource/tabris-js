@@ -16,7 +16,12 @@ class Bar extends Foo {}
 
 describe('WidgetCollection', function() {
 
-  let widgets, collection, host;
+  /** @type {Array<Foo|Bar>} */
+  let widgets;
+  /** @type {WidgetCollection} */
+  let collection;
+  /** @type {Bar} */
+  let host;
 
   beforeEach(function() {
     mockTabris(new ClientStub());
@@ -39,6 +44,7 @@ describe('WidgetCollection', function() {
   });
 
   it('makes host readonly', function() {
+    // @ts-ignore
     collection.host = new Foo();
     expect(collection.host).to.equal(host);
   });
@@ -100,6 +106,7 @@ describe('WidgetCollection', function() {
     });
 
     it('cannot be changed', function() {
+      // @ts-ignore
       collection.length = 1;
 
       expect(collection.length).to.equal(3);
