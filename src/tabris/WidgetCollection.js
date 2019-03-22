@@ -46,6 +46,16 @@ export default class WidgetCollection {
     return this._array[this._array.length - 1];
   }
 
+  only(selector) {
+    if (selector) {
+      return this.filter(selector).only();
+    }
+    if (this._array.length !== 1) {
+      throw new Error('Expected exactly one match, but found '  + this.length);
+    }
+    return this._array[0];
+  }
+
   toArray() {
     return this._array.concat();
   }

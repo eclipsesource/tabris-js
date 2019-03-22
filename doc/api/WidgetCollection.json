@@ -187,6 +187,23 @@
         "description": "Returns the first widget in the collection that is matched by the selector. Without selector, it is the same as `collection[0]`."
       }
     ],
+    "only": [
+      {
+        "generics": "Result extends T = T",
+        "parameters": [
+          {
+            "name": "selector",
+            "type": "Selector",
+            "ts_type": "Selector<T, Result>",
+            "optional": true,
+            "description": "A selector expression or a predicate function to filter the results."
+          }
+        ],
+        "returns": "Widget",
+        "ts_returns": "Result",
+        "description": "Returns the only widget in the collection that is matched by the selector. If there is more or less than one match the method throws en Error. Without a selector the widget collection needs to have exactly one entry."
+      }
+    ],
     "last": [
       {
         "generics": "Result extends T = T",

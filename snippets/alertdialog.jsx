@@ -10,7 +10,7 @@ contentView.append(
   </StackComposite>
 );
 
-const textView =  contentView.find(TextView).first();
+const textView =  $(TextView).only();
 
 async function showSimpleDialog() {
   await AlertDialog.open('Comment saved').onClose.promise();

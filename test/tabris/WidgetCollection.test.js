@@ -57,6 +57,16 @@ describe('WidgetCollection', function() {
     expect(collection.first(Bar)).to.equal(widgets[1]);
   });
 
+  it('only()', function() {
+    expect(new WidgetCollection([host]).only()).to.equal(host);
+    expect(() => collection.only()).to.throw('Expected exactly one match, but found 3');
+  });
+
+  it('only(selector)', function() {
+    expect(collection.only(Bar)).to.equal(widgets[1]);
+    expect(() => collection.only('#notFound')).to.throw('Expected exactly one match, but found 0');
+  });
+
   it('last()', function() {
     expect(collection.last()).to.equal(widgets[2]);
   });
