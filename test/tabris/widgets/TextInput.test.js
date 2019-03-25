@@ -161,11 +161,11 @@ describe('TextInput', function() {
       const widget = jsx.createElement(
         TextInput,
         null,
-        'Hello',
+        'Hello  ',
         'World!'
       );
 
-      expect(widget.text).to.equal('Hello World!');
+      expect(widget.text).to.equal('Hello  World!');
     });
 
     it('with text content and text property', function() {

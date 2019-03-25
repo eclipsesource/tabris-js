@@ -86,11 +86,11 @@ describe('Common Widgets', function() {
     const button = jsx.createElement(
       Button,
       null,
-      'Hello',
+      'Hello  ',
       'World!'
     );
 
-    expect(button.text).to.equal('Hello World!');
+    expect(button.text).to.equal('Hello  World!');
   });
 
   it('Button JSX with text content and text property', function() {
@@ -155,11 +155,11 @@ describe('Common Widgets', function() {
     const widget = jsx.createElement(
       CheckBox,
       null,
-      'Hello',
+      'Hello  ',
       'World!'
     );
 
-    expect(widget.text).to.equal('Hello World!');
+    expect(widget.text).to.equal('Hello  World!');
   });
 
   it('CheckBox JSX with text content and text property', function() {
@@ -258,11 +258,11 @@ describe('Common Widgets', function() {
     const button = jsx.createElement(
       RadioButton,
       null,
-      'Hello',
+      'Hello  ',
       'World!'
     );
 
-    expect(button.text).to.equal('Hello World!');
+    expect(button.text).to.equal('Hello  World!');
   });
 
   it('RadioButton JSX with text content and text property', function() {
@@ -439,11 +439,11 @@ describe('Common Widgets', function() {
     const button = jsx.createElement(
       ToggleButton,
       null,
-      'Hello',
+      'Hello  ',
       'World!'
     );
 
-    expect(button.text).to.equal('Hello World!');
+    expect(button.text).to.equal('Hello  World!');
   });
 
   it('ToggleButton JSX with text content and text property', function() {

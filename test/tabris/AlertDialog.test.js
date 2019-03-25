@@ -270,11 +270,11 @@ describe('AlertDialog', function() {
       const popup = jsx.createElement(
         AlertDialog,
         null,
-        'Hello',
+        'Hello  ',
         'World!'
       );
 
-      expect(popup.message).to.equal('Hello World!');
+      expect(popup.message).to.equal('Hello  World!');
     });
 
     it('with text content and message property', function() {

@@ -180,7 +180,11 @@ export function joinTextContent(textArray, markupEnabled) {
     return null;
   }
   if (markupEnabled) {
-    return textArray.map(str => (str + '').trim()).join(' ').replace(/\s*<br\s*\/>\s*/g, '<br/>');
+    return textArray
+      .map(str => str + '')
+      .join('')
+      .replace(/\s+/g, ' ')
+      .replace(/\s*<br\s*\/>\s*/g, '<br/>');
   }
-  return textArray.join(' ');
+  return textArray.join('');
 }

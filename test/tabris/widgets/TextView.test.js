@@ -77,24 +77,24 @@ describe('TextView', function() {
       const button = jsx.createElement(
         TextView,
         null,
-        'Hello',
-        '<br/>',
+        '  Hello',
+        '  <br/>  ',
         'World!'
       );
 
-      expect(button.text).to.equal('Hello <br/> World!');
+      expect(button.text).to.equal('  Hello  <br/>  World!');
     });
 
     it('creates widget with processed text content with markup enabled', function() {
       const button = jsx.createElement(
         TextView,
         {markupEnabled: true},
-        'Hello',
-        '<br/>',
+        '  Hello',
+        '  <br/>  ',
         'World!'
       );
 
-      expect(button.text).to.equal('Hello<br/>World!');
+      expect(button.text).to.equal(' Hello<br/>World!');
     });
 
     it('fails to create widget with text content and text property', function() {

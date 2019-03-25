@@ -219,11 +219,11 @@ describe('ActionSheet', () => {
       const popup = jsx.createElement(
         ActionSheet,
         null,
-        'Hello',
+        'Hello  ',
         'World!'
       );
 
-      expect(popup.message).to.equal('Hello World!');
+      expect(popup.message).to.equal('Hello  World!');
     });
 
     it('with text content and message property', function() {

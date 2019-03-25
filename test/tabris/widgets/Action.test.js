@@ -128,11 +128,11 @@ describe('Action', function() {
       const widget = jsx.createElement(
         Action,
         null,
-        'Hello',
+        'Hello  ',
         'World!'
       );
 
-      expect(widget.title).to.equal('Hello World!');
+      expect(widget.title).to.equal('Hello  World!');
     });
 
     it('with text content and title property', function() {

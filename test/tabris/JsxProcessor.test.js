@@ -375,15 +375,15 @@ describe('JsxProcessor', function() {
     describe('with intrinsic elements', function() {
 
       it('renders a markup string', function() {
-        expect(jsx.createElement('b', {}, 'hello', 'world')).to.equal('<b>hello world</b>');
-        expect(jsx.createElement('span', {}, 'hello', 'world')).to.equal('<span>hello world</span>');
-        expect(jsx.createElement('big', {}, 'hello', 'world')).to.equal('<big>hello world</big>');
-        expect(jsx.createElement('i', {}, 'hello', 'world')).to.equal('<i>hello world</i>');
-        expect(jsx.createElement('small', {}, 'hello', 'world')).to.equal('<small>hello world</small>');
-        expect(jsx.createElement('strong', {}, 'hello', 'world')).to.equal('<strong>hello world</strong>');
-        expect(jsx.createElement('ins', {}, 'hello', 'world')).to.equal('<ins>hello world</ins>');
-        expect(jsx.createElement('del', {}, 'hello', 'world')).to.equal('<del>hello world</del>');
-        expect(jsx.createElement('a', {}, 'hello', 'world')).to.equal('<a>hello world</a>');
+        expect(jsx.createElement('b', {}, 'hello', ' world')).to.equal('<b>hello world</b>');
+        expect(jsx.createElement('span', {}, 'hello', ' world')).to.equal('<span>hello world</span>');
+        expect(jsx.createElement('big', {}, 'hello', ' world')).to.equal('<big>hello world</big>');
+        expect(jsx.createElement('i', {}, 'hello', ' world')).to.equal('<i>hello world</i>');
+        expect(jsx.createElement('small', {}, 'hello', ' world')).to.equal('<small>hello world</small>');
+        expect(jsx.createElement('strong', {}, 'hello', ' world')).to.equal('<strong>hello world</strong>');
+        expect(jsx.createElement('ins', {}, 'hello', ' world')).to.equal('<ins>hello world</ins>');
+        expect(jsx.createElement('del', {}, 'hello', ' world')).to.equal('<del>hello world</del>');
+        expect(jsx.createElement('a', {}, 'hello', ' world')).to.equal('<a>hello world</a>');
       });
 
       it('renders a with href string', function() {
@@ -401,7 +401,7 @@ describe('JsxProcessor', function() {
       it('strips spaces around <br/>', function() {
         expect(jsx.createElement('span', {},
           ' foo  <br/> bar <br  />   baz '
-        )).to.equal('<span>foo<br/>bar<br/>baz</span>');
+        )).to.equal('<span> foo<br/>bar<br/>baz </span>');
       });
 
       it('throws for br with content', function() {
@@ -470,7 +470,7 @@ describe('JsxProcessor', function() {
         expect(collection).to.be.instanceOf(WidgetCollection);
         expect(collection.length).to.equal(4);
         expect(collection[0]).to.be.instanceof(TextView);
-        expect(collection[0].text).to.equal('foo false null');
+        expect(collection[0].text).to.equal('foofalsenull');
         expect(collection[1]).to.be.instanceof(Switch);
         expect(collection[2]).to.be.instanceof(Button);
         expect(collection[3]).to.be.instanceof(TextView);
@@ -495,7 +495,7 @@ describe('JsxProcessor', function() {
           ['bar', '<br/>', 'baz']
         );
 
-        expect(str).to.equal('foo bar<br/>baz');
+        expect(str).to.equal('foobar<br/>baz');
       });
 
       it('creates string from mixed array without widgets', function() {
@@ -507,7 +507,7 @@ describe('JsxProcessor', function() {
           1
         );
 
-        expect(str).to.equal('null foo 1');
+        expect(str).to.equal('nullfoo1');
       });
 
     });
