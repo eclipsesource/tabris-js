@@ -67,6 +67,7 @@ backgroundGradient = widget.background as LinearGradientValue;
 baseline = widget.baseline;
 bottomMargin = widget.bottom;
 bounds = widget.bounds;
+bounds = widget.absoluteBounds;
 boxDim = widget.padding;
 excludeFromLayout = widget.excludeFromLayout;
 centerX = widget.centerX;

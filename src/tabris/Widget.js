@@ -218,6 +218,10 @@ NativeObject.defineProperties(Widget.prototype, {
     type: 'bounds',
     readonly: true
   },
+  absoluteBounds: {
+    type: 'bounds',
+    readonly: true
+  },
   background: {
     type: 'shader',
     set(name, value) {
