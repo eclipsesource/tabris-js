@@ -407,6 +407,11 @@ describe('Widget', function() {
         expect(log).to.eql(['parent', 'child', 'grandchild']);
       });
 
+      it('marks children as disposed', function() {
+        parent.dispose();
+        expect(child.toString()).to.contain('(disposed)');
+      });
+
     });
 
     describe('when disposed', function() {
@@ -479,6 +484,10 @@ describe('Widget', function() {
         expect(() => {
           widget.detach();
         }).to.throw(Error, 'Object is disposed');
+      });
+
+      it('dispose() fails silently', function() {
+        expect(() => widget.dispose()).not.to.throw();
       });
 
     });

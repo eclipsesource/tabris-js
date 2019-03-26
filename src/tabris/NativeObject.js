@@ -224,14 +224,14 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
   }
 
   dispose() {
-    this._disposedToStringValue = this.toString();
-    this.toString = () => this._disposedToStringValue + ' (disposed)';
     this._dispose();
   }
 
   _dispose(skipNative) {
     if (!this._isDisposed && !this._inDispose) {
       this._inDispose = true;
+      this._disposedToStringValue = this.toString();
+      this.toString = () => this._disposedToStringValue + ' (disposed)';
       this._trigger('dispose');
       this._release();
       if (!skipNative) {
