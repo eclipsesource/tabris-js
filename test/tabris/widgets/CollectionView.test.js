@@ -620,6 +620,50 @@ describe('CollectionView', function() {
 
     });
 
+    describe('cellByItemIndex', function() {
+
+      let cellA, cellB;
+
+      beforeEach(function() {
+        view.createCell = () => new Composite();
+        const registry = tabris._nativeObjectRegistry;
+        cellA = registry.find(view._trigger('createCell', {type: 0}));
+        cellB = registry.find(view._trigger('createCell', {type: 0}));
+      });
+
+      it('throws for invalid values`', function() {
+        expect(() => view.cellByItemIndex()).to.throw();
+        expect(() => view.cellByItemIndex(null)).to.throw();
+        expect(() => view.cellByItemIndex(true)).to.throw();
+        expect(() => view.cellByItemIndex(-1)).to.throw();
+      });
+
+      it('returns null for unbound index', function() {
+        view._trigger('updateCell', {widget: cellA.cid, index: 3});
+        view._trigger('updateCell', {widget: cellB.cid, index: 4});
+
+        expect(view.cellByItemIndex(0)).to.be.null;
+        expect(view.cellByItemIndex(1)).to.be.null;
+      });
+
+      it('returns index for bound index', function() {
+        view._trigger('updateCell', {widget: cellA.cid, index: 3});
+        view._trigger('updateCell', {widget: cellB.cid, index: 4});
+
+        expect(view.cellByItemIndex(3)).to.equal(cellA);
+        expect(view.cellByItemIndex(4)).to.equal(cellB);
+      });
+
+      it('always returns latest association', function() {
+        view._trigger('updateCell', {widget: cellA.cid, index: 3});
+        view._trigger('updateCell', {widget: cellA.cid, index: 4});
+
+        expect(view.cellByItemIndex(4)).to.equal(cellA);
+        expect(view.cellByItemIndex(3)).to.be.null;
+      });
+
+    });
+
     describe('load', function() {
 
       beforeEach(function() {

@@ -179,6 +179,17 @@
       ],
       "description": "Determines the item index currently associated with the given cell.",
       "returns": "number"
+    },
+    "cellByItemIndex": {
+      "parameters": [
+        {
+          "type": "number",
+          "name": "itemIndex",
+          "description": "The index of the item as given in `updateCell`."
+        }
+      ],
+      "description": "Returns the cell currently associated with the given item index. Returns `null` if the item is not currently displayed.",
+      "returns": "Cell|null"
     }
   },
   "links": [

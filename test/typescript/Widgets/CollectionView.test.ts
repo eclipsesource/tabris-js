@@ -71,7 +71,8 @@ const buttonCV: CollectionView<Button> = new CollectionView<Button>({
   updateCell: cell => cell.text = 'foo'
 });
 
-const button: Button|undefined = buttonCV.children().first();
+let button: Button|undefined|null = buttonCV.children().first();
+button = buttonCV.cellByItemIndex(0);
 
 class CustomComponent extends CollectionView<Widget> {
   public foo: string;

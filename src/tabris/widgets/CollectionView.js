@@ -10,7 +10,10 @@ export default class CollectionView extends Composite {
    */
   constructor(properties) {
     super(properties);
+    /** @type {Map<Widget, number>} */
     this._cellMapping = new Map();
+    /** @type {Map<number, Widget>} */
+    this._itemMapping = new Map();
     this._nativeListen('requestInfo', true);
     this._nativeListen('createCell', true);
     this._nativeListen('updateCell', true);
@@ -93,6 +96,10 @@ export default class CollectionView extends Composite {
     }
   }
 
+  /**
+   * @param {Widget} widget
+   * @returns {number}
+  */
   itemIndex(widget) {
     if (!(widget instanceof Widget)) {
       throw new Error('Not a widget: ' + widget);
@@ -108,6 +115,20 @@ export default class CollectionView extends Composite {
       return this._cellMapping.get(cell);
     }
     return -1;
+  }
+
+  /**
+   * @param {number} index
+   * @returns {Widget}
+  */
+  cellByItemIndex(index) {
+    if (!isNumber(index) || index < 0) {
+      throw new Error('Invalid index');
+    }
+    if (this._itemMapping.has(index)) {
+      return this._itemMapping.get(index);
+    }
+    return null;
   }
 
   $checkIndex(index) {
@@ -140,7 +161,11 @@ export default class CollectionView extends Composite {
       return item.cid;
     } else if (name === 'updateCell') {
       const cell = tabris._nativeObjectRegistry.find(event.widget);
+      if (this._cellMapping.has(cell)) {
+        this._itemMapping.delete(this._cellMapping.get(cell));
+      }
       this._cellMapping.set(cell, event.index);
+      this._itemMapping.set(event.index, cell);
       this.updateCell(cell, event.index);
     } else {
       return super._trigger(name, event);
