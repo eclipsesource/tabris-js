@@ -47,6 +47,12 @@ describe('Widget', function() {
       }).to.throw(Error, 'Can not create instance of abstract class Widget');
     });
 
+    it('prevents overriding children with non-function', function() {
+      expect(() => {
+        new TestWidget({children: []});
+      }).to.throw(Error, 'You may not override children with a non-function');
+    });
+
   });
 
   describe('instance', function() {

@@ -42,6 +42,13 @@ export default class Composite extends Widget {
     return this._children(selector);
   }
 
+  set(props) {
+    if (('children' in props) && !(props.children instanceof Function)) {
+      throw new Error('You may not override children with a non-function');
+    }
+    return super.set(props);
+  }
+
   _nativeCreate(properties) {
     super._nativeCreate(omit(properties || {}, ['layout']));
     this._initLayout(properties);
