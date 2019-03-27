@@ -65,7 +65,12 @@ widget
 
 class CustomComponent extends Composite {
   public foo: string;
-  constructor(props: Properties<CustomComponent>) { super(props); }
+  constructor(props: Properties<CustomComponent>) {
+    super(props);
+    this.set(props);
+    this.set<CustomComponent>({visible: true, foo: 'bar'});
+  }
+
 }
 
-new CustomComponent({foo: 'bar'}).set({foo: 'bar'});
+new CustomComponent({foo: 'bar'}).set({foo: 'bar', visible: true});

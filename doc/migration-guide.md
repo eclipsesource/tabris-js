@@ -124,7 +124,9 @@ The `tabris` module no longer exports a separate properties interfaces for every
 
 ### "tsProperties" property no longer supported
 
-It is no longer necessary or supported to create a property `tsProperties` on classes inheriting from `Widget` to control the properties accepted by the `set` method. Instead all new public properties are recognized by `set` automatically. That excludes methods/functions. To extend the automatic behavior the `set` method can be overwritten.
+It is no longer necessary or supported to create a property `tsProperties` on classes inheriting from `Widget` to control the properties accepted by the `set` method. In most cases public properties are recognized by `set` automatically. That excludes methods/functions.
+
+When called on `this` the supported properties can not be inferred. To fix this the `set` method can be overwritten/re-declared, or it may be called with the appropriate generic type like this: `this.set<MyComponent>({propA: valueA});`
 
 ### type "Partial"
 

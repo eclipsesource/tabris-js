@@ -97,13 +97,14 @@
   "methods": {
     "set": [
       {
+        "generics": "T extends NativeObject = this",
         "parameters": [
           {
             "name": "properties",
-            "type": "Properties<this> & Partial<Pick<this, 'cellHeight' | 'cellType' | 'createCell'>>"
+            "type": "Properties<T> & Partial<Pick<this, 'cellHeight' | 'cellType' | 'createCell'>>"
           }
         ],
-        "description": "Sets all key-value pairs in the properties object as widget properties.",
+        "description": "Sets all key-value pairs in the properties object as widget properties.\n\n**Important TypeScript note:** When called on `this` you may need to specify your custom type like this: `this.set<MyComponent>({propA: valueA});`",
         "returns": "this"
       }
     ],
