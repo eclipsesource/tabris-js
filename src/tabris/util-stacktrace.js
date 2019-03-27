@@ -49,14 +49,27 @@ export function getCurrentLine(error) {
 }
 
 function getStackArray(error) {
-  const stack = [error.stack].concat(tabris._stackTraceStack).join('\n').split('\n');
-  const formattedStack = stack.filter(filterStackLine)
+  const stack = limitStack(
+    ([error.stack].concat(tabris._stackTraceStack).join('\n').split('\n')).filter(filterStackLine)
+  );
+  const formattedStack = stack
     .map(normalizeStackLine)
     .filter(line => !!line);
   if (!formattedStack.length) {
     throw new Error('Empty stacktrace');
   }
   return formattedStack;
+}
+
+/** @param {string[]} stack */
+function limitStack(stack) {
+  if (stack.length > 300) {
+    const missing = stack.length - 300;
+    return stack.slice(0, 150)
+      .concat(['['  + missing + ' more lines...]'])
+      .concat(stack.slice(-150));
+  }
+  return stack;
 }
 
 function filterStackLine(line) {
@@ -66,7 +79,11 @@ function filterStackLine(line) {
   return line.indexOf('tabris/tabris.min.js:') === -1 && line.indexOf('@[native code]') === -1;
 }
 
+/** @param {string} line */
 function normalizeStackLine(line) {
+  if (line.endsWith('more lines...]')) {
+    return line;
+  }
   const mapped = applySourceMap(parseLine(line));
   if (!mapped) {
     return null;

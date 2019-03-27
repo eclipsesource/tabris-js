@@ -257,6 +257,26 @@ showActionSheet (./dist/actionsheet.js:15:25)`
             expect(getStackTrace({stack: stacks[platform].production})).to.equal(stacks[platform].production);
           });
 
+          it('truncates stack traces over threshold length', function() {
+            stub(tabris.Module, 'getSourceMap').withArgs('./dist/console.js').returns(sourceMapCopy);
+            const oldStack = stacks[platform].production.split('\n');
+            const tooLong = oldStack.concat();
+            const line1 = tooLong.shift();
+            const line2 = tooLong.shift();
+            for (let i = 0; i < 350; i++) {
+              tooLong.unshift(line2);
+            }
+            tooLong.unshift(line1);
+
+            const result = getStackTrace({stack: tooLong.join('\n')}).split('\n');
+
+            const mapped = sourceMappedStack.split('\n');
+            expect(result.length).to.equal(301);
+            expect(result).to.contain('[52 more lines...]');
+            expect(result[0]).to.equal(mapped[0]);
+            expect(result[300]).to.equal(mapped[mapped.length - 1]);
+          });
+
         });
 
         describe('across timer', function() {
