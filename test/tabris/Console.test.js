@@ -409,6 +409,24 @@ _notify@[native code]`
         );
       });
 
+      it('can handle recursion', function() {
+        class Bar extends NativeObject {
+          get _nativeType() { return 'Bar'; }
+          toString() {
+            defaultConsole.hint(this, 'never ends');
+            return 'Bar';
+          }
+        }
+        tabris.device.platform = platform;
+        stack = stacks[platform];
+
+        defaultConsole.hint(new Bar(), 'Foo');
+
+        expect(realConsole.warn).to.have.been.calledWith(
+          'Bar: Foo\nSource: doSomethingElse (./dist/console.js:23:17)'
+        );
+      });
+
     });
 
   });

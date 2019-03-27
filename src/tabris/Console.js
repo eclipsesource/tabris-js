@@ -116,7 +116,13 @@ export const log = function(...args) { defaultConsole.log(...args); };
 export const warn = function(...args) { defaultConsole.warn(...args); };
 export const error = function(...args) { defaultConsole.error(...args); };
 
+let inHint = false;
+
 export const hint = function(source, message) {
+  if (inHint) {
+    return; // prevent potential stack overflow
+  }
+  inHint = true;
   let line = '';
   let prefix = '';
   try {
@@ -136,4 +142,5 @@ export const hint = function(source, message) {
     // ensure warning is printed in any case
   }
   defaultConsole.warn(prefix + message + (line ? `\nSource: ${line}` : ''));
+  inHint = false;
 };
