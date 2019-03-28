@@ -37,6 +37,11 @@
       "type": "boolean",
       "readonly": true,
       "description": "Whether there is a previous to navigated to via `goBack()`."
+    },
+    "initScript": {
+      "type": "string",
+      "const": true,
+      "description": "JavaScript code to be executed before page begins loading."
     }
   },
   "events": {
