@@ -1,5 +1,5 @@
 import {select} from './util-widget-select';
-import {jsxFactory} from './JsxProcessor';
+import {JSX} from './JsxProcessor';
 
 /** @typedef {import('./Widget').default} Widget */
 /** @typedef {Widget[]|WidgetCollection} Widgets */
@@ -149,7 +149,7 @@ export default class WidgetCollection {
 
 }
 
-WidgetCollection.prototype[jsxFactory] = createElement;
+WidgetCollection.prototype[JSX.jsxFactory] = createElement;
 
 /** @this {import("./JsxProcessor").default} */
 function createElement(Type, attributes) {

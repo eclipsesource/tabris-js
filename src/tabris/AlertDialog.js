@@ -2,7 +2,7 @@ import Popup from './Popup';
 import NativeObject from './NativeObject';
 import {capitalizeFirstChar} from './util';
 import TextInput from './widgets/TextInput';
-import {jsxFactory} from './JsxProcessor';
+import {JSX} from './JsxProcessor';
 
 export default class AlertDialog extends Popup {
 
@@ -48,7 +48,7 @@ export default class AlertDialog extends Popup {
   }
 
   /** @this {import("../JsxProcessor").default} */
-  [jsxFactory](Type, attributes) {
+  [JSX.jsxFactory](Type, attributes) {
     const children = this.getChildren(attributes) || [];
     let normalAttributes = this.withoutChildren(attributes);
     normalAttributes = this.withContentChildren(
@@ -61,7 +61,7 @@ export default class AlertDialog extends Popup {
       children.filter(child => !(child instanceof Object)),
       'message'
     );
-    return super[jsxFactory](Type, normalAttributes);
+    return super[JSX.jsxFactory](Type, normalAttributes);
   }
 
 }

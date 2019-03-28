@@ -1,6 +1,6 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
-import {jsxFactory} from '../JsxProcessor';
+import {JSX} from '../JsxProcessor';
 
 export default class Action extends Widget {
 
@@ -13,10 +13,10 @@ export default class Action extends Widget {
   }
 
   /** @this {import("../JsxProcessor").default} */
-  [jsxFactory](Type, attributes) {
+  [JSX.jsxFactory](Type, attributes) {
     const children = this.getChildren(attributes);
     const normalAttributes = this.withoutChildren(attributes);
-    return super[jsxFactory](Type, this.withContentText(
+    return super[JSX.jsxFactory](Type, this.withContentText(
       normalAttributes,
       children,
       'title'

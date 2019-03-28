@@ -20,6 +20,10 @@ describe('global object', function() {
     expect(global.$).to.equal(tabris.$);
   });
 
+  it('contains JSX', function() {
+    expect(global.JSX).to.equal(tabris.JSX);
+  });
+
 });
 
 describe('window', function() {
@@ -236,6 +240,19 @@ describe('tabris', function() {
       expect(window.document).to.be.ok;
       expect(window.location).to.be.ok;
       expect(window.navigator).to.be.ok;
+    });
+
+    it('sets up JSX processor', function() {
+      const composite = JSX.createElement(
+        tabris.Composite,
+        {padding: 10},
+        new tabris.TextView(),
+        new tabris.TextView()
+      );
+
+      expect(composite).to.be.instanceof(tabris.Composite);
+      expect(composite.padding.top).to.equal(10);
+      expect(composite.children().length).to.equal(2);
     });
 
   });

@@ -1,5 +1,5 @@
 import NativeObject from './NativeObject';
-import {jsxFactory} from './JsxProcessor';
+import {JSX} from './JsxProcessor';
 
 export default class Popup extends NativeObject {
 
@@ -19,7 +19,7 @@ export default class Popup extends NativeObject {
   }
 
   /** @this {import("../JsxProcessor").default} */
-  [jsxFactory](Type, attributes) {
+  [JSX.jsxFactory](Type, attributes) {
     return this.createNativeObject(Type, attributes);
   }
 

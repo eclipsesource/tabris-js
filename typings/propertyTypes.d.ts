@@ -348,3 +348,14 @@ export class ActionSheetItem {
   readonly jsxAttributes:  Partial<Pick<ActionSheetItem, 'title' | 'image' | 'style'>> & {children?: string};
 
 }
+
+export class JsxProcessor {
+
+  public readonly jsxFactory: Symbol;
+  public readonly jsxType: Symbol;
+
+  createElement(type: Function|string, attributes: object, ...children: Array<JSX.ElementClass>): JSX.ElementClass;
+
+  createNativeObject(Type: {new(): NativeObject} | ((param: any) => NativeObject), attributes: object): NativeObject;
+
+}

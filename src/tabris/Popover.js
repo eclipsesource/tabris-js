@@ -1,7 +1,7 @@
 import NativeObject from './NativeObject';
 import Popup from './Popup';
 import {create as createContentView} from './widgets/ContentView';
-import {jsxFactory} from './JsxProcessor';
+import {JSX} from './JsxProcessor';
 
 export default class Popover extends Popup {
 
@@ -40,10 +40,10 @@ export default class Popover extends Popup {
   }
 
   /** @this {import("../JsxProcessor").default} */
-  [jsxFactory](Type, attributes) {
+  [JSX.jsxFactory](Type, attributes) {
     const children = this.getChildren(attributes);
     const normalAttributes = this.withoutChildren(attributes);
-    const result = super[jsxFactory](Type, normalAttributes);
+    const result = super[JSX.jsxFactory](Type, normalAttributes);
     if (children && children.length) {
       result.contentView.append(children);
     }

@@ -1,6 +1,6 @@
 import {expect, mockTabris, spy, stub} from '../test';
 import ClientStub from './ClientStub';
-import {createJsxProcessor, jsxFactory} from '../../src/tabris/JsxProcessor';
+import {createJsxProcessor, JSX} from '../../src/tabris/JsxProcessor';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 import $ from '../../src/tabris/$';
 import Composite from '../../src/tabris/widgets/Composite';
@@ -323,35 +323,35 @@ describe('JsxProcessor', function() {
       beforeEach(function() {
         Foo = class {
           constructor(args) { this.args = args; }
-          [jsxFactory](type, props) { return new Foo([type, props]); }
+          [JSX.jsxFactory](type, props) { return new Foo([type, props]); }
         };
       });
 
       it('calls factory of custom type', function() {
         const props = {foo: 'bar'};
-        Foo.prototype[jsxFactory] = stub();
+        Foo.prototype[JSX.jsxFactory] = stub();
 
         jsx.createElement(Foo, props, 'a', 'b');
 
-        expect(Foo.prototype[jsxFactory]).to.have.been.calledWith(Foo, {foo: 'bar', children: ['a', 'b']});
+        expect(Foo.prototype[JSX.jsxFactory]).to.have.been.calledWith(Foo, {foo: 'bar', children: ['a', 'b']});
       });
 
       it('calls factory with children from properties', function() {
         const props = {foo: 'bar', children: ['a', 'b']};
-        Foo.prototype[jsxFactory] = stub();
+        Foo.prototype[JSX.jsxFactory] = stub();
 
         jsx.createElement(Foo, props);
 
-        expect(Foo.prototype[jsxFactory]).to.have.been.calledWith(Foo, {foo: 'bar', children: ['a', 'b']});
+        expect(Foo.prototype[JSX.jsxFactory]).to.have.been.calledWith(Foo, {foo: 'bar', children: ['a', 'b']});
       });
 
       it('calls factory with processor context', function() {
         const props = {foo: 'bar'};
-        Foo.prototype[jsxFactory] = stub();
+        Foo.prototype[JSX.jsxFactory] = stub();
 
         jsx.createElement(Foo, props, 'a', 'b');
 
-        expect(Foo.prototype[jsxFactory]).to.have.been.calledOn(jsx);
+        expect(Foo.prototype[JSX.jsxFactory]).to.have.been.calledOn(jsx);
       });
 
       it('returns factory return value', function() {
@@ -360,8 +360,8 @@ describe('JsxProcessor', function() {
 
       it('factory supports super call', function() {
         class Bar extends Foo {
-          [jsxFactory]() {
-            return super[jsxFactory](Bar, {a: 'b', children: ['a', 'b']});
+          [JSX.jsxFactory]() {
+            return super[JSX.jsxFactory](Bar, {a: 'b', children: ['a', 'b']});
           }
         }
 

@@ -19,6 +19,7 @@ describe('WebSocket', function() {
       call: () => {},
       create: () => {},
       get: () => {},
+      set: () => {},
       listen: () => {}
     });
     tabris._init(client);

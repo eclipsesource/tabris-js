@@ -15,19 +15,11 @@ const MARKUP = {
   a: {href: 'string', children: 'object'}
 };
 
-export const jsxFactory = Symbol('jsxFactory');
-export const jsxType = Symbol('jsxType');
-
 export function createJsxProcessor() {
-  return new JsxProcessor(jsxFactory, jsxType);
+  return new JsxProcessor();
 }
 
 export default class JsxProcessor {
-
-  constructor(jsxFactoryKey, jsxTypeKey) {
-    this.jsxFactory = jsxFactoryKey;
-    this.jsxType = jsxTypeKey;
-  }
 
   createElement(Type, attributes, ...children) {
     if (!(Type instanceof Function) && typeof Type !== 'string') {
@@ -49,14 +41,14 @@ export default class JsxProcessor {
     if (typeof Type === 'string') {
       return this.createIntrinsicElement(Type, finalAttributes);
     }
-    if (Type.prototype && Type.prototype[this.jsxFactory]) {
-      return Type.prototype[this.jsxFactory].call(this, Type, finalAttributes);
+    if (Type.prototype && Type.prototype[JSX.jsxFactory]) {
+      return Type.prototype[JSX.jsxFactory].call(this, Type, finalAttributes);
     }
     try {
       const result = Type.call(this, finalAttributes);
-      Type[jsxType] = true;
+      Type[JSX.jsxType] = true;
       if (result instanceof Object) {
-        result[jsxType] = Type;
+        result[JSX.jsxType] = Type;
       }
       return result;
     } catch (ex) {
@@ -188,3 +180,20 @@ export function joinTextContent(textArray, markupEnabled) {
   }
   return textArray.join('');
 }
+
+export const JSX = {
+
+  jsxFactory: Symbol('jsxFactory'),
+
+  jsxType: Symbol('jsxType'),
+
+  /** @param {JsxProcessor} jsxProcessor */
+  install(jsxProcessor) {
+    this.processor = jsxProcessor;
+  },
+
+  createElement() {
+    return this.processor.createElement.apply(this.processor, arguments);
+  }
+
+};

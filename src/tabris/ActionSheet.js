@@ -1,7 +1,7 @@
 import Popup from './Popup';
 import NativeObject from './NativeObject';
 import {types} from './property-types';
-import {jsxFactory} from './JsxProcessor';
+import {JSX} from './JsxProcessor';
 
 export default class ActionSheet extends Popup {
 
@@ -41,7 +41,7 @@ export default class ActionSheet extends Popup {
   }
 
   /** @this {import("../JsxProcessor").default} */
-  [jsxFactory](Type, attributes) {
+  [JSX.jsxFactory](Type, attributes) {
     const children = this.getChildren(attributes) || [];
     let normalAttributes = this.withoutChildren(attributes);
     normalAttributes = this.withContentChildren(
@@ -112,7 +112,7 @@ export class ActionSheetItem {
   }
 
   /** @this {import("./JsxProcessor").default} */
-  [jsxFactory](Type, attributes) {
+  [JSX.jsxFactory](Type, attributes) {
     const children = this.getChildren(attributes);
     const normalAttributes = this.withoutChildren(attributes);
     return new Type(this.withContentText(normalAttributes, children, 'title'));

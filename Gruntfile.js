@@ -17,7 +17,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     version,
-    clean: ['build'],
+    clean: ['build/**/*'],
     concat: {
       tabris: {
         options: {

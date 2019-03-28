@@ -4,7 +4,7 @@ import {createSelectorArray, getSelectorSpecificity} from '../util-widget-select
 import Layout, {ConstraintLayout} from '../Layout';
 import WidgetCollection from '../WidgetCollection';
 import {omit} from '../util';
-import {jsxFactory} from '../JsxProcessor';
+import {JSX} from '../JsxProcessor';
 import {toXML} from '../Console';
 
 export default class Composite extends Widget {
@@ -169,10 +169,10 @@ export default class Composite extends Widget {
   }
 
   /** @this {import("../JsxProcessor").default} */
-  [jsxFactory](Type, attributes) {
+  [JSX.jsxFactory](Type, attributes) {
     const children = this.getChildren(attributes);
     const normalAttributes = this.withoutChildren(attributes);
-    const result = super[jsxFactory](Type, normalAttributes);
+    const result = super[JSX.jsxFactory](Type, normalAttributes);
     if (children && children.length) {
       result.append(children);
     }

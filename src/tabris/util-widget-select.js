@@ -1,6 +1,6 @@
 import NativeObject from './NativeObject';
 import WidgetCollection from './WidgetCollection';
-import {jsxType} from './JsxProcessor';
+import {JSX} from './JsxProcessor';
 
 export function select(array, selector, deep, widgetCollection) {
   if (!array || array.length === 0) {
@@ -86,8 +86,8 @@ function createMatcher(selectorArg, widgetCollection) {
       return createChildMatcher(selector, widgetCollection);
     }
   }
-  if (selector instanceof Function && selector[jsxType]) {
-    return widget => widget[jsxType] === selector ;
+  if (selector instanceof Function && selector[JSX.jsxType]) {
+    return widget => widget[JSX.jsxType] === selector ;
   }
   if (selector instanceof Function) {
     return widget => widget instanceof selector;
@@ -110,7 +110,7 @@ function createMatcher(selectorArg, widgetCollection) {
     return () => true;
   }
   return widget => selector === widget.constructor.name
-    || selector === (widget[jsxType] ? widget[jsxType].name : false);
+    || selector === (widget[JSX.jsxType] ? widget[JSX.jsxType].name : false);
 }
 
 function createChildMatcher(selectors, widgetCollection) {
@@ -129,7 +129,7 @@ function createChildMatcher(selectors, widgetCollection) {
 }
 
 function isFilter(selector) {
-  return selector instanceof Function && !isWidgetConstructor(selector) && !selector[jsxType];
+  return selector instanceof Function && !isWidgetConstructor(selector) && !selector[JSX.jsxType];
 }
 
 function isWidgetConstructor(fn) {

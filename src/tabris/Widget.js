@@ -2,7 +2,7 @@ import NativeObject from './NativeObject';
 import WidgetCollection from './WidgetCollection';
 import GestureRecognizer from './GestureRecognizer';
 import {animate} from './Animation';
-import {jsxFactory} from './JsxProcessor';
+import {JSX} from './JsxProcessor';
 import {types} from './property-types';
 import LayoutData from './LayoutData';
 import {getFilter} from './util-widget-select';
@@ -195,7 +195,7 @@ export default class Widget extends NativeObject {
   }
 
   /** @this {import("../JsxProcessor").default} */
-  [jsxFactory](Type, attributes) {
+  [JSX.jsxFactory](Type, attributes) {
     return this.createNativeObject(Type, attributes);
   }
 

@@ -12,7 +12,7 @@ import {addDOMDocument} from './Document';
 import Event, {addDOMEventTargetMethods} from './Event';
 import {addWindowTimerMethods} from './WindowTimers';
 import Storage, {create as createStorage} from './Storage';
-import JsxProcessor, {createJsxProcessor} from './JsxProcessor';
+import JsxProcessor, {createJsxProcessor, JSX} from './JsxProcessor';
 import Action from './widgets/Action';
 import ActionSheet, {ActionSheetItem} from './ActionSheet';
 import ActivityIndicator from './widgets/ActivityIndicator';
@@ -115,6 +115,7 @@ const tabrisMain = Object.assign(new Tabris(), {
   ImageView,
   InactivityTimer,
   JsxProcessor,
+  JSX,
   Layout,
   LayoutData,
   Listeners,
@@ -175,7 +176,6 @@ Object.assign(global, {
   Headers,
   Request,
   Response,
-  JSX: createJsxProcessor(),
   Worker,
   $
 });
@@ -190,6 +190,7 @@ tabrisMain.on('start', (options) => {
     tabris.navigationBar = createNavigationBar();
     tabris.statusBar = createStatusBar();
     tabris.printer = createPrinter();
+    tabris.JSX.install(createJsxProcessor());
   }
   tabris.device = createDevice();
   tabris.fs = createFileSystem();
@@ -206,6 +207,7 @@ tabrisMain.on('start', (options) => {
   global.localStorage = tabrisMain.localStorage;
   global.secureStorage = tabrisMain.secureStorage;
   global.crypto = tabrisMain.crypto;
+  global.JSX = tabrisMain.JSX;
 });
 addDOMDocument(global);
 addDOMEventTargetMethods(global);

@@ -9,8 +9,11 @@ declare namespace JSX {
   type Element = any;
 
   const jsxFactory: unique symbol;
+  const jsxType: unique symbol;
 
   function createElement(type: Function|string, attributes: object, ...children: Array<ElementClass>): ElementClass;
+
+  function install(jsxProcessor: tabris.JsxProcessor): void;
 
   interface ElementClass {
     jsxAttributes?: object;
