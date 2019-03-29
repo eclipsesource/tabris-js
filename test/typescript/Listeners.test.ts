@@ -5,6 +5,7 @@ interface FooTarget {
 }
 
 interface MyEvent {
+  target: object;
   foo: string;
 }
 
@@ -31,7 +32,6 @@ let customTarget: {targetType: boolean} = {targetType: true};
 let fooTarget: FooTarget = {targetType: 'foo'};
 let ev: CustomEvent = {} as any;
 
-const voidListeners: Listeners = new Listeners(target, type);
 const myEventListeners: Listeners<MyEvent> = new Listeners(customTarget, type);
 const myFooListeners: Listeners<MyFooEvent> = new Listeners(fooTarget, type);
 const targetCompatible: Listeners<MyEvent> = new Listeners(fooTarget , type);
@@ -42,8 +42,6 @@ const myFooListener: (ev: MyFooEvent) => void = function() {};
 const myExtendedEventListener: (ev: MyExtendedEvent) => void = function() {};
 
 // target and type
-type = voidListeners.type;
-target = voidListeners.target;
 target = myEventListeners.target;
 fooTarget = myFooListeners.target;
 fooTarget = myExtendedEventListeners.target;
@@ -54,10 +52,6 @@ fooTarget = myFooListeners.removeListener(listener);
 fooTarget = myFooListeners.trigger();
 
 // listener
-voidListeners(listener);
-voidListeners.once(listener);
-voidListeners.addListener(listener);
-voidListeners.removeListener(listener);
 myEventListeners(listener);
 myEventListeners(myEventListener);
 myEventListeners.once(myEventListener);
@@ -75,8 +69,6 @@ myExtendedEventListeners.addListener(myExtendedEventListener);
 myExtendedEventListeners.removeListener(myExtendedEventListener);
 
 // trigger
-voidListeners.trigger();
-voidListeners.trigger({});
 const ignoreEventDataTarget = {foo: 'bar', target: fooTarget};
 myEventListeners.trigger(ignoreEventDataTarget);
 myEventListeners.trigger({foo: 'bar'});
@@ -86,7 +78,6 @@ myFooListeners.trigger(ev);
 myExtendedEventListeners.trigger(new MyExtendedEvent());
 
 // promises
-let promiseEv: Promise<EventObject<object>> = voidListeners.promise();
 let promiseMyEv: Promise<MyEvent> = myEventListeners.promise();
 let promiseFooEv: Promise<MyFooEvent> = myFooListeners.promise();
 let promiseExtEv: Promise<MyExtendedEvent> = myExtendedEventListeners.promise();

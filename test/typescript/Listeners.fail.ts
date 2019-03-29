@@ -21,9 +21,9 @@ const type = 'myEventType';
 let target: object = {};
 let customTarget: {targetType: boolean} = {targetType: true};
 let fooTarget: FooTarget = {targetType: 'foo'};
-
+const noEventData: Listeners = new Listeners(target, type);
 const wrongTarget: Listeners<MyFooEvent> = new Listeners(target, type);
-const voidListeners: Listeners = new Listeners(target, type);
+const voidListeners: Listeners<{target: object}> = new Listeners(target, type);
 const myEventListeners: Listeners<MyEvent> = new Listeners(customTarget, type);
 const listener: () => void = function() {};
 const myFooListeners: Listeners<MyFooEvent> = new Listeners(fooTarget, type);
@@ -60,7 +60,9 @@ let promiseStr: Promise<string> = voidListeners.promise();
 let promiseEv: Promise<MyFooEvent> = voidListeners.promise();
 
 /*Expected
+(24,
 (25,
+(27,
 
 (34,
 (35,

@@ -18,6 +18,15 @@ export default class Listeners {
   }
 
   constructor(target, type) {
+    if (arguments.length < 1 || !(target instanceof Object)) {
+      throw new Error('Missing target instance');
+    }
+    if (arguments.length < 2 || typeof type !== 'string' || !type) {
+      throw new Error('Missing event type string');
+    }
+    if (/^on[A-Z]/.test(type)) {
+      throw new Error(`Invalid event type string, did you mean "${type[2].toLowerCase() + type.slice(3)}"?`);
+    }
     this.store = Listeners.getListenerStore(target);
     const delegate = this.addListener.bind(this);
     delegate.target = this.target = target;

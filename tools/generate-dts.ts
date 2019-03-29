@@ -31,7 +31,7 @@ export type Properties<
   U = Omit<T, 'set'> // prevent self-reference issues
 > = Partial<Omit<U, MethodKeysOf<U> | ReadOnlyKeysOf<U>>>
   & {cid?: never}; // prevent empty object type as possible result, would allow any object
-type ListenersKeysOf<T> = { [K in keyof T]: T[K] extends Listeners ? K : never }[keyof T];
+type ListenersKeysOf<T> = { [K in keyof T]: T[K] extends Listeners<any> ? K : never }[keyof T];
 type UnpackListeners<T> = T extends Listeners<infer U> ? Listener<U> : T;
 type ListenersMap<T> = { [Key in ListenersKeysOf<T>]?: UnpackListeners<T[Key]>};
 export type JSXAttributes<
@@ -43,7 +43,7 @@ type Listener<T = {}> = (ev: ExtendedEvent<T>) => any;
 type ListenersTriggerParam<T> = {[P in Diff<keyof T, keyof EventObject<object>>]: T[P]};
 type MinimalEventObject<T extends object> = {target: T};
 type TargetType<E extends object> = E extends MinimalEventObject<infer Target> ? Target : object;
-export interface Listeners<EventData extends object = MinimalEventObject<object>> {
+export interface Listeners<EventData extends {target: object}> {
   // tslint:disable-next-line:callable-types
   (listener: Listener<ExtendedEvent<EventData>>): TargetType<EventData>;
 }

@@ -1,6 +1,6 @@
 {
   "type": "Listeners",
-  "generics": "EventData extends object = MinimalEventObject<object>",
+  "generics": "EventData extends {target: object}",
   "description": "Objects of the type `Listeners` provide methods to manage listeners and trigger events. They encapsulate the tabris event system in a way that is more convenient to use with TypeScript and the ES2017 `async`/`await` feature.",
   "constructor": {
     "access": "public",

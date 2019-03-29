@@ -1,4 +1,4 @@
-import {fail, expect, match, restore, spy, stub} from '../test';
+import {expect, match, restore, spy, stub} from '../test';
 import EventObject from '../../src/tabris/EventObject';
 import NativeObject from '../../src/tabris/NativeObject';
 import Listeners from '../../src/tabris/Listeners';
@@ -30,6 +30,27 @@ describe('Listeners', function() {
     expect(myListeners.type).to.equal(type);
     expect(myListeners.target).to.equal(target);
     expect(myFooListeners.target).to.equal(fooTarget);
+  });
+
+  it('throws for wrong target', function() {
+    expect(() => new Listeners()).to.throw('Missing target instance');
+    expect(() => new Listeners(null)).to.throw('Missing target instance');
+    expect(() => new Listeners(true)).to.throw('Missing target instance');
+  });
+
+  it('throws for wrong type', function() {
+    expect(() => new Listeners({})).to.throw('Missing event type string');
+    expect(() => new Listeners({}, true)).to.throw('Missing event type string');
+    expect(() => new Listeners({}, '')).to.throw('Missing event type string');
+  });
+
+  it('throws for types starting with on[UpperCase]', function() {
+    const ok = new Listeners(fooTarget, 'onion');
+
+    expect(ok.type).to.equal('onion');
+    expect(() => new Listeners(fooTarget, 'onIon')).to.throw(
+      'Invalid event type string, did you mean "ion"?'
+    );
   });
 
   it('notifies directly registered listener', function() {
@@ -202,8 +223,8 @@ describe('Listeners', function() {
     myListeners.trigger({foo: 'bar'});
 
     myListeners.promise().then(
-      () => fail('Should not resolve'),
-      () => fail('Should not reject')
+      () => new Error('Should not resolve'),
+      () => new Error('Should not reject')
     );
 
     setTimeout(done, 100);
