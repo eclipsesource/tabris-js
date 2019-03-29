@@ -84,7 +84,6 @@ export function readJsonDefs(files: string[]) {
   files.forEach(file => {
     const def = fs.readJsonSync(file);
     def.file = file;
-    def.isWidget = file.indexOf('/widgets/') !== -1;
     const title = getTitle(def);
     if (defs[title]) {
       throw new Error('Duplicate entry ' + title);
@@ -161,7 +160,8 @@ function splitIntoLines(text: string, maxLength: number) {
 
 function extendTypeDefs(defs: ApiDefinitions) {
   Object.keys(defs).forEach(name => {
-    defs[name].isNativeObject = isNativeObject(defs, defs[name]);
+    defs[name].isNativeObject = isType(defs, defs[name], 'NativeObject');
+    defs[name].isWidget = isType(defs, defs[name], 'Widget');
     if (defs[name].extends) {
       defs[name].parent = defs[defs[name].extends];
     }
@@ -175,6 +175,6 @@ export function getEventTypeName(def: ExtendedApi, eventName: string, parameters
   return parameters ? def.type + capitalizeFirstChar(eventName) + 'Event' : 'EventObject';
 }
 
-export function isNativeObject(defs: ApiDefinitions, def: ExtendedApi) {
-  return def && (def.type === 'NativeObject' || isNativeObject(defs, defs[(def.extends || '').split('<')[0]]));
+function isType(defs: ApiDefinitions, def: ExtendedApi, type: string) {
+  return def && (def.type === type || isType(defs, defs[(def.extends || '').split('<')[0]], type));
 }
