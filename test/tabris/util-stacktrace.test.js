@@ -47,6 +47,7 @@ describe('util-stacktrace', function() {
       trace1:
 `Error
   at new Promise (./node_modules/tabris/tabris.min.js:1:1896)
+  at Promise (<anonymous>:1:1896)
   at Listeners.promise (./node_modules/tabris/tabris.min.js:1:31118)
   at Button.showActionSheet (./dist/actionsheet.js:15:25)
   at ./node_modules/tabris/tabris.min.js:1:30065

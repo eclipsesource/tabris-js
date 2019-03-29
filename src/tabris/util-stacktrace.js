@@ -76,7 +76,9 @@ function filterStackLine(line) {
   if (tabris.device.platform === 'Android' && !androidStackLineNoNameRegex.test(line)) {
     return false;
   }
-  return line.indexOf('tabris/tabris.min.js:') === -1 && line.indexOf('@[native code]') === -1;
+  return line.indexOf('tabris/tabris.min.js:') === -1
+    && line.indexOf('@[native code]') === -1
+    && line.indexOf('<anonymous>:') === -1;
 }
 
 /** @param {string} line */
