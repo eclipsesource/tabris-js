@@ -1,4 +1,4 @@
-import { EventObject, Listeners } from 'tabris';
+import { EventObject, Listeners, ChangeListeners } from 'tabris';
 
 interface FooTarget {
   targetType: string;
@@ -59,6 +59,20 @@ myEventListeners.trigger({foo: 23});
 let promiseStr: Promise<string> = voidListeners.promise();
 let promiseEv: Promise<MyFooEvent> = voidListeners.promise();
 
+// ChangeListeners
+
+interface ChangeEventTarget {
+  prop: number
+}
+
+new ChangeListeners();
+new ChangeListeners<ChangeEventTarget>();
+new ChangeListeners<ChangeEventTarget, 'notaprop'>();
+new ChangeListeners<ChangeEventTarget, 'prop'>({prop: '23'}, 'notaprop');
+let myChangeListeners  = new ChangeListeners<ChangeEventTarget, 'prop'>({prop: 23}, 'prop');
+myChangeListeners.trigger({notvalue: 23});
+myChangeListeners.trigger({value: '23'});
+
 /*Expected
 (24,
 (25,
@@ -88,4 +102,11 @@ let promiseEv: Promise<MyFooEvent> = voidListeners.promise();
 
 (59,
 (60,
+
+(68,
+(69,
+(70,
+(71,
+(73,
+(74,
 */

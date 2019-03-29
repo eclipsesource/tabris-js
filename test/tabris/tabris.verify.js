@@ -193,6 +193,8 @@ describe('tabris', function() {
     expect(tabris.$).to.be.a('function');
     expect(tabris.Percent).to.be.a('function');
     expect(tabris.LinearGradient).to.be.a('function');
+    expect(tabris.Listeners).to.be.a('function');
+    expect(tabris.ChangeListeners).to.be.a('function');
   });
 
   it('contains event methods', function() {

@@ -39,7 +39,7 @@ import ImageView from './widgets/ImageView';
 import InactivityTimer from './InactivityTimer';
 import Layout, {ConstraintLayout} from './Layout';
 import LayoutData from './LayoutData';
-import Listeners from './Listeners';
+import Listeners, {ChangeListeners} from './Listeners';
 import LinearGradient from './LinearGradient';
 import Page from './widgets/Page';
 import Percent from './Percent';
@@ -92,6 +92,7 @@ const tabrisMain = Object.assign(new Tabris(), {
   App,
   Button,
   Canvas,
+  ChangeListeners,
   CheckBox,
   CollectionView,
   Color,

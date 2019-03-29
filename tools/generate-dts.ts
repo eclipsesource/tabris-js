@@ -271,18 +271,11 @@ function createPropertyChangedEventProperty(def: ExtendedApi, propName: string) 
   const property = def.properties[propName];
   const result = [];
   const standardDescription = `Fired when the [*${propName}*](#${propName}) property has changed.`;
-  const defType = property.ts_type || property.type;
-  const changeEvent = {
-    description: property.changeEventDescription || standardDescription,
-    parameters: [{
-      name: 'value',
-      type: defType,
-      description: `The new value of [*${propName}*](#${propName}).`
-    }]
-  };
-  result.push(createDoc(changeEvent));
+  result.push(createDoc({
+    description: property.changeEventDescription || standardDescription
+  }));
   result.push(`on${capitalizeFirstChar(propName)}Changed: `
-    + `Listeners<PropertyChangedEvent<this, ${defType}>>;`);
+    + `ChangeListeners<this, '${propName}'>;`);
   return result.join('\n');
 }
 

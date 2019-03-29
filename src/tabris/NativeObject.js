@@ -2,7 +2,7 @@ import {types} from './property-types';
 import {hint} from './Console';
 import EventObject from './EventObject';
 import Events from './Events';
-import Listeners from './Listeners';
+import Listeners, {ChangeListeners} from './Listeners';
 import {toXML} from './Console';
 
 const EventsClass = /** @type {any} */ function EventsClass() {};
@@ -39,7 +39,7 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
       }
     });
     if (typeof definition !== 'object' || !definition.const) {
-      this.defineEvent(target, name + 'Changed', true);
+      this.defineChangeEvent(target, name);
     }
   }
 
@@ -77,6 +77,19 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
         };
       }
     }
+  }
+
+  static defineChangeEvent(target, property) {
+    const listenersProperty = 'on' + property.charAt(0).toUpperCase() + property.slice(1) + 'Changed';
+    const $listenersProperty = '$' + property;
+    Object.defineProperty(target, listenersProperty, {
+      get() {
+        if (!this[$listenersProperty]) {
+          this[$listenersProperty] = new ChangeListeners(this, property);
+        }
+        return this[$listenersProperty];
+      }
+    });
   }
 
   static extend(nativeType, superType = NativeObject) {

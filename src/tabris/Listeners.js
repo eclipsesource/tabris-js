@@ -31,11 +31,15 @@ export default class Listeners {
     const delegate = this.addListener.bind(this);
     delegate.target = this.target = target;
     delegate.type = this.type = type;
-    delegate.original = this;
+    delegate.original = this.original;
     for (const key of DELEGATE_FIELDS) {
       delegate[key] = this[key] = this[key].bind(this);
     }
     return delegate;
+  }
+
+  get original() {
+    return this;
   }
 
   trigger(eventData) {
@@ -62,4 +66,26 @@ export default class Listeners {
     return this.target;
   }
 
+}
+
+export class ChangeListeners extends Listeners {
+
+  constructor(target, property) {
+    propertyCheck(target, property);
+    super(target, property + 'Changed');
+  }
+
+  trigger(eventData) {
+    if (!('value' in eventData)) {
+      throw new Error('Can not trigger change event without "value" property in event data');
+    }
+    super.trigger(eventData);
+  }
+
+}
+
+function propertyCheck(target, property) {
+  if (!(property in target)) {
+    throw new Error(`Target has no property "${property}"`);
+  }
 }

@@ -1,0 +1,21 @@
+{
+  "type": "ChangeListeners",
+  "generics": "Target extends object, Property extends keyof Target",
+  "extends": "Listeners",
+  "ts_extends": "Listeners<PropertyChangedEvent<Target, Target[Property]>>",
+  "description": "A convenience type that extends the `Listeners` type to perform some additional checks when handling change events.",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "target",
+        "type": "object",
+        "ts_type": "Target"
+      },
+      {
+        "name": "property",
+        "type": "Property"
+      }
+    ]
+  }
+}
