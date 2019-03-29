@@ -31,6 +31,7 @@ exports.generateDoc = function generateDoc({files, targetPath, version}: Config)
 
 class DocumentationGenerator {
 
+  public readonly apiPath: string;
   public readonly defs: ApiDefinitions;
   public readonly typeLinks: TypeLinks = Object.assign({}, LANG_TYPE_LINKS);
 
@@ -39,12 +40,14 @@ class DocumentationGenerator {
     public readonly tabrisVersion: string,
     files: string[]
   ) {
+    this.apiPath = join(this.targetPath, 'api');
     this.readPropertyTypes();
     this.defs = readJsonDefs(files);
     this.preProcessDefinitions();
   }
 
   public generate() {
+    this.renderOverview();
     this.renderAPI();
     this.renderIndex();
   }
@@ -59,17 +62,20 @@ class DocumentationGenerator {
 
   private readPropertyTypes() {
     const typesFile = join(this.targetPath, 'types.md');
-    const path = relative(join(this.targetPath, 'api'), typesFile).replace(sep, '/');
+    const path = relative(this.apiPath, typesFile).replace(sep, '/');
     const list = fs.readFileSync(typesFile, 'utf-8').match(/^### *(.*)$/gm).map(heading => heading.slice(4));
     for (const type of list) {
       this.addTypeLink(type, `${path}#${type.toLowerCase()}`);
     }
   }
 
+  private renderOverview() {
+    fs.writeFileSync(join(this.apiPath, 'widget-overview.md'), new OverviewRenderer(this).render());
+  }
+
   private renderAPI() {
-    const apiPath = join(this.targetPath, 'api');
     Object.keys(this.defs).forEach(title => {
-      const targetFile = join(apiPath, parse(this.defs[title].file).name + '.md');
+      const targetFile = join(this.apiPath, parse(this.defs[title].file).name + '.md');
       fs.writeFileSync(targetFile, new DocumentRenderer(this, title).render());
     });
   }
@@ -95,17 +101,57 @@ class DocumentationGenerator {
 
 }
 
+class OverviewRenderer {
+  private defs: ApiDefinitions;
+
+  constructor(docGenerator: DocumentationGenerator) {
+    this.defs = docGenerator.defs;
+  }
+
+  public render() {
+    return [
+      '---\n---',
+      '# Widget Overview\n',
+      'To build a comprehensive user experience, different UI components can be combined. The following' +
+      ' list shows all available widgets for Android and iOS.\n',
+      this.renderWidgets()
+    ].filter(value => !!value).join('\n');
+  }
+
+  private renderWidgets() {
+    return Object.keys(this.defs).map((key) => {
+      const def = this.defs[key];
+      if (def.isWidget) {
+        const images = renderImages(def);
+        if (images) {
+          const link = `${parse(def.file).name}.html`;
+          return [
+            `## [${def.type}](${link})\n`,
+            `${def.description}\n`,
+            `<div><a style="text-decoration: none" href="${link}">${images}</a></div>\n`
+          ].filter(value => !!value).join('\n');
+        }
+      }
+      return null;
+    }).filter((entry) => entry)
+      .join('\n');
+  }
+
+}
+
 class DocumentRenderer {
 
   private readonly defs: ApiDefinitions;
   private readonly def: ExtendedApi;
   private readonly typeLinks: TypeLinks;
   private readonly targetPath: string;
+  private readonly apiPath: string;
   private readonly tabrisVersion: string;
 
   constructor(docGenerator: DocumentationGenerator, private readonly title: string) {
     this.title = title;
     this.targetPath = docGenerator.targetPath;
+    this.apiPath = docGenerator.apiPath;
     this.defs = docGenerator.defs;
     this.typeLinks = docGenerator.typeLinks;
     this.tabrisVersion = docGenerator.tabrisVersion;
@@ -126,7 +172,7 @@ class DocumentRenderer {
       '# ' + heading + '\n',
       this.renderExtends(),
       this.renderDescription(),
-      this.renderImages(),
+      renderImages(this.def),
       this.renderSummary(),
       this.renderInfoFile(),
       this.renderLinks(),
@@ -140,8 +186,7 @@ class DocumentRenderer {
   }
 
   private renderInfoFile() {
-    const apiPath = join(this.targetPath, 'api');
-    const exampleFile = join(apiPath, parse(this.def.file).name + '.md');
+    const exampleFile = join(this.apiPath, parse(this.def.file).name + '.md');
     if (isFileSync(exampleFile)) {
       return [
         '## Example',
@@ -170,30 +215,6 @@ class DocumentRenderer {
       }
     }
     return hierarchy.join(' > ') + '\n';
-  }
-
-  private renderImages() {
-    const androidImage = join('img/android', parse(this.def.file).name + '.png');
-    const iosImage = join('img/ios', parse(this.def.file).name + '.png');
-    const result = this.createImageFigure(androidImage, 'Android') + this.createImageFigure(iosImage, 'iOS');
-    if (result.length !== 0) {
-      return `<div class="tabris-image">${result}</div>\n`;
-    }
-    if (this.def.type !== 'Widget' && (this.def.isWidget || this.def.extends === 'Popup')) {
-      console.log('No image for ' + this.def.type);
-    }
-    return '';
-  }
-
-  private createImageFigure(image: string, platform: string): string {
-    // a <figure> shows a content element together with a descriptive caption
-    // the child <div> is required to scale the image inside the <figure> container
-    if (isFileSync(join('doc/api', image))) {
-      return `<figure><div><img srcset="${image} 2x" src="${image}" alt="${this.def.type} on ${platform}"/></div>` +
-        `<figcaption>${platform}</figcaption></figure>`;
-    } else {
-      return '';
-    }
   }
 
   private renderSummary() {
@@ -621,4 +642,28 @@ function literal(value: string | boolean | number | {[key: string]: string}, typ
     return '`\'' + value + '\'`';
   }
   return '`' + value + '`';
+}
+
+function renderImages(def: ExtendedApi) {
+  const androidImage = join('img/android', parse(def.file).name + '.png');
+  const iosImage = join('img/ios', parse(def.file).name + '.png');
+  const result = createImageFigure(def, androidImage, 'Android') + createImageFigure(def, iosImage, 'iOS');
+  if (result.length !== 0) {
+    return `<div class="tabris-image">${result}</div>\n`;
+  }
+  if (def.type !== 'Widget' && (def.isWidget || def.extends === 'Popup')) {
+    console.log('No image for ' + def.type);
+  }
+  return '';
+}
+
+function createImageFigure(def: ExtendedApi, image: string, platform: string): string {
+  // a <figure> shows a content element together with a descriptive caption
+  // the child <div> is required to scale the image inside the <figure> container
+  if (isFileSync(join('doc/api', image))) {
+    return `<figure><div><img srcset="${image} 2x" src="${image}" alt="${def.type} on ${platform}"/></div>` +
+      `<figcaption>${platform}</figcaption></figure>`;
+  } else {
+    return '';
+  }
 }

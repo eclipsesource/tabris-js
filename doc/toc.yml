@@ -48,6 +48,8 @@
 
 - title: Widgets
   pages:
+    - title: Overview
+      url: api/widget-overview.html
 <%= widgets %>
 
 - title: Custom Widgets
