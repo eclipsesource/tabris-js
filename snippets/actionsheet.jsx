@@ -1,10 +1,10 @@
-import {ActionSheet, ActionSheetItem, TextView, Button, contentView, StackComposite} from 'tabris';
+import {ActionSheet, ActionSheetItem, TextView, Button, contentView, Stack} from 'tabris';
 
 contentView.append(
-  <StackComposite layoutData='fill' padding={8} spacing={16} alignment='stretchX'>
+  <Stack layoutData='fill' padding={8} spacing={16} alignment='stretchX'>
     <Button onSelect={showActionSheet}>Show ActionSheet</Button>
     <TextView alignment='center'/>
-  </StackComposite>
+  </Stack>
 );
 
 async function showActionSheet() {

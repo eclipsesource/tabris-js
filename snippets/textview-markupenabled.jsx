@@ -1,7 +1,7 @@
-import {TextView, contentView, CheckBox, StackComposite} from 'tabris';
+import {TextView, contentView, CheckBox, Stack} from 'tabris';
 
 contentView.append(
-  <StackComposite>
+  <Stack>
     <TextView markupEnabled font='16px' padding={12}>
       Normal Text<br/>
       <b>bold</b><br/>
@@ -13,7 +13,7 @@ contentView.append(
       <del>deleted</del><br/>
     </TextView>
     <CheckBox checked onSelect={updateMarkupEnabled}>markupEnabled</CheckBox>
-  </StackComposite>
+  </Stack>
 );
 
 function updateMarkupEnabled({checked: markupEnabled}) {

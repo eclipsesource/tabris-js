@@ -1,7 +1,7 @@
 ```js
-import {StackComposite, contentView} from 'tabris';
+import {Stack, contentView} from 'tabris';
 
-const stackComposite = new StackComposite({
+const stackComposite = new Stack({
   layoutData: 'fill',
   spacing: 16
 }).appendTo(contentView);

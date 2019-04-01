@@ -1,7 +1,7 @@
 import ClientStub from './ClientStub';
 import {expect, mockTabris, restore, stub} from '../test';
 import Composite from '../../src/tabris/widgets/Composite';
-import StackComposite from '../../src/tabris/widgets/StackComposite';
+import Stack from '../../src/tabris/widgets/Stack';
 import TextView from '../../src/tabris/widgets/TextView';
 import StackLayout from '../../src/tabris/StackLayout';
 import {LayoutQueue, ConstraintLayout} from '../../src/tabris/Layout';
@@ -446,22 +446,22 @@ describe('StackLayout', function() {
   describe('on Stack widget', function() {
 
     it('is the default layout', function() {
-      expect(new StackComposite().layout).to.be.instanceof(StackLayout);
+      expect(new Stack().layout).to.be.instanceof(StackLayout);
     });
 
     it('can be replaced in constructor', function() {
       const layout = new StackLayout();
-      expect(new StackComposite({layout}).layout).to.equal(layout);
+      expect(new Stack({layout}).layout).to.equal(layout);
     });
 
     it('can not be replaced with ConstraintLayout in constructor', function() {
       const layout = new ConstraintLayout();
-      expect(() => new StackComposite({layout})).to.throw();
+      expect(() => new Stack({layout})).to.throw();
     });
 
     it('can not be replaced later', function() {
       const layout = new StackLayout();
-      const stack = new StackComposite({layout});
+      const stack = new Stack({layout});
 
       stack.layout = layout;
 
@@ -469,30 +469,30 @@ describe('StackLayout', function() {
     });
 
     it('can be created by spacing parameter', function() {
-      const layout = new StackComposite({spacing: 2}).layout;
+      const layout = new Stack({spacing: 2}).layout;
       expect(layout.spacing).to.equal(2);
       expect(layout.alignment).to.equal('left');
     });
 
     it('can be created by alignment parameter', function() {
-      const layout = new StackComposite({alignment: 'right'}).layout;
+      const layout = new Stack({alignment: 'right'}).layout;
       expect(layout.spacing).to.equal(0);
       expect(layout.alignment).to.equal('right');
     });
 
     it('can be merged with spacing parameter', function() {
-      const layout = new StackComposite({layout: new StackLayout(), spacing: 4}).layout;
+      const layout = new Stack({layout: new StackLayout(), spacing: 4}).layout;
       expect(layout.spacing).to.equal(4);
     });
 
     it('can be merged with alignment parameter', function() {
-      const layout = new StackComposite({layout: new StackLayout(), alignment: 'right'}).layout;
+      const layout = new Stack({layout: new StackLayout(), alignment: 'right'}).layout;
       expect(layout.spacing).to.equal(0);
       expect(layout.alignment).to.deep.equal('right');
     });
 
     it('spacing can not be set later', function() {
-      const stack = new StackComposite({spacing: 4});
+      const stack = new Stack({spacing: 4});
 
       stack.spacing = 10;
 
@@ -500,7 +500,7 @@ describe('StackLayout', function() {
     });
 
     it('alignment can not be set later', function() {
-      const stack = new StackComposite({alignment: 'right'});
+      const stack = new Stack({alignment: 'right'});
 
       stack.alignment = 'left';
 
@@ -509,10 +509,10 @@ describe('StackLayout', function() {
 
     it('alignment is included in toXML result', function() {
       stub(client, 'get').returns({});
-      expect(new StackComposite()[toXML]())
-        .to.match(/<StackComposite .* alignment='left'\/>/);
-      expect(new StackComposite({alignment: 'right'})[toXML]())
-        .to.match(/<StackComposite .* alignment='right'\/>/);
+      expect(new Stack()[toXML]())
+        .to.match(/<Stack .* alignment='left'\/>/);
+      expect(new Stack({alignment: 'right'})[toXML]())
+        .to.match(/<Stack .* alignment='right'\/>/);
     });
 
   });

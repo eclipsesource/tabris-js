@@ -24,7 +24,7 @@ import CollectionView from './widgets/CollectionView';
 import Color from './Color';
 import Console from './Console';
 import {format} from './Formatter';
-import StackComposite from './widgets/StackComposite';
+import Stack from './widgets/Stack';
 import StackLayout from './StackLayout';
 import Composite from './widgets/Composite';
 import ContentView, {create as createContentView} from './widgets/ContentView';
@@ -98,7 +98,7 @@ const tabrisMain = Object.assign(new Tabris(), {
   Color,
   ConstraintLayout,
   StackLayout,
-  StackComposite,
+  Stack,
   Composite,
   Constraint,
   Console,

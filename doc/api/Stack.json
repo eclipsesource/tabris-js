@@ -1,13 +1,13 @@
 {
-  "type": "StackComposite",
-  "description": "A composite with the `layout` property initialized with a `StackComposite`. All children are automatically arranged in one vertical stack, starting from the top. The `layoutData` on the children is ignored.",
+  "type": "Stack",
+  "description": "A composite with the `layout` property initialized with a `Stack`. All children are automatically arranged in one vertical stack, starting from the top. The `layoutData` on the children is ignored.",
   "extends": "Composite",
   "constructor": {
     "access": "public",
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<StackComposite>",
+        "type": "Properties<Stack>",
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -30,20 +30,20 @@
       "type": "'left'|'centerX'|'stretchX'|'right'",
       "const": true,
       "default": "'left'",
-      "description": "Determines the horizontal placement of the children. For the `stretchX` value to work correctly the `StackComposite` needs to be given a width either by setting `width` or by setting `left` and `right`."
+      "description": "Determines the horizontal placement of the children. For the `stretchX` value to work correctly the `Stack` needs to be given a width either by setting `width` or by setting `left` and `right`."
     }
   },
   "links": [
     {
-      "title": "Creating a simple `StackComposite`",
+      "title": "Creating a simple `Stack`",
       "path": "${GITHUB_BRANCH}/snippets/stackcomposite.jsx"
     },
     {
-      "title": "Creating a `StackComposite` with horizontal alignment",
+      "title": "Creating a `Stack` with horizontal alignment",
       "path": "${GITHUB_BRANCH}/snippets/stackcomposite-alignment.jsx"
     },
     {
-      "title": "Creating a `StackComposite` with vertical alignment",
+      "title": "Creating a `Stack` with vertical alignment",
       "path": "${GITHUB_BRANCH}/snippets/stackcomposite-valign.jsx"
     }
   ]

@@ -27,7 +27,7 @@ import {
   ScrollView,
   SearchAction,
   Slider,
-  StackComposite,
+  Stack,
   Switch,
   Tab,
   TabFolder,
@@ -317,7 +317,7 @@ function sliderSnippet(parent) {
 
 function stackCompositeSnippet(parent) {
   dimen(parent, small);
-  new StackComposite({
+  new Stack({
     left: 16, right: 16, top: 16, bottom: 16,
     elevation: 8, background: 'white', padding: 16, spacing: 16, alignment: 'stretchX'
   }).appendTo(parent)

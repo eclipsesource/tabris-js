@@ -14,7 +14,7 @@ Type                 | Default            | Settable
 `ContentView`        | `ConstraintLayout` | No
 `Drawer`             | `ConstraintLayout` | No
 `Canvas`             | `ConstraintLayout` | On creation
-`StackComposite`     | `StackLayout`      | On creation, `StackLayout` instances only
+`Stack`              | `StackLayout`      | On creation, `StackLayout` instances only
 `NavigationView`     | `null`             | No
 `Page`               | `ConstraintLayout` | On creation
 `TabFolder`          | `null`             | No
@@ -159,11 +159,11 @@ widget.layoutData = {
 
 ## StackLayout
 
-The `StackLayout` is the default layout manager of `StackComposite`, but can also be used on `Composite`, `Canvas`, `Page`, `Tab` and `CollectionView`. It's a convenient way of arranging widgets in a vertical line, like a single-column table.
+The `StackLayout` is the default layout manager of `Stack`, but can also be used on `Composite`, `Canvas`, `Page`, `Tab` and `CollectionView`. It's a convenient way of arranging widgets in a vertical line, like a single-column table.
 
 > :point_right: `StackLayout` is just a helper, everything it can do can also be achieved with `ConstraintLayout`.
 
-There are three properties of `StackLayout` that can be set via constructor, all of which are also available on `StackComposite`. There properties are:
+There are three properties of `StackLayout` that can be set via constructor, all of which are also available on `Stack`. There properties are:
 
 Property | Value | Description
 ---------|-------|------------
@@ -180,11 +180,11 @@ The horizontal layout of each child is controlled by the `alignment` property. I
 Examples:
 
 ```jsx
-<StackComposite alignment='right' padding={4} spacing={24} >
+<Stack alignment='right' padding={4} spacing={24} >
   <TextView>lorem</TextView>
   <TextView>ipsum dolor</TextView>
   <TextView>sit amet</TextView>
-</StackComposite>
+</Stack>
 ```
 
 ```js

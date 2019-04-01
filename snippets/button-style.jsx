@@ -1,16 +1,16 @@
-import {Button, CheckBox, contentView, StackComposite, device} from 'tabris';
+import {Button, CheckBox, contentView, Stack, device} from 'tabris';
 
 // Create multiple buttons with various styles
 
 contentView.append(
-  <StackComposite spacing={4} alignment='centerX' top={16} left={16} right={16}>
+  <Stack spacing={4} alignment='centerX' top={16} left={16} right={16}>
     <Button style='default' text='Default'/>
     <Button style='elevate' text='Elevate'/>
     <Button style='outline' text='Outline'/>
     <Button style='flat' text='Flat'/>
     <Button style='text' text='Text'/>
-  </StackComposite>,
-  <StackComposite top='prev() 16' left='0' right='0' alignment='stretchX' padding={16}>
+  </Stack>,
+  <Stack top='prev() 16' left='0' right='0' alignment='stretchX' padding={16}>
     <CheckBox text='Tint background' onCheckedChanged={tintBackground}/>
     <CheckBox text='Tint textColor' onCheckedChanged={tintTextColor}/>
     <CheckBox text='Tint stroke' onCheckedChanged={tintStrokeColor}/>
@@ -18,7 +18,7 @@ contentView.append(
     <CheckBox text='Wider corner radius' onCheckedChanged={toggleCornerRadius}/>
     <CheckBox text='Buttons enabled' checked onCheckedChanged={toggleEnablement}/>
     <CheckBox text='Show icons' onCheckedChanged={toggleImage}/>
-  </StackComposite>
+  </Stack>
 );
 
 function tintBackground({value: checked}) {

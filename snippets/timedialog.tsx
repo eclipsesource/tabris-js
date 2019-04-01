@@ -1,11 +1,11 @@
-import { TimeDialog, Button, StackComposite, TextView, contentView } from 'tabris';
+import { TimeDialog, Button, Stack, TextView, contentView } from 'tabris';
 
 contentView.append(
-  <StackComposite layoutData='fill' padding={8} spacing={16} alignment='stretchX'>
+  <Stack layoutData='fill' padding={8} spacing={16} alignment='stretchX'>
     <Button onSelect={showSimpleDialog}>Simple time dialog</Button>
     <Button onSelect={showSpecificTime}>Dialog with pre-set time</Button>
     <TextView/>
-  </StackComposite>
+  </Stack>
 );
 
 const textView =  contentView.find(TextView).first();

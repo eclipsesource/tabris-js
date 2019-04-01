@@ -2,7 +2,7 @@ import Composite from './Composite';
 import StackLayout from '../StackLayout';
 import NativeObject from '../NativeObject';
 
-export default class StackComposite extends Composite {
+export default class Stack extends Composite {
 
   constructor(properties) {
     super(properties);
@@ -35,7 +35,7 @@ export default class StackComposite extends Composite {
 
 }
 
-NativeObject.defineProperties(StackComposite.prototype, {
+NativeObject.defineProperties(Stack.prototype, {
   spacing: {
     type: 'number',
     get() {

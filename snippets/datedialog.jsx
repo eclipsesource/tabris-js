@@ -1,12 +1,12 @@
-import { DateDialog, Button, StackComposite, TextView, contentView } from 'tabris';
+import { DateDialog, Button, Stack, TextView, contentView } from 'tabris';
 
 contentView.append(
-  <StackComposite layoutData='fill' padding={8} spacing={16} alignment='stretchX'>
+  <Stack layoutData='fill' padding={8} spacing={16} alignment='stretchX'>
     <Button onSelect={showSimpleDialog}>Simple date dialog</Button>
     <Button onSelect={showSpecificDate}>Dialog with pre-set date</Button>
     <Button onSelect={showMinMaxDate}>Dialog with min/max date</Button>
     <TextView/>
-  </StackComposite>
+  </Stack>
 );
 
 const FIVE_DAYS = 432000000;

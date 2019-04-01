@@ -12,7 +12,7 @@
       }
     ]
   },
-  "description": "Stack based layout manager. Can be set on the `layout` property of any `Composite` or widget extending `Composite` like `Page` or `Tab` widget. The `StackComposite` uses it as the default `layout`.<br/><br/> All children of the composite are automatically arranged in one vertical stack, starting from the top. The `layoutData` on the children is currently ignored.",
+  "description": "Stack based layout manager. Can be set on the `layout` property of any `Composite` or widget extending `Composite` like `Page` or `Tab` widget. The `Stack` uses it as the default `layout`.<br/><br/> All children of the composite are automatically arranged in one vertical stack, starting from the top. The `layoutData` on the children is currently ignored.",
   "properties": {
     "spacing": {
       "type": "number",
@@ -32,14 +32,14 @@
   "statics": {
     "properties": {
       "default": {
-        "description": "Instance of StackLayout used as the default `layout` property value of `StackComposite` widgets. Equivalent to `new StackLayout()`",
+        "description": "Instance of StackLayout used as the default `layout` property value of `Stack` widgets. Equivalent to `new StackLayout()`",
         "type": "StackLayout"
       }
     }
   },
   "links": [
     {
-      "title": "Creating a simple `StackComposite` with an included `StackLayout`",
+      "title": "Creating a simple `Stack` with an included `StackLayout`",
       "path": "${GITHUB_BRANCH}/snippets/printer.js"
     }
   ]
