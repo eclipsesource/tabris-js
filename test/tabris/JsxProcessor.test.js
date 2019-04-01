@@ -1,4 +1,4 @@
-import {expect, mockTabris, spy, stub} from '../test';
+import {expect, mockTabris, spy, stub, restore} from '../test';
 import ClientStub from './ClientStub';
 import {createJsxProcessor, JSX} from '../../src/tabris/JsxProcessor';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
@@ -9,6 +9,7 @@ import CheckBox from '../../src/tabris/widgets/CheckBox';
 import Switch from '../../src/tabris/widgets/Switch';
 import App from '../../src/tabris/App';
 import TextView from '../../src/tabris/widgets/TextView';
+import LayoutData from '../../src/tabris/LayoutData';
 
 describe('JsxProcessor', function() {
 
@@ -23,6 +24,10 @@ describe('JsxProcessor', function() {
     jsx = createJsxProcessor();
   });
 
+  afterEach(function() {
+    restore();
+  });
+
   describe('createElement', function() {
 
     it('creates widget by Constructor', function() {
@@ -31,6 +36,33 @@ describe('JsxProcessor', function() {
 
     it('sets properties', function() {
       expect(jsx.createElement(CheckBox, {text: 'foo'}).text).to.equal('foo');
+    });
+
+    it('allows shorthands for layoutData pre-sets', function() {
+      expect(jsx.createElement(CheckBox, {stretch: true}).layoutData).to.equal(LayoutData.stretch);
+      expect(jsx.createElement(CheckBox, {center: true}).layoutData).to.equal(LayoutData.center);
+      expect(jsx.createElement(CheckBox, {stretchX: true}).layoutData).to.equal(LayoutData.stretchX);
+      expect(jsx.createElement(CheckBox, {stretchY: true}).layoutData).to.equal(LayoutData.stretchY);
+      expect(jsx.createElement(CheckBox, {centerX: true}).layoutData.centerX).to.equal(0);
+      expect(jsx.createElement(CheckBox, {centerY: true}).layoutData.centerY).to.equal(0);
+    });
+
+    it('merges shorthand with property', function() {
+      const result = jsx.createElement(CheckBox, {stretchY: true, layoutData: {left: 0}}).layoutData;
+
+      expect(result.left.offset).to.equal(0);
+      expect(result.top.offset).to.equal(0);
+      expect(result.right).to.equal('auto');
+      expect(result.bottom.offset).to.equal(0);
+    });
+
+    it('merges shorthands with each other', function() {
+      const result = jsx.createElement(CheckBox, {stretchY: true, stretchX: true}).layoutData;
+
+      expect(result.left.offset).to.equal(0);
+      expect(result.top.offset).to.equal(0);
+      expect(result.right.offset).to.equal(0);
+      expect(result.bottom.offset).to.equal(0);
     });
 
     it('attaches camelCase listeners', function() {

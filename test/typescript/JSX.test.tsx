@@ -28,11 +28,17 @@ const textView: tabris.TextView = <tabris.TextView alignment='right'>foo</tabris
 const toggleButton: tabris.ToggleButton = <tabris.ToggleButton text='red'>foo</tabris.ToggleButton>;
 const video: tabris.Video = <tabris.Video background={[255, 255, 255]} autoPlay={true}/>;
 const webView: tabris.WebView = <tabris.WebView background={new tabris.Color(255, 255, 255)} url='http://localhost/'/>;
-
 const noAttributes: tabris.Composite = <tabris.Composite/>;
-const shortHands1: tabris.Composite = <tabris.Composite centerX baseline/>;
-const shortHands2: tabris.Composite = <tabris.Composite centerX centerY/>;
 
+// shortHands
+let shortHands1: tabris.Composite = <tabris.Composite centerX baseline/>;
+shortHands1 = <tabris.Composite centerX centerY/>;
+let shortHands2: tabris.CheckBox = <tabris.CheckBox center/>;
+shortHands2 = <tabris.CheckBox stretch/>;
+shortHands2 = <tabris.CheckBox stretchX/>;
+shortHands2 = <tabris.CheckBox stretchY/>;
+
+// Children
 const compositeWithChildren: tabris.Composite = <tabris.Composite>{[
   new tabris.Button(), new tabris.WidgetCollection([new tabris.TextView()])
 ]}</tabris.Composite>;
@@ -43,6 +49,7 @@ const scrollViewWidthChildren: tabris.ScrollView = <tabris.ScrollView>{new tabri
 const tabWidthChildren: tabris.Tab = <tabris.Tab>{new tabris.Button()}</tabris.Tab>;
 const tabFolderWidthChildren: tabris.TabFolder = <tabris.TabFolder>{new tabris.Tab()}</tabris.TabFolder>;
 
+// Custom Components
 class MyCustomWidget extends tabris.Composite {
 
   public foo: number;
@@ -86,7 +93,6 @@ widgetCollection = <tabris.$><tabris.Button/><tabris.TextView/></tabris.$>;
 widgetCollection = <$><tabris.Button/><tabris.TextView/></$>;
 
 // Popup
-
 const actions: Array<{title: string, image?: tabris.ImageValue, style?: 'default'|'cancel'|'destructive'}> = [
   {title: 'foo', image: 'foo.jpg', style: 'default'}
 ];
@@ -142,7 +148,6 @@ let popover: tabris.Popover = <tabris.Popover width={100} height={200} anchor={c
 popover = <tabris.Popover onClose={() => {}} />;
 
 // markup
-
 const markup: string =
 <$>
   normal text<br/><br/>

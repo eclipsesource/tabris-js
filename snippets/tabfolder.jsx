@@ -1,7 +1,7 @@
 import {Tab, TabFolder, TextView, contentView} from 'tabris';
 
 contentView.append(
-  <TabFolder paging layoutData='stretch'>
+  <TabFolder paging stretch>
     <Tab title='Cart' image='resources/cart@2x.png' selectedImage='resources/cart-filled@2x.png'>
       <TextView centerX centerY>Content of Tab Cart</TextView>
     </Tab>

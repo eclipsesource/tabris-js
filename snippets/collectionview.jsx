@@ -14,7 +14,7 @@ const people = [
 
 contentView.append(
   <CollectionView
-      layoutData='stretch'
+      stretch
       itemCount={people.length}
       cellHeight={256}
       createCell={createCell}

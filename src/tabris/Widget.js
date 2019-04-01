@@ -4,7 +4,7 @@ import GestureRecognizer from './GestureRecognizer';
 import {animate} from './Animation';
 import {JSX} from './JsxProcessor';
 import {types} from './property-types';
-import LayoutData from './LayoutData';
+import LayoutData, {mergeLayoutData} from './LayoutData';
 import {getFilter} from './util-widget-select';
 
 /**
@@ -190,13 +190,20 @@ export default class Widget extends NativeObject {
     }
   }
 
-  $triggerChangeBounds({left, top, width, height}) {
-    super._trigger('boundsChanged', {value: {left, top, width, height}});
+  /**
+   * @param {string[]} properties
+   */
+  _reorderProperties(properties) {
+    const layoutDataIndex = properties.indexOf('layoutData');
+    if (layoutDataIndex !== -1) {
+      const removed = properties.splice(layoutDataIndex, 1);
+      return removed.concat(properties);
+    }
+    return properties;
   }
 
-  /** @this {import("../JsxProcessor").default} */
-  [JSX.jsxFactory](Type, attributes) {
-    return this.createNativeObject(Type, attributes);
+  $triggerChangeBounds({left, top, width, height}) {
+    super._trigger('boundsChanged', {value: {left, top, width, height}});
   }
 
 }
@@ -287,6 +294,29 @@ NativeObject.defineProperties(Widget.prototype, {
 
 const layoutDataProps = ['left', 'right', 'top', 'bottom', 'width', 'height', 'centerX', 'centerY', 'baseline'];
 
+const jsxShorthands = {
+  center: 'layoutData',
+  stretch: 'layoutData',
+  stretchX: 'layoutData',
+  stretchY: 'layoutData'
+};
+
+const defaultGestures = {
+  tap: {type: 'tap'},
+  longPress: {type: 'longPress'},
+  pan: {type: 'pan'},
+  panLeft: {type: 'pan', direction: 'left'},
+  panRight: {type: 'pan', direction: 'right'},
+  panUp: {type: 'pan', direction: 'up'},
+  panDown: {type: 'pan', direction: 'down'},
+  panHorizontal: {type: 'pan', direction: 'horizontal'},
+  panVertical: {type: 'pan', direction: 'vertical'},
+  swipeLeft: {type: 'swipe', direction: 'left'},
+  swipeRight: {type: 'swipe', direction: 'right'},
+  swipeUp: {type: 'swipe', direction: 'up'},
+  swipeDown: {type: 'swipe', direction: 'down'}
+};
+
 NativeObject.defineProperties(Widget.prototype, {
   layoutData: {
     set(name, value) {
@@ -365,25 +395,21 @@ NativeObject.defineEvents(Widget.prototype, {
 
 Widget.prototype.animate = animate;
 
+Widget.prototype[JSX.jsxFactory] = createElement;
+
+/** @this {import("./JsxProcessor").default} */
+function createElement(Type, attributes) {
+  const finalAttributes = this.withShorthands(
+    attributes,
+    jsxShorthands,
+    mergeLayoutData
+  );
+  return this.createNativeObject(Type, finalAttributes);
+}
+
 function hasAndroidResizeBug() {
   if (!('cache' in hasAndroidResizeBug)) {
     hasAndroidResizeBug.cache = tabris.device.platform === 'Android' && tabris.device.version <= 17;
   }
   return hasAndroidResizeBug.cache;
 }
-
-const defaultGestures = {
-  tap: {type: 'tap'},
-  longPress: {type: 'longPress'},
-  pan: {type: 'pan'},
-  panLeft: {type: 'pan', direction: 'left'},
-  panRight: {type: 'pan', direction: 'right'},
-  panUp: {type: 'pan', direction: 'up'},
-  panDown: {type: 'pan', direction: 'down'},
-  panHorizontal: {type: 'pan', direction: 'horizontal'},
-  panVertical: {type: 'pan', direction: 'vertical'},
-  swipeLeft: {type: 'swipe', direction: 'left'},
-  swipeRight: {type: 'swipe', direction: 'right'},
-  swipeUp: {type: 'swipe', direction: 'up'},
-  swipeDown: {type: 'swipe', direction: 'down'}
-};

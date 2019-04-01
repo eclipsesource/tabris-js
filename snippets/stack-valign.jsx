@@ -1,9 +1,9 @@
 import {contentView, TextView, Stack} from 'tabris';
 
 contentView.append(
-  <Stack layoutData='stretch' alignment='stretchX'>
+  <Stack stretch alignment='stretchX'>
     <TextView top={0} background='red'>Top</TextView>
-    <TextView layoutData='stretchY' background='green'>Stretch</TextView>
+    <TextView stretchY background='green'>Stretch</TextView>
     <TextView bottom={0} background='teal'>Bottom</TextView>
   </Stack>
 );

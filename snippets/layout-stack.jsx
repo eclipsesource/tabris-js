@@ -1,7 +1,7 @@
 import {contentView, TextView, StackLayout, ScrollView} from 'tabris';
 
 contentView.append(
-  <ScrollView layoutData='stretch' layout={new StackLayout({alignment: 'stretchX'})} >
+  <ScrollView stretch layout={new StackLayout({alignment: 'stretchX'})} >
     <TextView background='red'>lorem</TextView>
     <TextView background='green'>ipsum dolor</TextView>
     <TextView background='blue'>sit amet</TextView>

@@ -120,6 +120,22 @@ export default class LayoutData {
 
 }
 
+export function mergeLayoutData(targetValue, sourceValue) {
+  const target = LayoutData.from(targetValue);
+  const source = LayoutData.from(sourceValue);
+  return LayoutData.from({
+    left: has(source, 'left') ? source.left : target.left,
+    right: has(source, 'right') ? source.right : target.right,
+    top: has(source, 'top') ? source.top : target.top,
+    bottom: has(source, 'bottom') ? source.bottom : target.bottom,
+    centerX: has(source, 'centerX') ? source.centerX : target.centerX,
+    centerY: has(source, 'centerY') ? source.centerY : target.centerY,
+    baseline: has(source, 'baseline') ? source.baseline : target.baseline,
+    width: has(source,'width') ? source.width : target.width,
+    height: has(source, 'height') ? source.height : target.height
+  });
+}
+
 function has(layoutDataValue, prop) {
   return layoutDataValue[prop] != null && layoutDataValue[prop] !== 'auto';
 }

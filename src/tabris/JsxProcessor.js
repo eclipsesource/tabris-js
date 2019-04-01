@@ -126,6 +126,30 @@ export default class JsxProcessor {
     return Object.assign(attributes || {}, children ? {[property]: children} : {});
   }
 
+  /**
+   * @param {object} attributes
+   * @param {{[attr: string]: string}} shorthandsMapping
+   * @param {((value1: any, value2: string) => any)} merge
+   * @returns {object}
+   */
+  withShorthands(attributes, shorthandsMapping, merge) {
+    const shorthandsKeys = Object.keys(shorthandsMapping);
+    const shorthands = shorthandsKeys.filter(value => value in attributes);
+    if (!shorthands.length) {
+      return attributes;
+    }
+    const attrCopy = omit(attributes, shorthandsKeys);
+    shorthands.forEach(shorthand => {
+      const prop = shorthandsMapping[shorthand];
+      if (prop in attrCopy) {
+        attrCopy[prop] = merge(attrCopy[prop], shorthand);
+      } else {
+        attrCopy[prop] = shorthand;
+      }
+    });
+    return attrCopy;
+  }
+
   getListeners(attributes) {
     const listeners = {};
     for (const attribute in attributes) {
@@ -183,8 +207,10 @@ export function joinTextContent(textArray, markupEnabled) {
 
 export const JSX = {
 
+  /** @type {unique Symbol} */
   jsxFactory: Symbol('jsxFactory'),
 
+  /** @type {unique Symbol} */
   jsxType: Symbol('jsxType'),
 
   /** @param {JsxProcessor} jsxProcessor */

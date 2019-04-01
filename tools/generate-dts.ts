@@ -34,10 +34,13 @@ export type Properties<
 type ListenersKeysOf<T> = { [K in keyof T]: T[K] extends Listeners<any> ? K : never }[keyof T];
 type UnpackListeners<T> = T extends Listeners<infer U> ? Listener<U> : T;
 type ListenersMap<T> = { [Key in ListenersKeysOf<T>]?: UnpackListeners<T[Key]>};
+export type JSXShorthands<T> = T extends {layoutData?: LayoutDataValue}
+  ? {center?: true, stretch?: true, stretchX?: true, stretchY?: true}
+  : {};
 export type JSXAttributes<
   T extends {set?: any; jsxAttributes?: any},
   U = Omit<T, 'set' | 'jsxAttributes'> // prevent self-reference issues
-> = Properties<U> & ListenersMap<U>;
+> = Properties<U> & ListenersMap<U> & JSXShorthands<U>;
 type ExtendedEvent<EventData, Target = {}> = EventObject<Target> & EventData;
 type Listener<T = {}> = (ev: ExtendedEvent<T>) => any;
 type ListenersTriggerParam<T> = {[P in Diff<keyof T, keyof EventObject<object>>]: T[P]};
