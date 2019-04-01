@@ -106,26 +106,35 @@ export default class StackLayout extends Layout {
   }
 
   _applyTop(targetLayoutData, allLayoutData, index) {
-    const layoutData = allLayoutData[index];
+    const top = allLayoutData[index].top;
     const prevLayoutData = allLayoutData[index - 1];
-    const top = layoutData.top !== 'auto' ? layoutData.top.offset : 0;
-    if (!prevLayoutData) {
-      targetLayoutData.top = new Constraint(zero, top);
+    const prevBottom = prevLayoutData ? prevLayoutData.bottom : 'auto';
+    const ref = prevLayoutData ? LayoutData.prev : zero;
+    if (top === 'auto' && prevBottom === 'auto') {
+      targetLayoutData.top = new Constraint(
+        ref,
+        prevLayoutData ? this._spacing : 0
+      );
     } else {
-      const prevBottom = prevLayoutData.bottom !== 'auto' ? prevLayoutData.bottom.offset : 0;
-      targetLayoutData.top = new Constraint(LayoutData.prev, prevBottom + this._spacing + top);
+      targetLayoutData.top = new Constraint(ref, maxPositive(
+        top !== 'auto' ? top.offset : 0,
+        prevBottom !== 'auto' ? prevBottom.offset : 0
+      ));
     }
   }
 
   _applyBottom(targetLayoutData, allLayoutData, index) {
-    const layoutData = allLayoutData[index];
+    const bottom = allLayoutData[index].bottom;
     const nextLayoutData = allLayoutData[index + 1];
-    const bottom = layoutData.bottom !== 'auto' ? layoutData.bottom.offset : 0;
-    if (!nextLayoutData) {
-      targetLayoutData.bottom = new Constraint(zero, bottom);
+    const nextTop = nextLayoutData ? nextLayoutData.top : 'auto';
+    const ref = nextLayoutData ? LayoutData.next : zero;
+    if (bottom === 'auto' && nextTop === 'auto') {
+      targetLayoutData.bottom = new Constraint(ref, nextLayoutData ? this._spacing : 0);
     } else {
-      const nextTop = nextLayoutData.top !== 'auto' ? nextLayoutData.top.offset : 0;
-      targetLayoutData.bottom = new Constraint(LayoutData.next, nextTop + this._spacing + bottom);
+      targetLayoutData.bottom = new Constraint(ref, maxPositive(
+        bottom !== 'auto' ? bottom.offset : 0,
+        nextTop !== 'auto' ? nextTop.offset : 0
+      ));
     }
   }
 
@@ -177,4 +186,16 @@ function isValidConstraint(constraint) {
 
 function layoutWarn(child, prop, message) {
   warn(`Unsupported value for "${prop}": ${message}\nTarget: ${getPath(child)}`);
+}
+
+/**
+ * @param {number} value1
+ * @param {number} value2
+ * @return {number}
+ */
+function maxPositive(value1, value2) {
+  if (value1 < 0 || value2 < 0) {
+    return 0;
+  }
+  return Math.max(0, Math.max(value1, value2));
 }

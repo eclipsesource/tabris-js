@@ -312,47 +312,54 @@ describe('StackLayout', function() {
 
     describe('with layoutData properties top/bottom', function() {
 
-      it('adds top to spacing', function() {
-        children[0].top = 10;
+      it('top replaces spacing', function() {
+        children[0].top = 20;
         children[1].top = 10;
-        children[2].top = -10;
+        children[2].top = 0;
         children[3].top = -20;
+        children[4].top = 'auto';
 
         const all = render({spacing: 16, alignment: 'left'});
 
-        expect(all[0]).to.deep.equal({top: 10, left: 0});
-        expect(all[1]).to.deep.equal({top: [cid[0], 26], left: 0});
-        expect(all[2]).to.deep.equal({top: [cid[1], 6], left: 0});
-        expect(all[3]).to.deep.equal({top: [cid[2], -4], left: 0});
+        expect(all[0]).to.deep.equal({top: 20, left: 0});
+        expect(all[1]).to.deep.equal({top: [cid[0], 10], left: 0});
+        expect(all[2]).to.deep.equal({top: [cid[1], 0], left: 0});
+        expect(all[3]).to.deep.equal({top: [cid[2], 0], left: 0});
         expect(all[4]).to.deep.equal({top: [cid[3], 16], left: 0});
         expect(all[5]).to.deep.equal({top: [cid[4], 16], left: 0});
       });
 
-      it('adds bottom to spacing', function() {
-        children[0].top = 10;
+      it('bottom replaces spacing', function() {
         children[0].bottom = 10;
-        children[1].bottom = -10;
+        children[1].bottom = 0;
         children[2].bottom = -20;
-
-        const all = render({spacing: 16, alignment: 'left'});
-
-        expect(all[0]).to.deep.equal({top: 10, left: 0});
-        expect(all[1]).to.deep.equal({top: [cid[0], 26], left: 0});
-        expect(all[2]).to.deep.equal({top: [cid[1], 6], left: 0});
-        expect(all[3]).to.deep.equal({top: [cid[2], -4], left: 0});
-        expect(all[4]).to.deep.equal({top: [cid[3], 16], left: 0});
-        expect(all[5]).to.deep.equal({top: [cid[4], 16], left: 0});
-      });
-
-      it('adds top and bottom to spacing', function() {
-        children[0].bottom = 10;
-        children[1].top = 10;
+        children[3].bottom = 'auto';
 
         const all = render({spacing: 16, alignment: 'left'});
 
         expect(all[0]).to.deep.equal({top: 0, left: 0});
-        expect(all[1]).to.deep.equal({top: [cid[0], 36], left: 0});
-        expect(all[2]).to.deep.equal({top: [cid[1], 16], left: 0});
+        expect(all[1]).to.deep.equal({top: [cid[0], 10], left: 0});
+        expect(all[2]).to.deep.equal({top: [cid[1], 0], left: 0});
+        expect(all[3]).to.deep.equal({top: [cid[2], 0], left: 0});
+        expect(all[4]).to.deep.equal({top: [cid[3], 16], left: 0});
+        expect(all[5]).to.deep.equal({top: [cid[4], 16], left: 0});
+      });
+
+      it('uses larger value to replace spacing', function() {
+        children[0].bottom = 10;
+        children[1].top = 20;
+        children[1].bottom = 20;
+        children[2].top = 10;
+        children[2].bottom = 20;
+        children[3].top = -10;
+
+        const all = render({spacing: 16, alignment: 'left'});
+
+        expect(all[0]).to.deep.equal({top: 0, left: 0});
+        expect(all[1]).to.deep.equal({top: [cid[0], 20], left: 0});
+        expect(all[2]).to.deep.equal({top: [cid[1], 20], left: 0});
+        expect(all[3]).to.deep.equal({top: [cid[2], 0], left: 0});
+        expect(all[4]).to.deep.equal({top: [cid[3], 16], left: 0});
       });
 
       it('supports height', function() {
@@ -361,8 +368,8 @@ describe('StackLayout', function() {
         const all = render({spacing: 16, alignment: 'left'});
 
         expect(all[0]).to.deep.equal({top: 0, left: 0});
-        expect(all[1]).to.deep.equal({top: [cid[0], 26], height: 12, left: 0});
-        expect(all[2]).to.deep.equal({top: [cid[1], 27], left: 0});
+        expect(all[1]).to.deep.equal({top: [cid[0], 10], height: 12, left: 0});
+        expect(all[2]).to.deep.equal({top: [cid[1], 11], left: 0});
       });
 
       it('vertically aligns to bottom when last child has bottom offset', function() {
@@ -375,10 +382,10 @@ describe('StackLayout', function() {
         const all = render({spacing: 16, alignment: 'left'});
 
         expect(all[0]).to.deep.equal({bottom: [cid[1], 16], left: 0});
-        expect(all[1]).to.deep.equal({bottom: [cid[2], 46], left: 0});
+        expect(all[1]).to.deep.equal({bottom: [cid[2], 30], left: 0});
         expect(all[2]).to.deep.equal({bottom: [cid[3], 16], left: 0});
-        expect(all[3]).to.deep.equal({bottom: [cid[4], 6], left: 0});
-        expect(all[4]).to.deep.equal({bottom: [cid[5], 66], left: 0});
+        expect(all[3]).to.deep.equal({bottom: [cid[4], 0], left: 0});
+        expect(all[4]).to.deep.equal({bottom: [cid[5], 30], left: 0});
         expect(all[5]).to.deep.equal({bottom: 10, left: 0});
       });
 
@@ -416,8 +423,8 @@ describe('StackLayout', function() {
 
         expect(all[0]).to.deep.equal({top: 10, left: 0});
         expect(all[1]).to.deep.equal({top: [cid[0], 16], left: 0});
-        expect(all[2]).to.deep.equal({top: [cid[1], 39], height: 100, left: 0});
-        expect(all[3]).to.deep.equal({top: [cid[2], 43], bottom: [cid[4], 31], left: 0});
+        expect(all[2]).to.deep.equal({top: [cid[1], 12], height: 100, left: 0});
+        expect(all[3]).to.deep.equal({top: [cid[2], 14], bottom: [cid[4], 15], left: 0});
         expect(all[4]).to.deep.equal({bottom: [cid[5], 16], left: 0});
         expect(all[5]).to.deep.equal({bottom: 15, left: 0});
       });
