@@ -116,6 +116,16 @@
         "readonly": true,
         "type": "LayoutData",
         "description": "An instance of LayoutData that makes a widget fill the inner width and height of its parent (padding excluded). Equivalent to `LayoutData.from({left: 0, top: 0, right: 0, bottom: 0})`."
+      },
+      "stretchX": {
+        "readonly": true,
+        "type": "LayoutData",
+        "description": "An instance of LayoutData that makes a widget as wide as its parent (padding excluded). Equivalent to `LayoutData.from({left: 0, right: 0})`."
+      },
+      "stretchY": {
+        "readonly": true,
+        "type": "LayoutData",
+        "description": "An instance of LayoutData that makes a widget as high as its parent (padding excluded). Equivalent to `LayoutData.from({top: 0, bottom: 0})`."
       }
     }
   }

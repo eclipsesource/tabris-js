@@ -24,6 +24,26 @@ export default class LayoutData {
     return this._fill;
   }
 
+  static get stretchX() {
+    if (!this._stretchX) {
+      this._stretchX = new LayoutData({
+        left: ConstraintExports.zero,
+        right: ConstraintExports.zero,
+      });
+    }
+    return this._stretchX;
+  }
+
+  static get stretchY() {
+    if (!this._stretchY) {
+      this._stretchY = new LayoutData({
+        top: ConstraintExports.zero,
+        bottom: ConstraintExports.zero
+      });
+    }
+    return this._stretchY;
+  }
+
   static get center() {
     if (!this._center) {
       this._center = new LayoutData({centerX: 0, centerY: 0});
@@ -34,6 +54,12 @@ export default class LayoutData {
   static from(value) {
     if (value === 'fill')  {
       return LayoutData.fill;
+    }
+    if (value === 'stretchX')  {
+      return LayoutData.stretchX;
+    }
+    if (value === 'stretchY')  {
+      return LayoutData.stretchY;
     }
     if (value === 'center')  {
       return LayoutData.center;

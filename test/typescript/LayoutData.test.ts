@@ -56,8 +56,12 @@ layoutDataValue = {
 };
 layoutDataValue = 'center';
 layoutDataValue = 'fill';
+layoutDataValue = 'stretchX';
+layoutDataValue = 'stretchY';
 
 // Statics
 layoutData = LayoutData.from(layoutDataValue);
 layoutData = LayoutData.center;
 layoutData = LayoutData.fill;
+layoutData = LayoutData.stretchX;
+layoutData = LayoutData.stretchY;

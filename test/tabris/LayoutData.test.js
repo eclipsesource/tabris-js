@@ -236,6 +236,14 @@ describe('LayoutData', function() {
       expect(LayoutData.from('center')).to.equal(LayoutData.center);
     });
 
+    it('creates LayoutData from string "stretchX"', function() {
+      expect(LayoutData.from('stretchX')).to.equal(LayoutData.stretchX);
+    });
+
+    it('creates LayoutData from string "stretchY"', function() {
+      expect(LayoutData.from('stretchY')).to.equal(LayoutData.stretchY);
+    });
+
     it('normalizes layoutData', function() {
       const altExampleData = {
         left: 0,
@@ -302,6 +310,58 @@ describe('LayoutData', function() {
       LayoutData.center = null;
 
       expect(LayoutData.center).to.equal(original);
+    });
+
+  });
+
+  describe('stretchX', function() {
+
+    it('sets left/right to 0', function() {
+      expect(LayoutData.stretchX).to.deep.equal(new LayoutData({
+        left: new Constraint(new Percent(0), 0),
+        top: 'auto',
+        width: 'auto',
+        baseline: 'auto',
+        centerX: 'auto',
+        bottom: 'auto',
+        right: new Constraint(new Percent(0), 0),
+        height: 'auto',
+        centerY: 'auto'
+      }));
+    });
+
+    it('is read-only', function() {
+      const original = LayoutData.stretchX;
+      // @ts-ignore
+      LayoutData.stretchX = null;
+
+      expect(LayoutData.stretchX).to.equal(original);
+    });
+
+  });
+
+  describe('stretchY', function() {
+
+    it('sets top/bottom to 0', function() {
+      expect(LayoutData.stretchY).to.deep.equal(new LayoutData({
+        left: 'auto',
+        top: new Constraint(new Percent(0), 0),
+        width: 'auto',
+        baseline: 'auto',
+        centerX: 'auto',
+        bottom: new Constraint(new Percent(0), 0),
+        right: 'auto',
+        height: 'auto',
+        centerY: 'auto'
+      }));
+    });
+
+    it('is read-only', function() {
+      const original = LayoutData.stretchY;
+      // @ts-ignore
+      LayoutData.stretchY = null;
+
+      expect(LayoutData.stretchY).to.equal(original);
     });
 
   });
