@@ -11,7 +11,7 @@ const button = contentView.find().first(Button);
 function showPopover() {
   const popover = Popover.open(
     <Popover width={300} height={400} anchor={button}>
-      <NavigationView layoutData='fill' navigationAction={closeAction(() => popover.close())}>
+      <NavigationView layoutData='stretch' navigationAction={closeAction(() => popover.close())}>
         <Page title='Popover'>
           <TextView layoutData='center'>Hello Popover</TextView>
         </Page>

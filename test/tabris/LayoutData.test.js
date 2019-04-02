@@ -228,8 +228,8 @@ describe('LayoutData', function() {
       })).to.deep.equal(new LayoutData({}));
     });
 
-    it('creates LayoutData from string "fill"', function() {
-      expect(LayoutData.from('fill')).to.equal(LayoutData.fill);
+    it('creates LayoutData from string "stretch"', function() {
+      expect(LayoutData.from('stretch')).to.equal(LayoutData.stretch);
     });
 
     it('creates LayoutData from string "center"', function() {
@@ -262,10 +262,10 @@ describe('LayoutData', function() {
 
   });
 
-  describe('fill', function() {
+  describe('stretch', function() {
 
     it('sets left/top/right/bottom to 0', function() {
-      expect(LayoutData.fill).to.deep.equal(new LayoutData({
+      expect(LayoutData.stretch).to.deep.equal(new LayoutData({
         left: new Constraint(new Percent(0), 0),
         top: new Constraint(new Percent(0), 0),
         width: 'auto',
@@ -279,11 +279,11 @@ describe('LayoutData', function() {
     });
 
     it('is read-only', function() {
-      const original = LayoutData.fill;
+      const original = LayoutData.stretch;
       // @ts-ignore
-      LayoutData.fill = null;
+      LayoutData.stretch = null;
 
-      expect(LayoutData.fill).to.equal(original);
+      expect(LayoutData.stretch).to.equal(original);
     });
 
   });

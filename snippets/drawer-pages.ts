@@ -18,7 +18,7 @@ drawer.enabled = true;
 new ImageView({
   left: 0, right: 0, top: 0, height: 200,
   image: 'resources/landscape.jpg',
-  scaleMode: 'fill'
+  scaleMode: 'stretch'
 }).appendTo(drawer);
 
 const pageSelector = new CollectionView({

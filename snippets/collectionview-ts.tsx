@@ -15,7 +15,7 @@ const people: Person[] = [
 ];
 
 contentView.append(
-  <CollectionView layoutData='fill' itemCount={people.length} cellHeight={256}
+  <CollectionView layoutData='stretch' itemCount={people.length} cellHeight={256}
       createCell={() => new Cell()}
       updateCell={(cell, index) => cell.person = people[index]} />
 );

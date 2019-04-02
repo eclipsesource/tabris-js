@@ -1,7 +1,7 @@
 import {Button, TextView, TextInput, contentView, Stack} from 'tabris';
 
 contentView.append(
-  <Stack layoutData='fill' alignment='stretchX' padding={16} spacing={8}>
+  <Stack layoutData='stretch' alignment='stretchX' padding={16} spacing={8}>
     <TextInput id='key' message='Key' text='Key'/>
     <TextInput id='value' message='Value' text='Value' onAccept={setValue}/>
     <Button text='Set' onSelect={setValue}/>

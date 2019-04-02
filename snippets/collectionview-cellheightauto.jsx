@@ -16,7 +16,7 @@ const TEXT = (
 const items = createItems();
 
 contentView.append(
-  <CollectionView layoutData='fill'
+  <CollectionView layoutData='stretch'
       itemCount={items.length}
       createCell={() => new TextView({padding: 12})}
       updateCell={(cell, index) => cell.text = items[index]}/>

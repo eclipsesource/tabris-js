@@ -12,16 +12,16 @@ export default class LayoutData {
     return ConstraintExports.default.prev;
   }
 
-  static get fill() {
-    if (!this._fill) {
-      this._fill = new LayoutData({
+  static get stretch() {
+    if (!this._stretch) {
+      this._stretch = new LayoutData({
         left: ConstraintExports.zero,
         top: ConstraintExports.zero,
         right: ConstraintExports.zero,
         bottom: ConstraintExports.zero
       });
     }
-    return this._fill;
+    return this._stretch;
   }
 
   static get stretchX() {
@@ -52,8 +52,8 @@ export default class LayoutData {
   }
 
   static from(value) {
-    if (value === 'fill')  {
-      return LayoutData.fill;
+    if (value === 'stretch')  {
+      return LayoutData.stretch;
     }
     if (value === 'stretchX')  {
       return LayoutData.stretchX;

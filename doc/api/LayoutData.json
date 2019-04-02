@@ -112,7 +112,7 @@
         "type": "LayoutData",
         "description": "An instance of LayoutData that centers a widget horizontally and vertically. Equivalent to `LayoutData.from({centerX: 0, centerY: 0})`"
       },
-      "fill": {
+      "stretch": {
         "readonly": true,
         "type": "LayoutData",
         "description": "An instance of LayoutData that makes a widget fill the inner width and height of its parent (padding excluded). Equivalent to `LayoutData.from({left: 0, top: 0, right: 0, bottom: 0})`."

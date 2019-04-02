@@ -55,7 +55,7 @@ for (let i = 0; i < PEOPLE.length; i++) {
       }));
   new ImageView({
     left: 0, top: 0, right: 0, bottom: 0,
-    scaleMode: 'fill',
+    scaleMode: 'stretch',
     opacity: i === 0 ? 1 : 0,
     image: person.image
   }).appendTo(imageContainer);
