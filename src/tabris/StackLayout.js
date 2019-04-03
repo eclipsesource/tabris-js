@@ -66,7 +66,7 @@ export default class StackLayout extends Layout {
    */
   _renderLayoutData(children, allLayoutData) {
     const stretchIndex = this._findStretchIndex(allLayoutData);
-    let alignTop = this._valignTop(allLayoutData) || !this._valignBottom(allLayoutData);
+    let alignTop = true;
     for (let i = 0; i < children.length; i++) {
       const targetLayoutData = Object.assign({}, this._layoutDataHorizontal);
       this._layoutX(allLayoutData[i], targetLayoutData);
@@ -145,23 +145,13 @@ export default class StackLayout extends Layout {
   }
 
   _findStretchIndex(allLayoutData) {
-    if (!(this._valignTop(allLayoutData) && this._valignBottom(allLayoutData))) {
-      return -1;
+    for (let i = 0; i < allLayoutData.length; i++) {
+      const {top, height, bottom} = allLayoutData[i];
+      if (top !== 'auto' && height === 'auto' && bottom !== 'auto') {
+        return i;
+      }
     }
-    const candidates = allLayoutData.filter(layoutData => layoutData.height === 'auto');
-    if (candidates.length === 0) {
-      return allLayoutData.length - 1;
-    }
-    if (candidates.length === 1) {
-      return allLayoutData.indexOf(candidates[0]);
-    }
-    const preferred = candidates.filter(
-      layoutData => layoutData.top !== 'auto' && layoutData.bottom !== 'auto'
-    );
-    if (preferred.length === 0) {
-      return allLayoutData.indexOf(candidates[candidates.length - 1]);
-    }
-    return allLayoutData.indexOf(preferred[0]);
+    return -1;
   }
 
   _valignTop(allLayoutData) {

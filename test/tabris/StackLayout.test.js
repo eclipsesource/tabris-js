@@ -348,8 +348,6 @@ describe('StackLayout', function() {
       it('uses larger value to replace spacing', function() {
         children[0].bottom = 10;
         children[1].top = 20;
-        children[1].bottom = 20;
-        children[2].top = 10;
         children[2].bottom = 20;
         children[3].top = -10;
 
@@ -357,7 +355,6 @@ describe('StackLayout', function() {
 
         expect(all[0]).to.deep.equal({top: 0, left: 0});
         expect(all[1]).to.deep.equal({top: [cid[0], 20], left: 0});
-        expect(all[2]).to.deep.equal({top: [cid[1], 20], left: 0});
         expect(all[3]).to.deep.equal({top: [cid[2], 0], left: 0});
         expect(all[4]).to.deep.equal({top: [cid[3], 16], left: 0});
       });
@@ -372,78 +369,21 @@ describe('StackLayout', function() {
         expect(all[2]).to.deep.equal({top: [cid[1], 11], left: 0});
       });
 
-      it('vertically aligns to bottom when last child has bottom offset', function() {
-        children[2].top = 30;
-        children[3].bottom = -10;
-        children[4].bottom = 30;
-        children[5].top = 20;
-        children[5].bottom = 10;
-
-        const all = render({spacing: 16, alignment: 'left'});
-
-        expect(all[0]).to.deep.equal({bottom: [cid[1], 16], left: 0});
-        expect(all[1]).to.deep.equal({bottom: [cid[2], 30], left: 0});
-        expect(all[2]).to.deep.equal({bottom: [cid[3], 16], left: 0});
-        expect(all[3]).to.deep.equal({bottom: [cid[4], 0], left: 0});
-        expect(all[4]).to.deep.equal({bottom: [cid[5], 30], left: 0});
-        expect(all[5]).to.deep.equal({bottom: 10, left: 0});
-      });
-
-      it('stretches when first child has top and last child bottom offset', function() {
-        children[0].top = 0;
-        children[5].bottom = 0;
+      it('stretches first child to have top and bottom offset, but not height', function() {
+        children[2].top = 0;
+        children[2].bottom = 0;
+        children[2].height = 10;
+        children[4].top = 0;
+        children[4].bottom = 0;
 
         const all = render({spacing: 16, alignment: 'left'});
 
         expect(all[0]).to.deep.equal({top: 0, left: 0});
         expect(all[1]).to.deep.equal({top: [cid[0], 16], left: 0});
-        expect(all[2]).to.deep.equal({top: [cid[1], 16], left: 0});
-        expect(all[3]).to.deep.equal({top: [cid[2], 16], left: 0});
-        expect(all[4]).to.deep.equal({top: [cid[3], 16], left: 0});
-        expect(all[5]).to.deep.equal({top: [cid[4], 16], bottom: 0, left: 0});
-      });
-
-      it('stretches only child', function() {
-        children = [new TextView()];
-        children[0].set({top: 0, bottom: 0, height: 10});
-
-        const all = render({spacing: 16, alignment: 'left'});
-
-        expect(all[0]).to.deep.equal({top: 0, bottom: 0, left: 0});
-      });
-
-      it('stretches first child to have top and bottom but not height', function() {
-        children[0].top = 10;
-        children[1].bottom = 11;
-        children[2].set({top: 12, bottom: 13, height: 100});
-        children[3].set({top: 14, bottom: 15});
-        children[5].bottom = 15;
-
-        const all = render({spacing: 16, alignment: 'left'});
-
-        expect(all[0]).to.deep.equal({top: 10, left: 0});
-        expect(all[1]).to.deep.equal({top: [cid[0], 16], left: 0});
-        expect(all[2]).to.deep.equal({top: [cid[1], 12], height: 100, left: 0});
-        expect(all[3]).to.deep.equal({top: [cid[2], 14], bottom: [cid[4], 15], left: 0});
-        expect(all[4]).to.deep.equal({bottom: [cid[5], 16], left: 0});
-        expect(all[5]).to.deep.equal({bottom: 15, left: 0});
-      });
-
-      it('stretches only child to not have height', function() {
-        children[0].set({top: 10, height: 10});
-        children[1].set({height: 10});
-        children[2].set({height: 10});
-        children[4].set({height: 10});
-        children[5].set({bottom: 10, height: 10});
-
-        const all = render({spacing: 16, alignment: 'left'});
-
-        expect(all[0]).to.deep.equal({top: 10, left: 0, height: 10});
-        expect(all[1]).to.deep.equal({top: [cid[0], 16], left: 0, height: 10});
-        expect(all[2]).to.deep.equal({top: [cid[1], 16], left: 0, height: 10});
-        expect(all[3]).to.deep.equal({top: [cid[2], 16], left: 0, bottom: [cid[4], 16]});
-        expect(all[4]).to.deep.equal({left: 0, bottom: [cid[5], 16], height: 10});
-        expect(all[5]).to.deep.equal({left: 0, bottom: 10, height: 10});
+        expect(all[2]).to.deep.equal({top: [cid[1], 0], left: 0, height: 10});
+        expect(all[3]).to.deep.equal({top: [cid[2], 0], left: 0});
+        expect(all[4]).to.deep.equal({top: [cid[3], 0], bottom: [cid[5], 0], left: 0});
+        expect(all[5]).to.deep.equal({bottom: 0, left: 0});
       });
 
     });
