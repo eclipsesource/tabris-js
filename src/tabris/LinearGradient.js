@@ -72,6 +72,7 @@ function gradientStringToObject(css) {
   let colorStopPartIndex = 1;
   if (startingPoint.indexOf('to') === 0) {
     startingPoint = startingPoint.substring(3).trim();
+    checkSide(startingPoint);
     result.direction = directionToDegrees(startingPoint);
   } else if (startingPoint.indexOf('deg') === startingPoint.length - 3) {
     result.direction = parseInt(startingPoint.substring(0, startingPoint.length - 3), 10);
@@ -197,6 +198,9 @@ function throwInvalidGradientLikeColorStop(colorStop) {
 }
 
 function checkSide(value) {
+  if (value.indexOf(' ') > -1) {
+    throw new Error(`Invalid direction "${value}". Corners are not supported.`);
+  }
   if (!SIDES.includes(value)) {
     throw new Error(`Invalid direction side "${value}". Must be a side (e.g. "left") or a corner (e.g. "left top").`);
   }

@@ -50,6 +50,9 @@ describe('property-types', function() {
 
     it('encode throws for invalid values', function() {
       expect(() => types.shader.encode(12)).to.throw('12 must be a valid LinearGradientValue or ColorValue');
+      expect(() => {
+        types.shader.encode('linear-gradient(to right bottom, blue, red)');
+      }).to.throw('Invalid direction "right bottom". Corners are not supported.');
     });
 
     it('encode converts linear gradient value to a linear gradient shader', function() {

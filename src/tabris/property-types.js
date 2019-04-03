@@ -72,7 +72,7 @@ export const types = {
       if (value === null || value === 'initial') {
         return undefined;
       }
-      if (LinearGradient.isValidLinearGradientValue(value)) {
+      if (isLinearGradientValue(value)) {
         const {colorStops, direction} = LinearGradient.from(value);
         return {
           type: 'linearGradient',
@@ -265,6 +265,18 @@ export const types = {
 };
 
 const numberRegex = /^[+-]?([0-9]+|[0-9]*\.[0-9]+)$/;
+
+function isLinearGradientValue(value) {
+  if (value instanceof LinearGradient) {
+    return true;
+  }
+  if (value instanceof Object) {
+    return 'colorStops' in value;
+  }
+  if (typeof value === 'string') {
+    return /^linear-gradient/.test(value);
+  }
+}
 
 function throwNotAcceptedError(acceptable, given) {
   const message = ['Accepting "'];

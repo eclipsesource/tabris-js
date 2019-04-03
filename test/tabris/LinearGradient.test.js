@@ -176,6 +176,11 @@ describe('LinearGradient', function() {
           .to.throw('Invalid percent string 20px');
       });
 
+      it('throws when direction is a corner', () => {
+        expect(() => LinearGradient.from('linear-gradient(to right bottom, yellow, red)'))
+          .to.throw('Invalid direction "right bottom". Corners are not supported.');
+      });
+
       it('has default direction', () => {
         expect(LinearGradient.from('linear-gradient(red)').direction).to.equal(180);
       });
