@@ -5,7 +5,7 @@ import {
 let widget: ToggleButton = new ToggleButton();
 
 // Properties
-let alignment: 'center' | 'left' | 'right';
+let alignment: 'centerX' | 'left' | 'right';
 let image: ImageValue;
 let checked: boolean;
 let text: string;

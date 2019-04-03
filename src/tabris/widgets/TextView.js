@@ -54,7 +54,7 @@ export default class TextView extends Widget {
 }
 
 NativeObject.defineProperties(TextView.prototype, {
-  alignment: {type: ['choice', ['left', 'right', 'center']], default: 'left'},
+  alignment: {type: ['choice', ['left', 'right', 'centerX']], default: 'left'},
   markupEnabled: {type: 'boolean', default: false},
   lineSpacing: {type: 'number', default: 1},
   selectable: {type: 'boolean', default: false},

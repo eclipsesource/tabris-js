@@ -62,7 +62,7 @@ NativeObject.defineProperties(TextInput.prototype, {
   message: {type: 'string', default: ''},
   editable: {type: 'boolean', default: true},
   keepFocus: {type: 'boolean', default: false},
-  alignment: {type: ['choice', ['left', 'center', 'right']], default: 'left'},
+  alignment: {type: ['choice', ['left', 'centerX', 'right']], default: 'left'},
   autoCorrect: {type: 'boolean', default: false},
   autoCapitalize: {
     type: ['choice', [true, false, 'none', 'sentence', 'word', 'all']],

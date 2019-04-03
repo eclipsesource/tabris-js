@@ -47,7 +47,7 @@ for (let i = 0; i < PEOPLE.length; i++) {
     .append(
       new TextView({
         left: 0, right: 0, bottom: 0, height: 56,
-        alignment: 'center',
+        alignment: 'centerX',
         background: 'rgba(0, 0, 0, 0.3)',
         font: 'bold 24px',
         textColor: 'white',

@@ -11,7 +11,7 @@ new TextView({
 new TextView({
   left: 10, top: 'prev() 10', right: 10,
   text: 'Center',
-  alignment: 'center'
+  alignment: 'centerX'
 }).appendTo(contentView);
 
 new TextView({

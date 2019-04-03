@@ -3,7 +3,7 @@ import {ColorValue, TextView, TextViewTapLinkEvent, Properties, FontValue} from 
 let widget: TextView = new TextView({markupEnabled: true});
 
 // Properties
-let alignment: 'center' | 'left' | 'right';
+let alignment: 'centerX' | 'left' | 'right';
 let lineSpacing: number;
 let markupEnabled: boolean;
 let maxLines: number|null;

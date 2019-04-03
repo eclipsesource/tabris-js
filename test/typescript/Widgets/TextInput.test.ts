@@ -6,7 +6,7 @@ import {
 let widget: TextInput = new TextInput({type: 'password'});
 
 // Properties
-let alignment: 'center' | 'left' | 'right';
+let alignment: 'centerX' | 'left' | 'right';
 let autoCapitalize: true | false | 'none' | 'sentence' | 'word' | 'all';
 let autoCorrect: boolean;
 let borderColor: ColorValue;

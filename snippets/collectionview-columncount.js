@@ -23,7 +23,7 @@ const collectionView = new CollectionView({
   createCell: () => new TextView({
     font: 'bold 32px',
     textColor: '#555555',
-    alignment: 'center',
+    alignment: 'centerX',
     maxLines: 1
   }),
   updateCell: (cell, index) => {

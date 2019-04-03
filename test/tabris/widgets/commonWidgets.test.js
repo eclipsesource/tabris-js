@@ -59,7 +59,7 @@ describe('Common Widgets', function() {
     expect(getCreate().type).to.equal('tabris.Button');
     expect(button.constructor.name).to.equal('Button');
     expect(button.image).to.equal(null);
-    expect(button.alignment).to.equal('center');
+    expect(button.alignment).to.equal('centerX');
     expect(button.text).to.equal('');
   });
 
@@ -403,7 +403,7 @@ describe('Common Widgets', function() {
     expect(toggleButton.constructor.name).to.equal('ToggleButton');
     expect(toggleButton.text).to.equal('');
     expect(toggleButton.image).to.equal(null);
-    expect(toggleButton.alignment).to.equal('center');
+    expect(toggleButton.alignment).to.equal('centerX');
   });
 
   it('ToggleButton checkedChanged', function() {

@@ -64,7 +64,7 @@ function createSectionView() {
     background: '#aaaaaa',
     textColor: 'white',
     font: 'bold 24px',
-    alignment: 'center'
+    alignment: 'centerX'
   });
 }
 

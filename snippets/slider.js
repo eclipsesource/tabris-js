@@ -4,7 +4,7 @@ import {Slider, TextView, contentView} from 'tabris';
 
 const textView = new TextView({
   left: 10, right: 10, top: '30%',
-  alignment: 'center',
+  alignment: 'centerX',
   font: '22px sans-serif',
   text: '50'
 }).appendTo(contentView);

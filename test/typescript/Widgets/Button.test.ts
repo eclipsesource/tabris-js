@@ -3,7 +3,7 @@ import {Button, ColorValue, ImageValue, EventObject, Properties, FontValue} from
 let widget: Button = new Button();
 
 // Properties
-let alignment: 'center' | 'left' | 'right';
+let alignment: 'centerX' | 'left' | 'right';
 let image: ImageValue;
 let text: string;
 let textColor: ColorValue;

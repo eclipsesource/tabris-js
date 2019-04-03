@@ -3,7 +3,7 @@ import {ActionSheet, ActionSheetItem, TextView, Button, contentView, Stack} from
 contentView.append(
   <Stack stretch padding={8} spacing={16} alignment='stretchX'>
     <Button onSelect={showActionSheet}>Show ActionSheet</Button>
-    <TextView alignment='center'/>
+    <TextView alignment='centerX'/>
   </Stack>
 );
 

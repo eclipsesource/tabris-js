@@ -8,7 +8,7 @@ new Button({
 
 const statusTextView = new TextView({
   left: 16, right: 16, bottom: 'prev()', height: 48,
-  alignment: 'center',
+  alignment: 'centerX',
   text: 'No message received from WebView'
 }).appendTo(contentView);
 

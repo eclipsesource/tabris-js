@@ -24,14 +24,14 @@ const scrollView = new ScrollView({
 new TextView({
   left: 16, top: 16, right: ['50%', 16],
   text: 'Native',
-  alignment: 'center',
+  alignment: 'centerX',
   font: 'black 16px'
 }).appendTo(scrollView);
 
 new TextView({
   left: ['50%', 16], top: 16, right: 16,
   text: 'WebView',
-  alignment: 'center',
+  alignment: 'centerX',
   font: 'black 16px'
 }).appendTo(scrollView);
 
@@ -53,7 +53,7 @@ BACKGROUNDS.forEach((gradient) => {
   }).appendTo(composite);
   new TextView({
     left: 16, top: 'prev() 8', right: 16,
-    alignment: 'center',
+    alignment: 'centerX',
     text: gradient,
     font: '10px monospace'
   }).appendTo(composite);

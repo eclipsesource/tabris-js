@@ -11,7 +11,7 @@ new ImageView({
 new TextView({
   id: 'label-image1',
   right:'50% +8', top: '50% +8', width: 64,
-  alignment: 'center'
+  alignment: 'centerX'
 }).appendTo(contentView);
 
 new ImageView({
@@ -25,7 +25,7 @@ new ImageView({
 new TextView({
   id: 'label-image2',
   left: '50% +8', top: '50% +8', width: 64,
-  alignment: 'center'
+  alignment: 'centerX'
 }).appendTo(contentView);
 
 function handleLoad({target, error}) {

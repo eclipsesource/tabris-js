@@ -55,7 +55,7 @@
       "values": [
         "left",
         "right",
-        "center"
+        "centerX"
       ],
       "default": "left",
       "description": "The horizontal alignment of the text."

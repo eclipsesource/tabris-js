@@ -13,14 +13,14 @@ const scrollView = new ScrollView({
 
 new TextView({
   left: 0, right: 0, top: 32,
-  alignment: 'center',
+  alignment: 'centerX',
   font: 'black 24px',
   text: 'pull to refresh'
 }).appendTo(scrollView);
 
 const textView = new TextView({
   left: 0, right: 0, top: 'prev() 32',
-  alignment: 'center',
+  alignment: 'centerX',
   lineSpacing: 1.4
 }).appendTo(scrollView);
 

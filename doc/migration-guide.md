@@ -75,6 +75,10 @@ Widget background setter now also accepts `ColorValue`, `ImageValue`, and `Linea
 
 You can now set images directly on the `background` property.
 
+### alignment properties
+
+All widget `alignment` properties (on `Button`, `TextInput`, `TextView` and `ToggleButton`) now expect `centerX` instead of `center`.
+
 ### TabFolder.textColor property replaced with more flexible properties
 
 The `TabFolder.textColor` property has been replaced with a set of new properties which provide more

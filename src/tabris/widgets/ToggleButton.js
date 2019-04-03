@@ -32,7 +32,7 @@ NativeObject.defineProperties(ToggleButton.prototype, {
   text: {type: 'string', default: ''},
   image: {type: 'ImageValue', default: null},
   checked: {type: 'boolean', nocache: true},
-  alignment: {type: ['choice', ['left', 'right', 'center']], default: 'center'},
+  alignment: {type: ['choice', ['left', 'right', 'centerX']], default: 'centerX'},
   textColor: {type: 'ColorValue'},
   font: {
     type: 'FontValue',

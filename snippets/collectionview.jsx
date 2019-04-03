@@ -25,7 +25,7 @@ function createCell() {
   return (
     <Composite onTap={handleTap}>
       <ImageView top={16} centerX={0} width={200} height={200} />
-      <TextView left={30} top='prev() 16' right={30} alignment='center' />
+      <TextView left={30} top='prev() 16' right={30} alignment='centerX' />
     </Composite>
   );
 }

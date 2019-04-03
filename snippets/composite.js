@@ -9,7 +9,7 @@ const composite1 = new Composite({
 
 new TextView({
   left: 0, right: 0, top: '50%',
-  alignment: 'center',
+  alignment: 'centerX',
   text: 'Composite 1'
 }).appendTo(composite1);
 
@@ -20,6 +20,6 @@ const composite2 = new Composite({
 
 new TextView({
   left: 0, right: 0, top: '50%',
-  alignment: 'center',
+  alignment: 'centerX',
   text: 'Composite 2'
 }).appendTo(composite2);
