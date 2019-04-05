@@ -94,3 +94,8 @@ myExtendedEventListeners.trigger(new MyExtendedEvent());
 let promiseMyEv: Promise<MyEvent> = myEventListeners.promise();
 let promiseFooEv: Promise<MyFooEvent> = myFooListeners.promise();
 let promiseExtEv: Promise<MyExtendedEvent> = myExtendedEventListeners.promise();
+
+Listeners.getListenerStore({}).on('foo', ev => console.log(ev.type));
+Listeners.getListenerStore({}).once('foo', ev => console.log(ev.type));
+Listeners.getListenerStore({}).off('foo', ev => console.log(ev.type));
+Listeners.getListenerStore({}).trigger('foo', {});

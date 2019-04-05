@@ -99,5 +99,21 @@
         "ts_returns": "TargetType<EventData>"
       }
     ]
+  },
+  "statics": {
+    "methods": {
+      "getListenerStore": {
+        "ts_only": true,
+        "parameters": [
+          {
+            "name": "target",
+            "type": "object",
+            "description": "This is a low-level API not typically used in application development. Returns the object used to manage listeners registered by `Listeners.addListener` for the given target object. For `NativeObject` instances this is the target itself."
+          }
+        ],
+        "returns": "object",
+        "ts_returns": "Pick<NativeObject, 'on' | 'off' | 'once' | 'trigger'>"
+      }
+    }
   }
 }
