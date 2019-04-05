@@ -110,6 +110,30 @@
       "parameters": [],
       "returns": "boolean",
       "description": "Returns `true` if the widget has been disposed, otherwise `false`."
+    },
+    "_setParent": {
+      "protected": true,
+      "parameters": [
+        {
+          "name": "parent",
+          "type": "Composite"
+        },
+        {
+          "name": "index",
+          "type": "number",
+          "optional": true
+        }
+      ],
+      "description": "Sets the parent of the widget. If an index is given the widget will be inserted at that position."
+    },
+    "$triggerChangeBounds": {
+      "private": true,
+      "parameters": [
+        {
+          "name": "bounds",
+          "type": "Bounds"
+        }
+      ]
     }
   },
   "properties": {

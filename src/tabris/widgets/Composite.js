@@ -159,10 +159,10 @@ export default class Composite extends Widget {
   }
 
   _scheduleRenderChildren() {
-    tabris.once('layout', this._flushChildren, this);
+    tabris.once('layout', this.$flushChildren, this);
   }
 
-  _flushChildren() {
+  $flushChildren() {
     if (this.$children) {
       this._nativeSet('children', this.$children.filter(notExcluded).map(toCid));
     }

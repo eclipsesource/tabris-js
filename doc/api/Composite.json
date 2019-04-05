@@ -26,6 +26,14 @@
       "const": true,
       "default": "Layout",
       "description": "The layout manager responsible for interpreting the [`layoutData`](./Widget.md#layoutdata) of the child widgets of this Composite."
+    },
+    "_layout": {
+      "private": true,
+      "type": "Layout"
+    },
+    "$children": {
+      "private": true,
+      "type": "Widget[]"
     }
   },
   "methods": {
@@ -158,6 +166,69 @@
       ],
       "returns": "this",
       "description": "Identical to the `apply` method, but intended to be used by subclasses in case the `children` method was overwritten . See `children` for details."
+    },
+    "_initLayout": {
+      "protected": true,
+      "parameters": [
+        {
+          "name": "props",
+          "type": "{layout?: Layout}",
+          "optional": true
+        }
+      ],
+      "description": "Called with the constructor paramter (if any) to initialize the composite's layout manager. May be overwritten to customize/replace the layout. The new implementation must make a super call to initialize the layout."
+    },
+    "_checkLayout": {
+      "protected": true,
+      "parameters": [
+        {
+          "name": "value",
+          "type": "Layout"
+        }
+      ],
+      "description": "Called by the framework with the layout about to be assigned to this composite. May be overwritten to reject a layout by throwing an Error."
+    },
+    "_acceptChild": {
+      "protected": true,
+      "parameters": [
+        {
+          "name": "child",
+          "type": "Widget"
+        }
+      ],
+      "returns": "boolean",
+      "description": "Called by the framework with each widget that is about to be added as a child of this composite. May be overwritten to reject some or all children by returning `false`."
+    },
+    "_addChild": {
+      "protected": true,
+      "parameters": [
+        {
+          "name": "child",
+          "type": "Widget"
+        },
+        {
+          "name": "index",
+          "type": "number",
+          "optional": true
+        }
+      ],
+      "description": "Called by the framework with a child to be assigned to this composite. Triggers the 'addChild' event. May be overwritten to run any code prior or after the child is inserted."
+    },
+    "_removeChild": {
+      "protected": true,
+      "parameters": [
+        {
+          "name": "child",
+          "type": "Widget"
+        }
+      ],
+      "description": "Called by the framework with a child to be removed from this composite. Triggers the 'removeChild' event. May be overwritten to run any code prior or after the child is removed."
+    },
+    "_scheduleRenderChildren": {
+      "private": true
+    },
+    "$flushChildren": {
+      "private": true
     }
   },
   "events": {

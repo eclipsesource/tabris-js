@@ -7,7 +7,8 @@ import {
   CompositeRemoveChildEvent,
   BoxDimensions,
   Selector,
-  Properties } from 'tabris';
+  Properties,
+  Layout} from 'tabris';
 
 let widget: Composite = new Composite();
 
@@ -69,6 +70,25 @@ class CustomComponent extends Composite {
     super(props);
     this.set(props);
     this.set<CustomComponent>({visible: true, foo: 'bar'});
+    this._checkDisposed();
+    this._setParent(new Composite());
+    this._setParent(new Composite(), 2);
+  }
+
+  protected _initLayout(param: {layout?: Layout}) {
+    super._initLayout();
+  }
+
+  protected _acceptChild(child: Widget) {
+    return false;
+  }
+
+  protected _addChild(widget: Widget, index: number) {
+    super._addChild(widget);
+  }
+
+  protected _removeChild(widget: Widget) {
+    super._removeChild(widget);
   }
 
 }
