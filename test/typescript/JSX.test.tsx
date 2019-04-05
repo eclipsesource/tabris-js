@@ -37,6 +37,7 @@ let shortHands2: tabris.CheckBox = <tabris.CheckBox center/>;
 shortHands2 = <tabris.CheckBox stretch/>;
 shortHands2 = <tabris.CheckBox stretchX/>;
 shortHands2 = <tabris.CheckBox stretchY/>;
+shortHands2 = <tabris.CheckBox left top right bottom/>;
 
 // Children
 const compositeWithChildren: tabris.Composite = <tabris.Composite>{[

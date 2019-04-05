@@ -9,6 +9,9 @@ const zeroPercent = new Percent(0);
 export default class Constraint {
 
   static from(constraintValue) {
+    if (constraintValue === true) {
+      return zero;
+    }
     if (typeof constraintValue === 'string') {
       const str = constraintValue.trim();
       if (str.indexOf(' ') !== -1) {

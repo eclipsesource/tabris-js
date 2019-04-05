@@ -45,6 +45,14 @@ describe('JsxProcessor', function() {
       expect(jsx.createElement(CheckBox, {stretchY: true}).layoutData).to.equal(LayoutData.stretchY);
       expect(jsx.createElement(CheckBox, {centerX: true}).layoutData.centerX).to.equal(0);
       expect(jsx.createElement(CheckBox, {centerY: true}).layoutData.centerY).to.equal(0);
+      expect(jsx.createElement(CheckBox, {left: true}).layoutData.left.offset).to.equal(0);
+      expect(jsx.createElement(CheckBox, {left: true}).layoutData.left.reference.percent).to.equal(0);
+      expect(jsx.createElement(CheckBox, {top: true}).layoutData.top.offset).to.equal(0);
+      expect(jsx.createElement(CheckBox, {top: true}).layoutData.top.reference.percent).to.equal(0);
+      expect(jsx.createElement(CheckBox, {right: true}).layoutData.right.offset).to.equal(0);
+      expect(jsx.createElement(CheckBox, {right: true}).layoutData.right.reference.percent).to.equal(0);
+      expect(jsx.createElement(CheckBox, {bottom: true}).layoutData.bottom.offset).to.equal(0);
+      expect(jsx.createElement(CheckBox, {bottom: true}).layoutData.bottom.reference.percent).to.equal(0);
     });
 
     it('merges shorthand with property', function() {

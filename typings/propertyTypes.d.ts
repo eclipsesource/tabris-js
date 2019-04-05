@@ -270,7 +270,8 @@ export type ConstraintValue = Constraint
   | ConstraintLikeObject
   | Offset
   | PercentValue
-  | SiblingReferenceValue;
+  | SiblingReferenceValue
+  | true;
 
   export interface AnimationOptions {
 
