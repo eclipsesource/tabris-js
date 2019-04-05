@@ -313,11 +313,13 @@ class DocumentRenderer {
   private renderAllMethods() {
     const result = [];
     const publicMethodKeys = Object.keys(this.def.methods || {})
-      .filter(name => isPublic(name) && isJS(this.def.methods[name])).sort();
+      .filter(name => isPublic(this.def.methods[name]) && isJS(this.def.methods[name])).sort();
     const protectedMethodKeys = Object.keys(this.def.methods || {})
-      .filter(name => !isPublic(name) && isJS(this.def.methods[name])).sort();
+      .filter(name => isProtected(this.def.methods[name]) && isJS(this.def.methods[name])).sort();
     const staticMethodKeys = Object.keys((this.def.statics || {}).methods || {})
-      .filter(name => isJS(this.def.statics.methods[name])).sort();
+      .filter(
+        name => isPublic(this.def.statics.methods[name]) && isJS(this.def.statics.methods[name])
+      ).sort();
     if (publicMethodKeys.length) {
       result.push('## Methods\n\n');
       result.push(this.renderMethods(this.def.methods, publicMethodKeys));
@@ -367,9 +369,9 @@ class DocumentRenderer {
     const {properties, statics, type} = this.def;
     const result = [];
     const publicPropertyKeys = Object.keys(properties || {})
-      .filter(name => isPublic(name) && isJS(properties[name])).sort();
+      .filter(name => isPublic(properties[name]) && isJS(properties[name])).sort();
     const protectedPropertyKeys = Object.keys(properties || {})
-      .filter(name => !isPublic(name) && isJS(properties[name])).sort();
+      .filter(name => isProtected(properties[name]) && isJS(properties[name])).sort();
     const staticPropertyKeys = Object.keys((statics || {}).properties || {})
       .filter(name => isJS(statics.properties[name])).sort();
     if (publicPropertyKeys.length) {
@@ -508,6 +510,8 @@ class DocumentRenderer {
     }
     return Object.keys(properties)
       .filter(name => !properties[name].const)
+      .filter(name => !properties[name].protected)
+      .filter(name => !properties[name].private)
       .map(name => {
         const standardDescription = `Fired when the [*${name}*](#${name.toLowerCase()}) property has changed.`;
         return {
@@ -633,8 +637,12 @@ function isJS(member: Member) {
   return asArray(member).some(variant => !variant.ts_only);
 }
 
-function isPublic(name: string) {
-  return name[0] !== '_';
+function isPublic(def: Member) {
+  return asArray(def).some(member => !member.protected && !member.private);
+}
+
+function isProtected(def: Member) {
+  return asArray(def).some(member => member.protected);
 }
 
 function literal(value: string | boolean | number | {[key: string]: string}, type: string) {

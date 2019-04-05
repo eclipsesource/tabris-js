@@ -24,6 +24,19 @@
       "readonly": true,
       "type": "JSXAttributes<this>",
       "description": "When using JSX with TypeScript (`.tsx` files), the type of this property determines which JSX attributes are valid for this object."
+    },
+    "_nativeType": {
+      "readonly": true,
+      "protected": true,
+      "type": "string"
+    },
+    "_isDisposed": {
+      "protected": true,
+      "type": "true|undefined"
+    },
+    "$props": {
+      "type": "unknown",
+      "private": true
     }
   },
   "methods": {
@@ -194,6 +207,509 @@
         "description": "Sets all key-value pairs in the properties object as widget properties.\n\n**Important TypeScript note:** When called on `this` you may need to specify your custom type like this: `this.set<MyComponent>({propA: valueA});`",
         "returns": "this"
       }
+    ],
+    "_storeProperty": [
+      {
+        "protected": true,
+        "parameters": [
+          {
+            "name": "propertyName",
+            "type": "string"
+          },
+          {
+            "name": "encodedValue",
+            "type": "any"
+          }
+        ],
+        "description": "Stores the given value internally and triggers a matching change event."
+      }
+    ],
+    "_getStoredProperty": [
+      {
+        "protected": true,
+        "parameters": [
+          {
+            "name": "propertyName",
+            "type": "string"
+          }
+        ],
+        "description": "Returns a value stored via `_storeProperty`, or undefined.",
+        "returns": "unknown"
+      }
+    ],
+    "_wasSet": [
+      {
+        "protected": true,
+        "parameters": [
+          {
+            "name": "propertyName",
+            "type": "string"
+          }
+        ],
+        "description": "Returns `true` if _storeProperty was ever called with the given property propertyName",
+        "returns": "boolean"
+      }
+    ],
+    "_listen": [
+      {
+        "protected": true,
+        "parameters": [
+          {
+            "name": "eventName",
+            "type": "string"
+          },
+          {
+            "name": "listening",
+            "type": "boolean"
+          }
+        ],
+        "description": "Called by the framework when the first listener of a given event type is registered on the instance (`listening` is `true`), and when the last listener of a given event type is removed (`listening` is `false`). Typically overwritten to make calls to `_nativeListen` when the given event type is issues by native code. The new implementation must make a super call if it does not handle the given event type itself."
+      }
+    ],
+    "_isListening": [
+      {
+        "protected": true,
+        "parameters": [
+          {
+            "name": "eventType",
+            "type": "string"
+          }
+        ],
+        "returns": "boolean",
+        "description": "Returns `true` if there is currently one or more listeners registers for the given event type."
+      }
+    ],
+    "_onoff": [
+      {
+        "protected": true,
+        "parameters": [
+          {
+            "name": "eventType",
+            "type": "string"
+          },
+          {
+            "name": "listening",
+            "type": "boolean"
+          },
+          {
+            "name": "listener",
+            "type": "Function"
+          }
+        ],
+        "description": "A helper function that register the given listener if `listening` is true and de-registers it if `listening` is false."
+      }
+    ],
+    "_nativeCreate": [
+      {
+        "protected": true,
+        "parameters": [
+          {
+            "name": "param",
+            "optional": true,
+            "type": "{[prop: string]: any}",
+            "description": "The first argument (if any) given in the constructor call. Will be forwarded to the `set` method after the native object was created."
+          }
+        ],
+        "description": "Sends a 'create' operation to the native client. Called once by the constructor and should not be called again. May be overwritten to check the constructor parameter or perform any kind of initialization code prior to creating the native object. The new implementation must make a super call."
+      }
+    ],
+    "_nativeSet": [
+      {
+        "protected": true,
+        "parameters": [
+          {
+            "name": "propertyName",
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "type": "any"
+          }
+        ],
+        "description": "Sends a 'set' operation to the native client."
+      }
+    ],
+    "_nativeGet": [
+      {
+        "protected": true,
+        "parameters": [
+          {
+            "name": "propertyName",
+            "type": "string"
+          }
+        ],
+        "returns": "unknown",
+        "description": "Sends a 'get' operation to the native client and returns the result."
+      }
+    ],
+    "_nativeCall": [
+      {
+        "protected": true,
+        "parameters": [
+          {
+            "name": "methodName",
+            "type": "string"
+          },
+          {
+            "name": "parameters",
+            "type": "object"
+          }
+        ],
+        "returns": "unknown",
+        "description": "Sends a 'call' operation to the native client and returns the result."
+      }
+    ],
+    "_nativeListen": [
+      {
+        "protected": true,
+        "parameters": [
+          {
+            "name": "eventType",
+            "type": "string"
+          }
+        ],
+        "description": "Sends a 'listen' operation to the native client."
+      }
+    ],
+    "_reorderProperties": {
+      "protected": true,
+      "parameters": [
+        {
+          "name": "propertyNames",
+          "type": "string[]",
+          "description": "List of properties to be set to a new value"
+        }
+      ],
+      "description": "Used by the `set` method to determined in which order the given property values are applied. May be overwritten, but the new implementation must pass the propertyNames through a super call at one point.",
+      "returns": "string[]"
+    },
+    "_trigger": [
+      {
+        "protected": true,
+        "parameters": [
+          {
+            "name": "eventType",
+            "type": "string"
+          },
+          {
+            "name": "eventData",
+            "type": "object",
+            "optional": true
+          }
+        ],
+        "returns": "boolean",
+        "description": "Called by the native client to trigger a JavaScript event on this instance. May be overwritten to pre-process the eventData object. The return value indicates whether `defaultPrevented` on the event object was set to `true`. The new implementation must forward the parameters to a super call and return that calls return value."
+      }
+    ],
+    "_checkDisposed": [
+      {
+        "protected": true,
+        "description": "A helper function that throws if the instance has already been marked as disposed."
+      }
+    ],
+    "_dispose": {
+      "protected": true,
+      "parameters": [
+        {
+          "name": "skipNative",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "description": "Called by the framework to dispose a `NativeObject` instance. (The `dispose` is only used by application code.) The method should never be called directly, but it may be overwritten to prevent dispose for objects that are not disposable."
+    },
+    "_release": {
+      "protected": true,
+      "description": "Called during the dispose process, after the 'dispose' event has fired, but before the native code has be executed. Native operations (`_nativeSet`, `_nativeGet`, `_nativeCall`, `_nativeListen`) on this object are still possible at this point. May be overwritten to perform any kind of clean-up code. The new implementation must perform a super call at some point, typically at the last command."
+    },
+    "_getXMLHeader": [
+      {
+        "protected": true,
+        "parameters": [
+          {
+            "name": "hasChild",
+            "type": "boolean"
+          }
+        ],
+        "returns": "string",
+        "description": "Used by `console.dirxml()` to produce part of the XML representation of this object. May be overwritten to modify the output. The default implementation crates the opening tag including the element name given by `_getXMLElementName` and attributes given by `_getXMLAttributes`. The `hasChild` parameter is `true` if `_getXMLContent` returns a non-empty array in which case the tag is not self-closing. It is preferable to override these individual method instead of this one."
+      }
+    ],
+    "_getXMLFooter": [
+      {
+        "protected": true,
+        "parameters": [
+          {
+            "name": "hasChild",
+            "type": "boolean"
+          }
+        ],
+        "returns": "string",
+        "description": "Used by `console.dirxml()` to produce part of the XML representation of this object. May be overwritten to modify the output. The default implementation the closing tag if `hasChild` is true, otherwise returns an empty string. The `hasChild` parameter is `true` if `_getXMLContent` returns a non-empty array. It is usually not necessary to call or override this method."
+      }
+    ],
+    "_getXMLElementName": [
+      {
+        "protected": true,
+        "returns": "string",
+        "description": "Used by `console.dirxml()` to produce part of the XML representation of this object. May be overwritten to modify the output. The default implementation returns the name of the constructor of this object."
+      }
+    ],
+    "_getXMLAttributes": [
+      {
+        "protected": true,
+        "returns": "Array<[string, any]>",
+        "description": "Used by `console.dirxml()` to produce part of the XML representation of this object. May be overwritten to modify the output. The return value should be an array of tuples consisting of the attribute name and string representation. The new implementation may make a super call to obtain the default list of attributes printed for this object."
+      }
+    ],
+    "_getXMLContent": [
+      {
+        "protected": true,
+        "returns": "string[]",
+        "description": "Used by `console.dirxml()` to produce part of the XML representation of this object. May be overwritten to modify the output. The return value should be an array of strings each representing on of the children of this instance."
+      }
+    ],
+    "_triggerChangeEvent": [
+      {
+        "private": true,
+        "parameters": [
+          {
+            "name": "propertyName",
+            "type": "string"
+          },
+          {
+            "name": "newEncodedValue",
+            "type": "any"
+          }
+        ]
+      }
+    ],
+    "_getDefaultPropertyValue": {
+      "private": true,
+      "parameters": [
+        {
+          "name": "propertyName",
+          "type": "string"
+        }
+      ]
+    },
+    "_encodeProperty": {
+      "private": true,
+      "parameters": [
+        {
+          "name": "propertyName",
+          "type": "string"
+        },
+        {
+          "name": "value",
+          "type": "any"
+        }
+      ],
+      "returns": "unknown"
+    },
+    "_decodeProperty": {
+      "private": true,
+      "parameters": [
+        {
+          "name": "propertyName",
+          "type": "string"
+        },
+        {
+          "name": "value",
+          "type": "any"
+        }
+      ],
+      "returns": "unknown"
+    },
+    "_register": [
+      {
+        "private": true
+      }
+    ],
+    "_getTypeDef": [
+      {
+        "private": true,
+        "parameters": [
+          {
+            "name": "propertyName",
+            "type": "string"
+          }
+        ],
+        "returns": "unknown"
+      }
+    ],
+    "$trigger": [
+      {
+        "private": true,
+        "parameters": [
+          {
+            "name": "eventType",
+            "type": "string"
+          },
+          {
+            "name": "eventData",
+            "optional": true,
+            "type": "object"
+          }
+        ]
+      }
+    ],
+    "$getProperty": [
+      {
+        "private": true,
+        "ts_only": true,
+        "parameters": [
+          {
+            "name": "name",
+            "type": "string"
+          }
+        ],
+        "returns": "unknown"
+      }
+    ],
+    "$setProperty": [
+      {
+        "private": true,
+        "ts_only": true,
+        "parameters": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "type": "any"
+          }
+        ]
+      }
+    ],
+    "$getPropertyGetter": [
+      {
+        "private": true,
+        "parameters": [
+          {
+            "name": "propertyName",
+            "type": "string"
+          }
+        ],
+        "returns": "unknown"
+      }
+    ],
+    "$getPropertySetter": [
+      {
+        "private": true,
+        "parameters": [
+          {
+            "name": "propertyName",
+            "type": "string"
+          }
+        ],
+        "returns": "unknown"
+      }
     ]
+  },
+  "statics": {
+    "methods": {
+      "defineProperties": [
+        {
+          "private": true,
+          "parameters": [
+            {
+              "name": "target",
+              "type": "object"
+            },
+            {
+              "name": "definitions",
+              "type": "object[]"
+            }
+          ]
+        }
+      ],
+      "defineProperty": [
+        {
+          "private": true,
+          "parameters": [
+            {
+              "name": "target",
+              "type": "object"
+            },
+            {
+              "name": "propertyName",
+              "type": "string"
+            },
+            {
+              "name": "definition",
+              "type": "object"
+            }
+          ]
+        }
+      ],
+      "defineEvents": [
+        {
+          "private": true,
+          "parameters": [
+            {
+              "name": "target",
+              "type": "object"
+            },
+            {
+              "name": "definitions",
+              "type": "object[]"
+            }
+          ]
+        }
+      ],
+      "defineEvent": [
+        {
+          "private": true,
+          "parameters": [
+            {
+              "name": "target",
+              "type": "object"
+            },
+            {
+              "name": "eventType",
+              "type": "string"
+            },
+            {
+              "name": "definition",
+              "type": "object"
+            }
+          ]
+        }
+      ],
+      "defineChangeEvent": [
+        {
+          "private": true,
+          "parameters": [
+            {
+              "name": "target",
+              "type": "object"
+            },
+            {
+              "name": "propertyName",
+              "type": "string"
+            }
+          ]
+        }
+      ],
+      "extend": [
+        {
+          "private": true,
+          "parameters": [
+            {
+              "name": "nativeType",
+              "type": "string"
+            },
+            {
+              "name": "superType",
+              "optional": true,
+              "type": "Function"
+            }
+          ],
+          "returns": "Function"
+        }
+      ]
+    }
   }
 }

@@ -40,7 +40,7 @@ export interface Api {
   methods?: {
     /**
      * This interface was referenced by `undefined`'s JSON-Schema definition
-     * via the `patternProperty` "(^_?[a-z]\w+$)|(^\[.*\]$)".
+     * via the `patternProperty` "(^[_\$]?[a-z]\w+$)|(^\[.*\]$|^\$$)".
      */
     [k: string]: Method | Method[];
   };
@@ -68,7 +68,7 @@ export interface Parameter {
 }
 /**
  * This interface was referenced by `undefined`'s JSON-Schema definition
- * via the `patternProperty` "(^_?[a-z]\w+$)|(^\[.*\]$)".
+ * via the `patternProperty` "(^[_\$]?[a-z]\w+$)|(^\[.*\]$)".
  *
  * This interface was referenced by `undefined`'s JSON-Schema definition
  * via the `patternProperty` "^_?[a-z]\w+$".
@@ -88,6 +88,14 @@ export interface Property {
    * Exclude this property from documentation
    */
   ts_only?: boolean;
+  /**
+   * Mark property as protected
+   */
+  protected?: boolean;
+  /**
+   * Mark property as private
+   */
+  private?: boolean;
   /**
    * The type of JSX element that may be used to express the value(s) of this property
    */
@@ -141,6 +149,7 @@ export interface Method {
   generics?: string;
   platforms?: Platforms;
   protected?: boolean;
+  private?: boolean;
   provisional?: boolean;
 }
 /**

@@ -228,7 +228,7 @@ function createMethod(
 }
 
 function createMethodModifiers(method: schema.Method, isStatic: boolean) {
-  return (method.protected ? 'protected ' : '') + (isStatic ? 'static ' : '');
+  return accessor(method) + (isStatic ? 'static ' : '');
 }
 
 function renderProperties(text: TextBuilder, def: ExtendedApi) {
@@ -253,7 +253,13 @@ function renderEventProperties(text: TextBuilder, def: ExtendedApi) {
       });
     }
     if (def.properties) {
-      Object.keys(def.properties).filter(name => !def.properties[name].const).sort().forEach(name => {
+      Object.keys(def.properties)
+        .filter(name => !def.properties[name].const)
+        .filter(name => !def.properties[name].private)
+        .filter(name => !def.properties[name].protected)
+        .sort()
+        .forEach(
+      name => {
         text.append('');
         text.append(createPropertyChangedEventProperty(def, name));
       });
@@ -288,7 +294,9 @@ function createProperty(name: string, properties: Properties, def: ExtendedApi, 
   result.push(createDoc(property));
   const readonly = property.readonly;
   const type = decodeType(property, def, {hasContext: false, excludeConsts: false});
-  result.push(`${isStatic ? 'static ' : ''}${readonly ? 'readonly ' : ''}${name}: ${type};`);
+  result.push(
+    `${accessor(property)}${isStatic ? 'static ' : ''}${readonly ? 'readonly ' : ''}${name}: ${type};`
+  );
   return result.join('\n');
 }
 
@@ -327,4 +335,14 @@ function genericType(def: ExtendedApi) {
     result += '<' + def.generics + '>';
   }
   return result;
+}
+
+function accessor(def: {protected?: boolean, private?: boolean}) {
+  if (def.protected) {
+    return 'protected ';
+  }
+  if (def.private) {
+    return 'private ';
+  }
+  return '';
 }

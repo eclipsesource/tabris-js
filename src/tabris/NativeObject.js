@@ -148,19 +148,19 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     if (encodedValue === oldEncodedValue) {
       return;
     }
-    if (encodedValue === undefined && !this._props) {
+    if (encodedValue === undefined && !this.$props) {
       return;
     } else {
-      if (!this._props) {
-        this._props = {};
+      if (!this.$props) {
+        this.$props = {};
       }
-      this._props[name] = encodedValue;
+      this.$props[name] = encodedValue;
     }
     this._triggerChangeEvent(name, encodedValue);
   }
 
   _getStoredProperty(name) {
-    let result = this._props ? this._props[name] : undefined;
+    let result = this.$props ? this.$props[name] : undefined;
     if (result === undefined) {
       result = this._getDefaultPropertyValue(name);
     }
@@ -168,7 +168,7 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
   }
 
   _wasSet(name) {
-    return name in (this._props || {});
+    return name in (this.$props || {});
   }
 
   _getTypeDef(name) {
@@ -251,7 +251,7 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
         tabris._nativeBridge.destroy(this.cid);
       }
       tabris._nativeObjectRegistry.remove(this.cid);
-      delete this._props;
+      delete this.$props;
       this._isDisposed = true;
     }
   }

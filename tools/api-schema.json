@@ -57,14 +57,14 @@
           "description": "Change events will be generated automatically if type extends NativeObject",
           "type": "object",
           "patternProperties": {
-            "(^_?[a-z]\\w+$)|(^\\[.*\\]$)": {"$ref": "#/definitions/property"}
+            "(^[_\\$]?[a-z]\\w+$)|(^\\[.*\\]$)": {"$ref": "#/definitions/property"}
           },
           "additionalProperties": false
         },
         "methods": {
           "type": "object",
           "patternProperties": {
-            "(^_?[a-z]\\w+$)|(^\\[.*\\]$|^\\$$)": {
+            "(^[_\\$]?[a-z]\\w+$)|(^\\[.*\\]$|^\\$$)": {
               "anyOf": [
                 {"$ref": "#/definitions/method"},
                 {"type": "array", "items": {"$ref": "#/definitions/method"}}
@@ -157,6 +157,14 @@
           "description": "Exclude this property from documentation",
           "type": "boolean"
         },
+        "protected": {
+          "description": "Mark property as protected",
+          "type": "boolean"
+        },
+        "private": {
+          "description": "Mark property as private",
+          "type": "boolean"
+        },
         "jsxType": {
           "description": "The type of JSX element that may be used to express the value(s) of this property",
           "type": "string"
@@ -233,6 +241,7 @@
         },
         "platforms": {"$ref": "#/definitions/platforms"},
         "protected": {"type": "boolean"},
+        "private": {"type": "boolean"},
         "provisional": {"type": "boolean"}
       },
       "additionalProperties": false
