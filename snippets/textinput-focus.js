@@ -5,7 +5,7 @@ new TextInput({
   message: 'Colorful typing...',
   font: '22px sans-serif'
 }).onFocus(({target}) => {
-    target.fillColor = 'yellow';
+    target.background = 'yellow';
     target.borderColor = 'yellow';
   })
   .onBlur(({target}) => target.borderColor = 'red')

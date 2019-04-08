@@ -118,6 +118,10 @@ All image properties are now of the type "ImageValue". While these properties st
 
 To be consistent with the event naming scheme of gesture events, the event "longpress" has been renamed to "longPress".
 
+### TextInput property "fillColor" removed
+
+With the introduction of the new `style` property on `TextInput`, the iOS only property `fillColor` became redundant. Previously the `fillColor` was required to separate the Android underline colorization from the ios input background color. Setting the `TextInput` `style` to _underline_ on Android now ignores the background and only applies the `borderColor` property.
+
 ## TypeScript
 
 ### Properties interfaces removed

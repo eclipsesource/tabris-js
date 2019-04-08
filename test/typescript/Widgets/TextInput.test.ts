@@ -11,8 +11,8 @@ let autoCapitalize: true | false | 'none' | 'sentence' | 'word' | 'all';
 let autoCorrect: boolean;
 let borderColor: ColorValue;
 let editable: boolean;
-let fillColor: ColorValue;
 let cursorColor: ColorValue;
+let floatMessage: boolean;
 let focused: boolean;
 let keepFocus: boolean;
 let keyboard: 'ascii' | 'decimal' | 'default' | 'email' | 'number' | 'numbersAndPunctuation' | 'phone' | 'url';
@@ -22,6 +22,7 @@ let text: string;
 let textColor: ColorValue;
 let textInputType: 'default' | 'multiline' | 'password' | 'search';
 let selection: number[];
+let style: 'default' | 'outline' | 'fill' | 'underline' | 'none';
 let font: FontValue;
 
 alignment = widget.alignment;
@@ -29,8 +30,8 @@ autoCapitalize = widget.autoCapitalize;
 autoCorrect = widget.autoCorrect;
 borderColor = widget.borderColor;
 editable = widget.editable;
-fillColor = widget.fillColor;
 cursorColor = widget.cursorColor;
+floatMessage = widget.floatMessage;
 focused = widget.focused;
 keepFocus = widget.keepFocus;
 keyboard = widget.keyboard;
@@ -40,6 +41,7 @@ text = widget.text;
 textColor = widget.textColor;
 textInputType = widget.type;
 selection = widget.selection;
+style = widget.style;
 font = widget.font;
 
 widget.alignment = alignment;
@@ -47,8 +49,8 @@ widget.autoCapitalize = autoCapitalize;
 widget.autoCorrect = autoCorrect;
 widget.borderColor = borderColor;
 widget.editable = editable;
-widget.fillColor = fillColor;
 widget.cursorColor = cursorColor;
+widget.floatMessage = floatMessage;
 widget.focused = focused;
 widget.keepFocus = keepFocus;
 widget.keyboard = keyboard;
@@ -57,6 +59,7 @@ widget.message = message;
 widget.text = text;
 widget.textColor = textColor;
 widget.selection = selection;
+widget.style = style;
 widget.font = font;
 
 let properties: Properties<TextInput> = {
@@ -65,8 +68,8 @@ let properties: Properties<TextInput> = {
   autoCorrect,
   borderColor,
   editable,
-  fillColor,
   cursorColor,
+  floatMessage,
   focused,
   keepFocus,
   keyboard,
@@ -75,6 +78,7 @@ let properties: Properties<TextInput> = {
   text,
   textColor,
   selection,
+  style: style,
   type: textInputType
 };
 widget = new TextInput(properties);

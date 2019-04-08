@@ -58,8 +58,10 @@ export default class TextInput extends Widget {
 
 NativeObject.defineProperties(TextInput.prototype, {
   type: {type: ['choice', ['default', 'password', 'search', 'multiline']], const: true, default: 'default'},
+  style: {type: ['choice', ['default', 'outline', 'fill', 'underline', 'none']], const: true, default: 'default'},
   text: {type: 'string', nocache: true},
   message: {type: 'string', default: ''},
+  floatMessage: {type: 'boolean', default: true},
   editable: {type: 'boolean', default: true},
   keepFocus: {type: 'boolean', default: false},
   alignment: {type: ['choice', ['left', 'centerX', 'right']], default: 'left'},
@@ -87,7 +89,6 @@ NativeObject.defineProperties(TextInput.prototype, {
     default: 'default'
   },
   focused: {type: 'boolean', nocache: true},
-  fillColor: {type: 'ColorValue'},
   borderColor: {type: 'ColorValue'},
   textColor: {type: 'ColorValue'},
   revealPassword: {type: 'boolean'},

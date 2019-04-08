@@ -32,6 +32,22 @@
       "const": true,
       "description": "The type of the text widget."
     },
+    "style": {
+      "type": "string",
+      "values": [
+        "default",
+        "outline",
+        "fill",
+        "underline",
+        "none"
+      ],
+      "default": "default",
+      "const": true,
+      "description": "The visual appearance of the text widget.\n\nWith the `style` _outline_, _fill_ or _underline_ the message hint will float above the `TextInput` on Android. This behavior can be controlled with the property `floatMessage`. The `style` _none_ will remove any background visualization, allowing to create a custom background. ",
+      "platforms": {
+        "ios": false
+      }
+    },
     "text": {
       "type": "string",
       "description": "The text in the input field.",
@@ -49,6 +65,14 @@
       "type": "boolean",
       "default": "true",
       "description": "Whether the text can be edited or not."
+    },
+    "floatMessage": {
+      "type": "boolean",
+      "default": "true",
+      "description": "Should the hint message float above the TextInput when focus is gained.",
+      "platforms": {
+        "ios": false
+      }
     },
     "alignment": {
       "type": "string",
@@ -115,13 +139,6 @@
       "type": "boolean",
       "default": "false",
       "description": "When `true` the `TextInput` will keep its focus, even when tapped outside of the widget bounds."
-    },
-    "fillColor": {
-      "type": "ColorValue",
-      "description": "The color of the background of the TextInput - applies only to iOS.",
-      "platforms": {
-        "android": false
-      }
     },
     "borderColor": {
       "type": "ColorValue",
