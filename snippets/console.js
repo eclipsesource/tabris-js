@@ -1,4 +1,4 @@
-import {Button, TextInput, contentView} from 'tabris';
+import {tabris, Button, TextInput, contentView, TextView} from 'tabris';
 
 const logTextInput = new TextInput({
   left: 10, top: 20, right: 10,
@@ -14,3 +14,13 @@ const logTextInput = new TextInput({
     console[method](logTextInput.text);
   }).appendTo(contentView);
 });
+
+contentView.append(new TextView({
+  top: 'prev() 24',
+  left: 12,
+  font: '18px'
+}));
+
+tabris.onLog(ev =>
+  $(TextView).only().text = ev.level + ': ' + ev.message
+);

@@ -1,6 +1,6 @@
 {
   "type": "Tabris",
-  "description": "The object exported by the `tabris` module hosting all the classes and singletons it provides (not listed here). Is also available in the global namespace as `tabris`.",
+  "description": "The main object exported by the `tabris` module hosting all the classes and singletons it provides (not listed here). It also provides low-level framework API required for bootstrapping and for some extensions/plug-ins. <b>Caution!</b>: These APIs interact with the internals of the framework. Only use them if you know what you are doing.\n\nThis object is also available in the global namespace as `tabris`. For technical reasons the low-level API is available in TypeScript only when the object is explicitly imported.",
   "extends": "NativeObject",
   "object": "tabris",
   "constructor": {
@@ -10,7 +10,7 @@
   "properties": {
     "started": {
       "type": "boolean",
-      "default": false,
+      "default": "false",
       "readonly": true,
       "description": "Indicates that the framework has been fully initialized. This happens before the main application module is parsed and executed, so it is only relevant for framework and plug-in developers."
     },
@@ -19,6 +19,88 @@
       "readonly": true,
       "const": true,
       "description": "The version of the tabris module."
+    }
+  },
+  "methods": {
+    "flush": {
+      "description": "Sends all queued native operations to the native client and triggers the 'flush' event."
+    },
+    "_init": {
+      "parameters": [
+        {
+          "name": "client",
+          "type": "any",
+          "description": "The client bridge provided by the native client."
+        },
+        {
+          "name": "options",
+          "type": "{headless: boolean}"
+        }
+      ],
+      "description": "Initializes the framework and triggers the 'start' event."
+    },
+    "_notify": {
+      "parameters": [
+        {
+          "name": "cid",
+          "type": "string"
+        },
+        {
+          "name": "eventType",
+          "type": "string"
+        },
+        {
+          "name": "eventData",
+          "type": "object"
+        }
+      ],
+      "returns": "boolean",
+      "description": "Callback for the native client to issue JavaScript events to the `NativeObject` with the given `cid`. Triggers a flush event afterwards. Errors are caught and logged to the console. Returns true if the event object has a `defaultPrevented` field set to true."
+    },
+    "_defineModule": {
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "loaderFunction",
+          "type": "Function"
+        }
+      ],
+      "returns": "object",
+      "description": "Adds a module to the internal module registry with an id relative to the app directory."
+    },
+    "_start": {
+      "private": true,
+      "parameters": [
+        {
+          "name": "client",
+          "type": "object"
+        }
+      ]
+    }
+  },
+  "events": {
+    "start": {
+      "description": "Fired after the client bridge has been installed but before `started` has been set to `true`."
+    },
+    "flush": {
+      "description": "Fired after a native event has been processed."
+    },
+    "log": {
+      "description": "Fired when a message is about to be printed to the console.",
+      "parameters": {
+        "message": {
+          "type": "string"
+        },
+        "level": {
+          "type": "'debug'|'info'|'log'|'warn'|'error'"
+        }
+      }
+    },
+    "layout": {
+      "description": "Fired before certain native operations to render all modified layoutData objects."
     }
   },
   "links": [

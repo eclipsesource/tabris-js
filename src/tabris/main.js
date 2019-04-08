@@ -165,6 +165,7 @@ const tabrisMain = Object.assign(new Tabris(), {
 // @ts-ignore
 module.exports = tabrisMain;
 global.tabris = tabrisMain;
+global.tabris.tabris = tabrisMain;
 
 Object.assign(global, {
   Crypto,

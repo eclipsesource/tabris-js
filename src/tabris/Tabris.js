@@ -82,3 +82,10 @@ export default class Tabris extends NativeObject {
   }
 
 }
+
+NativeObject.defineEvents(Tabris.prototype, {
+  start: {},
+  flush: {},
+  layout: {},
+  log: {}
+});
