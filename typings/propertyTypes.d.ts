@@ -360,3 +360,11 @@ export class JsxProcessor {
   createNativeObject(Type: {new(): NativeObject} | ((param: any) => NativeObject), attributes: object): NativeObject;
 
 }
+
+export type ModuleLoader = (
+  module: Module,
+  exports: object,
+  require: (fn: string) => object,
+  __filename: string,
+  __dirname: string
+) => void;

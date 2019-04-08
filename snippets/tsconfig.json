@@ -7,7 +7,8 @@
     "jsxFactory": "JSX.createElement",
     "outDir": "dist",
     "allowJs": true,
-    "checkJs": true
+    "checkJs": true,
+    "typeRoots": []
   },
   "include": [
     "./*.js",

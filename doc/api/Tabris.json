@@ -65,10 +65,10 @@
         },
         {
           "name": "loaderFunction",
-          "type": "Function"
+          "type": "ModuleLoader"
         }
       ],
-      "returns": "object",
+      "returns": "Module",
       "description": "Adds a module to the internal module registry with an id relative to the app directory."
     },
     "_start": {

@@ -1,0 +1,116 @@
+{
+  "type": "Module",
+  "description": "Represents a JavaScript module as outlined in the commonJS standard.",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+       {
+         "name": "id",
+         "type": "string"
+       },
+       {
+         "name": "parent",
+         "type": "Module|null"
+       },
+       {
+         "name": "content",
+         "type": "ModuleLoader|object"
+       }
+    ]
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "readonly": true,
+      "const": true,
+      "description": "Full id (path) of the module"
+    },
+    "parent": {
+      "type": "Module",
+      "readonly": true,
+      "const": true,
+      "description": "The module that first required this module"
+    },
+    "exports": {
+      "type": "object",
+      "readonly": true,
+      "const": true
+    }
+  },
+  "methods": {
+    "require": {
+      "parameters": [
+        {
+          "name": "request",
+          "type": "string"
+        }
+      ],
+      "returns": "object",
+      "description": "Finds a module relative to the id of this module and returns the exports object of that module. Throws if no matching module can be found."
+    }
+  },
+  "statics": {
+    "methods": {
+      "createLoader": {
+        "parameters": [
+          {
+            "name": "url",
+            "type": "string"
+          }
+        ],
+        "description": "Loads the given JavaScript file from the given (local or http) url and wraps it as a module loader function.",
+        "returns": "ModuleLoader"
+      },
+      "execute": {
+        "parameters": [
+          {
+            "name": "code",
+            "type": "string"
+          },
+          {
+            "name": "url",
+            "type": "string"
+          }
+        ],
+        "returns": "unknown",
+        "description": "Evaluates the given JavaScript code and returns the result of the last expression. The url is used to identify the source in stack traces."
+      },
+      "readJSON": {
+        "parameters": [
+          {
+            "name": "url",
+            "type": "string"
+          }
+        ],
+        "returns": "unknown",
+        "description": "Loads the JSON file from the given (local or http) url, parses it and returns the result. This is a blocking operation, in almost all cases it is preferable to use `fetch()` or the file system API to obtain and parse a JSON file."
+      },
+      "getSourceMap": {
+        "parameters": [
+          {
+            "name": "url",
+            "type": "string"
+          }
+        ],
+        "returns": "unknown",
+        "description": "Returns the source map object (decoded from base64 and parsed from JSON) for the JavaScript file of the given url. Returns `null` if no source map can be found. This method only works with code side-loaded via the tabris CLI `serve` command."
+      },
+      "load": {
+        "parameters": [
+          {
+            "name": "url",
+            "type": "string"
+          }
+        ],
+        "returns": "string",
+        "description": "Loads a text from the given (local or http) url and returns its content. File is expected to be utf-8 encoded. This is a blocking operation, in almost all cases it is preferable to use `fetch()` or the file system API to read a text file."
+      }
+    }
+  },
+  "links": [
+    {
+      "title": "Modules",
+      "path": "../modules.md"
+    }
+  ]
+}
