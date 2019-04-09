@@ -63,6 +63,28 @@ let toolbarHeightChangedEvent: PropertyChangedEvent<NavigationView, number> = {t
 
 widget.onToolbarHeightChanged((event: PropertyChangedEvent<NavigationView, number>) => {});
 
+class CustomPage extends Page {
+  public foo: string;
+}
+
+class CustomAction extends Action {
+  public bar: string;
+}
+
+const typedNavigationView: NavigationView<CustomPage, CustomAction> = new NavigationView();
+typedNavigationView.append(new CustomPage());
+typedNavigationView.append(new CustomAction());
+typedNavigationView.navigationAction = new CustomAction();
+const child: CustomPage|CustomAction = typedNavigationView.children()[0];
+type = typedNavigationView.pages()[0].foo;
+
+const partialTypedNavigationView: NavigationView<CustomPage> = new NavigationView();
+typedNavigationView.append(new CustomPage());
+typedNavigationView.append(new CustomAction());
+typedNavigationView.navigationAction = new CustomAction();
+const child2: CustomPage|Action = typedNavigationView.children()[0];
+type = typedNavigationView.pages()[0].foo;
+
 class CustomComponent extends NavigationView {
   public foo: string;
   constructor(props: Properties<NavigationView> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }

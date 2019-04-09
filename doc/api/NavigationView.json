@@ -1,8 +1,9 @@
 {
   "type": "NavigationView",
+  "generics": "PageType extends Page = Page, ActionType extends Action = Action",
   "description": "A widget that displays a stack of [pages](Page) with a toolbar that allows to navigate back. The toolbar also displays the current page's title and the highest priority [actions](Action) that are added to the NavigationView. Only children of type `Page`, `Action` and `SearchAction` are supported. Since the NavigationView does not compute its own size, the width and height must be defined by the respective layout properties (e.g. either `width` or `left` and `right` must be specified).",
   "extends": "Composite",
-  "ts_extends": "Composite<Page>",
+  "ts_extends": "Composite<PageType|ActionType>",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -58,6 +59,7 @@
     },
     "navigationAction": {
       "type": "Action",
+      "type": "ActionType",
       "default": "null",
       "description": "Action that replaces back button and arrow. When it is replaced the developer is responsible for providing a way to go back on the page stack. Setting the action to null restores back button and arrow."
     }
@@ -75,7 +77,7 @@
         ],
         "description": "Returns the ordered list of pages on the page stack, with the bottommost page as the first and the topmost page as the last element. Same as children(), but only returns children that are of type `Page`.",
         "returns": "WidgetCollection",
-        "ts_returns": "WidgetCollection<Page>"
+        "ts_returns": "WidgetCollection<PageType>"
       },
       {
         "ts_only": true,

@@ -1,8 +1,9 @@
 {
   "type": "TabFolder",
+  "generics": "ChildType extends Tab = Tab",
   "description": "A widget that can switch between [tabs](Tab). Only children of type `Tab` are supported. Since the TabFolder does not compute its own size, the width and height must be defined by the respective layout properties (e.g. either `width` or `left` and `right` must be specified).",
   "extends": "Composite",
-  "ts_extends": "Composite<Tab>",
+  "ts_extends": "Composite<ChildType>",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -46,6 +47,7 @@
     },
     "selection": {
       "type": "Tab",
+      "ts_type": "ChildType",
       "description": "The currently selected tab."
     },
     "tabTintColor": {
@@ -81,7 +83,8 @@
       "parameters": {
         "selection": {
           "description": "The `Tap` selected by the user.",
-          "type": "Tab"
+          "type": "Tab",
+          "ts_type": "Target extends TabFolder ? Target['selection'] : Tab"
         }
       }
     },
@@ -90,7 +93,8 @@
       "parameters": {
         "selection": {
           "description": "The current value of the `selection` property.",
-          "type": "Tab"
+          "type": "Tab",
+          "ts_type": "Target extends TabFolder ? Target['selection'] : Tab"
         },
         "offset": {
           "description": "Number of pixels the current tab has scrolled horizontally.",

@@ -70,6 +70,23 @@ widget
   .onSelect((event: TabFolderSelectEvent) => {})
   .onScroll((event: TabFolderScrollEvent) => {});
 
+class CustomTab extends Tab {
+  public foo: string;
+}
+
+const typedTabFolder: TabFolder<CustomTab> = new TabFolder();
+typedTabFolder.append(new CustomTab());
+type = typedTabFolder.children()[0].foo;
+type = typedTabFolder.selection.foo;
+typedTabFolder.onSelect(ev => {
+  type = ev.target.selection.foo;
+  type = ev.selection.foo;
+});
+typedTabFolder.onScroll(ev => {
+  type = ev.target.selection.foo;
+  type = ev.selection.foo;
+});
+
 class CustomComponent extends TabFolder {
   public foo: string;
   constructor(props: Properties<TabFolder> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
