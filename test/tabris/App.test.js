@@ -449,6 +449,34 @@ describe('App', function() {
 
     });
 
+    describe('debugBuild', function() {
+
+      it('should return `debugBuild` true from native', function() {
+        stub(client, 'get').returns(true);
+
+        const result = app.debugBuild;
+
+        expect(result).to.be.true;
+        expect(client.get).to.have.been.calledWith(app.cid, 'debugBuild');
+      });
+
+      it('should return `debugBuild` false from native', function() {
+        stub(client, 'get').returns(false);
+
+        const result = app.debugBuild;
+
+        expect(result).to.be.false;
+        expect(client.get).to.have.been.calledWith(app.cid, 'debugBuild');
+      });
+
+      it('should not SET native property', function() {
+        app.debugBuild = true;
+
+        expect(client.calls({op: 'set', id: app.cid}).length).to.equal(0);
+      });
+
+    });
+
     describe('version', function() {
 
       it('should return `version` from native', function() {

@@ -5,11 +5,13 @@ let id: string;
 let pinnedCertificates: any[];
 let version: string;
 let versionCode: number;
+let debugBuild: boolean;
 
 id = app.id;
 pinnedCertificates = app.pinnedCertificates;
 version = app.version;
 versionCode = app.versionCode;
+debugBuild = app.debugBuild;
 
 app.pinnedCertificates = pinnedCertificates;
 

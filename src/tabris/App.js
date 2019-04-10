@@ -20,6 +20,10 @@ export default class App extends NativeObject {
     return this._nativeGet('appId');
   }
 
+  get debugBuild() {
+    return this._nativeGet('debugBuild');
+  }
+
   get version() {
     return this._nativeGet('version');
   }

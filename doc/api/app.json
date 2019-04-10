@@ -20,6 +20,12 @@
       "const": true,
       "description": "Uniquely identifies the app."
     },
+    "debugBuild": {
+      "type": "boolean",
+      "const": true,
+      "readonly": true,
+      "description": "Returns `false` if this app was build build in production mode, otherwise `true`. In production mode no debugger can be attached to the JavaScript VM."
+    },
     "version": {
       "type": "string",
       "const": true,
