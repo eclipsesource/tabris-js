@@ -2,6 +2,8 @@ import NativeObject from '../NativeObject';
 import Composite from './Composite';
 import Tab from './Tab';
 import {hint} from '../Console';
+import {JSX} from '../JsxProcessor';
+import {omit, pick} from '../util';
 
 export default class TabFolder extends Composite {
 
@@ -40,6 +42,14 @@ export default class TabFolder extends Composite {
     super._removeChild(child);
   }
 
+  _listen(name, listening) {
+    if (name === 'selectionIndexChanged') {
+      this._onoff('selectionChanged', listening, this.$triggerSelectionIndexChanged);
+    } else {
+      super._listen(name, listening);
+    }
+  }
+
   _trigger(name, event) {
     if (name === 'select') {
       const selection = tabris._nativeObjectRegistry.find(event.selection);
@@ -76,6 +86,10 @@ export default class TabFolder extends Composite {
     ]);
   }
 
+  $triggerSelectionIndexChanged({value: tab}) {
+    super._triggerChangeEvent('selectionIndex', this._children().indexOf(tab));
+  }
+
 }
 
 NativeObject.defineProperties(TabFolder.prototype, {
@@ -95,11 +109,25 @@ NativeObject.defineProperties(TabFolder.prototype, {
       this._triggerChangeEvent('selection', tab);
     },
     get() {
-      if (!this.$children.length) {
+      if (!this._children().length) {
         return null;
       }
       const selection = this._nativeGet('selection');
       return selection ? tabris._nativeObjectRegistry.find(selection) : null;
+    }
+  },
+  selectionIndex: {
+    type: 'natural',
+    set(name, index) {
+      const children = this._children();
+      if (!children[index]) {
+        hint(this, 'Can not set selectionIndex to ' + index + ', value out of bounds');
+        return;
+      }
+      this.selection = children[index];
+    },
+    get() {
+      return this._children().indexOf(this.selection);
     }
   },
   tabTintColor: {type: 'ColorValue'},
@@ -113,3 +141,16 @@ NativeObject.defineEvents(TabFolder.prototype, {
   scroll: {native: true},
   select: {native: true, changes: 'selection'}
 });
+
+TabFolder.prototype[JSX.jsxFactory] = createElement;
+
+/** @this {import("../JsxProcessor").default} */
+function createElement(Type, attributes) {
+  const result = Composite.prototype[JSX.jsxFactory].call(
+    this,
+    Type,
+    omit(attributes, ['selection', 'selectionIndex'])
+  );
+  result.set(pick(attributes, ['selection', 'selectionIndex']));
+  return result;
+}

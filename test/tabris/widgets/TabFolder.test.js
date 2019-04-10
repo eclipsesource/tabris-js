@@ -5,6 +5,7 @@ import Layout from '../../../src/tabris/Layout';
 import TabFolder from '../../../src/tabris/widgets/TabFolder';
 import Composite from '../../../src/tabris/widgets/Composite';
 import {toXML} from '../../../src/tabris/Console';
+import {createJsxProcessor} from '../../../src/tabris/JsxProcessor';
 
 describe('TabFolder', function() {
 
@@ -329,6 +330,7 @@ describe('TabFolder', function() {
 
       tabris._notify(tabFolder.cid, 'select', {selection: tab.cid});
 
+      checkListen('select');
       expect(listener).to.have.been.calledOnce;
       expect(listener.firstCall.args[0].target).to.equal(tabFolder);
       expect(listener.firstCall.args[0].value).to.equal(tab);
@@ -343,6 +345,82 @@ describe('TabFolder', function() {
       expect(listener).to.have.been.calledOnce;
       expect(listener.firstCall.args[0].target).to.equal(tabFolder);
       expect(listener.firstCall.args[0].selection).to.equal(tab);
+    });
+
+  });
+
+  describe('selectionIndex property', function() {
+
+    /** @type {Tab} */
+    let tab2;
+
+    beforeEach(function() {
+      new Tab().appendTo(tabFolder);
+      tab2 = new Tab().appendTo(tabFolder);
+    });
+
+    it('set SETS selection', function() {
+      tabFolder.selectionIndex = 1;
+
+      const setCall = client.calls({op: 'set', id: tabFolder.cid})[1];
+      expect(setCall.properties.selection).to.equal(tab2.cid);
+    });
+
+    it('GET returns selectionIndex', function() {
+      stub(client, 'get').returns(tab2.cid);
+
+      expect(tabFolder.selectionIndex).to.equal(1);
+    });
+
+    it('get returns -1 if no tab exists', function() {
+      tabFolder.children().dispose();
+
+      expect(tabFolder.selectionIndex).to.equal(-1);
+    });
+
+    it('Ignores setting out of bounds index with warning', function() {
+      client.resetCalls();
+      stub(console, 'warn');
+
+      tabFolder.selectionIndex = 2;
+
+      const calls = client.calls({op: 'set', id: tabFolder.cid});
+      expect(calls.length).to.equal(0);
+      expect(console.warn).to.have.been.calledWithMatch('value out of bounds');
+    });
+
+    it('set fires selectionChanged', function() {
+      const listener = spy();
+      tabFolder.onSelectionChanged(listener);
+
+      tabFolder.selectionIndex = 1;
+
+      checkListen('select');
+      expect(listener).to.have.been.calledOnce;
+      expect(listener.firstCall.args[0].target).to.equal(tabFolder);
+      expect(listener.firstCall.args[0].value).to.equal(tab2);
+    });
+
+    it('set fires selectionIndexChanged', function() {
+      const listener = spy();
+      tabFolder.onSelectionIndexChanged(listener);
+
+      tabFolder.selectionIndex = 1;
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener.firstCall.args[0].target).to.equal(tabFolder);
+      expect(listener.firstCall.args[0].value).to.equal(1);
+    });
+
+    it('native select events fires selectionIndexChanged', function() {
+      const listener = spy();
+      tabFolder.onSelectionIndexChanged(listener);
+
+      tabris._notify(tabFolder.cid, 'select', {selection: tab2.cid});
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener.firstCall.args[0].target).to.equal(tabFolder);
+      expect(listener.firstCall.args[0].value).to.equal(1);
     });
 
   });
@@ -541,6 +619,31 @@ describe('TabFolder', function() {
       expect(listener.firstCall.args[0].target).to.equal(tabFolder);
       expect(listener.firstCall.args[0].selection).to.equal(null);
       expect(listener.firstCall.args[0].offset).to.equal(48);
+    });
+
+  });
+
+  describe('JSX', function() {
+
+    /** @type {import('../../../src/tabris/JsxProcessor').default} */
+    let jsx;
+
+    beforeEach(function() {
+      jsx = createJsxProcessor();
+    });
+
+    it('selectionIndex SETs tab id ', function() {
+      const tab1 = jsx.createElement(Tab, {});
+      const tab2 = jsx.createElement(Tab, {});
+      const widget = jsx.createElement(
+        TabFolder,
+        {selectionIndex: 1},
+        tab1,
+        tab2
+      );
+
+      const setCall = client.calls({op: 'set', id: widget.cid})[1];
+      expect(setCall.properties.selection).to.equal(tab2.cid);
     });
 
   });

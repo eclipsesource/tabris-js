@@ -13,6 +13,7 @@ let widget: TabFolder = new TabFolder({tabBarLocation: 'top'});
 // Properties
 let paging: boolean;
 let selection: Tab;
+let selectionIndex: number;
 let tabBarLocation: 'auto' | 'bottom' | 'hidden' | 'top';
 let tabMode: 'fixed' | 'scrollable';
 let tabTintColor: ColorValue;
@@ -24,6 +25,7 @@ let tabBarElevation: number;
 
 paging = widget.paging;
 selection = widget.selection;
+selectionIndex = widget.selectionIndex;
 tabBarLocation = widget.tabBarLocation;
 tabMode = widget.tabMode;
 tabTintColor = widget.tabTintColor;
@@ -34,6 +36,7 @@ tabBarElevation = widget.tabBarElevation;
 
 widget.paging = paging;
 widget.selection = selection;
+widget.selectionIndex = selectionIndex;
 widget.tabTintColor = tabTintColor;
 widget.selectedTabTintColor = selectedTabTintColor;
 widget.tabBarBackground = tabBarBackground;
@@ -67,6 +70,7 @@ let tabFolderSelectionChangedEvent: PropertyChangedEvent<TabFolder, Tab> = {targ
 
 widget
   .onSelectionChanged((event: PropertyChangedEvent<TabFolder, Tab>) => {})
+  .onSelectionIndexChanged((event: PropertyChangedEvent<TabFolder, number>) => {})
   .onSelect((event: TabFolderSelectEvent) => {})
   .onScroll((event: TabFolderScrollEvent) => {});
 

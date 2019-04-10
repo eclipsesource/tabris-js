@@ -50,6 +50,10 @@
       "ts_type": "ChildType",
       "description": "The currently selected tab."
     },
+    "selectionIndex": {
+      "type": "number",
+      "description": "The index of the currently selected tab."
+    },
     "tabTintColor": {
       "type": "ColorValue",
       "description": "The color used for the text and icon of a tab.\n\nWhen the `tabBarLocation` is `top` on iOS, this property affects the entire appearance of the bar. No other color properties have an effect in that configuration."
