@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore, spy} from './../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import Popover from './../../src/tabris/Popover';
 import ContentView from './../../src/tabris/widgets/ContentView';
 import Button from './../../src/tabris/widgets/Button';
@@ -8,14 +8,14 @@ import WidgetCollection from '../../src/tabris/WidgetCollection';
 
 describe('Popover', () => {
 
-  /** @type {ClientStub} */
+  /** @type {ClientMock} */
   let client;
 
   /** @type {Popover} */
   let popover;
 
   beforeEach(() => {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     popover = new Popover();
   });

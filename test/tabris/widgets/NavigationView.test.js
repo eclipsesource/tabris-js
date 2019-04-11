@@ -1,5 +1,5 @@
 import {expect, spy, stub, restore, match, mockTabris} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import Page from '../../../src/tabris/widgets/Page';
 import Action from '../../../src/tabris/widgets/Action';
 import SearchAction from '../../../src/tabris/widgets/SearchAction';
@@ -16,7 +16,7 @@ describe('NavigationView', function() {
   let client, navigationView;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     navigationView = new NavigationView();
     client.resetCalls();

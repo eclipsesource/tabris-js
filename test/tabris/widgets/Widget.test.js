@@ -1,7 +1,7 @@
 import {expect, mockTabris, restore, spy, stub} from '../../test';
 import WidgetCollection from '../../../src/tabris/WidgetCollection';
 import Layout, {LayoutQueue, ConstraintLayout} from '../../../src/tabris/Layout';
-import ClientStub from '.././ClientStub';
+import ClientMock from '../ClientMock';
 import Widget from '../../../src/tabris/Widget';
 import Composite from '../../../src/tabris/widgets/Composite';
 import TextView from '../../../src/tabris/widgets/TextView';
@@ -29,11 +29,11 @@ describe('Widget', function() {
     }
   }
 
-  /** @type {ClientStub} */
+  /** @type {ClientMock} */
   let client;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
   });
 

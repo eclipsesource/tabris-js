@@ -1,6 +1,6 @@
 import {expect, mockTabris, restore, spy, stub} from '../test';
 import NativeObject from '../../src/tabris/NativeObject';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import App, {create} from '../../src/tabris/App';
 
 describe('App', function() {
@@ -8,7 +8,7 @@ describe('App', function() {
   let app, client;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     app = create();
   });

@@ -1,5 +1,5 @@
 import {expect, mockTabris, spy, stub, restore} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import {fetch} from '../../../src/tabris/fetch/fetch';
 import Response from '../../../src/tabris/fetch/Response';
 
@@ -8,7 +8,7 @@ describe('fetch', function() {
   let nativeObject, client, promise;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     const origCreate = tabris._nativeBridge.create;
     stub(tabris._nativeBridge, 'create').callsFake((cid, type) => {

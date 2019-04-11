@@ -3,7 +3,7 @@ import Composite from '../../src/tabris/widgets/Composite';
 import ActionSheet from '../../src/tabris/ActionSheet';
 import Percent from '../../src/tabris/Percent';
 import {expect, mockTabris, restore} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 
 describe('Constraint', function() {
 
@@ -14,7 +14,7 @@ describe('Constraint', function() {
   afterEach(restore);
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     widget = new Composite();
     constraint = new Constraint(widget, 0.2);

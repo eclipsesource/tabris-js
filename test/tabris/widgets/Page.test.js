@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore, stub} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import NavigationView from '../../../src/tabris/widgets/NavigationView';
 import Page from '../../../src/tabris/widgets/Page';
 import Composite from '../../../src/tabris/widgets/Composite';
@@ -12,7 +12,7 @@ describe('Page', function() {
   let page;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     parent = new NavigationView();
     client.resetCalls();

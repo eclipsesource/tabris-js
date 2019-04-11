@@ -1,18 +1,18 @@
 import {expect, mockTabris, restore} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import Widget from '../../../src/tabris/Widget';
 import Button from '../../../src/tabris/widgets/Button';
 
 describe('Button', function() {
 
-  /** @type {ClientStub} */
+  /** @type {ClientMock} */
   let client;
 
   /** @type {Button} */
   let button;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
   });
 

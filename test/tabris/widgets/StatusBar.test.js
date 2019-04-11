@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore, spy, stub} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import StatusBar, {create} from '../../../src/tabris/widgets/StatusBar';
 import Composite from '../../../src/tabris/widgets/Composite';
 
@@ -15,7 +15,7 @@ describe('StatusBar', function() {
   };
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     statusBar = create();
   });

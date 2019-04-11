@@ -1,5 +1,5 @@
 import Widget from '../../src/tabris/Widget';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import {expect, mockTabris, spy, restore} from '../test';
 
 describe('gestures:', function() {
@@ -13,7 +13,7 @@ describe('gestures:', function() {
   let client, widget;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
   });
 

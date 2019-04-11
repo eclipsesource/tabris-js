@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import TextDecoder from '../../src/tabris/TextDecoder';
 
 const decode = TextDecoder.decode;
@@ -9,7 +9,7 @@ describe('TextDecoder', function() {
   let client, buffer;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     buffer = new Uint8Array().buffer;
   });

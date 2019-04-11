@@ -1,5 +1,5 @@
 import {expect, mockTabris, spy, stub, restore} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import WebSocket from '../../src/tabris/WebSocket';
 import Event from '../../src/tabris/Event';
 
@@ -9,7 +9,7 @@ describe('WebSocket', function() {
   let client;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     spy(client, 'call');
     webSocket = new WebSocket('ws://url.com', 'chat-protocol');

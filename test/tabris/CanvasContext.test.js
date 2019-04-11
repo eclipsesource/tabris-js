@@ -1,6 +1,6 @@
 import {expect, mockTabris, restore, spy, stub} from '../test';
 import GC, {OPCODES} from '../../src/tabris/GC';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import CanvasContext from '../../src/tabris/CanvasContext';
 import ImageData from '../../src/tabris/ImageData';
 import Canvas from '../../src/tabris/widgets/Canvas';
@@ -12,7 +12,7 @@ describe('CanvasContext', function() {
   let gc;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     gc = new GC();
     ctx = new CanvasContext(gc);

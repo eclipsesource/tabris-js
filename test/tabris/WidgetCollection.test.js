@@ -1,5 +1,5 @@
 import {expect, mockTabris, spy, stub, restore} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import Composite from '../../src/tabris/widgets/Composite';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 
@@ -24,7 +24,7 @@ describe('WidgetCollection', function() {
   let host;
 
   beforeEach(function() {
-    mockTabris(new ClientStub());
+    mockTabris(new ClientMock());
     host = new Bar();
     widgets = [new Foo(), new Bar(), new Foo()];
     host.append(widgets);

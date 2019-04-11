@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore, stub} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import Video from '../../../src/tabris/widgets/Video';
 import {toXML} from '../../../src/tabris/Console';
 
@@ -8,7 +8,7 @@ describe('Video', function() {
   let client, video;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     video = new Video();
   });

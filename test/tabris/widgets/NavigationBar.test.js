@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore, stub} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import NavigationBar, {create} from '../../../src/tabris/widgets/NavigationBar';
 import Composite from '../../../src/tabris/widgets/Composite';
 
@@ -8,7 +8,7 @@ describe('NavigationBar', function() {
   let navigationBar, client;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     navigationBar = create();
   });

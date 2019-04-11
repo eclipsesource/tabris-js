@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import TextEncoder from '../../src/tabris/TextEncoder';
 
 const encode = TextEncoder.encode;
@@ -9,7 +9,7 @@ describe('TextEncoder', function() {
   let client, text;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     text = 'Döner mit Soße';
   });

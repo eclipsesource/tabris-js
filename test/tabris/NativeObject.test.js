@@ -3,7 +3,7 @@ import NativeObject from '../../src/tabris/NativeObject';
 import NativeObjectRegistry from '../../src/tabris/NativeObjectRegistry';
 import NativeBridge from '../../src/tabris/NativeBridge';
 import EventObject from '../../src/tabris/EventObject';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import {toXML} from '../../src/tabris/Console';
 
 describe('NativeObject', function() {
@@ -11,7 +11,7 @@ describe('NativeObject', function() {
   let client;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
   });
 
@@ -484,7 +484,7 @@ describe('NativeObject.extend', function() {
   let client, CustomWidget;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     global.tabris = {
       on: () => {},
       trigger: () => {},

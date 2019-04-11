@@ -1,5 +1,5 @@
 import {expect, mockTabris, spy, stub, match, restore} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import Event from '../../src/tabris/Event';
 import XMLHttpRequest from '../../src/tabris/XMLHttpRequest';
 
@@ -13,7 +13,7 @@ describe('XMLHttpRequest', function() {
   }
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     const origCreate = tabris._nativeBridge.create;
     stub(tabris._nativeBridge, 'create').callsFake((cid, type) => {

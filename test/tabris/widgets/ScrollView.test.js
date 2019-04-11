@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore, spy, stub} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import ScrollView from '../../../src/tabris/widgets/ScrollView';
 import Composite from '../../../src/tabris/widgets/Composite';
 import {toXML} from '../../../src/tabris/Console';
@@ -16,7 +16,7 @@ describe('ScrollView', function() {
   };
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
   });
 

@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore, spy, stub} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import {animate} from '../../src/tabris/Animation';
 import NativeObject from '../../src/tabris/NativeObject';
 
@@ -46,7 +46,7 @@ describe('Animation', function() {
 
   beforeEach(function() {
     stub(console, 'warn');
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     TestWidget.prototype.animate = animate;
     widget = new TestWidget({});

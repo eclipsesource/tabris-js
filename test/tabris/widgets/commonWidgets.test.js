@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore, spy, stub} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import Composite from '../../../src/tabris/widgets/Composite';
 import Canvas from '../../../src/tabris/widgets/Canvas';
 import Button from '../../../src/tabris/widgets/Button';
@@ -24,7 +24,7 @@ describe('Common Widgets', function() {
   let jsx;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     listener = spy();
     jsx = createJsxProcessor();

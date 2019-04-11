@@ -1,5 +1,5 @@
 import {expect, stub, restore, mockTabris} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import {addWindowTimerMethods}  from '../../src/tabris/WindowTimers';
 import {create as createApp} from '../../src/tabris/App';
 import {getStackTrace, patchError, formatError, getCurrentLine} from '../../src/tabris/util-stacktrace';
@@ -171,7 +171,7 @@ showActionSheet (./dist/actionsheet.js:15:25)`
   const OrgError = Error;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
   });
 

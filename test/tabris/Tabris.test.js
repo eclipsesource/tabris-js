@@ -2,7 +2,7 @@ import {expect, spy, stub, restore} from '../test';
 import NativeObject from '../../src/tabris/NativeObject';
 import ClientInterface from '../../src/tabris/Tabris';
 import {create as createContentView} from '../../src/tabris/widgets/ContentView';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import '../../src/tabris/Tabris';
 
 describe('ClientInterface', function() {
@@ -12,7 +12,7 @@ describe('ClientInterface', function() {
 
   beforeEach(function() {
     tabris = global.tabris = new ClientInterface();
-    client = new ClientStub();
+    client = new ClientMock();
   });
 
   afterEach(restore);

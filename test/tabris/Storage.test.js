@@ -1,7 +1,7 @@
 import {expect, mockTabris, stub, restore} from '../test';
 import Storage, {create as createStorage} from '../../src/tabris/Storage';
 import {toXML} from '../../src/tabris/Console';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 
 describe('Storage', function() {
 
@@ -9,7 +9,7 @@ describe('Storage', function() {
   let returnValue;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     stub(client, 'call').callsFake(() => returnValue);
   });

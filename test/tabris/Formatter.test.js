@@ -1,14 +1,14 @@
 import {expect, mockTabris} from '../test';
 import PromisePolyfill from '../../src/tabris/Promise';
 import {format} from '../../src/tabris/Formatter';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 
 describe('format', function() {
 
   let originalPromise, client;
 
   before(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     originalPromise = global.Promise;
     global.Promise = PromisePolyfill;

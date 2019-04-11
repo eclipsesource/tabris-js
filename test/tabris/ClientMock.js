@@ -1,4 +1,4 @@
-export default class ClientStub {
+export default class ClientMock {
 
   constructor() {
     this.$calls = [];

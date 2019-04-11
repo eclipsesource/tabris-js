@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore, spy, stub} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import SearchAction from '../../../src/tabris/widgets/SearchAction';
 import {toXML} from '../../../src/tabris/Console';
 
@@ -8,7 +8,7 @@ describe('SearchAction', function() {
   let client;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
   });
 

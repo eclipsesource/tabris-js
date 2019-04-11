@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore, spy, stub} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import ImageView from '../../../src/tabris/widgets/ImageView';
 
 describe('ImageView', function() {
@@ -7,7 +7,7 @@ describe('ImageView', function() {
   let client, imageView;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     imageView = new ImageView({zoomEnabled: true});
     tabris.flush();

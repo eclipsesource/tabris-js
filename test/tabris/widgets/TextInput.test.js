@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore, spy, stub} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import TextInput from '../../../src/tabris/widgets/TextInput';
 import {createJsxProcessor} from '../../../src/tabris/JsxProcessor';
 import {toXML} from '../../../src/tabris/Console';
@@ -22,7 +22,7 @@ describe('TextInput', function() {
   }
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     client.get = (id, prop) => client.properties(id)[prop];
     mockTabris(client);
     listener = spy();

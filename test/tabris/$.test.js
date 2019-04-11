@@ -1,6 +1,6 @@
 import {expect, mockTabris} from '../test';
 import $ from '../../src/tabris/$';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import ContentView from '../../src/tabris/widgets/ContentView';
 import Composite from '../../src/tabris/widgets/Composite';
 import TextView from '../../src/tabris/widgets/TextView';
@@ -8,14 +8,14 @@ import NativeObject from '../../src/tabris/NativeObject';
 
 describe('$', function() {
 
-  /** @type {ClientStub} */
+  /** @type {ClientMock} */
   let client;
 
   /** @type {ContentView} */
   let contentView;
 
   beforeEach(() => {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     // @ts-ignore
     contentView = tabris.contentView = new ContentView(true);

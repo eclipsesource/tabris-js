@@ -3,7 +3,7 @@ import Composite from '../../src/tabris/widgets/Composite';
 import Percent from '../../src/tabris/Percent';
 import LayoutData from '../../src/tabris/LayoutData';
 import {expect, mockTabris, restore} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 
 describe('LayoutData', function() {
 
@@ -25,7 +25,7 @@ describe('LayoutData', function() {
   afterEach(restore);
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     widget = new Composite();
   });

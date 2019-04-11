@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore, spy, stub} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import Tab from '../../../src/tabris/widgets/Tab';
 import Layout from '../../../src/tabris/Layout';
 import TabFolder from '../../../src/tabris/widgets/TabFolder';
@@ -12,7 +12,7 @@ describe('TabFolder', function() {
   let client, tabFolder, parent;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     parent = new Composite({layout: null});
     client.resetCalls();

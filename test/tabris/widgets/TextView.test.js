@@ -1,19 +1,19 @@
 import {expect, mockTabris, restore, stub} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import TextView from '../../../src/tabris/widgets/TextView';
 import {createJsxProcessor} from '../../../src/tabris/JsxProcessor';
 import {toXML} from '../../../src/tabris/Console';
 
 describe('TextView', function() {
 
-  /** @type {ClientStub} */
+  /** @type {ClientMock} */
   let client;
 
   /** @type {TextView} */
   let widget;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
   });
 
@@ -59,7 +59,7 @@ describe('TextView', function() {
     let jsx;
 
     beforeEach(function() {
-      client = new ClientStub();
+      client = new ClientMock();
       mockTabris(client);
       jsx = createJsxProcessor();
     });

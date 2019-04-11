@@ -1,4 +1,4 @@
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import {expect, mockTabris, stub, spy, restore} from '../test';
 import Layout, {LayoutQueue, ConstraintLayout} from '../../src/tabris/Layout';
 import LayoutData from '../../src/tabris/LayoutData';
@@ -40,7 +40,7 @@ describe('Layout', function() {
   let parent, widget, other, layout, client, queue;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     queue = new LayoutQueue();
     layout = new TestLayout({}, queue);

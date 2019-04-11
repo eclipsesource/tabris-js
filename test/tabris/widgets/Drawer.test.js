@@ -1,5 +1,5 @@
 import {expect, restore, mockTabris} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import Drawer, {create} from '../../../src/tabris/widgets/Drawer';
 import Composite from '../../../src/tabris/widgets/Composite';
 import ContentView from '../../../src/tabris/widgets/ContentView';
@@ -9,7 +9,7 @@ describe('Drawer', function() {
   let drawer, client;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     drawer = create();
   });

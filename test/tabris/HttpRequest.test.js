@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import HttpRequest from '../../src/tabris/HttpRequest';
 
 describe('HttpRequest', function() {
@@ -7,7 +7,7 @@ describe('HttpRequest', function() {
   let client, request;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
   });
 

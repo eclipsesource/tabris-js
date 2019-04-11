@@ -1,5 +1,5 @@
 import {expect, mockTabris, stub} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import Tab from '../../../src/tabris/widgets/Tab';
 import Composite from '../../../src/tabris/widgets/Composite';
 import {toXML} from '../../../src/tabris/Console';
@@ -9,7 +9,7 @@ describe('Tab', function() {
   let client;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     client.resetCalls();
   });

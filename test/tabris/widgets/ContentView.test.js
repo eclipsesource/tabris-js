@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import ContentView from '../../../src/tabris/widgets/ContentView';
 import Composite from '../../../src/tabris/widgets/Composite';
 
@@ -8,7 +8,7 @@ describe('ContentView', () => {
   let contentView, client;
 
   beforeEach(() => {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     contentView = new ContentView(true);
   });

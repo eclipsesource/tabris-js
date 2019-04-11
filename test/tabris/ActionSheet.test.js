@@ -1,6 +1,6 @@
 import {createJsxProcessor} from '../../src/tabris/JsxProcessor';
 import {expect, mockTabris, restore, spy} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import ActionSheet, {ActionSheetItem} from '../../src/tabris/ActionSheet';
 
 describe('ActionSheet', () => {
@@ -8,7 +8,7 @@ describe('ActionSheet', () => {
   let client, actionSheet;
 
   beforeEach(() => {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     actionSheet = new ActionSheet();
   });

@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore, spy} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import {addWindowTimerMethods} from '../../src/tabris/WindowTimers';
 import {create} from '../../src/tabris/App';
 
@@ -9,7 +9,7 @@ describe('WindowTimers', () => {
   let target;
 
   beforeEach(() => {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     target = {};
     tabris.app = create();

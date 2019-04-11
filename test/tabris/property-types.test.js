@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore, stub} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import NativeObject from '../../src/tabris/NativeObject';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 import {types} from '../../src/tabris/property-types';
@@ -16,7 +16,7 @@ describe('property-types', function() {
   }
 
   beforeEach(function() {
-    const client = new ClientStub();
+    const client = new ClientMock();
     mockTabris(client);
   });
 

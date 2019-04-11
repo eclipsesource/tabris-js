@@ -1,5 +1,5 @@
 import {expect, stub, spy, restore, mockTabris} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import Picker from '../../../src/tabris/widgets/Picker';
 import {toXML} from '../../../src/tabris/Console';
 
@@ -8,7 +8,7 @@ describe('Picker', function() {
   let client, picker;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     picker = new Picker();
     tabris.flush();

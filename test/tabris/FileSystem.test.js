@@ -1,5 +1,5 @@
 import {expect, mockTabris, spy, stub, restore} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import FileSystem, {create as createFileSystem, createError} from '../../src/tabris/FileSystem';
 import TextEncoder from '../../src/tabris/TextEncoder';
 import TextDecoder from '../../src/tabris/TextDecoder';
@@ -11,7 +11,7 @@ describe('FileSystem', function() {
   let fs, client, data;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     data = new Uint8Array([0, 1, 2, 3, 127, 128, 255]).buffer;
   });

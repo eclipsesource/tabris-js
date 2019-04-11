@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore, spy} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import TimeDialog from '../../src/tabris/TimeDialog';
 import {createJsxProcessor} from '../../src/tabris/JsxProcessor';
 
@@ -8,7 +8,7 @@ describe('TimeDialog', function() {
   let client, dialog;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     dialog = new TimeDialog();
   });

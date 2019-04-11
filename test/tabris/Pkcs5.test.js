@@ -1,5 +1,5 @@
 import {expect, mockTabris, stub, restore} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import Pkcs5 from '../../src/tabris/Pkcs5';
 
 describe('Pkcs5', function() {
@@ -10,7 +10,7 @@ describe('Pkcs5', function() {
   const expectFail = () => {throw new Error('expected to fail');};
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     pkcs5 = new Pkcs5();
     stub(client, 'call').callsFake((id, method) => {

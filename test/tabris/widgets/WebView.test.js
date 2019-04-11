@@ -1,5 +1,5 @@
 import {expect, mockTabris, spy} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import WebView from '../../../src/tabris/widgets/WebView';
 
 describe('WebView', () => {
@@ -7,7 +7,7 @@ describe('WebView', () => {
   let client, webView;
 
   beforeEach(() => {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     webView = new WebView({url: 'http://wikipedia.com'});
   });

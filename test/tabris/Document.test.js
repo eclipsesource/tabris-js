@@ -1,7 +1,7 @@
 import {expect, mockTabris, spy, stub, restore} from '../test';
 import {addDOMDocument} from '../../src/tabris/Document';
 import Event from '../../src/tabris/Event';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 
 describe('Document', function() {
 
@@ -9,7 +9,7 @@ describe('Document', function() {
 
   beforeEach(function() {
     target = {};
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     stub(client, 'loadAndExecute').returns({});
     addDOMDocument(target);

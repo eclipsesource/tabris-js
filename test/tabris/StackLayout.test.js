@@ -1,4 +1,4 @@
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import {expect, mockTabris, restore, stub} from '../test';
 import Composite from '../../src/tabris/widgets/Composite';
 import Stack from '../../src/tabris/widgets/Stack';
@@ -12,14 +12,14 @@ describe('StackLayout', function() {
   /** @type {Composite} */
   let parent;
 
-  /** @type {ClientStub} */
+  /** @type {ClientMock} */
   let client;
 
   /** @type {LayoutQueue} */
   let queue;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     queue = new LayoutQueue();
   });

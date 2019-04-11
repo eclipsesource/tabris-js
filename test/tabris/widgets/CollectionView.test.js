@@ -1,5 +1,5 @@
 import {expect, match, mockTabris, restore, spy, stub} from '../../test';
-import ClientStub from '../ClientStub';
+import ClientMock from '../ClientMock';
 import CollectionView from '../../../src/tabris/widgets/CollectionView';
 import Composite from '../../../src/tabris/widgets/Composite';
 import {toXML} from '../../../src/tabris/Console';
@@ -10,7 +10,7 @@ describe('CollectionView', function() {
   let parent;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     parent = new Composite();
     client.resetCalls();

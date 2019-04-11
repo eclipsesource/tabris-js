@@ -1,5 +1,5 @@
 import {expect, mockTabris, spy, stub} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import Device, {create as createDevice, publishDeviceProperties} from '../../src/tabris/Device';
 
 describe('Device', function() {
@@ -7,7 +7,7 @@ describe('Device', function() {
   let device, client;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
   });
 

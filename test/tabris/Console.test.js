@@ -1,5 +1,5 @@
 import {expect, spy, stub, restore, mockTabris} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import {createConsole, toXML} from '../../src/tabris/Console';
 import * as defaultConsole from '../../src/tabris/Console';
 import {create as createApp} from '../../src/tabris/App';
@@ -47,7 +47,7 @@ _notify@[native code]`
   afterEach(restore);
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     tabris.app = createApp();
   });

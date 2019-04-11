@@ -1,5 +1,5 @@
 import {expect, mockTabris, spy, stub, restore} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import {createJsxProcessor, JSX} from '../../src/tabris/JsxProcessor';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 import $ from '../../src/tabris/$';
@@ -17,7 +17,7 @@ describe('JsxProcessor', function() {
   let jsx;
 
   beforeEach(function() {
-    mockTabris(new ClientStub());
+    mockTabris(new ClientMock());
     // main.js does this usually, but is not executed in tests:
     global.tabris.CheckBox = CheckBox;
     global.tabris.WidgetCollection = WidgetCollection;

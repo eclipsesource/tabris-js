@@ -1,5 +1,5 @@
 import {expect, mockTabris, stub} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import Crypto from '../../src/tabris/Crypto';
 
 describe('Crypto', function() {
@@ -9,7 +9,7 @@ describe('Crypto', function() {
   let returnValue;
 
   beforeEach(function() {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     crypto = new Crypto();
     stub(client, 'call').callsFake((id, method) => method === 'getRandomValues' ? returnValue : null);

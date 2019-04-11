@@ -1,5 +1,5 @@
 import {expect, mockTabris, restore, spy} from '../test';
-import ClientStub from './ClientStub';
+import ClientMock from './ClientMock';
 import Worker from '../../src/tabris/Worker';
 
 describe('Worker', () => {
@@ -8,7 +8,7 @@ describe('Worker', () => {
   let client;
 
   beforeEach(() => {
-    client = new ClientStub();
+    client = new ClientMock();
     mockTabris(client);
     spy(client, 'call');
     worker = new Worker('script.js');
