@@ -2,6 +2,7 @@ global.self = global;
 const {expect} = require('chai');
 const {copySync, removeSync} = require('fs-extra');
 const tabris = require('../../build/tabris');
+const ClientMock = require('../../build/tabris/ClientMock').default;
 
 const window = global.window;
 
@@ -207,12 +208,7 @@ describe('tabris', function() {
   describe('when started', function() {
 
     before(function() {
-      tabris._init({
-        create: () => {},
-        get: () => {},
-        set: () => {},
-        call: () => {}
-      });
+      tabris._init(new ClientMock());
     });
 
     it('creates a crypto object on window and tabris', function() {

@@ -66,6 +66,20 @@ module.exports = function(grunt) {
         cwd: 'snippets',
         src: ['*.js', '*.jsx', '*.ts', '*.tsx', '*.json'],
         dest: 'build/snippets/'
+      },
+      client_mock: {
+        expand: true,
+        cwd: 'test/tabris',
+        src: ['ClientMock.js', 'ClientMock.d.ts'],
+        dest: 'build/tabris/',
+        options: {
+          process: (content, srcpath) => {
+            if (srcpath.indexOf('.js') !== -1) {
+              return content.replace('export default class', 'exports.default = class');
+            }
+            return content;
+          }
+        }
       }
     },
     exec: {
@@ -201,6 +215,7 @@ module.exports = function(grunt) {
     'exec:transpile_boot',
     'concat:boot',
     'exec:uglify_boot',
+    'copy:client_mock',
     'package',
     'copy:readme',
     'generate-tsd'
