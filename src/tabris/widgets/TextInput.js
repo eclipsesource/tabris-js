@@ -54,6 +54,11 @@ export default class TextInput extends Widget {
     ));
   }
 
+  $listen_focusedChanged(listening) {
+    this._onoff('focus', listening, () => this._triggerChangeEvent('focused', true));
+    this._onoff('blur', listening, () => this._triggerChangeEvent('focused', false));
+  }
+
 }
 
 NativeObject.defineProperties(TextInput.prototype, {
