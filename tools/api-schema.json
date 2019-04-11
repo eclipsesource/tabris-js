@@ -182,6 +182,10 @@
           "description": "Indicates that this property can not change during the lifetime of this object. However, if there is a public constructor and the property is not \"readonly\", it can be set via constructor. No change events will be generated for this property. Defaults to false",
           "type": "boolean"
         },
+        "noChangeEvent": {
+          "type": "boolean",
+          "description": "This property does not produce change events. Implied by 'const'."
+        },
         "default": {
           "type": "string|number|boolean",
           "description": "Default value of this property"

@@ -92,6 +92,10 @@ export default class Widget extends NativeObject {
     return this.$data;
   }
 
+  get absoluteBounds() {
+    return this._nativeGet('absoluteBounds');
+  }
+
   toString() {
     const type = this.constructor.name;
     const cidAttr = `[cid="${this.cid}"]`;
@@ -222,10 +226,6 @@ NativeObject.defineProperties(Widget.prototype, {
     default: 0
   },
   bounds: {
-    type: 'bounds',
-    readonly: true
-  },
-  absoluteBounds: {
     type: 'bounds',
     readonly: true
   },

@@ -12,8 +12,9 @@ widget = new Composite({cid});
 widget.set({cid});
 widget.cid = cid;
 widget.onCidChanged(function() {});
-widget.set({appendTo: (() => {}) as any})
-widget.set({trigger: (() => {}) as any})
+widget.set({appendTo: (() => {}) as any});
+widget.set({trigger: (() => {}) as any});
+widget.onAbsoluteBoundsChanged(() => {});
 
 /*Expected
 (6,
@@ -28,4 +29,5 @@ cid
 (14,
 (15,
 (16,
+(17,
  */

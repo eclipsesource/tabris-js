@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 import * as schema from './api-schema';
 import {
   TextBuilder, asArray, filter, ApiDefinitions, ExtendedApi, Methods,
-  readJsonDefs, createDoc, getEventTypeName, capitalizeFirstChar, Properties
+  readJsonDefs, createDoc, getEventTypeName, capitalizeFirstChar, Properties, hasChangeEvent
 } from './common';
 
 type PropertyOps = {hasContext: boolean, excludeConsts: boolean};
@@ -254,9 +254,7 @@ function renderEventProperties(text: TextBuilder, def: ExtendedApi) {
     }
     if (def.properties) {
       Object.keys(def.properties)
-        .filter(name => !def.properties[name].const)
-        .filter(name => !def.properties[name].private)
-        .filter(name => !def.properties[name].protected)
+        .filter(name => hasChangeEvent(def.properties[name]))
         .sort()
         .forEach(
       name => {

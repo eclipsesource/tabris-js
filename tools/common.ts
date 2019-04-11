@@ -123,6 +123,10 @@ export function createDoc(documentable: ExtendedApi | schema.Property | schema.M
   return createComment(result);
 }
 
+export function hasChangeEvent(property: schema.Property, isStatic: boolean = false) {
+  return !isStatic && !property.const && !property.noChangeEvent && !property.protected && !property.private;
+}
+
 function createComment(comment: string[]) {
   return ['/**'].concat(comment.map(line => ' * ' + line), ' */').join('\n');
 }

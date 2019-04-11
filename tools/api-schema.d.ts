@@ -114,6 +114,10 @@ export interface Property {
    */
   const?: boolean;
   /**
+   * This property does not produce change events. Implied by 'const'.
+   */
+  noChangeEvent?: boolean;
+  /**
    * Default value of this property
    */
   default?: {

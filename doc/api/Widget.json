@@ -241,6 +241,7 @@
     "absoluteBounds": {
       "type": "Bounds",
       "readonly": true,
+      "noChangeEvent": true,
       "description": "The actual location and size of the widget, relative to contentView."
     },
     "background": {

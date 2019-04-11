@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra';
 import * as schema from './api-schema';
-import { ApiDefinitions, asArray, ExtendedApi, getTitle, readJsonDefs } from './common';
+import { ApiDefinitions, asArray, ExtendedApi, getTitle, readJsonDefs, hasChangeEvent } from './common';
 import { join, parse, relative, sep } from 'path';
 
 type TypeLinks = {[type: string]: string};
@@ -407,7 +407,7 @@ class DocumentRenderer {
     if (property.description) {
       result.push(property.description + '\n');
     }
-    result.push(this.renderPropertySummary(property, name), '\n\n');
+    result.push(this.renderPropertySummary(property, name, isStatic), '\n\n');
     if (property.jsxContentProperty) {
       result.push(`\n\nWhen using ${this.def.type} as an JSX element `);
       result.push(property.jsxType ? 'its child elements are' : 'the element content is');
@@ -450,7 +450,7 @@ class DocumentRenderer {
     return result.join('');
   }
 
-  private renderPropertySummary(property: schema.Property, name: string) {
+  private renderPropertySummary(property: schema.Property, name: string, isStatic: boolean) {
     const result = ['\nType | '];
     if (property.values) { // TODO: remove in favor of using only union types
       result.push(property.values.map(v => literal(v, property.type)).join(' \\| '));
@@ -469,6 +469,7 @@ class DocumentRenderer {
     } else {
       result.push('*Yes*\n');
     }
+    result.push(`Change events | ${hasChangeEvent(property, isStatic) ? '*Yes*' : '*No*'}\n`);
     if (property.jsxContentProperty) {
       result.push('JSX content type | `', property.jsxType || property.type, '`\n');
     }
@@ -509,9 +510,7 @@ class DocumentRenderer {
       return [];
     }
     return Object.keys(properties)
-      .filter(name => !properties[name].const)
-      .filter(name => !properties[name].protected)
-      .filter(name => !properties[name].private)
+      .filter(name => hasChangeEvent(properties[name]))
       .map(name => {
         const standardDescription = `Fired when the [*${name}*](#${name.toLowerCase()}) property has changed.`;
         return {
