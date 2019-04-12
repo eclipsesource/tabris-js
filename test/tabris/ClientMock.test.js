@@ -162,4 +162,40 @@ describe('ClientMock', function() {
 
   });
 
+  describe('client emulation', function() {
+
+    it('get returns properties from create', () => {
+      client.create('id1', 'test.Type', {foo: 'value'});
+
+      expect(client.get('id1', 'foo')).to.equal('value');
+    });
+
+    it('get returns properties from set', () => {
+      client.set('id1', {foo: 'value'});
+
+      expect(client.get('id1', 'foo')).to.equal('value');
+    });
+
+    it('get returns properties from create and set', () => {
+      client.create('id1', 'test.Type', {foo: 'value1', bar: 'value1'});
+      client.set('id1', {bar: 'value2', baz: 'value2'});
+
+      expect(client.get('id1', 'foo')).to.equal('value1');
+      expect(client.get('id1', 'bar')).to.equal('value2');
+      expect(client.get('id1', 'baz')).to.equal('value2');
+    });
+
+    it('get returns properties modified directly', () => {
+      client.create('id1', 'test.Type', {foo: 'value1', bar: 'value1'});
+      client.properties('id1').bar = 'value2';
+
+      expect(client.get('id1', 'bar')).to.equal('value2');
+    });
+
+    it('get returns default for "bounds" property', () => {
+      expect(client.get('id1', 'bounds')).to.eql([0, 0, 0, 0]);
+    });
+
+  });
+
 });
