@@ -46,8 +46,8 @@ export default class ClientMock {
     delete this.$objects[id];
   }
 
-  load(url) {
-    return url.slice(-5) === '.json' ? '{}' : 'exports = 23;';
+  load() {
+    return null;
   }
 
   loadAndExecute() {
