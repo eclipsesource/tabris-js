@@ -14,11 +14,7 @@ export default class ClientMock {
   get() {
     const [id, property] = arguments;
     this.$calls.push({op: 'get', id, property});
-    let value = id in this.$objects ? this.$objects[id].properties[property] : undefined;
-    if (property === 'bounds' && !value) {
-      value = [0, 0, 0, 0];
-    }
-    return value;
+    return id in this.$objects ? this.$objects[id].properties[property] : undefined;
   }
 
   set() {

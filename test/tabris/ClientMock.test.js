@@ -192,10 +192,6 @@ describe('ClientMock', function() {
       expect(client.get('id1', 'bar')).to.equal('value2');
     });
 
-    it('get returns default for "bounds" property', () => {
-      expect(client.get('id1', 'bounds')).to.eql([0, 0, 0, 0]);
-    });
-
   });
 
 });

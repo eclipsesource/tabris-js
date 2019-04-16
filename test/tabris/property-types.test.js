@@ -346,6 +346,7 @@ describe('property-types', function() {
   describe('boolean', function() {
 
     const encode = types.boolean.encode;
+    const decode = types.boolean.decode;
 
     it('passes through true', function() {
       expect(encode(true)).to.equal(true);
@@ -366,7 +367,10 @@ describe('property-types', function() {
       expect(encode(1)).to.equal(true);
       expect(encode({})).to.equal(true);
       expect(encode('true')).to.equal(true);
-      expect(encode('false')).to.equal(true);
+    });
+
+    it('decodes undefined to false', function() {
+      expect(decode(undefined)).to.equal(false);
     });
 
   });
@@ -374,10 +378,17 @@ describe('property-types', function() {
   describe('string', function() {
 
     const encode = types.string.encode;
+    const decode = types.string.decode;
 
     it('translates null to empty string', function() {
       expect(encode(null)).to.equal('');
       expect(encode(undefined)).to.equal('');
+    });
+
+    it('translates null to empty string', function() {
+      expect(encode(null)).to.equal('');
+      expect(encode(undefined)).to.equal('');
+      expect(decode(undefined)).to.equal('');
     });
 
     it('translates other types to string', function() {
@@ -389,11 +400,16 @@ describe('property-types', function() {
       expect(encode({toString() {return 'foo';}})).to.equal('foo');
     });
 
+    it('decodes undefined to empty string', function() {
+      expect(decode(undefined)).to.equal('');
+    });
+
   });
 
   describe('number', function() {
 
     const encode = types.number.encode;
+    const decode = types.number.decode;
 
     it('fails for non-numbers', function() {
       expect(() => encode()).to.throw(Error, 'Not a number: undefined');
@@ -431,11 +447,16 @@ describe('property-types', function() {
       expect(encode('.01')).to.equal(0.01);
     });
 
+    it('decodes undefined to 0', function() {
+      expect(decode(undefined)).to.equal(0);
+    });
+
   });
 
   describe('natural', function() {
 
     const encode = types.natural.encode;
+    const decode = types.natural.decode;
 
     it('fails for non-numbers', function() {
       expect(() => encode()).to.throw(Error, 'Not a number: undefined');
@@ -480,11 +501,16 @@ describe('property-types', function() {
       expect(encode('0.7')).to.equal(1);
     });
 
+    it('decodes undefined to 0', function() {
+      expect(decode(undefined)).to.equal(0);
+    });
+
   });
 
   describe('integer', function() {
 
     const encode = types.integer.encode;
+    const decode = types.integer.decode;
 
     it('fails for non-numbers', function() {
       expect(() => encode()).to.throw(Error, 'Not a number: undefined');
@@ -527,6 +553,10 @@ describe('property-types', function() {
       expect(encode('1')).to.equal(1);
       expect(encode('-1')).to.equal(-1);
       expect(encode('0.7')).to.equal(1);
+    });
+
+    it('decodes undefined to 0', function() {
+      expect(decode(undefined)).to.equal(0);
     });
 
   });
@@ -790,6 +820,20 @@ describe('property-types', function() {
       expect(() => encode([])).to.throw(Error, 'Invalid type: []');
       expect(() => encode([1, 2, 3, 4, 5])).to.throw(Error, 'Invalid type: [ 1, 2, 3, 4, 5 ]');
       expect(() => encode(['foo'])).to.throw(Error, 'Invalid type: [ \'foo\' ]');
+    });
+
+  });
+
+  describe('bounds', function() {
+
+    const decode = types.bounds.decode;
+
+    it('decodes array', function() {
+      expect(decode([1, 2, 3, 4])).to.deep.equal({left: 1, top: 2, width: 3, height: 4});
+    });
+
+    it('decodes undefined to default values', function() {
+      expect(decode(undefined)).to.deep.equal({left: 0, top: 0, width: 0, height: 0});
     });
 
   });

@@ -14,18 +14,27 @@ export const types = {
   boolean: {
     encode(bool) {
       return !!bool;
+    },
+    decode(value) {
+      return value === undefined ? false : value;
     }
   },
 
   string: {
     encode(str) {
       return str == null ? '' : '' + str;
+    },
+    decode(value) {
+      return value === undefined ? '' : value;
     }
   },
 
   number: {
     encode(value) {
       return encodeNumber(value);
+    },
+    decode(value) {
+      return value === undefined ? 0 : value;
     }
   },
 
@@ -33,14 +42,22 @@ export const types = {
     encode(value) {
       value = encodeNumber(value);
       return value < 0 ? 0 : Math.round(value);
+    },
+    decode(value) {
+      return value === undefined ? 0 : value;
     }
+
   },
 
   integer: {
     encode(value) {
       value = encodeNumber(value);
       return Math.round(value);
+    },
+    decode(value) {
+      return value === undefined ? 0 : value;
     }
+
   },
 
   dimension: {
@@ -198,6 +215,9 @@ export const types = {
       return [value.left, value.top, value.width, value.height];
     },
     decode(value) {
+      if (value === undefined) {
+        return {left: 0, top: 0, width: 0, height: 0};
+      }
       return {left: value[0], top: value[1], width: value[2], height: value[3]};
     }
   },
