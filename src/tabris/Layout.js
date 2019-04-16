@@ -179,6 +179,7 @@ export class LayoutQueue {
 
   constructor() {
     this._map = {};
+    this._inFlush = false;
   }
 
   add(composite) {
@@ -186,12 +187,17 @@ export class LayoutQueue {
   }
 
   flush() {
+    if (this._inFlush) {
+      throw new Error('flush in flush');
+    }
+    this._inFlush = true;
     for (const cid in this._map) {
       if (!this._map[cid]._isDisposed && this._map[cid].layout) {
         this._map[cid].layout.render(this._map[cid]);
       }
     }
     this._map = {};
+    this._inFlush = false;
   }
 
 }
