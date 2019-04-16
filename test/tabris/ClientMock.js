@@ -1,14 +1,18 @@
 export default class ClientMock {
 
-  constructor() {
+  constructor(defaults) {
     this.$calls = [];
     this.$objects = {};
+    this.$defaults = defaults || {};
   }
 
   create() {
     const [id, type, properties] = arguments;
     this.$calls.push({op: 'create', id, type, properties});
     this.$objects[id] = {type, properties};
+    if (type in this.$defaults) {
+      Object.assign(this.$objects[id].properties, this.$defaults[type]);
+    }
   }
 
   get() {

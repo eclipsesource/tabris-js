@@ -1,5 +1,7 @@
 export default class ClientMock {
 
+  constructor(defaults?: {[type: string]: {[prop: string]: any}});
+
   calls(): Array<ClientCall>;
   calls(filter: Partial<ClientCreateCall>): Array<ClientCreateCall>;
   calls(filter: Partial<ClientGetCall>): Array<ClientGetCall>;

@@ -1,5 +1,9 @@
 import {expect, mockTabris, restore} from '../test';
 import ClientMock from './ClientMock';
+import CheckBox from '../../src/tabris/widgets/CheckBox';
+import TextInput from '../../src/tabris/widgets/TextInput';
+import Tabris from '../../src/tabris/Tabris';
+import {create as createDevice} from '../../src/tabris/Device';
 
 describe('ClientMock', function() {
 
@@ -142,6 +146,21 @@ describe('ClientMock', function() {
       expect(() => client.properties('w1')).to.throw(Error, 'No object with id w1');
     });
 
+    it('initializes with defaults', function() {
+      client = new ClientMock({
+        'tabris.App': {appId: 'foo'},
+        'tabris.Device': {model: 'bar'}
+      });
+
+      client.create('$1', 'tabris.App', {});
+      client.create('$2', 'tabris.Device', {});
+
+      expect(client.get('$1', 'appId')).to.equal('foo');
+      expect(client.properties('$1')).to.deep.equal({appId: 'foo'});
+      expect(client.get('$2', 'model')).to.equal('bar');
+      expect(client.properties('$2')).to.deep.equal({model: 'bar'});
+    });
+
   });
 
   describe('resetCalls', function() {
@@ -190,6 +209,20 @@ describe('ClientMock', function() {
       client.properties('id1').bar = 'value2';
 
       expect(client.get('id1', 'bar')).to.equal('value2');
+    });
+
+    it('integrates with tabris object', function() {
+      client = new ClientMock({'tabris.Device': {platform: 'Android'}});
+      global.tabris = new Tabris();
+      global.tabris._init(client, {});
+      const checkBox = new CheckBox({});
+      client.properties(checkBox.cid).checked = true;
+      const textInput = new TextInput({text: 'foo'});
+
+      expect(createDevice().platform).to.equal('Android');
+      expect(checkBox.bounds).to.deep.equal({left: 0, top: 0, width: 0, height: 0});
+      expect(checkBox.checked).to.be.true;
+      expect(textInput.text).to.equal('foo');
     });
 
   });

@@ -1,7 +1,8 @@
 import { tabris } from 'tabris';
 import ClientMock from 'tabris/ClientMock';
 
-const mock = new ClientMock();
+let mock = new ClientMock();
+mock = new ClientMock({'tabris.Foo': {bar: 'baz', otherBar: 23}});
 tabris._init(mock, {headless: false});
 
 const anything: 1 | 'foo' | boolean = mock.properties('cid').prop;
