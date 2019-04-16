@@ -55,7 +55,7 @@ export default class Tabris extends NativeObject {
     this._nativeBridge = new NativeBridge(client);
     this._register();
     this._nativeBridge.create(this.cid, this._nativeType);
-    this.trigger('start', options);
+    this.trigger('start', options || {headless: false});
     this._started = true;
   }
 

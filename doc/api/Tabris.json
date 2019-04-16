@@ -34,6 +34,7 @@
         },
         {
           "name": "options",
+          "optional": true,
           "type": "{headless: boolean}"
         }
       ],
