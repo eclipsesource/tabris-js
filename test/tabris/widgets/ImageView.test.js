@@ -80,7 +80,7 @@ describe('ImageView', function() {
 
         expect(imageView.minZoomLevel).to.equal(1.0);
         expect(imageView.maxZoomLevel).to.equal(3.0);
-        expect(client.calls({op: 'set', id: imageView.cid})[1].properties.zoomLevel).to.equal(1.0);
+        expect(client.calls({op: 'set', id: imageView.cid})[0].properties.zoomLevel).to.equal(1.0);
       });
 
       it('set false does not reset zoomLevel, minZoomLevel and maxZoomLevel when already disabled', function() {

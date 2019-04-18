@@ -14,6 +14,7 @@ describe('NativeBridge', function() {
     global.tabris = Object.assign({
       flush() {
         this.trigger('flush');
+        this._nativeBridge.clearCache();
         this._nativeBridge.flush();
       }
     }, Events);
@@ -25,12 +26,13 @@ describe('NativeBridge', function() {
         return 23;
       });
     });
-    bridge = new NativeBridge(native);
+    bridge = global.tabris._nativeBridge = new NativeBridge(native);
   });
 
   afterEach(restore);
 
   describe('create', function() {
+
     beforeEach(function() {
       bridge.create('id', 'type');
     });
@@ -43,9 +45,11 @@ describe('NativeBridge', function() {
       bridge.flush();
       expect(native.create).to.have.been.calledWith('id', 'type', {});
     });
+
   });
 
   describe('set', function() {
+
     beforeEach(function() {
       bridge.set('id', 'foo', 23);
     });
@@ -58,9 +62,11 @@ describe('NativeBridge', function() {
       bridge.flush();
       expect(native.set).to.have.been.calledWith('id', {foo: 23});
     });
+
   });
 
   describe('subsequent create and set properties', function() {
+
     beforeEach(function() {
       bridge.create('id', 'type');
       bridge.set('id', 'foo', 23);
@@ -77,9 +83,11 @@ describe('NativeBridge', function() {
       expect(native.create).to.have.been.calledWith('id', 'type', {foo: 23, bar: 42});
       expect(native.set).to.have.not.been.called;
     });
+
   });
 
   describe('listen', function() {
+
     beforeEach(function() {
       bridge.listen('id', 'event', false);
     });
@@ -92,9 +100,11 @@ describe('NativeBridge', function() {
       bridge.flush();
       expect(native.listen).to.have.been.calledWith('id', 'event', false);
     });
+
   });
 
   describe('destroy', function() {
+
     beforeEach(function() {
       bridge.destroy('id');
     });
@@ -107,11 +117,14 @@ describe('NativeBridge', function() {
       bridge.flush();
       expect(native.destroy).to.have.been.calledWith('id');
     });
+
   });
 
   describe('get', function() {
+
     beforeEach(function() {
-      bridge.set('id', {foo: 23});
+      bridge.set('id', 'foo', 23);
+      tabris.flush();
     });
 
     it('is transferred immediately', function() {
@@ -124,21 +137,49 @@ describe('NativeBridge', function() {
       expect(result).to.equal(23);
     });
 
+    it('returns value cached from set', function() {
+      bridge.set('id', 'foo', 24);
+      const result = bridge.get('id', 'foo');
+      expect(result).to.equal(24);
+    });
+
+    it('returns value cached from get', function() {
+      const result1 = bridge.get('id', 'foo');
+      const result2 = bridge.get('id', 'foo');
+
+      expect(result1).to.equal(23);
+      expect(result2).to.equal(23);
+      expect(native.get).to.have.been.calledOnce;
+    });
+
+    it('returns native value after flush clears cache', function() {
+      bridge.set('id', 'foo', 24);
+
+      const result1 = bridge.get('id', 'foo');
+      tabris.flush();
+      const result2 = bridge.get('id', 'foo');
+
+      expect(result1).to.equal(24);
+      expect(result2).to.equal(23);
+    });
+
     it('flushes buffered operations first', function() {
       bridge.get('id', 'foo');
       expect(log).to.eql(['set', 'get']);
     });
 
     it('flushes layout queue first', function() {
-      stub(LayoutQueue.instance, 'flush').callsFake(() => bridge.set('id2', {bar: 23}));
+      stub(LayoutQueue.instance, 'flush').callsFake(() => bridge.set('id2', 'bar', 23));
 
       bridge.get('id', 'foo');
 
       expect(log).to.eql(['set', 'set', 'get']);
     });
+
   });
 
   describe('call', function() {
+
     beforeEach(function() {
       bridge.set('id', {foo: 23});
     });
@@ -165,6 +206,7 @@ describe('NativeBridge', function() {
 
       expect(log).to.eql(['set', 'set', 'call']);
     });
+
   });
 
 });

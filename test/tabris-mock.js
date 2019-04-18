@@ -15,6 +15,7 @@ export function mockTabris(client) {
     Module: {getSourceMap() { return null; }},
     flush() {
       this.trigger('flush');
+      this._nativeBridge.clearCache();
       this._nativeBridge.flush();
     },
     _client: client,

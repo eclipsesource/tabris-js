@@ -5,6 +5,7 @@ export default class NativeBridge {
     this.$bridge = bridge;
     this.$operations = [];
     this.$currentOperation = {id: null};
+    this.$propertyCache = {};
   }
 
   create(id, type) {
@@ -22,6 +23,7 @@ export default class NativeBridge {
       this.$operations.push(['set', id, properties]);
       this.$currentOperation = {id, properties};
     }
+    this._cache(id, name, value);
   }
 
   listen(id, event, listen) {
@@ -35,8 +37,13 @@ export default class NativeBridge {
   }
 
   get(id, name) {
+    if (this.$propertyCache[id] && name in this.$propertyCache[id]) {
+      return this.$propertyCache[id][name];
+    }
     this.flush();
-    return this.$bridge.get(id, name);
+    const result = this.$bridge.get(id, name);
+    this._cache(id, name, result);
+    return result;
   }
 
   call(id, method, parameters) {
@@ -68,5 +75,16 @@ export default class NativeBridge {
           this.$bridge.destroy(op[1]);
       }
     }
+  }
+
+  clearCache() {
+    this.$propertyCache = {};
+  }
+
+  _cache(id, property, value) {
+    if (!this.$propertyCache[id]) {
+      this.$propertyCache[id] = {};
+    }
+    this.$propertyCache[id][property] = value;
   }
 }

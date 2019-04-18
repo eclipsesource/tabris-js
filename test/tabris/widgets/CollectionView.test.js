@@ -228,6 +228,7 @@ describe('CollectionView', function() {
           view._trigger('scroll', {});
           view._trigger('scroll', {});
           index = 24;
+          tabris.flush();
           view._trigger('scroll', {});
           view._trigger('scroll', {});
 

@@ -438,7 +438,6 @@ function defaultSetter(name, value) {
 function defaultGetter(name) {
   let result = this._getStoredProperty(name);
   if (result === undefined) {
-    // TODO: cache read property, but not for device properties
     result = this._nativeGet(name);
   }
   return result;

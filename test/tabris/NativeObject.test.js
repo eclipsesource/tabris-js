@@ -96,6 +96,24 @@ describe('NativeObject', function() {
         expect(client.calls({op: 'set'}).length).to.equal(1);
       });
 
+      it('caches nocache property until flush', function() {
+        NativeObject.defineProperties(TestType.prototype, {foo: {type: 'number', nocache: true}});
+        tabris.flush();
+        client.properties(object.cid).foo = 24;
+
+        object.set({foo: 23});
+        const result1 = object.foo;
+        tabris.flush();
+        client.properties(object.cid).foo = 25;
+        const result2 = object.foo;
+        client.properties(object.cid).foo = 26;
+        const result3 = object.foo;
+
+        expect(result1).to.equal(23);
+        expect(result2).to.equal(25);
+        expect(result3).to.equal(25);
+      });
+
       it('supports multiple property objects', function() {
         Object.assign(TestType.prototype, {foo: 0, bar: 0});
 
