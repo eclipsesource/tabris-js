@@ -2,6 +2,7 @@ import NativeObject from './NativeObject';
 import Popup from './Popup';
 import {create as createContentView} from './widgets/ContentView';
 import {JSX} from './JsxProcessor';
+import Composite from './widgets/Composite';
 
 export default class Popover extends Popup {
 
@@ -37,6 +38,13 @@ export default class Popover extends Popup {
     } else {
       return super._trigger(name, event);
     }
+  }
+
+  _dispose() {
+    if (!this.isDisposed()) {
+      Composite.prototype._dispose.call(this.contentView);
+    }
+    super._dispose();
   }
 
   /** @this {import("../JsxProcessor").default} */

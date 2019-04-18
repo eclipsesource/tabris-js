@@ -95,9 +95,13 @@ describe('Popover', () => {
       expect(popover.close()).to.equal(popover);
     });
 
-    it('disposes the popover', () => {
+    it('disposes the popover and contentView', () => {
+      const contentView = popover.contentView;
+
       popover.close();
+
       expect(popover.isDisposed()).to.equal(true);
+      expect(contentView.isDisposed()).to.equal(true);
     });
 
   });
