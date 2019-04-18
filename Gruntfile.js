@@ -264,14 +264,18 @@ module.exports = function(grunt) {
   });
 
   /* runs tests against the build output */
-  grunt.registerTask('verify', [
-    'exec:verify_tabris',
-    'copy:test_ts',
-    'exec:verify_typings',
-    'copy:snippets',
-    'exec:transpile_snippets',
-    'verify_typings_fail'
-  ]);
+  grunt.registerTask('verify',
+    release ? [
+      'exec:verify_tabris',
+      'copy:test_ts',
+      'exec:verify_typings',
+      'copy:snippets',
+      'exec:transpile_snippets',
+      'verify_typings_fail'
+    ] : [
+      'exec:verify_tabris'
+    ]
+  );
 
   /* generates reference documentation */
   grunt.registerTask('doc', [
@@ -291,7 +295,12 @@ module.exports = function(grunt) {
   grunt.registerTask('quickverify', [
     'clean',
     'build',
-    'verify'
+    'exec:verify_tabris',
+    'copy:test_ts',
+    'verify_typings_fail',
+    'exec:verify_typings',
+    'copy:snippets',
+    'exec:transpile_snippets'
   ]);
 
   function blockComment(text) {
