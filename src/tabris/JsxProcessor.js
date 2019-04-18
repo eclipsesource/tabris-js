@@ -26,7 +26,7 @@ export default class JsxProcessor {
       throw new Error(`JSX: Unsupported type ${Type}`);
     }
     if (attributes && attributes.children && children && children.length) {
-      throw new Error(`JSX: Children for type ${Type} given twice.`);
+      throw new Error(`JSX: Children for type ${Type.name} given twice.`);
     }
     // Children may be part of attributes or given as varargs or both.
     // For JSX factories/functional components they should always be part of attributes

@@ -118,12 +118,11 @@ const cv: tabris.CollectionView<tabris.Widget> = <tabris.CollectionView
 let alertDialog: tabris.AlertDialog = <tabris.AlertDialog
   title='foo'
   message='foo'
-  textInputs={textInputs}
   onClose={(ev: tabris.AlertDialogCloseEvent) => console.log(ev.button  + ev.texts[0].trim())}
   onCloseOk={(ev: tabris.AlertDialogCloseEvent) => console.log(ev.button === 'ok' && ev.texts[0].trim())}
   onCloseCancel={(ev: tabris.AlertDialogCloseEvent) => console.log(ev.button === 'cancel' && ev.texts[0].trim())}
   onCloseNeutral={(ev: tabris.AlertDialogCloseEvent) => console.log(ev.button === 'neutral' && ev.texts[0].trim())}/>;
-alertDialog = <tabris.AlertDialog title='foo' textInputs={textInputs}>foo</tabris.AlertDialog>;
+alertDialog = <tabris.AlertDialog title='foo'>foo</tabris.AlertDialog>;
 alertDialog = <tabris.AlertDialog title='foo'>{textInputs}</tabris.AlertDialog>;
 alertDialog = <tabris.AlertDialog title='foo'>{['foo', 'bar', textInputs[0]]}</tabris.AlertDialog>;
 alertDialog = <tabris.AlertDialog title='foo'><tabris.TextInput /></tabris.AlertDialog>;

@@ -11,14 +11,14 @@ let title: string;
 buttons = alertDialog.buttons;
 message = alertDialog.message;
 title = alertDialog.title;
-textInputs = alertDialog.textInputs;
+textInputs = alertDialog.textInputs.children().toArray();
 
 alertDialog.buttons = buttons;
 alertDialog.message = message;
 alertDialog.title = title;
-alertDialog.textInputs = textInputs;
+alertDialog.textInputs.append(textInputs);
 
-let properties: Properties<AlertDialog> = {buttons, message, title, textInputs};
+let properties: Properties<AlertDialog> = {buttons, message, title};
 alertDialog = new AlertDialog(properties);
 alertDialog.set(properties);
 

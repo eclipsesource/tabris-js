@@ -4,10 +4,16 @@ import AlertDialog from './../../src/tabris/AlertDialog';
 import TextInput from './../../src/tabris/widgets/TextInput';
 import Button from './../../src/tabris/widgets/Button';
 import {createJsxProcessor} from '../../src/tabris/JsxProcessor';
+import ContentView from '../../src/tabris/widgets/ContentView';
+import Composite from '../../src/tabris/widgets/Composite';
 
 describe('AlertDialog', function() {
 
-  let client, dialog;
+  /** @type {ClientMock} */
+  let client;
+
+  /** @type {AlertDialog} */
+  let dialog;
 
   beforeEach(function() {
     client = new ClientMock();
@@ -26,7 +32,7 @@ describe('AlertDialog', function() {
     it('can be set to string', function() {
       dialog.title = 'foo';
       expect(dialog.title).to.equal('foo');
-      expect(client.calls({op: 'set'})[0].properties.title).to.equal('foo');
+      expect(client.calls({op: 'create', id: dialog.cid})[0].properties.title).to.equal('foo');
     });
 
   });
@@ -40,51 +46,80 @@ describe('AlertDialog', function() {
     it('can be set to string', function() {
       dialog.message = 'foo';
       expect(dialog.message).to.equal('foo');
-      expect(client.calls({op: 'set'})[0].properties.message).to.equal('foo');
+      expect(client.calls({op: 'create', id: dialog.cid})[0].properties.message).to.equal('foo');
     });
 
   });
 
   describe('textInputs', function() {
 
-    it('initial value is null', function() {
-      expect(dialog.textInputs).to.equal(null);
+    it('is a contentView', function() {
+      expect(dialog.textInputs).to.be.instanceof(ContentView);
+      expect(dialog.textInputs.children().length).to.equal(0);
+      expect(dialog.textInputs.layout).to.be.null;
     });
 
-    it('can be set to array of TextInputs', function() {
+    it('does not CREATE anything', function() {
+      expect(dialog.textInputs.cid).to.not.be.empty;
+      expect(client.calls({op: 'create', id: dialog.textInputs.cid}).length).equal(0);
+    });
+
+    it('can not be set directly', function() {
+      const composite = new Composite();
+      client.resetCalls();
+      spy(console, 'warn');
+
+      // @ts-ignore
+      dialog.textInputs = composite;
+
+      expect(console.warn).to.have.been.calledWithMatch(/Property "textInputs" can not be set, append to it instead/);
+      expect(client.calls().length).to.equal(0);
+    });
+
+    it('can not be disposed', function() {
+      const textInputs = dialog.textInputs;
+
+      expect(() => textInputs.dispose()).to.throw();
+    });
+
+    it('can add TextInputs', function() {
       const textInput = new TextInput();
+      client.resetCalls();
 
-      dialog.textInputs = [textInput];
+      dialog.textInputs.append(textInput);
+      dialog.open();
 
-      expect(client.calls({op: 'set'})[0].properties.textInputs).to.deep.equal([textInput.cid]);
+      expect(client.calls({
+        op: 'set',
+        id: dialog.cid
+      })[0].properties.textInputs).to.deep.equal([textInput.cid]);
     });
 
-    it('can not be set to different type ', function() {
-      stub(console, 'warn');
+    it('can not add other types', function() {
+      const button = new Button();
+      client.resetCalls();
 
-      dialog.textInputs = [new Button()];
-
-      const calls = client.calls({op: 'set', id: dialog.cid});
-      expect(calls.length).to.equal(0);
-      expect(console.warn).to.have.been.calledOnce;
-    });
-
-    it('can be gotten as array of TextInputs', function() {
-      const textInput = new TextInput();
-      const textInputs = [textInput];
-
-      dialog.textInputs = textInputs;
-
-      expect(dialog.textInputs).to.deep.equal(textInputs);
+      expect(() => dialog.textInputs.append(button)).to.throw();
     });
 
     it('should be disposed when dialog is disposed', function() {
       const textInput = new TextInput();
-      dialog.textInputs = [textInput];
+      dialog.textInputs.append(textInput);
 
       dialog.dispose();
 
-      expect(textInput.isDisposed()).to.equal(true);
+      expect(dialog.textInputs.isDisposed()).to.equal(true);
+    });
+
+    it('does not access nativeBridge', function() {
+      client.resetCalls();
+      dialog.textInputs.animate({}, {});
+      dialog.textInputs.onResize(() => {});
+      dialog.textInputs.enabled = false;
+      dialog.textInputs.bounds;
+      dialog.dispose();
+
+      expect(client.calls({id: dialog.textInputs.cid}).length).to.equal(0);
     });
 
   });
@@ -232,7 +267,7 @@ describe('AlertDialog', function() {
     it('contain texts', function() {
       const textInput = new TextInput();
       stub(client, 'get').withArgs(textInput.cid, 'text').returns('foo');
-      dialog.textInputs = [textInput];
+      dialog.textInputs.append(textInput);
       const closeOk = spy();
       const close = spy();
       dialog.onCloseOk(closeOk);
@@ -286,15 +321,15 @@ describe('AlertDialog', function() {
       )).to.throw(/message given twice/);
     });
 
-    it('with textInputs property', function() {
+    it('with children property', function() {
       const textInputs = [new TextInput(), new TextInput()];
       const popup = jsx.createElement(
-        AlertDialog, {textInputs}
+        AlertDialog, {children: textInputs}
       );
 
-      expect(popup.textInputs.length).to.equal(2);
-      expect(popup.textInputs[0]).to.equal(textInputs[0]);
-      expect(popup.textInputs[1]).to.equal(textInputs[1]);
+      expect(popup.textInputs.children().length).to.equal(2);
+      expect(popup.textInputs.children()[0]).to.equal(textInputs[0]);
+      expect(popup.textInputs.children()[1]).to.equal(textInputs[1]);
     });
 
     it('with TextInput as content', function() {
@@ -306,17 +341,17 @@ describe('AlertDialog', function() {
         textInputs[1]
       );
 
-      expect(popup.textInputs.length).to.equal(2);
-      expect(popup.textInputs[0]).to.equal(textInputs[0]);
-      expect(popup.textInputs[1]).to.equal(textInputs[1]);
+      expect(popup.textInputs.children().length).to.equal(2);
+      expect(popup.textInputs.children()[0]).to.equal(textInputs[0]);
+      expect(popup.textInputs.children()[1]).to.equal(textInputs[1]);
     });
 
-    it('with textInputs property and content', function() {
+    it('with children property and content', function() {
       expect(() => jsx.createElement(
         AlertDialog,
-        {textInputs: [new TextInput()]},
+        {children: [new TextInput()]},
         new TextInput()
-      )).to.throw(/textInputs given twice/);
+      )).to.throw('JSX: Children for type AlertDialog given twice.');
     });
 
   });

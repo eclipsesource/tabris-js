@@ -68,7 +68,7 @@ tabris.contentView.append(
 
 ![ContentView](img/contentview.png)
 
-[`Popover`](./api/Popover.md) dialogs also have `ContentView` instances attached.
+[`Popover`](./api/Popover.md) and [`AlertDialog`](./api/AlertDialog.md) popups also have `ContentView` instances attached.
 
 ## Drawer
 

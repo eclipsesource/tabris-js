@@ -1,6 +1,6 @@
 import {expect, mockTabris, restore} from '../../test';
 import ClientMock from '../ClientMock';
-import ContentView from '../../../src/tabris/widgets/ContentView';
+import ContentView, {create as createContentView} from '../../../src/tabris/widgets/ContentView';
 import Composite from '../../../src/tabris/widgets/Composite';
 
 describe('ContentView', () => {
@@ -10,7 +10,7 @@ describe('ContentView', () => {
   beforeEach(() => {
     client = new ClientMock();
     mockTabris(client);
-    contentView = new ContentView(true);
+    contentView = createContentView();
   });
 
   afterEach(restore);

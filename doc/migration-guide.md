@@ -37,7 +37,7 @@ This concerns all instances of `NativeObject` (including widgets) and `WidgetCol
 The `set` method still exists, but now only takes one argument (the properties object).
 The `get` method has been removed entirely.
 
-### Alternatives for `set("prop", value)`:
+#### Alternatives for `set("prop", value)`:
 
 On both `NativeObject` and `WidgetCollection`, `obj.set('foo', baz)` can be replaced with `obj.set({foo: baz})`,
 and `obj.set(bar, baz)` can be replaced with `obj.set({[foo]: baz})`.
@@ -45,7 +45,7 @@ and `obj.set(bar, baz)` can be replaced with `obj.set({[foo]: baz})`.
 On `NativeObject` only, `obj.set('foo', baz)` can be replaced with `obj.foo = baz`,
 and `obj.set(bar, baz)` can be replaced with `obj[bar] = baz`.
 
-### Alternatives for `get("prop")`:
+#### Alternatives for `get("prop")`:
 
 On `NativeObject`, `bar = obj.get('foo')` can be replaced with `bar = obj.foo`,
 and `baz = obj.get(bar)` can be replaced with `baz = obj[bar]`.
@@ -56,6 +56,28 @@ and `baz = wc.get(bar)` can be replaced with `baz = wc.first()[bar]`.
 ### app.installPatch removed
 
 You can no longer patch your application using this method.
+
+### AlertDialog textInputs property is now a ContentView
+
+Instead of assigning `TextInputs` widgets to that property they need to be appended:
+
+Old:
+```js
+alertDialog.textInputs = [new TextInput()];
+```
+
+New:
+```js
+alertDialog.textInputs.append(new TextInput());
+```
+
+Alternatively JSX my be used:
+
+```jsx
+<AlertDialog>
+  <TextInput/>
+</AlertDialog>
+```
 
 ### "trigger" object/eventObject parameter is now cloned
 

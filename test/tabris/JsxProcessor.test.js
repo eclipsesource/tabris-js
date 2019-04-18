@@ -196,7 +196,7 @@ describe('JsxProcessor', function() {
         jsx.createElement(Button),
         jsx.createElement(CheckBox),
         jsx.createElement(Switch)
-      )).to.throw(/children/);
+      )).to.throw('JSX: Children for type Composite given twice.');
     });
 
     it('executes given function', function() {

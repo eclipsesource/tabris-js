@@ -1,7 +1,7 @@
 import {expect, mockTabris} from '../test';
 import $ from '../../src/tabris/$';
 import ClientMock from './ClientMock';
-import ContentView from '../../src/tabris/widgets/ContentView';
+import {create as createContentView} from '../../src/tabris/widgets/ContentView';
 import Composite from '../../src/tabris/widgets/Composite';
 import TextView from '../../src/tabris/widgets/TextView';
 import NativeObject from '../../src/tabris/NativeObject';
@@ -11,14 +11,14 @@ describe('$', function() {
   /** @type {ClientMock} */
   let client;
 
-  /** @type {ContentView} */
+  /** @type {import('../../src/tabris/widgets/ContentView').default} */
   let contentView;
 
   beforeEach(() => {
     client = new ClientMock();
     mockTabris(client);
     // @ts-ignore
-    contentView = tabris.contentView = new ContentView(true);
+    contentView = tabris.contentView = createContentView();
   });
 
   // See JsxProcessor.test.js for other JSX uses of $

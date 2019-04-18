@@ -24,10 +24,12 @@
       "description": "The message to display inside the dialog."
     },
     "textInputs": {
-      "type": "TextInput[]",
-      "jsxType": "TextInput",
-      "jsxContentProperty": true,
-      "description": "A list of `TextInput` widgets to be displayed alongside the `title` and `message`. The text values inserted by the user can be read in the dialogs `close` event from the respective `TextInputs`. Eg.: `dialog.on('close', (e) => e.target.textInputs[0].text)`"
+      "const": true,
+      "readonly": true,
+      "default": "ContentView",
+      "type": "ContentView",
+      "ts_type": "ContentView<TextInput>",
+      "description": "A composite that may contain `TextInput` widgets to be displayed alongside the `title` and `message`. The text values inserted by the user can be read in the dialogs `close` event via its `texts` property. Eg.: `dialog.on('close', (e) => e.texts[0])`\n\nIn an AlertDialog JSX element the TextInput widgets may be given as child elements."
     },
     "buttons": {
       "type": "{ok?: string, cancel?: string, neutral?: string}",

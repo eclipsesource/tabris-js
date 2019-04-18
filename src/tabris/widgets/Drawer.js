@@ -1,5 +1,5 @@
 import NativeObject from '../NativeObject';
-import ContentView from './ContentView';
+import ContentView, {creationAllowed} from './ContentView';
 
 export default class Drawer extends ContentView {
 
@@ -12,7 +12,7 @@ export default class Drawer extends ContentView {
     if (param !== true) {
       throw new Error('Drawer can not be created');
     }
-    super._nativeCreate(true);
+    super._nativeCreate({[creationAllowed]: true});
   }
 
   _setParent() {

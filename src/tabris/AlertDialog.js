@@ -3,6 +3,9 @@ import NativeObject from './NativeObject';
 import {capitalizeFirstChar} from './util';
 import TextInput from './widgets/TextInput';
 import {JSX} from './JsxProcessor';
+import {create as createContentView} from './widgets/ContentView';
+import {hint} from './Console';
+import Composite from './widgets/Composite';
 
 export default class AlertDialog extends Popup {
 
@@ -26,10 +29,35 @@ export default class AlertDialog extends Popup {
     return 'tabris.AlertDialog';
   }
 
+  get textInputs() {
+    if (!this._contentView) {
+      this._contentView = createContentView({
+        layout: null,
+        childType: TextInput,
+        phantom: true
+      });
+    }
+    return this._contentView;
+  }
+
+  set textInputs(value) {
+    hint(this, 'Property "textInputs" can not be set, append to it instead');
+  }
+
+  open() {
+    if (!this.isDisposed() && this._contentView) {
+      this._nativeSet('textInputs', this._contentView.children().toArray().map(object => object.cid));
+    }
+    return super.open();
+  }
+
   _trigger(name, event) {
     if (name === 'close') {
       event.button = event.button || null;
-      event.texts = (this.textInputs || []).map(textInput => textInput.text);
+      event.texts = [];
+      if (this._contentView) {
+        event.texts = this._contentView.children().toArray().map(textInput => textInput.text);
+      }
       if (event.button) {
         super._trigger('close' + capitalizeFirstChar(event.button), event);
       }
@@ -41,27 +69,10 @@ export default class AlertDialog extends Popup {
   }
 
   _dispose() {
-    if (!this.isDisposed() && this.textInputs) {
-      this.textInputs.forEach(textInput => textInput.dispose());
+    if (!this.isDisposed() && this._contentView) {
+      Composite.prototype._dispose.call(this._contentView, true);
     }
     super._dispose();
-  }
-
-  /** @this {import("../JsxProcessor").default} */
-  [JSX.jsxFactory](Type, attributes) {
-    const children = this.getChildren(attributes) || [];
-    let normalAttributes = this.withoutChildren(attributes);
-    normalAttributes = this.withContentChildren(
-      normalAttributes,
-      children.filter(child => child instanceof Object),
-      'textInputs'
-    );
-    normalAttributes = this.withContentText(
-      normalAttributes,
-      children.filter(child => !(child instanceof Object)),
-      'message'
-    );
-    return super[JSX.jsxFactory](Type, normalAttributes);
   }
 
 }
@@ -69,29 +80,6 @@ export default class AlertDialog extends Popup {
 NativeObject.defineProperties(AlertDialog.prototype, {
   title: {type: 'string', default: ''},
   message: {type: 'string', default: ''},
-  textInputs: {
-    type: {
-      encode(textInputs) {
-        if (textInputs instanceof Array) {
-          return textInputs.map((textInput) => {
-            if (!(textInput instanceof TextInput)) {
-              throw new Error('Only TextInput widgets are allowed');
-            }
-            return textInput.cid;
-          });
-        }
-        throw new Error('TextInputs is not of type Array');
-      },
-      decode(cids) {
-        if (cids instanceof Array) {
-          return cids
-            .map(cid => tabris._nativeObjectRegistry.find(cid))
-            .filter(textInput => textInput != null);
-        }
-        return null;
-      }
-    }
-  },
   buttons: {
     type: {
       encode(value) {
@@ -121,3 +109,26 @@ NativeObject.defineEvents(AlertDialog.prototype, {
   closeCancel: true,
   closeNeutral: true
 });
+
+AlertDialog.prototype[JSX.jsxFactory] = createElement;
+
+/** @this {import("./JsxProcessor").default} */
+function createElement(Type, attributes) {
+  const children = this.getChildren(attributes) || [];
+  let normalAttributes = this.withoutChildren(attributes);
+  normalAttributes = this.withContentText(
+    normalAttributes,
+    children.filter(child => !(child instanceof Object)),
+    'message'
+  );
+  const textInputs = children.filter(child => child instanceof Object);
+  const result = Popup.prototype[JSX.jsxFactory].call(
+    this,
+    Type,
+    normalAttributes
+  );
+  if (children && children.length) {
+    result.textInputs.append(textInputs);
+  }
+  return result;
+}
