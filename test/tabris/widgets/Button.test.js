@@ -57,8 +57,13 @@ describe('Button', function() {
       ).to.deep.equal([255, 254, 253, 255]);
     });
 
-    it('translate textColor "initial" to undefined', function() {
+    it('translate textColor "initial" to null', function() {
+      button.textColor = 'red';
+      tabris.flush();
+      client.resetCalls();
+
       button.textColor = 'initial';
+
       expect(
         client.calls({op: 'set', id: button.cid})[0].properties.textColor
       ).to.be.null;

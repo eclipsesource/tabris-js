@@ -423,11 +423,14 @@ function oneTimeSetter(name, value) {
 
 /** @this {NativeObject} */
 function defaultSetter(name, value) {
-  this._nativeSet(name, value);
   if (this['$prop_' + name].nocache) {
+    this._nativeSet(name, value);
     this._triggerChangeEvent(name, value);
   } else {
-    this._storeProperty(name, value);
+    if (this._getStoredProperty(name) !== value) {
+      this._nativeSet(name, value);
+      this._storeProperty(name, value);
+    }
   }
 }
 

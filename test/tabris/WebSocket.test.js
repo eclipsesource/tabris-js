@@ -194,14 +194,12 @@ describe('WebSocket', function() {
   describe('binaryType', function() {
 
     it('set calls setter', function() {
-      webSocket.binaryType = 'blob';
+      webSocket.binaryType = 'nonblob';
 
-      expect(client.calls({op: 'set', id: webSocket._nativeObject.cid})[0].properties).to.eql({binaryType: 'blob'});
+      expect(client.calls({op: 'set', id: webSocket._nativeObject.cid})[0].properties).to.eql({binaryType: 'nonblob'});
     });
 
-    it('get calls getter', function() {
-      stub(client, 'get').returns('blob');
-
+    it('get returns default', function() {
       expect(webSocket.binaryType).to.equal('blob');
     });
 

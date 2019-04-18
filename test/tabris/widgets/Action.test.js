@@ -20,7 +20,7 @@ describe('Action', function() {
     let actionCreateCalls;
 
     beforeEach(function() {
-      new Action({title: 'Foo', enabled: true});
+      new Action({title: 'Foo', enabled: false});
       actionCreateCalls = client.calls({op: 'create', type: 'tabris.Action'});
     });
 
@@ -30,7 +30,7 @@ describe('Action', function() {
 
     it('properties are passed to created action', function() {
       expect(actionCreateCalls[0].properties.title).to.eql('Foo');
-      expect(actionCreateCalls[0].properties.enabled).to.equal(true);
+      expect(actionCreateCalls[0].properties.enabled).to.equal(false);
     });
 
   });

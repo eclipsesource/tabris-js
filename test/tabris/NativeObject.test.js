@@ -8,6 +8,7 @@ import {toXML} from '../../src/tabris/Console';
 
 describe('NativeObject', function() {
 
+  /** @type {ClientMock} */
   let client;
 
   beforeEach(function() {
@@ -83,6 +84,16 @@ describe('NativeObject', function() {
         object.set({foo: 23});
 
         expect(setter).to.have.been.calledWith(23);
+      });
+
+      it('native-sets cached unchanged property only once', function() {
+        NativeObject.defineProperties(TestType.prototype, {foo: 'number'});
+
+        object.set({foo: 23});
+        tabris.flush();
+        object.set({foo: 23});
+
+        expect(client.calls({op: 'set'}).length).to.equal(1);
       });
 
       it('supports multiple property objects', function() {
