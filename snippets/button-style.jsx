@@ -1,16 +1,16 @@
-import {Button, CheckBox, contentView, Stack, device} from 'tabris';
+import {Button, CheckBox, contentView, Stack} from 'tabris';
 
 // Create multiple buttons with various styles
 
 contentView.append(
-  <Stack spacing={4} alignment='centerX' top={16} left={16} right={16}>
+  <Stack top={16} left={16} right='50%' spacing={4} alignment='centerX' >
     <Button style='default' text='Default'/>
     <Button style='elevate' text='Elevate'/>
     <Button style='outline' text='Outline'/>
     <Button style='flat' text='Flat'/>
     <Button style='text' text='Text'/>
   </Stack>,
-  <Stack top='prev() 16' left='0' right='0' alignment='stretchX' padding={16}>
+  <Stack top={16} left='50%' right={0} alignment='stretchX'>
     <CheckBox text='Tint background' onCheckedChanged={tintBackground}/>
     <CheckBox text='Tint textColor' onCheckedChanged={tintTextColor}/>
     <CheckBox text='Tint stroke' onCheckedChanged={tintStrokeColor}/>
@@ -47,8 +47,6 @@ function toggleCornerRadius({value: checked}) {
 
 function toggleImage({value: checked}) {
   contentView.find(Button).forEach((button) => {
-    button.image = checked ? device.platform === 'Android'
-      ? 'resources/settings-white-24dp@3x.png'
-      : 'resources/settings-black-24dp@3x.png' : null;
+    button.image = checked ? 'resources/settings-black-24dp@3x.png' : null;
   });
 }
