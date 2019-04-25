@@ -56,12 +56,6 @@
       "values": ["default", "none"],
       "default": "default",
       "description": "Controls what animation to use when animating a page transition."
-    },
-    "navigationAction": {
-      "type": "Action",
-      "type": "ActionType",
-      "default": "null",
-      "description": "Action that replaces back button and arrow. When it is replaced the developer is responsible for providing a way to go back on the page stack. Setting the action to null restores back button and arrow."
     }
   },
   "methods": {

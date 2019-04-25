@@ -16,7 +16,6 @@ let actionColor: ColorValue;
 let actionTextColor: ColorValue;
 let pageAnimation: 'default' | 'none';
 let drawerActionVisible: boolean;
-let navigationAction: Action;
 let titleTextColor: ColorValue;
 let toolbarColor: ColorValue;
 let toolbarVisible: boolean;
@@ -25,7 +24,6 @@ actionColor = widget.actionColor;
 actionTextColor = widget.actionTextColor;
 pageAnimation = widget.pageAnimation;
 drawerActionVisible = widget.drawerActionVisible;
-navigationAction = widget.navigationAction;
 titleTextColor = widget.titleTextColor;
 toolbarColor = widget.toolbarColor;
 toolbarVisible = widget.toolbarVisible;
@@ -39,7 +37,7 @@ widget.toolbarColor = toolbarColor;
 widget.toolbarVisible = toolbarVisible;
 
 let properties: Properties<NavigationView> = {
-  actionColor, actionTextColor, pageAnimation, drawerActionVisible, navigationAction, titleTextColor, toolbarColor, toolbarVisible
+  actionColor, actionTextColor, pageAnimation, drawerActionVisible, titleTextColor, toolbarColor, toolbarVisible
 };
 widget = new NavigationView(properties);
 widget.set(properties);
@@ -74,14 +72,12 @@ class CustomAction extends Action {
 const typedNavigationView: NavigationView<CustomPage, CustomAction> = new NavigationView();
 typedNavigationView.append(new CustomPage());
 typedNavigationView.append(new CustomAction());
-typedNavigationView.navigationAction = new CustomAction();
 const child: CustomPage|CustomAction = typedNavigationView.children()[0];
 type = typedNavigationView.pages()[0].foo;
 
 const partialTypedNavigationView: NavigationView<CustomPage> = new NavigationView();
 typedNavigationView.append(new CustomPage());
 typedNavigationView.append(new CustomAction());
-typedNavigationView.navigationAction = new CustomAction();
 const child2: CustomPage|Action = typedNavigationView.children()[0];
 type = typedNavigationView.pages()[0].foo;
 

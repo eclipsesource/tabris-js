@@ -35,24 +35,6 @@ describe('Action', function() {
 
   });
 
-  describe('set', function() {
-
-    let action;
-
-    beforeEach(function() {
-      action = new Action();
-      client.resetCalls();
-    });
-
-    it('translates placement priority to uppercase', function() {
-      action.placementPriority = 'low';
-
-      const call = client.calls({op: 'set'})[0];
-      expect(call.properties.placementPriority).to.equal('LOW');
-    });
-
-  });
-
   describe('get', function() {
 
     let action;
@@ -65,15 +47,15 @@ describe('Action', function() {
     it('returns initial default property values', function() {
       expect(action.image).to.equal(null);
       expect(action.visible).to.equal(true);
-      expect(action.placementPriority).to.equal('normal');
+      expect(action.placement).to.equal('default');
     });
 
-    it('returns cached placementPriority', function() {
-      action.placementPriority = 'low';
+    it('returns cached placement', function() {
+      action.placement = 'overflow';
 
-      const result = action.placementPriority;
+      const result = action.placement;
 
-      expect(result).to.equal('low');
+      expect(result).to.equal('overflow');
     });
 
   });

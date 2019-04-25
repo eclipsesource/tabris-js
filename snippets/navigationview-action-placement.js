@@ -4,14 +4,14 @@ const navigationView = new NavigationView({
   left: 0, top: 0, right: 0, bottom: 0
 }).appendTo(contentView);
 
-createAction('Search', getImage('search'), 'high');
-createAction('Share', getImage('share'), 'normal');
-createAction('Settings', getImage('settings'), 'low');
+createAction('Close', getImage('close'), 'navigation');
+createAction('Settings', getImage('settings'), 'default');
+createAction('Share', getImage('share'), 'overflow');
 
-function createAction(title, image, placementPriority) {
+function createAction(title, image, placement) {
   new Action({
     title,
-    placementPriority,
+    placement,
     image: {src: image, scale: 3}
   }).appendTo(navigationView);
 }

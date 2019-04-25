@@ -3,22 +3,22 @@ import {Action, ImageValue, Properties, NavigationView, Page, WidgetCollection} 
 let widget: Action = new Action();
 
 // Properties
-let placementPriority: 'low'|'normal'|'high';
+let placement: 'default'|'overflow'|'navigation';
 let image: ImageValue;
 let title: string;
 let nullValue: null;
 
-placementPriority = widget.placementPriority;
+placement = widget.placement;
 image = widget.image as ImageValue;
 nullValue = widget.image as null;
 title = widget.title;
 
-widget.placementPriority = placementPriority;
+widget.placement = placement;
 widget.image = image;
 widget.image = nullValue;
 widget.title = title;
 
-let properties: Properties<Action> = {placementPriority, image, title};
+let properties: Properties<Action> = {placement, image, title};
 widget = new Action(properties);
 widget.set(properties);
 

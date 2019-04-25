@@ -83,15 +83,15 @@
       "type": "ImageValue",
       "description": "Icon image for the action.\n\nOn iOS the `image` is tinted with the apps default accent color whereas on Android the `image` is shown as is. When an action is placed into a `NavigationView`, the `NavigationView` property `actionColor` can be used to adjust the action tint color."
     },
-    "placementPriority": {
+    "placement": {
       "type": "string",
       "values": [
-        "low",
-        "high",
-        "normal"
+        "default",
+        "overflow",
+        "navigation"
       ],
-      "default": "normal",
-      "description": "Actions with higher placement priority will be placed at a more significant position in the UI, e.g. low priority actions could go into a menu instead of being included in a toolbar."
+      "default": "default",
+      "description": "Actions with 'default' placement will be visible in the toolbar if enough space is available, otherwise moved to the overflow section. Setting the property to 'overflow' makes the action appear there exclusively. Lastly, 'navigation' puts the action in the position normally occupied by the drawer/back button. If multiple actions have this value only the first one is displayed."
     },
     "title": {
       "type": "string",

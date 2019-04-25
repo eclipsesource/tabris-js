@@ -50,7 +50,8 @@ createCheckBox('Show drawer action', ({value: checked}) => {
 
 createCheckBox('Custom navigation action', ({value: checked}) => {
   if (checked) {
-    navigationView.navigationAction = new Action({
+    navigationView.append(new Action({
+      placement: 'navigation'
       title: 'Close',
       image: {
         src: device.platform === 'iOS' ? 'resources/close-black-24dp@3x.png' : 'resources/close-white-24dp@3x.png',
@@ -58,7 +59,7 @@ createCheckBox('Custom navigation action', ({value: checked}) => {
       }
     }).on('select', () => console.log('navigationAction selected'));
   } else {
-    navigationView.navigationAction = null;
+    navigationView.find(Action).only(({placement}) => placement === 'navigation').dispose();
   }
 }, false);
 
