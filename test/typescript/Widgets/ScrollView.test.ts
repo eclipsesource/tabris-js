@@ -7,11 +7,15 @@ let direction: 'horizontal' | 'vertical';
 let offsetX: number;
 let offsetY: number;
 let scrollbarVisible: boolean;
+let scrollXState: 'rest' | 'drag' | 'scroll';
+let scrollYState: 'rest' | 'drag' | 'scroll';
 
 direction = widget.direction;
 offsetX = widget.offsetX;
 offsetY = widget.offsetY;
 scrollbarVisible = widget.scrollbarVisible;
+scrollXState = widget.scrollXState;
+scrollYState = widget.scrollYState;
 
 let properties: Properties<ScrollView> = {direction};
 widget = new ScrollView(properties);

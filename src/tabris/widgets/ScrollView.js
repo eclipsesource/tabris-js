@@ -23,6 +23,16 @@ export default class ScrollView extends Composite {
     return this;
   }
 
+  _listen(name, listening) {
+    if (name === 'scrollXStateChanged') {
+      this._nativeListen('scrollXStateChanged', listening);
+    } else if (name === 'scrollYStateChanged') {
+      this._nativeListen('scrollYStateChanged', listening);
+    } else {
+      super._listen(name, listening);
+    }
+  }
+
   _getXMLAttributes() {
     const offset = this.direction === 'vertical' ? 'offsetY' : 'offsetX';
     return super._getXMLAttributes().concat([
@@ -41,7 +51,9 @@ NativeObject.defineProperties(ScrollView.prototype, {
   },
   offsetX: {type: 'number', nocache: true, readonly: true},
   offsetY: {type: 'number', nocache: true, readonly: true},
-  scrollbarVisible: {type: 'boolean', default: true}
+  scrollbarVisible: {type: 'boolean', default: true},
+  scrollXState: {type: 'string', nocache: true, readonly: true},
+  scrollYState: {type: 'string', nocache: true, readonly: true},
 });
 
 NativeObject.defineEvents(ScrollView.prototype, {
