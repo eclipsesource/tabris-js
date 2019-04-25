@@ -229,3 +229,19 @@ The Cordova CLI dependency has been updated from `6.5.0` to `8.1.2`. The Cordova
 
 * Plugins need to provide a `package.json` in their root directory.
 * Plugins in package [subdirectories](https://cordova.apache.org/docs/en/6.x/reference/cordova-cli/index.html#plugin-spec) are not supported anymore.
+
+## Android custom theme
+
+Creating a custom theme follows the same approach as in 2.x but the paths to the theme.xml file has been changed slightly due to the migration to cordova-android 8.0. Declared theme.xml resource files need to be prefixed with with `app/src/main/`, e.g.:
+
+```
+<resource-file src="res/android/values/my_theme.xml" target="res/values/my_theme.xml" />
+```
+
+should be changed to:
+
+```
+<resource-file src="res/android/values/my_theme.xml" target="app/src/main/res/values/my_theme.xml" />
+```
+
+For more details on Android custom themes see: https://docs.tabris.com/3.0/theming-android.html
