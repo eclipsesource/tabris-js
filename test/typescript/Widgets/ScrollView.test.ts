@@ -6,10 +6,14 @@ let widget: ScrollView = new ScrollView();
 let direction: 'horizontal' | 'vertical';
 let offsetX: number;
 let offsetY: number;
+let scrollXState: 'rest' | 'drag' | 'scroll';
+let scrollYState: 'rest' | 'drag' | 'scroll';
 
 direction = widget.direction;
 offsetX = widget.offsetX;
 offsetY = widget.offsetY;
+scrollXState = widget.scrollXState;
+scrollYState = widget.scrollYState;
 
 widget.direction = direction;
 

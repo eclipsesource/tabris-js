@@ -1,7 +1,7 @@
 import NativeObject from '../NativeObject';
 import Composite from './Composite';
 
-const EVENT_TYPES = ['scrollX', 'scrollY'];
+const EVENT_TYPES = ['scrollX', 'scrollY', 'scrollXStateChanged', 'scrollYStateChanged'];
 
 export default class ScrollView extends Composite {
 
@@ -53,5 +53,7 @@ NativeObject.defineProperties(ScrollView.prototype, {
     default: 'vertical'
   },
   offsetX: {type: 'number', nocache: true, readonly: true},
-  offsetY: {type: 'number', nocache: true, readonly: true}
+  offsetY: {type: 'number', nocache: true, readonly: true},
+  scrollXState: {type: 'string', nocache: true, readonly: true},
+  scrollYState: {type: 'string', nocache: true, readonly: true}
 });

@@ -352,4 +352,44 @@ describe('ScrollView', function() {
 
   });
 
+  describe('scrollXState', function() {
+
+    beforeEach(function() {
+      scrollView = new ScrollView();
+    });
+
+    it('it returns value from native', function() {
+      stub(client, 'get').returns('rest');
+      expect(scrollView.scrollXState).to.equal('rest');
+    });
+
+    it('it calls listen for scrollXStateChanged when change event registered', function() {
+      scrollView.on('scrollXStateChanged', function() {});
+
+      const calls = client.calls({id: scrollView.cid, op: 'listen', event: 'scrollXStateChanged'});
+      expect(calls[0].listen).to.equal(true);
+    });
+
+  });
+
+  describe('scrollYState', function() {
+
+    beforeEach(function() {
+      scrollView = new ScrollView();
+    });
+
+    it('it returns value from native', function() {
+      stub(client, 'get').returns('rest');
+      expect(scrollView.scrollYState).to.equal('rest');
+    });
+
+    it('it calls listen for scrollYStateChanged when change event registered', function() {
+      scrollView.on('scrollYStateChanged', function() {});
+
+      const calls = client.calls({id: scrollView.cid, op: 'listen', event: 'scrollYStateChanged'});
+      expect(calls[0].listen).to.equal(true);
+    });
+
+  });
+
 });

@@ -34,6 +34,28 @@
       "type": "number",
       "readonly": true,
       "description": "The vertical scrolling position in dip."
+    },
+    "scrollXState": {
+      "type": "string",
+      "readonly": true,
+      "values": [
+        "rest",
+        "drag",
+        "scroll"
+      ],
+      "default": "rest",
+      "description": "The scroll state of the `ScrollView` in horizontal direction. The following states are supported:\n\n* `rest` - no scrolling\n* `drag` the user moves the `ScrollView` content with his finger\n* `scroll` the user has flinged the content with his finger or the `ScrollView` is scrolling programmatically"
+    },
+    "scrollYState": {
+      "type": "string",
+      "readonly": true,
+      "values": [
+        "rest",
+        "drag",
+        "scroll"
+      ],
+      "default": "rest",
+      "description": "The scroll state of the `ScrollView` in vertical direction. The following states are supported:\n\n* `rest` - no scrolling\n* `drag` the user moves the `ScrollView` content with his finger\n* `scroll` the user has flinged the `ScrollView` content with his finger or the `ScrollView` is scrolling programmatically"
     }
   },
   "methods": {
@@ -96,11 +118,11 @@
   },
   "links": [
     {
-      "title": "Simple ScrollView snippet",
+      "title": "Creating a simple `ScrollView`",
       "path": "${GITHUB_BRANCH}/snippets/scrollview.js"
     },
     {
-      "title": "Example using a ScrollView",
+      "title": "How to implement parallax scrolling with a `ScrollView`",
       "path": "${GITHUB_BRANCH}/examples/parallax/parallax.js"
     }
   ]
