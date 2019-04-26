@@ -297,8 +297,8 @@ module.exports = function(grunt) {
     'build',
     'exec:verify_tabris',
     'copy:test_ts',
-    'verify_typings_fail',
     'exec:verify_typings',
+    'verify_typings_fail',
     'copy:snippets',
     'exec:transpile_snippets'
   ]);
