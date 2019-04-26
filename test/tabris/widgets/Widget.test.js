@@ -1944,26 +1944,39 @@ describe('Widget', function() {
       listener = spy();
     });
 
-    it('boundsChanged', function() {
-      widget = new TestWidget().onBoundsChanged(listener);
+    describe('resize', function() {
 
-      widget._trigger('resize', {bounds: [1, 2, 3, 4]});
+      it('decodes bounds', function() {
+        widget = new TestWidget().onResize(listener);
 
-      expect(listener).to.have.been.calledOnce;
-      expect(listener.getCall(0).args[0].target).to.equal(widget);
-      expect(listener.getCall(0).args[0].value).to.deep.equal({left: 1, top: 2, width: 3, height: 4});
-      checkListen('resize');
-    });
+        tabris._notify(widget.cid, 'resize', {bounds: [1, 2, 3, 4]});
 
-    it('resize', function() {
-      widget = new TestWidget().onResize(listener);
+        expect(listener).to.have.been.calledOnce;
+        expect(listener.getCall(0).args[0].target).to.equal(widget);
+        expect(listener).to.have.been.calledWithMatch({left: 1, top: 2, width: 3, height: 4});
+        checkListen('resize');
+      });
 
-      widget._trigger('resize', {bounds: [1, 2, 3, 4]});
+      it('maps to boundsChanged', function() {
+        widget = new TestWidget().onBoundsChanged(listener);
 
-      expect(listener).to.have.been.calledOnce;
-      expect(listener.getCall(0).args[0].target).to.equal(widget);
-      expect(listener).to.have.been.calledWithMatch({left: 1, top: 2, width: 3, height: 4});
-      checkListen('resize');
+        tabris._notify(widget.cid, 'resize', {bounds: [1, 2, 3, 4]});
+
+        expect(listener).to.have.been.calledOnce;
+        expect(listener.getCall(0).args[0].target).to.equal(widget);
+        expect(listener.getCall(0).args[0].value).to.deep.equal({left: 1, top: 2, width: 3, height: 4});
+        checkListen('resize');
+      });
+
+      it('caches bounds', function() {
+        let bounds;
+        widget = new TestWidget().onBoundsChanged(() => bounds = widget.bounds);
+
+        tabris._notify(widget.cid, 'resize', {bounds: [1, 2, 3, 4]});
+
+        expect(bounds).to.deep.equal({left: 1, top: 2, width: 3, height: 4});
+      });
+
     });
 
     ['touchStart', 'touchMove', 'touchEnd', 'touchCancel'].forEach(name => {

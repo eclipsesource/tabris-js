@@ -3,6 +3,7 @@ import NativeBridge from '../src/tabris/NativeBridge';
 import Events from '../src/tabris/Events';
 import {ConstraintLayout, LayoutQueue} from '../src/tabris/Layout';
 import StackLayout from '../src/tabris/StackLayout';
+import Tabris from '../src/tabris/Tabris';
 
 export function mockTabris(client) {
   if (!client) {
@@ -13,15 +14,11 @@ export function mockTabris(client) {
   delete StackLayout._default;
   global.tabris = Object.assign({
     Module: {getSourceMap() { return null; }},
-    flush() {
-      this.trigger('flush');
-      this._nativeBridge.clearCache();
-      this._nativeBridge.flush();
-    },
+    flush: Tabris.prototype.flush,
+    _notify: Tabris.prototype._notify,
     _client: client,
     _stackTraceStack: [],
     _nativeObjectRegistry: new NativeObjectRegistry(),
-    _notify: (cid, event, param) => tabris._nativeObjectRegistry.find(cid)._trigger(event, param),
     started: true,
     device: {platform: 'test'}
   }, Events);

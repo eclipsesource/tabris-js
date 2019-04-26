@@ -152,6 +152,12 @@ describe('NativeBridge', function() {
       expect(native.get).to.have.been.calledOnce;
     });
 
+    it('returns value explicitly cached by cacheValue', function() {
+      bridge.cacheValue('id', 'foo', 'bar');
+
+      expect(bridge.get('id', 'foo')).to.equal('bar');
+    });
+
     it('returns native value after flush clears cache', function() {
       bridge.set('id', 'foo', 24);
 

@@ -70,6 +70,10 @@ export default class Tabris extends NativeObject {
       const nativeObject = this._nativeObjectRegistry.find(cid);
       if (nativeObject) {
         try {
+          const eventDef = nativeObject['$event_' + event];
+          if (eventDef && eventDef.changes) {
+            this._nativeBridge.cacheValue(cid, eventDef.changes, eventDef.changeValue(param));
+          }
           returnValue = nativeObject._trigger(event, param);
         } catch (err) {
           error(err);

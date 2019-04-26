@@ -378,7 +378,7 @@ NativeObject.defineEvents(Widget.prototype, {
   resize: {
     native: true,
     changes: 'bounds',
-    changeValue: ({left, top, width, height}) => ({left, top, width, height})
+    changeValue: ({left, top, width, height, bounds}) => bounds || ({left, top, width, height})
   },
   addChild: true,
   removeChild: true

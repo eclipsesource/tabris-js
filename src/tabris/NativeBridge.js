@@ -23,7 +23,7 @@ export default class NativeBridge {
       this.$operations.push(['set', id, properties]);
       this.$currentOperation = {id, properties};
     }
-    this._cache(id, name, value);
+    this.cacheValue(id, name, value);
   }
 
   listen(id, event, listen) {
@@ -42,7 +42,7 @@ export default class NativeBridge {
     }
     this.flush();
     const result = this.$bridge.get(id, name);
-    this._cache(id, name, result);
+    this.cacheValue(id, name, result);
     return result;
   }
 
@@ -81,10 +81,11 @@ export default class NativeBridge {
     this.$propertyCache = {};
   }
 
-  _cache(id, property, value) {
+  cacheValue(id, property, value) {
     if (!this.$propertyCache[id]) {
       this.$propertyCache[id] = {};
     }
     this.$propertyCache[id][property] = value;
   }
+
 }
