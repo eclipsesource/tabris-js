@@ -53,10 +53,13 @@ interface EventDefinition {
 
   /**
    * When creating the change event, this is the field name on the
-   * event object containing the new value. Falls back to the name of the property.
-   * Requires "changes".
+   * event object containing the new value. Can also be
+   * a function extracting the value form the event object.
+   * Falls back to the name of the property. Requires "changes".
    */
-  changeValue?: string;
+  changeValue?: string | Function;
+
+  listen?: Array<(target: NativeObject, listening: boolean) => void>;
 }
 
 interface EventDefinitions {

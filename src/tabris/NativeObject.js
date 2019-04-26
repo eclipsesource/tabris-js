@@ -44,7 +44,7 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
   }
 
   /**
-   * @param {object} target
+   * @param {NativeObject} target
    * @param {import('./internals').EventDefinitions} definitions
    */
   static defineEvents(target, definitions) {
@@ -53,9 +53,22 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     }
   }
 
+  /**
+   * @param {NativeObject} target
+   * @param {string} name
+   * @param {import('./internals').EventDefinition|true} definition
+   */
   static defineEvent(target, name, definition) {
     const property = 'on' + name.charAt(0).toUpperCase() + name.slice(1);
     const $property = '$' + property;
+    const $eventProperty = '$event_' + name;
+    if (target[$eventProperty]) {
+      throw new Error('Event already defined');
+    }
+    const def = target[$eventProperty] = normalizeEvent(name, definition);
+    if (def.changes) {
+      this.synthesizeChangeEvents(target, name, def);
+    }
     Object.defineProperty(target, property, {
       get() {
         if (!this[$property]) {
@@ -64,19 +77,6 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
         return this[$property];
       }
     });
-    if (typeof definition === 'object') {
-      if (definition.native) {
-        target['$listen_' + name] = function(listening) {
-          this._nativeListen(name, listening);
-        };
-      }
-      if (definition.changes) {
-        const prop = definition.changes;
-        target['$listen_' + prop + 'Changed'] = function(listening) {
-          this._onoff(name, listening, ev => this._triggerChangeEvent(prop, ev[definition.changeValue || prop]));
-        };
-      }
-    }
   }
 
   static defineChangeEvent(target, property) {
@@ -89,6 +89,18 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
         }
         return this[$listenersProperty];
       }
+    });
+  }
+
+  static synthesizeChangeEvents(target, sourceEvent, sourceDef) {
+    const changeListener = function (ev) {
+      this.$trigger(sourceDef.changes + 'Changed', {value: sourceDef.changeValue(ev)});
+    };
+    const $changeEventProperty = '$event_' + sourceDef.changes + 'Changed';
+    /** @type {import('./internals').EventDefinition} */
+    const changeEventDef = target[$changeEventProperty] = target[$changeEventProperty] || {listen: []};
+    changeEventDef.listen.push((target, listening) => {
+      target._onoff(sourceEvent, listening, changeListener);
     });
   }
 
@@ -264,9 +276,9 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
   }
 
   _listen(name, listening) {
-    const listenHandler = this['$listen_' + name];
-    if (listenHandler) {
-      listenHandler.call(this, listening);
+    const eventDef = this['$event_' + name];
+    if (eventDef) {
+      eventDef.listen.forEach(listen => listen(this, listening));
     }
   }
 
@@ -366,6 +378,10 @@ function setExistingProperty(name, value) {
   this[name] = value;
 }
 
+/**
+ * @param {import('./internals').PropertyDefinition|import('./internals').TabrisType}  property
+ * @returns {import('./internals').PropertyDefinition}
+ */
 function normalizeProperty(property) {
   const config = typeof property === 'string' ? {type: property} : property;
   return {
@@ -376,6 +392,33 @@ function normalizeProperty(property) {
     set: config.readonly ? readOnlySetter : config.const ? oneTimeSetter : config.set || defaultSetter,
     get: config.get || defaultGetter
   };
+}
+
+/**
+ * @param {string} name
+ * @param {import('./internals').EventDefinition|true} definition
+ * @returns {import('./internals').EventDefinition}
+ */
+function normalizeEvent(name, definition) {
+  const result = {listen: []};
+  if (definition === true) {
+    return result;
+  }
+  Object.assign(result, definition);
+  if (definition.native) {
+    result.listen.push((target, listening) => {
+      target._nativeListen(name, listening);
+    });
+  }
+  if(result.changes) {
+    const changeValue = result.changeValue;
+    if (typeof changeValue === 'string') {
+      result.changeValue =  ev => ev[changeValue];
+    } else if (!changeValue) {
+      result.changeValue =  ev => ev[result.changes];
+    }
+  }
+  return result;
 }
 
 function resolveType(type) {

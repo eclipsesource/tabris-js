@@ -168,8 +168,6 @@ export default class Widget extends NativeObject {
         this._recognizers[name].dispose();
         delete this._recognizers[name];
       }
-    } else if (name === 'boundsChanged') {
-      this._onoff('resize', listening, this.$triggerChangeBounds);
     } else {
       super._listen(name, listening);
     }
@@ -177,11 +175,7 @@ export default class Widget extends NativeObject {
 
   _trigger(name, event) {
     if (name === 'resize') {
-      if (hasAndroidResizeBug()) {
-        setTimeout(() => super._trigger(name, types.bounds.decode(event.bounds)), 0);
-      } else {
-        super._trigger(name, types.bounds.decode(event.bounds));
-      }
+      super._trigger(name, types.bounds.decode(event.bounds));
     } else {
       return super._trigger(name, event);
     }
@@ -206,11 +200,32 @@ export default class Widget extends NativeObject {
     return properties;
   }
 
-  $triggerChangeBounds({left, top, width, height}) {
-    super._trigger('boundsChanged', {value: {left, top, width, height}});
-  }
-
 }
+
+const layoutDataProps = ['left', 'right', 'top', 'bottom', 'width', 'height', 'centerX', 'centerY', 'baseline'];
+
+const jsxShorthands = {
+  center: 'layoutData',
+  stretch: 'layoutData',
+  stretchX: 'layoutData',
+  stretchY: 'layoutData'
+};
+
+const defaultGestures = {
+  tap: {type: 'tap'},
+  longPress: {type: 'longPress'},
+  pan: {type: 'pan'},
+  panLeft: {type: 'pan', direction: 'left'},
+  panRight: {type: 'pan', direction: 'right'},
+  panUp: {type: 'pan', direction: 'up'},
+  panDown: {type: 'pan', direction: 'down'},
+  panHorizontal: {type: 'pan', direction: 'horizontal'},
+  panVertical: {type: 'pan', direction: 'vertical'},
+  swipeLeft: {type: 'swipe', direction: 'left'},
+  swipeRight: {type: 'swipe', direction: 'right'},
+  swipeUp: {type: 'swipe', direction: 'up'},
+  swipeDown: {type: 'swipe', direction: 'down'}
+};
 
 NativeObject.defineProperties(Widget.prototype, {
   enabled: {
@@ -289,35 +304,7 @@ NativeObject.defineProperties(Widget.prototype, {
       }
       return this._gestures;
     }
-  }
-});
-
-const layoutDataProps = ['left', 'right', 'top', 'bottom', 'width', 'height', 'centerX', 'centerY', 'baseline'];
-
-const jsxShorthands = {
-  center: 'layoutData',
-  stretch: 'layoutData',
-  stretchX: 'layoutData',
-  stretchY: 'layoutData'
-};
-
-const defaultGestures = {
-  tap: {type: 'tap'},
-  longPress: {type: 'longPress'},
-  pan: {type: 'pan'},
-  panLeft: {type: 'pan', direction: 'left'},
-  panRight: {type: 'pan', direction: 'right'},
-  panUp: {type: 'pan', direction: 'up'},
-  panDown: {type: 'pan', direction: 'down'},
-  panHorizontal: {type: 'pan', direction: 'horizontal'},
-  panVertical: {type: 'pan', direction: 'vertical'},
-  swipeLeft: {type: 'swipe', direction: 'left'},
-  swipeRight: {type: 'swipe', direction: 'right'},
-  swipeUp: {type: 'swipe', direction: 'up'},
-  swipeDown: {type: 'swipe', direction: 'down'}
-};
-
-NativeObject.defineProperties(Widget.prototype, {
+  },
   layoutData: {
     set(name, value) {
       const oldLayoutData = this._layoutData;
@@ -388,7 +375,11 @@ NativeObject.defineEvents(Widget.prototype, {
   touchMove: {native: true},
   touchEnd: {native: true},
   touchCancel: {native: true},
-  resize: {native: true},
+  resize: {
+    native: true,
+    changes: 'bounds',
+    changeValue: ({left, top, width, height}) => ({left, top, width, height})
+  },
   addChild: true,
   removeChild: true
 });
@@ -405,11 +396,4 @@ function createElement(Type, attributes) {
     mergeLayoutData
   );
   return this.createNativeObject(Type, finalAttributes);
-}
-
-function hasAndroidResizeBug() {
-  if (!('cache' in hasAndroidResizeBug)) {
-    hasAndroidResizeBug.cache = tabris.device.platform === 'Android' && tabris.device.version <= 17;
-  }
-  return hasAndroidResizeBug.cache;
 }

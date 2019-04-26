@@ -99,6 +99,22 @@ describe('TextInput', function() {
     checkListen('accept');
   });
 
+  it('focus event triggers focusedChanged', function() {
+    widget = new TextInput().onFocusedChanged(listener);
+
+    tabris._notify(widget.cid, 'focus');
+
+    expect(listener).to.have.been.calledWithMatch({value: true});
+  });
+
+  it('blur event triggers focusedChanged', function() {
+    widget = new TextInput().onFocusedChanged(listener);
+
+    tabris._notify(widget.cid, 'blur');
+
+    expect(listener).to.have.been.calledWithMatch({value: false});
+  });
+
   describe('selection', function() {
 
     it('sets valid selection', function() {
