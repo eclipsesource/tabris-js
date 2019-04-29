@@ -94,6 +94,49 @@ describe('WidgetCollection', function() {
     expect(callback).to.have.been.calledWith(widgets[2], 2, collection);
   });
 
+  it('map()', function() {
+    const result = collection.map((value, index, ctx) => ({
+      value, index, ctx
+    }));
+
+    expect(result[0].index).to.equal(0);
+    expect(result[1].index).to.equal(1);
+    expect(result[2].index).to.equal(2);
+    expect(result[0].value).to.equal(collection[0]);
+    expect(result[1].value).to.equal(collection[1]);
+    expect(result[2].value).to.equal(collection[2]);
+    expect(result[0].ctx).to.equal(collection);
+    expect(result[1].ctx).to.equal(collection);
+    expect(result[2].ctx).to.equal(collection);
+  });
+
+  it('slice()', function() {
+    expect(collection.slice()).to.be.instanceof(WidgetCollection);
+    expect(collection.slice(1).toArray()).to.deep.equal(
+      collection.toArray().slice(1)
+    );
+    expect(collection.slice(1, 2).toArray()).to.deep.equal(
+      collection.toArray().slice(1, 2)
+    );
+    expect(collection.slice(-2).toArray()).to.deep.equal(
+      collection.toArray().slice(-2)
+    );
+  });
+
+  it('concat()', function() {
+    const added = [new Bar(), new Bar()];
+    expect(collection.concat()).to.be.instanceof(WidgetCollection);
+    expect(collection.concat(added).toArray()).to.deep.equal(
+      collection.toArray().concat(added)
+    );
+    expect(collection.concat(added[0], added[1]).toArray()).to.deep.equal(
+      collection.toArray().concat(added)
+    );
+    expect(collection.concat(new WidgetCollection(added)).toArray()).to.deep.equal(
+      collection.toArray().concat(added)
+    );
+  });
+
   it('indexOf()', function() {
     expect(collection.indexOf(widgets[0])).to.equal(0);
     expect(collection.indexOf(widgets[1])).to.equal(1);
@@ -302,6 +345,17 @@ describe('WidgetCollection', function() {
       expect(widgets[0].dispose).to.have.been.called;
       expect(widgets[1].dispose).to.have.been.called;
       expect(widgets[2].dispose).to.have.been.called;
+    });
+
+    it('detach() is delegated', function() {
+      spy(widgets[0], 'detach');
+      spy(widgets[1], 'detach');
+      spy(widgets[2], 'detach');
+      collection.detach();
+
+      expect(widgets[0].detach).to.have.been.called;
+      expect(widgets[1].detach).to.have.been.called;
+      expect(widgets[2].detach).to.have.been.called;
     });
 
     it('dispose() returns undefined', function() {

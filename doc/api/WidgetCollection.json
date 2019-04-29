@@ -170,6 +170,10 @@
       "parameters": [],
       "description": "Disposes all widgets in this collection."
     },
+    "detach": {
+      "parameters": [],
+      "description": "Detaches all widgets in this collection from their parent."
+    },
     "first": [
       {
         "generics": "Result extends T = T",
@@ -251,6 +255,20 @@
       ],
       "description": "Calls the given callback function once for each widget in the collection."
     },
+    "map": {
+      "generics": "U",
+      "parameters": [
+        {
+          "name": "callback",
+          "type": "(widget: Widget, index: number, collection: WidgetCollection) => void",
+          "ts_type": "(widget: T, index: number, collection: WidgetCollection<T>) => U",
+          "description": "The function to call for each widget. The arguments are: *widget*, *index*, *collection*"
+        }
+      ],
+      "returns": "Array",
+      "ts_returns": "Array<U>",
+      "description": "Calls the given callback function once for each widget in the collection and returns an array with the return values of each call."
+    },
     "filter": [
       {
         "generics": "Result extends T = T",
@@ -289,7 +307,41 @@
       ],
       "returns": "boolean",
       "description": "Returns `true` if the given widget is included in the collection, `false` otherwise."
-    }
+    },
+    "concat": [
+      {
+        "parameters": [
+          {
+            "name": "...items",
+            "type": "Array<T|T[]|WidgetCollection<T>>"
+          }
+        ],
+        "returns": "WidgetCollection",
+        "ts_returns": "WidgetCollection<T>",
+        "description": "Returns a new *WidgetCollection* containing all widgets in this collection and those given as arguments."
+      }
+    ],
+    "slice": [
+      {
+        "parameters": [
+          {
+            "optional": true,
+            "name": "start",
+            "type": "number",
+            "description": "The beginning of the specified portion of the collection."
+          },
+          {
+            "optional": true,
+            "name": "end",
+            "type": "number",
+            "description": "The end of the specified portion of the collection."
+          }
+        ],
+        "returns": "WidgetCollection",
+        "ts_returns": "WidgetCollection<T>",
+        "description": "Returns a new *WidgetCollection* containing a section of this collection."
+      }
+    ]
   },
   "properties": {
     "jsxAttributes": {

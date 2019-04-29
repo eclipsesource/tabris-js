@@ -22,6 +22,7 @@ textInputCollection = widgetCollection.once('event', function() {});
 fooCollection.forEach(textInputCallback);
 textInput = fooCollection.last();
 textInput = fooCollection.last('selector');
+fooCollection = textInputCollection.concat(fooCollection);
 
 /*Expected
 (14,
@@ -33,4 +34,5 @@ textInput = fooCollection.last('selector');
 (23,
 (24,
 Type 'Foo' is not assignable to type 'TextInput'.
+(25,
 */

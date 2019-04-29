@@ -64,8 +64,27 @@ export default class WidgetCollection {
     this._array.forEach((value, index) => callback(value, index, this));
   }
 
+  map(callback) {
+    return this._array.map((value, index) => callback(value, index, this));
+  }
+
   indexOf(needle) {
     return this._array.indexOf(needle);
+  }
+
+  slice() {
+    return new WidgetCollection(
+      this._array.slice.apply(this._array, arguments), {origin: this}
+    );
+  }
+
+  concat() {
+    const added = Array.prototype.map.call(arguments,
+      part => part instanceof WidgetCollection ? part.toArray() : part
+    );
+    return new WidgetCollection(
+      this._array.concat.apply(this._array, added), {origin: this}
+    );
   }
 
   includes(needle) {
@@ -136,6 +155,10 @@ export default class WidgetCollection {
 
   dispose() {
     this._array.forEach(widget => widget.dispose());
+  }
+
+  detach() {
+    this._array.forEach(widget => widget.detach());
   }
 
   [Symbol.iterator]() {
