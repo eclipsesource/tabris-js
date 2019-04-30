@@ -6,7 +6,11 @@ import ContentView from '../../../src/tabris/widgets/ContentView';
 
 describe('Drawer', function() {
 
-  let drawer, client;
+  /** @type {Drawer} */
+  let drawer;
+
+  /** @type {ClientMock} */
+  let client;
 
   beforeEach(function() {
     client = new ClientMock();
@@ -52,7 +56,7 @@ describe('Drawer', function() {
       expect(drawer.enabled).to.be.false;
     });
 
-    describe('open', function() {
+    describe('open()', function() {
 
       it('CALLs open', function() {
         drawer.open();
@@ -61,11 +65,31 @@ describe('Drawer', function() {
 
     });
 
-    describe('close', function() {
+    describe('open', function() {
+
+      it('LISTENs to open event', function() {
+        drawer.onOpen(() => {});
+
+        expect(client.calls({id: drawer.cid, op: 'listen', listen: true, event: 'open'}).length).to.equal(1);
+      });
+
+    });
+
+    describe('close()', function() {
 
       it('CALLs close', function() {
         drawer.close();
         expect(client.calls({op: 'call', id: drawer.cid})[0].method).to.equal('close');
+      });
+
+    });
+
+    describe('close', function() {
+
+      it('LISTENs to close event', function() {
+        drawer.onClose(() => {});
+
+        expect(client.calls({id: drawer.cid, op: 'listen', listen: true, event: 'close'}).length).to.equal(1);
       });
 
     });

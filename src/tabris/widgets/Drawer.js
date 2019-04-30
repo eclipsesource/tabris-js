@@ -50,6 +50,11 @@ NativeObject.defineProperties(Drawer.prototype, {
   }
 });
 
+NativeObject.defineEvents(Drawer.prototype, {
+  open: {native: true},
+  close: {native: true}
+});
+
 export function create() {
   return new Drawer(true);
 }
