@@ -125,15 +125,6 @@
         }
       ],
       "description": "Sets the parent of the widget. If an index is given the widget will be inserted at that position."
-    },
-    "$triggerChangeBounds": {
-      "private": true,
-      "parameters": [
-        {
-          "name": "bounds",
-          "type": "Bounds"
-        }
-      ]
     }
   },
   "properties": {
@@ -583,7 +574,7 @@
       }
     },
     "resize": {
-      "description": "Fired when the widget's size has changed. You can use this event to apply new [*layoutData*](#layoutdata).",
+      "description": "Fired when the widget's size has changed.",
       "parameters": {
         "left": {
           "description": "The horizontal offset from the parent's left edge in dip.",

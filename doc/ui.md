@@ -28,17 +28,25 @@ tabris.NativeObject
  | ... etc ...
 ```
 
-As can be seen here, most UI elements either inherit from `Widget` or `Popup`.
+These classes may be accessed directly via the global `tabris` object...
 
-**Widgets** can (with some exceptions) be freely [created](./widget-basics.md#hello-world), [arranged](./layout.md) and [composed](./widget-basics.md#composition) to form the main UI of your application.
-
-**Popups** are floating on top of your main UI and are specialized for specific use cases. Unlike widgets they never need a parent to be visible and they can not be combined in any way.
-
-All other types are special cases that will be explained below.
+```js
+ new tabris.AlertDialog();
+```
+...or explicitly imported:
+ ```js
+import {AlertDialog} from 'tabris';
+new AlertDialog();
+```
+Or, [depending on your setup](./modules.md):
+```js
+const {AlertDialog} = require('tabris');
+new AlertDialog();
+```
 
 ## Object Hierarchy
 
-The top-level parent for the main UI is represented by the global object `tabris`, which also acts as the namespace that holds all public classes and singletons of the framework.
+The top-level parent for the application UI is represented by the global object `tabris`, which then holds various singleton instances representing different aspects of the UI:
 
 ```
 tabris
@@ -48,9 +56,40 @@ tabris
 |- tabris.navigationBar
 ```
 
-## ContentView
+Like with classes these instances may be accessed directly via the global `tabris` object...
 
-`tabris.ContentView` is a subclass of `tabris.Composite` and the only widget that is visible without any kind of parent. It can not be instantiated by application code. Instead, any instance is bound to another `tabris.NativeObject`, like the global `tabris` object, e.g. `tabris.contentView` representing the main app content. Newly created widgets can be added directly to that instance to make them visible immediately:
+```js
+tabris.contentView.append(widget);
+```
+...or explicitly imported:
+```js
+import {contentView} from 'tabris';
+contentView.append(widget);
+```
+Or, [depending on your setup](./modules.md):
+```js
+const {contentView} = require('tabris');
+contentView.append(widget);
+```
+
+# Widgets
+
+Widgets can (with some exceptions) be freely [created](./widget-basics.md#hello-world), [arranged](./layout.md) and [composed](./widget-basics.md#composition) to form the main UI of your application. Every widget has needs parent to be visible (with the exception of `ContentView`, see below), but only widgets of the type `tabris.Composite` (or any of its subclasses) can have children. All widget types are (direct or indirect) subclasses of `tabris.Widget` and can be created by calling their constructor (if public), or using [JSX](./JSX.md) elements.
+
+See also ["Widget Basics"](./widget-basics.md).
+
+### ContentView
+
+`tabris.ContentView` is a subclass of `tabris.Composite` and the only widget that is visible without a parent. It can not be instantiated or disposed directly. Instead, any instance is bound to another `tabris.NativeObject` instance:
+
+ContentView instance | Description
+---------------------|------------
+`tabris.contentView` | Represents the main UI. Created by the framework on application start and bound to the global `tabris` object. Can never be disposed.
+`tabris.drawer` | Represents the drawer (see below). Created by the framework on application start and bound to the global `tabris` object. Can never be disposed.
+[`popover.contentView`](./api/Popover.md#contentview) | Created with and bound to [`Popover`](./api/Popover.md) instances. Disposed when the popover closes.
+[`alertDialog.textInputs`](./api/AlertDialog.md#textinputs) | Created with and bound to [`AlertDialog`](./api/AlertDialog.md) instances. Disposed when the dialog closes. Only accepts instances of [`TextInput`](./api/TextInput.md) as children.
+
+Newly created widgets can be added directly to a `ContentView` instance to make them visible immediately:
 
 JSX:
 ```jsx
@@ -68,9 +107,7 @@ tabris.contentView.append(
 
 ![ContentView](img/contentview.png)
 
-[`Popover`](./api/Popover.md) and [`AlertDialog`](./api/AlertDialog.md) popups also have `ContentView` instances attached.
-
-## Drawer
+### Drawer
 
 `tabris.drawer` is a singleton instance of `tabris.Drawer`, extending `tabris.ContentView`. It's a widget container that can be slid in from the left edge of the screen, typically used for top-level navigation.
 
@@ -92,7 +129,21 @@ tabris.drawer.append(
 );
 ```
 
-Widgets can be added to the content view, and optionally to the drawer.
+## Popups
+
+Popups are floating on top of your main UI and are specialized for specific use cases. All popup types are direct subclasses of [`tabris.Popup`](./api/popup.md) and can be created by calling their constructor (if public), or using [JSX](./JSX.md) elements.
+
+Unlike widgets they do not need a parent to be visible. Instead they are made visible by calling `open()` on the [instance](./api/popup.md#open) or the static open method provided directly on the class, e.g. `AlertDialog.open(...)`. The latter is meant to be used with inline-JSX, e.g.:
+
+```jsx
+const dialog = AlertDialog.open(
+  <AlertDialog>
+    Hello World!
+  </AlertDialog>
+);
+```
+
+Two popup types can also host widgets: [`Popover`](./api/Popover.md) via `popover.contentView` and [`AlertDialog`](./api/AlertDialog.md) via `alertDialog.texts`, though the latter only accepts `TextInput` widgets.
 
 ## StatusBar
 
@@ -105,4 +156,3 @@ Widgets can be added to the content view, and optionally to the drawer.
 `tabris.navigationBar` is a singleton instance of `tabris.NavigationBar`, extending `tabris.NativeObject`. It represents the area that contains the *Back*, *Home*, etc. buttons on Android. The object can be used to control that element's background color and visibility.
 
 ![NavigationBar](img/navigationbar.png)
-

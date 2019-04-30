@@ -4,6 +4,8 @@
 
 In the context of Tabris.js a widget is a native UI element that can be freely arranged, composed and configured in application code. In JavaScript these elements are represented by subclasses of `tabris.Widget`.
 
+See also ["UI Architecture"](./ui.md) for a technical overview of all UI-related Tabris.js API including non-widget API.
+
 ## Hello World
 
 This is a complete Tabris.js app to create an onscreen button:
@@ -99,7 +101,7 @@ contentView.append(
 To set or get a property on an existing widget you need a reference, which you can easily obtain using the [selector API](./selector.md):
 
 ```js
-const button = contentView.find(Button).first();
+const button = contentView.find(Button).first(); // alternatively: $(Button).first();
 const oldText = button.text;
 button.text = 'New Text';
 ```
@@ -193,7 +195,7 @@ button.onSelect.removeListener(listener);
 
 ### Change Events
 
-All widgets support property change events that are fired when a property value changes. All change events are named after the property with `Changed` as a postfix, e.g. `myValue` fires `myValueChanged`, so listeners can be registered via `onMyValueChangd`.
+All widgets support property change events that are fired when a property value changes. All change events are named after the property with `Changed` as a postfix, e.g. `myValue` fires `myValueChanged`, so listeners can be registered via `onMyValueChanged`.
 
 In addition to the common event properties, [change events](./types.md#propertychangedevent) have a property `value` that contains the new value of the property.
 
@@ -230,7 +232,7 @@ fadeOut(myLabel);
 
 ## Disposing of a Widget
 
-The `dispose` method disposes of the widget and all of its children. It triggers a *removeChild* event on the parent and a *dispose* event on itself.
+When a widget instance is no longer needed in the application it should be *disposed* to free up the resources it uses. This is done using the `dispose` method, which disposes of the widget and all of its children. It triggers a *removeChild* event on the parent and a *dispose* event on itself.
 
 Example:
 
@@ -239,4 +241,4 @@ button.on('dispose', () => console.log('Button disposed!'));
 button.dispose();
 ```
 
-After a widget has been disposed `isDisposed()` returns `true` while all other methods will throw an exception if called.
+After a widget has been disposed `isDisposed()` returns `true` while almost all other methods will throw an exception if called.

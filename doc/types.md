@@ -81,7 +81,7 @@ widget.padding = '0 8';
 
 ### ConstraintValue
 
-* JavaScript Type: `tabris.Constraint`, `tabris.Widget`, `tabris.Percent`, `Symbol`, `Array`, `Object`, `string` or `number`
+* JavaScript Type: `tabris.Constraint`, `tabris.Widget`, `tabris.Percent`, `Symbol`, `Array`, `Object`, `string`, `number` or `true`.
 * TypeScript Type: `tabris.ConstraintValue`
 
 A `ConstraintValue` represents a constraint on the layout of a widget that the parent uses to determine the position of one of its edges. This type allows various expressions that can all be used in place of a [`Constraint`](./api/Constraint.md) instance for convenience. All API that accept these expressions will convert them to a `Constraint` object. (With the exception of `CanvasContext`.)
@@ -90,7 +90,7 @@ Every expression of `ConstraintValue` consists of a [`reference`](./api/Constrai
 
 #### Offset-only constraints
 
-Simply the [`Offset`](#offset) number by itself, a positive float including zero.
+Simply the [`Offset`](#offset) number by itself, a positive float including zero. A value of `true` is also accepted and treated like zero.
 
 Examples:
 
@@ -98,7 +98,7 @@ Examples:
 widget.left = 12.5;
 widget.right = 8;
 widget.top = 0;
-widget.bottom = 0;
+widget.bottom = true;
 ```
 
 #### Reference-only constraints
@@ -196,15 +196,17 @@ interface LayoutDataLikeObject {
   right?: 'auto' | ConstraintValue;
   top?: 'auto' | ConstraintValue;
   bottom?: 'auto' | ConstraintValue;
-  centerX?: 'auto' | Offset;
-  centerY?: 'auto' | Offset;
-  baseline?: 'auto' | SiblingReferenceValue;
+  centerX?: 'auto' | Offset | true;
+  centerY?: 'auto' | Offset | true;
+  baseline?: 'auto' | SiblingReferenceValue | true;
   width?: 'auto' | Dimension;
   height?: 'auto' | Dimension;
 }
 ```
 
 An instance of [`LayoutData`](./api/LayoutData.md) is a valid `LayoutDataLikeObject`, but in `LayoutDataLikeObject` all properties are optional and less strict. For example `left`, `top`, `right` and `bottom` accept [`ConstraintValue`](#constraintvalue) (e.g. a `number`) in place of a [`Constraint`](./api/Constraint.md) instance.
+
+A value of `true` is also accepted for all fields except `width` and `height`. For `left`, `right`, `top`, `bottom`, `centerX` and `centerY` it means `0`. For `baseline` it means `'prev()'`.
 
 Example:
 
@@ -213,15 +215,26 @@ widget.layoutData = {
   baseline: 'prev()',
   left: 10,
   width: 100
-}
+};
+widget.layoutData = {
+  top: '25%',
+  centerX: true
+};
 ```
 
 #### LayoutData string
 
-The strings `'center'` and `'fill'` may also be used in place of a LayoutData object to express `{centerX: 0, centerY: 0}` and `{left: 0, top: 0, right: 0, bottom: 0}` with less characters.
+There are 4 alias strings that can be used in place of a LayoutData object:
+
+Alias        | Equivalent
+-------------|-----------------------------------------
+`'center'`   | `{centerX: 0, centerY: 0}`
+`'stretch'`  | `{left: 0, top: 0, right: 0, bottom: 0}`
+`'stretchX'` | `{left: 0, right: 0}`
+`'stretchY'` | `{top: 0, bottom: 0}`
 
 ```js
-widget.layoutData = 'fill';
+widget.layoutData = 'stretch';
 ```
 
 ### Offset

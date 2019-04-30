@@ -232,6 +232,16 @@ The selector parameter defaults to `*`, so `find()` is the same as `find('*')`.
 
 This will modify all `TextView` elements in the tree.
 
+### $()
+
+This function is a global alias for `tabris.contentView.find()`, and it there accepts the same selector parameters.
+
+```js
+$('.foo > .bar').set({background: 'blue'});
+// same thing:
+tabris.contentView.find('.foo > .bar').set({background: 'blue'});
+```
+
 ### widgetCollection.filter()
 
 The method `widgetCollection.filter(selector)` returns a new widget collection containing all entries of the original collection that match the given selector. This is useful to narrow down an initial selection:
@@ -261,6 +271,17 @@ In TypeScript `first(Type)` and `last(Type)` perform an implicit cast:
 ```js
 page.find('#submit').first().text = 'Hello'; // does not compile
 page.find('#submit').first(Button).text = 'Hello'; // OK
+```
+
+### widgetCollection.only()
+
+Very similar to `first()`, except that it requires the collection to have exactly one match for the given selector. If there is more or less than one match the method throws en Error. This is preferable to `first()` if there is only one match expected, as it greatly reduces the risk of accidentally selecting the wrong one or encountering hard-to-debug exceptions if no match exists.
+
+Without a selector the widget collection needs to have exactly one entry.
+
+```js
+// throws if more than one child with the id "submit" exists:
+page.find('#submit').only() === page.find('#submit').first();
 ```
 
 ### widgetCollection.children()
@@ -317,6 +338,49 @@ page.apply({
 
 ## Encapsulation
 
+All custom components should override their `children` method to protect them from outside manipulation:
+
+```js
+class MyCustomComponent extends Composite {
+
+  // ...
+
+  children() {
+    return new WidgetCollection();
+  }
+
+}
+```
+
+Alternatively, when using the (TypeScript-only) [`tabris-decorators` extension](https://github.com/eclipsesource/tabris-decorators) the `@component` decorator will do this automatically:
+
+```ts
+@component
+class MyCustomComponent extends Composite {
+
+  // ... no override needed
+
+}
+```
+
+Either approach will prevent `find()` and `apply()` from including any children of `MyCustomComponent`. It will always appear as though it has no children. For `MyCustomComponent` itself to still be able to select its own children it needs to use the non-public version of the selector API:
+
+```js
+class MyCustomComponent extends Composite {
+
+  // ...
+
+  doSomething()
+    this._children().set({background: 'red'});
+    this._find('#foo').set({background: 'green'});
+    this._apply({'.bar': {background: 'blue'}});
+  }
+
+}
+```
+
+**Why encapsulation?**
+
 By default the scope of `find` and `apply` include all descendants of their hosts, including all children of a custom component. This may not be desireable:
 
 ```jsx
@@ -328,7 +392,7 @@ widget.append(
 );
 ```
 
-In this scenario we may want to select all '#primary' elements:
+In this scenario we may want to select all `'#primary'` elements:
 
 ```js
 widget.find('#primary').set({text: 'blue'});
@@ -347,32 +411,4 @@ class MyCustomComponent extends Composite {
 }
 ```
 
-This would be an unexpected collision, assuming `MyCustomComponent` considers its own children to be internals that should not be accessed by outside code. To prevent this from happening all custom components should override their `children` methods:
-
-```js
-class MyCustomComponent extends Composite {
-
-  // ...
-
-  public children() {
-    return new WidgetCollection();
-  }
-
-}
-```
-
-This will prevent `find()` and `apply()` from including any children of `MyCustomComponent`. It will always appear as though it has no children. For `MyCustomComponent` itself to still be able to select its own children it needs to use the non-public version of the selector API:
-
-```js
-class MyCustomComponent extends Composite {
-
-  // ...
-
-  public doSomething()
-    this._children().set({background: 'red'});
-    this._find('#foo').set({background: 'green'});
-    this._apply({'.bar': {background: 'blue'}});
-  }
-
-}
-```
+This would be an unexpected collision, assuming `MyCustomComponent` considers its own children to be internals that should not be accessed by outside code. This is what encapsulation prevents.
