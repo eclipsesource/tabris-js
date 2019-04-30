@@ -311,7 +311,7 @@ function decodeType(param: Partial<schema.Parameter & schema.Property>, def: Ext
   return param.ts_type || param.type;
 }
 
-function union(values: Array<string|number|boolean>) {
+function union(values: Array<string | number | boolean>) {
   return (values || []).sort().map(value => typeof value === 'string' ? `'${value}'` : `${value}`).join(' | ');
 }
 

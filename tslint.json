@@ -3,7 +3,7 @@
   "rules": {
     "no-console": false,
     "variable-name": {
-      "options": "allow-leading-underscore"
+      "options": ["allow-leading-underscore", "allow-pascal-case"]
     },
     "ordered-imports": [
       false
@@ -47,7 +47,15 @@
     "max-classes-per-file": false,
     "whitespace": [
       true,
-      "check-module"
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-separator",
+      "check-rest-spread",
+      "check-type",
+      "check-typecast",
+      "check-type-operator",
+      "check-preblock"
     ],
     "interface-over-type-literal": false,
     "no-conditional-assignment": false,
@@ -87,7 +95,7 @@
   "jsRules": {
     "no-console": false,
     "variable-name": {
-      "options": "allow-leading-underscore"
+      "options": ["allow-leading-underscore", "allow-pascal-case"]
     },
     "ordered-imports": [
       false
@@ -127,7 +135,18 @@
       }
     ],
     "max-classes-per-file": false,
-    "whitespace": [true],
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-separator",
+      "check-rest-spread",
+      "check-type",
+      "check-typecast",
+      "check-type-operator",
+      "check-preblock"
+    ],
     "interface-over-type-literal": false,
     "no-conditional-assignment": false,
     "member-ordering": [

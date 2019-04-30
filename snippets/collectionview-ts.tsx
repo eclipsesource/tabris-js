@@ -1,4 +1,3 @@
-// Create a collection view, initialize its cells and fill it with items
 import { CollectionView, Composite, $, ImageView, TextView, contentView, AlertDialog, Properties } from 'tabris';
 
 type Person = {firstName: string, lastName: string};
@@ -37,8 +36,8 @@ class Cell extends Composite {
 
   set person(value: Person) {
     this._person = value;
-    this.find(ImageView).set({image: `resources/${this._person.firstName.toLowerCase()}.jpg`});
-    this.find(TextView).set({text: this._person.lastName});
+    this.find(ImageView).only().image = `resources/${this._person.firstName.toLowerCase()}.jpg`;
+    this.find(TextView).only().text = this._person.lastName;
   }
 
   get person() {

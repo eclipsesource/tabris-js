@@ -1,10 +1,9 @@
 import {Canvas, contentView, device} from 'tabris';
 
-// Draw shapes on a canvas using HTML5 Canvas API
+contentView.append(<Canvas stretch onResize={draw}/>);
 
-new Canvas({
-  left: 10, top: 10, right: 10, bottom: 10
-}).onResize(({target: canvas, width, height}) => {
+/** @param {tabris.WidgetResizeEvent<Canvas>} ev */
+function draw({target: canvas, width, height}) {
   const scaleFactor = device.scaleFactor;
   const ctx = canvas.getContext('2d', width * scaleFactor, height * scaleFactor);
   ctx.scale(scaleFactor, scaleFactor);
@@ -13,17 +12,18 @@ new Canvas({
   ctx.moveTo(20, 20);
   ctx.lineTo(width - 40, height - 40);
   ctx.stroke();
-
-  // draw image
   ctx.putImageData(createImageData(80, 40), 100, 100);
-
-  // copy region
   const data = ctx.getImageData(0, 0, 100, 100);
   ctx.putImageData(data, 180, 100);
+}
 
-}).appendTo(contentView);
-
+/**
+ * @param {number} width
+ * @param {number} height
+ * @returns {ImageData}
+ */
 function createImageData(width, height) {
+  /** @type {number[]} */
   const array = [];
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {

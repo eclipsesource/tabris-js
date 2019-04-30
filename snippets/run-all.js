@@ -3,7 +3,7 @@ import {
   NativeObject, contentView, TextView, app, Button, Picker, Composite, CheckBox, Page, NavigationView, Action, device,
   SearchAction, TabFolder, Popover, ProgressBar, RadioButton, RefreshComposite, ScrollView, Slider, Switch,
   ToggleButton, TextInput, CollectionView, TimeDialog, Video, WebView, ImageView, ActivityIndicator, AlertDialog,
-  ActionSheet, Canvas, DateDialog, drawer, Color
+  ActionSheet, Canvas, DateDialog, drawer, Color, ContentView
 } from 'tabris';
 
 // Use these to exclude tests where they are broken due to a platform bug
@@ -11,148 +11,231 @@ const ios = device.platform === 'iOS';
 const android = device.platform === 'Android';
 
 const snippets = [
-  android && ['actionsheet.js', () => confirm(Button)
-    .then(() => tap(find(Button)))
-    .then(() => wait(1000))
-    .then(() => find(ActionSheet).close())
-  ],
-  ['activityindicator.js', () => confirm(ActivityIndicator)
-    .then(() => wait(3000))
-    .then(() => tap(find(Button)))
-    .then(() => wait(2500))
-  ],
-  ['alertdialog.js', () => confirm(Button, {}, 4)
-    .then(() => wait(500))
-    .then(() => forEachAsync(
-      findAll(tabris.Button),
+  ['actionsheet.js', async () => {
+    await confirm(Button);
+    await tap(find(Button));
+    await wait(1000);
+    await find(ActionSheet).close();
+  }],
+  ['activityindicator.js', async () => {
+    await confirm(ActivityIndicator);
+    await wait(3000);
+    await tap(find(Button));
+    await wait(2500);
+  }],
+  ['alertdialog.js', async () => {
+    await confirm(Button, {}, 4);
+    await wait(500);
+    await forEachAsync(
+      findAll(Button),
       button => tap(button),
       1000,
       () => find(AlertDialog).close()
-    ))
-    .then(() => wait(500))
-  ],
-  // 'app-launch.js',
-  // 'app.js',
-  ['button.js', () => confirm(Button)
-    .then(() => tap(find(Button), 10))
-  ],
-  android && ['canvas.js', () => confirm(Canvas)
-    .then(() => find(Canvas).getContext('2d').getImageData(0, 0, 100, 100).data)
-    .then(data => data.some(i => i !== 0) ? Promise.resolve() : Promise.reject())
-  ],
-  ['checkbox.js', () => confirm(CheckBox)
-    .then(() => tap(find(CheckBox), 10, 10))
-  ],
-  ['collectionview.js', () => confirm(CollectionView)
-    .then(() => scroll(find(CollectionView)))
-  ],
-  ['collectionview-cellheightauto.js', () => confirm(CollectionView)
-    .then(() => scroll(find(CollectionView)))
-  ],
-  ['collectionview-celltype.js', () => confirm(CollectionView)
-    .then(() => scroll(find(CollectionView)))
-  ],
-  ['collectionview-columncount.js', () => confirm(CollectionView)
-    .then(() => move(find(Slider), 1, 10, 300))
-  ],
-  ['collectionview-refreshenabled.js', () => confirm(CollectionView)
-    .then(() => wait(1200))
-    .then(() => find(CollectionView).trigger('refresh'))
-    .then(() => wait(1200))
-    .then(() => find(CollectionView).trigger('refresh'))
-    .then(() => wait(1200))
-    .then(() => scroll(find(CollectionView)))
-  ],
-  ['collectionview-scroll.js', () => confirm(CollectionView)
-    .then(() => scroll(find(CollectionView)))
-  ],
+    );
+    await wait(500);
+  }],
+  ['app-launch.js', async () => {
+    await confirm(Button, {text: 'Launch'});
+    await confirm(TextInput, {text: 'http://tabris.com'});
+  }],
+  ['app-info.js', async () => {
+    await confirm(TextView, {text: /Id.*com\.eclipsesource\.tabris.*/});
+    await confirm(TextView, {text: /Version.*3\.[0-9]\.[0-9][\-0-9]*/});
+    await confirm(TextView, {text: /Version Code.*[0-9]+/});
+  }],
+  ['app-events.js', async () => {
+    const waitForReloadKey = 'app.js-wait-for-reload';
+    await confirm(TextView);
+    if (localStorage.getItem(waitForReloadKey)) {
+      localStorage.removeItem(waitForReloadKey);
+      return;
+    }
+    localStorage.setItem(waitForReloadKey, true);
+    await tap(find(Button, {text: 'Reload app'}));
+  }],
+  ['button.js', async () => {
+    await confirm(Button);
+    await tap(find(Button), 10);
+  }],
+  ['button-style.js', async () => {
+    await confirm(Button, {}, 5);
+    await forEachAsync(
+      findAll(CheckBox),
+      checkBox => tap(checkBox),
+      1000,
+      checkBox => tap(checkBox)
+    );
+  }],
+  ['canvas.js', async () => {
+    await confirm(Canvas);
+    const data = await find(Canvas).getContext('2d').getImageData(0, 0, 100, 100).data;
+    if (!data.some(i => i !== 0)) { throw new Error(); }
+  }],
+  ['checkbox.js', async () => {
+    await confirm(CheckBox);
+    await tap(find(CheckBox), 10, 10);
+  }],
+  ['collectionview.js', async () => {
+    await confirm(CollectionView);
+    await scroll(find(CollectionView));
+  }],
+  ['collectionview-ts.js', async () => {
+    await confirm(CollectionView);
+    await scroll(find(CollectionView));
+  }],
+  ['collectionview-cellheightauto.js', async () => {
+    await confirm(CollectionView);
+    await scroll(find(CollectionView));
+  }],
+  ['collectionview-celltype.js', async () => {
+    await confirm(CollectionView);
+    await scroll(find(CollectionView));
+  }],
+  ['collectionview-celltype-ts.js', async () => {
+    await confirm(CollectionView);
+    await scroll(find(CollectionView));
+  }],
+  ['collectionview-columncount.js', async () => {
+    await confirm(CollectionView);
+    await move(find(Slider), 1, 10, 300);
+  }],
+  ['collectionview-refreshenabled.js', async () => {
+    await confirm(CollectionView);
+    await wait(1200);
+    await find(CollectionView).trigger('refresh');
+    await wait(1200);
+    await find(CollectionView).trigger('refresh');
+    await wait(1200);
+    await scroll(find(CollectionView));
+  }],
+  ['collectionview-scroll.js', async () => {
+     await confirm(CollectionView);
+     await scroll(find(CollectionView));
+  }],
+  ['collectionview-scroll-ts.js', async () => {
+     await confirm(CollectionView);
+     await scroll(find(CollectionView));
+  }],
   ['composite.js', () => confirm(Composite, {}, 2)],
   // 'console.js',
   ['crypto.js', () => confirm(TextView, {text: /\s[0-9][0-9]/})],
-  ['datedialog.js', () => confirm(Button, {}, 3)
-    .then(() => wait(500))
-    .then(() => forEachAsync(
+  ['datedialog.js', async () => {
+    await confirm(Button, {}, 3);
+    await wait(500);
+    await forEachAsync(
       findAll(tabris.Button),
       button => tap(button),
       1000,
       () => find(DateDialog).close()
-    ))
-    .then(() => wait(500))
-  ],
-  ['device.js', () => confirm(TextView, {text: /.+:\s.+/}, 10)
-    .then(() => wait(1000))
-  ],
-  ['drawer.js', () => wait(500)
-    .then(() => drawer.open())
-    .then(() => wait(1000))
-    .then(() => drawer.close())
-    .then(() => wait(500))
-  ],
-  ['drawer-pages.js', () => confirm(Button)
-    .then(() => tap(find(Button)))
-    .then(() => drawer.open())
-    .then(() => wait(1000))
-    .then(() => select(find(CollectionView), 2))
-    .then(() => confirm(Page, {title: 'Another Page'}))
-  ],
+    );
+    await wait(500);
+  }],
+  ['device.js', async () => {
+    await confirm(TextView, {text: /\<b\>Version:\<\/b\>\s.+/});
+    await wait(1000);
+  }],
+  ['drawer.js', async () => {
+    await wait(500);
+    await drawer.open();
+    await wait(1000);
+    await drawer.close();
+    await wait(500);
+  }],
+  ['drawer-pages.js', async () => {
+    await confirm(Button);
+    await tap(find(Button));
+    await drawer.open();
+    await wait(1000);
+    await select(find(CollectionView), 2);
+    await confirm(Page, {title: 'Another Page'});
+  }],
   // TODO: snippet is broken due to freegeoip.net API change
-  // ['fetch.js', () => confirm(Button)
+  // ['fetch.js', async () => {
+//    confirm(Button)
   //   .then(() => pressButton())
   //   .then(() => wait(3000))
   //   .then(() => confirm(TextView))
-  // ],
+  // }],
   // TODO: untestable, lorempixel is too slow
-  // ['fs.js', () => waitFor(ImageView, 'load', 1, 100000)],
-  ['imageview.js', () => waitFor(ImageView, 'load', 3)],
-  ['imageview-as-a-button.js', () => confirm(ImageView)
-    .then(() => tap(find(ImageView), 10, 10))
-  ],
-  ['imageview-base64.js', () => waitFor(ImageView, 'load')],
-  ['imageview-load.js', () => waitFor(ImageView, 'load', 2)],
-  ['imageview-scalemode-auto.js', () => waitFor(ImageView, 'load')
-    .then(() => move(find(Slider), 20, 20, 500))
-  ],
-  ['imageview-scalemode.js', () => waitFor(ImageView, 'load')
+  // ['fs.js', async () => {waitFor(ImageView, 'load', 1, 100000)],
+  ['imageview.js', async () => {
+    waitFor(ImageView, 'load', 3);
+  }],
+  ['imageview-as-a-button.js', async () => {
+    confirm(ImageView)
+    .then(() => tap(find(ImageView), 10, 10));
+  }],
+  ['imageview-base64.js', async () => {
+    waitFor(ImageView, 'load');
+  }],
+  ['imageview-load.js', async () => {
+    waitFor(ImageView, 'load', 2);
+  }],
+  ['imageview-scalemode-auto.js', async () => {
+    waitFor(ImageView, 'load')
+    .then(() => move(find(Slider), 20, 20, 500));
+  }],
+  ['imageview-scalemode.js', async () => {
+    waitFor(ImageView, 'load')
     .then(() => selectAllItems(find(Picker, {}, 1)))
     .then(() => select(find(Picker, {}, 0), 1))
     .then(() => waitFor(ImageView, 'load'))
-    .then(() => selectAllItems(find(Picker, {}, 1)))
-  ],
-  ['imageview-tintcolor.js', () => waitFor(ImageView, 'load')
-    .then(() => selectAllItems(find(Picker)))
-  ],
-  ['imageview-zoom.js', () => waitFor(ImageView, 'load')
+    .then(() => selectAllItems(find(Picker, {}, 1)));
+  }],
+  ['imageview-tintcolor.js', async () => {
+    waitFor(ImageView, 'load')
+    .then(() => selectAllItems(find(Picker)));
+  }],
+  ['imageview-zoom.js', async () => {
+    waitFor(ImageView, 'load')
     .then(() => move(find(Slider), 2, 5, 500))
     .then(() => tap(find(CheckBox)))
     .then(() => wait(500))
-    .then(() => tap(find(CheckBox)))
-  ],
-  ['inactivitytimer.js', () => confirm(Button, {}, 2)
+    .then(() => tap(find(CheckBox)));
+  }],
+  ['inactivitytimer.js', async () => {
+    confirm(Button, {}, 2)
     .then(() => tap(find(Button, {text: 'Start'})))
     .then(() => wait(2200))
     .then(() => confirm(TextView, {text: 'inactive!'}))
     .then(() => tap(find(Button, {text: 'Start'})))
     .then(() => wait(100))
     .then(() => tap(find(Button, {text: 'Cancel'})))
-    .then(() => confirm(TextView, {text: 'cancelled'}))
-  ],
-  ['layout.js', () => confirm(Composite)],
-  ['layout-baseline.js', () => confirm(TextView)
-    .then(() => confirm(TextInput))
-  ],
-  ['layout-center.js', () => confirm(Composite)],
-  ['layout-dynamic.js', () => confirm(Composite, {}, 2)], // TODO: can be tested once orientation lock is supported
-  ['layout-nested.js', () => confirm(Composite, {}, 6)
+    .then(() => confirm(TextView, {text: 'cancelled'}));
+  }],
+  ['layout.js', async () => {
+    confirm(Composite);
+  }],
+  ['layout-baseline.js', async () => {
+    confirm(TextView)
+    .then(() => confirm(TextInput));
+  }],
+  ['layout-center.js', async () => {
+    confirm(Composite);
+  }],
+  ['layout-dynamic.js', async () => {
+    confirm(Composite, {}, 2);
+  }], // TODO: can be tested once orientation lock is supported
+  ['layout-nested.js', async () => {
+    confirm(Composite, {}, 6)
     .then(() => confirm(TextView, {}, 6))
-    .then(() => confirm(ImageView, {}, 3))
-  ],
-  ['layout-relative-position.js', () => confirm(Composite, {}, 4)],
-  ['layout-relative-size.js', () => confirm(Composite, {}, 2)],
-  ['layout-transform-translationz.js', () => confirm(Composite)
-    .then(() => tap(find(Composite), 2, 500, 500))
-  ],
-  ['layout-z-order.js', () => confirm(Composite, {}, 3)],
-  ['local-storage.js', () => confirm(Button, {}, 5)
+    .then(() => confirm(ImageView, {}, 3));
+  }],
+  ['layout-relative-position.js', async () => {
+    confirm(Composite, {}, 4);
+  }],
+  ['layout-relative-size.js', async () => {
+    confirm(Composite, {}, 2);
+  }],
+  ['layout-transform-translationz.js', async () => {
+    confirm(Composite)
+    .then(() => tap(find(Composite), 2, 500, 500));
+  }],
+  ['layout-z-order.js', async () => {
+    confirm(Composite, {}, 3);
+  }],
+  ['local-storage.js', async () => {
+    confirm(Button, {}, 5)
     .then(() => confirm(TextInput, {text: 'Key'}))
     .then(() => confirm(TextInput, {text: 'Value'}))
     .then(() => tap(find(Button, {text: 'Set'})))
@@ -163,21 +246,28 @@ const snippets = [
     .then(() => confirm(TextView, {text: 'Removed "Key"'}))
     .then(() => tap(find(Button, {text: 'Get'})))
     .then(() => confirm(TextView, {text: '"Key" is "null"'}))
-    .then(() => tap(find(Button, {text: 'List Keys'})))
-  ],
-  ['navigationbar.js', () => confirm(Picker, {}, 3)
+    .then(() => tap(find(Button, {text: 'List Keys'})));
+  }],
+  ['navigationbar.js', async () => {
+    confirm(Picker, {}, 3)
     .then(() => selectAllItems(find(Picker, {}, 0), 300, true))
     .then(() => selectAllItems(find(Picker, {}, 1), 300, true))
-    .then(() => selectAllItems(find(Picker, {}, 2), 300, true))
-  ],
-  ['navigationview-action.js', () => confirm(Action)],
-  ['navigationview-action-placementpriority.js', () => confirm(Action, {}, 3)
+    .then(() => selectAllItems(find(Picker, {}, 2), 300, true));
+  }],
+  ['navigationview-action.js', async () => {
+    confirm(Action);
+  }],
+  ['navigationview-action-placementpriority.js', async () => {
+    confirm(Action, {}, 3)
     .then(() => confirm(Action, {placementPriority: 'high'}))
     .then(() => confirm(Action, {placementPriority: 'normal'}))
-    .then(() => confirm(Action, {placementPriority: 'low'}))
-  ],
-  ['navigationview-page.js', () => confirm(Page)],
-  ['navigationview-page-stacked.js', () => confirm(Button, {}, 3)
+    .then(() => confirm(Action, {placementPriority: 'low'}));
+  }],
+  ['navigationview-page.js', async () => {
+    confirm(Page);
+  }],
+  ['navigationview-page-stacked.js', async () => {
+    confirm(Button, {}, 3)
     .then(() => confirm(Page, {title: 'Initial Page'}))
     .then(() => forAsync(4, i => tap(find(Button, {text: 'Create another page'}, i))))
     .then(() => confirm(Page, {}, 5))
@@ -188,9 +278,10 @@ const snippets = [
     .then(() => tap(find(Button, {text: 'Go to initial page'}, 2)))
     .then(() => wait(100))
     .then(() => confirm(Page, {}, 1))
-    .then(() => confirm(Page, {title: 'Initial Page'}))
-  ],
-  ['navigationview-properties.js', () => confirm(
+    .then(() => confirm(Page, {title: 'Initial Page'}));
+  }],
+  ['navigationview-properties.js', async () => {
+    confirm(
     NavigationView,
     {toolbarVisible: true, drawerActionVisible: true, navigationAction: null}
   )
@@ -209,15 +300,17 @@ const snippets = [
     .then(() => forAsync(device.platform === 'Android' ? 4 : 3, i => selectAllItems(find(Picker, {}, i), 300)))
     .then(() => confirm(NavigationView,
       {toolbarColor: 'rgba(0, 0, 0, 0.25)', titleTextColor: 'rgba(0, 0, 0, 0.25)', actionColor: 'rgba(0, 0, 0, 0.25)'}
-    ))
-  ],
-  android && ['navigationview-searchaction.js', () => confirm(SearchAction)
+    ));
+  }],
+  android && ['navigationview-searchaction.js', async () => {
+    confirm(SearchAction)
     .then(() => tap(find(Button), 1, 300))
     .then(() => input(find(SearchAction), 'bat')).then(() => wait(300))
     .then(() => select(find(SearchAction), 1)).then(() => wait(300))
-    .then(() => confirm(TextView, {text: 'Selected "battleship"'}))
-  ],
-  ['navigationview-tabfolder.js', () => confirm(TabFolder)
+    .then(() => confirm(TextView, {text: 'Selected "battleship"'}));
+  }],
+  ['navigationview-tabfolder.js', async () => {
+    confirm(TabFolder)
     .then(() => select(find(TabFolder), 1))
     .then(() => select(find(TabFolder), 2))
     .then(() => wait(1000))
@@ -228,124 +321,150 @@ const snippets = [
     .then(() => wait(1000))
     .then(() => tap(find(TabFolder).children().first().find(Page).last().find(Button)[1]))
     .then(() => tap(find(TabFolder).children().first().find(Page).last().find(Button)[1]))
-    .then(() => tap(find(TabFolder).children().first().find(Page).last().find(Button)[1]))
-  ],
-  ['picker.js', () => confirm(Picker)
+    .then(() => tap(find(TabFolder).children().first().find(Page).last().find(Button)[1]));
+  }],
+  ['picker.js', async () => {
+    confirm(Picker)
     .then(() => wait(300))
     .then(() => select(find(Picker), 0))
     .then(() => wait(300))
     .then(() => select(find(Picker), 2))
     .then(() => wait(300))
-    .then(() => select(find(Picker), 1))
-  ],
-  ['popover.js', () => confirm(Button)
+    .then(() => select(find(Picker), 1));
+  }],
+  ['popover.js', async () => {
+    confirm(Button)
     .then(() => tap(find(Button)))
     .then(() => wait(500))
     .then(() => confirm(Popover))
     .then(() => tap(find(Action)))
     .then(() => wait(500))
-    .then(() => confirm(Popover, {}, 0))
-  ],
+    .then(() => confirm(Popover, {}, 0));
+  }],
   // 'printer.js',
-  ['progressbar.js', () => confirm(ProgressBar)
-    .then(() => wait(1000))
-  ],
-  ['radiobutton.js', () => confirm(RadioButton, {}, 3)
+  ['progressbar.js', async () => {
+    confirm(ProgressBar)
+    .then(() => wait(1000));
+  }],
+  ['radiobutton.js', async () => {
+    confirm(RadioButton, {}, 3)
     .then(() => tap(find(RadioButton, {}, 0)))
     .then(() => wait(500))
     .then(() => tap(find(RadioButton, {}, 1)))
     .then(() => wait(500))
     .then(() => tap(find(RadioButton, {}, 2)))
-    .then(() => wait(500))
-  ],
-  ['refreshcomposite.js', () => confirm(RefreshComposite)
+    .then(() => wait(500));
+  }],
+  ['refreshcomposite.js', async () => {
+    confirm(RefreshComposite)
     .then(() => tap(find(CheckBox)))
     .then(() => find(RefreshComposite).set({refreshIndicator: true}))
     .then(() => find(RefreshComposite).trigger('refresh'))
     .then(() => wait(1200))
     .then(() => confirm(RefreshComposite, {refreshIndicator: true}, 0)) // TODO: Bug, refreshIndicator can be null
-    .then(() => wait(500))
-  ],
-  android && ['scrollview.js', () => confirm(ScrollView)
+    .then(() => wait(500));
+  }],
+  android && ['scrollview.js', async () => {
+    confirm(ScrollView)
     .then(() => tap(find(Button)))
     .then(() => wait(500))
     .then(() => confirm(ScrollView, {offsetX: 310}))
     .then(() => find(ScrollView).scrollToX(0))
     .then(() => wait(500))
-    .then(() => confirm(ScrollView, {offsetX: 0}))
-  ],
-  ['slider.js', () => confirm(Slider)
-    .then(() => move(find(Slider), 10, 20))
-  ],
-  ['statusbar.js', () => confirm(Picker, {}, 3)
+    .then(() => confirm(ScrollView, {offsetX: 0}));
+  }],
+  ['slider.js', async () => {
+    confirm(Slider)
+    .then(() => move(find(Slider), 10, 20));
+  }],
+  ['statusbar.js', async () => {
+    confirm(Picker, {}, 3)
     .then(() => selectAllItems(find(Picker, {}, 0), 500, true))
     .then(() => selectAllItems(find(Picker, {}, 1), 500, true))
-    .then(() => selectAllItems(find(Picker, {}, 2), 500, true))
-  ],
-  ['switch.js', () => confirm(Switch)
+    .then(() => selectAllItems(find(Picker, {}, 2), 500, true));
+  }],
+  ['switch.js', async () => {
+    confirm(Switch)
     .then(() => tap(find(Switch), 2, 300))
-    .then(() => tap(find(Button), 2, 300))
-  ],
-  ['tabfolder.js', () => confirm(TabFolder)
+    .then(() => tap(find(Button), 2, 300));
+  }],
+  ['tabfolder.js', async () => {
+    confirm(TabFolder)
     .then(() => selectAllItems(find(TabFolder), 500))
-    .then(() => confirm(TabFolder, {selection: find(TabFolder).children()[2]}))
-  ],
-  ['tabfolder-swipe.js', () => confirm(TabFolder)
+    .then(() => confirm(TabFolder, {selection: find(TabFolder).children()[2]}));
+  }],
+  ['tabfolder-swipe.js', async () => {
+    confirm(TabFolder)
     .then(() => selectAllItems(find(TabFolder), 500))
-    .then(() => confirm(TabFolder, {selection: find(TabFolder).children()[2]}))
-  ],
-  ['tabfolder-swipe-parallax.js', () => confirm(TabFolder)
+    .then(() => confirm(TabFolder, {selection: find(TabFolder).children()[2]}));
+  }],
+  ['tabfolder-swipe-parallax.js', async () => {
+    confirm(TabFolder)
     .then(() => selectAllItems(find(TabFolder), 500))
-    .then(() => confirm(TabFolder, {selection: find(TabFolder).children()[4]}))
-  ],
-  ['textinput.js', () => confirm(TextInput)
+    .then(() => confirm(TabFolder, {selection: find(TabFolder).children()[4]}));
+  }],
+  ['textinput.js', async () => {
+    confirm(TextInput)
     .then(() => input(find(TextInput), 'Hello World'))
     .then(() => wait(500))
     .then(() => input(find(TextInput), ''))
     .then(() => wait(500))
-    .then(() => input(find(TextInput), 'Hello Again', true))
-  ],
-  android && ['textinput-enterkeytype.js', () => confirm(TextInput, {}, 11)
-    .then(() => forEachAsync(findAll(TextInput), target => input(target, 'Hello \nWorld'), 500))
-  ],
-  ['textinput-focus.js', () => confirm(TextInput, {}, 2)
-    .then(() => forEachAsync(findAll(TextInput), target => input(target, 'Hello World'), 500))
-  ],
-  ['textinput-keyboard.js', () => confirm(TextInput, {}, 8)
-    .then(() => forEachAsync(findAll(TextInput), target => target.focused = true, 500))
-  ],
-  ['textinput-revealpassword.js', () => confirm(TextInput)
+    .then(() => input(find(TextInput), 'Hello Again', true));
+  }],
+  android && ['textinput-enterkeytype.js', async () => {
+    confirm(TextInput, {}, 11)
+    .then(() => forEachAsync(findAll(TextInput), target => input(target, 'Hello \nWorld'), 500));
+  }],
+  ['textinput-focus.js', async () => {
+    confirm(TextInput, {}, 2)
+    .then(() => forEachAsync(findAll(TextInput), target => input(target, 'Hello World'), 500));
+  }],
+  ['textinput-keyboard.js', async () => {
+    confirm(TextInput, {}, 8)
+    .then(() => forEachAsync(findAll(TextInput), target => target.focused = true, 500));
+  }],
+  ['textinput-revealpassword.js', async () => {
+    confirm(TextInput)
     .then(() => input(find(TextInput), 'Hello World'))
     .then(() => wait(500))
     .then(() => tap(find(CheckBox)))
     .then(() => confirm(TextInput, {revealPassword: true}))
     .then(() => wait(1000))
     .then(() => tap(find(CheckBox)))
-    .then(() => confirm(TextInput, {revealPassword: false}))
-  ],
-  android && ['textinput-selection.js', () => confirm(TextInput)
+    .then(() => confirm(TextInput, {revealPassword: false}));
+  }],
+  android && ['textinput-selection.js', async () => {
+    confirm(TextInput)
     .then(() => input(find(TextInput), ''))
     .then(() => input(find(TextInput), '      -----'))
     .then(() => tap(find(Button, {}, 0)))
     .then(() => wait(1500))
     .then(() => tap(find(Button, {}, 1)))
-    .then(() => wait(1500))
-  ],
-  ['textview.js', () => confirm(TextView, {}, 3)],
-  ['textview-font-bundled.js', () => confirm(TextView, {}, 96)
-    .then(() => scroll(find(ScrollView)))
-  ],
-  ['textview-font-external.js', () => confirm(TextView, {}, 2)],
-  ['textview-linespacing.js', () => confirm(TextView, {}, 2)
-    .then(() => move(find(Slider), 2, 32, 500))
-  ],
-  ['textview-markupenabled.js', () => confirm(TextView, {markupEnabled: true})
+    .then(() => wait(1500));
+  }],
+  ['textview.js', async () => {
+    confirm(TextView, {}, 3);
+  }],
+  ['textview-font-bundled.js', async () => {
+    confirm(TextView, {}, 96)
+    .then(() => scroll(find(ScrollView)));
+  }],
+  ['textview-font-external.js', async () => {
+    confirm(TextView, {}, 2);
+  }],
+  ['textview-linespacing.js', async () => {
+    confirm(TextView, {}, 2)
+    .then(() => move(find(Slider), 2, 32, 500));
+  }],
+  ['textview-markupenabled.js', async () => {
+    confirm(TextView, {markupEnabled: true})
     .then(() => tap(find(CheckBox)))
     .then(() => wait(1000))
     .then(() => tap(find(CheckBox)))
-    .then(() => wait(2000))
-  ],
-  ['timedialog.js', () => confirm(Button, {}, 2)
+    .then(() => wait(2000));
+  }],
+  ['timedialog.js', async () => {
+    confirm(Button, {}, 2)
     .then(() => wait(500))
     .then(() => forEachAsync(
       findAll(tabris.Button),
@@ -353,17 +472,20 @@ const snippets = [
       1000,
       () => find(TimeDialog).close()
     ))
-    .then(() => wait(500))
-  ],
-  ['timer.js', () => confirm(Button, {text: 'Press me!'})
+    .then(() => wait(500));
+  }],
+  ['timer.js', async () => {
+    confirm(Button, {text: 'Press me!'})
     .then(() => tap(find(Button)))
     .then(() => wait(2500))
-    .then(() => confirm(Button, {text: 'Thank you!'}))
-  ],
-  ['togglebutton.js', () => confirm(ToggleButton)
-    .then(() => forAsync(5, () => tap(find(ToggleButton)), 300))
-  ],
-  ['video.js', () => confirm(Video)
+    .then(() => confirm(Button, {text: 'Thank you!'}));
+  }],
+  ['togglebutton.js', async () => {
+    confirm(ToggleButton)
+    .then(() => forAsync(5, () => tap(find(ToggleButton)), 300));
+  }],
+  ['video.js', async () => {
+    confirm(Video)
     .then(() => wait(10000))
     .then(() => confirm(Video, {state: 'play'}))
     .then(() => tap(find(Button)))
@@ -371,16 +493,20 @@ const snippets = [
     .then(() => wait(500))
     .then(() => tap(find(Button)))
     .then(() => wait(1000))
-    .then(() => confirm(Video, {state: 'play'}))
-  ],
-  ['web-storage.js', () => confirm(TextView, {text: /started\s[0-9]+\stime/})],
-  ['webview.js', () => confirm(WebView, {url: /wikipedia/})
+    .then(() => confirm(Video, {state: 'play'}));
+  }],
+  ['web-storage.js', async () => {
+    confirm(TextView, {text: /started\s[0-9]+\stime/});
+  }],
+  ['webview.js', async () => {
+    confirm(WebView, {url: /wikipedia/})
     .then(() => input(find(TextInput), 'http://goolge.com', true))
     .then(() => timeout(find(WebView).onLoad.promise()))
     .then(() => confirm(WebView, {url: /google/}))
-    .then(() => wait(1000))
-  ],
-  ['webview-navigation.js', () => confirm(WebView, {url: /wikipedia/})
+    .then(() => wait(1000));
+  }],
+  ['webview-navigation.js', async () => {
+    confirm(WebView, {url: /wikipedia/})
     .then(() => confirm(ImageView, {enabled: false}, 2))
     .then(() => input(find(TextInput), 'http://goolge.com', true))
     .then(() => timeout(find(WebView).onLoad.promise()))
@@ -401,9 +527,10 @@ const snippets = [
     .then(() => confirm(WebView, {url: /google/}))
     .then(() => confirm(TextInput, {text: /google/}))
     .then(() => confirm(ImageView, {image: /back/, enabled: true}))
-    .then(() => confirm(ImageView, {image: /forward/, enabled: false}))
-  ],
-  ['webview-webmessaging.js', () => confirm(WebView)
+    .then(() => confirm(ImageView, {image: /forward/, enabled: false}));
+  }],
+  ['webview-webmessaging.js', async () => {
+    confirm(WebView)
     .then(() => tap(find(Button)))
     .then(() => wait(1000))
     .then(() => confirm(TextView, {text: /No message/}))
@@ -413,16 +540,25 @@ const snippets = [
       </script></head></html>`
     )
     .then(() => wait(1000))
-    .then(() => confirm(TextView, {text: /Hello from the WebView/}))
-  ],
-  ['widget-cornerradius.js', () => confirm(Composite, {cornerRadius: 24})],
-  ['widget-elevation.js', () => confirm(Composite, {elevation: 8})],
-  ios && ['widget-highlightontouch.js', () => confirm(Composite, {highlightOnTouch: true})],
-  ['widget-lineargradient.js', () => confirm(ScrollView)
+    .then(() => confirm(TextView, {text: /Hello from the WebView/}));
+  }],
+  ['widget-cornerradius.js', async () => {
+    confirm(Composite, {
+    cornerRadius: 24});
+  }],
+  ['widget-elevation.js', async () => {
+    confirm(Composite, {elevation: 8});
+  }],
+  ios && ['widget-highlightontouch.js', async () => {
+    confirm(Composite, {highlightOnTouch: true});
+  }],
+  ['widget-lineargradient.js', async () => {
+    confirm(ScrollView)
     .then(() => timeout(findAll(WebView).pop().onLoad.promise(), 4000, true))
-    .then(() => scroll(find(ScrollView)))
-  ],
-  ['widget-longpress-to-drag.js', () => confirm(Composite)
+    .then(() => scroll(find(ScrollView)));
+  }],
+  ['widget-longpress-to-drag.js', async () => {
+    confirm(Composite)
     .then(() => confirm(TextView))
     .then(() => find(Composite).onTouchStart.trigger({touches: [{absoluteX: 100, absoluteY: 100}]}))
     .then(() => find(Composite).onLongPress.trigger({state: 'start'}))
@@ -434,11 +570,16 @@ const snippets = [
       16
     ))
     .then(() => find(Composite).onTouchEnd.trigger())
-    .then(() => confirm(Composite, {transform: {translationX: -57, translationY: -38}}))
-  ],
-  android && ['widget-padding.js', () => confirm(TextView, {bounds: {left: 8, top: 8}, left: 0, top: 0})],
-  ['widget-styling.js', () => confirm(TextView, {}, 5)],
-  ['widget-touch.js', () => confirm(TextView, {text: 'Touch anywhere...'})
+    .then(() => confirm(Composite, {transform: {translationX: -57, translationY: -38}}));
+  }],
+  android && ['widget-padding.js', async () => {
+    confirm(TextView, {bounds: {left: 8, top: 8}, left: 0, top: 0});
+  }],
+  ['widget-styling.js', async () => {
+    confirm(TextView, {}, 5);
+  }],
+  ['widget-touch.js', async () => {
+    confirm(TextView, {text: 'Touch anywhere...'})
     .then(() => contentView.onTouchStart.trigger({touches: [{x: 100, y: 100}]}))
     .then(() => wait(200))
     .then(() => forAsync(
@@ -449,14 +590,15 @@ const snippets = [
     .then(() => contentView.onTouchEnd.trigger({touches: [{x: 0, y: 0}]}))
     .then(() => confirm(TextView, {text: 'touchEnd: 0 X 0'}))
     .then(() => contentView.onLongPress.trigger({touches: [{x: 0, y: 0}]}))
-    .then(() => confirm(TextView, {text: 'longPress: 0 X 0'}))
-  ],
-  ['xmlhttprequest.js', () => confirm(Button)
+    .then(() => confirm(TextView, {text: 'longPress: 0 X 0'}));
+  }],
+  ['xmlhttprequest.js', async () => {
+    confirm(Button)
     .then(() => tap(find(Button)))
     .then(() => forAsync(100, () => confirm(TextView, {}, 0), 100))
     .catch(() => Promise.resolve())
-    .then(() => confirm(TextView, {text: /home/}))
-  ]
+    .then(() => confirm(TextView, {text: /home/}));
+  }]
 ].filter(v => v);
 
 //#region test controls
@@ -475,7 +617,7 @@ if (!showIntro()) {
     const test = typeof current === 'string' ? () => Promise.resolve() : current[1];
     initErrorLog();
     wait(300).then(() => {
-      console.log(`require('./${file});`);
+      console.log(`require('./${file}');`);
       require('./' + file);
       return test().catch(ex => console.error(ex.message + '\n' + ex.stack)).then(() => console.log('test finished'));
     }).then(errorCheck)
@@ -745,7 +887,7 @@ function select(target, value) {
     target.selectionIndex = value;
     target.trigger('select', {target, index: value});
   } else if (target instanceof CollectionView) {
-    target.trigger('select', {target, index: value});
+    target.cellByItemIndex(value).trigger('tap');
   } else if (target instanceof Slider) {
     target.selection = value;
     target.trigger('select', {target, selection: value});
@@ -813,8 +955,8 @@ function forEachAsync(items, cb, pause = 1000, afterEach = () => null) {
 function has(obj1, obj2) {
   for (const key in obj2) {
     if (obj2[key] instanceof RegExp) {
-      if (!obj2[key].test(JSON.stringify(obj1[key]))) {
-        console.log(key + ' is ' + obj1[key] + ', not matching ' + obj2[key]);
+      if (!obj2[key].test(obj1[key])) {
+        console.log(key + ' is ' + JSON.stringify(obj1[key]) + ', not matching ' + obj2[key]);
         return false;
       }
     } else if (obj2[key] && obj2[key].constructor === Object) {
@@ -858,8 +1000,12 @@ function find(type, props = {}, pos = 0) {
 function findAll(type, props = {}) {
   const results = [];
   for (const cid in tabris._nativeObjectRegistry.$objects) {
-    if (tabris._nativeObjectRegistry.$objects[cid].constructor === type) {
-      results.push(tabris._nativeObjectRegistry.$objects[cid]);
+    const candidate = tabris._nativeObjectRegistry.$objects[cid];
+    if (candidate.constructor === type) {
+      if (candidate instanceof tabris.Widget && !candidate.parent(tabris.ContentView)) {
+        continue;
+      }
+      results.push(candidate);
     }
   }
   return results.filter(obj => has(obj, props));

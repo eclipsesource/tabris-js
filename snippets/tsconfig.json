@@ -8,7 +8,8 @@
     "outDir": "dist",
     "allowJs": true,
     "checkJs": true,
-    "typeRoots": []
+    "typeRoots": [],
+    "alwaysStrict": true
   },
   "include": [
     "./*.js",

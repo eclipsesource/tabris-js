@@ -1,4 +1,3 @@
-// Create a collection view, initialize its cells and fill it with items
 import {CollectionView, Composite, ImageView, TextView, contentView, AlertDialog} from 'tabris';
 
 const people = [
@@ -21,6 +20,7 @@ contentView.append(
       updateCell={updateCell}/>
 );
 
+/** @returns {Composite} */
 function createCell() {
   return (
     <Composite onTap={handleTap}>
@@ -30,11 +30,16 @@ function createCell() {
   );
 }
 
+/**
+ * @param {Composite} cell
+ * @param {number} index
+ */
 function updateCell(cell, index) {
-  cell.find(ImageView).set({image: `resources/${people[index].firstName.toLocaleLowerCase()}.jpg`});
-  cell.find(TextView).set({text: people[index].firstName});
+  cell.find(ImageView).only().image = `resources/${people[index].firstName.toLowerCase()}.jpg`;
+  cell.find(TextView).only().text = people[index].firstName;
 }
 
+/** @param {tabris.WidgetTapEvent} ev */
 function handleTap({target}) {
   const index = target.parent(CollectionView).itemIndex(target);
   AlertDialog.open(people[index].firstName + ' ' + people[index].lastName);

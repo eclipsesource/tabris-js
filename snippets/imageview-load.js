@@ -10,7 +10,7 @@ new ImageView({
 
 new TextView({
   id: 'label-image1',
-  right:'50% +8', top: '50% +8', width: 64,
+  right: '50% +8', top: '50% +8', width: 64,
   alignment: 'centerX'
 }).appendTo(contentView);
 
