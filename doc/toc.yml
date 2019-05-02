@@ -35,6 +35,8 @@
       url: JSX.html
     - title: Debugging
       url: debug.html
+    - title: Testing
+      url: testing.html
     - title: Theming Android
       url: theming-android.html
     - title: Build your app
