@@ -2,6 +2,7 @@ import {expect, mockTabris, spy, stub, restore} from '../test';
 import ClientMock from './ClientMock';
 import Composite from '../../src/tabris/widgets/Composite';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
+import TextView from '../../src/tabris/widgets/TextView';
 
 class Foo extends Composite {
   get foo() {
@@ -408,9 +409,15 @@ describe('WidgetCollection', function() {
     it('children() returns children from all in collection', function() {
       const children = [new Foo(), new Bar(), new Foo(), new Bar()];
       widgets[0].append(children.slice(0, 2));
-      widgets[2].append(children.slice(2, 4));
+      widgets[2].append(children.slice(2, 5));
 
       expect(collection.children().toArray()).to.deep.equal(children);
+    });
+
+    it('children() returns empty array for non-composite entries', function() {
+      const collection = new WidgetCollection([new TextView()]);
+
+      expect(collection.children().toArray()).to.deep.equal([]);
     });
 
     it('children() with matcher returns children from all in collection', function() {

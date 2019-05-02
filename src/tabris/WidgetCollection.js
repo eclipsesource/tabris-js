@@ -111,7 +111,9 @@ export default class WidgetCollection {
   children(selector) {
     const result = [];
     for (const widget of this._array) {
-      result.push.apply(result, widget.children());
+      if (widget.children instanceof Function) {
+        result.push.apply(result, widget.children());
+      }
     }
     return new WidgetCollection(result, {selector, origin: this});
   }
