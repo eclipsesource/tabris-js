@@ -116,10 +116,6 @@ export default class WidgetCollection {
     return new WidgetCollection(result, {selector, origin: this});
   }
 
-  find(selector) {
-    return new WidgetCollection(this.children()._array, {selector, deep: true, origin: this});
-  }
-
   appendTo(parent) {
     parent.append(this);
   }

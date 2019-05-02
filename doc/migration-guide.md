@@ -83,6 +83,10 @@ Alternatively JSX my be used:
 
 These properties are replaced by a new property `placement` on the `Action` widget. It accepts the values `'default'` (same as `placementPriority = 'normal'`), `'overflow'` (same as a `placementPriority = 'low'`) and `'navigation'`, which puts the action in the place usually reserved by the drawer icon.
 
+### Removed widgetCollection.find
+
+This method has been removed due to its ambiguous nature. This does not affect `composite.find` which still exists.
+
 ### "trigger" object/eventObject parameter is now cloned
 
 **This is relevant only if in your application you are passing values to `trigger` of types other than `Object` or `EventObject`.** Examples would be passing primitives (e.g. `trigger('select', selectionIndex);`) or instances of classes other than `Object` (e.g. `trigger('select', someArray);`). If you do that you need to change this to pass an object that references the value instead (e.g. `trigger('select', {selectionIndex});`)

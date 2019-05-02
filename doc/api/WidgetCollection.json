@@ -117,23 +117,6 @@
         "description": "Returns a collection containing all children of all widgets in this collection that match the given selector."
       }
     ],
-    "find": [
-      {
-        "generics": "Result extends Widget = Widget",
-        "parameters": [
-          {
-            "name": "selector",
-            "type": "Selector",
-            "ts_type": "Selector<Widget, Result>",
-            "optional": true,
-            "description": "A selector expression or a predicate function to filter the results."
-          }
-        ],
-        "returns": "WidgetCollection",
-        "ts_returns": "WidgetCollection<Result>",
-        "description": "Returns a collection containing all descendants of all widgets in this collection that match the given selector."
-      }
-    ],
     "parent": {
       "parameters": [],
       "returns": "WidgetCollection",

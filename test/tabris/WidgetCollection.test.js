@@ -421,45 +421,6 @@ describe('WidgetCollection', function() {
       expect(collection.children('Foo').toArray()).to.deep.equal([children[0], children[2]]);
     });
 
-    it('find() returns WidgetCollection with host', function() {
-      expect(collection.find()).to.be.instanceof(WidgetCollection);
-      expect(collection.find().host).to.equal(host);
-    });
-
-    it('find("*") returns descendants from all widgets in collection', function() {
-      const children = [new Foo(), new Bar(), new Foo(), new Bar()];
-      widgets[0].append(children[0]);
-      widgets[2].append(children[1]);
-      children[1].append(children.slice(2, 4));
-
-      expect(collection.find('*').toArray().length).to.deep.equal(children.length);
-      expect(collection.find('*').toArray()).to.deep.equal(children);
-    });
-
-    it('find() returns descendants from all widgets in collection', function() {
-      const children = [new Foo(), new Foo(), new Foo(), new Foo()];
-      widgets[0].append(children[0]);
-      widgets[2].append(children[1]);
-      children[1].append(children.slice(2, 4));
-
-      expect(collection.find().toArray().length).to.deep.equal(children.length);
-      expect(collection.find().toArray()).to.deep.equal(children);
-    });
-
-    it('find() returns no duplicates', function() {
-      const children = [new Foo(), new Foo(), new Foo(), new Foo()];
-      widgets[0].append(children[0]);
-      children[0].append(children[1]);
-      children[1].append(children[2]);
-      children[2].append(children[3]);
-
-      const result = collection.find('*').find('*');
-      expect(result.length).to.equal(3);
-      expect(result.indexOf(children[1])).not.to.equal(-1);
-      expect(result.indexOf(children[2])).not.to.equal(-1);
-      expect(result.indexOf(children[3])).not.to.equal(-1);
-    });
-
   });
 
 });

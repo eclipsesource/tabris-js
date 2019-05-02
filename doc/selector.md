@@ -274,15 +274,6 @@ widget.children('.foo').children('.bar'); // same result
 
 While this method is longer, it allows using non-string selector, i.e. functions/constructors.
 
-### widgetCollection.find()
-
-The method `collection.find(selector)` will apply the given selector to all descendants of its own entries. This excludes the entries themselves, effectively skipping one generation in a subtree.
-
-```js
-widget.children().find('.bar'); // All descendants matching '.bar' EXCEPT direct children
-widget.children().filter('.bar'); // The opposite: ONLY direct children matching '.bar'
-```
-
 ### composite.apply()
 
 A shortcut for setting different sets of properties for different selections in one method call. The method takes a plain object with selectors as keys and property objects as values:
