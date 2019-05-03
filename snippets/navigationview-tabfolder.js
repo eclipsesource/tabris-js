@@ -1,4 +1,4 @@
-import {Button, Composite, NavigationView, Page, Tab, TabFolder, TextView, app, contentView} from 'tabris';
+import {app, Button, Composite, contentView, NavigationView, Page, Tab, TabFolder, TextView} from 'tabris';
 
 // demonstrates NavigationViews as children of a TabFolder
 
@@ -9,10 +9,8 @@ const tabFolder = new TabFolder({
 }).appendTo(contentView);
 
 function createTab(title, image) {
-  const tab = new Tab({
-    title,
-    image: {src: image, scale: 2}
-  }).appendTo(tabFolder);
+  const tab = new Tab({title, image})
+    .appendTo(tabFolder);
   const navigationView = new NavigationView({
     left: 0, top: 0, right: 0, bottom: 0
   }).appendTo(tab);
@@ -44,9 +42,9 @@ function createPage(navigationView, title) {
     .appendTo(controls);
 }
 
-createTab('Cart', 'resources/cart.png');
-createTab('Pay', 'resources/card.png');
-createTab('Statistic', 'resources/chart.png');
+createTab('Cart', 'resources/cart@2x.png');
+createTab('Pay', 'resources/card@2x.png');
+createTab('Statistic', 'resources/chart@2x.png');
 
 app.onBackNavigation((event) => {
   // handle the "physical" back button on Android
