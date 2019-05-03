@@ -253,6 +253,41 @@ describe('tabris', function() {
       expect(composite.children().length).to.equal(2);
     });
 
+    it('replaces proxified singletons', function() {
+      const {device, contentView, drawer, app, fs, navigationBar, statusBar, printer} = tabris;
+      contentView.data.foo = 1;
+      drawer.data.foo = 1;
+      expect(device.model).to.equal(undefined);
+      expect(app.version).to.equal(undefined);
+      expect(fs.filesDir).to.equal(undefined);
+      expect(contentView.bounds).to.deep.equal({left: 0, top: 0, width: 0, height: 0});
+      expect(drawer.bounds).to.deep.equal({left: 0, top: 0, width: 0, height: 0});
+      expect(contentView.data).to.deep.equal({foo: 1});
+      expect(drawer.data).to.deep.equal({foo: 1});
+
+      tabris._init(new ClientMock({
+        'tabris.Device': {model: 'foo'},
+        'tabris.App': {version: 'bar'},
+        'tabris.FileSystem': {filesDir: 'baz'},
+        'tabris.Composite': {bounds: [1, 2, 3, 4]},
+        'tabris.Drawer': {bounds: [5, 6, 7, 8]}
+      }));
+
+      expect(device).to.equal(tabris.device);
+      expect(app).to.equal(tabris.app);
+      expect(fs).to.equal(tabris.fs);
+      expect(navigationBar).to.equal(tabris.navigationBar);
+      expect(statusBar).to.equal(tabris.statusBar);
+      expect(printer).to.equal(tabris.printer);
+      expect(device.model).to.equal('foo');
+      expect(app.version).to.equal('bar');
+      expect(fs.filesDir).to.equal('baz');
+      expect(contentView.bounds).to.deep.equal({left: 1, top: 2, width: 3, height: 4});
+      expect(drawer.bounds).to.deep.equal({left: 5, top: 6, width: 7, height: 8});
+      expect(contentView.data).to.deep.equal({});
+      expect(drawer.data).to.deep.equal({});
+    });
+
   });
 
 });

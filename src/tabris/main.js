@@ -184,28 +184,31 @@ Object.assign(global, {
 
 tabrisMain.on('start', (options) => {
   patchError(Error);
-  tabris.app = createApp();
+  tabris.$app = createApp();
   checkVersion(tabris.version, tabris.app._nativeGet('tabrisJsVersion'));
   if (!options || !options.headless) {
-    tabris.contentView = createContentView();
-    tabris.drawer = createDrawer();
-    tabris.navigationBar = createNavigationBar();
-    tabris.statusBar = createStatusBar();
-    tabris.printer = createPrinter();
+    tabris.$contentView = createContentView();
+    tabris._nativeSet('contentView', tabris.contentView.cid);
+    tabris.$drawer = createDrawer();
+    tabris.$navigationBar = createNavigationBar();
+    tabris.$statusBar = createStatusBar();
+    tabris.$printer = createPrinter();
     tabris.JSX.install(createJsxProcessor());
   }
-  tabris.device = createDevice();
-  tabris.fs = createFileSystem();
+  tabris.$device = createDevice();
+  tabris.$fs = createFileSystem();
   publishDeviceProperties(tabris.device, global);
-  tabris.localStorage = createStorage();
+  tabris.$localStorage = createStorage();
   if (tabris.device.platform === 'iOS') {
-    tabris.secureStorage = createStorage(true);
+    tabris.$secureStorage = createStorage(true);
+  }else {
+    tabris.$secureStorage = {};
   }
-  tabris.crypto = new Crypto();
+  tabris.$crypto = new Crypto();
   if (global.console['print']) {
     global.console = createConsole(global.console);
   }
-  tabris.pkcs5 = new Pkcs5();
+  tabris.$pkcs5 = new Pkcs5();
   global.localStorage = tabrisMain.localStorage;
   global.secureStorage = tabrisMain.secureStorage;
   global.crypto = tabrisMain.crypto;

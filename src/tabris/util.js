@@ -79,7 +79,7 @@ export function dirname(path) {
  * @param range An array of min and max value of a closed range.
  * @param errorPrefix Prefix to prepend to messages of thrown errors.
  */
-export function checkNumber(value, range = [-Infinity, Infinity], errorPrefix) {
+export function checkNumber(value, range = [-Infinity, Infinity], errorPrefix = undefined) {
   const prefix = errorPrefix ? errorPrefix + ': ' : '';
   if (typeof value !== 'number' || isNaN(value) || !isFinite(value)) {
     throw new Error(`${prefix}Invalid number ${value}`);
@@ -87,4 +87,31 @@ export function checkNumber(value, range = [-Infinity, Infinity], errorPrefix) {
   if (value < range[0] || value > range[1]) {
     throw new Error(`${prefix}Number ${value} out of range`);
   }
+}
+
+const traps = [
+  'getPrototypeOf',
+  'setPrototypeOf',
+  'isExtensible',
+  'preventExtensions',
+  'getOwnPropertyDescriptor',
+  'defineProperty',
+  'has',
+  'get',
+  'set',
+  'deleteProperty',
+  'ownKeys',
+  'apply',
+  'construct'
+];
+
+/**
+ * @param {() => object} getTarget
+ */
+export function proxify(getTarget) {
+  const handler = {};
+  traps.forEach(trap => handler[trap]
+    = (_, ...args) => Reflect[trap](getTarget(), ...args)
+  );
+  return new Proxy({}, handler);
 }

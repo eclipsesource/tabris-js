@@ -2,6 +2,7 @@ import NativeObject from './NativeObject';
 import NativeBridge from './NativeBridge';
 import NativeObjectRegistry from './NativeObjectRegistry';
 import {error} from './Console';
+import {proxify} from './util';
 
 export default class Tabris extends NativeObject {
 
@@ -11,6 +12,7 @@ export default class Tabris extends NativeObject {
     this._init = this._init.bind(this);
     this._notify = this._notify.bind(this);
     this._stackTraceStack = [];
+    this.$publishProxies();
   }
 
   get version() {
@@ -19,17 +21,6 @@ export default class Tabris extends NativeObject {
 
   get started() {
     return !!this._started;
-  }
-
-  set contentView(contentView) {
-    if (!this.$contentView) {
-      this.$contentView = contentView;
-      this._nativeSet('contentView', contentView.cid);
-    }
-  }
-
-  get contentView() {
-    return this.$contentView;
   }
 
   flush() {
@@ -84,6 +75,16 @@ export default class Tabris extends NativeObject {
       error(err);
     }
     return returnValue;
+  }
+
+  $publishProxies() {
+    [
+      'contentView', 'drawer', 'navigationBar', 'statusBar', 'printer', 'device', 'app', 'localStorage',
+      'secureStorage', 'crypto', 'fs', 'pkcs5'
+    ].forEach(name => {
+      const value = proxify(() => this['$' + name]);
+      Object.defineProperty(this, name, {value});
+    });
   }
 
 }

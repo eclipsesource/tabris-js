@@ -6,7 +6,8 @@ import {
   capitalizeFirstChar,
   normalizePath,
   normalizePathUrl,
-  checkNumber
+  checkNumber,
+  proxify
 } from '../../src/tabris/util';
 
 describe('util', function() {
@@ -151,15 +152,18 @@ describe('util', function() {
   });
 
   describe('checkNumber', function() {
+
     it('throws for invalid numbers', function() {
       expect(() => checkNumber('foo')).to.throw('Invalid number foo');
       expect(() => checkNumber(NaN)).to.throw('Invalid number NaN');
       expect(() => checkNumber(Infinity)).to.throw('Invalid number Infinity');
     });
+
     it('throws for numbers out of range', function() {
       expect(() => checkNumber(5, [0, 4])).to.throw('Number 5 out of range');
       expect(() => checkNumber(-1, [0, Infinity])).to.throw('Number -1 out of range');
     });
+
     it('does not throw for valid numbers', function() {
       expect(() => checkNumber(5, [0, Infinity])).not.to.throw();
       expect(() => checkNumber(-5, [-Infinity, 5])).not.to.throw();
@@ -167,6 +171,7 @@ describe('util', function() {
       expect(() => checkNumber(5, [0, 5])).not.to.throw();
       expect(() => checkNumber(4, [0, 5])).not.to.throw();
     });
+
     it('prepends error message', function() {
       expect(() => {
         checkNumber('foo', [-Infinity, Infinity], 'Invalid bar');
@@ -175,6 +180,52 @@ describe('util', function() {
         checkNumber(6, [-1, 5], 'Invalid bar');
       }).to.throw('Invalid bar: Number 6 out of range');
     });
+
+  });
+
+  describe('proxify', function() {
+
+    class Test {
+      constructor() {
+        this.a = 1;
+      }
+    }
+
+    let org, proxy;
+
+    beforeEach(function () {
+      org = new Test();
+      proxy = proxify(() => org);
+    });
+
+    it('returns equal-but-not-identical object', function() {
+      expect(proxy).to.deep.equal(org);
+      expect(proxy === org).be.false;
+    });
+
+    it('delegates set', function() {
+      proxy.b = 2;
+      expect(proxy).to.deep.equal(org);
+    });
+
+    it('supports instanceof', function() {
+      expect(proxy instanceof Test).to.be.true;
+    });
+
+    it('supports equals', function() {
+      expect(proxy === proxy).to.be.true;
+    });
+
+    it('allows switching target', function() {
+      const backup = org;
+      org = {b: 2};
+      proxy.c = 3;
+
+      expect(proxy).to.deep.equal(org);
+      expect(proxy).not.to.deep.equal(backup);
+      expect(proxy instanceof Test).to.be.false;
+    });
+
   });
 
 });
