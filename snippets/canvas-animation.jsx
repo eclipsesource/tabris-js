@@ -1,21 +1,14 @@
-module.exports = class AnimationExample {
+import {Canvas, contentView, device} from 'tabris';
+
+contentView.append(
+  <Canvas stretch onResize={drawGraph}/>
+);
+
+class Graph {
 
   constructor() {
     this._angle = 0;
-    this._animating = false;
     this._speedometer = new Speedometer();
-  }
-
-  set animating(animating) {
-    if (animating && !this._animating) {
-      this._start();
-    } else if (!animating && this._animating) {
-      this._stop();
-    }
-  }
-
-  get animating() {
-    return this._animating;
   }
 
   draw(ctx, width, height) {
@@ -27,36 +20,20 @@ module.exports = class AnimationExample {
     this._cx = Math.floor(this._width / 3);
     this._cy = Math.floor(this._height / 2);
     this._unit = this._width / 12;
-    // initial draw
-    if (!this._animating) {
-      this._draw();
-    }
-  }
-
-  _start() {
-    clearTimeout(this._timerId);
-    this._animating = true;
     this._draw();
-  }
-
-  _stop() {
-    clearTimeout(this._timerId);
-    this._animating = false;
   }
 
   _draw() {
     this._clear();
     this._drawAxes(this._angle);
     this._drawSine(this._angle);
-    this._drawCircle(this._angle);
+    this._drawCircle();
     this._drawLever(this._angle);
-    this._drawFpsLabel();
+    this._drawUpdatesLabel();
     // re-schedule
-    if (this._animating) {
-      this._speedometer.update();
-      this._angle = this._normalizeAngle(this._angle - Math.PI / 90);
-      this._timerId = setTimeout(() => this._draw(), 0);
-    }
+    this._speedometer.update();
+    this._angle = this._normalizeAngle(this._angle - Math.PI / 90);
+    setTimeout(() => this._draw(), 0);
   }
 
   _clear() {
@@ -104,7 +81,8 @@ module.exports = class AnimationExample {
   }
 
   _drawSine(angle) {
-    let x, y;
+    let x;
+    let y;
     const steps = 50;
     this._ctx.beginPath();
     this._ctx.moveTo(this._cx, this._cy + Math.sin(angle) * this._unit);
@@ -152,22 +130,22 @@ module.exports = class AnimationExample {
     this._ctx.stroke();
   }
 
-  _drawFpsLabel() {
+  _drawUpdatesLabel() {
     this._ctx.textAlign = 'left';
     this._ctx.textBaseline = 'top';
     this._ctx.fillStyle = '#000';
     this._ctx.lineWidth = 1;
-    this._ctx.fillText('FPS: ' + this._speedometer._fps.toFixed(1), 10, 10);
+    this._ctx.fillText('Updates per second: ' + this._speedometer._updates.toFixed(1), 10, 10);
   }
 
-};
+}
 
 class Speedometer {
 
   constructor() {
     this._start = 0;
     this._count = 0;
-    this._fps = 0;
+    this._updates = 0;
   }
 
   update() {
@@ -177,9 +155,19 @@ class Speedometer {
     if (this._start === 0) {
       this._start = now;
     } else if (time >= 1000) {
-      this._fps = this._count / (time / 1000);
+      this._updates = this._count / (time / 1000);
       this._start = now;
       this._count = 0;
     }
   }
+}
+
+const graph = new Graph();
+
+function drawGraph({target: canvas, width, height}) {
+  const scaleFactor = device.scaleFactor;
+  const ctx = canvas.getContext('2d', width * scaleFactor, height * scaleFactor);
+  // scale canvas to be pixel exact
+  ctx.scale(scaleFactor, scaleFactor);
+  graph.draw(ctx, width, height);
 }
