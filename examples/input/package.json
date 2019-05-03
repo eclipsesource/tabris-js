@@ -1,9 +1,0 @@
-{
-  "title": "Input Elements",
-  "description": "Showcases various input elements like Text, Checkbox, Picker, ...",
-  "category": "Small Apps",
-  "main": "input.js",
-  "dependencies": {
-    "tabris": "3.0.0-rc1"
-  }
-}
