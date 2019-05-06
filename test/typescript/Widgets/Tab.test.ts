@@ -3,7 +3,7 @@ import {ColorValue, ImageValue, Properties, Tab, TabFolder, WidgetCollection} fr
 let widget: Tab = new Tab();
 
 // Properties
-let badge: string;
+let badge: number;
 let image: ImageValue;
 let selectedImage: ImageValue;
 let title: string;
