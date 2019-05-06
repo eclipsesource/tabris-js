@@ -121,6 +121,14 @@ control over the appearance of the TabFolder tabs:
 
 In addition the `TabFolder` gained the property `tabBarElevation` which is applicable on Android.
 
+### Tab.badge property changed to be of type number instead of string
+
+With the added support for `badge` on Android, the type of the `badge` property has been updated to be a number:
+
+```js
+tab.badge = 10
+```
+
 ### CollectionView select event removed
 
 The collectionView no longer provides a select event. Interactions with a cell have to be handled directly by listeners attached to the cell. A new method `itemIndex` may be used to determine the index associated with a cell:

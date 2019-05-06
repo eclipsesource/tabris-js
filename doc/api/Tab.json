@@ -85,18 +85,12 @@
       "description": "An image to be displayed on the currently active tab."
     },
     "badge": {
-      "type": "string",
-      "description": "A badge to attach to the tab.",
-      "platforms": {
-        "android": false
-      }
+      "type": "number",
+      "description": "A badge to attach on the tab. The property only has an effect when the parent `TabFolder` has its `tabBarLocation` set to `bottom`. Setting the `badge` to `0` hides the badge. The background color of the badge can be controlled with the `badgeColor` property."
     },
     "badgeColor": {
       "type": "ColorValue",
-      "description": "The color used for the `badge` indicator.",
-      "platforms": {
-        "android": false
-      }
+      "description": "The background color used for the `badge` indicator."
     }
   },
   "events": {

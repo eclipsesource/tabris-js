@@ -23,7 +23,7 @@ describe('Tab', function() {
         title: 'foo',
         image: {src: 'bar'},
         selectedImage: {src: 'selectedBar'},
-        badge: '1',
+        badge: 1,
         background: '#010203',
         visible: false
       });
@@ -41,7 +41,7 @@ describe('Tab', function() {
       expect(tab.title).to.equal('');
       expect(tab.image).to.equal(null);
       expect(tab.selectedImage).to.equal(null);
-      expect(tab.badge).to.equal('');
+      expect(tab.badge).to.equal(0);
       expect(tab.visible).to.equal(true);
     });
 

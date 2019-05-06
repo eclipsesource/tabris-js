@@ -67,13 +67,13 @@ describe('TabFolder', function() {
     it('getter gets tab properties from cache', function() {
       tab.set({
         title: 'foo',
-        badge: 'bar',
+        badge: 123,
         image: 'foobar.jpg',
         selectedImage: 'selectedFoobar.jpg'
       });
 
       expect(tab.title).to.equal('foo');
-      expect(tab.badge).to.equal('bar');
+      expect(tab.badge).to.equal(123);
       expect(tab.image).to.eql({src: 'foobar.jpg', width: 'auto', height: 'auto', scale: 'auto'});
       expect(tab.selectedImage).to.eql({src: 'selectedFoobar.jpg', width: 'auto', height: 'auto', scale: 'auto'});
     });
