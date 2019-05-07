@@ -1,24 +1,24 @@
-import { $, CollectionView, TextView, contentView, CollectionViewScrollEvent } from 'tabris';
+import {$, CollectionView, contentView, TextView} from 'tabris';
 
 /** @param {TextView['jsxAttributes']=} attributes */
 const SectionCell = attributes =>
-  <TextView {...attributes} background='#aaaaaa' textColor='white' font='bold 24px' alignment='centerX'/>;
+  <TextView background='#aaaaaa' textColor='white' font='bold 24px' alignment='centerX' {...attributes}/>;
 
 /** @param {TextView['jsxAttributes']=} attributes */
 const ItemCell = attributes =>
-  <TextView {...attributes} padding={[2, 5]} font='14px' alignment='left'/>;
+  <TextView padding={[2, 5]} font='14px' alignment='left' {...attributes} />;
 
 const items = createItems();
 
 contentView.append(
   <$>
     <CollectionView stretch
-        itemCount={items.length}
-        cellType={index => items[index].type}
-        cellHeight={(_, type) => type === 'section' ? 48 : 32}
-        createCell={type => type === 'section' ? SectionCell() : ItemCell()}
-        updateCell={(cell, index) => cell.text = items[index].name}
-        onScroll={handleScroll}/>
+                    itemCount={items.length}
+                    cellType={index => items[index].type}
+                    cellHeight={(_, type) => type === 'section' ? 48 : 32}
+                    createCell={type => type === 'section' ? SectionCell() : ItemCell()}
+                    updateCell={(cell, index) => cell.text = items[index].name}
+                    onScroll={handleScroll}/>
     <SectionCell stretchX height={48} id='floatingSection' text={items[0].name}/>
   </$>
 );
@@ -29,7 +29,7 @@ function handleScroll({target}) {
   const currentSection = items.slice(0, splitIndex).filter(item => item.type === 'section').pop();
   const nextSection = items.slice(splitIndex).filter(item => item.type === 'section')[0];
   const nextSectionCell = target.cellByItemIndex(items.indexOf(nextSection));
-  const bounds = nextSectionCell ? nextSectionCell.bounds : null;
+  const bounds = nextSectionCell ? nextSectionCell.absoluteBounds : null;
   $('#floatingSection').only(SectionCell).set({
     text: currentSection ? currentSection.name : items[0].name,
     transform: bounds ? {translationY: Math.min(bounds.top - bounds.height, 0)} : {}

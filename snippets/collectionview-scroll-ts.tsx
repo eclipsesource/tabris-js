@@ -1,4 +1,4 @@
-import { CollectionView, TextView, contentView, Properties, Composite } from 'tabris';
+import { CollectionView, Composite, contentView, Properties, TextView } from 'tabris';
 
 type Item = {name: string, type: 'section' | 'item'};
 
@@ -11,11 +11,11 @@ class ItemsView extends Composite {
   constructor(properties: Properties<ItemsView>) {
     super();
     this._cv = new CollectionView({
-        layoutData: 'stretch',
-        cellType: index => this._items[index].type,
-        cellHeight: (_, type) => type === 'section' ? 48 : 32,
-        createCell: this.createCell,
-        updateCell: (cell, index) => cell.text = this._items[index].name
+      layoutData: 'stretch',
+      cellType: index => this._items[index].type,
+      cellHeight: (_, type) => type === 'section' ? 48 : 32,
+      createCell: this.createCell,
+      updateCell: (cell, index) => cell.text = this._items[index].name
     }).onScroll(this.updateFloatingSection)
       .appendTo(this);
     this._floatingSection = this.createCell('section').set({
@@ -45,7 +45,7 @@ class ItemsView extends Composite {
     const currentSection = this._items.slice(0, splitIndex).filter(item => item.type === 'section').pop();
     const nextSection = this._items.slice(splitIndex).filter(item => item.type === 'section')[0];
     const nextSectionCell = this._cv.cellByItemIndex(this._items.indexOf(nextSection));
-    const bounds = nextSectionCell ? nextSectionCell.bounds : null;
+    const bounds = nextSectionCell ? nextSectionCell.absoluteBounds : null;
     this._floatingSection.text = currentSection ? currentSection.name : this._items[0].name;
     this._floatingSection.transform = bounds ? {translationY: Math.min(bounds.top - bounds.height, 0)} : {};
   }
