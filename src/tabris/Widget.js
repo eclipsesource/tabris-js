@@ -93,7 +93,7 @@ export default class Widget extends NativeObject {
   }
 
   get absoluteBounds() {
-    return this._nativeGet('absoluteBounds');
+    return types.bounds.decode(this._nativeGet('absoluteBounds'));
   }
 
   toString() {

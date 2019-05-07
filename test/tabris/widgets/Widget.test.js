@@ -125,6 +125,16 @@ describe('Widget', function() {
       expect(call.properties.background).to.eql({type: 'image', image: ['bar', 23, 42, null]});
     });
 
+    it('decodes bounds', function() {
+      client.properties(widget.cid).bounds = [0, 1, 2, 3];
+      expect(widget.bounds).to.deep.equal({left: 0, top: 1, width: 2, height: 3});
+    });
+
+    it('decodes absoluteBounds', function() {
+      client.properties(widget.cid).absoluteBounds = [0, 1, 2, 3];
+      expect(widget.absoluteBounds).to.deep.equal({left: 0, top: 1, width: 2, height: 3});
+    });
+
     it('prints warning when attempting to set bounds', function() {
       stub(console, 'warn');
 
