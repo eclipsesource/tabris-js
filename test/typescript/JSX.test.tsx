@@ -21,7 +21,7 @@ const scrollView: tabris.ScrollView = <tabris.ScrollView background='blue' paddi
 const searchAction: tabris.SearchAction = <tabris.SearchAction title='bar'>foo</tabris.SearchAction>;
 const slider: tabris.Slider = <tabris.Slider maximum={100}/>;
 const switchButton: tabris.Switch = <tabris.Switch thumbOnColor='red'>foo</tabris.Switch>;
-const tab: tabris.Tab = <tabris.Tab background={[255, 255, 255, 0]} badge='3'/>;
+const tab: tabris.Tab = <tabris.Tab background={[255, 255, 255, 0]} badge={3}/>;
 const tabFolder: tabris.TabFolder = <tabris.TabFolder tabBarLocation='top'/>;
 const textInput: tabris.TextInput = <tabris.TextInput autoCapitalize={true} onTextChanged={onTextChangedHandler}>foo</tabris.TextInput>;
 const textView: tabris.TextView = <tabris.TextView alignment='right'>foo</tabris.TextView>;
