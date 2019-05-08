@@ -7,7 +7,7 @@ export default class Picker extends Widget {
    * @param {Partial<Picker>} properties
    */
   constructor(properties) {
-    super(Object.assign({selectionIndex: 0}, properties));
+    super(properties);
     tabris.on('flush', this.$flush, this);
     this.on('dispose', () => tabris.off('flush', this.$flush, this));
   }
@@ -33,7 +33,7 @@ export default class Picker extends Widget {
       tabris._nativeBridge.flush();
       delete this.$needsUpdateItems;
     }
-    if (this.$newSelectionIndex >= 0) {
+    if (this.$newSelectionIndex >= -1) {
       this._nativeSet('selectionIndex', this.$newSelectionIndex);
       this._triggerChangeEvent('selectionIndex', this.$newSelectionIndex);
       tabris._nativeBridge.flush();
@@ -51,6 +51,9 @@ export default class Picker extends Widget {
 }
 
 NativeObject.defineProperties(Picker.prototype, {
+  style: {type: ['choice', ['default', 'outline', 'fill', 'underline', 'none']], const: true, default: 'default'},
+  message: {type: 'string', default: ''},
+  floatMessage: {type: 'boolean', default: true},
   itemCount: {
     type: 'natural',
     default: 0,
@@ -68,18 +71,18 @@ NativeObject.defineProperties(Picker.prototype, {
     }
   },
   selectionIndex: {
-    type: 'natural',
-    default: 0,
+    type: 'integer',
+    default: -1,
     set(name, value) {
       this.$newSelectionIndex = value;
     },
     get(name) {
-      return this.$newSelectionIndex >= 0 ? this.$newSelectionIndex : this._nativeGet(name);
+      return this.$newSelectionIndex >= -1 ? this.$newSelectionIndex : this._nativeGet(name);
     }
   },
-  fillColor: {type: 'ColorValue'},
-  borderColor: {type: 'ColorValue'},
-  textColor: {type: 'ColorValue'}
+  borderColor: {type: 'ColorValue', default: null},
+  textColor: {type: 'ColorValue', default: null},
+  font: {type: 'FontValue', default: null}
 });
 
 NativeObject.defineEvents(Picker.prototype, {

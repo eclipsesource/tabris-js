@@ -20,6 +20,34 @@
       "ts_only": true,
       "type": "JSXAttributes<this> & {children?: never} & Partial<Pick<Picker, 'itemText'>>"
     },
+    "style": {
+      "type": "string",
+      "values": [
+        "default",
+        "outline",
+        "fill",
+        "underline",
+        "none"
+      ],
+      "default": "default",
+      "const": true,
+      "description": "The visual appearance of the `Picker` widget.\n\nWith the `style` _outline_, _fill_ or _underline_ the message hint will float above the `Picker` on Android. This behavior can be controlled with the property `floatMessage`. The `style` _none_ will remove any background visualization, allowing to create a custom background. ",
+      "platforms": {
+        "ios": false
+      }
+    },
+    "message": {
+      "type": "string",
+      "description": "A hint text that is displayed when the picker has no selection."
+    },
+    "floatMessage": {
+      "type": "boolean",
+      "default": "true",
+      "description": "Whether the hint message should float above the Picker when focus is gained.",
+      "platforms": {
+        "ios": false
+      }
+    },
     "itemCount": {
       "type": "number",
       "description": "The number of items to display."
@@ -32,20 +60,17 @@
       "type": "number",
       "description": "The index of the currently selected item."
     },
-    "fillColor": {
-      "type": "ColorValue",
-      "description": "The color of the background of the Picker - applies only to iOS.",
-      "platforms": {
-        "android": false
-      }
-    },
     "borderColor": {
       "type": "ColorValue",
-      "description": "The color of the border of the Picker. On iOS this is a rectangular border around the Picker, on Android it is a single line below the Picker."
+      "description": "The color of the Picker border. This can be the surrounding line or the underline of the Picker depending on the `style` property."
     },
     "textColor": {
       "type": "ColorValue",
       "description": "The color of the text."
+    },
+    "font": {
+      "type": "FontValue",
+      "description": "The font used for the text inside the Picker."
     }
   },
   "methods": {

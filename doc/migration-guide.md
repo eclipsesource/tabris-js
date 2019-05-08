@@ -144,6 +144,17 @@ collectionView.createCell = () => {
 }
 ```
 
+### Picker allows empty state with "message" property as placeholder
+
+The `Picker` now allows to show an (initial) empty state. This unselected state can be filled with a `message` text similar to a `TextInput`. The initial `selectionIndex` is therefore `-1`. It can also be set to `-1` which shows the empty state or the `message` respectively.
+
+To recreate the previous behavior the `selectionIndex` could be set to `0`.
+
+### Picker property "fillColor" removed
+
+With the introduction of the new `style` property on `Picker`, the iOS only property `fillColor` became redundant.
+Previously the `fillColor` was required to separate the Android underline colorization from the ios picker background color. Setting the `Picker` `style` to _underline_ on Android now ignores the background and only applies the `borderColor` property.
+
 ### Font properties
 
 All font properties are now of the type "FontValue". While these properties still accept the same string values as in 2.x, they will return a "Font" class instance instead of a string. The exception is CanvasContext, where font properties still return a string for W3C compatibility.

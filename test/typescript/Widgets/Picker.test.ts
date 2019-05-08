@@ -1,30 +1,40 @@
-import {ColorValue, Picker, PickerSelectEvent, PropertyChangedEvent, Properties} from 'tabris';
+import { ColorValue, Picker, PickerSelectEvent, Properties, PropertyChangedEvent } from 'tabris';
+import { FontValue } from '../../../typings/propertyTypes';
 
 let widget: Picker = new Picker();
 
 // Properties
 let borderColor: ColorValue;
-let fillColor: ColorValue;
 let itemCount: number;
 let itemText: (index: number) => string;
 let selectionIndex: number;
 let textColor: ColorValue;
+let font: FontValue;
+let message: string;
+let floatMessage: boolean;
+let style: 'default' | 'outline' | 'fill' | 'underline' | 'none';
 
 borderColor = widget.borderColor;
-fillColor = widget.fillColor;
 itemCount = widget.itemCount;
 itemText = widget.itemText;
 selectionIndex = widget.selectionIndex;
 textColor = widget.textColor;
+font = widget.font;
+message = widget.message;
+floatMessage = widget.floatMessage;
+style = widget.style;
 
 widget.borderColor = borderColor;
-widget.fillColor = fillColor;
 widget.itemCount = itemCount;
 widget.itemText = itemText;
 widget.selectionIndex = selectionIndex;
 widget.textColor = textColor;
+widget.font = font;
+widget.message = message;
+widget.floatMessage = floatMessage;
+widget.style = style;
 
-let properties = {borderColor, fillColor, itemCount, itemText, selectionIndex, textColor};
+let properties = {borderColor, itemCount, itemText, selectionIndex, textColor, font, style, message, floatMessage};
 widget = new Picker(properties);
 widget.set(properties);
 

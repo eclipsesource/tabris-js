@@ -22,10 +22,6 @@ describe('Picker', function() {
       expect(client.calls({op: 'create'})[0].type).to.deep.equal('tabris.Picker');
     });
 
-    it('initializes selectionIndex', function() {
-      expect(client.calls({op: 'create'})[0].properties).to.deep.equal({selectionIndex: 0});
-    });
-
   });
 
   describe('events', function() {
