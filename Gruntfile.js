@@ -265,16 +265,12 @@ module.exports = function(grunt) {
 
   /* runs tests against the build output */
   grunt.registerTask('verify',
-    release ? [
-      'exec:verify_tabris',
-      'copy:test_ts',
-      'exec:verify_typings',
-      'copy:snippets',
-      'exec:transpile_snippets',
-      'verify_typings_fail'
-    ] : [
-      'exec:verify_tabris'
-    ]
+    'exec:verify_tabris',
+    'copy:test_ts',
+    'exec:verify_typings',
+    'copy:snippets',
+    'exec:transpile_snippets',
+    'verify_typings_fail'
   );
 
   /* generates reference documentation */
