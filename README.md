@@ -8,6 +8,28 @@ iOS and Android apps can be built entirely from one code base, which frees you f
 
 ![Tabris.js hello world](doc/img/hello-example.png)
 
+```jsx
+import {Button, contentView, TextView} from 'tabris';
+
+// in JS
+
+new Button({top: 16, centerX: true, text: 'Use native UI'})
+  .onSelect(() => $(TextView).only().text = 'Powered by Tabris.js')
+  .appendTo(contentView);
+new TextView({top: 'prev() 16', centerX: true})
+  .appendTo(contentView);
+
+// or in JSX
+
+contentView.append(
+  <$>
+    <Button top={16} centerX text='Use native UI'
+            onSelect={() => $(TextView).only().text = 'Powered by Tabris.js'}/>
+    <TextView top='prev() 16' centerX/>
+  </$>
+);
+```
+
 ## Native widgets
 
 The code of the application is loaded dynamically - nothing is precompiled. JavaScript is executed Just-in-Time and passed via a native bridge to the device. Tabris.js accesses native controls and does not depend on webviews to render the app's UI. As a result, the performance of the apps cannot be distinguished from apps developed directly in native code of the platforms.
