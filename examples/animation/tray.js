@@ -45,7 +45,7 @@ const strap = new Composite({
 
 const strapIcon = new TextView({
   left: MARGIN, right: MARGIN, top: 20,
-  alignment: 'center',
+  alignment: 'centerX',
   text: '⇧',
   font: 'bold 24px',
   textColor: 'white'
@@ -58,7 +58,7 @@ const trayContent = new Composite({
 
 new TextView({
   left: MARGIN, right: MARGIN, top: MARGIN,
-  alignment: 'center',
+  alignment: 'centerX',
   text: 'Tray content',
   font: 'bold 24px',
   textColor: 'white'

@@ -90,7 +90,7 @@ function createItemCell() {
 function createLoadingCell() {
   return new TextView({
     centerY: 0,
-    alignment: 'center',
+    alignment: 'centerX',
     text: 'Loading...'
   });
 }

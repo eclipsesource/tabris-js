@@ -141,7 +141,7 @@ function createPersonThumb(person, thumbsize) {
   }).on('tap', () => animateOutLeftCreateCurrentPerson(person))
     .appendTo(composite);
   new TextView({
-    alignment: 'center',
+    alignment: 'centerX',
     left: 0, top: personView, width: thumbsize,
     text: person.firstName,
     font: font

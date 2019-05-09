@@ -70,7 +70,7 @@ const label = new TextView({
   width: 80,
   top: 0,
   left: 0,
-  alignment: 'center',
+  alignment: 'centerX',
   opacity: 0.8
 });
 universe.append(label);
