@@ -1,21 +1,15 @@
-import {TextView, contentView, CheckBox, Stack} from 'tabris';
+import {CheckBox, contentView, Stack, TextView} from 'tabris';
 
 contentView.append(
-  <Stack>
-    <TextView markupEnabled font='16px' padding={12}>
-      Normal Text<br/>
-      <b>bold</b><br/>
-      <i>italic</i><br/>
+  <Stack stretch padding={16} spacing={16} alignment='stretchX'>
+    <TextView markupEnabled font='16px'>
+      Normal Text <b>bold</b> <i>italic</i><br/>
       <big>big</big><br/>
       <small>small</small><br/>
       <strong>strong</strong><br/>
       <ins>inserted</ins><br/>
-      <del>deleted</del><br/>
+      <del>deleted</del>
     </TextView>
-    <CheckBox checked onSelect={updateMarkupEnabled}>markupEnabled</CheckBox>
+    <CheckBox text='Enable markup' checked onSelect={e => $(TextView).only().markupEnabled = e.checked}/>
   </Stack>
 );
-
-function updateMarkupEnabled({checked: markupEnabled}) {
-  contentView.find(TextView).set({markupEnabled});
-}
