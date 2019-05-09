@@ -5,7 +5,6 @@ const MotionPage = require('./MotionPage');
 const NetworkPage = require('./NetworkPage');
 const MediaPage = require('./MediaPage');
 const CameraPage = require('./CameraPage');
-const BarcodeScannerPage = require('./BarcodeScannerPage');
 
 const navigationView = new NavigationView({left: 0, top: 0, right: 0, bottom: 0})
   .appendTo(contentView);
@@ -15,7 +14,7 @@ const mainPage = new Page({
 }).appendTo(navigationView);
 
 const contentContainer = new ScrollView({
-  left: 0, top: 0, right: 0, bottom: 0
+  left: 0, top: 0, right: 0, bottom: 0, padding: 16
 }).appendTo(mainPage);
 
 [
@@ -24,7 +23,6 @@ const contentContainer = new ScrollView({
   MotionPage,
   NetworkPage,
   CameraPage,
-  BarcodeScannerPage,
   MediaPage
 ].forEach(Page => {
   const page = new Page();
@@ -33,7 +31,7 @@ const contentContainer = new ScrollView({
 
 function addPageSelector(page) {
   new Button({
-    left: 16, top: 'prev() 8', right: 16,
+    left: 0, top: 'prev() 8', right: 0,
     text: page.title
   }).on('select', () => page.appendTo(navigationView))
     .appendTo(contentContainer);
