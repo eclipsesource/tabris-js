@@ -6,7 +6,6 @@ module.exports = class BooksList extends CollectionView {
   constructor(properties) {
     super(Object.assign({id: 'booksList', cellHeight: 72}, properties));
     this._books = books.filter(this.filter);
-    this.on('select', ({index}) => this._showBookDetailsPage(books[index]));
     this.itemCount = this.books.length;
   }
 
@@ -22,11 +21,6 @@ module.exports = class BooksList extends CollectionView {
     return this._filter || (() => true);
   }
 
-  _showBookDetailsPage(book) {
-    const BookDetailsPage = require('./BookDetailsPage');
-    new BookDetailsPage({title: book.title, book}).appendTo(contentView.find('NavigationView').first());
-  }
-
   createCell() {
     super.createCell();
     return new BookCell();
@@ -34,8 +28,7 @@ module.exports = class BooksList extends CollectionView {
 
   updateCell(view, index) {
     super.updateCell(view, index);
-    const {image, title, author} = books[index];
-    Object.assign(view, {image, title, author});
+    Object.assign(view, {book: books[index]});
   }
 
 };
@@ -47,30 +40,23 @@ class BookCell extends Composite {
     this._createUI();
     this._applyLayout();
     this._applyStyles();
+    this.onTap(this._showBookDetailsPage);
   }
 
-  set image(image) {
-    this.find('#image').first().image = image;
+  set book(book) {
+    this._book = book;
+    this.find('#image').first().image = book.image;
+    this.find('#titleLabel').first().text = book.title;
+    this.find('#authorLabel').first().text = book.author;
   }
 
-  get image() {
-    return this.find('#image').first().image;
+  get book() {
+    return this._book;
   }
 
-  set title(title) {
-    this.find('#titleLabel').first().text = title;
-  }
-
-  get title() {
-    return this.find('#titleLabel').first().text;
-  }
-
-  set author(author) {
-    this.find('#authorLabel').first().text = author;
-  }
-
-  get author() {
-    return this.find('#authorLabel').first().text;
+  _showBookDetailsPage() {
+    const BookDetailsPage = require('./BookDetailsPage');
+    new BookDetailsPage({title: this.book.title, book: this.book}).appendTo(contentView.find('NavigationView').first());
   }
 
   _createUI() {
