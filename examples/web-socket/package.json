@@ -6,6 +6,6 @@
     "server": "cd server && npm i && npm start"
   },
   "dependencies": {
-    "tabris": "3.0.0-beta2"
+    "tabris": "3.0.0-rc1"
   }
 }

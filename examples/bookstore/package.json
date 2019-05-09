@@ -4,7 +4,7 @@
   "description": "An example of a bookstore app",
   "main": "bookstore.js",
   "dependencies": {
-    "tabris": "3.0.0-beta2"
+    "tabris": "3.0.0-rc1"
   }
 
 }
