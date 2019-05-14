@@ -430,4 +430,24 @@ describe('WidgetCollection', function() {
 
   });
 
+  describe('toString', function() {
+
+    it('strigifies in one line for 3 entries', function() {
+      const lines = collection.toString().split('\n');
+      expect(lines.length).to.equal(1);
+      expect(lines[0]).to.match(/^WidgetCollection { Foo\[cid=".*"\], Bar.*\s}$/);
+    });
+
+    it('strigifies in multiple line for 4 entries', function() {
+      collection = collection.concat([new Bar()]);
+      const lines = collection.toString().split('\n');
+      expect(lines.length).to.equal(6);
+      expect(lines[0]).to.equal('WidgetCollection {');
+      expect(lines[1]).to.match(/\s\sFoo\[cid=".*"\]/);
+      expect(lines[4]).to.match(/\s\sBar\[cid=".*"\]/);
+      expect(lines[5]).to.equal('}');
+    });
+
+  });
+
 });

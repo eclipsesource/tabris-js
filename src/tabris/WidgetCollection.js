@@ -159,6 +159,16 @@ export default class WidgetCollection {
     this._array.forEach(widget => widget.detach());
   }
 
+  toString() {
+    if (this._array.length < 4) {
+      return 'WidgetCollection { ' + this._array.join(', ') + ' }';
+
+    }
+    return 'WidgetCollection {\n'
+      + this._array.map(entry => '  ' + entry).join(',\n')
+      + '\n}';
+  }
+
   [Symbol.iterator]() {
     let index = 0;
     return {
