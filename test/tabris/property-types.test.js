@@ -280,7 +280,7 @@ describe('property-types', function() {
     it('fails if image value is not an object', function() {
       expect(() => {
         encode(23);
-      }).to.throw(Error, 'Not a valid ImageValue: 23');
+      }).to.throw(Error, '23 is not a valid ImageValue');
     });
 
     it('fails if src is undefined', function() {
@@ -298,7 +298,7 @@ describe('property-types', function() {
     it('fails if src contains invalid ../ segments', function() {
       expect(() => {
         encode({src: '../test.png'});
-      }).to.throw(Error, 'Invalid image "src": Path must not start with \'..\'');
+      }).to.throw(Error, 'Invalid image "src": Path must not start with ".."');
     });
 
     it('fails if width/height/scale values are invalid number', function() {
@@ -412,13 +412,13 @@ describe('property-types', function() {
     const decode = types.number.decode;
 
     it('fails for non-numbers', function() {
-      expect(() => encode()).to.throw(Error, 'Not a number: undefined');
-      expect(() => encode(null)).to.throw(Error, 'Not a number: null');
-      expect(() => encode(true)).to.throw(Error, 'Not a number: true');
-      expect(() => encode('')).to.throw(Error, "Not a number: ''");
-      expect(() => encode('23x')).to.throw(Error, "Not a number: '23x'");
-      expect(() => encode({})).to.throw(Error, 'Not a number: {}');
-      expect(() => encode([])).to.throw(Error, 'Not a number: []');
+      expect(() => encode()).to.throw(Error, 'undefined is not a number');
+      expect(() => encode(null)).to.throw(Error, 'null is not a number');
+      expect(() => encode(true)).to.throw(Error, 'true is not a number');
+      expect(() => encode('')).to.throw(Error, '"" is not a number');
+      expect(() => encode('23x')).to.throw(Error, '"23x" is not a number');
+      expect(() => encode({})).to.throw(Error, '{} is not a number');
+      expect(() => encode([])).to.throw(Error, '[] is not a number');
     });
 
     it('fails for invalid numbers', function() {
@@ -426,7 +426,7 @@ describe('property-types', function() {
       values.forEach((value) => {
         expect(() => {
           encode(value);
-        }).to.throw(Error, 'Invalid number: ' + value);
+        }).to.throw(Error, value + ' is not a valid number');
       });
     });
 
@@ -459,13 +459,13 @@ describe('property-types', function() {
     const decode = types.natural.decode;
 
     it('fails for non-numbers', function() {
-      expect(() => encode()).to.throw(Error, 'Not a number: undefined');
-      expect(() => encode(null)).to.throw(Error, 'Not a number: null');
-      expect(() => encode(true)).to.throw(Error, 'Not a number: true');
-      expect(() => encode('')).to.throw(Error, "Not a number: ''");
-      expect(() => encode('23x')).to.throw(Error, "Not a number: '23x'");
-      expect(() => encode({})).to.throw(Error, 'Not a number: {}');
-      expect(() => encode([])).to.throw(Error, 'Not a number: []');
+      expect(() => encode()).to.throw(Error, 'undefined is not a number');
+      expect(() => encode(null)).to.throw(Error, 'null is not a number');
+      expect(() => encode(true)).to.throw(Error, 'true is not a number');
+      expect(() => encode('')).to.throw(Error, '"" is not a number');
+      expect(() => encode('23x')).to.throw(Error, '"23x" is not a number');
+      expect(() => encode({})).to.throw(Error, '{} is not a number');
+      expect(() => encode([])).to.throw(Error, '[] is not a number');
     });
 
     it('fails for invalid numbers', function() {
@@ -473,7 +473,7 @@ describe('property-types', function() {
       values.forEach((value) => {
         expect(() => {
           encode(value);
-        }).to.throw(Error, 'Invalid number: ' + value);
+        }).to.throw(Error, value + ' is not a valid number');
       });
     });
 
@@ -513,13 +513,13 @@ describe('property-types', function() {
     const decode = types.integer.decode;
 
     it('fails for non-numbers', function() {
-      expect(() => encode()).to.throw(Error, 'Not a number: undefined');
-      expect(() => encode(null)).to.throw(Error, 'Not a number: null');
-      expect(() => encode(true)).to.throw(Error, 'Not a number: true');
-      expect(() => encode('')).to.throw(Error, "Not a number: ''");
-      expect(() => encode('23x')).to.throw(Error, "Not a number: '23x'");
-      expect(() => encode({})).to.throw(Error, 'Not a number: {}');
-      expect(() => encode([])).to.throw(Error, 'Not a number: []');
+      expect(() => encode()).to.throw(Error, 'undefined is not a number');
+      expect(() => encode(null)).to.throw(Error, 'null is not a number');
+      expect(() => encode(true)).to.throw(Error, 'true is not a number');
+      expect(() => encode('')).to.throw(Error, '"" is not a number');
+      expect(() => encode('23x')).to.throw(Error, '"23x" is not a number');
+      expect(() => encode({})).to.throw(Error, '{} is not a number');
+      expect(() => encode([])).to.throw(Error, '[] is not a number');
     });
 
     it('fails for invalid numbers', function() {
@@ -527,7 +527,7 @@ describe('property-types', function() {
       values.forEach((value) => {
         expect(() => {
           encode(value);
-        }).to.throw(Error, 'Invalid number: ' + value);
+        }).to.throw(Error, value + ' is not a valid number');
       });
     });
 
@@ -575,7 +575,7 @@ describe('property-types', function() {
       values.forEach((value) => {
         expect(() => {
           encode(value);
-        }).to.throw(Error, typeof value + ' is not a function: ' + value);
+        }).to.throw(Error, / is not a function/);
       });
     });
 
@@ -631,13 +631,13 @@ describe('property-types', function() {
     const encode = types.opacity.encode;
 
     it('fails for non-numbers', function() {
-      expect(() => encode()).to.throw(Error, 'Not a number: undefined');
-      expect(() => encode(null)).to.throw(Error, 'Not a number: null');
-      expect(() => encode(true)).to.throw(Error, 'Not a number: true');
-      expect(() => encode('')).to.throw(Error, "Not a number: ''");
-      expect(() => encode('23x')).to.throw(Error, "Not a number: '23x'");
-      expect(() => encode({})).to.throw(Error, 'Not a number: {}');
-      expect(() => encode([])).to.throw(Error, 'Not a number: []');
+      expect(() => encode()).to.throw(Error, 'undefined is not a number');
+      expect(() => encode(null)).to.throw(Error, 'null is not a number');
+      expect(() => encode(true)).to.throw(Error, 'true is not a number');
+      expect(() => encode('')).to.throw(Error, '"" is not a number');
+      expect(() => encode('23x')).to.throw(Error, '"23x" is not a number');
+      expect(() => encode({})).to.throw(Error, '{} is not a number');
+      expect(() => encode([])).to.throw(Error, '[] is not a number');
     });
 
     it('fails for invalid numbers', function() {
@@ -645,7 +645,7 @@ describe('property-types', function() {
       values.forEach((value) => {
         expect(() => {
           encode(value);
-        }).to.throw(Error, 'Invalid number: ' + value);
+        }).to.throw(Error, value + ' is not a valid number');
       });
     });
 
@@ -727,7 +727,7 @@ describe('property-types', function() {
     it('fails for unknown keys', function() {
       expect(() => {
         encode({foo: 1});
-      }).to.throw(Error, 'Not a valid transformation containing "foo"');
+      }).to.throw(Error, '{"foo":1} is not a valid transformation containing key "foo"');
     });
 
   });
@@ -758,13 +758,13 @@ describe('property-types', function() {
       values.forEach((value) => {
         expect(() => {
           encode(value);
-        }).to.throw(Error, typeof value + ' is not an array: ' + value);
+        }).to.throw(Error, / is not an Array/);
       });
     });
 
     it('performs optional item checks', function() {
       expect(encode(['foo', 1, true], 'string')).to.eql(['foo', '1', 'true']);
-      expect(() => encode(['foo'], 'integer')).to.throw(Error, "Not a number: 'foo'");
+      expect(() => encode(['foo'], 'integer')).to.throw(Error, '"foo" is not a number');
     });
 
   });
@@ -814,12 +814,12 @@ describe('property-types', function() {
     });
 
     it('fails for invalid types', function() {
-      expect(() => encode('foo')).to.throw(Error, 'Invalid type: foo');
-      expect(() => encode(false)).to.throw(Error, 'Invalid type: false');
-      expect(() => encode(true)).to.throw(Error, 'Invalid type: true');
-      expect(() => encode([])).to.throw(Error, 'Invalid type: []');
-      expect(() => encode([1, 2, 3, 4, 5])).to.throw(Error, 'Invalid type: [ 1, 2, 3, 4, 5 ]');
-      expect(() => encode(['foo'])).to.throw(Error, 'Invalid type: [ \'foo\' ]');
+      expect(() => encode('foo')).to.throw(Error, '"foo" is not a valid BoxDimension value');
+      expect(() => encode(false)).to.throw(Error, 'false is not a valid BoxDimension value');
+      expect(() => encode(true)).to.throw(Error, 'true is not a valid BoxDimension value');
+      expect(() => encode([])).to.throw(Error, '[] is not a valid BoxDimension value');
+      expect(() => encode([1, 2, 3, 4, 5])).to.throw(Error, '[1, 2, 3, 4, 5] is not a valid BoxDimension value');
+      expect(() => encode(['foo'])).to.throw(Error, '["foo"] is not a valid BoxDimension value');
     });
 
   });

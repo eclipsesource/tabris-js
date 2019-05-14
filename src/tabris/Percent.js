@@ -1,4 +1,5 @@
 import {checkNumber} from './util';
+import {toValueString} from './Console';
 
 export default class Percent {
 
@@ -22,7 +23,7 @@ export default class Percent {
       checkPercentString(value);
       return new Percent(percentNumberFromString(value));
     }
-    throw new Error('Not a valid PercentValue: ' + value);
+    throw new Error(`${toValueString(value)} is not a valid PercentValue`);
   }
 
   constructor(percent) {

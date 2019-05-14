@@ -1,6 +1,7 @@
 import Composite from './Composite';
 import StackLayout from '../StackLayout';
 import NativeObject from '../NativeObject';
+import {toValueString} from '../Console';
 
 export default class Stack extends Composite {
 
@@ -23,7 +24,7 @@ export default class Stack extends Composite {
 
   _checkLayout(value) {
     if (!(value instanceof StackLayout)) {
-      throw new Error('Not an instance of "StackLayout"');
+      throw new Error(`${toValueString(value)} is not an instance of StackLayout`);
     }
   }
 

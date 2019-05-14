@@ -2,6 +2,7 @@ import NativeObject from './NativeObject';
 import TextEncoder from './TextEncoder';
 import TextDecoder from './TextDecoder';
 import {normalizePath} from './util';
+import {toValueString} from './Console';
 
 const ERRORS = {
   EACCES: 'Permission denied',
@@ -117,7 +118,7 @@ function checkPath(path) {
   try {
     return normalizePath(path);
   } catch (err) {
-    throw new Error('Invalid file name: ' + err.message);
+    throw new Error(`${toValueString(path)} is not a valid file name. ${err.message}`);
   }
 }
 
@@ -126,7 +127,7 @@ function checkBuffer(buffer) {
     buffer = buffer.buffer;
   }
   if (!(buffer instanceof ArrayBuffer)) {
-    throw new Error('Invalid buffer type');
+    throw new Error(`${toValueString(buffer)} is not an ArrayBuffer`);
   }
   return buffer;
 }

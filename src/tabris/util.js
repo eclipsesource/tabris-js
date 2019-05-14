@@ -41,7 +41,7 @@ export function normalizePath(path) {
     if (segment === '..') {
       const removed = segments.pop();
       if (!removed || removed === '.') {
-        throw new Error('Path must not start with \'..\'');
+        throw new Error('Path must not start with ".."');
       }
     } else if (segment !== '.' && segment !== '') {
       segments.push(segment);

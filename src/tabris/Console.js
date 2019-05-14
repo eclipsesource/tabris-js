@@ -120,16 +120,33 @@ let inHint = false;
 
 export const toValueString = function(value) {
   try {
-    if (value && typeof value === 'string') {
-      return '"' + value + "'";
-    } else if (value && value[toXML]) { // Alternative to using instanceof to avoid circular dependency
+    if ((value instanceof Array || (value && value._array instanceof Array))) {
+      const array = value instanceof Array ? value : value._array;
+      const joined = `[${array.map(toValueString).join(', ')}]`;
+      if (joined.length <= 40) {
+        return joined;
+      }
+    }
+    if (typeof value === 'string') {
+      const escaped = value.slice(0, 40).replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n');
+      return value.length > 40 ? `"${escaped}..."` : `"${escaped}"`;
+    }
+    if (value && value[toXML]) { // Alternative to using instanceof to avoid circular dependency
       return value._disposedToStringValue || value.toString();
-    } else if (value && (value instanceof Function)) {
+    }
+    if (value && (value instanceof Function)) {
       return value.name;
-    } else if (value && (value.constructor instanceof Function)) {
+    }
+    if (value && (value.constructor === Object)) {
+      const json = JSON.stringify(value);
+      if (json.length <= 40) {
+        return json;
+      }
+    }
+    if (value instanceof Object && (value.constructor instanceof Function)) {
       return value.constructor.name;
     }
-    return value;
+    return value + '';
   } catch (ex) {
     return '[unknown]';
   }

@@ -1,4 +1,5 @@
 import NativeObject from './NativeObject';
+import {toValueString} from './Console';
 
 export default class Crypto extends NativeObject {
 
@@ -11,7 +12,7 @@ export default class Crypto extends NativeObject {
       throw new Error('Not enough arguments to Crypto.getRandomValues');
     }
     if (!isIntArray(typedArray)) {
-      throw new Error('Unsupported type in Crypto.getRandomValues');
+      throw new Error(`Argument ${toValueString(typedArray)} is not an accepted array type`);
     }
     const byteLength = typedArray.byteLength;
     const values = new Uint8Array(this._nativeCall('getRandomValues', {byteLength}));

@@ -21,11 +21,21 @@ describe('LinearGradient', function() {
     it('throws for invalid colorStops', function() {
       expect(() => new LinearGradient(5)).to.throw('colorStops must be an array');
       expect(() => new LinearGradient([])).to.throw('colorStops must not be empty');
-      expect(() => new LinearGradient(['red'])).to.throw('Invalid color stop: "red".');
-      expect(() => new LinearGradient([[Color.red]])).to.throw('Invalid color stop');
-      expect(() => new LinearGradient([['foo']])).to.throw('Invalid color stop: ["foo"]');
-      expect(() => new LinearGradient([['foo', 8]])).to.throw('Invalid color stop: ["foo",8]');
-      expect(() => new LinearGradient([[Color.red, 8, 8]])).to.throw('Invalid color stop');
+      expect(() => new LinearGradient(['red'])).to.throw(
+        '"red" is not a valid color stop. It must be either [Color, Percent] or Color.'
+      );
+      expect(() => new LinearGradient([[Color.red]])).to.throw(
+        '[Color] is not a valid color stop. It must be either [Color, Percent] or Color'
+      );
+      expect(() => new LinearGradient([['foo']])).to.throw(
+        '["foo"] is not a valid color stop. It must be either [Color, Percent] or Color.'
+      );
+      expect(() => new LinearGradient([['foo', 8]])).to.throw(
+        '["foo", 8] is not a valid color stop. It must be either [Color, Percent] or Color.'
+      );
+      expect(() => new LinearGradient([[Color.red, 8, 8]])).to.throw(
+        '[Color, 8, 8] is not a valid color stop. It must be either [Color, Percent] or Color.'
+      );
     });
 
     it('creates an instance from valid parameters', function() {
@@ -164,7 +174,7 @@ describe('LinearGradient', function() {
     describe('with CSS', function() {
 
       it('throws when input does not start with linear-gradient', () => {
-        expect(() => LinearGradient.from('')).to.throw('Argument is not a valid linear gradient definition');
+        expect(() => LinearGradient.from('')).to.throw('Argument "" is not a valid linear gradient definition');
       });
 
       it('throws when input does not provide a color', () => {

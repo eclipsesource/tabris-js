@@ -29,22 +29,22 @@ describe('WebSocket', function() {
 
     it('fails when url parameter is omitted', function() {
       expect(() => new WebSocket())
-        .to.throw('The WebSocket url has to be of type string');
+        .to.throw('WebSocket url undefined is not a string');
     });
 
     it('fails when url parameter is not string', function() {
       expect(() => new WebSocket(123))
-        .to.throw('The WebSocket url has to be of type string');
+        .to.throw('WebSocket url 123 is not a string');
     });
 
     it("fails when scheme of url parameter is not 'ws' or 'wss'", function() {
       expect(() => new WebSocket('http://url.com'))
-        .to.throw("The WebSocket url has to have a scheme of 'ws' or 'wss' but is 'http'");
+        .to.throw("WebSocket url has to have a scheme of 'ws' or 'wss' but is 'http'");
     });
 
     it('fails when protocol is omitted', function() {
       expect(() => new WebSocket('ws://url.com'))
-        .to.throw('The WebSocket protocol has too be a string or an array of strings');
+        .to.throw('WebSocket protocol has too be a string or an array of strings');
     });
 
     it('fails when protocol is not string', function() {

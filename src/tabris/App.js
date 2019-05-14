@@ -1,4 +1,5 @@
 import NativeObject from './NativeObject';
+import {toValueString} from './Console';
 
 const CERTIFICATE_ALGORITHMS = ['RSA2048', 'RSA4096', 'ECDSA256'];
 
@@ -38,7 +39,7 @@ export default class App extends NativeObject {
         throw new Error('Not enough arguments to launch');
       }
       if (typeof url !== 'string') {
-        throw new Error('url is not a string');
+        throw new Error(`Invalid url: ${toValueString(url)} is not a string`);
       }
       this._nativeCall('launch', {
         url,
@@ -73,10 +74,10 @@ export default class App extends NativeObject {
       throw new Error('Not enough arguments to register a font');
     }
     if (typeof alias !== 'string') {
-      throw new Error('alias is not a string');
+      throw new Error(`Invalid alias: ${toValueString(alias)} is not a string`);
     }
     if (typeof file !== 'string') {
-      throw new Error('file is not a string');
+      throw new Error(`Invalid file path: ${toValueString(file)} is not a string`);
     }
     this._nativeCall('registerFont', {alias, file});
   }
@@ -108,8 +109,7 @@ NativeObject.defineProperties(App.prototype, {
       for (let i = 0; i < value.length; i++) {
         const certificate = value[i];
         if (!(certificate instanceof ArrayBuffer)) {
-          throw new Error('The trustedCertificates array entries have to be of type ArrayBuffer but contain '
-            + certificate);
+          throw new Error(`certificate entry ${toValueString(certificate)} is not an ArrayBuffer`);
         }
       }
       this._storeProperty(name, value);
@@ -132,17 +132,17 @@ function checkCertificates(certificates) {
   const hashes = {};
   for (const cert of certificates) {
     if (typeof cert.host !== 'string') {
-      throw new Error('Invalid host for pinned certificate: ' + cert.host);
+      throw new Error(`Invalid host ${toValueString(cert.host)}`);
     }
     if (typeof cert.hash !== 'string' || !cert.hash.startsWith('sha256/')) {
-      throw new Error('Invalid hash for pinned certificate: ' + cert.hash);
+      throw new Error(`Invalid hash ${toValueString(cert.hash)} for pinned certificate ${cert.host}`);
     }
     if (tabris.device.platform === 'iOS') {
       if (!('algorithm' in cert)) {
-        throw new Error('Missing algorithm for pinned certificate: ' + cert.host);
+        throw new Error(`Missing algorithm for pinned certificate ${cert.host}`);
       }
       if (typeof cert.algorithm !== 'string' || CERTIFICATE_ALGORITHMS.indexOf(cert.algorithm) === -1) {
-        throw new Error('Invalid algorithm for pinned certificate: ' + cert.algorithm);
+        throw new Error(`Invalid algorithm ${toValueString(cert.algorithm)} for pinned certificate ${cert.host}`);
       }
     }
     hashes[cert.host] = hashes[cert.host] || [];
@@ -158,7 +158,7 @@ export function create() {
 function normalizePath(path) {
   return path.split(/\/+/).map((segment) => {
     if (segment === '..') {
-      throw new Error('Path must not contain \'..\'');
+      throw new Error(`Path ${toValueString(path)} must not contain ".."`);
     }
     if (segment === '.') {
       return '';

@@ -6,6 +6,7 @@ import {JSX} from './JsxProcessor';
 import {types} from './property-types';
 import LayoutData, {mergeLayoutData} from './LayoutData';
 import {getFilter} from './util-widget-select';
+import {toValueString} from './Console';
 
 /**
  * @abstract
@@ -16,7 +17,7 @@ export default class Widget extends NativeObject {
     this._checkDisposed();
     widget = widget instanceof WidgetCollection ? widget.first() : widget;
     if (!(widget instanceof NativeObject)) {
-      throw new Error('Cannot append to non-widget');
+      throw new Error(`Cannot append to non-widget ${toValueString(widget)}`);
     }
     this._setParent(widget);
     return this;
@@ -26,11 +27,11 @@ export default class Widget extends NativeObject {
     this._checkDisposed();
     widget = widget instanceof WidgetCollection ? widget.first() : widget;
     if (!(widget instanceof NativeObject)) {
-      throw new Error('Cannot insert before non-widget');
+      throw new Error(`Cannot insert before non-widget ${toValueString(widget)}`);
     }
     const parent = widget.parent();
     if (!parent) {
-      throw new Error('Cannot insert before orphan');
+      throw new Error(`Cannot insert before orphan ${toValueString(widget)}`);
     }
     const index = parent.$children.indexOf(widget);
     this._setParent(parent, index);
@@ -41,11 +42,11 @@ export default class Widget extends NativeObject {
     this._checkDisposed();
     widget = widget instanceof WidgetCollection ? widget.first() : widget;
     if (!(widget instanceof NativeObject)) {
-      throw new Error('Cannot insert after non-widget');
+      throw new Error(`Cannot insert after non-widget ${toValueString(widget)}`);
     }
     const parent = widget.parent();
     if (!parent) {
-      throw new Error('Cannot insert after orphan');
+      throw new Error(`Cannot insert after orphan ${toValueString(widget)}`);
     }
     this.detach();
     const index = parent.$children.indexOf(widget);

@@ -77,7 +77,7 @@ describe('ActionSheet', () => {
 
       actionSheet.actions = [{image: 23}];
 
-      expect(console.warn).to.have.been.calledWithMatch(/Not a valid ImageValue/);
+      expect(console.warn).to.have.been.calledWithMatch(/23 is not a valid ImageValue/);
       expect(actionSheet.actions).to.deep.equal([]);
     });
 

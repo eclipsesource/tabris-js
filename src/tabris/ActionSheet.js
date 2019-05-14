@@ -2,12 +2,13 @@ import Popup from './Popup';
 import NativeObject from './NativeObject';
 import {types} from './property-types';
 import {JSX} from './JsxProcessor';
+import {toValueString} from './Console';
 
 export default class ActionSheet extends Popup {
 
   static open(actionSheet) {
     if (!(actionSheet instanceof ActionSheet)) {
-      throw new Error('Not an ActionSheet: ' + actionSheet);
+      throw new Error('Not an ActionSheet: ' + toValueString(actionSheet));
     }
     return actionSheet.open();
   }
@@ -66,7 +67,7 @@ NativeObject.defineProperties(ActionSheet.prototype, {
     type: {
       encode(value) {
         if (!Array.isArray(value)) {
-          throw new Error('value is not an array');
+          throw new Error(toValueString(value) + ' is not an array');
         }
         return value.map(action => {
           const result = {title: '' + (action.title || '')};
@@ -75,7 +76,7 @@ NativeObject.defineProperties(ActionSheet.prototype, {
           }
           if ('style' in action) {
             if (!['default', 'cancel', 'destructive'].includes(action.style)) {
-              throw new Error('Invalid action style');
+              throw new Error('Invalid action style ' + toValueString(action.style));
             }
             result.style = action.style;
           }

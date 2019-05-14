@@ -1,7 +1,7 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 import Composite from './Composite';
-import {hint} from '../Console';
+import {hint, toValueString} from '../Console';
 
 export default class CollectionView extends Composite {
 
@@ -29,7 +29,7 @@ export default class CollectionView extends Composite {
 
   load(itemCount) {
     if (!isNumber(itemCount) || itemCount < 0) {
-      throw new Error('Invalid itemCount');
+      throw new Error(`Invalid itemCount ${toValueString(itemCount)}`);
     }
     this._storeProperty('itemCount', itemCount);
     this._needsReload = true;
@@ -59,7 +59,7 @@ export default class CollectionView extends Composite {
   insert(index, count = 1) {
     index = Math.min(Math.max(0, this.$checkIndex(index)), this.itemCount);
     if (!isNumber(count) || count <= 0) {
-      throw new Error('Invalid insert count');
+      throw new Error(`Invalid insert count ${toValueString(count)}`);
     }
     this._storeProperty('itemCount', this.itemCount + count);
     this.$flush();
@@ -71,7 +71,7 @@ export default class CollectionView extends Composite {
     if (isNumber(count) && count >= 0) {
       count = Math.min(count, this.itemCount - index);
     } else {
-      throw new Error('Invalid remove count');
+      throw new Error(`Invalid remove count ${toValueString(count)}`);
     }
     if (index >= 0 && index < this.itemCount && count > 0) {
       this._storeProperty('itemCount', this.itemCount - count);
@@ -102,14 +102,14 @@ export default class CollectionView extends Composite {
   */
   itemIndex(widget) {
     if (!(widget instanceof Widget)) {
-      throw new Error('Not a widget: ' + widget);
+      throw new Error(`${toValueString(widget)} is not a widget`);
     }
     let cell = widget;
     while (cell && cell.parent() !== this) {
       cell = cell.parent();
     }
     if (!cell) {
-      throw new Error('Not a cell or child of a cell');
+      throw new Error(`${toValueString(widget)} not a cell or child of a cell`);
     }
     if (this._cellMapping.has(cell)) {
       return this._cellMapping.get(cell);
@@ -123,7 +123,7 @@ export default class CollectionView extends Composite {
   */
   cellByItemIndex(index) {
     if (!isNumber(index) || index < 0) {
-      throw new Error('Invalid index');
+      throw new Error(`${toValueString(index)} is not a valid index`);
     }
     if (this._itemMapping.has(index)) {
       return this._itemMapping.get(index);
@@ -133,7 +133,7 @@ export default class CollectionView extends Composite {
 
   $checkIndex(index) {
     if (!isNumber(index)) {
-      throw new Error('Invalid index');
+      throw new Error(`${toValueString(index)} is not a valid index`);
     }
     return index < 0 ? index + this.itemCount : index;
   }
@@ -175,10 +175,10 @@ export default class CollectionView extends Composite {
   $createCell(type) {
     const cell = this.createCell(decodeCellType(this, type));
     if (!(cell instanceof Widget)) {
-      throw new Error('Created cell is not a widget');
+      throw new Error(`Created cell ${toValueString(cell)} is not a widget`);
     }
     if (cell._parent) {
-      throw new Error('Created cell already has a parent');
+      throw new Error(`Created cell ${toValueString(cell)} already has a parent`);
     }
     cell._parent = this;
     this._addChild(cell);

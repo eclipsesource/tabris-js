@@ -1,6 +1,7 @@
 import * as ConstraintExports from './Constraint'; // work around circular dependency
 import {checkIsValidSiblingReference, referenceToString, normalizeNumber, normalizeReference} from './Constraint';
 import {checkNumber} from './util';
+import {toValueString} from './Console';
 
 export default class LayoutData {
 
@@ -65,13 +66,13 @@ export default class LayoutData {
       return LayoutData.center;
     }
     if (!(value instanceof Object)) {
-      throw new Error('Not an object: ' + typeof value);
+      throw new Error(`${toValueString(value)} is not an object`);
     }
     if (value instanceof LayoutData) {
       return value;
     }
     if (value.constructor !== Object) {
-      throw new Error('Not a parameter object: ' + value.constructor.name);
+      throw new Error(`${toValueString(value)} is not a parameter object`);
     }
     return new LayoutData({
       left: has(value, 'left') ? ConstraintExports.default.from(value.left) : 'auto',
@@ -87,11 +88,8 @@ export default class LayoutData {
   }
 
   constructor(parameters) {
-    if (!(parameters instanceof Object)) {
-      throw new Error('Not an object: ' + parameters);
-    }
-    if (parameters.constructor !== Object) {
-      throw new Error('Not a parameter object: ' + parameters.constructor.name);
+    if (!(parameters instanceof Object) || parameters.constructor !== Object) {
+      throw new Error(`${toValueString(parameters)} is not a parameter object`);
     }
     setConstraintValue(this, parameters, 'left');
     setConstraintValue(this, parameters, 'top');
@@ -145,7 +143,7 @@ function setConstraintValue(layoutData, parameters, property) {
   if (value === 'auto' || value instanceof ConstraintExports.default) {
     return Object.defineProperty(layoutData, property, {enumerable: true, value});
   }
-  throw new Error(`Invalid ${property} constraint ${value}`);
+  throw new Error(`Invalid ${property} constraint ${toValueString(value)}`);
 }
 
 function setDimension(layoutData, parameters, property) {

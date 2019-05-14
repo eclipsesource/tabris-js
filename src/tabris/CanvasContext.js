@@ -3,7 +3,7 @@ import Color from './Color';
 import {fontStringToObject, fontObjectToString} from './util-fonts';
 import ImageData from './ImageData';
 import GC from './GC';
-import {hint} from './Console';
+import {hint, toValueString} from './Console';
 
 export default class CanvasContext {
 
@@ -173,10 +173,10 @@ const properties = {
   lineWidth: {
     init: 1,
     encode(value) {
-      if (value > 0) {
+      if (!isNaN(value) && value > 0) {
         return value;
       }
-      throw new Error(value);
+      throw new Error(`Invalid value ${toValueString(value)}`);
     },
     decode: passThrough,
     addOperations(value) {
@@ -254,7 +254,7 @@ function checkValue(value) {
   if (value in this.values) {
     return value;
   }
-  throw new Error(value);
+  throw new Error(`Invalid value ${toValueString(value)}`);
 }
 
 function toObject(array) {

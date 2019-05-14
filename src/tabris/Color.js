@@ -1,5 +1,6 @@
 import {colorStringToArray, NAMES} from './util-colors';
 import {checkNumber} from './util';
+import {toValueString} from './Console';
 
 export default class Color {
 
@@ -29,7 +30,7 @@ export default class Color {
     if (typeof value === 'string') {
       return arrayToColorInstance(colorStringToArray(value));
     }
-    throw new Error('Not a valid ColorValue: ' + value);
+    throw new Error(`Not a valid ColorValue: ${toValueString(value)}`);
   }
 
   constructor(red, green, blue, alpha = 255) {
@@ -59,11 +60,17 @@ export default class Color {
 }
 
 Object.keys(NAMES).forEach(name => {
-  Object.defineProperty(Color, name, {value: Color.from(NAMES[name])});
+  let value; // create lazy to avoid circular dependency issues
+  Object.defineProperty(Color, name, {get() {
+    if (!value) {
+      value = Color.from(NAMES[name]);
+    }
+    return value;
+  }});
 });
 
 function setChannel(color, channel, value) {
-  checkNumber(value, [0, 255], `Invalid color value "${channel}"`);
+  checkNumber(value, [0, 255], `Invalid color value ${toValueString(channel)}`);
   Object.defineProperty(color, channel, {enumerable: true, value: Math.round(value)});
 }
 

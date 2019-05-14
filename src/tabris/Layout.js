@@ -1,5 +1,5 @@
 import {types} from './property-types';
-import {warn} from './Console';
+import {warn, toValueString} from './Console';
 import LayoutData from './LayoutData';
 import Constraint from './Constraint';
 import Percent from './Percent';
@@ -28,7 +28,7 @@ export default class Layout {
 
   add(composite) {
     if (!composite || composite.layout !== this) {
-      throw new Error(`Invalid layout target ${composite}. Do not call layout.add directly.`);
+      throw new Error(`Invalid layout target ${toValueString(composite)}. Do not call layout.add directly.`);
     }
     composite.on({
       addChild: this._handleAddChildEvent,

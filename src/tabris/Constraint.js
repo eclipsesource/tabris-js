@@ -1,6 +1,7 @@
 import * as WidgetExports from '../../src/tabris/Widget'; // work around circular dependency
 import Percent from './Percent';
 import {checkNumber} from './util';
+import {toValueString} from './Console';
 
 const selectorRegex = /^(\*|([#.A-Z][A-Za-z0-9_-]+))$/;
 const numberRegex = /^[+-]?([0-9]+|[0-9]*\.[0-9]+)$/;
@@ -40,12 +41,12 @@ export default class Constraint {
     if ('reference' in constraintValue || 'offset' in constraintValue) {
       return fromArray([constraintValue.reference || zeroPercent, constraintValue.offset || 0]);
     }
-    throw new Error('Invalid constraint: ' + constraintValue);
+    throw new Error(`Invalid constraint ${toValueString(constraintValue)}`);
   }
 
   constructor(reference, offset) {
     if (typeof reference === 'string' && !selectorRegex.test(reference)) {
-      throw new Error('Invalid sibling selector: ' + reference);
+      throw new Error(`Invalid sibling selector ${toValueString(reference)}`);
     }
     if (!(reference instanceof Percent)) {
       checkIsValidSiblingReference(reference);
@@ -70,7 +71,7 @@ Constraint.prev = Symbol('prev()');
 
 export function checkIsValidSiblingReference(reference) {
   if (typeof reference === 'string' && !selectorRegex.test(reference)) {
-    throw new Error('Invalid sibling selector: ' + reference);
+    throw new Error(`Invalid sibling selector ${toValueString(reference)}`);
   }
   if (
     typeof reference !== 'string'
@@ -78,7 +79,7 @@ export function checkIsValidSiblingReference(reference) {
     && reference !== Constraint.next
     && reference !== Constraint.prev
   ) {
-    throw new Error('Invalid constraint reference: ' + reference);
+    throw new Error(`Invalid constraint reference ${toValueString(reference)}`);
   }
 }
 
@@ -120,7 +121,7 @@ export function normalizeReference(reference, shorthand) {
       return str;
     }
   }
-  throw new Error('Not a percentage or widget reference: ' + reference);
+  throw new Error(`${toValueString(reference)} is not a percentage or widget reference`);
 }
 
 export function normalizeNumber(value, shorthand) {
@@ -138,7 +139,7 @@ export {zero};
 
 function fromArray(array) {
   if (array.length !== 2) {
-    throw new Error('Wrong number of elements in constraint array: ' + array.length);
+    throw new Error(`Constraint array requires exactly 2 elements but has ${array.length}`);
   }
   return new Constraint(normalizeReference(array[0]), normalizeNumber(array[1]));
 }

@@ -1,7 +1,7 @@
 import NativeObject from './NativeObject';
 import Event, {addDOMEventTargetMethods, defineEventHandlerProperties} from './Event';
 import {omit} from './util';
-import {hint} from './Console';
+import {hint, toValueString} from './Console';
 
 const CONNECTING = 0;
 const OPEN = 1;
@@ -39,7 +39,7 @@ export default class WebSocket {
 
   constructor(url, protocol) {
     if (typeof url !== 'string') {
-      throw new Error('The WebSocket url has to be of type string');
+      throw new Error(`WebSocket url ${toValueString(url)} is not a string`);
     }
     const scheme = extractScheme(url);
     if (!(scheme === 'ws' || scheme === 'wss')) {

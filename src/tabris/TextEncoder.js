@@ -1,4 +1,5 @@
 import NativeObject from './NativeObject';
+import {toValueString} from './Console';
 
 const SUPPORTED_ENCODINGS = ['ascii', 'utf-8'];
 
@@ -25,7 +26,7 @@ export default class TextEncoder extends NativeObject {
       }
       encoding = encoding || 'utf-8';
       if (!SUPPORTED_ENCODINGS.includes(encoding)) {
-        throw new Error(`Unsupported encoding: '${encoding}'`);
+        throw new Error(`Unsupported encoding: ${toValueString(encoding)}`);
       }
       new TextEncoder()
         .on('result', ({target, data}) => {

@@ -168,13 +168,15 @@ describe('CollectionView', function() {
 
       it('throws when createCell returns wrong type', function() {
         view.createCell = spy(() => 23);
-        expect(() => view._trigger('createCell', {type: 0})).to.throw(Error, 'Created cell is not a widget');
+        expect(() => view._trigger('createCell', {type: 0})).to.throw(Error, 'Created cell 23 is not a widget');
       });
 
       it('throws when createCell returns widget with a parent', function() {
         const cell = new Composite().appendTo(new Composite());
         view.createCell = spy(() => cell);
-        expect(() => view._trigger('createCell', {type: 0})).to.throw(Error, 'Created cell already has a parent');
+        expect(() => view._trigger('createCell', {type: 0})).to.throw(Error,
+          /Created cell Composite\[cid=".*"\] already has a parent/
+        );
       });
 
     });
@@ -716,7 +718,7 @@ describe('CollectionView', function() {
       });
 
       it('fails when index is not a number', function() {
-        expect(() => view.insert(NaN)).to.throw(Error, 'Invalid index');
+        expect(() => view.insert(NaN)).to.throw(Error, 'NaN is not a valid index');
       });
 
       it('fails when count is not a number', function() {
@@ -791,11 +793,11 @@ describe('CollectionView', function() {
       });
 
       it('fails when index is not a number', function() {
-        expect(() => view.remove(NaN)).to.throw(Error, 'Invalid index');
+        expect(() => view.remove(NaN)).to.throw(Error, 'NaN is not a valid index');
       });
 
       it('fails when count is not a number', function() {
-        expect(() => view.remove(0, NaN)).to.throw(Error, 'Invalid remove count');
+        expect(() => view.remove(0, NaN)).to.throw(Error, 'Invalid remove count NaN');
       });
 
       it('calls native update', function() {
@@ -914,7 +916,7 @@ describe('CollectionView', function() {
       it('fails with invalid parameter', function() {
         expect(() => {
           view.refresh(NaN);
-        }).to.throw(Error, 'Invalid index');
+        }).to.throw(Error, 'NaN is not a valid index');
       });
 
     });

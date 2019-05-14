@@ -4,7 +4,7 @@ import {capitalizeFirstChar} from './util';
 import TextInput from './widgets/TextInput';
 import {JSX} from './JsxProcessor';
 import {create as createContentView} from './widgets/ContentView';
-import {hint} from './Console';
+import {hint, toValueString} from './Console';
 import Composite from './widgets/Composite';
 
 export default class AlertDialog extends Popup {
@@ -84,7 +84,7 @@ NativeObject.defineProperties(AlertDialog.prototype, {
     type: {
       encode(value) {
         if (typeof value !== 'object') {
-          throw new Error('value is not an object');
+          throw new Error(toValueString(value) + ' is not an object');
         }
         const encoded = {};
         if ('ok' in value) {

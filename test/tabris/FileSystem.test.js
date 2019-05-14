@@ -75,7 +75,7 @@ describe('FileSystem', function() {
       it('rejects invalid path', function() {
         return fs.readFile('/../bar').then(expectFail, err => {
           expect(err).to.be.instanceOf(Error);
-          expect(err.message).to.equal("Invalid file name: Path must not start with '..'");
+          expect(err.message).to.equal('"/../bar" is not a valid file name. Path must not start with ".."');
         });
       });
 
@@ -83,7 +83,7 @@ describe('FileSystem', function() {
         stub(client, 'call').callsFake((id, method, args) => args.onSuccess(data));
         return fs.readFile('/foo', 'foo').then(expectFail, err => {
           expect(err).to.be.instanceOf(Error);
-          expect(err.message).to.equal('Unsupported encoding: \'foo\'');
+          expect(err.message).to.equal('Unsupported encoding: "foo"');
         });
       });
 
@@ -138,7 +138,9 @@ describe('FileSystem', function() {
       it('rejects invalid path', function() {
         return fs.readDir('/../bar').then(expectFail, err => {
           expect(err).to.be.instanceOf(Error);
-          expect(err.message).to.equal("Invalid file name: Path must not start with '..'");
+          expect(err.message).to.equal(
+            '"/../bar" is not a valid file name. Path must not start with ".."'
+          );
         });
       });
 
@@ -177,21 +179,21 @@ describe('FileSystem', function() {
       it('rejects invalid path', function() {
         return fs.writeFile('/../bar', data).then(expectFail, err => {
           expect(err).to.be.instanceOf(Error);
-          expect(err.message).to.equal("Invalid file name: Path must not start with '..'");
+          expect(err.message).to.equal('"/../bar" is not a valid file name. Path must not start with ".."');
         });
       });
 
       it('rejects invalid data', function() {
         return fs.writeFile('/foo', new Date()).then(expectFail, err => {
           expect(err).to.be.instanceOf(Error);
-          expect(err.message).to.equal('Invalid buffer type');
+          expect(err.message).to.equal('Date is not an ArrayBuffer');
         });
       });
 
       it('rejects invalid encoding', function() {
         return fs.writeFile('/foo', 'string', 'foo').then(expectFail, err => {
           expect(err).to.be.instanceOf(Error);
-          expect(err.message).to.equal('Unsupported encoding: \'foo\'');
+          expect(err.message).to.equal('Unsupported encoding: "foo"');
         });
       });
 
@@ -255,7 +257,9 @@ describe('FileSystem', function() {
       it('rejects invalid path', function() {
         return fs.removeFile('/../bar').then(expectFail, err => {
           expect(err).to.be.instanceOf(Error);
-          expect(err.message).to.equal("Invalid file name: Path must not start with '..'");
+          expect(err.message).to.equal(
+            '"/../bar" is not a valid file name. Path must not start with ".."'
+          );
         });
       });
 

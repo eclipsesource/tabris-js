@@ -9,6 +9,7 @@ import {
   normalizeStyle
 } from './util-fonts';
 import {checkNumber} from './util';
+import {toValueString} from './Console';
 
 export default class Font {
 
@@ -35,7 +36,7 @@ export default class Font {
     if (typeof value === 'string') {
       return fontLikeObjectToFontInstance(fontStringToObject(value));
     }
-    throw new Error('Not a valid FontValue: ' + value);
+    throw new Error(`${toValueString(value)} is not a valid FontValue`);
   }
 
   static get sansSerif() {

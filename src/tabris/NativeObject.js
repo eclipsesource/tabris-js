@@ -1,9 +1,8 @@
 import {types} from './property-types';
-import {hint} from './Console';
+import {hint, toXML} from './Console';
 import EventObject from './EventObject';
 import Events from './Events';
 import Listeners, {ChangeListeners} from './Listeners';
-import {toXML} from './Console';
 
 const EventsClass = /** @type {any} */ function EventsClass() {};
 Object.assign(EventsClass.prototype, Events);

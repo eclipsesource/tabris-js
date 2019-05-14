@@ -294,7 +294,7 @@ describe('App', function() {
 
     it('rejects invalid url type`', function() {
       return app.launch(23).then(expectFail, error => {
-        expect(error.message).to.equal('url is not a string');
+        expect(error.message).to.equal('Invalid url: 23 is not a string');
       });
     });
 
@@ -330,11 +330,11 @@ describe('App', function() {
     });
 
     it('rejects invalid alias type', () => {
-      expect(() => app.registerFont(23, 'arial.ttf')).to.throw(Error, 'alias is not a string');
+      expect(() => app.registerFont(23, 'arial.ttf')).to.throw(Error, 'Invalid alias: 23 is not a string');
     });
 
     it('rejects invalid font type', () => {
-      expect(() => app.registerFont('Arial', 23)).to.throw(Error, 'file is not a string');
+      expect(() => app.registerFont('Arial', 23)).to.throw(Error, 'Invalid file path: 23 is not a string');
     });
 
     it('calls native `registerFont`', () => {
@@ -423,7 +423,7 @@ describe('App', function() {
     it('throws on \'..\'', function() {
       expect(() => {
         app.getResourceLocation('../foo');
-      }).to.throw('Path must not contain \'..\'');
+      }).to.throw('Path "../foo" must not contain ".."');
     });
 
   });

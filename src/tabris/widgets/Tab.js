@@ -1,6 +1,7 @@
 import NativeObject from '../NativeObject';
 import Composite from './Composite';
 import TabFolder from './TabFolder';
+import {toValueString} from '../Console';
 
 export default class Tab extends Composite {
 
@@ -10,7 +11,7 @@ export default class Tab extends Composite {
 
   _setParent(parent, index) {
     if (parent && !(parent instanceof TabFolder)) {
-      throw new Error('Tab could not be appended to ' + parent);
+      throw new Error(`Tab could not be appended to ${toValueString(parent)}`);
     }
     super._setParent(parent, index);
   }

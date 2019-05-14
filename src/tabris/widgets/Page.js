@@ -1,6 +1,7 @@
 import NativeObject from '../NativeObject';
 import Composite from './Composite';
 import NavigationView from '../widgets/NavigationView';
+import {toValueString} from '../Console';
 
 export default class Page extends Composite {
 
@@ -8,17 +9,19 @@ export default class Page extends Composite {
     return 'tabris.Page';
   }
 
+  /** @returns {never} */
   insertBefore() {
     throw new Error('insertBefore not supported on Page');
   }
 
+  /** @returns {never} */
   insertAfter() {
     throw new Error('insertAfter not supported on Page');
   }
 
   _setParent(parent, index) {
     if (parent && !(parent instanceof NavigationView)) {
-      throw new Error('Page could not be appended to ' + parent);
+      throw new Error(`Page could not be appended to ${toValueString(parent)}`);
     }
     super._setParent(parent, index);
   }

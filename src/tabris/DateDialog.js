@@ -1,5 +1,6 @@
 import Popup from './Popup';
 import NativeObject from './NativeObject';
+import {toValueString} from './Console';
 
 export default class DateDialog extends Popup {
 
@@ -64,6 +65,6 @@ function setDate(name, value) {
     this._nativeSet(name, value.getTime());
     this._storeProperty(name, value);
   } else {
-    throw new Error(`${name} is not of type Date`);
+    throw new Error(`${toValueString(name)} is not of type Date`);
   }
 }

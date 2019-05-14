@@ -5,7 +5,7 @@ import Color from './Color';
 import Image from './Image';
 import Font from './Font';
 import LinearGradient from './LinearGradient';
-import {format} from './Formatter';
+import {toValueString} from './Console';
 
 export const types = {
 
@@ -69,7 +69,7 @@ export const types = {
   function: {
     encode(value) {
       if ('function' !== typeof value) {
-        throw new Error(typeof value + ' is not a function: ' + value);
+        throw new Error(`${toValueString(value)} + ' is not a function`);
       }
       return value;
     }
@@ -104,7 +104,7 @@ export const types = {
       } else if (Image.isValidImageValue(value)) {
         return {type: 'image', image: imageToArray(Image.from.call(this, value))};
       }
-      throw new Error(value + ' must be a valid LinearGradientValue or ColorValue.');
+      throw new Error(`${toValueString(value)} must be a valid LinearGradientValue or ColorValue.`);
     },
     decode(value) {
       if (!value) {
@@ -174,7 +174,7 @@ export const types = {
           }
           arr = arr.map(encodePx);
         } catch (ex) {
-          throw new Error('Invalid type: ' + format(value));
+          throw new Error(`${toValueString(value)} is not a valid BoxDimension value`);
         }
         return {
           top: arr[0],
@@ -191,7 +191,7 @@ export const types = {
           bottom: 'bottom' in value ? encodePx(value.bottom) : 0
         };
       }
-      throw new Error('Invalid type: ' + value);
+      throw new Error(`${toValueString(value)} is not a valid BoxDimension value`);
     }
   },
 
@@ -259,7 +259,7 @@ export const types = {
       const result = Object.assign({}, transformDefaults);
       for (const key in value) {
         if (!(key in transformDefaults)) {
-          throw new Error('Not a valid transformation containing "' + key + '"');
+          throw new Error(`${toValueString(value)} is not a valid transformation containing key "${key}"`);
         }
         result[key] = encodeNumber(value[key]);
       }
@@ -273,7 +273,7 @@ export const types = {
         return [];
       }
       if (!(value instanceof Array)) {
-        throw new Error(typeof value + ' is not an array: ' + value);
+        throw new Error(`${toValueString(value)} is not an Array`);
       }
       if (type) {
         return value.map(types[type].encode);
@@ -320,10 +320,10 @@ function encodeNumber(value) {
     return parseFloat(value);
   }
   if (typeof value !== 'number') {
-    throw new Error('Not a number: ' + toString(value));
+    throw new Error(`${toValueString(value)} is not a number`);
   }
   if (!isFinite(value)) {
-    throw new Error('Invalid number: ' + toString(value));
+    throw new Error(`${toValueString(value)} is not a valid number`);
   }
   return value;
 }
@@ -336,16 +336,3 @@ const transformDefaults = {
   translationY: 0,
   translationZ: 0
 };
-
-function toString(value) {
-  if (typeof value === 'string') {
-    return "'" + value + "'";
-  }
-  if (Array.isArray(value)) {
-    return '[' + value.map(toString).join(', ') + ']';
-  }
-  if (typeof value === 'object' && value != null) {
-    return '{' + Object.keys(value).join(', ') + '}';
-  }
-  return '' + value;
-}

@@ -40,13 +40,13 @@ describe('Listeners', function() {
 
   it('throws for wrong target', function() {
     expect(() => new Listeners()).to.throw('Missing target instance');
-    expect(() => new Listeners(null)).to.throw('Missing target instance');
-    expect(() => new Listeners(true)).to.throw('Missing target instance');
+    expect(() => new Listeners(null)).to.throw('Target null is not an object');
+    expect(() => new Listeners(true)).to.throw('Target true is not an object');
   });
 
   it('throws for wrong type', function() {
     expect(() => new Listeners({})).to.throw('Missing event type string');
-    expect(() => new Listeners({}, true)).to.throw('Missing event type string');
+    expect(() => new Listeners({}, true)).to.throw('Event type true is not a string');
     expect(() => new Listeners({}, '')).to.throw('Missing event type string');
   });
 

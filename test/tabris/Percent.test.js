@@ -73,7 +73,7 @@ describe('Percent', function() {
     });
 
     it('rejects Percent-like object with missing percent', function() {
-      expect(() => Percent.from()).to.throw('Not a valid PercentValue: undefined');
+      expect(() => Percent.from()).to.throw('undefined is not a valid PercentValue');
       expect(() => Percent.from({})).to.throw('Percent-like object missing percent value');
     });
 
@@ -81,8 +81,8 @@ describe('Percent', function() {
       expect(() => Percent.from('foo')).to.throw('Invalid percent string foo: It must be a number followed by "%"');
       expect(() => Percent.from('foo%')).to.throw('Invalid percent string foo%: It must be a number followed by "%"');
       expect(() => Percent.from('NaN')).to.throw('Invalid percent string NaN: It must be a number followed by "%"');
-      expect(() => Percent.from(Infinity)).to.throw('Not a valid PercentValue: Infinity');
-      expect(() => Percent.from(-Infinity)).to.throw('Not a valid PercentValue: -Infinity');
+      expect(() => Percent.from(Infinity)).to.throw('Infinity is not a valid PercentValue');
+      expect(() => Percent.from(-Infinity)).to.throw('-Infinity is not a valid PercentValue');
     });
 
   });

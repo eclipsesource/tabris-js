@@ -137,7 +137,7 @@ describe('AlertDialog', function() {
 
       expect(dialog.buttons).to.deep.equal({});
       expect(console.warn).to.have.been.calledWithMatch(
-        'AlertDialog: Ignored unsupported value for property "buttons": value is not an object'
+        'AlertDialog: Ignored unsupported value for property "buttons": 123 is not an object'
       );
     });
 

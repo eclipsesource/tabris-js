@@ -1,6 +1,7 @@
 import {omit} from './util';
 import {getCurrentLine} from './util-stacktrace';
 import Listeners from './Listeners';
+import {toValueString} from './Console';
 
 const MARKUP = {
   br: {},
@@ -23,7 +24,7 @@ export default class JsxProcessor {
 
   createElement(Type, attributes, ...children) {
     if (!(Type instanceof Function) && typeof Type !== 'string') {
-      throw new Error(`JSX: Unsupported type ${Type}`);
+      throw new Error(`JSX: Unsupported type ${toValueString(Type)}`);
     }
     if (attributes && attributes.children && children && children.length) {
       throw new Error(`JSX: Children for type ${Type.name} given twice.`);

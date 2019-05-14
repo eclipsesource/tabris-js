@@ -49,7 +49,7 @@ describe('TextDecoder', function() {
 
     it('rejects unsupported encoding parameter', function() {
       return decode(buffer, 'foo').then(expectFail, err => {
-        expect(err.message).to.equal("Unsupported encoding: 'foo'");
+        expect(err.message).to.equal('Unsupported encoding: "foo"');
       });
     });
 

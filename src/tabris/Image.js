@@ -1,5 +1,5 @@
 import {normalizePathUrl, checkNumber} from './util';
-import {hint} from './Console';
+import {hint, toValueString} from './Console';
 
 export default class Image {
 
@@ -33,7 +33,7 @@ export default class Image {
     if (typeof value === 'string') {
       return new Image({src: value});
     }
-    throw new Error('Not a valid ImageValue: ' + value);
+    throw new Error(`${toValueString(value)} is not a valid ImageValue`);
   }
 
   constructor(imageLike) {
@@ -82,7 +82,7 @@ function checkSrc(imageLike) {
     throw new Error('Image "src" missing');
   }
   if (typeof imageLike.src !== 'string') {
-    throw new Error(`Image "src" ${imageLike.src} must be a string`);
+    throw new Error(`Image "src" ${toValueString(imageLike.src)} must be a string`);
   }
   if (!imageLike.src.length) {
     throw new Error('Image "src" must not be empty');

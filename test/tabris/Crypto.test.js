@@ -29,17 +29,17 @@ describe('Crypto', function() {
 
     it('fails with null argument', function() {
       expect(() => crypto.getRandomValues(null))
-        .to.throw('Unsupported type in Crypto.getRandomValues');
+        .to.throw('Argument null is not an accepted array type');
     });
 
     it('fails with plain array', function() {
       expect(() => crypto.getRandomValues([0, 0, 0]))
-        .to.throw('Unsupported type in Crypto.getRandomValues');
+        .to.throw('Argument [0, 0, 0] is not an accepted array type');
     });
 
     it('fails with float typed array', function() {
       expect(() => crypto.getRandomValues(new Float32Array(3)))
-        .to.throw('Unsupported type in Crypto.getRandomValues');
+        .to.throw('Argument Float32Array is not an accepted array type');
     });
 
     it('fails when client returns wrong number of values', function() {

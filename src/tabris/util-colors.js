@@ -1,3 +1,4 @@
+import {toValueString} from './Console';
 
 export function colorArrayToString(array) {
   const r = array[0];
@@ -52,7 +53,7 @@ export function colorStringToArray(str) {
     const rgb = NAMES[str];
     return [rgb[0], rgb[1], rgb[2], 255];
   }
-  throw new Error('invalid color: ' + str);
+  throw new Error(`${toValueString(str)} is not a valid color`);
 }
 
 /*

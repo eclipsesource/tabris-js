@@ -1,6 +1,7 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 import {JSX} from '../JsxProcessor';
+import {toValueString} from '../Console';
 
 export default class TextInput extends Widget {
 
@@ -97,7 +98,9 @@ NativeObject.defineProperties(TextInput.prototype, {
     type: 'array',
     set(name, value) {
       if (value.length !== 2) {
-        throw new Error(`Selection has to be a two element array with start and end position but is ${value}`);
+        throw new Error(
+          `Selection has to be a two element array with start and end position but is ${toValueString(value)}`
+        );
       }
       const textLength = this.text.length;
       if (value[1] > textLength || value[0] > textLength || value[1] < 0 || value[0] < 0) {

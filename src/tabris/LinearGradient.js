@@ -1,6 +1,7 @@
 import {checkNumber} from './util';
 import Color from './Color';
 import Percent from './Percent';
+import {toValueString} from './Console';
 
 const SIDES = ['left', 'top', 'right', 'bottom'];
 
@@ -29,7 +30,7 @@ export default class LinearGradient {
     if (typeof value === 'string') {
       return gradientLikeObjectToGradientInstance(gradientStringToObject(value));
     }
-    throw new Error('Not a valid LinearGradient: ' + value);
+    throw new Error(`${toValueString(value)} is not a valid LinearGradient`);
   }
 
   constructor(colorStops, direction) {
@@ -58,11 +59,11 @@ function gradientStringToObject(css) {
   let gradient = css.trim();
   const result = {colorStops: []};
   if (gradient.indexOf('linear-gradient') !== 0) {
-    throw new Error('Argument is not a valid linear gradient definition');
+    throw new Error(`Argument ${toValueString(css)} is not a valid linear gradient definition`);
   }
   gradient = gradient.substring(15).trim();
   if (gradient.indexOf('(') !== 0 && gradient.lastIndexOf(')') !== gradient.length - 1) {
-    throw new Error('Argument is not a valid linear gradient definition');
+    throw new Error(`Argument ${toValueString(css)} is not a valid linear gradient definition`);
   }
   gradient = gradient.substring(1, gradient.length - 1).trim();
   gradient = encodeRGBColors(gradient);
@@ -90,7 +91,7 @@ function gradientStringToObject(css) {
       const offset = colorStopParts[1];
       result.colorStops.push([color, offset]);
     } else {
-      throw new Error('Invalid color stop value');
+      throw new Error(`Invalid color stop value ${toValueString(colorStopParts)}`);
     }
   }
   return result;
@@ -186,14 +187,14 @@ function checkColorStop(colorStop) {
 }
 
 function throwInvalidColorStop(colorStop) {
-  throw new Error('Invalid color stop: ' + JSON.stringify(colorStop) + '. ' +
-    'It must be either [Color, Percent] or Color.');
+  throw new Error(
+    `${toValueString(colorStop)} is not a valid color stop. It must be either [Color, Percent] or Color.`
+  );
 }
 
 function throwInvalidGradientLikeColorStop(colorStop) {
   throw new Error(
-    'Invalid color stop: ' + JSON.stringify(colorStop) +
-    '. It must be either [ColorValue, Percent] or ColorValue.'
+    `${toValueString(colorStop)} is not a valid color stop. It must be either [ColorValue, Percent] or ColorValue.`
   );
 }
 

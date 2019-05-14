@@ -1,4 +1,5 @@
 import Events from './Events';
+import {toValueString} from './Console';
 
 const DELEGATE_FIELDS = ['promise', 'addListener', 'removeListener', 'once', 'trigger'];
 const storeKey = Symbol('ListenersStore');
@@ -18,11 +19,17 @@ export default class Listeners {
   }
 
   constructor(target, type) {
-    if (arguments.length < 1 || !(target instanceof Object)) {
+    if (arguments.length < 1) {
       throw new Error('Missing target instance');
     }
-    if (arguments.length < 2 || typeof type !== 'string' || !type) {
+    if (!(target instanceof Object)) {
+      throw new Error(`Target ${toValueString(target)} is not an object`);
+    }
+    if (arguments.length < 2 || !type) {
       throw new Error('Missing event type string');
+    }
+    if (typeof type !== 'string') {
+      throw new Error(`Event type ${toValueString(type)} is not a string`);
     }
     if (/^on[A-Z]/.test(type)) {
       throw new Error(`Invalid event type string, did you mean "${type[2].toLowerCase() + type.slice(3)}"?`);

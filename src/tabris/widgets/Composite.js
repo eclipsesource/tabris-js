@@ -108,13 +108,13 @@ export default class Composite extends Widget {
 
   _checkLayout(value) {
     if (value && !(value instanceof Layout)) {
-      throw new Error('Not an instance of "Layout"');
+      throw new Error(`${toValueString(value)} is not an instance of Layout`);
     }
   }
 
   _addChild(child, index) {
     if (!this._acceptChild(child)) {
-      throw new Error(child + ' could not be appended to ' + this);
+      throw new Error(`${toValueString(child)} could not be appended to ${this}`);
     }
     if (!this.$children) {
       this.$children = [];
