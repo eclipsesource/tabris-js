@@ -2,7 +2,7 @@
 import {Stack, contentView} from 'tabris';
 
 const stack = new Stack({
-  layoutData: 'fill',
+  layoutData: 'stretch',
   spacing: 16
 }).appendTo(contentView);
 

@@ -1,7 +1,7 @@
 ```js
 import {Action, NavigationView, contentView} from 'tabris';
 
-const navigationView = new NavigationView({layoutData: 'fill'})
+const navigationView = new NavigationView({layoutData: 'stretch'})
   .appendTo(contentView);
 
 new Action({

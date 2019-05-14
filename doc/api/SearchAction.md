@@ -3,7 +3,7 @@ import {SearchAction, NavigationView, contentView} from 'tabris';
 
 const items = ['apple', 'banana', 'cherry'];
 
-const navigationView = new NavigationView({layoutData: 'fill'})
+const navigationView = new NavigationView({layoutData: 'stretch'})
   .appendTo(contentView);
 
 new SearchAction({title: 'Search', image: 'resources/search.png'})

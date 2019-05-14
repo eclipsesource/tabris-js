@@ -1,7 +1,7 @@
 ```js
 import {NavigationView, Page, contentView} from 'tabris';
 
-new NavigationView({layoutData: 'fill'})
+new NavigationView({layoutData: 'stretch'})
   .append(new Page({title: 'Albums'}))
   .appendTo(contentView);
 ```
