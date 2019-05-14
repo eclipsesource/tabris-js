@@ -657,7 +657,17 @@ describe('Widget', function() {
         it('throws an error', function() {
           expect(() => {
             widget.append({});
-          }).to.throw(Error, 'Cannot append non-widget');
+          }).to.throw(Error, `Cannot append non-widget Object to TestWidget[cid="${widget.cid}"]`);
+        });
+
+      });
+
+      describe('when called with itself', function() {
+
+        it('throws an error', function() {
+          expect(() => {
+            widget.append(widget);
+          }).to.throw(Error, `Cannot append widget TestWidget[cid="${widget.cid}"] to itself`);
         });
 
       });

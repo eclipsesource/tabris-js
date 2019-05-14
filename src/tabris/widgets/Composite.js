@@ -5,7 +5,7 @@ import Layout, {ConstraintLayout} from '../Layout';
 import WidgetCollection from '../WidgetCollection';
 import {omit} from '../util';
 import {JSX} from '../JsxProcessor';
-import {toXML} from '../Console';
+import {toXML, toValueString} from '../Console';
 
 export default class Composite extends Widget {
 
@@ -13,7 +13,10 @@ export default class Composite extends Widget {
     this._checkDisposed();
     const accept = (/** @type {Widget} */ widget) => {
       if (!(widget instanceof NativeObject)) {
-        throw new Error('Cannot append non-widget');
+        throw new Error(`Cannot append non-widget ${toValueString(widget)} to ${this}`);
+      }
+      if (widget === this) {
+        throw new Error(`Cannot append widget ${this} to itself`);
       }
       widget._setParent(this);
     };

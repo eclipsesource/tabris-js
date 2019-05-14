@@ -118,6 +118,23 @@ export const error = function(...args) { defaultConsole.error(...args); };
 
 let inHint = false;
 
+export const toValueString = function(value) {
+  try {
+    if (value && typeof value === 'string') {
+      return '"' + value + "'";
+    } else if (value && value[toXML]) { // Alternative to using instanceof to avoid circular dependency
+      return value._disposedToStringValue || value.toString();
+    } else if (value && (value instanceof Function)) {
+      return value.name;
+    } else if (value && (value.constructor instanceof Function)) {
+      return value.constructor.name;
+    }
+    return value;
+  } catch (ex) {
+    return '[unknown]';
+  }
+};
+
 export const hint = function(source, message) {
   if (inHint) {
     return; // prevent potential stack overflow
@@ -125,21 +142,11 @@ export const hint = function(source, message) {
   inHint = true;
   let line = '';
   let prefix = '';
-  try {
-    line = getCurrentLine(new Error());
-    if (source && typeof source === 'string') {
-      prefix = source + ': ';
-    } else if (source && source[toXML]) { // Alternative to using instanceof to avoid circular dependency
-      prefix = (source._disposedToStringValue || source.toString()) + ': ';
-    } else if (source && (source instanceof Function)) {
-      prefix = source.name + ': ';
-    } else if (source && (source.constructor instanceof Function)) {
-      prefix = source.constructor.name + ': ';
-    } else if (source) {
-      prefix = source + ' ';
-    }
-  } catch (ex) {
-    // ensure warning is printed in any case
+  line = getCurrentLine(new Error());
+  if (source && typeof source === 'string') {
+    prefix = source + ': ';
+  } else if (source) {
+    prefix = toValueString(source) + ': ';
   }
   defaultConsole.warn(prefix + message + (line ? `\nSource: ${line}` : ''));
   inHint = false;
