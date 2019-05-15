@@ -1,9 +1,0 @@
-{
-  "title": "Setting timers and intervals",
-  "category": "Web APIs",
-  "description": "Demonstrates using the Tabris.js timer with the window.timer API",
-  "main": "timer.js",
-  "dependencies": {
-    "tabris": "3.0.0-rc1"
-  }
-}
