@@ -464,6 +464,8 @@ The **scale** is a positive float or `'auto'`. The image will be scaled down by 
 
 The scale factor of the image is relevant when the intrinsic size (in DIP) of the image is needed for layouting. On high-density displays (i.e. [devices with a  scale factor higher than 1](./api/device.md#scalefactor)) an undetermined image scale factor (or scale factor `1`) may make the image look blurry at full its full natural size.  It is the application developers responsibility to provide and use image files with the appropriate scale factor for any given device.
 
+When displaying images that are very large (eg. 3000 x 2000) on small widgets (like a 100 x 100 `ImageView`), it is strongly recommended to provided a concrete image size. This will allow the system to scale the image to the given size, saving memory and computing power, which leads to a faster display time overall.
+
 The following are all valid `ImageValue` types:
 
 #### Image instance
