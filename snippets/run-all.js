@@ -117,7 +117,22 @@ const snippets = [
      await scroll(find(CollectionView));
   }],
   ['composite.js', () => confirm(Composite, {}, 2)],
-  // 'console.js',
+  ['console.js', async () => {
+    const logs = [];
+    const expected = 'debug:Message,log:Message,info:Message,warn:Message,log:onSelect (./console.jsx:11:';
+    tabris.on('log', ev => logs.push(ev.level + ':' + ev.message));
+    await confirm(Button, {}, 6);
+    await wait(500);
+    await forEachAsync(
+      findAll(tabris.Button),
+      button => button.text !== 'error' ? tap(button) : null,
+      100
+    );
+    const actual = logs.join();
+    if (!actual.startsWith(expected)) {
+      console.error(`Expected log "${expected}", got "${actual}"`);
+    }
+  }],
   ['crypto.js', () => confirm(TextView, {text: /\s[0-9][0-9]/})],
   ['datedialog.js', async () => {
     await confirm(Button, {}, 3);
@@ -149,21 +164,21 @@ const snippets = [
     await select(find(CollectionView), 2);
     await confirm(Page, {title: 'Another Page'});
   }],
-  // TODO: snippet is broken due to freegeoip.net API change
-  // ['fetch.js', async () => {
-//    confirm(Button)
-  //   .then(() => pressButton())
-  //   .then(() => wait(3000))
-  //   .then(() => confirm(TextView))
-  // }],
-  // TODO: untestable, lorempixel is too slow
-  // ['fs.js', async () => {waitFor(ImageView, 'load', 1, 100000)],
+  ['fetch.js', async () => {
+    await confirm(Button);
+    await tap(find(Button));
+    await wait(3000);
+    await confirm(TextView);
+  }],
+  ['fs.js', async () => {
+    waitFor(ImageView, 'load', 1, 100000);
+  }],
   ['imageview.js', async () => {
     waitFor(ImageView, 'load', 3);
   }],
   ['imageview-as-a-button.js', async () => {
-    confirm(ImageView)
-    .then(() => tap(find(ImageView), 10, 10));
+    await confirm(ImageView);
+    await tap(find(ImageView), 10, 10);
   }],
   ['imageview-base64.js', async () => {
     waitFor(ImageView, 'load');
@@ -172,54 +187,49 @@ const snippets = [
     waitFor(ImageView, 'load', 2);
   }],
   ['imageview-scalemode-auto.js', async () => {
-    waitFor(ImageView, 'load')
-    .then(() => move(find(Slider), 20, 20, 500));
+    await waitFor(ImageView, 'load');
+    await move(find(Slider), 20, 20, 500);
   }],
   ['imageview-scalemode.js', async () => {
-    waitFor(ImageView, 'load')
-    .then(() => selectAllItems(find(Picker, {}, 1)))
-    .then(() => select(find(Picker, {}, 0), 1))
-    .then(() => waitFor(ImageView, 'load'))
-    .then(() => selectAllItems(find(Picker, {}, 1)));
+    await waitFor(ImageView, 'load');
+    await selectAllItems(find(Picker, {}, 1));
+    await select(find(Picker, {}, 0), 1);
+    await waitFor(ImageView, 'load');
+    await selectAllItems(find(Picker, {}, 1));
   }],
   ['imageview-tintcolor.js', async () => {
-    waitFor(ImageView, 'load')
-    .then(() => selectAllItems(find(Picker)));
+    await waitFor(ImageView, 'load');
+    await selectAllItems(find(Picker));
   }],
   ['imageview-zoom.js', async () => {
-    waitFor(ImageView, 'load')
-    .then(() => move(find(Slider), 2, 5, 500))
-    .then(() => tap(find(CheckBox)))
-    .then(() => wait(500))
-    .then(() => tap(find(CheckBox)));
+    await waitFor(ImageView, 'load');
+    await move(find(Slider), 2, 5, 500);
+    await tap(find(CheckBox));
+    await wait(500);
+    await tap(find(CheckBox));
   }],
   ['inactivitytimer.js', async () => {
-    confirm(Button, {}, 2)
-    .then(() => tap(find(Button, {text: 'Start'})))
-    .then(() => wait(2200))
-    .then(() => confirm(TextView, {text: 'inactive!'}))
-    .then(() => tap(find(Button, {text: 'Start'})))
-    .then(() => wait(100))
-    .then(() => tap(find(Button, {text: 'Cancel'})))
-    .then(() => confirm(TextView, {text: 'cancelled'}));
+    await confirm(Button, {}, 2);
+    await tap(find(Button, {text: 'Start'}));
+    await wait(2200);
+    await confirm(TextView, {text: 'inactive!'});
+    await tap(find(Button, {text: 'Start'}));
+    await wait(100);
+    await tap(find(Button, {text: 'Cancel'}));
+    await confirm(TextView, {text: 'cancelled'});
   }],
   ['layout.js', async () => {
     confirm(Composite);
   }],
   ['layout-baseline.js', async () => {
-    confirm(TextView)
-    .then(() => confirm(TextInput));
+    await confirm(TextView);
+    await confirm(TextInput);
   }],
   ['layout-center.js', async () => {
     confirm(Composite);
   }],
   ['layout-dynamic.js', async () => {
     confirm(Composite, {}, 2);
-  }], // TODO: can be tested once orientation lock is supported
-  ['layout-nested.js', async () => {
-    confirm(Composite, {}, 6)
-    .then(() => confirm(TextView, {}, 6))
-    .then(() => confirm(ImageView, {}, 3));
   }],
   ['layout-relative-position.js', async () => {
     confirm(Composite, {}, 4);
@@ -227,320 +237,321 @@ const snippets = [
   ['layout-relative-size.js', async () => {
     confirm(Composite, {}, 2);
   }],
+  ['layout-stack.js', async () => {
+    confirm(tabris.Stack);
+  }],
   ['layout-transform-translationz.js', async () => {
-    confirm(Composite)
-    .then(() => tap(find(Composite), 2, 500, 500));
+    await confirm(Composite);
+    await tap(find(Composite), 2, 500, 500);
   }],
   ['layout-z-order.js', async () => {
     confirm(Composite, {}, 3);
   }],
   ['local-storage.js', async () => {
-    confirm(Button, {}, 5)
-    .then(() => confirm(TextInput, {text: 'Key'}))
-    .then(() => confirm(TextInput, {text: 'Value'}))
-    .then(() => tap(find(Button, {text: 'Set'})))
-    .then(() => confirm(TextView, {text: '"Key" set to "Value"'}))
-    .then(() => tap(find(Button, {text: 'Get'})))
-    .then(() => confirm(TextView, {text: '"Key" is "Value"'}))
-    .then(() => tap(find(Button, {text: 'Remove'})))
-    .then(() => confirm(TextView, {text: 'Removed "Key"'}))
-    .then(() => tap(find(Button, {text: 'Get'})))
-    .then(() => confirm(TextView, {text: '"Key" is "null"'}))
-    .then(() => tap(find(Button, {text: 'List Keys'})));
+    await confirm(Button, {}, 5);
+    await confirm(TextInput, {text: 'Key'});
+    await confirm(TextInput, {text: 'Value'});
+    await tap(find(Button, {text: 'Set'}));
+    await confirm(TextView, {text: '"Key" set to "Value"'});
+    await tap(find(Button, {text: 'Get'}));
+    await confirm(TextView, {text: '"Key" is "Value"'});
+    await tap(find(Button, {text: 'Remove'}));
+    await confirm(TextView, {text: 'Removed "Key"'});
+    await tap(find(Button, {text: 'Get'}));
+    await confirm(TextView, {text: '"Key" is "null"'});
+    await tap(find(Button, {text: 'List Keys'}));
   }],
   ['navigationbar.js', async () => {
-    confirm(Picker, {}, 3)
-    .then(() => selectAllItems(find(Picker, {}, 0), 300, true))
-    .then(() => selectAllItems(find(Picker, {}, 1), 300, true))
-    .then(() => selectAllItems(find(Picker, {}, 2), 300, true));
+    await confirm(Picker, {}, 3);
+    await selectAllItems(find(Picker, {}, 0), 300, true);
+    await selectAllItems(find(Picker, {}, 1), 300, true);
+    await selectAllItems(find(Picker, {}, 2), 300, true);
   }],
   ['navigationview-action.js', async () => {
     confirm(Action);
   }],
-  ['navigationview-action-placementpriority.js', async () => {
-    confirm(Action, {}, 3)
-    .then(() => confirm(Action, {placementPriority: 'high'}))
-    .then(() => confirm(Action, {placementPriority: 'normal'}))
-    .then(() => confirm(Action, {placementPriority: 'low'}));
+  ['navigationview-action-placement.js', async () => {
+    await confirm(Action, {}, 3);
+    await confirm(Action, {placement: 'default'});
+    await confirm(Action, {placement: 'navigation'});
+    await confirm(Action, {placement: 'overflow'});
   }],
   ['navigationview-page.js', async () => {
     confirm(Page);
   }],
   ['navigationview-page-stacked.js', async () => {
-    confirm(Button, {}, 3)
-    .then(() => confirm(Page, {title: 'Initial Page'}))
-    .then(() => forAsync(4, i => tap(find(Button, {text: 'Create another page'}, i))))
-    .then(() => confirm(Page, {}, 5))
-    .then(() => confirm(Page, {title: 'Page 4'}))
-    .then(() => tap(find(Button, {text: 'Go back'}, 4)))
-    .then(() => wait(100))
-    .then(() => confirm(Page, {title: 'Page 3'}))
-    .then(() => tap(find(Button, {text: 'Go to initial page'}, 2)))
-    .then(() => wait(100))
-    .then(() => confirm(Page, {}, 1))
-    .then(() => confirm(Page, {title: 'Initial Page'}));
+    await confirm(Button, {}, 3);
+    await confirm(Page, {title: 'Initial Page'});
+    await forAsync(4, i => tap(find(Button, {text: 'Create another page'}, i)));
+    await confirm(Page, {}, 5);
+    await confirm(Page, {title: 'Page 4'});
+    await tap(find(Button, {text: 'Go back'}, 4));
+    await wait(100);
+    await confirm(Page, {title: 'Page 3'});
+    await tap(find(Button, {text: 'Go to initial page'}, 2));
+    await wait(100);
+    await confirm(Page, {}, 1);
+    await confirm(Page, {title: 'Initial Page'});
   }],
   ['navigationview-properties.js', async () => {
     confirm(
-    NavigationView,
-    {toolbarVisible: true, drawerActionVisible: true, navigationAction: null}
-  )
-    .then(() => tap(find(CheckBox, {text: 'Show toolbar'}), 1, 300))
-    .then(() => confirm(NavigationView, {toolbarVisible: false}))
-    .then(() => tap(find(CheckBox, {text: 'Show toolbar'}), 1, 300))
-    .then(() => confirm(NavigationView, {toolbarVisible: true}))
-    .then(() => tap(find(CheckBox, {text: 'Show drawer action'}), 1, 300))
-    .then(() => confirm(NavigationView, {drawerActionVisible: false}))
-    .then(() => tap(find(CheckBox, {text: 'Show drawer action'}), 1, 300))
-    .then(() => confirm(NavigationView, {drawerActionVisible: true}))
-    .then(() => tap(find(CheckBox, {text: 'Custom navigation action'}), 1, 300))
-    .then(() => confirm(NavigationView, {navigationAction: findAll(Action, {title: 'Close'}).pop()}))
-    .then(() => tap(find(CheckBox, {text: 'Custom navigation action'}), 1, 300))
-    .then(() => confirm(NavigationView, {navigationAction: null}))
-    .then(() => forAsync(device.platform === 'Android' ? 4 : 3, i => selectAllItems(find(Picker, {}, i), 300)))
-    .then(() => confirm(NavigationView,
+      NavigationView,
+      {toolbarVisible: true, drawerActionVisible: true}
+    );
+    await tap(find(CheckBox, {text: 'Show toolbar'}), 1, 300);
+    await confirm(NavigationView, {toolbarVisible: false});
+    await tap(find(CheckBox, {text: 'Show toolbar'}), 1, 300);
+    await confirm(NavigationView, {toolbarVisible: true});
+    await tap(find(CheckBox, {text: 'Show drawer action'}), 1, 300);
+    await confirm(NavigationView, {drawerActionVisible: false});
+    await tap(find(CheckBox, {text: 'Show drawer action'}), 1, 300);
+    await confirm(NavigationView, {drawerActionVisible: true});
+    await forAsync(device.platform === 'Android' ? 4 : 3, i => selectAllItems(find(Picker, {}, i), 300));
+    await confirm(NavigationView,
       {toolbarColor: 'rgba(0, 0, 0, 0.25)', titleTextColor: 'rgba(0, 0, 0, 0.25)', actionColor: 'rgba(0, 0, 0, 0.25)'}
-    ));
+    );
   }],
   android && ['navigationview-searchaction.js', async () => {
-    confirm(SearchAction)
-    .then(() => tap(find(Button), 1, 300))
-    .then(() => input(find(SearchAction), 'bat')).then(() => wait(300))
-    .then(() => select(find(SearchAction), 1)).then(() => wait(300))
-    .then(() => confirm(TextView, {text: 'Selected "battleship"'}));
+    await confirm(SearchAction);
+    await tap(find(Button), 1, 300);
+    await input(find(SearchAction), 'bat');
+    await wait(300);
+    await select(find(SearchAction), 1);
+    await wait(300);
+    await confirm(TextView, {text: 'Selected "battleship"'});
   }],
   ['navigationview-tabfolder.js', async () => {
-    confirm(TabFolder)
-    .then(() => select(find(TabFolder), 1))
-    .then(() => select(find(TabFolder), 2))
-    .then(() => wait(1000))
-    .then(() => select(find(TabFolder), 0))
-    .then(() => tap(find(TabFolder).children().first().find(Page).last().find(Button)[0]))
-    .then(() => tap(find(TabFolder).children().first().find(Page).last().find(Button)[0]))
-    .then(() => tap(find(TabFolder).children().first().find(Page).last().find(Button)[0]))
-    .then(() => wait(1000))
-    .then(() => tap(find(TabFolder).children().first().find(Page).last().find(Button)[1]))
-    .then(() => tap(find(TabFolder).children().first().find(Page).last().find(Button)[1]))
-    .then(() => tap(find(TabFolder).children().first().find(Page).last().find(Button)[1]));
+    await confirm(TabFolder);
+    await select(find(TabFolder), 1);
+    await select(find(TabFolder), 2);
+    await wait(1000);
+    await select(find(TabFolder), 0);
+    await tap(find(TabFolder).children().first().find(Page).last().find(Button)[0]);
+    await tap(find(TabFolder).children().first().find(Page).last().find(Button)[0]);
+    await tap(find(TabFolder).children().first().find(Page).last().find(Button)[0]);
+    await wait(1000);
+    await tap(find(TabFolder).children().first().find(Page).last().find(Button)[1]);
+    await tap(find(TabFolder).children().first().find(Page).last().find(Button)[1]);
+    await tap(find(TabFolder).children().first().find(Page).last().find(Button)[1]);
   }],
   ['picker.js', async () => {
-    confirm(Picker)
-    .then(() => wait(300))
-    .then(() => select(find(Picker), 0))
-    .then(() => wait(300))
-    .then(() => select(find(Picker), 2))
-    .then(() => wait(300))
-    .then(() => select(find(Picker), 1));
+    await confirm(Picker);
+    await wait(300);
+    await select(find(Picker), 0);
+    await wait(300);
+    await select(find(Picker), 2);
+    await wait(300);
+    await select(find(Picker), 1);
   }],
   ['popover.js', async () => {
-    confirm(Button)
-    .then(() => tap(find(Button)))
-    .then(() => wait(500))
-    .then(() => confirm(Popover))
-    .then(() => tap(find(Action)))
-    .then(() => wait(500))
-    .then(() => confirm(Popover, {}, 0));
+    await confirm(Button);
+    await tap(find(Button));
+    await wait(500);
+    await confirm(Popover);
+    await tap(find(Action));
+    await wait(500);
+    await confirm(Popover, {}, 0);
   }],
-  // 'printer.js',
+  ['printer.js', async () => {
+    await confirm(Button, 2);
+  }],
   ['progressbar.js', async () => {
-    confirm(ProgressBar)
-    .then(() => wait(1000));
+    await confirm(ProgressBar);
+    await wait(1000);
   }],
   ['radiobutton.js', async () => {
-    confirm(RadioButton, {}, 3)
-    .then(() => tap(find(RadioButton, {}, 0)))
-    .then(() => wait(500))
-    .then(() => tap(find(RadioButton, {}, 1)))
-    .then(() => wait(500))
-    .then(() => tap(find(RadioButton, {}, 2)))
-    .then(() => wait(500));
+    await confirm(RadioButton, {}, 3);
+    await tap(find(RadioButton, {}, 0));
+    await wait(500);
+    await tap(find(RadioButton, {}, 1));
+    await wait(500);
+    await tap(find(RadioButton, {}, 2));
+    await wait(500);
   }],
   ['refreshcomposite.js', async () => {
-    confirm(RefreshComposite)
-    .then(() => tap(find(CheckBox)))
-    .then(() => find(RefreshComposite).set({refreshIndicator: true}))
-    .then(() => find(RefreshComposite).trigger('refresh'))
-    .then(() => wait(1200))
-    .then(() => confirm(RefreshComposite, {refreshIndicator: true}, 0)) // TODO: Bug, refreshIndicator can be null
-    .then(() => wait(500));
+    await confirm(RefreshComposite);
+    await find(RefreshComposite).set({refreshIndicator: true});
+    await find(RefreshComposite).trigger('refresh');
+    await wait(1200);
+    await confirm(RefreshComposite, {refreshIndicator: true}, 0); // TODO: Bug, refreshIndicator can be null
+    await wait(500);
   }],
   android && ['scrollview.js', async () => {
-    confirm(ScrollView)
-    .then(() => tap(find(Button)))
-    .then(() => wait(500))
-    .then(() => confirm(ScrollView, {offsetX: 310}))
-    .then(() => find(ScrollView).scrollToX(0))
-    .then(() => wait(500))
-    .then(() => confirm(ScrollView, {offsetX: 0}));
+    await confirm(ScrollView);
+    await tap(find(Button));
+    await wait(500);
+    await confirm(ScrollView, {offsetX: 300});
+    await find(ScrollView).scrollToX(0);
+    await wait(500);
+    await confirm(ScrollView, {offsetX: 0});
   }],
   ['slider.js', async () => {
-    confirm(Slider)
-    .then(() => move(find(Slider), 10, 20));
+    await confirm(Slider);
+    await move(find(Slider), 10, 20);
   }],
   ['statusbar.js', async () => {
-    confirm(Picker, {}, 3)
-    .then(() => selectAllItems(find(Picker, {}, 0), 500, true))
-    .then(() => selectAllItems(find(Picker, {}, 1), 500, true))
-    .then(() => selectAllItems(find(Picker, {}, 2), 500, true));
+    await confirm(Picker, {}, 3);
+    await selectAllItems(find(Picker, {}, 0), 500, true);
+    await selectAllItems(find(Picker, {}, 1), 500, true);
+    await selectAllItems(find(Picker, {}, 2), 500, true);
   }],
   ['switch.js', async () => {
-    confirm(Switch)
-    .then(() => tap(find(Switch), 2, 300))
-    .then(() => tap(find(Button), 2, 300));
+    await confirm(Switch);
+    await tap(find(Switch), 2, 300);
+    await tap(find(Button), 2, 300);
   }],
   ['tabfolder.js', async () => {
-    confirm(TabFolder)
-    .then(() => selectAllItems(find(TabFolder), 500))
-    .then(() => confirm(TabFolder, {selection: find(TabFolder).children()[2]}));
+    await confirm(TabFolder);
+    await selectAllItems(find(TabFolder), 500);
+    await confirm(TabFolder, {selection: find(TabFolder).children()[2]});
   }],
   ['tabfolder-swipe.js', async () => {
-    confirm(TabFolder)
-    .then(() => selectAllItems(find(TabFolder), 500))
-    .then(() => confirm(TabFolder, {selection: find(TabFolder).children()[2]}));
+    await confirm(TabFolder);
+    await selectAllItems(find(TabFolder), 500);
+    await confirm(TabFolder, {selection: find(TabFolder).children()[2]});
   }],
   ['tabfolder-swipe-parallax.js', async () => {
-    confirm(TabFolder)
-    .then(() => selectAllItems(find(TabFolder), 500))
-    .then(() => confirm(TabFolder, {selection: find(TabFolder).children()[4]}));
+    await confirm(TabFolder);
+    await selectAllItems(find(TabFolder), 500);
+    await confirm(TabFolder, {selection: find(TabFolder).children()[4]});
   }],
   ['textinput.js', async () => {
-    confirm(TextInput)
-    .then(() => input(find(TextInput), 'Hello World'))
-    .then(() => wait(500))
-    .then(() => input(find(TextInput), ''))
-    .then(() => wait(500))
-    .then(() => input(find(TextInput), 'Hello Again', true));
+    await confirm(TextInput);
+    await input(find(TextInput), 'Hello World');
+    await wait(500);
+    await input(find(TextInput), '');
+    await wait(500);
+    await input(find(TextInput), 'Hello Again', true);
   }],
   android && ['textinput-enterkeytype.js', async () => {
-    confirm(TextInput, {}, 11)
-    .then(() => forEachAsync(findAll(TextInput), target => input(target, 'Hello \nWorld'), 500));
+    await confirm(TextInput, {}, 11);
+    await forEachAsync(findAll(TextInput), target => input(target, 'Hello \nWorld'), 500);
   }],
   ['textinput-focus.js', async () => {
-    confirm(TextInput, {}, 2)
-    .then(() => forEachAsync(findAll(TextInput), target => input(target, 'Hello World'), 500));
+    await confirm(TextInput, {}, 3);
+    await forEachAsync(findAll(TextInput), target => input(target, 'Hello World'), 500);
   }],
   ['textinput-keyboard.js', async () => {
-    confirm(TextInput, {}, 8)
-    .then(() => forEachAsync(findAll(TextInput), target => target.focused = true, 500));
+    await confirm(TextInput, {}, 8);
+    await forEachAsync(findAll(TextInput), target => target.focused = true, 500);
   }],
   ['textinput-revealpassword.js', async () => {
-    confirm(TextInput)
-    .then(() => input(find(TextInput), 'Hello World'))
-    .then(() => wait(500))
-    .then(() => tap(find(CheckBox)))
-    .then(() => confirm(TextInput, {revealPassword: true}))
-    .then(() => wait(1000))
-    .then(() => tap(find(CheckBox)))
-    .then(() => confirm(TextInput, {revealPassword: false}));
+    await confirm(TextInput);
+    await input(find(TextInput), 'Hello World');
+    await wait(500);
+    await tap(find(CheckBox));
+    await confirm(TextInput, {revealPassword: true});
+    await wait(1000);
+    await tap(find(CheckBox));
+    await confirm(TextInput, {revealPassword: false});
   }],
   android && ['textinput-selection.js', async () => {
-    confirm(TextInput)
-    .then(() => input(find(TextInput), ''))
-    .then(() => input(find(TextInput), '      -----'))
-    .then(() => tap(find(Button, {}, 0)))
-    .then(() => wait(1500))
-    .then(() => tap(find(Button, {}, 1)))
-    .then(() => wait(1500));
+    await confirm(TextInput);
+    await input(find(TextInput), '');
+    await input(find(TextInput), '      -----');
+    await tap(find(Button, {}, 0));
+    await wait(1500);
+    await tap(find(Button, {}, 1));
+    await wait(1500);
   }],
   ['textview.js', async () => {
     confirm(TextView, {}, 3);
   }],
   ['textview-font-bundled.js', async () => {
-    confirm(TextView, {}, 96)
-    .then(() => scroll(find(ScrollView)));
+    await confirm(TextView, {}, 96);
+    await scroll(find(ScrollView));
   }],
   ['textview-font-external.js', async () => {
     confirm(TextView, {}, 2);
   }],
   ['textview-linespacing.js', async () => {
-    confirm(TextView, {}, 2)
-    .then(() => move(find(Slider), 2, 32, 500));
+    await confirm(TextView, {}, 2);
+    await move(find(Slider), 2, 32, 500);
   }],
   ['textview-markupenabled.js', async () => {
-    confirm(TextView, {markupEnabled: true})
-    .then(() => tap(find(CheckBox)))
-    .then(() => wait(1000))
-    .then(() => tap(find(CheckBox)))
-    .then(() => wait(2000));
+    await confirm(TextView, {markupEnabled: true});
+    await tap(find(CheckBox));
+    await wait(1000);
+    await tap(find(CheckBox));
+    await wait(2000);
   }],
   ['timedialog.js', async () => {
-    confirm(Button, {}, 2)
-    .then(() => wait(500))
-    .then(() => forEachAsync(
+    await confirm(Button, {}, 2);
+    await wait(500);
+    await forEachAsync(
       findAll(tabris.Button),
       button => tap(button),
       1000,
       () => find(TimeDialog).close()
-    ))
-    .then(() => wait(500));
+    );
+    await wait(500);
   }],
   ['timer.js', async () => {
-    confirm(Button, {text: 'Press me!'})
-    .then(() => tap(find(Button)))
-    .then(() => wait(2500))
-    .then(() => confirm(Button, {text: 'Thank you!'}));
+    await confirm(Button, {text: 'Press me!'});
+    await tap(find(Button));
+    await wait(2500);
+    await confirm(Button, {text: 'Thank you!'});
   }],
   ['togglebutton.js', async () => {
-    confirm(ToggleButton)
-    .then(() => forAsync(5, () => tap(find(ToggleButton)), 300));
+    await confirm(ToggleButton);
+    await forAsync(5, () => tap(find(ToggleButton)), 300);
   }],
   ['video.js', async () => {
-    confirm(Video)
-    .then(() => wait(10000))
-    .then(() => confirm(Video, {state: 'play'}))
-    .then(() => tap(find(Button)))
-    .then(() => confirm(Video, {state: 'pause'}))
-    .then(() => wait(500))
-    .then(() => tap(find(Button)))
-    .then(() => wait(1000))
-    .then(() => confirm(Video, {state: 'play'}));
+    await confirm(Video);
+    await wait(10000);
+    await confirm(Video, {state: 'play'});
+    await tap(find(Button));
+    await confirm(Video, {state: 'pause'});
+    await wait(500);
+    await tap(find(Button));
+    await wait(1000);
+    await confirm(Video, {state: 'play'});
   }],
   ['web-storage.js', async () => {
     confirm(TextView, {text: /started\s[0-9]+\stime/});
   }],
   ['webview.js', async () => {
-    confirm(WebView, {url: /wikipedia/})
-    .then(() => input(find(TextInput), 'http://goolge.com', true))
-    .then(() => timeout(find(WebView).onLoad.promise()))
-    .then(() => confirm(WebView, {url: /google/}))
-    .then(() => wait(1000));
+    await confirm(WebView, {url: /wikipedia/});
+    await input(find(TextInput), 'http://goolge.com', true);
+    await timeout(find(WebView).onLoad.promise());
+    await confirm(WebView, {url: /google/});
+    await wait(1000);
   }],
   ['webview-navigation.js', async () => {
-    confirm(WebView, {url: /wikipedia/})
-    .then(() => confirm(ImageView, {enabled: false}, 2))
-    .then(() => input(find(TextInput), 'http://goolge.com', true))
-    .then(() => timeout(find(WebView).onLoad.promise()))
-    .then(() => wait(1000))
-    .then(() => confirm(WebView, {url: /google/}))
-    .then(() => confirm(TextInput, {text: /google/}))
-    .then(() => confirm(ImageView, {image: /back/, enabled: true}))
-    .then(() => confirm(ImageView, {image: /forward/, enabled: false}))
-    .then(() => wait(1000))
-    .then(() => tap(find(ImageView, {image: /back/})))
-    .then(() => timeout(find(WebView).onLoad.promise()))
-    .then(() => confirm(WebView, {url: /wikipedia/}))
-    .then(() => confirm(TextInput, {text: /wikipedia/}))
-    .then(() => confirm(ImageView, {image: /back/, enabled: false}))
-    .then(() => confirm(ImageView, {image: /forward/, enabled: true}))
-    .then(() => tap(find(ImageView, {image: /forward/})))
-    .then(() => timeout(find(WebView).onLoad.promise()))
-    .then(() => confirm(WebView, {url: /google/}))
-    .then(() => confirm(TextInput, {text: /google/}))
-    .then(() => confirm(ImageView, {image: /back/, enabled: true}))
-    .then(() => confirm(ImageView, {image: /forward/, enabled: false}));
+    await confirm(WebView, {url: /wikipedia/});
+    await confirm(ImageView, {enabled: false}, 2);
+    await input(find(TextInput), 'http://goolge.com', true);
+    await timeout(find(WebView).onLoad.promise());
+    await wait(1000);
+    await confirm(WebView, {url: /google/});
+    await confirm(TextInput, {text: /google/});
+    await confirm(ImageView, {image: {src: /back/}, enabled: true});
+    await confirm(ImageView, {image: {src: /forward/}, enabled: false});
+    await wait(1000);
+    await tap(find(ImageView, {image: {src: /back/}}));
+    await timeout(find(WebView).onLoad.promise());
+    await confirm(WebView, {url: /wikipedia/});
+    await confirm(TextInput, {text: /wikipedia/});
+    await confirm(ImageView, {image: {src: /back/}, enabled: false});
+    await confirm(ImageView, {image: {src: /forward/}, enabled: true});
+    await tap(find(ImageView, {image: {src: /forward/}}));
+    await timeout(find(WebView).onLoad.promise());
+    await confirm(WebView, {url: /google/});
+    await confirm(TextInput, {text: /google/});
+    await confirm(ImageView, {image: {src: /back/}, enabled: true});
+    await confirm(ImageView, {image: {src: /forward/}, enabled: false});
   }],
   ['webview-webmessaging.js', async () => {
-    confirm(WebView)
-    .then(() => tap(find(Button)))
-    .then(() => wait(1000))
-    .then(() => confirm(TextView, {text: /No message/}))
-    .then(() => find(WebView).html = `
+    await confirm(WebView);
+    await tap(find(Button));
+    await wait(1000);
+    await confirm(TextView, {text: /No message/});
+    find(WebView).html = `
       <html><head><script>
         setTimeout(() => window.parent.postMessage("Hello from the WebView", "*"), 100);
-      </script></head></html>`
-    )
-    .then(() => wait(1000))
-    .then(() => confirm(TextView, {text: /Hello from the WebView/}));
+      </script></head></html>`;
+    await wait(1000);
+    await confirm(TextView, {text: /Hello from the WebView/});
   }],
   ['widget-cornerradius.js', async () => {
     confirm(Composite, {
@@ -549,28 +560,31 @@ const snippets = [
   ['widget-elevation.js', async () => {
     confirm(Composite, {elevation: 8});
   }],
-  ios && ['widget-highlightontouch.js', async () => {
+  ['widget-exclude-from-layout.js', async () => {
+    confirm(Composite, {foo: 'bar'});
+  }],
+  ['widget-highlightontouch.js', async () => {
     confirm(Composite, {highlightOnTouch: true});
   }],
   ['widget-lineargradient.js', async () => {
-    confirm(ScrollView)
-    .then(() => timeout(findAll(WebView).pop().onLoad.promise(), 4000, true))
-    .then(() => scroll(find(ScrollView)));
+    await confirm(ScrollView);
+    await timeout(findAll(WebView).pop().onLoad.promise(), 4000, true);
+    await scroll(find(ScrollView));
   }],
   ['widget-longpress-to-drag.js', async () => {
-    confirm(Composite)
-    .then(() => confirm(TextView))
-    .then(() => find(Composite).onTouchStart.trigger({touches: [{absoluteX: 100, absoluteY: 100}]}))
-    .then(() => find(Composite).onLongPress.trigger({state: 'start'}))
-    .then(() => confirm(TextView, {}, 0))
-    .then(() => wait(200))
-    .then(() => forAsync(
+    await confirm(Composite);
+    await confirm(TextView);
+    await find(Composite).onTouchStart.trigger({touches: [{absoluteX: 100, absoluteY: 100}]});
+    await find(Composite).onLongPress.trigger({state: 'start'});
+    await confirm(TextView, {}, 0);
+    await wait(200);
+    await forAsync(
       20,
       i => find(Composite).onTouchMove.trigger({touches: [{absoluteX: 100 + i * -3, absoluteY: 100 + i * -2}]}),
       16
-    ))
-    .then(() => find(Composite).onTouchEnd.trigger())
-    .then(() => confirm(Composite, {transform: {translationX: -57, translationY: -38}}));
+    );
+    await find(Composite).onTouchEnd.trigger();
+    await confirm(Composite, {transform: {translationX: -57, translationY: -38}});
   }],
   android && ['widget-padding.js', async () => {
     confirm(TextView, {bounds: {left: 8, top: 8}, left: 0, top: 0});
@@ -579,25 +593,31 @@ const snippets = [
     confirm(TextView, {}, 5);
   }],
   ['widget-touch.js', async () => {
-    confirm(TextView, {text: 'Touch anywhere...'})
-    .then(() => contentView.onTouchStart.trigger({touches: [{x: 100, y: 100}]}))
-    .then(() => wait(200))
-    .then(() => forAsync(
+    await confirm(TextView, {text: 'Touch anywhere...'});
+    await contentView.onTouchStart.trigger({touches: [{x: 100, y: 100}]});
+    await wait(200);
+    await forAsync(
       20,
       i => contentView.onTouchMove.trigger({touches: [{x: 100 + i * -3, y: 100 + i * -2}]}),
       16
-    ))
-    .then(() => contentView.onTouchEnd.trigger({touches: [{x: 0, y: 0}]}))
-    .then(() => confirm(TextView, {text: 'touchEnd: 0 X 0'}))
-    .then(() => contentView.onLongPress.trigger({touches: [{x: 0, y: 0}]}))
-    .then(() => confirm(TextView, {text: 'longPress: 0 X 0'}));
+    );
+    await contentView.onTouchEnd.trigger({touches: [{x: 0, y: 0}]});
+    await confirm(TextView, {text: 'touchEnd: 0 X 0'});
+    await contentView.onLongPress.trigger({touches: [{x: 0, y: 0}]});
+    await confirm(TextView, {text: 'longPress: 0 X 0'});
+  }],
+  ['worker.js', async () => {
+    confirm(TextView, {}, 5);
   }],
   ['xmlhttprequest.js', async () => {
-    confirm(Button)
-    .then(() => tap(find(Button)))
-    .then(() => forAsync(100, () => confirm(TextView, {}, 0), 100))
-    .catch(() => Promise.resolve())
-    .then(() => confirm(TextView, {text: /home/}));
+    await confirm(Button);
+    await tap(find(Button));
+    try {
+      await forAsync(100, () => confirm(TextView, {}, 0), 100);
+    } catch (ex) {
+      // polling ended before timeout
+    }
+    await confirm(TextView, {text: /home/});
   }]
 ].filter(v => v);
 
@@ -621,8 +641,8 @@ if (!showIntro()) {
       require('./' + file);
       return test().catch(ex => console.error(ex.message + '\n' + ex.stack)).then(() => console.log('test finished'));
     }).then(errorCheck)
-      .then(() => showOptions(file + ' - OK', 'next'))
-      .catch(ex => {
+    .then(() => showOptions(file + ' - OK', 'next'))
+    .catch(ex => {
         console.log(ex.stack);
         showOptions(file + ' - ' + ex, 'error');
       });
@@ -638,6 +658,7 @@ function showIntro() {
   }
   const snippetPicker = new Picker({
     top: 'prev()', left: 10, right: 10,
+    selectionIndex: 0,
     itemText: index => typeof snippets[index] === 'string' ? snippets[index] : snippets[index][0],
     itemCount: snippets.length
   }).appendTo(contentView);

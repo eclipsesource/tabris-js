@@ -25,5 +25,5 @@ new Button({
 new Button({
   top: 'prev() 16', left: 16, right: 16,
   text: 'Set selection to 6, 11'
-}).on('select', () => textInput.selection = [6, 11])
+}).onSelect(() => textInput.selection = [6, 11])
   .appendTo(contentView);

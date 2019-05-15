@@ -3,7 +3,7 @@ import {Button, TextView, contentView} from 'tabris';
 new Button({
   left: 10, top: 10,
   text: 'Find words starting with "mobile"'
-}).on('select', () => {
+}).onSelect(() => {
   const xhr = new XMLHttpRequest();
   xhr.onreadystatechange = () => {
     if (xhr.readyState === xhr.DONE) {

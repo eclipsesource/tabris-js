@@ -93,6 +93,7 @@
     "no-boolean-literal-compare": true
   },
   "jsRules": {
+    "max-line-length": 100,
     "no-console": false,
     "variable-name": {
       "options": ["allow-leading-underscore", "allow-pascal-case"]

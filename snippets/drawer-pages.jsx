@@ -63,7 +63,7 @@ function showPage(index) {
   navigationView.append(pages[index]);
 }
 
-/** @param {Page['jsxAttributes']} attributes */
+/** @param {tabris.Attributes<Page>=} attributes */
 function MyPage(attributes) {
   return (
     <Page padding={20} {...attributes}>

@@ -1,10 +1,10 @@
 import {$, CollectionView, contentView, TextView} from 'tabris';
 
-/** @param {TextView['jsxAttributes']=} attributes */
+/** @param {tabris.Attributes<TextView>=} attributes */
 const SectionCell = attributes =>
   <TextView background='#aaaaaa' textColor='white' font='bold 24px' alignment='centerX' {...attributes}/>;
 
-/** @param {TextView['jsxAttributes']=} attributes */
+/** @param {tabris.Attributes<TextView>=} attributes */
 const ItemCell = attributes =>
   <TextView padding={[2, 5]} font='14px' alignment='left' {...attributes} />;
 

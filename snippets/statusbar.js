@@ -1,8 +1,11 @@
 import {Picker, TextView, contentView, statusBar} from 'tabris';
 
+/** @type {Array<tabris.StatusBar['theme']>} */
 const THEMES = ['default', 'light', 'dark'];
+/** @type {Array<tabris.StatusBar['displayMode']>} */
 const DISPLAY_MODES = ['default', 'float', 'hide'];
-const BACKGROUNDS = [statusBar.background, 'rgba(0, 0, 0, 0.25)', 'red', 'green', 'blue'];
+/** @type {Array<string>} */
+const BACKGROUNDS = ['initial', 'rgba(0, 0, 0, 0.25)', 'red', 'green', 'blue'];
 
 createTextView('Theme', 'theme');
 createTextView('Display mode', 'displayMode');
@@ -13,34 +16,34 @@ new Picker({
   left: '#displayMode 16', baseline: '#theme', right: 16,
   itemCount: THEMES.length,
   itemText: index => THEMES[index]
-}).on('select', ({index}) => statusBar.theme = THEMES[index])
+}).onSelect(({index}) => statusBar.theme = THEMES[index])
   .appendTo(contentView);
 
 new Picker({
   left: '#displayMode 16', baseline: '#displayMode', right: 16,
   itemCount: DISPLAY_MODES.length,
   itemText: index => DISPLAY_MODES[index]
-}).on('select', ({index}) => statusBar.displayMode = DISPLAY_MODES[index])
+}).onSelect(({index}) => statusBar.displayMode = DISPLAY_MODES[index])
   .appendTo(contentView);
 
 new Picker({
   left: '#displayMode 16', baseline: '#background', right: 16,
   itemCount: BACKGROUNDS.length,
   itemText: index => BACKGROUNDS[index]
-}).on('select', ({index}) => statusBar.background = BACKGROUNDS[index])
+}).onSelect(({index}) => statusBar.background = BACKGROUNDS[index])
   .appendTo(contentView);
 
 new TextView({
   left: '#displayMode 16', baseline: '#height', right: 16,
-  text: statusBar.height
+  text: statusBar.height.toString()
 }).appendTo(contentView);
 
 function createTextView(text, id) {
   new TextView({
     id,
-    left: 16, top: 'prev() 16',
+    left: 16, top: 'prev() 44',
     text
   }).appendTo(contentView);
 }
 
-statusBar.on('tap', () => console.log('Status bar tapped'));
+statusBar.onTap(() => console.log('Status bar tapped'));

@@ -13,9 +13,9 @@ contentView.append(
   </Stack>
 );
 
-const keyField = contentView.find('#key').first(TextInput);
-const valueField = contentView.find('#value').first(TextInput);
-const output = contentView.find('#output').first(TextView);
+const keyField = $('#key').only(TextInput);
+const valueField = $('#value').only(TextInput);
+const output = $('#output').only(TextView);
 
 function setValue() {
   localStorage.setItem(keyField.text, valueField.text);

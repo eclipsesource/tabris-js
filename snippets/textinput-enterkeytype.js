@@ -12,18 +12,22 @@ const textInput = createTextInput();
 createTextInput('send');
 createTextInput('go');
 createTextInput('search');
-createTextInput('done').on('accept', () => textInput.focused = false);
+createTextInput('done').onAccept(() => textInput.focused = false);
 createTextInput('next');
-createTextInput('next').on('accept', () => textInput.focused = true);
+createTextInput('next').onAccept(() => textInput.focused = true);
 createTextInput();
 
+/**
+ * @param {TextInput['enterKeyType']} enterKeyType
+ * @param {TextInput['type']} type
+ */
 function createTextInput(enterKeyType = 'default', type = 'default') {
   return new TextInput({
-    top: 'prev()', left: '16', right: '16',
+    top: 'prev() 16', left: '16', right: '16',
     message: message(enterKeyType, type),
     type,
     enterKeyType
-  }).on('accept', () => console.log(message(enterKeyType, type)))
+  }).onAccept(() => console.log(message(enterKeyType, type)))
     .appendTo(scrollView);
 }
 

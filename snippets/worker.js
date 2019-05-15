@@ -17,7 +17,7 @@ const result = new TextView({left: 'prev() 24', baseline: 'prev()', text: '?'})
 new Button({
   left: 16, right: 16, top: [number1, 16],
   text: 'Add numbers in Worker'
-}).on('select', () => {
+}).onSelect(() => {
   const worker = new Worker('resources/worker-script.js');
   worker.onmessage = (event) => {
     result.text = event.data;

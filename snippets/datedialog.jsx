@@ -10,7 +10,7 @@ contentView.append(
 );
 
 const FIVE_DAYS = 432000000;
-const textView =  contentView.find(TextView).first();
+const textView =  $(TextView).only();
 
 async function showSimpleDialog() {
   const {date} = await DateDialog.open().onClose.promise();

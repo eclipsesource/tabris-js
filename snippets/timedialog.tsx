@@ -8,7 +8,7 @@ contentView.append(
   </Stack>
 );
 
-const textView =  contentView.find(TextView).first();
+const textView =  $(TextView).only();
 
 async function showSimpleDialog() {
   const {date} = await TimeDialog.open().onClose.promise();

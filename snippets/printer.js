@@ -5,13 +5,13 @@ import {Button, printer, contentView, app} from 'tabris';
 new Button({
   left: 16, right: 16, top: 16,
   text: 'Print PDF'
-}).on('select', () => print('resources/example.pdf', 'application/pdf', 'Example PDF'))
+}).onSelect(() => print('resources/example.pdf', 'application/pdf', 'Example PDF'))
   .appendTo(contentView);
 
 new Button({
   left: 16, right: 16, top: 'prev() 16',
   text: 'Print Image'
-}).on('select', () => print('resources/salad.jpg', 'image/jpg', 'Salad image'))
+}).onSelect(() => print('resources/salad.jpg', 'image/jpg', 'Salad image'))
   .appendTo(contentView);
 
 function print(file, contentType, jobName) {

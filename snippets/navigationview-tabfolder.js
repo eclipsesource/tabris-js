@@ -33,12 +33,12 @@ function createPage(navigationView, title) {
   new Button({
     top: 'prev() 16', centerX: 0,
     text: 'Add Page'
-  }).on('select', () => createPage(navigationView))
+  }).onSelect(() => createPage(navigationView))
     .appendTo(controls);
   new Button({
     top: 'prev() 16', centerX: 0,
     text: 'Remove Page'
-  }).on('select', () => page.dispose())
+  }).onSelect(() => page.dispose())
     .appendTo(controls);
 }
 
@@ -48,7 +48,7 @@ createTab('Statistic', 'resources/chart@2x.png');
 
 app.onBackNavigation((event) => {
   // handle the "physical" back button on Android
-  const navigationView = tabFolder.selection.find(NavigationView).first();
+  const navigationView = tabFolder.selection.find(NavigationView).only();
   const page = navigationView.pages().last();
   if (page !== undefined) {
     page.dispose();

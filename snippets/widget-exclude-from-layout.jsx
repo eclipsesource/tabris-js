@@ -9,8 +9,8 @@ contentView.append(
   </Stack>
 );
 
-const target = contentView.find('#target')[0];
-const checkBox = contentView.find(CheckBox)[0];
+const target = $('#target')[0];
+const checkBox = $(CheckBox)[0];
 
 function handleSelect() {
   target.excludeFromLayout = checkBox.checked;

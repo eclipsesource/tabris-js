@@ -1,11 +1,11 @@
 import {Action, NavigationView, Page, Popover, Button, TextView, contentView, device} from 'tabris';
 
-contentView.append(
-  <Button stretchX top={24} onSelect={showPopover}>Show Popover</Button>
+contentView.set({padding: 16}).append(
+  <Button stretchX onSelect={showPopover}>Show Popover</Button>
 );
 
 const IMG_CLOSE = device.platform === 'iOS' ? 'resources/close-black-24dp@3x.png' : 'resources/close-white-24dp@3x.png';
-const button = contentView.find().first(Button);
+const button = $(Button).only();
 
 function showPopover() {
   const popover = Popover.open(

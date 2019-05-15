@@ -7,5 +7,5 @@ contentView.append(
 );
 
 function countUp() {
-  contentView.find(Button).set({text: `Pressed ${++count} times`});
+  $(Button).set({text: `Pressed ${++count} times`});
 }

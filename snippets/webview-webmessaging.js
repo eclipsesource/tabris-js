@@ -3,7 +3,7 @@ import {Button, Composite, TextView, WebView, contentView} from 'tabris';
 new Button({
   left: 16, right: 16, bottom: 16,
   text: 'Send message to WebView'
-}).on('select', () => webView.postMessage('Hello from Tabris.js', '*'))
+}).onSelect(() => webView.postMessage('Hello from Tabris.js', '*'))
   .appendTo(contentView);
 
 const statusTextView = new TextView({

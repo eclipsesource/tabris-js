@@ -163,7 +163,7 @@ function buttonSnippet(parent) {
 function canvasSnippet(parent) {
   dimen(parent, 232, 198);
   new Canvas({left: 16, right: 16, top: 16, bottom: 16})
-    .on('resize', ({target: canvas, width, height}) => {
+    .onResize(({target: canvas, width, height}) => {
       const scaleFactor = device.scaleFactor;
       const ctx = canvas.getContext('2d', width * scaleFactor, height * scaleFactor);
       ctx.textAlign = 'center';

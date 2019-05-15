@@ -9,26 +9,26 @@ const back = new ImageView({
   left: MARGIN, width: NAV_SIZE, height: NAV_SIZE, top: MARGIN,
   highlightOnTouch: true,
   image: {src: 'resources/arrow-back-black-24dp@3x.png', scale: 3}
-}).on('tap', () => webView.goBack())
+}).onTap(() => webView.goBack())
   .appendTo(contentView);
 
 const forward = new ImageView({
   left: back, width: NAV_SIZE, height: NAV_SIZE, top: MARGIN,
   highlightOnTouch: true,
   image: {src: 'resources/arrow-forward-black-24dp@3x.png', scale: 3}
-}).on('tap', () => webView.goForward())
+}).onTap(() => webView.goForward())
   .appendTo(contentView);
 
 const urlInput = new TextInput({
   id: 'urlInput',
   left: [forward, MARGIN], top: MARGIN, right: MARGIN
-}).on('accept', () => webView.url = urlInput.text)
+}).onAccept(() => webView.url = urlInput.text)
   .appendTo(contentView);
 
 const webView = new WebView({
   left: 0, top: [urlInput, MARGIN], right: 0, bottom: 0,
   url: 'http://en.wikipedia.org'
-}).on('load', updateNavigation)
+}).onLoad(updateNavigation)
   .appendTo(contentView);
 
 function updateNavigation() {
