@@ -16,7 +16,7 @@ You can use existing JavaScript libraries from the [npm](http://npmjs.com/) ecos
 
 You can try out Tabris.js without installing anything on your computer.
 
-* Install the [Tabris.js Developer App](developer-app.md) on your device and browse through the included examples.
+* Install the [Tabris.js Developer App](developer-app.md) on your device and browse through the included snippets.
 * Play with the JavaScript code of a simple Tabris.js app online in the [Tabris.js Playground](https://tabrisjs.com/playground).
 * Load your edited version in the Developer App by scanning the bar code on the playground page.
 

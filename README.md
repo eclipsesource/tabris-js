@@ -36,7 +36,7 @@ The code of the application is loaded dynamically - nothing is precompiled. Java
 
 ## Getting started
 
-To start developing Tabris.js applications, visit [tabrisjs.com](http://tabrisjs.com) and check out the "[Getting Started](https://tabrisjs.com/documentation/latest/getting-started)" guide in the documentation. Be sure to also consult the code [snippets](https://github.com/eclipsesource/tabris-js/tree/master/snippets) and [examples](https://github.com/eclipsesource/tabris-js/tree/master/examples) in the Tabris.js Developer App (download from the app store for [Android](https://play.google.com/store/apps/details?id=com.eclipsesource.tabrisjs2) and [iOS](https://itunes.apple.com/us/app/tabris.js-2/id1166468326?mt=8)).
+To start developing Tabris.js applications, visit [tabrisjs.com](http://tabrisjs.com) and check out the "[Getting Started](https://tabrisjs.com/documentation/latest/getting-started)" guide in the documentation. Be sure to also consult the code [snippets](https://github.com/eclipsesource/tabris-js/tree/master/snippets) in the Tabris.js Developer App (download from the app store for [Android](https://play.google.com/store/apps/details?id=com.eclipsesource.tabrisjs2) and [iOS](https://itunes.apple.com/us/app/tabris.js-2/id1166468326?mt=8)).
 
 ## Extensible
 

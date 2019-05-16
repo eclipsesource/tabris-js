@@ -8,19 +8,6 @@ It is available for free in the app stores – just follow the links below or se
 [![Tabris.js on Google play](https://tabrisjs.com/assets/img/playstore-badge.png)](https://play.google.com/store/apps/details?id=com.eclipsesource.tabris.js)
 [![Tabris.js on Apple App Store](https://tabrisjs.com/assets/img/appstore-badge.png)](https://itunes.apple.com/us/app/tabris-js/id939600018?mt=8)
 
-## Try the Examples
-
-The Tabris.js examples are a collection of small apps that demonstrate the power and flexibility of the framework.
-You can find the source code in the Tabris.js [GitHub repository](https://github.com/eclipsesource/tabris-js/tree/master/examples).
-
-![Android Examples Tab](img/examples.png)
-
-Just tap an example and it will run within the Developer App.
-To get back to the examples selection, use the *Home* symbol in the [Developer Console](#the-developer-console).
-On Android, you can also press the system's back button to go back.
-
-![iOS Back](img/back-ios.png)
-
 ## The Developer Console
 
 While running Tabris.js scripts in the Developer App, you can open a developer console by sliding from the right edge of the screen to the left.

@@ -8,18 +8,7 @@ The JavaScript API documentation of Cordova plug-ins is also valid in Tabris.js,
 
 ## Default Plug-Ins
 
-While using the [Tabris.js Developer App](developer-app.md), your application can directly access the following pre-packaged plug-ins:
-
-* [Badge](https://www.npmjs.com/package/de.appplant.cordova.plugin.badge)
-* [Camera](https://www.npmjs.com/package/cordova-plugin-camera)
-* [Device Motion](https://www.npmjs.com/package/cordova-plugin-device-motion)
-* [Network Information](https://www.npmjs.com/package/cordova-plugin-network-information)
-* [Toast](https://www.npmjs.com/package/cordova-plugin-x-toast)
-* [BarcodeScanner](https://www.npmjs.com/package/phonegap-plugin-barcodescanner)
-* [Google Analytics](https://www.npmjs.com/package/com.cmackay.plugins.googleanalytics)
-* [Google Play Services](https://www.npmjs.com/package/cordova-plugin-googleplayservices)
-
-These plug-ins have been tested with Tabris.js and a [demo](https://github.com/eclipsesource/tabris-js/tree/master/examples/cordova) can be found among the Tabris.js examples.
+While using the [Tabris.js Developer App](developer-app.md), several plugins are pre-installed. Please see About page for details.
 
 Please note, these default plug-ins are only part of the developer app published through the app stores, they are not automatically included when you are building your own app.
 

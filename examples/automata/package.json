@@ -1,6 +1,0 @@
-{
-  "main": "automata.js",
-  "dependencies": {
-    "tabris": "3.0.0-rc1"
-  }
-}

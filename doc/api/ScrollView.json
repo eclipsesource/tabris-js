@@ -127,7 +127,7 @@
     },
     {
       "title": "How to implement parallax scrolling with a `ScrollView`",
-      "path": "${GITHUB_BRANCH}/examples/parallax/parallax.js"
+      "path": "${GITHUB_BRANCH}/snippets/scrollview-parallax.jsx"
     }
   ]
 }

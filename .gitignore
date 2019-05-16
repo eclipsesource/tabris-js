@@ -6,7 +6,6 @@ node_modules/
 platforms/
 npm-debug.log*
 snippets/package-lock.json
-examples/**/package-lock.json
 *~
 snippets/dist
 .project

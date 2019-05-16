@@ -176,7 +176,6 @@
     "exclude": [
       "./src/**",
       "./test/**",
-      "./examples/**",
       "dist",
       "./**/*.d.ts",
       "./**/*.json",

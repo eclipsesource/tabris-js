@@ -38,12 +38,20 @@
   },
   "links": [
     {
-      "title": "Creating a `Canvas` with simple drawings",
+      "title": "Creating a `Canvas` with simple shapes",
+      "path": "${GITHUB_BRANCH}/snippets/canvas-shapes.jsx"
+    },
+    {
+      "title": "Creating a `Canvas` and working with `ImageData`",
       "path": "${GITHUB_BRANCH}/snippets/canvas.js"
     },
     {
-      "title": "How to use animations and different shapes on a `Canvas`",
-      "path": "${GITHUB_BRANCH}/examples/canvas"
+      "title": "How to show text on a `Canvas`",
+      "path": "${GITHUB_BRANCH}/snippets/canvas-text.jsx"
+    },
+    {
+      "title": "How to use animations on a `Canvas`",
+      "path": "${GITHUB_BRANCH}/snippets/canvas-animation.jsx"
     }
   ]
 }

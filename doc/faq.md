@@ -6,7 +6,7 @@
 
 ### Where can I see examples of what Tabris.js can do?
 
-To see examples of widgets and layouts, download the [Developer App](developer-app.md) and have a look at the Examples section. Then head over to the [Playground](https://playground.tabris.com/) to run (and edit) any of the many snippets showcasing Tabris.js APIs.
+To see examples of widgets and layouts, download the [Developer App](developer-app.md) and head over to the [Playground](https://playground.tabris.com/) to run (and edit) any of the many snippets showcasing Tabris.js APIs.
 
 ### Is the framework open source?
 

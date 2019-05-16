@@ -226,7 +226,7 @@
     },
     {
       "title": "A form using `TextInput` and other input controls",
-      "path": "${GITHUB_BRANCH}/examples/input/input.js"
+      "path": "${GITHUB_BRANCH}/snippets/input.jsx"
     }
   ]
 }
