@@ -309,7 +309,7 @@ describe('AlertDialog', function() {
         'World!'
       );
 
-      expect(popup.message).to.equal('Hello  World!');
+      expect(popup.message).to.equal('Hello  \nWorld!');
     });
 
     it('with text content and message property', function() {

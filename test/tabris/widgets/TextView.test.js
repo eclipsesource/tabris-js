@@ -82,7 +82,7 @@ describe('TextView', function() {
         'World!'
       );
 
-      expect(button.text).to.equal('  Hello  <br/>  World!');
+      expect(button.text).to.equal('  Hello\n  <br/>  \nWorld!');
     });
 
     it('creates widget with processed text content with markup enabled', function() {

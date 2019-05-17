@@ -90,7 +90,7 @@ describe('Common Widgets', function() {
       'World!'
     );
 
-    expect(button.text).to.equal('Hello  World!');
+    expect(button.text).to.equal('Hello  \nWorld!');
   });
 
   it('Button JSX with text content and text property', function() {
@@ -159,7 +159,7 @@ describe('Common Widgets', function() {
       'World!'
     );
 
-    expect(widget.text).to.equal('Hello  World!');
+    expect(widget.text).to.equal('Hello  \nWorld!');
   });
 
   it('CheckBox JSX with text content and text property', function() {
@@ -262,7 +262,7 @@ describe('Common Widgets', function() {
       'World!'
     );
 
-    expect(button.text).to.equal('Hello  World!');
+    expect(button.text).to.equal('Hello  \nWorld!');
   });
 
   it('RadioButton JSX with text content and text property', function() {
@@ -443,7 +443,7 @@ describe('Common Widgets', function() {
       'World!'
     );
 
-    expect(button.text).to.equal('Hello  World!');
+    expect(button.text).to.equal('Hello  \nWorld!');
   });
 
   it('ToggleButton JSX with text content and text property', function() {

@@ -21,7 +21,7 @@ Mix in properties object|`new TextView({text: 'foo', ...props})`|`<TextView text
 Add new children|`new Composite().append(new TextView())`|`<Composite><TextView /></Composite>`
 Add existing children|`new Composite().append(children)`|`<Composite>{children}</Composite>`
 
-\* Some properties can also be set by putting the value between the opening and closing tag, like children. For `<TextView>foo</TextView>` sets the `text` property to `'foo'`. Properties that support this are marked as such in the API reference.
+\* Some properties can also be set by putting the value between the opening and closing tag, like children. For `<TextView>foo</TextView>` sets the `text` property to `'foo'`. Properties that support this are marked as such in the API reference. In case of `<$>` and `<TextView markupEnabled>` text inside an JSX element is treated as markup, meaning that multiple whitespaces in succession (including `<br/>`) are reduced to a single one, and line breaks other than `<br/>`are ignored. In all other cases link breaks are kept (and can be added with `\n`), and the only whitespaces that are removed is the indention.
 
 > :warning: In TypeScript JSX expressions themselves are type-safe, but their return type is `any`! So be extra careful when you assign them to a variable to give it the proper type.
 
