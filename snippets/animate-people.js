@@ -1,6 +1,5 @@
-const {Composite, ImageView, Page, TextView} = require('tabris');
+import {Composite, contentView, ImageView, TextView} from 'tabris';
 
-const IMAGE_PATH = 'images/';
 const IMAGE_SIZE = 128;
 const THUMB_SIZE = 48;
 const MARGIN_SMALL = 4;
@@ -14,29 +13,24 @@ const PEOPLE = [
   ['Markus ', 'Knauer', 'markus.jpg'],
   ['Moritz', 'Post', 'moritz.jpg'],
   ['Tim', 'Buschtöns', 'tim.jpg']
-].map(([firstName, lastName, image]) => ({firstName, lastName, image: IMAGE_PATH + image}));
-
-const page = new Page({
-  title: 'People',
-  autoDispose: false
-});
+].map(([firstName, lastName, image]) => ({firstName, lastName, image: `resources/${image}`}));
 
 const detailsParent = new Composite({
   left: MARGIN, top: MARGIN_LARGE, right: MARGIN
-}).appendTo(page);
+}).appendTo(contentView);
 
 let detailView = createPersonDetail(detailsParent, PEOPLE[2], ANIMATION_START_DELAY);
 
 new Composite({
   left: 0, top: [detailsParent, MARGIN], right: 0, height: 96
-}).on('resize', ({target: container, width}) => {
+}).onResize(({target: container, width}) => {
   container.children().dispose();
-  const thumbsize = Math.min(64, width / PEOPLE.length - MARGIN);
+  const thumbSize = Math.min(64, width / PEOPLE.length - MARGIN);
   PEOPLE.forEach((person, index) => {
-    const personThumb = createPersonThumb(person, thumbsize).appendTo(container);
+    const personThumb = createPersonThumb(person, thumbSize).appendTo(container);
     animateInFromBottom(personThumb, index);
   });
-}).appendTo(page);
+}).appendTo(contentView);
 
 function animateInFromBottom(widget, index) {
   widget.set({
@@ -83,7 +77,7 @@ function animateInScaleUp(widget, delay) {
 function animateOutLeftCreateCurrentPerson(person) {
   detailView
     .animate({opacity: 0.0, transform: {translationX: -64}}, {duration: 500, easing: 'ease-out'})
-    .then(function() {
+    .then(() => {
       detailView.dispose();
       detailView = createPersonDetail(detailsParent, person, 0);
     });
@@ -97,7 +91,7 @@ function createPersonDetail(parent, person, delay) {
     left: 0, top: 0, width: IMAGE_SIZE, height: IMAGE_SIZE,
     image: {src: person.image, width: IMAGE_SIZE, height: IMAGE_SIZE},
     opacity: 0.0
-  }).on('resize', () => {
+  }).onResize(() => {
     personImage.transform = {
       scaleX: 0.75,
       scaleY: 0.75
@@ -138,7 +132,7 @@ function createPersonThumb(person, thumbsize) {
     left: 0, top: 0, width: thumbsize, height: thumbsize,
     image: {src: person.image, width: thumbsize, height: thumbsize},
     highlightOnTouch: true
-  }).on('tap', () => animateOutLeftCreateCurrentPerson(person))
+  }).onTap(() => animateOutLeftCreateCurrentPerson(person))
     .appendTo(composite);
   new TextView({
     alignment: 'centerX',
@@ -148,5 +142,3 @@ function createPersonThumb(person, thumbsize) {
   }).appendTo(composite);
   return composite;
 }
-
-module.exports = page;
