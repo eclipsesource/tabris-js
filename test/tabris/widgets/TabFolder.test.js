@@ -9,7 +9,12 @@ import {createJsxProcessor} from '../../../src/tabris/JsxProcessor';
 
 describe('TabFolder', function() {
 
-  let client, tabFolder, parent;
+  /** @type {ClientMock} */
+  let client;
+  /** @type {TabFolder} */
+  let tabFolder;
+  /** @type {Composite} */
+  let parent;
 
   beforeEach(function() {
     client = new ClientMock();
@@ -20,6 +25,18 @@ describe('TabFolder', function() {
   });
 
   afterEach(restore);
+
+  it('listens to select', function() {
+    expect(client.calls({op: 'listen', event: 'select', listen: true}).length).to.equal(1);
+    expect(client.calls({op: 'listen', event: 'select', listen: false}).length).to.equal(0);
+  });
+
+  it('always listens to selection', function() {
+    const listener = spy();
+    tabFolder.on('select', listener);
+    tabFolder.off('select', listener);
+    expect(client.calls({op: 'listen', event: 'select', listen: false}).length).to.equal(0);
+  });
 
   it('children list is empty', function() {
     expect(tabFolder.children().toArray()).to.eql([]);
@@ -330,7 +347,6 @@ describe('TabFolder', function() {
 
       tabris._notify(tabFolder.cid, 'select', {selection: tab.cid});
 
-      checkListen('select');
       expect(listener).to.have.been.calledOnce;
       expect(listener.firstCall.args[0].target).to.equal(tabFolder);
       expect(listener.firstCall.args[0].value).to.equal(tab);
@@ -395,7 +411,6 @@ describe('TabFolder', function() {
 
       tabFolder.selectionIndex = 1;
 
-      checkListen('select');
       expect(listener).to.have.been.calledOnce;
       expect(listener.firstCall.args[0].target).to.equal(tabFolder);
       expect(listener.firstCall.args[0].value).to.equal(tab2);
@@ -549,7 +564,7 @@ describe('TabFolder', function() {
       tab1.appendTo(tabFolder);
       tab2.onAppear(listener).appendTo(tabFolder);
 
-      tabFolder._triggerChangeEvent('selection', tab2);
+      tabFolder._trigger('select', {selection: tab2.cid});
 
       expect(listener).to.have.been.calledOnce;
       expect(listener.firstCall.args[0].target).to.equal(tab2);
@@ -571,7 +586,7 @@ describe('TabFolder', function() {
     it('is triggered when the Tab is no longer the selection of the TabFolder', function() {
       tab1.onDisappear(listener);
 
-      tabFolder._triggerChangeEvent('selection', tab2);
+      tabFolder._trigger('select', {selection: tab2.cid});
 
       expect(listener).to.have.been.calledOnce;
       expect(listener.firstCall.args[0].target).to.equal(tab1);
@@ -580,7 +595,7 @@ describe('TabFolder', function() {
     it('is not triggered when the Tab appears', function() {
       tab2.onDisappear(listener);
 
-      tabFolder._triggerChangeEvent('selection', tab2);
+      tabFolder._trigger('select', {selection: tab2.cid});
 
       expect(listener).not.to.have.been.called;
     });
@@ -666,9 +681,8 @@ describe('TabFolder', function() {
   });
 
   const checkListen = function(event) {
-    const listen = client.calls({op: 'listen', id: tabFolder.cid});
+    const listen = client.calls({op: 'listen', id: tabFolder.cid, event});
     expect(listen.length).to.equal(1);
-    expect(listen[0].event).to.equal(event);
     expect(listen[0].listen).to.equal(true);
   };
 

@@ -7,6 +7,21 @@ import {omit, pick} from '../util';
 
 export default class TabFolder extends Composite {
 
+  /**
+  * @param {Partial<TabFolder>=} properties
+  */
+  constructor(properties) {
+    super(properties);
+    this._nativeListen('select', true);
+  }
+
+  _nativeListen(event, state) {
+    if (event === 'select' && !state) {
+      return;
+    }
+    super._nativeListen(event, state);
+  }
+
   get _nativeType() {
     return 'tabris.TabFolder';
   }
@@ -53,7 +68,9 @@ export default class TabFolder extends Composite {
   _trigger(name, event) {
     if (name === 'select') {
       const selection = tabris._nativeObjectRegistry.find(event.selection);
-      return super._trigger('select', {selection});
+      const result = super._trigger('select', {selection});
+      this._triggerChangeEvent('selection', selection);
+      return result;
     }
     if (name === 'scroll') {
       const selection = event.selection ? tabris._nativeObjectRegistry.find(event.selection) : null;
@@ -139,7 +156,7 @@ NativeObject.defineProperties(TabFolder.prototype, {
 
 NativeObject.defineEvents(TabFolder.prototype, {
   scroll: {native: true},
-  select: {native: true, changes: 'selection'}
+  select: {native: true}
 });
 
 TabFolder.prototype[JSX.jsxFactory] = createElement;
