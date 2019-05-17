@@ -174,6 +174,9 @@ function findMapping(mappings, line, column) {
     const next = lineMappings[index + 1];
     const startColumn = mapping[0] + 1;
     const endColumn = next ? next[0] + 1 : Infinity;
+    if (index === 0 && column < startColumn) {
+      return true;
+    }
     return column >= startColumn && column < endColumn;
   });
 }

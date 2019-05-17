@@ -13,7 +13,7 @@ describe('util-stacktrace', function() {
     Android: {
       production:
 `Error
-  at doSomethingElse (./dist/console.js:23:17)
+  at doSomethingElse (./dist/console.js:23:2)
   at doSomething (./dist/console.js:20:5)
   at Button.start (./dist/console.js:17:17)
   at ./node_modules/tabris/tabris.min.js:1:27243
@@ -22,7 +22,7 @@ describe('util-stacktrace', function() {
   at Tabris._notify (./node_modules/tabris/tabris.min.js:1:74931)`,
       debug:
 `Error
-  at doSomethingElse (./dist/console.js:23:17)
+  at doSomethingElse (./dist/console.js:23:2)
   at doSomething (./dist/console.js:20:5)
   at Button.start (./dist/console.js:17:17)
   at ./node_modules/tabris/tabris.js:1:27243
@@ -66,7 +66,7 @@ describe('util-stacktrace', function() {
     },
     iOS: {
       production:
-`doSomethingElse@http://192.168.6.77:8080/dist/console.js:23:17
+`doSomethingElse@http://192.168.6.77:8080/dist/console.js:23:2
 doSomething@http://192.168.6.77:8080/dist/console.js:20:5
 start@http://192.168.6.77:8080/dist/console.js:17:17
 http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:27243
@@ -75,7 +75,7 @@ $trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:48355
 _notify@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:74931
 _notify@[native code]`,
       debug:
-`doSomethingElse@http://192.168.6.77:8080/dist/console.js:23:17
+`doSomethingElse@http://192.168.6.77:8080/dist/console.js:23:2
 doSomething@http://192.168.6.77:8080/dist/console.js:20:5
 start@http://192.168.6.77:8080/dist/console.js:17:17
 http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:27243
@@ -114,15 +114,15 @@ callback@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:95462`
     },
     expected: {
       simplified:
-`doSomethingElse (./dist/console.js:23:17)
+`doSomethingElse (./dist/console.js:23:2)
 doSomething (./dist/console.js:20:5)
 start (./dist/console.js:17:17)`,
       simplifiedError:
-`  at doSomethingElse (./dist/console.js:23:17)
+`  at doSomethingElse (./dist/console.js:23:2)
   at doSomething (./dist/console.js:20:5)
   at start (./dist/console.js:17:17)`,
       full:
-`doSomethingElse (./dist/console.js:23:17)
+`doSomethingElse (./dist/console.js:23:2)
 doSomething (./dist/console.js:20:5)
 start (./dist/console.js:17:17)
 ./node_modules/tabris/tabris.js:1:27243
@@ -136,12 +136,12 @@ start (./dist/timer.js:10:9)`,
       timerNested:
 `done (./dist/timer.js:19:17)
 sayThanks (./dist/timer.js:16:5)
-doSomethingElse (./dist/console.js:23:17)
+doSomethingElse (./dist/console.js:23:2)
 doSomething (./dist/console.js:20:5)
 start (./dist/console.js:17:17)
 start (./dist/timer.js:10:9)`,
       timerParallel:
-`doSomethingElse (./dist/console.js:23:17)
+`doSomethingElse (./dist/console.js:23:2)
 doSomething (./dist/console.js:20:5)
 start (./dist/console.js:17:17)
 start (./dist/timer.js:10:9)`,
@@ -152,7 +152,7 @@ showActionSheet (./dist/actionsheet.js:15:25)`,
       promiseNested:
 `./dist/actionsheet.js:17:21
 ./dist/actionsheet.js:16:1
-doSomethingElse (./dist/console.js:23:17)
+doSomethingElse (./dist/console.js:23:2)
 doSomething (./dist/console.js:20:5)
 start (./dist/console.js:17:17)
 showActionSheet (./dist/actionsheet.js:15:25)`
@@ -212,7 +212,7 @@ showActionSheet (./dist/actionsheet.js:15:25)`
             mappings: ';;AAAA,mCAA6C;AAE7C,IAAI,YAAY,GAAG,IAAI,kBAAS,CAAC;IAC/B,IAAI,EAAE,EAAE,EAAE,GAAG,EAAE,EAAE,EAAE,KAAK,EAAE,EAAE;IAC5B,IAAI,EAAE,SAAS;IACf,OAAO,EAAE,aAAa;CACvB,CAAC,CAAC,QAAQ,CAAC,WAAE,CAAC,WAAW,CAAC,CAAC;AAE5B,CAAC,OAAO,EAAE,KAAK,EAAE,MAAM,EAAE,MAAM,EAAE,OAAO,EAAE,OAAO,CAAC,CAAC,OAAO,CAAC,CAAC,MAAM,EAAE,EAAE;IACpE,IAAI,eAAM,CAAC;QACT,IAAI,EAAE,EAAE,EAAE,KAAK,EAAE,EAAE,EAAE,GAAG,EAAE,WAAW;QACrC,IAAI,EAAE,MAAM;KACb,CAAC,CAAC,EAAE,CAAC,QAAQ,EAAG,KAAK,CAAC;SACtB,QAAQ,CAAC,WAAE,CAAC,WAAW,CAAC,CAAC;AAC5B,CAAC,CAAC,CAAC;AAEH,SAAS,KAAK;IACZ,MAAM,GAAG,GAAW,WAAW,EAAE,CAAC;AACpC,CAAC;AAED,SAAS,WAAW;IACnB,eAAe,EAAE,CAAC;AACnB,CAAC;AAED,SAAS,eAAe;IACtB,OAAO,CAAC,GAAG,CAAC,IAAI,KAAK,EAAE,CAAC,KAAK,CAAC,CAAC;AACjC,CAAC'// eslint-disable-line
           };
 
-          const sourceMappedStack = 'doSomethingElse (./console.js:26:15)\n' +
+          const sourceMappedStack = 'doSomethingElse (./console.js:26:0)\n' +
             'doSomething (./console.js:22:2)\n' +
             'start (./console.js:18:23)';
 
@@ -400,7 +400,7 @@ showActionSheet (./dist/actionsheet.js:15:25)`
           stack = stacks[platform].production;
           const error = new CustomError('Foo');
 
-          expect(getCurrentLine(error)).to.equal('doSomethingElse (./dist/console.js:23:17)');
+          expect(getCurrentLine(error)).to.equal('doSomethingElse (./dist/console.js:23:2)');
         });
 
       });
