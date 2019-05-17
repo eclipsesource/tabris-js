@@ -22,11 +22,13 @@ export default class Button extends Widget {
   _reorderProperties(properties) {
     const styleIndex = properties.indexOf('style');
     if (styleIndex === -1) {
-      return properties;
+      return super._reorderProperties(properties);
     }
-    return ['style']
-      .concat(properties.slice(0, styleIndex))
-      .concat(properties.slice(styleIndex + 1));
+    return super._reorderProperties(
+      ['style']
+        .concat(properties.slice(0, styleIndex))
+        .concat(properties.slice(styleIndex + 1))
+    );
   }
 
   _getXMLAttributes() {
