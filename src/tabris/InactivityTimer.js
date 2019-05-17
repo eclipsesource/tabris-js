@@ -27,3 +27,7 @@ NativeObject.defineProperties(InactivityTimer.prototype, {
     default: 0
   }
 });
+
+NativeObject.defineEvents(InactivityTimer.prototype, {
+  timeout: true
+});
