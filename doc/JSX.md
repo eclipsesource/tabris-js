@@ -97,14 +97,20 @@ contentView.append(<StyledText>Hello World!</StyledText>);
 ```
 If the element has children (everything within the element's body) they are mapped to the attribute "children". Therefore `<Foo><Bar/></Foo>` is treated like `<Foo children={<Bar/>}/>`.
 
-In TypeScript you need to give the proper type of the attributes object:
+In TypeScript (`.tsx` files) you need to give the proper type of the attributes object:
 
 ```tsx
-const StyledText = (attributes: TextView['jsxAttributes']) =>
+const StyledText = (attributes: Attributes<TextView>) =>
   <TextView textColor='red' {...attributes} />;
 ```
 
-> :point-right: `TextView['jsxAttributes']` resolves to the attributes supported by `TextView`. Explained in the next section.
+> :point-right: The Attributes interface needs to be imported from `'tabris'`
+
+If your IDE understands jsDocs wit TypeScript types you can also do this in `.jsx` files:
+```jsx
+/** @param {Attributes<TextView>=} attributes */
+const StyledText = attributes => <TextView textColor='red' {...attributes} />;
+```
 
 A function that was used as a SFC can also be used as a selector, as can its name:
 

@@ -41,6 +41,8 @@ export type JSXAttributes<
   T extends {set?: any; jsxAttributes?: any},
   U = Omit<T, 'set' | 'jsxAttributes'> // prevent self-reference issues
 > = Properties<U> & ListenersMap<U> & JSXShorthands<U>;
+export type Attributes<T extends {set?: any; jsxAttributes?: any}>
+  = T['jsxAttributes'];
 type ExtendedEvent<EventData, Target = {}> = EventObject<Target> & EventData;
 type Listener<T = {}> = (ev: ExtendedEvent<T>) => any;
 type ListenersTriggerParam<T> = {[P in Diff<keyof T, keyof EventObject<object>>]: T[P]};

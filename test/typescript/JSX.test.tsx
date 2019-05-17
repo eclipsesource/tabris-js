@@ -75,6 +75,9 @@ class MyCustomWidgetWithUnpackedListeners extends tabris.Composite {
   public onFooChanged = new tabris.Listeners<tabris.PropertyChangedEvent<this, string>>(this, 'onFooChanged');
 }
 
+const MyStyledComponent = (attributes: tabris.Attributes<tabris.TextInput>) =>
+  <tabris.TextInput background='blue' {...attributes}/>;
+
 const custom1: MyCustomWidget = <MyCustomWidget height={23}/>;
 const custom2: MyCustomWidgetWithCustomJsx = <MyCustomWidgetWithCustomJsx height={23} bar='foo'/>;
 const custom3: MyCustomWidgetWithUnpackedListeners = <MyCustomWidgetWithUnpackedListeners
@@ -85,6 +88,7 @@ const custom3: MyCustomWidgetWithUnpackedListeners = <MyCustomWidgetWithUnpacked
     const widget: MyCustomWidgetWithUnpackedListeners = event.target;
   }}
   />;
+const custom4: tabris.TextInput = <MyStyledComponent onAccept={ev => console.log(ev.text)}/>;
 
 // WidgetCollection
 let widgetCollection: tabris.WidgetCollection = <tabris.WidgetCollection><tabris.Button/><tabris.TextView/></tabris.WidgetCollection>;
