@@ -1,11 +1,10 @@
-import {TextInput, WebView, contentView} from 'tabris';
+import {contentView, TextInput, WebView} from 'tabris';
 
 contentView.append(
   <$>
-    <TextInput left={8} right={8} message='Enter URL...' onAccept={loadUrl}>
-      http://en.wikipedia.org
-    </TextInput>
-    <WebView stretchX bottom top='prev()' />
+    <TextInput left={16} right={16} top={8} message='Enter URL...'
+      text='http://en.wikipedia.org' floatMessage={false} onAccept={loadUrl}/>
+    <WebView stretchX bottom top='prev() 8'/>
   </$>
 );
 

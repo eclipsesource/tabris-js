@@ -1,7 +1,7 @@
 import {CheckBox, contentView} from 'tabris';
 
 contentView.append(
-  <CheckBox checked padding={16} onSelect={updateText}>unchecked</CheckBox>
+  <CheckBox left={16} top={16} checked onSelect={updateText}>checked</CheckBox>
 );
 
 /** @param {tabris.CheckBoxSelectEvent} ev */

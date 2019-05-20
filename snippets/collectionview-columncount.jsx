@@ -15,7 +15,7 @@ contentView.append(
         maximum={8}
         selection={3}
         onSelectionChanged={updateColumnCount}/>
-    <TextView id='label' bottom={16} right={16} width={32} font={{size: 14, weight: 'bold'}}/>
+    <TextView id='label' bottom={16} right={24} width={24} font='bold 14px' alignment='right' text='3'/>
   </$>
 );
 
