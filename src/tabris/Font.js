@@ -94,16 +94,12 @@ function setStyle(font, value) {
 
 function fontLikeObjectToFontInstance(value) {
   checkProperty(value, 'size');
-  if ('family' in value) {
-    if ('weight' in value) {
-      if ('style' in value) {
-        return new Font(value.size, value.family, value.weight, value.style);
-      }
-      return new Font(value.size, value.family, value.weight);
-    }
-    return new Font(value.size, value.family);
-  }
-  return new Font(value.size);
+  return new Font(
+    value.size,
+    value.family || [],
+    value.weight || 'normal',
+    value.style || 'normal'
+  );
 }
 
 function checkProperty(object, prop) {

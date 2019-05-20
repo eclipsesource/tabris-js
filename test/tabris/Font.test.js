@@ -127,6 +127,16 @@ describe('Font', function() {
       expect(Font.from(fontLike)).to.deep.equal({size: 16, family: ['bar'], weight: 'bold', style: 'italic'});
     });
 
+    it('accepts font-like with size and weight', function() {
+      const fontLike = {size: 16, weight: 'bold'};
+      expect(Font.from(fontLike)).to.deep.equal({size: 16, family: [], weight: 'bold', style: 'normal'});
+    });
+
+    it('accepts font-like with size, family and style', function() {
+      const fontLike = {size: 16, family: ['bar'], style: 'italic'};
+      expect(Font.from(fontLike)).to.deep.equal({size: 16, family: ['bar'], weight: 'normal', style: 'italic'});
+    });
+
     it('rejects font-like without size', function() {
       expect(() => {
         Font.from({});
