@@ -82,7 +82,7 @@
   "links": [
     {
       "title": "Reading various device properties",
-      "path": "${GITHUB_BRANCH}/snippets/device.js"
+      "snippet": "device.jsx"
     }
   ]
 }

@@ -104,7 +104,7 @@
   "links": [
     {
       "title": "Creating a `Tab` inside a `TabFolder`",
-      "path": "${GITHUB_BRANCH}/snippets/tabfolder.jsx"
+      "snippet": "tabfolder.jsx"
     }
   ]
 }

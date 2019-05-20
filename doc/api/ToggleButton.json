@@ -67,7 +67,7 @@
   "links": [
     {
       "title": "Creating a simple `ToggleButton`",
-      "path": "${GITHUB_BRANCH}/snippets/togglebutton.js"
+      "snippet": "togglebutton.jsx"
     }
   ]
 }

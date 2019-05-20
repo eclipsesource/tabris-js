@@ -54,7 +54,7 @@
   "links": [
     {
       "title": "Creating a simple `Slider`",
-      "path": "${GITHUB_BRANCH}/snippets/slider.js"
+      "snippet": "slider.jsx"
     }
   ]
 }

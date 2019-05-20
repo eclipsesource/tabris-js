@@ -81,16 +81,7 @@
           "additionalProperties": false
         },
         "statics": {"$ref": "#/definitions/statics"},
-        "links": {
-          "type": "array",
-          "items": {
-            "properties": {
-              "title": {"type": "string"},
-              "path": {"type": "string"}
-            },
-            "additionalProperties": false
-          }
-        }
+        "links": {"$ref": "#/definitions/links"}
       },
       "dependencies": {
         "extends": ["type"],
@@ -275,6 +266,32 @@
         "android": {"type": "boolean", "description": "Defaults to true"}
       },
       "additionalProperties": false
+    },
+    "link": {
+      "required": ["title", "path"],
+      "properties": {
+        "title": {"type": "string"},
+        "path": {"type": "string"}
+      },
+      "required": ["title", "path"],
+      "additionalProperties": false
+    },
+    "snippet": {
+      "required": ["snippet"],
+      "properties": {
+        "title": {"type": "string"},
+        "snippet": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {"$ref": "#/definitions/link"},
+          {"$ref": "#/definitions/snippet"}
+        ]
+      }
     }
   },
   "oneOf": [{"$ref": "#/definitions/api"}]

@@ -39,7 +39,7 @@
     },
     "markupEnabled": {
       "type": "boolean",
-      "description": "Allows for a subset of HTML tags in the text. Supported tags are: `a`, `del`, `ins`, `b`, `i`, `strong`, `em`, `big`, `small`, `br`. All tags must be closed (e.g. use `<br/>` instead of `<br>`). Nesting tags is not supported."
+      "description": "Allows for a subset of HTML tags in the text. Supported tags are: `a`, `del`, `ins`, `b`, `i`, `strong`, `em`, `big`, `small`, `br`. All tags must be closed (e.g. use `<br/>` instead of `<br>`). Nesting tags is not supported. When the text is given as the content of a `<TextView>` JSX element, `markupEnabled` will parse the text more like HTML, i.e. consecutive white spaces will be merged."
     },
     "text": {
       "type": "string",
@@ -80,23 +80,23 @@
   "links": [
     {
       "title": "Creating a simple `TextView`",
-      "path": "${GITHUB_BRANCH}/snippets/textview.js"
+      "snippet": "textview.jsx"
     },
     {
       "title": "Creating a `TextView` with support for markup",
-      "path": "${GITHUB_BRANCH}/snippets/textview-markupenabled.jsx"
+      "snippet": "textview-markupenabled.jsx"
     },
     {
       "title": "Creating a `TextView` with support for text links",
-      "path": "${GITHUB_BRANCH}/snippets/textview-link.jsx"
+      "snippet": "textview-link.jsx"
     },
     {
       "title": "Demonstrating various line spacing values on a `TextView`",
-      "path": "${GITHUB_BRANCH}/snippets/textview-link.jsx"
+      "snippet": "textview-link.jsx"
     },
     {
       "title": "Creating a `TextView` with an external font",
-      "path": "${GITHUB_BRANCH}/snippets/textview-font-external.js"
+      "snippet": "textview-font-external.js"
     }
   ]
 }

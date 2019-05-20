@@ -36,15 +36,15 @@
   "links": [
     {
       "title": "Creating a simple `Stack`",
-      "path": "${GITHUB_BRANCH}/snippets/stackcomposite.jsx"
+      "snippet": "stack.jsx"
     },
     {
       "title": "Creating a `Stack` with horizontal alignment",
-      "path": "${GITHUB_BRANCH}/snippets/stackcomposite-alignment.jsx"
+      "snippet": "stack-alignment.jsx"
     },
     {
       "title": "Creating a `Stack` with vertical alignment",
-      "path": "${GITHUB_BRANCH}/snippets/stackcomposite-valign.jsx"
+      "snippet": "stack-valign.jsx"
     }
   ]
 }

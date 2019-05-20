@@ -55,8 +55,8 @@
   },
   "links": [
     {
-      "title": "Creating a simple `Switch`",
-      "path": "${GITHUB_BRANCH}/snippets/switch.js"
+      "title": "Creating a Switch",
+      "snippet": "switch.jsx"
     }
   ]
 }

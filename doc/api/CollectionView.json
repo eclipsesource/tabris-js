@@ -196,23 +196,23 @@
   "links": [
     {
       "title": "Creating a simple `CollectionView`",
-      "path": "${GITHUB_BRANCH}/snippets/collectionview.jsx"
+      "snippet": "collectionview.jsx"
     },
     {
       "title": "Creating a `CollectionView` with multiple cell types",
-      "path": "${GITHUB_BRANCH}/snippets/collectionview-celltype.js"
+      "snippet": "collectionview-celltype.jsx"
     },
     {
       "title": "Creating a `CollectionView` with pull-to-refresh support",
-      "path": "${GITHUB_BRANCH}/snippets/collectionview-refreshenabled.js"
+      "snippet": "collectionview-refreshenabled.jsx"
     },
     {
       "title": "Creating a `CollectionView` with sticky headers",
-      "path": "${GITHUB_BRANCH}/snippets/collectionview-scroll.js"
+      "snippet": "collectionview-scroll.jsx"
     },
     {
       "title": "Creating a `CollectionView` with dynamic column count",
-      "path": "${GITHUB_BRANCH}/snippets/collectionview-columncount.js"
+      "snippet": "collectionview-columncount.jsx"
     }
   ]
 }

@@ -70,7 +70,7 @@
   "links": [
     {
       "title": "Creating a `Popover` containing a `NavigationView`",
-      "path": "${GITHUB_BRANCH}/snippets/popover.jsx"
+      "snippet": "popover.jsx"
     }
   ]
 }

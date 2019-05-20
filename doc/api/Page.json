@@ -96,12 +96,8 @@
   },
   "links": [
     {
-      "title": "Creating a simple `Page` in a `NavigationView`",
-      "path": "${GITHUB_BRANCH}/snippets/navigationview-page.js"
-    },
-    {
       "title": "Creating a stack of pages",
-      "path": "${GITHUB_BRANCH}/snippets/navigationview-page-stacked.js"
+      "snippet": "navigationview-page-stacked.jsx"
     }
   ]
 }

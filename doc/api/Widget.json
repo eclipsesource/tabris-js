@@ -609,19 +609,19 @@
     },
     {
       "title": "A `Widget` with padding",
-      "path": "${GITHUB_BRANCH}/snippets/widget-padding.jsx"
+      "snippet": "widget-padding.js"
     },
     {
       "title": "A card style `Widget` with corner radius and elevation",
-      "path": "${GITHUB_BRANCH}/snippets/widget-cornerradius.js"
+      "snippet": "widget-cornerradius.jsx"
     },
     {
       "title": "A `Widget` with a linear-gradient background",
-      "path": "${GITHUB_BRANCH}/snippets/widget-lineargradient.js"
+      "snippet": "widget-lineargradient.js"
     },
     {
       "title": "Using touch events on a `Widget`",
-      "path": "${GITHUB_BRANCH}/snippets/widget-longpress-to-drag.js"
+      "snippet": "widget-longpress-to-drag.js"
     }
   ]
 }

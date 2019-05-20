@@ -77,7 +77,7 @@
   "links": [
     {
       "title": "Creating a simple `TimeDialog`",
-      "path": "${GITHUB_BRANCH}/snippets/timedialog.tsx"
+      "snippet": "timedialog.tsx"
     }
   ]
 }

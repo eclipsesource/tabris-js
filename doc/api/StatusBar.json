@@ -69,7 +69,7 @@
   "links": [
     {
       "title": "Demonstrating various `StatusBar` properties",
-      "path": "${GITHUB_BRANCH}/snippets/statusbar.js"
+      "snippet": "statusbar.js"
     }
   ]
 }

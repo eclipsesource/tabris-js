@@ -21,11 +21,12 @@ const LANG_TYPE_LINKS: TypeLinks = {
   'void': 'https://www.typescriptlang.org/docs/handbook/basic-types.html#void',
   'this': '#'
 };
+const GITHUB_BRANCH = 'https://github.com/eclipsesource/tabris-js/blob/v';
 
-type Config = {files: string[], targetPath: string, version: string};
+type Config = {files: string[], targetPath: string, snippets: string, version: string};
 
-exports.generateDoc = function generateDoc({files, targetPath, version}: Config) {
-  const generator = new DocumentationGenerator(targetPath, version, files);
+exports.generateDoc = function generateDoc({files, targetPath, snippets, version}: Config) {
+  const generator = new DocumentationGenerator(targetPath, version, snippets, files);
   generator.generate();
 };
 
@@ -33,15 +34,18 @@ class DocumentationGenerator {
 
   public readonly apiPath: string;
   public readonly defs: ApiDefinitions;
+  public readonly snippets: {[name: string]: string} = {};
   public readonly typeLinks: TypeLinks = Object.assign({}, LANG_TYPE_LINKS);
 
   constructor(
     public readonly targetPath: string,
     public readonly tabrisVersion: string,
+    snippetsPath: string,
     files: string[]
   ) {
     this.apiPath = join(this.targetPath, 'api');
     this.readPropertyTypes();
+    this.readSnippets(snippetsPath);
     this.defs = readJsonDefs(files);
     this.preProcessDefinitions();
   }
@@ -57,6 +61,7 @@ class DocumentationGenerator {
       if (this.defs[title].type) {
         this.addTypeLink(this.defs[title].type, `${parse(this.defs[title].file).name}.md`);
       }
+      this.addSnippets(title);
     });
   }
 
@@ -67,6 +72,14 @@ class DocumentationGenerator {
     for (const type of list) {
       this.addTypeLink(type, `${path}#${type.toLowerCase()}`);
     }
+  }
+
+  private readSnippets(path: string) {
+    fs.readdirSync(path).forEach(snippet => {
+      if (snippet.endsWith('.js') || snippet.endsWith('.jsx') || snippet.endsWith('.ts') || snippet.endsWith('.tsx')) {
+        this.snippets[snippet] = join(path, snippet).replace(/\\/g, '/');
+      }
+    });
   }
 
   private renderOverview() {
@@ -97,6 +110,28 @@ class DocumentationGenerator {
       throw new Error('Duplicate type ' + type);
     }
     this.typeLinks[type] = link;
+  }
+
+  private addSnippets(title: string) {
+    const def = this.defs[title];
+    def.links = def.links || [];
+    const snippets = def.links
+      .filter(isSnippet)
+      .map(entry => {
+        if (!this.snippets[entry.snippet]) {
+          throw new Error(title + ' - No such snippet: '  + entry.snippet);
+        }
+        return entry.snippet;
+      });
+    Object.keys(this.snippets).forEach(snippet => {
+      if (snippet.startsWith(title.toLowerCase()) && snippets.indexOf(snippet) === -1) {
+        console.warn('Auto-add snippet ' + snippet + ' to ' + title);
+        def.links.push({snippet});
+      }
+    });
+    if (def.links.length === 0) {
+      console.warn('No links/snippets given for ' + title);
+    }
   }
 
 }
@@ -573,8 +608,15 @@ class DocumentRenderer {
       return '';
     }
     return ['See also:\n'].concat(this.def.links.map(link => {
-      const path = link.path.replace('${GITHUB_BRANCH}',
-        'https://github.com/eclipsesource/tabris-js/tree/v' + this.tabrisVersion);
+      if (isSnippet(link)) {
+        const snippetPath = GITHUB_BRANCH + this.tabrisVersion + '/snippets/' + link.snippet;
+        const title = 'Demo Snippet: ' + (link.title || link.snippet);
+        return `- [${title}](${snippetPath})`;
+      }
+      const path = link.path.replace(
+        '${GITHUB_BRANCH}',
+        GITHUB_BRANCH + this.tabrisVersion
+      );
       return `- [${link.title}](${path})`;
     })).join('\n') + '\n';
   }
@@ -673,4 +715,9 @@ function createImageFigure(def: ExtendedApi, image: string, platform: string): s
   } else {
     return '';
   }
+}
+
+// tslint:disable-next-line: no-any
+function isSnippet(obj: any): obj is schema.Snippet {
+  return typeof obj.snippet === 'string';
 }

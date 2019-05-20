@@ -61,7 +61,7 @@
   "links": [
     {
       "title": "Creating a set of `RadioButtons`",
-      "path": "${GITHUB_BRANCH}/snippets/radiobutton.js"
+      "snippet": "radiobutton.jsx"
     }
   ]
 }

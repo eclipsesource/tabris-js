@@ -28,7 +28,7 @@
   "links": [
     {
       "title": "Creating a simple `ActivityIndicator`",
-      "path": "${GITHUB_BRANCH}/snippets/activityindicator.js"
+      "snippet": "activityindicator.jsx"
     }
   ]
 }

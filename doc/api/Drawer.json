@@ -43,11 +43,11 @@
   "links": [
     {
       "title": "Simple example of using a `Drawer`",
-      "path": "${GITHUB_BRANCH}/snippets/drawer.js"
+      "snippet": "drawer.jsx"
     },
     {
       "title": "Using a `Drawer` for app navigation",
-      "path": "${GITHUB_BRANCH}/snippets/drawer-pages.ts"
+      "snippet": "drawer-pages.jsx"
     }
   ]
 }

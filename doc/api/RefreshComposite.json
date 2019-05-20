@@ -41,7 +41,7 @@
   "links": [
     {
       "title": "Creating a simple `RefreshComposite`",
-      "path": "${GITHUB_BRANCH}/snippets/refreshcomposite.js"
+      "snippet": "refreshcomposite.jsx"
     }
   ]
 }

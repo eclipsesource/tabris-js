@@ -77,7 +77,7 @@
   "links": [
     {
       "title": "Creating various types of linear gradients",
-      "path": "${GITHUB_BRANCH}/snippets/widget-lineargradient.js"
+      "snippet": "widget-lineargradient.js"
     }
   ]
 }

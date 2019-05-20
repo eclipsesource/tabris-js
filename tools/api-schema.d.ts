@@ -5,6 +5,7 @@
  */
 
 export type TabrisJsApiDefinitionJsonSchema = Api;
+export type Links = (Link | Snippet)[];
 
 export interface Api {
   /**
@@ -48,10 +49,7 @@ export interface Api {
     [k: string]: Event;
   };
   statics?: Statics;
-  links?: {
-    title?: string;
-    path?: string;
-  }[];
+  links?: Links;
 }
 export interface Parameter {
   name: string;
@@ -183,4 +181,12 @@ export interface Statics {
     [k: string]: Method | Method[];
   };
   [k: string]: any;
+}
+export interface Link {
+  title: string;
+  path: string;
+}
+export interface Snippet {
+  title?: string;
+  snippet: string;
 }

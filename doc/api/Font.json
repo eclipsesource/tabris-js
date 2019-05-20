@@ -107,7 +107,7 @@
   "links": [
     {
       "title": "Applying multiple font styles to TextViews",
-      "path": "${GITHUB_BRANCH}/snippets/textview-font-bundled.js"
+      "snippet": "textview-font-bundled.js"
     }
   ]
 }

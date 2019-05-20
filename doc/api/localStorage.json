@@ -66,7 +66,7 @@
   "links": [
     {
       "title": "A example how to read and write from the `localStorage`",
-      "path": "${GITHUB_BRANCH}/snippets/local-storage.jsx"
+      "snippet": "local-storage.jsx"
     }
   ]
 }

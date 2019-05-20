@@ -61,7 +61,7 @@
   "links": [
     {
       "title": "Creating a simple `Checkbox`",
-      "path": "${GITHUB_BRANCH}/snippets/checkbox.js"
+      "snippet": "checkbox.jsx"
     }
   ]
 }

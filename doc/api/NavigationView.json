@@ -91,15 +91,15 @@
   "links": [
     {
       "title": "Creating a simple `NavigationView` with pages",
-      "path": "${GITHUB_BRANCH}/snippets/navigationview-page-stacked.js"
+      "snippet": "navigationview-page-stacked.jsx"
     },
     {
       "title": "Demonstrating a `NavigationView` with various interactive properties",
-      "path": "${GITHUB_BRANCH}/snippets/navigationview-properties.js"
+      "snippet": "navigationview-properties.jsx"
     },
     {
       "title": "Using multiple `NavigationViews` in `TabFolder` `Tabs`",
-      "path": "${GITHUB_BRANCH}/snippets/navigationview-tabfolder.js"
+      "snippet": "navigationview-tabfolder.js"
     }
   ]
 }

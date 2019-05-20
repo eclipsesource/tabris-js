@@ -132,12 +132,20 @@
   },
   "links": [
     {
-      "title": "Snippet showing various capabilities of the `App` object",
-      "path": "${GITHUB_BRANCH}/snippets/app.js"
+      "title": "Displaying app properties",
+      "snippet": "app-info.jsx"
     },
     {
-      "title": "Snippet to register and use an external font",
-      "path": "${GITHUB_BRANCH}/snippets/textview-font-external.js"
+      "title": "Displaying app events",
+      "snippet": "app-events.jsx"
+    },
+    {
+      "title": "Launching an url",
+      "snippet": "app-launch.jsx"
+    },
+    {
+      "title": "Register and use an external font",
+      "snippet": "textview-font-external.js"
     }
   ]
 }

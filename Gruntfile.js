@@ -38,6 +38,7 @@ module.exports = function(grunt) {
     },
     doc: {
       api: 'doc/api/**/*.json',
+      snippets: 'snippets/',
       schema: 'tools/api-schema.json',
       propertyTypes: 'typings/propertyTypes.d.ts',
       reExports: 'typings/reExports.d.ts',
@@ -167,9 +168,10 @@ module.exports = function(grunt) {
 
   grunt.registerTask('generate-doc', () => {
     const targetPath = grunt.config('doc').target;
+    const snippets = grunt.config('doc').snippets;
     const files = grunt.file.expand(grunt.config('doc').api);
     try {
-      generateDoc({files, targetPath, version});
+      generateDoc({files, targetPath, snippets, version});
     } catch (ex) {
       grunt.fail.warn(ex.stack);
     }

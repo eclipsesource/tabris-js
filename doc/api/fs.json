@@ -116,7 +116,7 @@
   "links": [
     {
       "title": "Using the file system to read and write files",
-      "path": "${GITHUB_BRANCH}/snippets/fs.js"
+      "snippet": "fs.jsx"
     }
   ]
 }
