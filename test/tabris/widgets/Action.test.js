@@ -114,7 +114,7 @@ describe('Action', function() {
         'World!'
       );
 
-      expect(widget.title).to.equal('Hello  \nWorld!');
+      expect(widget.title).to.equal('Hello  World!');
     });
 
     it('with text content and title property', function() {

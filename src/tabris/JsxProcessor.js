@@ -203,7 +203,7 @@ export function joinTextContent(textArray, markupEnabled) {
       .replace(/\s+/g, ' ')
       .replace(/\s*<br\s*\/>\s*/g, '<br/>');
   }
-  return textArray.map(str => str.replace(/\\n/g, '\n')).join('\n');
+  return textArray.join('');
 }
 
 export const JSX = {

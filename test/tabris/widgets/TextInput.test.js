@@ -181,7 +181,7 @@ describe('TextInput', function() {
         'World!'
       );
 
-      expect(widget.text).to.equal('Hello  \nWorld!');
+      expect(widget.text).to.equal('Hello  World!');
     });
 
     it('with text content and text property', function() {
