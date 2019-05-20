@@ -6,13 +6,13 @@ drawer.onClose(() => console.log('drawer closed'));
 const arrow = String.fromCharCode(8592);
 
 contentView.append(
-  <TextView left={10} centerY font='22px Arial' onTap={() => drawer.open()}>
+  <TextView left={16} centerY font='22px Arial' onTap={() => drawer.open()}>
     {arrow} Swipe from left or tap here
   </TextView>
 );
 
 drawer.append(
-  <TextView left={10} centerY font='22px Arial' onTap={() => drawer.close()}>
+  <TextView left={16} centerY font='22px Arial' onTap={() => drawer.close()}>
     Thank you!
   </TextView>
 );

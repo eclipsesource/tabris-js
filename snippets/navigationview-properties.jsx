@@ -15,7 +15,7 @@ contentView.append(
   <NavigationView drawerActionVisible stretch>
     <Action title='Search'/>
     <Action title='Share' image={getImage('share')}/>
-    <Page title='NavigationView' padding={12} layout={controlsLayout}>
+    <Page title='NavigationView' padding={16} layout={controlsLayout}>
       <CheckBox checked text='Show toolbar'
           onCheckedChanged={ev => toggleToolbar(ev.value)}/>
       <CheckBox checked text='Show drawer action'

@@ -1,7 +1,7 @@
 import {AlertDialog, Button, Stack, TextInput, TextView, contentView} from 'tabris';
 
 contentView.append(
-  <Stack stretch padding={8} spacing={16} alignment='stretchX'>
+  <Stack stretch padding={16} spacing={16} alignment='stretchX'>
     <Button onSelect={showSimpleDialog}>Simple dialog</Button>
     <Button onSelect={showDialogWithButtons}>Dialog with multiple buttons</Button>
     <Button onSelect={showSelfClosingDialog}>Self-closing dialog</Button>

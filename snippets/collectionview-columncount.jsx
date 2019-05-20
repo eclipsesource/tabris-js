@@ -10,7 +10,7 @@ contentView.append(
         itemCount={items.length}
         createCell={createCell}
         updateCell={updateCell}/>
-    <Slider left={15} bottom={0} right='next()' height={48}
+    <Slider left={16} bottom={0} right='next()' height={48}
         minimum={1}
         maximum={8}
         selection={3}

@@ -66,7 +66,7 @@ function showPage(index) {
 /** @param {tabris.Attributes<Page>=} attributes */
 function MyPage(attributes) {
   return (
-    <Page padding={20} {...attributes}>
+    <Page padding={16} {...attributes}>
       <Button stretchX onSelect={addPage}>Create page in drawer</Button>
     </Page>
   );

@@ -1,7 +1,7 @@
 import { DateDialog, Button, Stack, TextView, contentView } from 'tabris';
 
 contentView.append(
-  <Stack stretch padding={8} spacing={16} alignment='stretchX'>
+  <Stack stretch padding={16} spacing={16} alignment='stretchX'>
     <Button onSelect={showSimpleDialog}>Simple date dialog</Button>
     <Button onSelect={showSpecificDate}>Dialog with pre-set date</Button>
     <Button onSelect={showMinMaxDate}>Dialog with min/max date</Button>

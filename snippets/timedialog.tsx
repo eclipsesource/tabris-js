@@ -1,7 +1,7 @@
 import { TimeDialog, Button, Stack, TextView, contentView } from 'tabris';
 
 contentView.append(
-  <Stack stretch padding={8} spacing={16} alignment='stretchX'>
+  <Stack stretch padding={16} spacing={16} alignment='stretchX'>
     <Button onSelect={showSimpleDialog}>Simple time dialog</Button>
     <Button onSelect={showSpecificTime}>Dialog with pre-set time</Button>
     <TextView/>
