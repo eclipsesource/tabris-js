@@ -56,6 +56,5 @@ For submission to the App / Play Stores you will need to bundle, brand and build
 Help us improve Tabris.js! Feedback via [mail](mailto:care@tabrisjs.com?subject=Feedback) or [chat](https://tabrisjs.herokuapp.com/) is always welcome. Feel free to invite your friends if you find Tabris.js interesting.
 
 [![Tabris.js on Twitter](img/social-logo-twitter.png)](https://twitter.com/tabrisjs)
-[![EclipseSource on LinkedIn](img/social-logo-linkedin.png)](https://www.linkedin.com/company/eclipsesource)
-[![EclipseSource on Google+](img/social-logo-gplus.png)](https://plus.google.com/+Eclipsesource)
 [![EclipseSource on Facebook](img/social-logo-facebook.png)](https://www.facebook.com/eclipsesource)
+[![EclipseSource on LinkedIn](img/social-logo-linkedin.png)](https://www.linkedin.com/company/eclipsesource)
