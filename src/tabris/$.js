@@ -33,7 +33,7 @@ export default function $(param) {
     flat.forEach(entry => {
       if (entry instanceof Widget) {
         if (str.length) {
-          result.push(new TextView({text: joinTextContent(str, true)}));
+          result.push(new TextView({text: joinTextContent(str, false)}));
           str = [];
         }
         result.push(entry);
@@ -42,9 +42,9 @@ export default function $(param) {
       }
     });
     if (str.length) {
-      result.push(new TextView({text: joinTextContent(str, true)}));
+      result.push(new TextView({text: joinTextContent(str, false)}));
     }
     return new WidgetCollection(result);
   }
-  return joinTextContent(flat, true);
+  return joinTextContent(flat, false);
 }

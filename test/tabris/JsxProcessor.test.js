@@ -510,7 +510,7 @@ describe('JsxProcessor', function() {
         expect(collection).to.be.instanceOf(WidgetCollection);
         expect(collection.length).to.equal(4);
         expect(collection[0]).to.be.instanceof(TextView);
-        expect(collection[0].text).to.equal('foofalsenull');
+        expect(collection[0].text).to.equal('foofalse');
         expect(collection[1]).to.be.instanceof(Switch);
         expect(collection[2]).to.be.instanceof(Button);
         expect(collection[3]).to.be.instanceof(TextView);
@@ -547,7 +547,7 @@ describe('JsxProcessor', function() {
           1
         );
 
-        expect(str).to.equal('nullfoo1');
+        expect(str).to.equal('foo1');
       });
 
     });

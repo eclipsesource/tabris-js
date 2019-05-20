@@ -21,7 +21,19 @@ Mix in properties object|`new TextView({text: 'foo', ...props})`|`<TextView text
 Add new children|`new Composite().append(new TextView())`|`<Composite><TextView /></Composite>`
 Add existing children|`new Composite().append(children)`|`<Composite>{children}</Composite>`
 
-\* Some properties can also be set by putting the value between the opening and closing tag, like children. For `<TextView>foo</TextView>` sets the `text` property to `'foo'`. Properties that support this are marked as such in the API reference.
+Some properties can also be set by putting the value between the opening and closing tag, like children. The value must be put in curly braces, except strings and markup, which can be inlined directly.
+
+Most commonly this sets the `text` property. Examples:
+
+JavaScript/TypeScript | JSX
+---|---
+`new TextView({text: foo})`|`<TextView>{foo}</TextView>`
+`new TextView({text: 'foo'})`|`<TextView>{'foo'}</TextView>`
+`new TextView({text: 'foo'})`|`<TextView>foo</TextView>`
+`new TextView({text: '<b>bar/b>'})`|`<TextView><b>bar</b></TextView>`
+`new TextView({text: 'bar ' + foo})`|`<TextView>bar {foo}</TextView>`
+
+Properties that support this are always marked as such in the API reference.
 
 > :warning: In TypeScript JSX expressions themselves are type-safe, but their return type is `any`! So be extra careful when you assign them to a variable to give it the proper type.
 
@@ -62,18 +74,20 @@ This is not necessary inside JSX elements:
 </Composite>
 ```
 
-The `<$>` element can also create multiline markup strings:
+The `<$>` element can also create multiline strings:
 
 ```jsx
 /** @type {string} **/
 const str =
   <$>
-    This is <b>some text</b>
-    with multiple lines
+    This is some very long text
+    across multiple lines
   </$>
 );
 contentView.append(<TextView>{str}</TextView>);
 ```
+
+The line breaks and indentions will not become part of the final string.
 
 ## Custom JSX Elements
 

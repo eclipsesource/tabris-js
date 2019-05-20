@@ -50,7 +50,7 @@
             "description": "The content of the resulting string."
           }
         ],
-        "description": "A JSX stateless functional component that joins any given content in to a single string. The text is treated as markup, meaning that multiple whitespaces in succession (including `<br/>`) are reduced to a single one.",
+        "description": "A JSX stateless functional component that joins any given content in to a single string.",
         "returns": "string"
       },
       {
