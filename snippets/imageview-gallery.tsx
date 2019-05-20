@@ -1,4 +1,4 @@
-import {contentView, ImageView, ScrollView, statusBar} from 'tabris';
+import { contentView, EventObject, Image, ImageValue, ImageView, Properties, ScrollView, statusBar } from 'tabris';
 
 const IMAGES = ['cover.jpg', 'salad.jpg', 'landscape.jpg', 'ian.jpg', 'target_200.png']
   .map((image) => `resources/${image}`);
@@ -6,25 +6,26 @@ const IMAGE_SIZE = 96;
 
 class FilmStrip extends ScrollView {
 
-  constructor(properties) {
+  private _timeout: null;
+
+  constructor(properties: Properties<ScrollView>) {
     super({...properties, direction: 'horizontal'});
-    this._timeout = null;
     this.resetHideTimeout();
   }
 
-  isShowing() {
+  public isShowing() {
     return this.transform.translationY === 0;
   }
 
-  show() {
+  public show() {
     this.animate({transform: {translationY: 0}}, {easing: 'ease-out', duration: 150});
   }
 
-  hide() {
+  public hide() {
     this.animate({transform: {translationY: this.bounds.height}}, {easing: 'ease-out', duration: 150});
   }
 
-  toggleShowing() {
+  public toggleShowing() {
     if (this.isShowing()) {
       this.hide();
     } else {
@@ -33,7 +34,7 @@ class FilmStrip extends ScrollView {
     }
   }
 
-  resetHideTimeout() {
+  public resetHideTimeout() {
     if (this._timeout !== null) {
       clearTimeout(this._timeout);
     }
@@ -62,13 +63,13 @@ contentView.append(
         IMAGES.map((image) =>
           <ImageView top={8} left='prev() 8' width={IMAGE_SIZE} height={IMAGE_SIZE}
             highlightOnTouch image={{src: image, width: IMAGE_SIZE, height: IMAGE_SIZE}}
-            scaleMode='fill' onTap={(e) => showImage(e.target.image)}/>)
+            scaleMode='fill' onTap={(e: EventObject<ImageView>) => showImage(e.target.image)}/>)
       }
     </FilmStrip>
   </$>
 );
 
-function showImage(image) {
-  $(ImageView).first().image = image.src;
+function showImage(image: ImageValue) {
+  $(ImageView).first().image = (image as Image).src;
   $(FilmStrip).only().resetHideTimeout();
 }
