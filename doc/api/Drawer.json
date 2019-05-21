@@ -47,7 +47,7 @@
     },
     {
       "title": "Using a `Drawer` for app navigation",
-      "snippet": "drawer-pages.jsx"
+      "snippet": "drawer-pages.tsx"
     }
   ]
 }
