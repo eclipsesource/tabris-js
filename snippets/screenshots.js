@@ -260,6 +260,7 @@ function pickerSnippet(parent) {
   new Picker({
     left: 16, right: 16, top: 16, bottom: 16,
     itemCount: items.length,
+    selectionIndex: 0,
     itemText: (index) => items[index]
   }).appendTo(parent);
 }
