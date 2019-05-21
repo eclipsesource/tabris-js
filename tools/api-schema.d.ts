@@ -125,6 +125,7 @@ export interface Property {
    * Limits the possible values of this property
    */
   values?: (string | number | boolean)[];
+  links?: Links;
 }
 export interface Platforms {
   /**
@@ -135,6 +136,14 @@ export interface Platforms {
    * Defaults to true
    */
   android?: boolean;
+}
+export interface Link {
+  title: string;
+  path: string;
+}
+export interface Snippet {
+  title?: string;
+  snippet: string;
 }
 export interface Method {
   parameters?: Parameter[];
@@ -153,6 +162,7 @@ export interface Method {
   protected?: boolean;
   private?: boolean;
   provisional?: boolean;
+  links?: Links;
 }
 /**
  * This interface was referenced by `undefined`'s JSON-Schema definition
@@ -168,6 +178,7 @@ export interface Event {
   parameters?: {
     [k: string]: Property;
   };
+  links?: Links;
 }
 export interface Statics {
   properties?: {
@@ -181,12 +192,4 @@ export interface Statics {
     [k: string]: Method | Method[];
   };
   [k: string]: any;
-}
-export interface Link {
-  title: string;
-  path: string;
-}
-export interface Snippet {
-  title?: string;
-  snippet: string;
 }

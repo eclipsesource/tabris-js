@@ -61,7 +61,34 @@ class DocumentationGenerator {
       if (this.defs[title].type) {
         this.addTypeLink(this.defs[title].type, `${parse(this.defs[title].file).name}.md`);
       }
-      this.addSnippets(title);
+      Object.keys(this.defs[title].properties || {}).forEach(property => this.addSnippets(
+        `${title}-${property}`,
+        this.defs[title].properties[property]
+      ));
+      Object.keys(this.defs[title].methods || {}).forEach(method =>
+        asArray(this.defs[title].methods[method]).forEach(signature => this.addSnippets(
+          `${title}-${method}`,
+          signature
+        )
+      ));
+      Object.keys(this.defs[title].events || {}).forEach(event => this.addSnippets(
+        `${title}-${event}`,
+        this.defs[title].events[event]
+      ));
+      Object.keys((this.defs[title].statics || {}).properties || {}).forEach(property => this.addSnippets(
+        `${title}-${property}`,
+        this.defs[title].statics.properties[property]
+      ));
+      Object.keys((this.defs[title].statics || {}).methods || {}).forEach(method =>
+        asArray(this.defs[title].statics.methods[method]).forEach(signature => this.addSnippets(
+          `${title}-${method}`,
+          signature
+        )
+      ));
+      this.addSnippets(title, this.defs[title]);
+      if (this.defs[title].links.length === 0) {
+        console.warn('No links or snippets given for ' + title);
+      }
     });
   }
 
@@ -112,10 +139,9 @@ class DocumentationGenerator {
     this.typeLinks[type] = link;
   }
 
-  private addSnippets(title: string) {
-    const def = this.defs[title];
-    def.links = def.links || [];
-    const snippets = def.links
+  private addSnippets(title: string, target: {links?: schema.Links}) {
+    const links = target.links = target.links || [];
+    const snippets = links
       .filter(isSnippet)
       .map(entry => {
         if (!this.snippets[entry.snippet]) {
@@ -124,14 +150,13 @@ class DocumentationGenerator {
         return entry.snippet;
       });
     Object.keys(this.snippets).forEach(snippet => {
-      if (snippet.startsWith(title.toLowerCase()) && snippets.indexOf(snippet) === -1) {
+      const autoInclude = snippet.startsWith(title.toLowerCase() + '.')
+        || snippet.startsWith(title.toLowerCase() + '-');
+      if (autoInclude && snippets.indexOf(snippet) === -1) {
         console.warn('Auto-add snippet ' + snippet + ' to ' + title);
-        def.links.push({snippet});
+        links.push({snippet});
       }
     });
-    if (def.links.length === 0) {
-      console.warn('No links/snippets given for ' + title);
-    }
   }
 
 }
@@ -210,7 +235,7 @@ class DocumentRenderer {
       renderImages(this.def),
       this.renderSummary(),
       this.renderInfoFile(),
-      this.renderLinks(),
+      this.renderLinks(this.def.links),
       this.renderConstructor(),
       this.renderMembers()
     ].filter(value => !!value).join('\n');
@@ -397,6 +422,7 @@ class DocumentRenderer {
       result.push('\n\n', this.renderMethodParamList(method.parameters, true), '\n\n');
     }
     result.push('\nReturns ', this.renderTypeLink(method.returns || 'void'), '\n');
+    result.push(this.renderLinks(method.links));
     return result.join('') + '\n';
   }
 
@@ -465,6 +491,7 @@ class DocumentRenderer {
       }
       result.push('. Once set, it cannot change anymore.');
     }
+    result.push(this.renderLinks(property.links)),
     result.push('\n\n');
     return result.join('');
   }
@@ -532,10 +559,11 @@ class DocumentRenderer {
   }
 
   private renderEvents(events: NamedEvents) {
-    return events.map(({name, description, parameters, platforms}) => [
+    return events.map(({name, description, parameters, platforms, links}) => [
       '### ', name, '\n\n', this.renderPlatforms(platforms),
       description ? description + '\n\n' : '\n',
-      parameters ? this.renderEventParamList(parameters) : ''
+      parameters ? this.renderEventParamList(parameters) : '',
+      this.renderLinks(links)
     ].join('')).join('');
   }
 
@@ -602,15 +630,20 @@ class DocumentRenderer {
     }).join('\n');
   }
 
-  private renderLinks() {
-    // TODO: replace by either description text and/or examples field in members
-    if (!this.def.links || !this.def.links.length) {
+  private renderLinks(links: schema.Links) {
+    if (!links || !links.length) {
       return '';
     }
-    return ['See also:\n'].concat(this.def.links.map(link => {
+    return ['See also:\n'].concat(links.map(link => {
       if (isSnippet(link)) {
         const snippetPath = GITHUB_BRANCH + this.tabrisVersion + '/snippets/' + link.snippet;
-        const title = 'Demo Snippet: ' + (link.title || link.snippet);
+        const snippetType = {
+          js: 'JavaScript',
+          jsx: 'JavaScript/JSX',
+          ts: 'TypeScript',
+          tsx: 'TypeScript/JSX'
+        }[link.snippet.split('.').pop()];
+        const title = `Demo ${snippetType} Snippet: ${(link.title || link.snippet)}`;
         return `- [${title}](${snippetPath})`;
       }
       const path = link.path.replace(

@@ -191,7 +191,8 @@
               {"type": "boolean"}
             ]
           }
-        }
+        },
+        "links": {"$ref": "#/definitions/links"}
       },
       "required": ["type"],
       "additionalProperties": false
@@ -210,7 +211,8 @@
           "patternProperties": {
             "^_?[a-z]\\w+$": {"$ref": "#/definitions/property"}
           }
-        }
+        },
+        "links": {"$ref": "#/definitions/links"}
       },
       "additionalProperties": false
     },
@@ -237,7 +239,8 @@
         "platforms": {"$ref": "#/definitions/platforms"},
         "protected": {"type": "boolean"},
         "private": {"type": "boolean"},
-        "provisional": {"type": "boolean"}
+        "provisional": {"type": "boolean"},
+        "links": {"$ref": "#/definitions/links"}
       },
       "additionalProperties": false
     },
