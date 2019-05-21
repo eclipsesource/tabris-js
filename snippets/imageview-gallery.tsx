@@ -18,11 +18,13 @@ class FilmStrip extends ScrollView {
   }
 
   public show() {
-    this.animate({transform: {translationY: 0}}, {easing: 'ease-out', duration: 150});
+    this.animate({transform: {translationY: 0}}, {easing: 'ease-out', duration: 150})
+      .catch(ex => console.error(ex));
   }
 
   public hide() {
-    this.animate({transform: {translationY: this.bounds.height}}, {easing: 'ease-out', duration: 150});
+    this.animate({transform: {translationY: this.bounds.height}}, {easing: 'ease-out', duration: 150})
+      .catch(ex => console.error(ex));
   }
 
   public toggleShowing() {
