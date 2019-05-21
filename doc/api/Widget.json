@@ -609,7 +609,7 @@
     },
     {
       "title": "A `Widget` with padding",
-      "snippet": "widget-padding.js"
+      "snippet": "widget-padding.jsx"
     },
     {
       "title": "A card style `Widget` with corner radius and elevation",
