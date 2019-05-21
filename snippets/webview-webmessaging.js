@@ -21,7 +21,7 @@ const webView = new WebView({
   left: 0, top: 0, right: 0, bottom: 'prev()'
 }).appendTo(contentView);
 
-fetch('./html/website.html')
+fetch('./resources/website.html')
   .then(result => result.text())
   .then(text => webView.html = text);
 
