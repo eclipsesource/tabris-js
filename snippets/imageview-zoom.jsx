@@ -1,17 +1,20 @@
-import {ImageView, TextView, CheckBox, Slider, Composite, Stack, contentView, device} from 'tabris';
+import {CheckBox, Composite, contentView, ImageView, Slider, Stack, TextView} from 'tabris';
 
 contentView.append(
   <Stack stretch alignment='stretchX'>
     <ImageView stretchY zoomEnabled image='resources/salad.jpg' background='#f5f5f5'
-        onZoom={ev => zoomLevelSlider.selection = ev.zoomLevel * 10}/>
-    <CheckBox left={16} top={16} stretchX checked text='Zoom enabled'
+      onZoom={ev => zoomLevelSlider.selection = ev.zoomLevel * 10}/>
+    <Stack height={device.platform === 'iOS' ? 196 : undefined} alignment='stretchX'
+      padding={{bottom: 12, top: 12}} background='white' elevation={8}>
+      <CheckBox left={device.platform === 'iOS' ? 16 : 9} height={48} stretchX checked text='Zoom enabled'
         onCheckedChanged={ev => setZoomEnabled(ev.value)}/>
-    <LabeledSlider id='zoomLevel' text='Zoom level' selection={10}
+      <LabeledSlider id='zoomLevel' text='Zoom level' selection={10}
         onSelectionChanged={ev => setZoomLevel(ev.value / 10)}/>
-    <LabeledSlider id='minZoomLevel' text='Min zoom' selection={10}
+      <LabeledSlider id='minZoomLevel' text='Min zoom' selection={10}
         onSelectionChanged={ev => setMinZoomLevel(ev.value / 10)}/>
-    <LabeledSlider id='maxZoomLevel' text='Max zoom' selection={30}
+      <LabeledSlider id='maxZoomLevel' text='Max zoom' selection={30}
         onSelectionChanged={ev => setMaxZoomLevel(ev.value / 10)}/>
+    </Stack>
   </Stack>
 );
 
@@ -62,7 +65,7 @@ function setMaxZoomLevel(value) {
 /** @param {tabris.Attributes<Slider> & {text: string}} attributes */
 function LabeledSlider({text, ...attributes}) {
   const container = /** @type {Composite} */ (
-    <Composite padding={16}>
+    <Composite height={40} padding={[0, 16]}>
       <TextView left centerY width={72} text={text}/>
       <Slider left='prev() 16' right={40} centerY minimum={5} maximum={50} {...attributes}/>
       <TextView right centerY alignment='right' text={(attributes.selection / 10).toFixed(1)}/>
