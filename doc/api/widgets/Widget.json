@@ -341,6 +341,11 @@
       "readonly": true,
       "description": "The actual location and size of the widget, relative to its parent."
     },
+    "absoluteBounds": {
+      "type": "Bounds",
+      "readonly": true,
+      "description": "The actual location and size of the widget, relative to contentView."
+    },
     "background": {
       "type": "Color",
       "description": "Background color of the widget."

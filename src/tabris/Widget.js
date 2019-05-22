@@ -115,6 +115,10 @@ export default class Widget extends NativeObject {
     return this.$data;
   }
 
+  get absoluteBounds() {
+    return types.bounds.decode(this._nativeGet('absoluteBounds'));
+  }
+
   _getContainer() {
     return this;
   }
@@ -313,6 +317,10 @@ NativeObject.defineProperties(Widget.prototype, {
     type: 'image'
   },
   bounds: {
+    type: 'bounds',
+    readonly: true
+  },
+  absoluteBounds: {
     type: 'bounds',
     readonly: true
   },

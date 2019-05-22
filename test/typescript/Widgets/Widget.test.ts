@@ -57,6 +57,7 @@ backgroundImage = widget.backgroundImage;
 baseline = widget.baseline;
 bottom = widget.bottom;
 bounds = widget.bounds;
+bounds = widget.absoluteBounds;
 centerX = widget.centerX;
 centerY = widget.centerY;
 _class = widget.class;
