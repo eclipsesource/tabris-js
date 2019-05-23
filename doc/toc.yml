@@ -48,13 +48,13 @@
       url: types.html
 <%= api %>
 
-- title: Widgets
+- title: Widgets API
   pages:
     - title: Overview
       url: api/widget-overview.html
 <%= widgets %>
 
-- title: Custom Widgets
+- title: Native Custom Widgets
   pages:
     - title: Custom Widgets
       url: custom-widgets.html
@@ -62,8 +62,3 @@
       url: custom-widgets-android.html
     - title: Custom Widgets - iOS
       url: custom-widgets-ios.html
-
-- title: FAQ
-  pages:
-    - title: FAQ
-      url: faq.html
