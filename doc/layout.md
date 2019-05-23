@@ -107,7 +107,7 @@ widget = <Composite centerX={0} baseline='prev()'/>;
 
 The `layoutData` property always reflects the values set by the application, *not* the actual outcome of the layout process. For example, if `width` is left on `'auto'` it will always be `'auto'`, not visible on-screen widget width. However, that value can be obtained via the read-only properties [`bounds`](./types.md#bounds) and [`absoluteBounds`](./types.md#bounds). They provide the position and size of any widget in relation to its parent or assigned contentView respectively.
 
-Note that there is a short delay needed for the layout calculation before changes to `layoutData` are reflected in `bounds`. You can be notified of any changes of `bounds` by listening to the [`resize`](#/api/Widget.md#resize) or [`boundsChanged`](#/api/Widget.md#boundsChanged) events. (They are fired at the same time.) However, there is no event to get notified when the `absoluteBounds` property changes, specifically its `top` and `left` values may change without a `resize` event.
+Note that there is a short delay needed for the layout calculation before changes to `layoutData` are reflected in `bounds`. You can be notified of any changes of `bounds` by listening to the [`resize`](/api/Widget.md#resize) or [`boundsChanged`](/api/Widget.md#boundschanged) events. (They are fired at the same time.) However, there is no event to get notified when the `absoluteBounds` property changes, specifically its `top` and `left` values may change without a `resize` event.
 
 The initial value of `bounds` until the first layout pass is `{left: 0, top: 0, width: 0, height: 0}`. That is also the value for any widget not attached to a parent.
 
