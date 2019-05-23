@@ -21,7 +21,7 @@ const LANG_TYPE_LINKS: TypeLinks = {
   'void': 'https://www.typescriptlang.org/docs/handbook/basic-types.html#void',
   'this': '#'
 };
-const GITHUB_BRANCH = 'https://github.com/eclipsesource/tabris-js/blob/v';
+const PLAYGROUND = 'https://playground.tabris.com/';
 
 type Config = {files: string[], targetPath: string, snippets: string, version: string};
 
@@ -636,7 +636,8 @@ class DocumentRenderer {
     }
     return ['See also:\n'].concat(links.map(link => {
       if (isSnippet(link)) {
-        const snippetPath = GITHUB_BRANCH + this.tabrisVersion + '/snippets/' + link.snippet;
+        const snippetPath =
+          `${PLAYGROUND}?gitref=v${encodeURIComponent(this.tabrisVersion)}&snippet=${encodeURIComponent(link.snippet)}`;
         const snippetType = {
           js: 'JavaScript',
           jsx: 'JavaScript/JSX',
@@ -648,7 +649,7 @@ class DocumentRenderer {
       }
       const path = link.path.replace(
         '${GITHUB_BRANCH}',
-        GITHUB_BRANCH + this.tabrisVersion
+        PLAYGROUND + this.tabrisVersion
       );
       return `- [${link.title}](${path})`;
     })).join('\n') + '\n';
