@@ -50,7 +50,11 @@ module.exports = function(grunt) {
         expand: true,
         cwd: 'doc/',
         src: ['*.md', 'api/*.md', 'api/img/**/*.*', 'img/*.*', 'toc.yml'],
-        dest: 'build/doc/'
+        dest: 'build/doc/',
+        options: {
+          process: content => content.replace(/\$\{moduleversion\}/g, version),
+          noProcess: '*.png'
+        }
       },
       readme: {
         src: 'README.md',

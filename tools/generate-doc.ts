@@ -647,11 +647,7 @@ class DocumentRenderer {
         const title = `Demo ${snippetType} Snippet: ${(link.title || link.snippet)}`;
         return `- [${title}](${snippetPath})`;
       }
-      const path = link.path.replace(
-        '${GITHUB_BRANCH}',
-        PLAYGROUND + this.tabrisVersion
-      );
-      return `- [${link.title}](${path})`;
+      return `- [${link.title}](${link.path})`;
     })).join('\n') + '\n';
   }
 
