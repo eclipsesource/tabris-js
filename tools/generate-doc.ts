@@ -638,17 +638,13 @@ class DocumentRenderer {
       if (isSnippet(link)) {
         const snippetPath =
           `${PLAYGROUND}?gitref=v${encodeURIComponent(this.tabrisVersion)}&snippet=${encodeURIComponent(link.snippet)}`;
-        const snippetType = {
-          js: 'JavaScript',
-          jsx: 'JavaScript/JSX',
-          ts: 'TypeScript',
-          tsx: 'TypeScript/JSX'
-        }[link.snippet.split('.').pop()];
-        const title = `Demo ${snippetType} Snippet: ${(link.title || link.snippet)}`;
-        return `- [${title}](${snippetPath})`;
+        const snippetType = link.snippet.split('.').pop().toLowerCase();
+        const language = `<span class='language ${snippetType}'>${snippetType.toUpperCase()}</span>`;
+        const title = `${(link.title || link.snippet)}`;
+        return `[${language} ${title}](${snippetPath})`;
       }
-      return `- [${link.title}](${link.path})`;
-    })).join('\n') + '\n';
+      return `[${link.title}](${link.path})`;
+    })).join('  \n') + '\n';
   }
 
   private renderTypeLink(type: string): string {
