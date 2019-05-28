@@ -53,7 +53,7 @@ module.exports = function(grunt) {
         dest: 'build/doc/',
         options: {
           process: content => content.replace(/\$\{moduleversion\}/g, version),
-          noProcess: '*.png'
+          noProcess: '**/*.png'
         }
       },
       readme: {

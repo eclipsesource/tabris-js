@@ -724,8 +724,8 @@ function literal(value: string | boolean | number | {[key: string]: string}, typ
 }
 
 function renderImages(def: ExtendedApi) {
-  const androidImage = join('img/android', parse(def.file).name + '.png');
-  const iosImage = join('img/ios', parse(def.file).name + '.png');
+  const androidImage = join('img/android', parse(def.file).name + '.png').replace(/\\/g, '/');
+  const iosImage = join('img/ios', parse(def.file).name + '.png').replace(/\\/g, '/');
   const result = createImageFigure(def, androidImage, 'Android') + createImageFigure(def, iosImage, 'iOS');
   if (result.length !== 0) {
     return `<div class="tabris-image">${result}</div>\n`;
