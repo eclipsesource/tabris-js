@@ -22,16 +22,20 @@ By leveraging the Cordova plugin architecture, we make use of the Cordova build 
 
 `BasicObject` is at the bottom of Tabris.js widget hierarchy. It can interact with JavaScript but cannot have any UI elements. The most common use case for this class is a widget which does not need UI elements.
 
-`BasicWidget` inherits from `BasicObject`. `BasicWidget` is not capable of receiving touch inputs. If your widget needs touch input please use `Control` widget as your superclass.
+`BasicWidget` inherits from `BasicObject`. This class is an abstract and deprecated class which might be removed in future releases. Please use following classes in this paragraph. `BasicWidget` implements necessary Tabris.js-related properties.
 
-`Control` inherits from `BasicWidget` implements all of the necessary things to provide a full widget. This class can receive touch inputs, contain other widgets.
+`Widget` inherits from `BasicWidget`. It can contain user interface elements and implements all the necessary layouting logic.
+
+`WidgetContainer` inherits from `Widget` and can contain other `Widgets` and their derivatives (e.g. subclasses of `Control`).
+
+`Control` inherits from `WidgetContainer` implements all of the necessary things to provide a full widget. This class can receive touch inputs, contain other widgets.
 
 ### Initializers
 
 To develop a new widget that can communicate with the JavaScript side, you have to create a new class that subclasses one of the classes mentioned in `Widget Hierarchy` paragraph. `BasicObject` and all of its subclasses has a designated initializer you’ll need to override.
 
 ```objc
-- (instancetype)initWithObjectId:(NSString *)objectId properties:(NSDictionary *)properties andClient:(TabrisClient *)client;
+- (instancetype)initWithObjectId:(NSString *)objectId properties:(NSDictionary *)properties inContext:(id<TabrisContext>)context;
 ```
 
 `properties` parameter contains all of the constructor parameters passed from JavaScript to the native side.
@@ -48,6 +52,10 @@ Implementation of the following methods is required:
 `+ (NSString *)remoteObjectType` must return the unique identifier of the widget. Using reverse domain name notation is advised (e.g. `@“com.mydomain.MyWidget”`). It must return the same value as type declared in JavaScript (e.g. `_type: “com.mydomain.MyWidget”`). This method does not require a `super` call.
 
 `+ (NSMutableSet *)remoteObjectProperties` contains all of the widget’s properties that can be accessed by JavaScript. You have to call `super` of this method first. Afterward add the names of properties defined by your widget to this set, to expose those to JavaScript.
+
+### Optional methods
+
+`+ (void)setup;` is a static method and is executed just after the class is added to widget registry of Tabris.js. This method can be used to execute tasks which have to be ran before the class is instantiated.
 
 ### Defining UI
 
