@@ -8,8 +8,8 @@ import {omit, pick} from '../util';
 export default class TabFolder extends Composite {
 
   /**
-  * @param {Partial<TabFolder>=} properties
-  */
+   * @param {Partial<TabFolder>=} properties
+   */
   constructor(properties) {
     super(properties);
     this._nativeListen('select', true);
@@ -69,6 +69,10 @@ export default class TabFolder extends Composite {
     if (name === 'select') {
       const selection = tabris._nativeObjectRegistry.find(event.selection);
       const result = super._trigger('select', {selection});
+      selection._trigger('select');
+      if (this.$previousSelection === selection) {
+        selection._trigger('reselect');
+      }
       this._triggerChangeEvent('selection', selection);
       return result;
     }

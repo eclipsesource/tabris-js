@@ -35,6 +35,11 @@ widget.insertBefore(new Tab());
 widget.insertAfter(new Tab());
 const siblings: WidgetCollection<Tab> = widget.siblings();
 
+widget.onAppear(() => {});
+widget.onDisappear(() => {});
+widget.onSelect(() => {});
+widget.onReselect(() => {});
+
 class CustomComponent extends Tab {
   public foo: string;
   constructor(props: Properties<Tab> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }

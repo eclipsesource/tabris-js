@@ -99,6 +99,12 @@
     },
     "disappear": {
       "description": "Fired when the tab is no longer visible, i.e. it no longer is the selection of its TabFolder."
+    },
+    "select": {
+      "description": "Fired when the tab is tapped by the user. The event is fired either when the tab is first selected or when it is already visible and tapped."
+    },
+    "reselect": {
+      "description": "Fired when the tab is tapped by the user while it is already visible."
     }
   },
   "links": [

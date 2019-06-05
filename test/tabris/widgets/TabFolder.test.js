@@ -363,6 +363,37 @@ describe('TabFolder', function() {
       expect(listener.firstCall.args[0].selection).to.equal(tab);
     });
 
+    it('forwards event select to tab', function() {
+      const listener = spy();
+      tab.onSelect(listener);
+
+      tabris._notify(tabFolder.cid, 'select', {selection: tab.cid});
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener.firstCall.args[0].target).to.equal(tab);
+    });
+
+    it('forwards select event as reselect to tab when same tab as current', function() {
+      const listener = spy();
+      tab.onReselect(listener);
+
+      // the current tab is already set by simply appending it
+      tabris._notify(tabFolder.cid, 'select', {selection: tab.cid});
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener.firstCall.args[0].target).to.equal(tab);
+    });
+
+    it('does not fire reselect on target tab when switching tabs', function() {
+      const targetTab = new Tab().appendTo(tabFolder);
+      const listener = spy();
+      tab.onReselect(listener);
+
+      tabris._notify(tabFolder.cid, 'select', {selection: targetTab.cid});
+
+      expect(listener).to.have.not.been.called;
+    });
+
   });
 
   describe('selectionIndex property', function() {

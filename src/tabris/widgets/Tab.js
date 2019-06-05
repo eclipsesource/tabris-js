@@ -32,5 +32,7 @@ NativeObject.defineProperties(Tab.prototype, {
 
 NativeObject.defineEvents(Tab.prototype, {
   disappear: true,
-  appear: true
+  appear: true,
+  select: true,
+  reselect: true
 });
