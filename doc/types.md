@@ -616,7 +616,7 @@ Property   | Default            | Description
 `delay`    | `0`                | Time until the animation starts in ms.
 `duration` | (platform default) | Animation duration in ms.
 `easing`   | `linear`           | Acceleration/deceleration curve
-`repeat`   | `0`                | Number of times to repeat the animation.
+`repeat`   | `0`                | Number of times to repeat the animation. Use `Infinity` to repeat indefinitely.
 `reverse`  | `true`             | Should the direction of the animation alternative on every repeat.
 `name`     | `undefined`        | No effect, but will be given in animation events.
 

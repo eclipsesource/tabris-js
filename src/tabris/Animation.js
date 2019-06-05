@@ -1,5 +1,5 @@
 import NativeObject from './NativeObject';
-import {hint} from './Console';
+import {hint, toValueString} from './Console';
 
 const ANIMATABLE_PROPERTIES = ['opacity', 'transform'];
 
@@ -7,7 +7,19 @@ const PROPERTIES = {
   properties: {type: 'any'},
   delay: {type: 'natural'},
   duration: {type: 'natural'},
-  repeat: {type: 'natural'},
+  repeat: {
+    type: 'any',
+    set(name, value) {
+      if (typeof value !== 'number') {
+        throw new Error(`${toValueString(value)} is not a number`);
+      }
+      if (!(isFinite(value) || isNaN(value) || value === Infinity)) {
+        throw new Error(`${toValueString(value)} is not a valid number`);
+      }
+      this._nativeSet(name, value === Infinity ? -1 : value);
+      this._storeProperty(name, value);
+    }
+  },
   reverse: {type: 'boolean'},
   easing: {type: ['choice', ['linear', 'ease-in', 'ease-out', 'ease-in-out']]},
   target: {type: 'NativeObject'}

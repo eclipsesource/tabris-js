@@ -163,6 +163,34 @@ describe('Animation', function() {
       expect(createOp().properties).to.eql({opacity: 0});
     });
 
+    it('sends -1 when repeat is set to `Infinity`', function() {
+      widget.animate({}, {repeat: Infinity});
+
+      expect(createOp()).to.eql({
+        target: widget.cid,
+        properties: {},
+        repeat: -1
+      });
+    });
+
+    it('throws when repeat is set to negative number', function() {
+      widget.animate({}, {repeat: -1});
+
+      expect(createOp()).to.throw;
+    });
+
+    it('throws when repeat is set to non-number', function() {
+      widget.animate({}, {repeat: 'value'});
+
+      expect(createOp()).to.throw;
+    });
+
+    it('throws when repeat is set to NaN', function() {
+      widget.animate({}, {repeat: NaN});
+
+      expect(createOp()).to.throw;
+    });
+
     it('issues listen call for completed', function() {
       widget.animate({}, {});
       expect(client.calls({
