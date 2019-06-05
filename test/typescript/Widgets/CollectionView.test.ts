@@ -12,6 +12,7 @@ let refreshEnabled: boolean;
 let refreshIndicator: boolean;
 let refreshMessage: string;
 let nullValue: null;
+let scrollbarVisible: boolean;
 
 let widget: CollectionView<Widget> = new CollectionView();
 const composite: Composite = widget;
@@ -27,6 +28,7 @@ lastVisibleIndex = widget.lastVisibleIndex;
 refreshEnabled = widget.refreshEnabled;
 refreshIndicator = widget.refreshIndicator;
 refreshMessage = widget.refreshMessage;
+scrollbarVisible = widget.scrollbarVisible;
 
 widget.cellHeight = cellHeight;
 widget.cellType = cellType;

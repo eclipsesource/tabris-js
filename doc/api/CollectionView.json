@@ -21,6 +21,11 @@
       "ts_only": true,
       "type": "JSXAttributes<this> & Partial<Pick<CollectionView<Cell>, 'cellHeight' | 'cellType' | 'createCell' | 'updateCell'>> & {children?: never}"
     },
+    "scrollbarVisible": {
+      "type": "boolean",
+      "default": "true",
+      "description": "Allows to show or hide the scroll bar. When the scroll bar is hidden, it will be briefly visible while scrolling."
+    },
     "cellHeight": {
       "type": "number|\"auto\"|((index: number, cellType: string) => number|\"auto\")",
       "default": "auto",

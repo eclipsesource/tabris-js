@@ -99,7 +99,7 @@ export default class CollectionView extends Composite {
   /**
    * @param {Widget} widget
    * @returns {number}
-  */
+   */
   itemIndex(widget) {
     if (!(widget instanceof Widget)) {
       throw new Error(`${toValueString(widget)} is not a widget`);
@@ -120,7 +120,7 @@ export default class CollectionView extends Composite {
   /**
    * @param {number} index
    * @returns {Widget}
-  */
+   */
   cellByItemIndex(index) {
     if (!isNumber(index) || index < 0) {
       throw new Error(`${toValueString(index)} is not a valid index`);
@@ -261,6 +261,10 @@ NativeObject.defineProperties(CollectionView.prototype, {
   columnCount: {
     type: 'number',
     default: 1
+  },
+  scrollbarVisible: {
+    type: 'boolean',
+    default: true
   },
   layout: {
     set(name, value) {

@@ -58,8 +58,9 @@ describe('CollectionView', function() {
       expect(view.cellHeight).to.equal('auto');
       expect(view.createCell).to.be.a('function');
       expect(view.updateCell).to.be.a('function');
-      expect(view.refreshEnabled).to.equal(false);
+      expect(view.refreshEnabled).to.be.false;
       expect(view.refreshMessage).to.equal('');
+      expect(view.scrollbarVisible).to.be.true;
     });
 
     describe('refreshIndicator', function() {
@@ -365,6 +366,16 @@ describe('CollectionView', function() {
         const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls).to.be.empty;
       });
+    });
+
+    describe('scrollbarVisible', function() {
+
+      it('changes to false', function() {
+        view.scrollbarVisible = false;
+
+        expect(client.calls({id: view.cid})[0].properties).to.deep.equal({scrollbarVisible: false});
+      });
+
     });
 
     describe('itemCount', function() {
