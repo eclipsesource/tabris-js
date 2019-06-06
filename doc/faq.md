@@ -49,11 +49,11 @@ One way to put it is "Tabris.js is Cordova with native widgets instead of HTML".
 
 ### What Cordova platform versions is Tabris.js based on?
 
-|         | Tabris.js 1.x | Tabris.js 2.x | Tabris.js 3.x |
-|---------|---------------|---------------|---------------|
-| Android | 4.2           | 4.4           | 5.0           |
-| iOS     | 4.5.4         | 5.0.0         | 5.0.0         |
-| Windows | N/A           | 5.0.0         | N/A           |
+|               | Android   | iOS           | Windows |
+|---------------|-----------|---------------|---------|
+| Tabris.js 1.x | 5.2.2     | 4.5.4         | N/A     |
+| Tabris.js 2.x | 6.2 - 6.3 | 4.5.4 - 5.0.0 | 5.0.0   |
+| Tabris.js 3.x | 8.0       | 5.0.0         | N/A     |
 
 ### Is Tabris.js based on Java?
 
