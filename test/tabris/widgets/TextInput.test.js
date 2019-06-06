@@ -55,6 +55,7 @@ describe('TextInput', function() {
     expect(textInput.enterKeyType).to.equal('default');
     expect(textInput.autoCorrect).to.equal(false);
     expect(textInput.onTypeChanged).to.be.undefined;
+    expect(textInput.maxChars).to.equal(null);
   });
 
   describe('autoCapitalize', function() {
@@ -75,6 +76,24 @@ describe('TextInput', function() {
       new TextInput({autoCapitalize: 'sentence'});
 
       expect(getCreate().properties.autoCapitalize).to.equal('sentence');
+    });
+
+  });
+
+  describe('maxChars', function() {
+
+    it('sends null when maxChars is set to `null`', function() {
+      new TextInput({maxChars: null});
+
+      expect(getCreate().properties.maxChars).to.equal(undefined);
+    });
+
+    it('throws when maxChars is set to negative number', function() {
+      expect(() => new TextInput({maxChars: -1})).to.throw;
+    });
+
+    it('throws when maxChars is set to non-number', function() {
+      expect(() => new TextInput({maxChars: 'string'})).to.throw;
     });
 
   });

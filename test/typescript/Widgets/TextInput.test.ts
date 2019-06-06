@@ -24,6 +24,7 @@ let textInputType: 'default' | 'multiline' | 'password' | 'search';
 let selection: number[];
 let style: 'default' | 'outline' | 'fill' | 'underline' | 'none';
 let font: FontValue;
+let maxChars: number;
 
 alignment = widget.alignment;
 autoCapitalize = widget.autoCapitalize;
@@ -43,6 +44,7 @@ textInputType = widget.type;
 selection = widget.selection;
 style = widget.style;
 font = widget.font;
+maxChars = widget.maxChars;
 
 widget.alignment = alignment;
 widget.autoCapitalize = autoCapitalize;
@@ -61,6 +63,7 @@ widget.textColor = textColor;
 widget.selection = selection;
 widget.style = style;
 widget.font = font;
+widget.maxChars = maxChars;
 
 let properties: Properties<TextInput> = {
   alignment,

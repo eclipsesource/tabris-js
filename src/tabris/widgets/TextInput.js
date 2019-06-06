@@ -64,6 +64,7 @@ NativeObject.defineProperties(TextInput.prototype, {
   message: {type: 'string', default: ''},
   floatMessage: {type: 'boolean', default: true},
   editable: {type: 'boolean', default: true},
+  maxChars: {type: 'natural', default: null},
   keepFocus: {type: 'boolean', default: false},
   alignment: {type: ['choice', ['left', 'centerX', 'right']], default: 'left'},
   autoCorrect: {type: 'boolean', default: false},

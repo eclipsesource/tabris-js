@@ -66,6 +66,11 @@
       "default": "true",
       "description": "Whether the text can be edited or not."
     },
+    "maxChars": {
+      "type": "number",
+      "default": "null",
+      "description": "The maximum number of characters that can be entered into a `TextInput`."
+    },
     "floatMessage": {
       "type": "boolean",
       "default": "true",
