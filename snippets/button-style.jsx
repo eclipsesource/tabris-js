@@ -14,6 +14,7 @@ contentView.append(
     <CheckBox text='Wider corner radius' onSelect={toggleCornerRadius}/>
     <CheckBox text='Buttons enabled' checked onSelect={toggleEnabled}/>
     <CheckBox text='Show icons' onSelect={toggleImage}/>
+    <CheckBox text='Tint icons' onSelect={toggleImageTintColor}/>
   </Stack>
 );
 
@@ -50,6 +51,11 @@ function toggleCornerRadius({checked}) {
 /** @param {tabris.CheckBoxSelectEvent} ev */
 function toggleImage({checked}) {
   $(Button).set({image: checked ? 'resources/settings-black-24dp@3x.png' : null});
+}
+
+/** @param {tabris.CheckBoxSelectEvent} ev */
+function toggleImageTintColor({checked}) {
+  $(Button).set({imageTintColor: checked ? 'purple' : 'initial'});
 }
 
 /** @param {Button} button */

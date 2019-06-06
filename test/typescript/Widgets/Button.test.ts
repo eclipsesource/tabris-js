@@ -10,6 +10,7 @@ let textColor: ColorValue;
 let nullValue: null;
 let font: FontValue;
 let style: 'default' | 'elevate' | 'flat' | 'outline' | 'text';
+let imageTintColor: ColorValue;
 
 alignment = widget.alignment;
 image = widget.image as ImageValue;
@@ -17,14 +18,17 @@ nullValue = widget.image as null;
 text = widget.text;
 textColor = widget.textColor;
 style = widget.style;
+font = widget.font;
+imageTintColor = widget.imageTintColor;
 
 widget.alignment = alignment;
 widget.image = image;
 widget.image = nullValue;
 widget.text = text;
 widget.textColor = textColor;
-font = widget.font;
-style = widget.style;
+widget.style = style;
+widget.font = font;
+widget.imageTintColor = imageTintColor;
 
 let properties: Properties<Button> = {alignment, image, text, textColor, font};
 widget = new Button(properties);

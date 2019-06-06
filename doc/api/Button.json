@@ -59,6 +59,10 @@
       "type": "ImageValue",
       "description": "An image to be displayed on the button."
     },
+    "imageTintColor": {
+      "type": "ColorValue",
+      "description": "A color to change the `image` appearance. All opaque parts of the image will be tinted with the given color. Set to `initial` to remove the effect."
+    },
     "text": {
       "type": "string",
       "description": "The button's label text.",
