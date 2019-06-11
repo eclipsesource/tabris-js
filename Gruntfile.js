@@ -69,7 +69,7 @@ module.exports = function(grunt) {
       snippets: {
         expand: true,
         cwd: 'snippets',
-        src: ['*.js', '*.jsx', '*.ts', '*.tsx', '*.json'],
+        src: ['*.js', '*.jsx', '*.ts', '*.tsx', '*.json', 'resources/*'],
         dest: 'build/snippets/'
       },
       client_mock: {
