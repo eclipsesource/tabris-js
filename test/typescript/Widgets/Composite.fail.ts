@@ -21,7 +21,6 @@ buttonsComposite.set({children: (() => {}) as any});
 customComponent.set({_doX: (() => {}) as any});
 customComponent.set({_doY: (() => {}) as any});
 customComponent.set({doesNotExist: (() => {}) as any});
-customComponent.$triggerChangeBounds({left: 0, top: 0, width: 0, height: 0});
 customComponent._scheduleRenderChildren();
 customComponent.$flushChildren();
 customComponent._layout;
@@ -47,7 +46,5 @@ private
 (25,
 private
 (26,
-private
-(27,
 private
 */

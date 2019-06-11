@@ -270,14 +270,14 @@ module.exports = function(grunt) {
   });
 
   /* runs tests against the build output */
-  grunt.registerTask('verify',
+  grunt.registerTask('verify', [
     'exec:verify_tabris',
     'copy:test_ts',
     'exec:verify_typings',
     'copy:snippets',
     'exec:transpile_snippets',
     'verify_typings_fail'
-  );
+  ]);
 
   /* generates reference documentation */
   grunt.registerTask('doc', [
