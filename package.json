@@ -1,6 +1,6 @@
 {
   "name": "tabris",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "Mobile apps with native UIs in JavaScript",
   "keywords": [
     "native",
@@ -31,7 +31,7 @@
     "chai": "^4.1.0",
     "eslint": "^4.3.0",
     "format-json": "^1.0.3",
-    "fs-extra": "^4.0.0",
+    "fs-extra": "^4.0.3",
     "grunt": "^1.0.4",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-concat": "^1.0.0",
