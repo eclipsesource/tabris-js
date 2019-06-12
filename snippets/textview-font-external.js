@@ -1,6 +1,6 @@
 import {ScrollView, TextView, contentView, app} from 'tabris';
 
-app.registerFont('pacifico', 'resources/pacifico.ttf#Pacifico');
+app.registerFont('pacifico', 'resources/pacifico.ttf');
 
 const scrollView = new ScrollView({
   left: 0, top: 0, right: 0, bottom: 0
