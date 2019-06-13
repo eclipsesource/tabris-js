@@ -168,4 +168,7 @@ const markup: string =
   </span>
   <a href='http://tabrisjs.com'>link</a>
   <a>href optional</a>
+  <a textColor='#f0f'>with other color</a>
+  <span font='bold 16px monospace'>other font</span>
+  <del font={{family: [tabris.Font.serif], size: 24}} textColor={[100, 200, 50, 0.5]}>combined</del>
 </$>;

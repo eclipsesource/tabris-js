@@ -6,7 +6,10 @@ import App, {create} from '../../src/tabris/App';
 
 describe('App', function() {
 
-  let app, client;
+  /** @type {App} */
+  let app;
+  /** @type {ClientMock} */
+  let client;
 
   beforeEach(function() {
     client = new ClientMock();
@@ -33,8 +36,23 @@ describe('App', function() {
 
   describe('create', function() {
 
-    it('creates a native object', function() {
+    it('CREATEs a native object', function() {
       expect(client.calls({op: 'create', type: 'tabris.App'})).to.not.be.empty;
+    });
+
+    it('CREATEs with color and font converter/encoder', function() {
+      const createCall = client.calls({op: 'create', type: 'tabris.App'});
+      const {encodeColor, encodeFont} = createCall[0].properties;
+
+      expect(encodeColor).to.be.instanceOf(Function);
+      expect(encodeColor('rgb(1,2,3)')).to.deep.equal([1,2,3, 255]);
+      expect(encodeFont).to.be.instanceOf(Function);
+      expect(encodeFont('2px Arial')).to.deep.equal({
+        family: ['Arial'],
+        size: 2,
+        style: 'normal',
+        weight: 'normal'
+      });
     });
 
   });

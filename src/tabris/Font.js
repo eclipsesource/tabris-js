@@ -86,6 +86,9 @@ export default class Font {
 Font.prototype[symbols.equals] = Font.prototype.equals;
 
 function setFamily(font, family) {
+  if (!(family instanceof Array)) {
+    throw new Error('family is not an array');
+  }
   family.forEach(validateFamily);
   const value = Object.freeze(family.map(normalizeFamily));
   Object.defineProperty(font, 'family', {enumerable: true, value});

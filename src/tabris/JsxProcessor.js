@@ -2,18 +2,38 @@ import {omit} from './util';
 import {getCurrentLine} from './util-stacktrace';
 import Listeners from './Listeners';
 import {toValueString} from './Console';
+import Color from './Color';
+import Font from './Font';
+
+const COMMON_ATTR = {
+  textColor: value => Color.from(value).toString(),
+  font: value => Font.from(value).toString(),
+  children: value => {
+    if (!(value instanceof Array)) {
+      throw new Error('Not an array: ' + toValueString(value));
+    }
+    return value;
+  }
+};
 
 const MARKUP = {
   br: {},
-  b: {children: 'object'},
-  span: {children: 'object'},
-  big: {children: 'object'},
-  i: {children: 'object'},
-  small: {children: 'object'},
-  strong: {children: 'object'},
-  ins: {children: 'object'},
-  del: {children: 'object'},
-  a: {href: 'string', children: 'object'}
+  b: COMMON_ATTR,
+  span: COMMON_ATTR,
+  big: COMMON_ATTR,
+  i: COMMON_ATTR,
+  small: COMMON_ATTR,
+  strong: COMMON_ATTR,
+  ins: COMMON_ATTR,
+  del: COMMON_ATTR,
+  a: Object.assign({
+    href: value => {
+      if (typeof value !== 'string') {
+        throw new Error('Not a string: ' + toValueString(value));
+      }
+      return value;
+    }
+  }, COMMON_ATTR)
 };
 
 export function createJsxProcessor() {
@@ -67,19 +87,25 @@ export default class JsxProcessor {
 
   createIntrinsicElement(el, attributes) {
     if (el in MARKUP) {
+      const encoded = {};
       Object.keys(attributes || {}).forEach(attribute => {
-        const attrType = typeof attributes[attribute];
-        if (attrType !== MARKUP[el][attribute]) {
+        const encoder = MARKUP[el][attribute];
+        if (!encoder) {
           if (attribute === 'children') {
-            throw new Error(`Element ${el} can not have children`);
+            throw new Error(`Element "${el}" can not have children`);
           } else {
-            throw new Error(`Element ${el} does not a support attribute ${attribute} of type ${attrType}`);
+            throw new Error(`Element "${el}" does not support attribute "${attribute}"`);
           }
         }
+        try {
+          encoded[attribute] = encoder(attributes[attribute]);
+        } catch(ex) {
+          throw new Error(`Element "${el}" attribute "${attribute}" can not bet set: ${ex.message}`);
+        }
       });
-      const text = joinTextContent(attributes.children, true);
-      const tagOpen = [el].concat(Object.keys(attributes || {}).filter(attr => attr !== 'children').map(
-        attribute => `${attribute}='${attributes[attribute]}'`
+      const text = joinTextContent(encoded.children, true);
+      const tagOpen = [el].concat(Object.keys(encoded || {}).filter(attr => attr !== 'children').map(
+        attribute => `${attribute}='${encoded[attribute]}'`
       )).join(' ');
       if (text) {
         return `<${tagOpen}>${text}</${el}>`;

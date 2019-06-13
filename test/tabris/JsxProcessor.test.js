@@ -10,6 +10,8 @@ import Switch from '../../src/tabris/widgets/Switch';
 import App from '../../src/tabris/App';
 import TextView from '../../src/tabris/widgets/TextView';
 import LayoutData from '../../src/tabris/LayoutData';
+import Color from '../../src/tabris/Color';
+import Font from '../../src/tabris/Font';
 
 describe('JsxProcessor', function() {
 
@@ -428,6 +430,25 @@ describe('JsxProcessor', function() {
 
       it('renders a with href string', function() {
         expect(jsx.createElement('a', {href: 'foo'}, 'bar')).to.equal('<a href=\'foo\'>bar</a>');
+      });
+
+      it('render with textColor', function() {
+        expect(jsx.createElement('span', {textColor: '#ff00ff'}, 'bar'))
+          .to.equal('<span textColor=\'rgb(255, 0, 255)\'>bar</span>');
+        expect(jsx.createElement('a', {textColor: [100, 50, 100, 0]}, 'bar'))
+          .to.equal('<a textColor=\'rgba(100, 50, 100, 0)\'>bar</a>');
+        expect(jsx.createElement('del', {textColor: new Color(0, 1, 0)}, 'bar'))
+          .to.equal('<del textColor=\'rgb(0, 1, 0)\'>bar</del>');
+      });
+
+      it('render with font', function() {
+        expect(jsx.createElement('span', {font: 'normal normal 24px serif'}, 'bar'))
+          .to.equal('<span font=\'24px serif\'>bar</span>');
+        expect(jsx.createElement('a', {
+          font: {family: ['sans-serif'], size: 12, style: 'italic', weight: 'bold'}
+        }, 'bar')).to.equal('<a font=\'italic bold 12px sans-serif\'>bar</a>');
+        expect(jsx.createElement('del', {font: new Font(24, ['Arial'])}, 'bar'))
+          .to.equal('<del font=\'24px Arial\'>bar</del>');
       });
 
       it('throws for a with unsupported href type', function() {

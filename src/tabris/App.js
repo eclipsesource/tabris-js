@@ -18,6 +18,12 @@ export default class App extends NativeObject {
       throw new Error('App can not be created');
     }
     super._nativeCreate();
+    this._nativeSet('encodeColor',
+      (color) => types.ColorValue.encode(types.ColorValue.convert(color))
+    );
+    this._nativeSet('encodeFont',
+      (font) => types.FontValue.encode(types.FontValue.convert(font))
+    );
   }
 
   /**

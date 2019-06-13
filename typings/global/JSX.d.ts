@@ -30,15 +30,15 @@ declare namespace JSX {
 
   interface IntrinsicElements {
     br: {children?: never};
-    b: {children?: string|string[]};
-    span: {children?: string|string[]};
-    big: {children?: string|string[]};
-    i: {children?: string|string[]};
-    small: {children?: string|string[]};
-    strong: {children?: string|string[]};
-    ins: {children?: string|string[]};
-    del: {children?: string|string[]};
-    a: {href?: string, children?: string|string[]};
+    b: {children?: string|string[], font?: tabris.FontValue, textColor?: tabris.ColorValue};
+    span: {children?: string|string[], font?: tabris.FontValue, textColor?: tabris.ColorValue};
+    big: {children?: string|string[], font?: tabris.FontValue, textColor?: tabris.ColorValue};
+    i: {children?: string|string[], font?: tabris.FontValue, textColor?: tabris.ColorValue};
+    small: {children?: string|string[], font?: tabris.FontValue, textColor?: tabris.ColorValue};
+    strong: {children?: string|string[], font?: tabris.FontValue, textColor?: tabris.ColorValue};
+    ins: {children?: string|string[], font?: tabris.FontValue, textColor?: tabris.ColorValue};
+    del: {children?: string|string[], font?: tabris.FontValue, textColor?: tabris.ColorValue};
+    a: {href?: string, children?: string|string[], font?: tabris.FontValue, textColor?: tabris.ColorValue};
   }
 
 }
