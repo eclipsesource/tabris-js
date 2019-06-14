@@ -40,7 +40,7 @@
   "links": [
     {
       "title": "Creating a simple `Stack` with an included `StackLayout`",
-      "snippet": "printer.js"
+      "snippet": "stack.jsx"
     }
   ]
 }
