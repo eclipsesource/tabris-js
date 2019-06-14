@@ -1,0 +1,91 @@
+{
+  "type": "Permission",
+  "object": "permission",
+  "extends": "NativeObject",
+  "description": "Allows to request runtime permissions which are required to access certain device features. Trying to access a Tabris.js API without a required permission will throw an `Error`.\n\nA permission can be either a category (supported on Android and iOS) or a specific Android permission name.\n\n See the [permissions documentation](../permissions.md) for full details on how to handle runtime permissions.",
+  "constructor": {
+    "access": "private",
+    "parameters": []
+  },
+  "methods": {
+    "getAuthorizationStatus": {
+      "parameters": [
+        {
+          "name": "...permissions",
+          "type": "string[]",
+          "description": "A list of permissions to get the authorization status for."
+        }
+      ],
+      "returns": "string",
+      "description": "Checks the authorization status for a given set of permissions.\n\nSince an app permission can change during the apps lifecycle or when it is changed in the app settings, it is recommended to check the permissions status before making API calls that require a granted permission."
+    },
+    "isAuthorized": {
+      "parameters": [
+        {
+          "name": "...permissions",
+          "type": "string[]",
+          "description": "A list of permissions to check its authorization status."
+        }
+      ],
+      "returns": "boolean",
+      "description": "Checks whether the given set of permissions is authorized. A set of permissions is regarded as authorized when the status of all permissions is `'granted'`."
+    },
+    "isAuthorizationPossible": {
+      "parameters": [
+        {
+          "name": "...permissions",
+          "type": "string[]",
+          "description": "A list of permissions to check if authorization is possible."
+        }
+      ],
+      "returns": "boolean",
+      "description": "Checks if any of the given permissions allow to request authorization. A permission is regarded as allowed to authorize when its status is either `'undetermined'` or `'declined'`."
+    },
+    "requestAuthorization": {
+      "parameters": [
+        {
+          "name": "...permissions",
+          "type": "string[]",
+          "description": "A list of permissions to request authorization for."
+        }
+      ],
+      "returns": "Promise<string>",
+      "description": "Request authorization for a set of permissions.\n\nIf any of the permissions allow to request authorization, the method call will prompt the user to grant the permission and returns the result in the resolved promise. If the status can not be changed, the current status is returned by the resolved promise."
+    },
+    "withAuthorization": {
+      "parameters": [
+        {
+          "name": "permissions",
+          "type": "string | string[]",
+          "description": "An individual permission or a list of permissions to gain authorization for."
+        },
+        {
+          "name": "onAuthorized",
+          "type": "Function",
+          "description": "A callback to be invoked if the desired permissions could be granted. The permissions will have the status `'granted`'."
+        },
+        {
+          "name": "onUnauthorized",
+          "type": "Function",
+          "description": "A callback to be invoked when the desired permissions could not be granted."
+        },
+        {
+          "name": "onError",
+          "type": "Function",
+          "description": "A callback to be invoked if the request failed."
+        }
+      ],
+      "description": "Tries to authorize access to the given permissions, either by already holding the permissions or by requesting authorization for the given permissions. When the result is `'granted' the `onAuthorized` callback will be invoked. If any other state is determined the `onUnauthorized` callback will be invoked. In case of an `Error` the `onError` callback will be invoked."
+    }
+  },
+  "links": [
+    {
+      "title": "Simple approach to check and request permissions",
+      "snippet": "permission.jsx"
+    },
+    {
+      "title": "Full featured example with multiple permissions and states",
+      "snippet": "permission-advanced.tsx"
+    }
+  ]
+}

@@ -25,6 +25,8 @@
       url: layout.html
     - title: Touch Events
       url: touch.html
+    - title: Permissions
+      url: permissions.html
     - title: W3C Compatibility
       url: w3c-api.html
     - title: Cordova Support
