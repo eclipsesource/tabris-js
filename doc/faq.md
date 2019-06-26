@@ -18,13 +18,15 @@ The source code of the native clients is available for [organization customers](
 
 No, unlike a regular Cordova app, the UI created by Tabris.js apps consists of truly native components.
 
-### For what platforms can I create Tabris.js apps?
+### What platforms and platform versions are supported by Tabris.js?
 
-|         | Tabris.js 1.x | Tabris.js 2.x | Tabris.js 3.x |
-|---------|---------------|---------------|---------------|
-| Android | 4.1 and up    | 4.2 and up    | 5.9 and up    |
-| iOS     | iOS 8 and up  | iOS 9 and up  | iOS 9 and up  |
-| Windows | N/A           | 10            | on request    |
+The following table shows the minimum supported version of each supported platform.
+
+|               | Android | iOS | Windows    |
+|---------------|---------|-----|------------|
+| Tabris.js 1.x | 4.1     | 8   | N/A        |
+| Tabris.js 2.x | 4.2     | 9   | 10         |
+| Tabris.js 3.x | 5.0     | 11  | on request |
 
 ### Can the same Tabris.js app really run on both iOS and Android?
 
