@@ -489,7 +489,7 @@ class DocumentRenderer {
       if (this.def.isWidget || this.def.extends === 'Popup') {
         result.push(' or JSX');
       }
-      result.push('. Once set, it cannot change anymore.');
+      result.push('. Once set, it cannot change anymore.\n\n');
     }
     result.push(this.renderLinks(property.links)),
     result.push('\n\n');
