@@ -1,4 +1,5 @@
 import NativeObject from './NativeObject';
+import Camera from './Camera';
 
 export default class Device extends NativeObject {
 
@@ -46,7 +47,8 @@ NativeObject.defineProperties(Device.prototype, {
   orientation: {readonly: true},
   screenWidth: {readonly: true, const: true},
   screenHeight: {readonly: true, const: true},
-  scaleFactor: {readonly: true, get: getOnce, const: true}
+  scaleFactor: {readonly: true, get: getOnce, const: true},
+  cameras: {readonly: true, get: getCameras, const: true}
 });
 
 export function create() {
@@ -96,4 +98,17 @@ function getOnce(name) {
     this._storeProperty(name, value);
   }
   return value;
+}
+
+function getCameras(name) {
+  let cameras = this._getStoredProperty(name);
+  if (!cameras) {
+    const cameraIds = this._nativeGet(name);
+    if (!(cameraIds instanceof Array)) {
+      throw new Error('Cameras property is not an array of camera ids but ' + JSON.stringify(cameraIds));
+    }
+    cameras = cameraIds.map((cameraId) => new Camera({cameraId}));
+    this._storeProperty(name, cameras);
+  }
+  return cameras;
 }

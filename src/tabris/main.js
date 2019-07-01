@@ -30,6 +30,8 @@ import Stack from './widgets/Stack';
 import StackLayout from './StackLayout';
 import Composite from './widgets/Composite';
 import ContentView, {create as createContentView} from './widgets/ContentView';
+import Camera from './Camera';
+import CameraView from './widgets/CameraView';
 import Crypto from './Crypto';
 import Drawer, {create as createDrawer} from './widgets/Drawer';
 import DateDialog from './DateDialog';
@@ -103,8 +105,8 @@ const tabrisMain = Object.assign(new Tabris(), {
   CollectionView,
   Color,
   ConstraintLayout,
-  StackLayout,
-  Stack,
+  Camera,
+  CameraView,
   Composite,
   Constraint,
   Console,
@@ -147,6 +149,8 @@ const tabrisMain = Object.assign(new Tabris(), {
   SearchAction,
   Slider,
   Storage,
+  StackLayout,
+  Stack,
   StatusBar,
   Switch,
   Tab,

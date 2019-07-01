@@ -78,6 +78,12 @@
       ],
       "description": "The device orientation. One of `portrait-primary`, `portrait-secondary`, `landscape-primary`, and `landscape-secondary`.",
       "changeEventDescription": "Fired when the `orientation` property has changed and the rotation animation has finished."
+    },
+    "cameras": {
+      "type": "Camera[]",
+      "readonly": true,
+      "const": true,
+      "description": "An array of `Camera` objects ordered by priority. The first entry is considered the primary camera of the device."
     }
   },
   "links": [

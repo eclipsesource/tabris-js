@@ -1,0 +1,44 @@
+{
+  "type": "CameraView",
+  "category": "widget",
+  "description": "A widget to preview a `Camera` feed.\n\nIn order to show a camera preview image the app has to hold the `'camera'` permission.",
+  "extends": "Widget",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": {
+          "interface": "Properties",
+          "generics": [
+            "CameraView"
+          ]
+        },
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
+  "properties": {
+    "camera": {
+      "type": "Camera",
+      "default": null,
+      "description": "The source video feed to display. In order to show a preview the `Camera` has to be in an active state. When the `Camera` is inactive or no `Camera` is assigned the `CameraView` shows a blank screen. \n\nIt is recommended to deactivate the `Camera` when not in use in order to preserve battery life."
+    },
+    "scaleMode": {
+      "type": {"union": ["'fit'", "'fill'"]},
+      "default": "'fit'",
+      "description": "How to scale the camera preview image.\n\n- `fit` will scale the image proportionally to fit into the view, possible leaving some empty space at the edges. That is, the image will be displayed as large as possible while being fully contained in the view.\n- `fill` will scale the image proportionally to fill the entire view, possibly cutting off parts of the image. That is, the image will be displayed as small as possible while covering the entire view."
+    }
+  },
+  "links": [
+    {
+      "title": "Simple example to capture an image",
+      "snippet": "camera.jsx"
+    },
+    {
+      "title": "Control `Camera` and `CameraView` to capture an image",
+      "snippet": "camera-advanced.tsx"
+    }
+  ]
+}

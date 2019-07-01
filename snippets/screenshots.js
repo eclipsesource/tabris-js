@@ -6,6 +6,7 @@ import {
   AlertDialog,
   app,
   Button,
+  CameraView,
   Canvas,
   CheckBox,
   CollectionView,
@@ -18,6 +19,7 @@ import {
   ImageView,
   NavigationView,
   Page,
+  permission,
   Picker,
   Popover,
   printer,
@@ -43,6 +45,7 @@ const snippets = [
   actionSnippet,
   activityIndicatorSnippet,
   buttonSnippet,
+  cameraViewSnippet,
   canvasSnippet,
   checkBoxSnippet,
   collectionViewSnippet,
@@ -158,6 +161,17 @@ function buttonSnippet(parent) {
   new Button({left: 16, right: 16, top: ['prev()', ios(12)], text: 'Flat', style: 'flat'}).appendTo(parent);
   new Button({left: 16, right: 16, top: ['prev()', ios(12)], text: 'Outline', style: 'outline'}).appendTo(parent);
   new Button({left: 16, right: 16, top: ['prev()', ios(12)], bottom: 16, text: 'Text', style: 'text'}).appendTo(parent);
+
+}
+
+function cameraViewSnippet(parent) {
+  dimen(parent, large, large);
+  permission.withAuthorization('camera', () => {
+    const camera = device.cameras[0];
+    const cameraView = new CameraView({left: 16, right: 16, top: 16, bottom: 16, camera: camera});
+    cameraView.appendTo(parent);
+    camera.start();
+  }, () => console.log('Permission required.'), (e) => console.error(e));
 }
 
 function canvasSnippet(parent) {

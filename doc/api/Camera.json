@@ -1,0 +1,122 @@
+{
+  "type": "Camera",
+  "category": "service",
+  "description": "A `Camera` provides access to the device's camera. The `Camera` can be used as a source for a `CameraView` to display a live preview feed or to capture a photo.\n\nIn order to capture an image or to show a camera preview image the app has to have the [`'camera'`](../permissions.md#category-camera) [permission](./permission.md).",
+  "extends": "NativeObject",
+  "constructor": {
+    "access": "private"
+  },
+  "properties": {
+    "cameraId": {
+      "type": "string",
+      "const": true,
+      "readonly": true,
+      "description": "The id of the device camera given by the native platform."
+    },
+    "active": {
+      "type": "boolean",
+      "default": false,
+      "description": "Setting `active` to true activates the camera. If it is currently assigned to a `CameraView`, the `CameraView` will now show the video feed from the `Camera`. It is then possible to capture an image via the `captureImage()` method.\n\nSetting `active` to false stops the camera and disables any video feed shown on a `CameraView`.\n\nIt is recommended to stop the `Camera` when not in use in order to preserve battery life."
+    },
+    "position": {
+      "type": {
+        "union": [
+          "'front'",
+          "'back'",
+          "'external'"
+        ]
+      },
+      "readonly": true,
+      "const": true,
+      "description": "The position of the camera on the device. The `external` position is used for devices like usb cameras."
+    },
+    "availableCaptureResolutions": {
+      "type": {
+        "interface": "Array",
+        "generics": [
+          {
+            "map": {
+              "width": {
+                "type": "number",
+                "description": "The width of the capture resolution"
+              },
+              "height": {
+                "type": "number",
+                "description": "The height of the capture resolution"
+              }
+            }
+          }
+        ]
+      },
+      "readonly": true,
+      "description": "An array of resolutions supported by the camera. Each array entry is an object consisting of `width` and `height`. Eg.: `{width: 4000, height: 3000}"
+    },
+    "captureResolution": {
+      "type": "{width: number, height: number}",
+      "description": "An object determining the pixel dimensions of the captured image. Has to be an object containing `width` and `height` properties of type `number`. The list of natively available resolutions can be obtained from the `availableCaptureResolutions` property.\n\nIf the given `captureResolution` is not in the list of `availableCaptureResolutions`, a closely matching resolution larger than the given resolution is used. When no `captureResolution` is given, the best possible match for the device is chosen automatically. The physical dimensions of the captured image should be checked on the resolved result object of the `captureImage()` method.\n\nWhen setting the `captureResolution` on the iOS platform, a small grace period should pass before capturing an image. Otherwise the image might turn out incorrectly exposed."
+    }
+  },
+  "methods": {
+    "captureImage": {
+      "parameters": [
+        {
+          "name": "options",
+          "type": {
+            "map": {
+              "flash": {
+                "type": {
+                  "union": [
+                    "'auto'",
+                    "'on'",
+                    "'off'"
+                  ]
+                },
+                "optional": true,
+                "default": "off",
+                "description": "Whether to enable or disable the device flashlight. If set to `'auto'` the device will decide (based on the lighting conditions) whether to activate the flashlight."
+              }
+            }
+          },
+          "optional": true,
+          "description": "A set of capture options to apply when taking a picture."
+        }
+      ],
+      "returns": {
+        "interface": "Promise",
+        "generics": [
+          {
+            "map": {
+              "image": {
+                "type": "Blob",
+                "description": "The jpg encoded captured image"
+              },
+              "width": {
+                "type": "number",
+                "description": "The width of the captured image"
+              },
+              "height": {
+                "type": "number",
+                "description": "The height of the captured image"
+              }
+            }
+          }
+        ]
+      },
+      "description": "Captures an image and returns a result object when the returned promise resolves successfully. The `Camera` has to be in an `active` state to capture an image. The result object has an `image` property of type `Blob` which contains the jpg encoded image, as well as a `width` and `height` property describing the dimensions of the captured image."
+    }
+  },
+  "links": [
+    {
+      "title": "Simple example to capture an image",
+      "snippet": "camera.jsx"
+    },
+    {
+      "title": "Control `Camera` and `CameraView` to capture an image",
+      "snippet": "camera-advanced.tsx"
+    },
+    {
+      "title": "Check and request camera permissions",
+      "snippet": "permission.jsx"
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import {expect, mockTabris, spy, stub} from '../test';
 import ClientMock from './ClientMock';
 import Device, {create as createDevice, publishDeviceProperties} from '../../src/tabris/Device';
+import Camera from '../../src/tabris/Camera';
 
 describe('Device', function() {
 
@@ -40,6 +41,7 @@ describe('Device', function() {
         screenHeight: 42,
         scaleFactor: 2.5,
         orientation: 'portrait',
+        cameras: ['camera1', 'camera2']
       };
       stub(client, 'get').callsFake((id, name) => {
         if (id === device.cid) {
@@ -134,10 +136,14 @@ describe('Device', function() {
       expect(device.onScaleFactorChanged).to.be.undefined;
     });
 
+    it('creates camera objects for cameraIds', function() {
+      expect(device.cameras).to.deep.equal([
+        new Camera({cameraId: 'camera1'}), new Camera({cameraId: 'camera2'})
+      ]);
+    });
   });
 
   describe('create', function() {
-
     it('creates an instance', function() {
       expect(createDevice()).to.be.instanceOf(Device);
     });
