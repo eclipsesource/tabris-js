@@ -13,7 +13,9 @@ result.then((response) => {
   let json: Promise<any> = response.json();
   let json2: Promise<T> = response.json<T>();
   let text: Promise<string> = response.text();
+  let blob: Promise<Blob> = response.blob();
 });
 
-let request: Request = new Request('input');
+let request: Request = new Request('input', {body: 'foo'});
+request = new Request('input', {body: new Blob()});
 let fetchWithRequest: Promise<Response> = fetch(request);

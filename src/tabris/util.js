@@ -115,3 +115,44 @@ export function proxify(getTarget) {
   );
   return new Proxy({}, handler);
 }
+
+export function isReadable(value) {
+  return value instanceof ArrayBuffer
+    || ArrayBuffer.isView(value)
+    || !!getBytes(value);
+}
+
+/**
+ * @param {any} value
+ * @return {ArrayBuffer}
+ */
+export function read(value) {
+  if (value instanceof ArrayBuffer) {
+    return value.slice(0);
+  }
+  if (ArrayBuffer.isView(value)) {
+    return value.buffer.slice(0);
+  }
+  if (getBytes(value)) {
+    return getBytes(value); // no copy needed since blobs are pseudo-immutable
+  }
+  throw new Error(`${typeof value} is not an ArrayBuffer, Blob or typed`);
+}
+
+const bytesSym = Symbol();
+
+/**
+ * @param {any} blob
+ * @returns {ArrayBuffer}
+ */
+export function getBytes(blob) {
+  return blob[bytesSym];
+}
+
+/**
+ * @param {any} blob
+ * @param {ArrayBuffer} bytes
+ */
+export function setBytes(blob, bytes) {
+  return blob[bytesSym] = bytes;
+}

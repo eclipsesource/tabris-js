@@ -33,6 +33,14 @@ When a relative URL is given, Tabris.js will interpret it as a path relative to 
 
 > :point_right: To enable access to SSL protected resources that use self signed certificates add them to [`app.trustedCertificates`](./api/app.md). Alternatively you can disable the `UseStrictSSL` preference in the config.xml to accept all certificates. See [Building a Tabris.js App](build.md#preferences).
 
+## Blob
+
+[Blobs](./api/Blob.md) represent raw data that may be created from various sources and can also be read into an `ArrayBuffer` or converted to a string. They are accepted by [fetch](#fetch), [XMLHttpRequest](#xmlhttprequest), [FileSystem](./api/fs.md#writefilepath-text-encoding) and [WebSocket](#websocket) APIs.
+
+## File
+
+[File](./api/File.md) is a subclass of [Blob](#blob) with additional `name` and `lastModified` fields.
+
 ## XMLHttpRequest
 
 Tabris also supports `XMLHttpRequest`, though `fetch()` is recommended for convenience.

@@ -47,8 +47,12 @@ describe('window', function() {
   });
 
   it('contains DOM API constructors', function() {
+    expect(window.Blob).to.be.a('function');
+    expect(window.Blob.name).to.equal('Blob');
     expect(window.Crypto).to.be.a('function');
     expect(window.Crypto.name).to.equal('Crypto');
+    expect(window.File).to.be.a('function');
+    expect(window.File.name).to.equal('File');
     expect(window.ImageData).to.be.a('function');
     expect(window.ImageData.name).to.equal('ImageData');
     expect(window.ProgressEvent).to.be.a('function');
@@ -87,8 +91,12 @@ describe('tabris', function() {
   });
 
   it('contains DOM API constructors', function() {
+    expect(tabris.Blob).to.be.a('function');
+    expect(tabris.Blob.name).to.equal('Blob');
     expect(tabris.Crypto).to.be.a('function');
     expect(tabris.Crypto.name).to.equal('Crypto');
+    expect(tabris.File).to.be.a('function');
+    expect(tabris.File.name).to.equal('File');
     expect(tabris.Event).to.be.a('function');
     expect(tabris.Event.name).to.equal('Event');
     expect(tabris.ImageData).to.be.a('function');

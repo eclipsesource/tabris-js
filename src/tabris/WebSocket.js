@@ -1,6 +1,6 @@
 import NativeObject from './NativeObject';
 import Event, {addDOMEventTargetMethods, defineEventHandlerProperties} from './Event';
-import {omit} from './util';
+import {omit, isReadable, read} from './util';
 import {hint, toValueString} from './Console';
 
 const CONNECTING = 0;
@@ -102,8 +102,8 @@ export default class WebSocket {
     }
     if (typeof data === 'string') {
       this._nativeObject._nativeCall('send', {data});
-    } else if (data instanceof ArrayBuffer || ArrayBuffer.isView(data)) {
-      this._nativeObject._nativeCall('send', {data});
+    } else if (isReadable(data)) {
+      this._nativeObject._nativeCall('send', {data: read(data)});
     } else {
       throw new Error('Data of type ' + typeof data + " is not supported in WebSocket 'send' operation");
     }

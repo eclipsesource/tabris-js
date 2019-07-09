@@ -1,7 +1,8 @@
-import {expect, mockTabris, spy, stub, restore} from '../../test';
+import {expect, mockTabris, spy, stub, restore, match} from '../../test';
 import ClientMock from '../ClientMock';
 import {fetch} from '../../../src/tabris/fetch/fetch';
 import Response from '../../../src/tabris/fetch/Response';
+import Blob from '../../../src/tabris/Blob';
 
 describe('fetch', function() {
 
@@ -51,6 +52,29 @@ describe('fetch', function() {
       data: 'content',
       responseType: 'arraybuffer',
       timeout: 4711
+    });
+  });
+
+  it('calls send on HttpRequest with arrayBuffer from blob', function() {
+    fetch('http://example.org', {
+      method: 'post',
+      body: new Blob([new Uint8Array([201])])
+    });
+    expect(nativeObject.send).to.have.been.calledWithMatch(
+      match(({data}) => {
+        const arr = new Uint8Array(data);
+        return data instanceof ArrayBuffer && arr[0] === 201;
+      })
+    );
+  });
+
+  it('calls send on HttpRequest with inferred Content-Type', function() {
+    fetch('http://example.org', {
+      method: 'post',
+      body: new Blob([], {type: 'foo'})
+    });
+    expect(nativeObject.send).to.have.been.calledWithMatch({
+      headers: {'content-type': 'foo'}
     });
   });
 

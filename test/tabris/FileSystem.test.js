@@ -1,8 +1,9 @@
-import {expect, mockTabris, spy, stub, restore} from '../test';
+import {expect, mockTabris, spy, stub, restore, match} from '../test';
 import ClientMock from './ClientMock';
 import FileSystem, {create as createFileSystem, createError} from '../../src/tabris/FileSystem';
 import TextEncoder from '../../src/tabris/TextEncoder';
 import TextDecoder from '../../src/tabris/TextDecoder';
+import Blob from '../../src/tabris/Blob';
 
 const text = 'Lorem ipsum';
 
@@ -200,7 +201,29 @@ describe('FileSystem', function() {
       it('calls native method', function() {
         spy(client, 'call');
         fs.writeFile('/foo', data);
-        expect(client.call).to.have.been.calledWithMatch(fs.cid, 'writeFile', {path: '/foo'});
+        expect(client.call).to.have.been.calledWithMatch(fs.cid, 'writeFile', {
+          path: '/foo',
+          data: match.same(data)
+        });
+      });
+
+      it('converts typed array to arrayBuffer', function() {
+        spy(client, 'call');
+        const arr = new Uint8Array(data);
+        fs.writeFile('/foo', arr);
+        expect(client.call).to.have.been.calledWithMatch(fs.cid, 'writeFile', {
+          path: '/foo',
+          data: match.same(data)
+        });
+      });
+
+      it('converts blob to arrayBuffer', function() {
+        spy(client, 'call');
+        fs.writeFile('/foo', new Blob([data]));
+        expect(client.call).to.have.been.calledWithMatch(fs.cid, 'writeFile', {
+          path: '/foo',
+          data: match.has('byteLength', data.byteLength)
+        });
       });
 
       it('encodes text with given encoding', function() {

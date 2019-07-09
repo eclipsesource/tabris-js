@@ -2,6 +2,7 @@ import {expect, mockTabris, spy, stub, match, restore} from '../test';
 import ClientMock from './ClientMock';
 import Event from '../../src/tabris/Event';
 import XMLHttpRequest from '../../src/tabris/XMLHttpRequest';
+import Blob from '../../src/tabris/Blob';
 
 describe('XMLHttpRequest', function() {
 
@@ -178,7 +179,6 @@ describe('XMLHttpRequest', function() {
     });
 
     it('calls nativeObject send with request URL specified as open argument', function() {
-      sendRequest(xhr);
       xhr.open('GET', 'http://foo.com');
       xhr.send();
       expect(nativeObject.send).to.have.been.calledWithMatch({
@@ -187,7 +187,6 @@ describe('XMLHttpRequest', function() {
     });
 
     it('calls nativeObject send with method specified as open argument', function() {
-      sendRequest(xhr);
       xhr.open('GET', 'http://foo.com');
       xhr.send();
       expect(nativeObject.send).to.have.been.calledWithMatch({
@@ -196,7 +195,6 @@ describe('XMLHttpRequest', function() {
     });
 
     it('calls nativeObject send with timeout property', function() {
-      sendRequest(xhr);
       xhr.open('GET', 'http://foo.com');
       xhr.timeout = 2000;
       xhr.send();
@@ -206,7 +204,6 @@ describe('XMLHttpRequest', function() {
     });
 
     it('calls nativeObject send with headers property', function() {
-      sendRequest(xhr);
       xhr.open('GET', 'http://foo.com');
       xhr.setRequestHeader('Foo', 'Bar');
       xhr.send();
@@ -216,11 +213,44 @@ describe('XMLHttpRequest', function() {
     });
 
     it('calls nativeObject send with data property', function() {
-      sendRequest(xhr);
       xhr.open('POST', 'http://foo.com');
       xhr.send('foo');
       expect(nativeObject.send).to.have.been.calledWithMatch({
         data: 'foo'
+      });
+    });
+
+    it('calls nativeObject send with ArrayBuffer copy from Blob', function() {
+      const data = new Blob([new Uint8Array([201, 2, 3])]);
+      xhr.open('POST', 'http://foo.com');
+      xhr.send(data);
+      data[0] = 23;
+      expect(nativeObject.send).to.have.been.calledWithMatch(
+        match(({data}) => {
+          const arr = new Uint8Array(data);
+          return data instanceof ArrayBuffer && arr[0] === 201;
+        })
+      );
+    });
+
+    it('calls nativeObject send with Content-Type header from Blob type', function() {
+      const data = new Blob([new Uint8Array([201, 2, 3])], {type: 'footype'});
+      xhr.open('POST', 'http://foo.com');
+      xhr.send(data);
+      data[0] = 23;
+      expect(nativeObject.send).to.have.been.calledWithMatch({
+        headers: {'Content-Type': 'footype'}
+      });
+    });
+
+    it('calls nativeObject send with custom Content-Type header ignoring Blob type', function() {
+      const data = new Blob([new Uint8Array([201, 2, 3])], {type: 'footype'});
+      xhr.open('POST', 'http://foo.com');
+      xhr.setRequestHeader('Content-type', 'bartype');
+      xhr.send(data);
+      data[0] = 23;
+      expect(nativeObject.send).to.have.been.calledWithMatch({
+        headers: {'Content-type': 'bartype'}
       });
     });
 

@@ -1,7 +1,8 @@
-import {expect, mockTabris, spy, stub, restore} from '../test';
+import {expect, mockTabris, spy, stub, restore, match} from '../test';
 import ClientMock from './ClientMock';
 import WebSocket from '../../src/tabris/WebSocket';
 import Event from '../../src/tabris/Event';
+import Blob from '../../src/tabris/Blob';
 
 describe('WebSocket', function() {
 
@@ -233,7 +234,9 @@ describe('WebSocket', function() {
       webSocket.send(new Int8Array([1, 2, 3]));
 
       expect(client.call).to.have.been
-        .calledWith(webSocket._nativeObject.cid, 'send', {data: new Int8Array([1, 2, 3])});
+        .calledWith(webSocket._nativeObject.cid, 'send', {
+          data: match.has('byteLength', 3)
+        });
     });
 
     it("calls 'send' with arraybuffer data", function() {
@@ -243,6 +246,17 @@ describe('WebSocket', function() {
       webSocket.send(data);
 
       expect(client.call).to.have.been.calledWith(webSocket._nativeObject.cid, 'send', {data});
+    });
+
+    it("calls 'send' with arraybuffer from blob", function() {
+      tabris._notify(webSocket._nativeObject.cid, 'open', {});
+      const data = new Blob([new Int8Array([1, 2, 3]).buffer]);
+
+      webSocket.send(data);
+
+      expect(client.call).to.have.been.calledWithMatch(webSocket._nativeObject.cid, 'send', {
+        data: match.has('byteLength', 3)
+      });
     });
 
   });

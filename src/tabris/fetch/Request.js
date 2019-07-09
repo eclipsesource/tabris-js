@@ -4,6 +4,7 @@
  */
 import Headers from './Headers';
 import Body from './Body';
+import Blob from '../Blob';
 
 // HTTP methods whose capitalization should be normalized
 const METHODS = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'];
@@ -37,6 +38,9 @@ export default class Request extends Body {
     });
     if ((this.method === 'GET' || this.method === 'HEAD') && body) {
       throw new TypeError('Body not allowed for GET or HEAD requests');
+    }
+    if (body instanceof Blob && !this.headers.has('Content-Type')) {
+      this.headers.set('Content-Type', body.type);
     }
     this._initBody(body);
   }

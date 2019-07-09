@@ -46,7 +46,7 @@ let url: string = '';
 let async: boolean = true;
 let user: string = '';
 let password: string = '';
-let data: any;
+let data: string | ArrayBuffer | Blob = 'foo';
 let value: string = '';
 let type: string = '';
 let listener: EventListener = () => {};

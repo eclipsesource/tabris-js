@@ -42,7 +42,7 @@ export function fetch(input, init) {
       url: request.url,
       method: request.method,
       responseType: 'arraybuffer',
-      data: typeof request._bodyInit === 'undefined' ? null : request._bodyInit,
+      data: (typeof request._bodyInit === 'undefined') ? null : request._bodyBuffer || request._bodyInit,
       headers: encodeHeaders(request.headers),
       timeout: request.timeout
     });

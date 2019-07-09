@@ -18,6 +18,7 @@ import Action from './widgets/Action';
 import ActionSheet, {ActionSheetItem} from './ActionSheet';
 import ActivityIndicator from './widgets/ActivityIndicator';
 import AlertDialog from './AlertDialog';
+import Blob from './Blob';
 import Button from './widgets/Button';
 import Canvas from './widgets/Canvas';
 import CheckBox from './widgets/CheckBox';
@@ -33,6 +34,7 @@ import Crypto from './Crypto';
 import Drawer, {create as createDrawer} from './widgets/Drawer';
 import DateDialog from './DateDialog';
 import EventObject from './EventObject';
+import File from './File';
 import Font from './Font';
 import Image from './Image';
 import ImageData from './ImageData';
@@ -92,6 +94,7 @@ const tabrisMain = Object.assign(new Tabris(), {
   AlertDialog,
   App,
   Button,
+  Blob,
   Canvas,
   ChangeListeners,
   CheckBox,
@@ -111,6 +114,7 @@ const tabrisMain = Object.assign(new Tabris(), {
   Event,
   EventObject,
   FileSystem,
+  File,
   Font,
   Image,
   ImageData,
@@ -170,6 +174,8 @@ global.tabris = tabrisMain;
 global.tabris.tabris = tabrisMain;
 
 Object.assign(global, {
+  Blob,
+  File,
   Crypto,
   ImageData,
   ProgressEvent,

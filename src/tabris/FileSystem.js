@@ -3,6 +3,8 @@ import TextEncoder from './TextEncoder';
 import TextDecoder from './TextDecoder';
 import {normalizePath} from './util';
 import {toValueString} from './Console';
+import Blob from './Blob';
+import {getBytes} from './util';
 
 const ERRORS = {
   EACCES: 'Permission denied',
@@ -125,6 +127,9 @@ function checkPath(path) {
 function checkBuffer(buffer) {
   if (ArrayBuffer.isView(buffer)) {
     buffer = buffer.buffer;
+  }
+  if (buffer instanceof Blob) {
+    return getBytes(buffer);
   }
   if (!(buffer instanceof ArrayBuffer)) {
     throw new Error(`${toValueString(buffer)} is not an ArrayBuffer`);

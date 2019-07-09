@@ -3,6 +3,8 @@
  * Implementation based on https://github.com/github/fetch
  */
 import TextDecoder from '../TextDecoder';
+import {isReadable, read} from '../util';
+import Blob from '../Blob';
 
 export default class Body {
 
@@ -12,8 +14,8 @@ export default class Body {
       this._bodyText = '';
     } else if (typeof body === 'string') {
       this._bodyText = body;
-    } else if ((ArrayBuffer.prototype.isPrototypeOf(body) || ArrayBuffer.isView(body))) {
-      this._bodyBuffer = body.slice(0);
+    } else if (isReadable(body)) {
+      this._bodyBuffer = read(body);
     } else {
       throw new Error('unsupported BodyInit type');
     }
@@ -29,8 +31,12 @@ export default class Body {
     return this.text().then(JSON.parse);
   }
 
+  blob() {
+    return this.arrayBuffer().then(buffer => new Blob([buffer]));
+  }
+
   arrayBuffer() {
-    return this.$consumed() || Promise.resolve(this._bodyBuffer);
+    return this.$consumed() || Promise.resolve(this._bodyBuffer.slice(0));
   }
 
   get bodyUsed() {

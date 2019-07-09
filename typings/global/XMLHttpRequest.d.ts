@@ -40,8 +40,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     getAllResponseHeaders(): string;
     getResponseHeader(header: string): string | null;
     open(method: string, url: string, async?: boolean, user?: string, password?: string): void;
-    send(data?: string): void;
-    send(data?: any): void;
+    send(data?: string | ArrayBuffer | Blob): void;
     setRequestHeader(header: string, value: string): void;
     readonly DONE: number;
     readonly HEADERS_RECEIVED: number;

@@ -1,0 +1,41 @@
+{
+  "type": "File",
+  "namespace": "global",
+  "extends": "Blob",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "blobParts",
+        "type": "any[]",
+        "description": "Array of ArrayBuffer, Blob, string, or any typed array. Any other type will be stringified. Strings are encoded as UTF-8."
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "description": "The name or path of the file"
+      },
+      {
+        "name": "options",
+        "type": "{type?: string, lastModified?: number}",
+        "description": "`type` represents the MIME type of the blob content. Defaults to empty string.\n`lastModified` is a unix timestamp of the last known modification of the file. Defaults to the current time.",
+        "optional": true
+      }
+    ]
+  },
+  "description": "Represents raw data of a given type and name.",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name or path of the file",
+      "const": true,
+      "readonly": true
+    },
+    "lastModified": {
+      "type": "number",
+      "description": "Unix timestamp of the last known modification of the file",
+      "const": true,
+      "readonly": true
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import {expect} from '../../test';
 import Request from '../../../src/tabris/fetch/Request';
 import Headers from '../../../src/tabris/fetch/Headers';
+import Blob from '../../../src/tabris/Blob';
 
 describe('Request', function() {
 
@@ -36,6 +37,23 @@ describe('Request', function() {
       expect(request.method).to.equal('POST');
       expect(Array.from(request.headers.entries())).to.deep.equal([['foo', '23']]);
       expect(request._bodyInit).to.equal('{"result": true}');
+    });
+
+    it('sets Content-Type header from blob.type', function() {
+      const request = new Request('http://example.com', {
+        method: 'post',
+        body: new Blob([], {type: 'foo'})
+      });
+      expect(Array.from(request.headers.entries())).to.deep.equal([['content-type', 'foo']]);
+    });
+
+    it('sets Content-Type header overriding blob.type', function() {
+      const request = new Request('http://example.com', {
+        method: 'post',
+        headers: {'content-type': 'bar'},
+        body: new Blob([], {type: 'foo'})
+      });
+      expect(Array.from(request.headers.entries())).to.deep.equal([['content-type', 'bar']]);
     });
 
     it('rejects body if method is GET', function() {
