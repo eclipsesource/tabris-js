@@ -1,11 +1,12 @@
-import {expect, mockTabris, spy, stub, restore} from '../../test';
+import {expect, mockTabris, spy, stub, restore, match} from '../../test';
 import ClientStub from '../ClientStub';
 import {fetch} from '../../../src/tabris/fetch/fetch';
 import Response from '../../../src/tabris/fetch/Response';
+import Blob from '../../../src/tabris/Blob';
 
 describe('fetch', function() {
 
-  let proxy, client, promise;
+  let nativeObject, client, promise;
 
   beforeEach(function() {
     client = new ClientStub();
@@ -13,9 +14,9 @@ describe('fetch', function() {
     let origCreate = tabris._nativeBridge.create;
     stub(tabris._nativeBridge, 'create').callsFake((cid, type) => {
       if (type === 'tabris.HttpRequest') {
-        proxy = tabris._proxies.find(cid);
-        spy(proxy, 'send');
-        spy(proxy, 'abort');
+        nativeObject = tabris._proxies.find(cid);
+        spy(nativeObject, 'send');
+        spy(nativeObject, 'abort');
       }
       return origCreate.apply(tabris._nativeBridge, arguments);
     });
@@ -27,7 +28,7 @@ describe('fetch', function() {
 
   it('calls send on HttpRequest', function() {
     fetch('http://example.org');
-    expect(proxy.send).to.have.been.calledWithMatch({
+    expect(nativeObject.send).to.have.been.calledWithMatch({
       url: 'http://example.org',
       method: 'GET',
       headers: {},
@@ -44,7 +45,7 @@ describe('fetch', function() {
       body: 'content',
       timeout: 4711
     });
-    expect(proxy.send).to.have.been.calledWithMatch({
+    expect(nativeObject.send).to.have.been.calledWithMatch({
       url: 'http://example.org',
       method: 'POST',
       headers: {foo: '23', bar: '42'},
@@ -54,17 +55,40 @@ describe('fetch', function() {
     });
   });
 
+  it('calls send on HttpRequest with arrayBuffer from blob', function() {
+    fetch('http://example.org', {
+      method: 'post',
+      body: new Blob([new Uint8Array([201])])
+    });
+    expect(nativeObject.send).to.have.been.calledWithMatch(
+      match(({data}) => {
+        const arr = new Uint8Array(data);
+        return data instanceof ArrayBuffer && arr[0] === 201;
+      })
+    );
+  });
+
+  it('calls send on HttpRequest with inferred Content-Type', function() {
+    fetch('http://example.org', {
+      method: 'post',
+      body: new Blob([], {type: 'foo'})
+    });
+    expect(nativeObject.send).to.have.been.calledWithMatch({
+      headers: {'content-type': 'foo'}
+    });
+  });
+
   describe('on finished', function() {
 
     beforeEach(function() {
       promise = fetch('http://example.org');
-      proxy._trigger('stateChanged', {
+      nativeObject._trigger('stateChanged', {
         state: 'headers',
         code: 418,
         message: "I'm a teapot",
         headers: {'X-Foo': '23,42'}
       });
-      proxy._trigger('stateChanged', {
+      nativeObject._trigger('stateChanged', {
         state: 'finished',
         response: "I can't brew coffee!"
       });
@@ -82,7 +106,7 @@ describe('fetch', function() {
 
     it('disposes remote object', function() {
       return promise.then(() => {
-        expect(proxy.isDisposed()).to.be.true;
+        expect(nativeObject.isDisposed()).to.be.true;
       });
     });
 
@@ -92,7 +116,7 @@ describe('fetch', function() {
 
     beforeEach(function() {
       promise = fetch('http://example.org');
-      proxy._trigger('stateChanged', {state: 'error'});
+      nativeObject._trigger('stateChanged', {state: 'error'});
     });
 
     it('rejects promise with error', function() {
@@ -104,7 +128,7 @@ describe('fetch', function() {
 
     it('disposes remote object', function() {
       return promise.then(expectFail, () => {
-        expect(proxy.isDisposed()).to.be.true;
+        expect(nativeObject.isDisposed()).to.be.true;
       });
     });
 
@@ -114,7 +138,7 @@ describe('fetch', function() {
 
     beforeEach(function() {
       promise = fetch('http://example.org');
-      proxy._trigger('stateChanged', {state: 'timeout'});
+      nativeObject._trigger('stateChanged', {state: 'timeout'});
     });
 
     it('rejects promise with error', function() {
@@ -126,7 +150,7 @@ describe('fetch', function() {
 
     it('disposes remote object', function() {
       return promise.then(expectFail, () => {
-        expect(proxy.isDisposed()).to.be.true;
+        expect(nativeObject.isDisposed()).to.be.true;
       });
     });
 
@@ -136,7 +160,7 @@ describe('fetch', function() {
 
     beforeEach(function() {
       promise = fetch('http://example.org');
-      proxy._trigger('stateChanged', {state: 'abort'});
+      nativeObject._trigger('stateChanged', {state: 'abort'});
     });
 
     it('rejects promise with error', function() {
@@ -148,7 +172,7 @@ describe('fetch', function() {
 
     it('disposes remote object', function() {
       return promise.then(expectFail, () => {
-        expect(proxy.isDisposed()).to.be.true;
+        expect(nativeObject.isDisposed()).to.be.true;
       });
     });
 

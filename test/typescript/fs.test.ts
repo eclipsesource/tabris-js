@@ -1,7 +1,7 @@
 import {fs} from 'tabris';
 
 let path: string;
-let data: ArrayBuffer;
+let data: ArrayBuffer | Blob;
 let text: string;
 let files: string[];
 let none: void;

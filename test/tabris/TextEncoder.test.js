@@ -1,12 +1,15 @@
-import {expect, mockTabris, restore} from '../test';
+import {expect, mockTabris, restore, stub} from '../test';
 import ClientStub from './ClientStub';
 import TextEncoder from '../../src/tabris/TextEncoder';
 
 const encode = TextEncoder.encode;
+const encodeSync = TextEncoder.encodeSync;
 
 describe('TextEncoder', function() {
 
-  let client, text;
+  let client;
+
+  let text;
 
   beforeEach(function() {
     client = new ClientStub();
@@ -49,7 +52,7 @@ describe('TextEncoder', function() {
 
     it('rejects unsupported encoding parameter', function() {
       return encode(text, 'foo').then(expectFail, err => {
-        expect(err.message).to.equal("Unsupported encoding: 'foo'");
+        expect(err.message).to.equal('Unsupported encoding: foo');
       });
     });
 
@@ -108,6 +111,79 @@ describe('TextEncoder', function() {
       return promise.then(expectFail, () => {
         expect(client.calls({op: 'destroy', id: created().id})).not.to.be.empty;
       });
+    });
+
+  });
+  describe('encodeSync', function() {
+
+    /** @type {TextEncoder} */
+    let encoder;
+
+    beforeEach(function() {
+      encoder = new TextEncoder();
+      stub(TextEncoder, 'getInstance').returns(encoder);
+      client.resetCalls();
+    });
+
+    it('adds no listeners', function() {
+      encodeSync(text);
+      expect(client.calls({op: 'listen', id: encoder.cid, listen: true}).length).to.equal(0);
+    });
+
+    it('throws for missing text argument', function() {
+      expect(() => encodeSync()).to.throw(Error, 'Invalid text, must be a string');
+    });
+
+    it('throws invalid buffer types', function() {
+      expect(() => encodeSync([])).to.throw(Error, 'Invalid text, must be a string');
+    });
+
+    it('throws for unsupported encoding parameter', function() {
+      expect(() => encodeSync(text, 'foo')).to.throw(Error, 'Unsupported encoding: foo');
+    });
+
+    it('does not create new native object', function() {
+      encodeSync(text, 'ascii');
+      expect(client.calls({op: 'create'})).to.be.empty;
+    });
+
+    it('uses singleton object', function() {
+      encodeSync(text, 'ascii');
+      expect(client.calls({op: 'call', method: 'encodeSync', id: encoder.cid}).length).to.equal(1);
+    });
+
+    it('passes parameters to native call', function() {
+      encodeSync(text, 'ascii');
+      const call = client.calls({op: 'call', method: 'encodeSync', id: encoder.cid})[0];
+      expect(call.parameters).to.deep.equal({text, encoding: 'ascii'});
+    });
+
+    it('defaults to utf-8', function() {
+      encodeSync(text);
+      const call = client.calls({op: 'call', method: 'encodeSync', id: encoder.cid})[0];
+      expect(call.parameters.encoding).to.equal('utf-8');
+    });
+
+    it('replaces null with utf-8 ', function() {
+      encodeSync(text, null);
+      const call = client.calls({op: 'call', method: 'encodeSync', id: encoder.cid})[0];
+      expect(call.parameters.encoding).to.equal('utf-8');
+    });
+
+    it('returns ArrayBuffer', function() {
+      const buffer = new Uint8Array([1, 2, 3]).buffer;
+      // @ts-ignore
+      stub(client, 'call').callsFake((id, method) => {
+        if (method === 'encodeSync') {
+          return buffer;
+        }
+      });
+      expect(encodeSync(text)).to.equal(buffer);
+    });
+
+    it('does not destroy native object after call', function() {
+      encodeSync(text);
+      expect(client.calls({op: 'destroy', id: encoder.cid})).to.be.empty;
     });
 
   });

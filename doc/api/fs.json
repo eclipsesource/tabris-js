@@ -71,7 +71,7 @@
           },
           {
             "name": "data",
-            "type": "ArrayBuffer",
+            "type": "ArrayBuffer|Blob",
             "description": "The contents to write to the file."
           }
         ],

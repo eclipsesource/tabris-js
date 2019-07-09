@@ -28,6 +28,14 @@ Tabris supports the timer methods `setTimeout`, `setInterval`, `clearTimeout` an
 
 See [W3C](http://www.w3.org/TR/2011/WD-html5-20110525/timers.html#timers) / [MDN](https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Timers)
 
+## Blob
+
+[Blobs](./api/Blob.md) represent raw data that may be created from various sources and can also be read into an `ArrayBuffer` or converted to a string. They are accepted by [fetch](#fetch), [XMLHttpRequest](#xmlhttprequest), [FileSystem](./api/fs.md#writefilepath-text-encoding) and [WebSocket](#websocket) APIs.
+
+## File
+
+[File](./api/File.md) is a subclass of [Blob](#blob) with additional `name` and `lastModified` fields.
+
 ## XMLHttpRequest
 
 Tabris supports the `XMLHttpRequest` to make HTTP request and to read resources that are part of the application.

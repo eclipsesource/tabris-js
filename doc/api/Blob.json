@@ -1,0 +1,48 @@
+{
+  "type": "Blob",
+  "namespace": "global",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "blobParts",
+        "type": "any[]",
+        "description": "Array of ArrayBuffer, Blob, string, or any typed array. Any other type will be stringified. Strings are encoded as UTF-8.",
+        "optional": true
+      },
+      {
+        "name": "options",
+        "type": "{type?: string}",
+        "description": "`type` represents the MIME type of the blob content. Defaults to empty string.",
+        "optional": true
+      }
+    ]
+  },
+  "description": "Represents raw data of a given type.",
+  "properties": {
+    "size": {
+      "type": "number",
+      "description": "Size of the blob data in bytes",
+      "default": "0",
+      "const": true,
+      "readonly": true
+    },
+    "type": {
+      "type": "string",
+      "description": "The MIME type of the blob data",
+      "default": "''",
+      "const": true,
+      "readonly": true
+    }
+  },
+  "methods": {
+    "arrayBuffer": {
+      "description": "Reads the blob data into an ArrayBuffer and returns it in a promise. Each call creates a new in-memory copy of the data.",
+      "returns": "Promise<ArrayBuffer>"
+    },
+    "text": {
+      "description": "Decodes the blob data as a string and returns it in a promise.",
+      "returns": "Promise<string>"
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import {expect, stub, restore} from '../../test';
 import Body from '../../../src/tabris/fetch/Body';
 import TextDecoder from '../../../src/tabris/TextDecoder';
+import Blob from '../../../src/tabris/Blob';
 
 describe('Body', function() {
 
@@ -53,13 +54,55 @@ describe('Body', function() {
 
       it('returns copy of array buffer', function() {
         return body.arrayBuffer().then(buffer => {
-          expect(buffer).to.deep.equal(data);
+          expect(buffer).to.instanceOf(ArrayBuffer);
+          expect(new Uint8Array(buffer)).to.deep.equal(new Uint8Array(data));
           expect(buffer).to.not.equal(data);
+        });
+      });
+
+      it('returns copy of typed array buffer', function() {
+        body = new Body();
+        data = new Uint8Array([123, 125]);
+        body._initBody(data);
+        return body.arrayBuffer().then(buffer => {
+          expect(buffer).to.instanceOf(ArrayBuffer);
+          expect(new Uint8Array(buffer)).to.deep.equal(data);
+          expect(buffer).to.not.equal(data.buffer);
+        });
+      });
+
+      it('returns copy of Blob array buffer', function() {
+        body = new Body();
+        data = new Uint8Array([123, 125]);
+        body._initBody(new Blob([data]));
+        return body.arrayBuffer().then(buffer => {
+          expect(buffer).to.instanceOf(ArrayBuffer);
+          expect(new Uint8Array(buffer)).to.deep.equal(data);
+          expect(buffer).to.not.equal(data.buffer);
         });
       });
 
       it('consumes data', function() {
         return body.arrayBuffer().then(() => body.text()).then(expectFail, err => {
+          expect(err.message).to.equal('Already read');
+        });
+      });
+    });
+
+    describe('blob', function() {
+
+      it('returns copy of array buffer', function() {
+        return body.blob()
+          .then(blob => blob.arrayBuffer())
+          .then(buffer => {
+            expect(buffer).to.instanceOf(ArrayBuffer);
+            expect(new Uint8Array(buffer)).to.deep.equal(new Uint8Array(data));
+            expect(buffer).to.not.equal(data);
+          });
+      });
+
+      it('consumes data', function() {
+        return body.blob().then(() => body.text()).then(expectFail, err => {
           expect(err.message).to.equal('Already read');
         });
       });

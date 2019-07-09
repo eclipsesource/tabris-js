@@ -17,6 +17,7 @@ import Action from './widgets/Action';
 import ActionSheet from './ActionSheet';
 import ActivityIndicator from './widgets/ActivityIndicator';
 import AlertDialog from './AlertDialog';
+import Blob from './Blob';
 import Button from './widgets/Button';
 import Canvas from './widgets/Canvas';
 import CheckBox from './widgets/CheckBox';
@@ -27,6 +28,7 @@ import Crypto from './Crypto';
 import Drawer from './widgets/Drawer';
 import DateDialog from './DateDialog';
 import EventObject from './EventObject';
+import File from './File';
 import ImageData from './ImageData';
 import ImageView from './widgets/ImageView';
 import InactivityTimer from './InactivityTimer.js';
@@ -77,6 +79,7 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   AlertDialog,
   App,
   Button,
+  Blob,
   Canvas,
   CheckBox,
   CollectionView,
@@ -89,6 +92,7 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   Event,
   EventObject,
   FileSystem,
+  File,
   ImageData,
   ImageView,
   InactivityTimer,
@@ -128,7 +132,9 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   Response
 });
 
-Object.assign(window, {
+Object.assign(global, {
+  Blob,
+  File,
   Crypto,
   ImageData,
   ProgressEvent,

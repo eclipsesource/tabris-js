@@ -340,7 +340,7 @@ function createProperty(name, def) {
 }
 
 function createParamList(parameters, className) {
-  return parameters.map(param =>
+  return (parameters || []).map(param =>
     `${param.name}${param.optional ? '?' : ''}: ${decodeType(param.ts_type || param.type, className)}`
   ).join(', ');
 }
@@ -391,7 +391,7 @@ function createComment(comment) {
 }
 
 function createParamAnnotations(params) {
-  return params.map(param => {
+  return (params || []).map(param => {
     let name = param.name.startsWith('...') ? param.name.slice(3) : param.name;
     let description = param.description || '';
     return `@param ${name} ${description}`;

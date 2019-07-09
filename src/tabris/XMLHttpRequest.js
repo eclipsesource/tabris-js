@@ -3,6 +3,8 @@
 import HttpRequest from './HttpRequest';
 import Event, {addDOMEventTargetMethods, defineEventHandlerProperties} from './Event';
 import ProgressEvent from './ProgressEvent';
+import {getBytes} from './util';
+import Blob from './Blob';
 
 const UNSENT = 0;
 const OPENED = 1;
@@ -195,7 +197,13 @@ export default class XMLHttpRequest {
     if (['GET', 'HEAD'].indexOf(this.$requestMethod) > -1) { // (3)
       data = null;
     }
-    this.$requestBody = data; // (4)
+    this.$requestBody = (data && getBytes(data)) ? getBytes(data) : data; // (4)
+    if (
+      (data instanceof Blob)
+      && Object.keys(this.$authorRequestHeaders).map(str => str.toLowerCase()).indexOf('content-type') === -1
+    ) {
+      this.$authorRequestHeaders['Content-Type'] = data.type;
+    }
     // TODO: support encoding and mimetype for string response types
     // (5): no storage mutex
     this.$error = this.$uploadComplete = false; // (6), see (8)

@@ -2,10 +2,11 @@ import {expect, mockTabris, spy, stub, match, restore} from '../test';
 import ClientStub from './ClientStub';
 import Event from '../../src/tabris/Event';
 import XMLHttpRequest from '../../src/tabris/XMLHttpRequest';
+import Blob from '../../src/tabris/Blob';
 
 describe('XMLHttpRequest', function() {
 
-  let proxy, client, xhr;
+  let nativeObject, client, xhr;
 
   function sendRequest(xhr) {
     xhr.open('GET', 'http://foo.com');
@@ -18,9 +19,9 @@ describe('XMLHttpRequest', function() {
     let origCreate = tabris._nativeBridge.create;
     stub(tabris._nativeBridge, 'create').callsFake((cid, type) => {
       if (type === 'tabris.HttpRequest') {
-        proxy = tabris._proxies.find(cid);
-        spy(proxy, 'send');
-        spy(proxy, 'abort');
+        nativeObject = tabris._proxies.find(cid);
+        spy(nativeObject, 'send');
+        spy(nativeObject, 'abort');
       }
       return origCreate.apply(tabris._nativeBridge, arguments);
     });
@@ -131,19 +132,19 @@ describe('XMLHttpRequest', function() {
       xhr.setRequestHeader('Foo', 'Bar');
       xhr.open('GET', 'http://foo.com');
       xhr.send();
-      expect(proxy.send).to.have.been.calledWithMatch({headers: {}});
+      expect(nativeObject.send).to.have.been.calledWithMatch({headers: {}});
     });
 
     it('resets responseText', function() {
       sendRequest(xhr);
-      proxy.trigger('stateChanged', {state: 'finished', response: 'foo'});
+      nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
       xhr.open('GET', 'http://foo.com');
       expect(xhr.responseText).to.equal('');
     });
 
     it('sets sendInvoked to false', function() {
       sendRequest(xhr);
-      proxy.trigger('stateChanged', {state: 'finished', response: 'foo'});
+      nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
       xhr.open('GET', 'http://foo.com');
       xhr.send();
       xhr.open('GET', 'http://foo.com');
@@ -159,7 +160,7 @@ describe('XMLHttpRequest', function() {
       xhr.open('GET', 'http://www.foo.com');
       xhr.send();
 
-      expect(proxy).not.to.be.undefined;
+      expect(nativeObject).not.to.be.undefined;
     });
 
     it("fails when state not 'opened'", function() {
@@ -178,62 +179,91 @@ describe('XMLHttpRequest', function() {
     });
 
     it('calls proxy send with request URL specified as open argument', function() {
-      sendRequest(xhr);
       xhr.open('GET', 'http://foo.com');
       xhr.send();
-      expect(proxy.send).to.have.been.calledWithMatch({
+      expect(nativeObject.send).to.have.been.calledWithMatch({
         url: 'http://foo.com'
       });
     });
 
     it('calls proxy send with method specified as open argument', function() {
-      sendRequest(xhr);
       xhr.open('GET', 'http://foo.com');
       xhr.send();
-      expect(proxy.send).to.have.been.calledWithMatch({
+      expect(nativeObject.send).to.have.been.calledWithMatch({
         method: 'GET'
       });
     });
 
-    it('calls proxy send with timeout property', function() {
-      sendRequest(xhr);
+    it('calls nativeObject send with timeout property', function() {
       xhr.open('GET', 'http://foo.com');
       xhr.timeout = 2000;
       xhr.send();
-      expect(proxy.send).to.have.been.calledWithMatch({
+      expect(nativeObject.send).to.have.been.calledWithMatch({
         timeout: 2000
       });
     });
 
-    it('calls proxy send with headers property', function() {
-      sendRequest(xhr);
+    it('calls nativeObject send with headers property', function() {
       xhr.open('GET', 'http://foo.com');
       xhr.setRequestHeader('Foo', 'Bar');
       xhr.send();
-      expect(proxy.send).to.have.been.calledWithMatch({
+      expect(nativeObject.send).to.have.been.calledWithMatch({
         headers: {Foo: 'Bar'}
       });
     });
 
-    it('calls proxy send with data property', function() {
-      sendRequest(xhr);
+    it('calls nativeObject send with data property', function() {
       xhr.open('POST', 'http://foo.com');
       xhr.send('foo');
-      expect(proxy.send).to.have.been.calledWithMatch({
+      expect(nativeObject.send).to.have.been.calledWithMatch({
         data: 'foo'
       });
     });
 
-    it('calls proxy send with null data if request method is HEAD or GET', function() {
+    it('calls nativeObject send with ArrayBuffer copy from Blob', function() {
+      const data = new Blob([new Uint8Array([201, 2, 3])]);
+      xhr.open('POST', 'http://foo.com');
+      xhr.send(data);
+      data[0] = 23;
+      expect(nativeObject.send).to.have.been.calledWithMatch(
+        match(({data}) => {
+          const arr = new Uint8Array(data);
+          return data instanceof ArrayBuffer && arr[0] === 201;
+        })
+      );
+    });
+
+    it('calls nativeObject send with Content-Type header from Blob type', function() {
+      const data = new Blob([new Uint8Array([201, 2, 3])], {type: 'footype'});
+      xhr.open('POST', 'http://foo.com');
+      xhr.send(data);
+      data[0] = 23;
+      expect(nativeObject.send).to.have.been.calledWithMatch({
+        headers: {'Content-Type': 'footype'}
+      });
+    });
+
+    it('calls nativeObject send with custom Content-Type header ignoring Blob type', function() {
+      const data = new Blob([new Uint8Array([201, 2, 3])], {type: 'footype'});
+      xhr.open('POST', 'http://foo.com');
+      xhr.setRequestHeader('Content-type', 'bartype');
+      xhr.send(data);
+      data[0] = 23;
+      expect(nativeObject.send).to.have.been.calledWithMatch({
+        headers: {'Content-type': 'bartype'}
+      });
+    });
+
+    it('calls nativeObject send with null data if request method is HEAD or GET', function() {
       sendRequest(xhr);
       xhr.open('GET', 'http://foo.com');
       xhr.send('foo');
-      expect(proxy.send).to.have.been.calledWithMatch({
+      expect(nativeObject.send).to.have.been.calledWithMatch({
         data: null
       });
       xhr.open('HEAD', 'http://foo.com');
       xhr.send('foo');
-      expect(proxy.send).to.have.been.calledWithMatch({
+      expect(nativeObject.send).to.have.been.calledWithMatch({
         data: null
       });
     });
@@ -244,7 +274,7 @@ describe('XMLHttpRequest', function() {
       xhr.setRequestHeader('Foo', 'Bar');
       xhr.setRequestHeader('Foo', 'Baz');
       xhr.send();
-      expect(proxy.send).to.have.been.calledWithMatch({
+      expect(nativeObject.send).to.have.been.calledWithMatch({
         headers: {Foo: 'Bar, Baz'}
       });
     });
@@ -253,11 +283,11 @@ describe('XMLHttpRequest', function() {
       sendRequest(xhr);
       xhr.open('GET', 'http://foobar.com');
       xhr.send();
-      proxy.trigger('stateChanged', {state: 'error'});
+      nativeObject.trigger('stateChanged', {state: 'error'});
       expect(xhr.responseText).to.equal('');
       xhr.open('GET', 'http://foo.com');
       xhr.send();
-      proxy.trigger('stateChanged', {state: 'finished', response: 'foo'});
+      nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
       expect(xhr.responseText).to.equal('foo');
     });
 
@@ -265,12 +295,12 @@ describe('XMLHttpRequest', function() {
       xhr.upload.onprogress = spy();
       xhr.open('POST', 'http://foo.com');
       xhr.send('foo');
-      proxy.trigger('stateChanged', {state: 'headers'});
-      proxy.trigger('stateChanged', {state: 'error'});
+      nativeObject.trigger('stateChanged', {state: 'headers'});
+      nativeObject.trigger('stateChanged', {state: 'error'});
       expect(xhr.upload.onprogress).to.have.not.been.called;
       xhr.open('POST', 'http://foo.com');
       xhr.send('foo');
-      proxy.trigger('stateChanged', {state: 'error'});
+      nativeObject.trigger('stateChanged', {state: 'error'});
       expect(xhr.upload.onprogress).to.have.been.called;
     });
 
@@ -306,13 +336,13 @@ describe('XMLHttpRequest', function() {
 
       it("doesn't fail when onreadystatechange not implemented", function() {
         expect(() => {
-          proxy.trigger('stateChanged', {state: 'finished', response: 'foo'});
+          nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
         }).to.not.throw();
       });
 
       it("sets readystatechange event type to 'readystatechange'", function() {
         xhr.onreadystatechange = spy();
-        proxy.trigger('stateChanged', {state: 'finished', response: 'foo'});
+        nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
         expect(xhr.onreadystatechange).to.have.been.calledWith(match({
           type: 'readystatechange'
         }));
@@ -320,19 +350,19 @@ describe('XMLHttpRequest', function() {
 
       it("calls onreadystatechange on proxy event state 'headers'", function() {
         xhr.onreadystatechange = spy();
-        proxy.trigger('stateChanged', {state: 'headers'});
+        nativeObject.trigger('stateChanged', {state: 'headers'});
         expect(xhr.onreadystatechange).to.have.been.called;
       });
 
       it("calls onreadystatechange on proxy event state 'loading'", function() {
         xhr.onreadystatechange = spy();
-        proxy.trigger('stateChanged', {state: 'loading'});
+        nativeObject.trigger('stateChanged', {state: 'loading'});
         expect(xhr.onreadystatechange).to.have.been.called;
       });
 
       it("calls onreadystatechange on proxy event state 'finished'", function() {
         xhr.onreadystatechange = spy();
-        proxy.trigger('stateChanged', {state: 'finished'});
+        nativeObject.trigger('stateChanged', {state: 'finished'});
         expect(xhr.onreadystatechange).to.have.been.called;
       });
 
@@ -340,7 +370,7 @@ describe('XMLHttpRequest', function() {
         progressEvents.forEach((event) => {
           let handler = 'on' + event;
           xhr.upload[handler] = spy();
-          proxy.trigger('stateChanged', {state: 'headers'});
+          nativeObject.trigger('stateChanged', {state: 'headers'});
           expect(xhr.upload[handler]).to.have.been.called;
         });
       });
@@ -349,7 +379,7 @@ describe('XMLHttpRequest', function() {
         progressEvents.forEach((event) => {
           let handler = 'on' + event;
           xhr[handler] = spy();
-          proxy.trigger('stateChanged', {state: 'finished'});
+          nativeObject.trigger('stateChanged', {state: 'finished'});
           expect(xhr[handler]).to.have.been.called;
           sendRequest(xhr);
         });
@@ -359,7 +389,7 @@ describe('XMLHttpRequest', function() {
         progressEvents.forEach((event) => {
           let handler = 'on' + event;
           xhr.upload[handler] = spy();
-          proxy.trigger('stateChanged', {state: 'finished'});
+          nativeObject.trigger('stateChanged', {state: 'finished'});
           expect(xhr.upload[handler]).to.have.been.called;
           sendRequest(xhr);
         });
@@ -367,7 +397,7 @@ describe('XMLHttpRequest', function() {
 
       it('sets target and currentTarget to XHR', function() {
         xhr.onreadystatechange = spy();
-        proxy.trigger('stateChanged', {state: 'finished', response: 'foo'});
+        nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
         expect(xhr.onreadystatechange).to.have.been.calledWith(match({
           target: xhr,
           currentTarget: xhr
@@ -375,22 +405,22 @@ describe('XMLHttpRequest', function() {
       });
 
       it("sets state to 'HEADERS_RECEIVED' when proxy event state 'headers'", function() {
-        proxy.trigger('stateChanged', {state: 'headers'});
+        nativeObject.trigger('stateChanged', {state: 'headers'});
         expect(xhr.readyState).to.equal(xhr.HEADERS_RECEIVED);
       });
 
       it("sets HTTP status code to 'code' when state 'headers'", function() {
-        proxy.trigger('stateChanged', {state: 'headers', code: 200});
+        nativeObject.trigger('stateChanged', {state: 'headers', code: 200});
         expect(xhr.status).to.equal(200);
       });
 
       it("sets HTTP statusText to 'message' when state 'headers'", function() {
-        proxy.trigger('stateChanged', {state: 'headers', message: 'OK'});
+        nativeObject.trigger('stateChanged', {state: 'headers', message: 'OK'});
         expect(xhr.statusText).to.equal('OK');
       });
 
       it("sets response headers to headers when proxy event state 'headers'", function() {
-        proxy.trigger('stateChanged', {
+        nativeObject.trigger('stateChanged', {
           state: 'headers',
           code: 200,
           headers: {'Header-Name1': 'foo', 'Header-Name2': 'bar, baz'}
@@ -399,23 +429,23 @@ describe('XMLHttpRequest', function() {
       });
 
       it("sets state to 'LOADING' when proxy event state 'loading'", function() {
-        proxy.trigger('stateChanged', {state: 'loading'});
+        nativeObject.trigger('stateChanged', {state: 'loading'});
         expect(xhr.readyState).to.equal(xhr.LOADING);
       });
 
       it("sets state to 'DONE' when proxy event state 'finished'", function() {
-        proxy.trigger('stateChanged', {state: 'finished', response: 'foo'});
+        nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
         expect(xhr.readyState).to.equal(xhr.DONE);
       });
 
       it("sets responseText to 'response' when proxy event state 'finished'", function() {
-        proxy.trigger('stateChanged', {state: 'finished', response: 'foo'});
+        nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
         expect(xhr.responseText).to.equal('foo');
       });
 
       it("sets state to 'DONE' on request error", function() {
         requestErrors.forEach((entry) => {
-          proxy.trigger('stateChanged', {state: entry});
+          nativeObject.trigger('stateChanged', {state: entry});
           expect(xhr.readyState).to.equal(xhr.DONE);
           sendRequest(xhr);
         });
@@ -424,7 +454,7 @@ describe('XMLHttpRequest', function() {
       it('calls onreadystatechange on request error', function() {
         requestErrors.forEach((entry) => {
           xhr.onreadystatechange = spy();
-          proxy.trigger('stateChanged', {state: entry});
+          nativeObject.trigger('stateChanged', {state: entry});
           expect(xhr.onreadystatechange).to.have.been.called;
           sendRequest(xhr);
         });
@@ -436,7 +466,7 @@ describe('XMLHttpRequest', function() {
           xhr.onprogress = spy();
           xhr[handler] = spy();
           xhr.onloadend = spy();
-          proxy.trigger('stateChanged', {state: entry});
+          nativeObject.trigger('stateChanged', {state: entry});
           expect(xhr.onprogress).to.have.been.called;
           expect(xhr[handler]).to.have.been.called;
           expect(xhr.onloadend).to.have.been.called;
@@ -452,7 +482,7 @@ describe('XMLHttpRequest', function() {
           xhr.upload.onloadend = spy();
           xhr.open('POST', 'http://foo.com');
           xhr.send('foo');
-          proxy.trigger('stateChanged', {state: entry});
+          nativeObject.trigger('stateChanged', {state: entry});
           expect(xhr.upload.onprogress).to.have.been.called;
           expect(xhr.upload[handler]).to.have.been.called;
           expect(xhr.upload.onloadend).to.have.been.called;
@@ -467,8 +497,8 @@ describe('XMLHttpRequest', function() {
           xhr.upload.onloadend = spy();
           xhr.open('GET', 'http://foo.com');
           xhr.send();
-          proxy.trigger('stateChanged', {state: 'headers'});
-          proxy.trigger('stateChanged', {state: entry});
+          nativeObject.trigger('stateChanged', {state: 'headers'});
+          nativeObject.trigger('stateChanged', {state: entry});
           expect(xhr.upload.onprogress).to.have.not.been.called;
           expect(xhr.upload[handler]).to.have.not.been.called;
           expect(xhr.upload.onloadend).to.have.been.calledOnce; // called on "headers" stateChange
@@ -476,15 +506,15 @@ describe('XMLHttpRequest', function() {
       });
 
       it('sets error to true on request error', function() {
-        proxy.trigger('stateChanged', {state: 'finished', response: 'foo'});
+        nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
         sendRequest(xhr);
-        proxy.trigger('stateChanged', {state: 'error'});
+        nativeObject.trigger('stateChanged', {state: 'error'});
         expect(xhr.responseText).to.equal('');
       });
 
       it("calls onprogress on proxy event 'downloadProgress'", function() {
         xhr.onprogress = spy();
-        proxy.trigger('downloadProgress', {lengthComputable: true, loaded: 50, total: 100});
+        nativeObject.trigger('downloadProgress', {lengthComputable: true, loaded: 50, total: 100});
         expect(xhr.onprogress).to.have.been.calledWith(match({
           lengthComputable: true,
           loaded: 50,
@@ -494,7 +524,7 @@ describe('XMLHttpRequest', function() {
 
       it("calls upload.onprogress on proxy event 'UploadRequest'", function() {
         xhr.upload.onprogress = spy();
-        proxy.trigger('uploadProgress', {lengthComputable: true, loaded: 50, total: 100});
+        nativeObject.trigger('uploadProgress', {lengthComputable: true, loaded: 50, total: 100});
         expect(xhr.upload.onprogress).to.have.been.calledWith(match({
           lengthComputable: true,
           loaded: 50,
@@ -505,8 +535,8 @@ describe('XMLHttpRequest', function() {
       it("disposes of proxy on error proxy event states and 'finished'", function() {
         requestErrors.concat('finished').forEach((state) => {
           xhr.onreadystatechange = spy();
-          proxy.trigger('stateChanged', {state});
-          expect(proxy._isDisposed).to.equal(true);
+          nativeObject.trigger('stateChanged', {state});
+          expect(nativeObject._isDisposed).to.equal(true);
           sendRequest(xhr);
         });
       });
@@ -514,8 +544,8 @@ describe('XMLHttpRequest', function() {
       it("doesn't dispose of proxy on proxy event states 'headers' and 'loading'", function() {
         ['headers', 'loading'].forEach((state) => {
           xhr.onreadystatechange = spy();
-          proxy.trigger('stateChanged', {state});
-          expect(!proxy._isDisposed).to.equal(true);
+          nativeObject.trigger('stateChanged', {state});
+          expect(!nativeObject._isDisposed).to.equal(true);
           sendRequest(xhr);
         });
       });
@@ -537,7 +567,7 @@ describe('XMLHttpRequest', function() {
     it('calls proxy abort', function() {
       sendRequest(xhr);
       xhr.abort();
-      expect(proxy.abort).to.have.been.called;
+      expect(nativeObject.abort).to.have.been.called;
     });
 
     it("changes state to 'UNSENT' with states 'UNSENT' and 'OPENED' if send() not invoked", function() {
@@ -550,7 +580,7 @@ describe('XMLHttpRequest', function() {
 
     it("changes state to 'UNSENT' with state 'DONE'", function() {
       sendRequest(xhr);
-      proxy.trigger('stateChanged', {state: 'finished', response: 'foo'});
+      nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
       xhr.abort();
       expect(xhr.readyState).to.equal(xhr.UNSENT);
     });
@@ -593,7 +623,7 @@ describe('XMLHttpRequest', function() {
       handlers.forEach((handler) => {
         xhr.open('GET', 'http://www.foo.com');
         xhr.send();
-        proxy.trigger('stateChanged', {state: 'headers'});
+        nativeObject.trigger('stateChanged', {state: 'headers'});
         xhr.upload[handler] = spy();
         xhr.abort();
         if (handler !== 'loadend') {
@@ -671,7 +701,7 @@ describe('XMLHttpRequest', function() {
     });
 
     it('returns empty string when state not allowed', function() {
-      proxy.trigger('stateChanged', {
+      nativeObject.trigger('stateChanged', {
         state: 'headers',
         headers: {'Header-Name1': 'foo', 'Header-Name2': 'bar, baz'}
       });
@@ -680,16 +710,16 @@ describe('XMLHttpRequest', function() {
     });
 
     it('returns empty string on error', function() {
-      proxy.trigger('stateChanged', {
+      nativeObject.trigger('stateChanged', {
         state: 'headers',
         headers: {'Header-Name1': 'foo', 'Header-Name2': 'bar, baz'}
       });
-      proxy.trigger('stateChanged', {state: 'error'});
+      nativeObject.trigger('stateChanged', {state: 'error'});
       expect(xhr.getAllResponseHeaders()).to.equal('');
     });
 
     it('returns response headers, separated by CRLF', function() {
-      proxy.trigger('stateChanged', {
+      nativeObject.trigger('stateChanged', {
         state: 'headers',
         code: 200,
         headers: {
@@ -710,7 +740,7 @@ describe('XMLHttpRequest', function() {
     });
 
     it('returns null when readyState not allowed', function() {
-      proxy.trigger('stateChanged', {
+      nativeObject.trigger('stateChanged', {
         state: 'headers',
         headers: {'Header-Name1': 'foo', 'Header-Name2': 'bar, baz'}
       });
@@ -719,16 +749,16 @@ describe('XMLHttpRequest', function() {
     });
 
     it('returns null on error', function() {
-      proxy.trigger('stateChanged', {
+      nativeObject.trigger('stateChanged', {
         state: 'headers',
         headers: {'Header-Name1': 'foo', 'Header-Name2': 'bar, baz'}
       });
-      proxy.trigger('stateChanged', {state: 'error'});
+      nativeObject.trigger('stateChanged', {state: 'error'});
       expect(xhr.getResponseHeader('Header-Name1')).to.equal(null);
     });
 
     it('returns response header', function() {
-      proxy.trigger('stateChanged', {
+      nativeObject.trigger('stateChanged', {
         state: 'headers',
         headers: {'Header-Name1': 'foo', 'Header-Name2': 'bar, baz'}
       });
@@ -782,26 +812,26 @@ describe('XMLHttpRequest', function() {
 
       it('throws when responseType is not text', function() {
         xhr.responseType = 'arraybuffer';
-        proxy.trigger('stateChanged', {state: 'finished', response: 2});
+        nativeObject.trigger('stateChanged', {state: 'finished', response: 2});
         expect(() => {
           xhr.responseText;
         }).to.throw(Error, 'XHR responseText not accessible for non-text responseType');
       });
 
       it('returns responseText', function() {
-        proxy.trigger('stateChanged', {state: 'finished', response: 'foo'});
+        nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
         expect(xhr.responseText).to.equal('foo');
       });
 
       it('returns empty string when state not allowed', function() {
-        proxy.trigger('stateChanged', {state: 'headers', response: 'hello'});
+        nativeObject.trigger('stateChanged', {state: 'headers', response: 'hello'});
         expect(xhr.responseText).to.equal('');
       });
 
       it('returns empty string on error', function() {
-        proxy.trigger('stateChanged', {state: 'finished', response: 'foo'});
+        nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
         sendRequest(xhr);
-        proxy.trigger('stateChanged', {state: 'error'});
+        nativeObject.trigger('stateChanged', {state: 'error'});
         expect(xhr.responseText).to.equal('');
       });
 
@@ -820,26 +850,26 @@ describe('XMLHttpRequest', function() {
 
       it('returns empty string when state not allowed', function() {
         sendRequest(xhr);
-        proxy.trigger('stateChanged', {state: 'headers', response: 'hello'});
+        nativeObject.trigger('stateChanged', {state: 'headers', response: 'hello'});
         expect(xhr.response).to.equal('');
       });
 
       it('returns empty string on error', function() {
         sendRequest(xhr);
-        proxy.trigger('stateChanged', {state: 'error'});
+        nativeObject.trigger('stateChanged', {state: 'error'});
         expect(xhr.response).to.equal('');
       });
 
       it('returns response text when responseType is empty', function() {
         sendRequest(xhr);
-        proxy.trigger('stateChanged', {state: 'finished', response: 'foo'});
+        nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
         expect(xhr.response).to.equal('foo');
       });
 
       it("returns response text when responseType is 'text'", function() {
         xhr.responseType = 'text';
         sendRequest(xhr);
-        proxy.trigger('stateChanged', {state: 'finished', response: 'foo'});
+        nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
         expect(xhr.response).to.equal('foo');
       });
 
@@ -847,7 +877,7 @@ describe('XMLHttpRequest', function() {
         let buffer = new ArrayBuffer(8);
         xhr.responseType = 'arraybuffer';
         sendRequest(xhr);
-        proxy.trigger('stateChanged', {state: 'finished', response: buffer});
+        nativeObject.trigger('stateChanged', {state: 'finished', response: buffer});
         expect(xhr.response).to.equal(buffer);
       });
 
@@ -865,7 +895,7 @@ describe('XMLHttpRequest', function() {
 
       it('fails with bad state', function() {
         sendRequest(xhr);
-        proxy.trigger('stateChanged', {state: 'loading'});
+        nativeObject.trigger('stateChanged', {state: 'loading'});
         expect(() => {
           xhr.responseType = 'foo';
         }).to.throw(Error, 'The response type cannot be set when state is LOADING or DONE.');
@@ -956,14 +986,14 @@ describe('XMLHttpRequest', function() {
       });
 
       it('returns 0 when state not allowed', function() {
-        proxy.trigger('stateChanged', {state: 'headers', code: 200});
+        nativeObject.trigger('stateChanged', {state: 'headers', code: 200});
         xhr.open('GET', 'http://foo.com');
         expect(xhr.status).to.equal(0);
       });
 
       it('returns 0 on error', function() {
-        proxy.trigger('stateChanged', {state: 'headers', code: 200});
-        proxy.trigger('stateChanged', {state: 'error'});
+        nativeObject.trigger('stateChanged', {state: 'headers', code: 200});
+        nativeObject.trigger('stateChanged', {state: 'error'});
         expect(xhr.status).to.equal(0);
       });
 
@@ -989,14 +1019,14 @@ describe('XMLHttpRequest', function() {
       });
 
       it('returns empty string when state not allowed', function() {
-        proxy.trigger('stateChanged', {state: 'headers', message: 'OK'});
+        nativeObject.trigger('stateChanged', {state: 'headers', message: 'OK'});
         xhr.open('GET', 'http://foo.com');
         expect(xhr.statusText).to.equal('');
       });
 
       it('returns empty string on error', function() {
-        proxy.trigger('stateChanged', {state: 'headers', message: 'OK'});
-        proxy.trigger('stateChanged', {state: 'error'});
+        nativeObject.trigger('stateChanged', {state: 'headers', message: 'OK'});
+        nativeObject.trigger('stateChanged', {state: 'error'});
         expect(xhr.statusText).to.equal('');
       });
 
@@ -1017,7 +1047,7 @@ describe('XMLHttpRequest', function() {
     describe('set', function() {
 
       it('fails with state other than UNSENT or OPENED', function() {
-        proxy.trigger('stateChanged', {state: 'headers', message: 'OK'});
+        nativeObject.trigger('stateChanged', {state: 'headers', message: 'OK'});
         expect(() => {
           xhr.withCredentials = true;
         }).to.throw(Error, "InvalidStateError: state must be 'UNSENT' or 'OPENED' when setting withCredentials");
