@@ -4,7 +4,6 @@ import {checkVersion} from './version';
 import Tabris from './Tabris';
 import Device, {create as createDevice, publishDeviceProperties} from './Device';
 import Printer, {create as createPrinter} from './Printer';
-import Permission , {create as createPermission} from './Permission';
 import App, {create as createApp} from './App';
 import FileSystem, {create as createFileSystem} from './FileSystem';
 import {createConsole} from './Console';
@@ -128,7 +127,6 @@ const tabrisMain = Object.assign(new Tabris(), {
   Popover,
   Page,
   Percent,
-  Permission,
   Picker,
   Printer,
   ProgressBar,
@@ -195,7 +193,6 @@ tabrisMain.on('start', (options) => {
     tabris.$navigationBar = createNavigationBar();
     tabris.$statusBar = createStatusBar();
     tabris.$printer = createPrinter();
-    tabris.$permission = createPermission();
     tabris.JSX.install(createJsxProcessor());
   }
   tabris.$device = createDevice();
