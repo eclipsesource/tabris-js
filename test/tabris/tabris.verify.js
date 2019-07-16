@@ -44,6 +44,8 @@ describe('window', function() {
     expect(window.Crypto.name).to.equal('Crypto');
     expect(window.File).to.be.a('function');
     expect(window.File.name).to.equal('File');
+    expect(window.ImageBitmap).to.be.a('function');
+    expect(window.ImageBitmap.name).to.equal('ImageBitmap');
     expect(window.ImageData).to.be.a('function');
     expect(window.ImageData.name).to.equal('ImageData');
     expect(window.ProgressEvent).to.be.a('function');
@@ -61,6 +63,10 @@ describe('window', function() {
     expect(window.Response.name).to.equal('Response');
     expect(window.XMLHttpRequest).to.be.a('function');
     expect(window.XMLHttpRequest.name).to.equal('XMLHttpRequest');
+  });
+
+  it('contains createImageBitmap', function() {
+    expect(window.createImageBitmap).to.equal(window.ImageBitmap.createImageBitmap);
   });
 
 });
@@ -90,6 +96,8 @@ describe('tabris', function() {
     expect(tabris.File.name).to.equal('File');
     expect(tabris.Event).to.be.a('function');
     expect(tabris.Event.name).to.equal('Event');
+    expect(tabris.ImageBitmap).to.be.a('function');
+    expect(tabris.ImageBitmap.name).to.equal('ImageBitmap');
     expect(tabris.ImageData).to.be.a('function');
     expect(tabris.ImageData.name).to.equal('ImageData');
     expect(tabris.ProgressEvent).to.be.a('function');

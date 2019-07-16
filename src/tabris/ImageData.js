@@ -1,4 +1,4 @@
-export default class {
+export default class ImageData {
 
   constructor() {
     if (arguments.length < 2) {
@@ -25,6 +25,10 @@ export default class {
   }
 
 }
+
+Object.defineProperty(ImageData.prototype, 'data', {value: /** @type {Uint8ClampedArray} */(null)});
+Object.defineProperty(ImageData.prototype, 'width', {value: 0});
+Object.defineProperty(ImageData.prototype, 'height', {value: 0});
 
 function checkArray(array) {
   if (array.byteLength % 4 !== 0) {

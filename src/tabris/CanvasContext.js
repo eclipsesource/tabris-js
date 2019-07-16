@@ -3,6 +3,7 @@ import {fontStringToObject, fontObjectToString} from './util-fonts';
 import ImageData from './ImageData';
 import GC from './GC';
 import {warn} from './Console';
+import ImageBitmap, {getNativeObject} from './ImageBitmap';
 
 export default class CanvasContext {
 
@@ -156,6 +157,22 @@ defineMethod('strokeText', 3, function(text, x, y /* , maxWidth */) {
 defineMethod('fill');
 
 defineMethod('stroke');
+
+defineMethod('drawImage', 3, function(image, x1, y1, w1, h1, x2, y2, w2, h2) {
+  if (!(image instanceof ImageBitmap)) {
+    throw new TypeError('First argument of CanvasContext.drawImage must be of type ImageBitmap');
+  }
+  this._gc.addString(getNativeObject(image).cid);
+  if (arguments.length === 9) {
+    this._gc.addDouble(x1, y1, w1, h1, x2, y2, w2, h2);
+  } else if (arguments.length === 5) {
+    this._gc.addDouble(0, 0, image.width, image.height, x1, y1, w1, h1);
+  } else if (arguments.length === 3) {
+    this._gc.addDouble(0, 0, image.width, image.height, x1, y1, image.width, image.height);
+  } else {
+    throw new TypeError(arguments.length + ' is not a valid argument count for any overload of Canvas.drawImage.');
+  }
+});
 
 CanvasContext.getContext = function(canvas, width, height) {
   if (!canvas._gc) {

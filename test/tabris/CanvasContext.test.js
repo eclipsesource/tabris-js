@@ -4,9 +4,12 @@ import ClientStub from './ClientStub';
 import CanvasContext from '../../src/tabris/CanvasContext';
 import ImageData from '../../src/tabris/ImageData';
 import Canvas from '../../src/tabris/widgets/Canvas';
+import ImageBitmap from '../../src/tabris/ImageBitmap';
+import Blob from '../../src/tabris/Blob';
 
 describe('CanvasContext', function() {
 
+  /** @type {ClientMock} */
   let client;
   let ctx;
   let gc;
@@ -799,6 +802,73 @@ describe('CanvasContext', function() {
       expect(() => {
         ctx.clearRect(1, 2, 3);
       }).to.throw('Not enough arguments to CanvasContext.clearRect');
+    });
+
+  });
+
+  describe('drawImage', function() {
+
+    /** @type {ImageBitmap} */
+    let imageBitmap;
+
+    /** @type {string} */
+    let imageId;
+
+    beforeEach(function() {
+      const result = ImageBitmap.createImageBitmap(new Blob([new Uint8Array([0, 1, 2])]));
+      const id = client.calls({type: 'tabris.ImageBitmap', op: 'create'})[0].id;
+      const param = client.calls({op: 'call', method: 'loadEncodedImage', id})[0].parameters;
+      param.onSuccess({width: 100, height: 200});
+      return result.then(value => {
+        imageBitmap = value;
+        imageId = client.calls({op: 'create', type: 'tabris.ImageBitmap'})[0].id;
+      });
+    });
+
+    it('throws if parameters are missing', function() {
+      expect(() => ctx.drawImage()).to.throw('Not enough arguments to CanvasContext.drawImage');
+    });
+
+    it('throws if parameter count does not match any overload', function() {
+      expect(() => ctx.drawImage(imageBitmap, 1, 2, 3)).to.throw(
+        '4 is not a valid argument count for any overload of Canvas.drawImage.'
+      );
+    });
+
+    it('throws if image is not ImageBitmap', function() {
+      expect(() => ctx.drawImage('foo.jpg', 1, 2, 3, 4, 5, 6, 7, 8)).to.throw(
+        'First argument of CanvasContext.drawImage must be of type ImageBitmap'
+      );
+    });
+
+    it('is rendered with all parameters', function() {
+      ctx.drawImage(imageBitmap, 1, 2, 3, 4, 5, 6, 7, 8);
+      flush();
+      expect(decodeLastPacket()).to.deep.equal({
+        ops: ['drawImage'],
+        doubles: [1, 2, 3, 4, 5, 6, 7, 8],
+        strings: [imageId]
+      });
+    });
+
+    it('is rendered with implicit source rect', function() {
+      ctx.drawImage(imageBitmap, 1, 2, 3, 4);
+      flush();
+      expect(decodeLastPacket()).to.deep.equal({
+        ops: ['drawImage'],
+        doubles: [0, 0, 100, 200, 1, 2, 3, 4],
+        strings: [imageId]
+      });
+    });
+
+    it('is rendered with implicit source rect and destination rect', function() {
+      ctx.drawImage(imageBitmap, 1, 2);
+      flush();
+      expect(decodeLastPacket()).to.deep.equal({
+        ops: ['drawImage'],
+        doubles: [0, 0, 100, 200, 1, 2, 100, 200],
+        strings: [imageId]
+      });
     });
 
   });

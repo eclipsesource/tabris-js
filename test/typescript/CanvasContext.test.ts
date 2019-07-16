@@ -1,4 +1,4 @@
-import {Canvas, CanvasContext, ImageData, Color, Font} from 'tabris';
+import {Canvas, CanvasContext, ImageData, Color, Font, ImageBitmap} from 'tabris';
 
 let ctx: CanvasContext = new Canvas().getContext('2d', 100, 100);
 
@@ -35,6 +35,7 @@ let num: number = 42;
 let bool: boolean = false;
 let voidReturnValue: void;
 let imageData: ImageData;
+let imageBitmap: ImageBitmap = null as any;
 let text: string = '';
 
 voidReturnValue = ctx.arc(num, num, num, num, num, bool);
@@ -63,3 +64,6 @@ voidReturnValue = ctx.strokeRect(num, num, num, num);
 voidReturnValue = ctx.strokeText(text, num, num);
 voidReturnValue = ctx.transform(num, num, num, num, num, num);
 voidReturnValue = ctx.translate(num, num);
+voidReturnValue = ctx.drawImage(imageBitmap, 0, 1);
+voidReturnValue = ctx.drawImage(imageBitmap, 0, 1, 2, 3);
+voidReturnValue = ctx.drawImage(imageBitmap, 0, 1, 2, 3, 4, 5, 6, 7);

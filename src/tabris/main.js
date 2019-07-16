@@ -30,6 +30,7 @@ import DateDialog from './DateDialog';
 import EventObject from './EventObject';
 import File from './File';
 import ImageData from './ImageData';
+import ImageBitmap from './ImageBitmap';
 import ImageView from './widgets/ImageView';
 import InactivityTimer from './InactivityTimer.js';
 import Page from './widgets/Page';
@@ -94,6 +95,7 @@ module.exports = global.tabris = Object.assign(new Tabris(), {
   FileSystem,
   File,
   ImageData,
+  ImageBitmap,
   ImageView,
   InactivityTimer,
   NativeObject,
@@ -137,6 +139,7 @@ Object.assign(global, {
   File,
   Crypto,
   ImageData,
+  ImageBitmap,
   ProgressEvent,
   Storage,
   WebSocket,
@@ -145,7 +148,8 @@ Object.assign(global, {
   Headers,
   Request,
   Response,
-  JSX
+  JSX,
+  createImageBitmap: ImageBitmap.createImageBitmap
 });
 
 tabris.on('start', () => {
