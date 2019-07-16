@@ -38,6 +38,7 @@ import File from './File';
 import Font from './Font';
 import Image from './Image';
 import ImageData from './ImageData';
+import ImageBitmap from './ImageBitmap';
 import ImageView from './widgets/ImageView';
 import InactivityTimer from './InactivityTimer';
 import Layout, {ConstraintLayout} from './Layout';
@@ -118,6 +119,7 @@ const tabrisMain = Object.assign(new Tabris(), {
   Font,
   Image,
   ImageData,
+  ImageBitmap,
   ImageView,
   InactivityTimer,
   JsxProcessor,
@@ -178,6 +180,7 @@ Object.assign(global, {
   File,
   Crypto,
   ImageData,
+  ImageBitmap,
   ProgressEvent,
   Storage,
   WebSocket,
@@ -187,7 +190,8 @@ Object.assign(global, {
   Request,
   Response,
   Worker,
-  $
+  $,
+  createImageBitmap: ImageBitmap.createImageBitmap
 });
 
 tabrisMain.on('start', (options) => {

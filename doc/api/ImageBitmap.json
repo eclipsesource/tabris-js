@@ -1,0 +1,41 @@
+{
+  "type": "ImageBitmap",
+  "constructor": {
+    "access": "private"
+  },
+  "description": "Represents an in-memory Image. Unlike ImageData it is immutable, but can be created from a number of sources via [createImageBitmap](#createimagebitmapimage).",
+  "properties": {
+    "width": {
+      "type": "number",
+      "description": "Native image width in pixel",
+      "const": true,
+      "readonly": true
+    },
+    "height": {
+      "type": "number",
+      "description": "Native image height in pixel",
+      "const": true,
+      "readonly": true
+    }
+  },
+  "methods": {
+    "close": {
+      "description": "Disposes the resources associated with this ImageBitmap. Should be called once the image is no longer needed to free up memory."
+    }
+  },
+  "statics": {
+    "methods": {
+      "createImageBitmap": {
+        "parameters": [
+          {
+            "name": "image",
+            "description": "The data source to create an ImageBitmap instance from.",
+            "type": "Blob|ImageData|ImageBitmap"
+          }
+        ],
+        "description": "Creates a promise that resolves to a new instance of ImageBitmap. Also available in global scope.",
+        "returns": "Promise<ImageBitmap>"
+      }
+    }
+  }
+}

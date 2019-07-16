@@ -539,6 +539,108 @@
         "returns": "ImageData",
         "description": "creates a new, blank ImageData object with the same dimensions as the specified existing ImageData object. All of the pixels in the new object are transparent black."
       }
+    ],
+    "drawImage": [
+      {
+        "parameters": [
+          {
+            "name": "image",
+            "type": "ImageBitmap",
+            "description": "An ImageBitmap object that has not been closed yet."
+          },
+          {
+            "name": "dx",
+            "type": "number",
+            "description": "Destination x-coordinate of the upper-left corner of the image"
+          },
+          {
+            "name": "dy",
+            "type": "number",
+            "description": "Destination y-coordinate of the upper-left corner of the image"
+          }
+        ],
+        "description": "Draws the entire given ImageBitmap at the given coordinates (dx, dy) in its natural size."
+      },
+      {
+        "parameters": [
+          {
+            "name": "image",
+            "type": "ImageBitmap",
+            "description": "An ImageBitmap object that has not been closed yet."
+          },
+          {
+            "name": "dx",
+            "type": "number",
+            "description": "Destination x-coordinate of the upper-left corner of the image"
+          },
+          {
+            "name": "dy",
+            "type": "number",
+            "description": "Destination y-coordinate of the upper-left corner of the image"
+          },
+          {
+            "name": "dWidth",
+            "type": "number",
+            "description": "Destination width of the image"
+          },
+          {
+            "name": "dHeight",
+            "type": "number",
+            "description": "Destination height of the image"
+          }
+        ],
+        "description": "Draws the entire given ImageBitmap at the given coordinates (dx, dy) in the given dimension (dWidth, dHeight)."
+      },
+      {
+        "parameters": [
+          {
+            "name": "image",
+            "type": "ImageBitmap",
+            "description": "An ImageBitmap object that has not been closed yet."
+          },
+          {
+            "name": "sx",
+            "type": "number",
+            "description": "Source x-coordinate of the upper-left corner of the image"
+          },
+          {
+            "name": "sy",
+            "type": "number",
+            "description": "Source y-coordinate of the upper-left corner of the image"
+          },
+          {
+            "name": "sWidth",
+            "type": "number",
+            "description": "Source width of the image"
+          },
+          {
+            "name": "sHeight",
+            "type": "number",
+            "description": "Source height of the image"
+          },
+          {
+            "name": "dx",
+            "type": "number",
+            "description": "Destination x-coordinate of the upper-left corner of the image"
+          },
+          {
+            "name": "dy",
+            "type": "number",
+            "description": "Destination y-coordinate of the upper-left corner of the image"
+          },
+          {
+            "name": "dWidth",
+            "type": "number",
+            "description": "Destination width of the image"
+          },
+          {
+            "name": "dHeight",
+            "type": "number",
+            "description": "Destination height of the image"
+          }
+        ],
+        "description": "Draws a section (sx, sy, sWidth, sHeight) of the given ImageBitmap at the given coordinates (dx, dy) in the given dimension (dWidth, dHeight)."
+      }
     ]
   }
 }
