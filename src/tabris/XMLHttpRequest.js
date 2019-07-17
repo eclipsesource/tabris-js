@@ -5,6 +5,7 @@ import Event, {addDOMEventTargetMethods, defineEventHandlerProperties} from './E
 import ProgressEvent from './ProgressEvent';
 import {getBytes} from './util';
 import Blob from './Blob';
+import FormData, {formDataToBlob} from './FormData';
 
 const UNSENT = 0;
 const OPENED = 1;
@@ -196,6 +197,9 @@ export default class XMLHttpRequest {
     }
     if (['GET', 'HEAD'].indexOf(this.$requestMethod) > -1) { // (3)
       data = null;
+    }
+    if (data instanceof FormData) {
+      data = formDataToBlob(data);
     }
     this.$requestBody = (data && getBytes(data)) ? getBytes(data) : data; // (4)
     if (

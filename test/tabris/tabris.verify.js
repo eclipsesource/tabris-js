@@ -53,6 +53,8 @@ describe('window', function() {
     expect(window.Crypto.name).to.equal('Crypto');
     expect(window.File).to.be.a('function');
     expect(window.File.name).to.equal('File');
+    expect(window.FormData).to.be.a('function');
+    expect(window.FormData.name).to.equal('FormData');
     expect(window.ImageBitmap).to.be.a('function');
     expect(window.ImageBitmap.name).to.equal('ImageBitmap');
     expect(window.ImageData).to.be.a('function');
@@ -103,6 +105,8 @@ describe('tabris', function() {
     expect(tabris.Crypto.name).to.equal('Crypto');
     expect(tabris.File).to.be.a('function');
     expect(tabris.File.name).to.equal('File');
+    expect(tabris.FormData).to.be.a('function');
+    expect(tabris.FormData.name).to.equal('FormData');
     expect(tabris.Event).to.be.a('function');
     expect(tabris.Event.name).to.equal('Event');
     expect(tabris.ImageBitmap).to.be.a('function');

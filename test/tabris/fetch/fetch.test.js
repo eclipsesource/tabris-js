@@ -3,6 +3,10 @@ import ClientMock from '../ClientMock';
 import {fetch} from '../../../src/tabris/fetch/fetch';
 import Response from '../../../src/tabris/fetch/Response';
 import Blob from '../../../src/tabris/Blob';
+import FormData from '../../../src/tabris/FormData';
+import TabrisTextEncoder from '../../../src/tabris/TextEncoder';
+import TabrisTextDecoder from '../../../src/tabris/TextDecoder';
+import {TextEncoder, TextDecoder} from 'util';
 
 describe('fetch', function() {
 
@@ -64,6 +68,25 @@ describe('fetch', function() {
       match(({data}) => {
         const arr = new Uint8Array(data);
         return data instanceof ArrayBuffer && arr[0] === 201;
+      })
+    );
+  });
+
+  it('calls send on HttpRequest with arrayBuffer from FormData', function() {
+    stub(TabrisTextEncoder, 'encodeSync').callsFake((text) =>
+      new TextEncoder().encode(text).buffer
+    );
+    stub(TabrisTextDecoder, 'decode').callsFake((buffer) =>
+      Promise.resolve(new TextDecoder().decode(buffer))
+    );
+    const body = new FormData();
+    body.append('foo', new Blob([new Uint8Array([201, 202, 203])]), 'bar');
+    fetch('http://example.org', {method: 'post', body});
+    expect(nativeObject.send).to.have.been.calledWithMatch(
+      match(({data, headers}) => {
+        const contentType = headers['content-type'];
+        const isFormData = /multipart\/form-data; boundary=----[0-9a-z]+/.test(contentType);
+        return isFormData && data instanceof ArrayBuffer && data.byteLength > 100;
       })
     );
   });

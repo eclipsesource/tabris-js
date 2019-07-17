@@ -1,0 +1,128 @@
+{
+  "type": "FormData",
+  "namespace": "global",
+  "constructor": {
+    "access": "public"
+  },
+  "description": "FormData provides a way to construct a set of key/value pairs which can then be sent using fetch() or XMLHttpRequest. It uses the same format a HTML form would use if the encoding type were set to `multipart/form-data`.",
+  "methods": {
+    "getAll": {
+      "parameters": [
+        {
+          "name": "key",
+          "type": "string"
+        }
+      ],
+      "description": "Returns all the values associated with a given key.",
+      "returns": "Array<string|File>"
+    },
+    "get": {
+      "parameters": [
+        {
+          "name": "key",
+          "type": "string"
+        }
+      ],
+      "description": "Returns the first value associated with a given key.",
+      "returns": "string|File|null"
+    },
+    "has": {
+      "parameters": [
+        {
+          "name": "key",
+          "type": "string"
+        }
+      ],
+      "description": "Returns true if there are any values associated with a given key.",
+      "returns": "boolean"
+    },
+    "delete": {
+      "parameters": [
+        {
+          "name": "key",
+          "type": "string"
+        }
+      ],
+      "description": "Removes all values associated with a given key."
+    },
+    "append": [
+      {
+        "parameters": [
+          {
+            "name": "key",
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "type": "string"
+          }
+        ],
+        "description": "Adds a string value associated with a given key. Any existing values for that key will be retained."
+      },
+      {
+        "parameters": [
+          {
+            "name": "key",
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "type": "Blob|File"
+          },
+          {
+            "name": "filename",
+            "type": "string",
+            "optional": true
+          }
+        ],
+        "description": "Adds binary data associated with a given key. Will be stored as an instance of `File` with its `name` set to the given `filename` parameter. If no `filename` is given and the value is not already a named `File` instance it will default to `'blob'`. Any existing values for that key will be retained."
+      }
+    ],
+    "set": [
+      {
+        "parameters": [
+          {
+            "name": "key",
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "type": "string"
+          }
+        ],
+        "description": "Adds a string value associated with a given key. Any existing values for that key will be replaced."
+      },
+      {
+        "parameters": [
+          {
+            "name": "key",
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "type": "Blob|File"
+          },
+          {
+            "name": "filename",
+            "type": "string",
+            "optional": true
+          }
+        ],
+        "description": "Adds binary data associated with a given key. Will be stored as an instance of `File` with its `name` set to the given `filename` parameter. If no `filename` is given and the value is not already a named `File` instance it will default to `'blob'`. Any existing values for that key will be replaced."
+      }
+    ],
+    "keys": {
+      "returns": "IterableIterator<string>"
+    },
+    "values": {
+      "returns": "IterableIterator<string|File>"
+    },
+    "entries": {
+      "returns": "IterableIterator<[string, string|File]>"
+    },
+    "[Symbol.iterator]": {
+      "ts_only": true,
+      "returns": "IterableIterator<[string, string|File]>"
+    }
+  }
+}

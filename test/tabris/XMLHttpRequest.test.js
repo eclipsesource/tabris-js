@@ -3,6 +3,10 @@ import ClientMock from './ClientMock';
 import Event from '../../src/tabris/Event';
 import XMLHttpRequest from '../../src/tabris/XMLHttpRequest';
 import Blob from '../../src/tabris/Blob';
+import FormData from '../../src/tabris/FormData';
+import TabrisTextEncoder from '../../src/tabris/TextEncoder';
+import TabrisTextDecoder from '../../src/tabris/TextDecoder';
+import {TextEncoder, TextDecoder} from 'util';
 
 describe('XMLHttpRequest', function() {
 
@@ -252,6 +256,26 @@ describe('XMLHttpRequest', function() {
       expect(nativeObject.send).to.have.been.calledWithMatch({
         headers: {'Content-type': 'bartype'}
       });
+    });
+
+    it('calls nativeObject send with ArrayBuffer created from FormData', function() {
+      stub(TabrisTextEncoder, 'encodeSync').callsFake((text) =>
+        new TextEncoder().encode(text).buffer
+      );
+      stub(TabrisTextDecoder, 'decode').callsFake((buffer) =>
+        Promise.resolve(new TextDecoder().decode(buffer))
+      );
+      const body = new FormData();
+      body.append('foo', new Blob([new Uint8Array([201, 202, 203])]), 'bar');
+      xhr.open('POST', 'http://foo.com');
+      xhr.send(body);
+      expect(nativeObject.send).to.have.been.calledWithMatch(
+        match(({data, headers}) => {
+          const contentType = headers['Content-Type'];
+          const isFormData = /multipart\/form-data; boundary=----[0-9a-z]+/.test(contentType);
+          return isFormData && data instanceof ArrayBuffer && data.byteLength > 100;
+        })
+      );
     });
 
     it('calls nativeObject send with null data if request method is HEAD or GET', function() {

@@ -41,6 +41,10 @@ When a relative URL is given, Tabris.js will interpret it as a path relative to 
 
 [File](./api/File.md) is a subclass of [Blob](#blob) with additional `name` and `lastModified` fields.
 
+## FormData
+
+[FormData](./api/FormData.md) can be used to send messages of the `multipart/form-data` MIME type via [`fetch()`](#Fetch) or [`XMLHttpRequest`](#XMLHttpRequest).
+
 ## XMLHttpRequest
 
 Tabris also supports `XMLHttpRequest`, though `fetch()` is recommended for convenience.

@@ -35,6 +35,7 @@ import Drawer, {create as createDrawer} from './widgets/Drawer';
 import DateDialog from './DateDialog';
 import EventObject from './EventObject';
 import File from './File';
+import FormData from './FormData';
 import Font from './Font';
 import Image from './Image';
 import ImageData from './ImageData';
@@ -116,6 +117,7 @@ const tabrisMain = Object.assign(new Tabris(), {
   EventObject,
   FileSystem,
   File,
+  FormData,
   Font,
   Image,
   ImageData,
@@ -178,6 +180,7 @@ global.tabris.tabris = tabrisMain;
 Object.assign(global, {
   Blob,
   File,
+  FormData,
   Crypto,
   ImageData,
   ImageBitmap,
