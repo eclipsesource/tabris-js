@@ -4,6 +4,7 @@
   },
   "globals": {
     "tabris": false,
+    "createImageBitmap": false,
     "window": false,
     "document": false,
     "navigator": false,

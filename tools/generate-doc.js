@@ -300,7 +300,7 @@ exports.generateDoc = function generateDoc({files, targetPath, version}) {
       });
   }
 
-  function renderSignature(parameters) {
+  function renderSignature(parameters = []) {
     return '(' + parameters.map(param => typeof param === 'object' ? param.name : param).join(', ') + ')';
   }
 

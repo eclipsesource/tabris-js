@@ -3,7 +3,6 @@ import {expect, mockTabris, restore} from '../test';
 import ClientStub from './ClientStub';
 import ImageBitmap from '../../src/tabris/ImageBitmap';
 import Blob from '../../src/tabris/Blob';
-import ImageData from '../../src/tabris/ImageData';
 
 const createImageBitmap = ImageBitmap.createImageBitmap;
 
