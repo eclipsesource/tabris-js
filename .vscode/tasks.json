@@ -22,20 +22,20 @@
       "command": "bash",
       "suppressTaskName": true,
       "isBuildCommand": true,
-      "args": ["-c", "cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve ${file}"],
+      "args": ["-c", "cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve -m ./${fileBasename}"],
       "windows": {
         "command": "cmd",
-        "args": ["/c", "\"cd ${fileDirname} & npm install ${workspaceRoot}\\build\\tabris & tabris serve ${file}\""]
+        "args": ["/c", "\"cd ${fileDirname} & npm install ${workspaceRoot}\\build\\tabris & tabris serve -m ./${fileBasename}\""]
       }
     },
     {
       "taskName": "serve (fresh build)",
       "command": "bash",
       "suppressTaskName": true,
-      "args": ["-c", "grunt clean build && cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve ${file}"],
+      "args": ["-c", "grunt clean build && cd ${fileDirname} && npm install ${workspaceRoot}/build/tabris && tabris serve --m ./${fileBasename}"],
       "windows": {
         "command": "cmd",
-        "args": ["/c", "\"grunt clean build & cd ${fileDirname} & npm install ${workspaceRoot}\\build\\tabris & tabris serve ${file}\""]
+        "args": ["/c", "\"grunt clean build & cd ${fileDirname} & npm install ${workspaceRoot}\\build\\tabris & tabris serve -m ./${fileBasename}\""]
       }
     },
     {
@@ -43,10 +43,10 @@
       "command": "bash",
       "suppressTaskName": true,
       "isBuildCommand": true,
-      "args": ["-c", "cd ${fileDirname} && npm remove tabris && npm install tabris && tabris serve ${file}"],
+      "args": ["-c", "cd ${fileDirname} && npm remove tabris && npm install tabris && tabris serve -m ./${fileBasename}"],
       "windows": {
         "command": "cmd",
-        "args": ["/c", "\"cd ${fileDirname} & npm remove tabris & npm install tabris & tabris serve ${file}\""]
+        "args": ["/c", "\"cd ${fileDirname} & npm remove tabris & npm install tabris & tabris serve -m ./${fileBasename}\""]
       }
     },
     {
