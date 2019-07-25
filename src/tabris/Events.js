@@ -1,19 +1,30 @@
 import {isObject} from './util';
 import EventObject from './EventObject';
 import {omit} from './util';
-import {hint} from './Console';
+import {hint, toValueString} from './Console';
+
+const notify = Symbol('notify');
 
 export default {
 
   on(type, callback, context) {
-    if (this._isDisposed) {
-      hint(this, `Event registration warning: Can not listen for event "${type}" on disposed object`);
-    }
     if (isObject(type)) {
       for (const key in type) {
         this.on(key, type[key]);
       }
       return this;
+    }
+    if (typeof type !== 'string') {
+      throw new Error(toValueString(type) + ' is not a string');
+    }
+    if (!(callback instanceof Function)) {
+      throw new Error(toValueString(callback) + ' is not a function');
+    }
+    if (context && !(context instanceof Object)) {
+      throw new Error(toValueString(context) + ' is not an object');
+    }
+    if (this._isDisposed) {
+      hint(this, `Event registration warning: Can not listen for event "${type}" on disposed object`);
     }
     const wasListening = this._isListening(type);
     this._callbacks = this._callbacks || [];
@@ -85,6 +96,21 @@ export default {
   },
 
   trigger(type, eventData = {}) {
+    return this[notify](type, eventData, false);
+  },
+
+  triggerAsync(type, eventData = {}) {
+    return this[notify](type, eventData, true);
+  },
+
+  /**
+   * @param {string} type
+   * @param {object} eventData
+   * @param {boolean} async
+   * @returns {object|Promise<object>}
+   */
+  [notify](type, eventData, async) {
+    const returnValues = [];
     if (!this._isDisposed) {
       if (this._callbacks && type in this._callbacks) {
         const uninitialized = (eventData instanceof EventObject) && !eventData.type;
@@ -97,27 +123,31 @@ export default {
         if (dispatchObject._initEvent instanceof Function) {
           dispatchObject._initEvent(type, target);
         }
-        const callbacks = this._callbacks[type];
-        for (let i = 0; i < callbacks.length; i++) {
-          const callback = callbacks[i];
-          const returnValue = callback.fn.call(callback.ctx || this, dispatchObject);
-          if (returnValue instanceof Promise) {
-            returnValue.catch(ex => console.error(
+        for (const callback of this._callbacks[type]) {
+          const value = callback.fn.call(callback.ctx || this, dispatchObject);
+          if (value instanceof Promise) {
+            value.catch(ex => console.error(
               `Listener for ${target.constructor.name} event "${type}" rejected with ${ex.stack || ex}`
             ));
           }
+          returnValues.push(value);
         }
       }
     } else {
       hint(this, `Trigger warning: Can not dispatch event "${type}" on disposed object`);
     }
-    return this;
+    return async ? Promise.all(returnValues).then(() => this) : this;
   },
 
   _isListening(type) {
     return !!this._callbacks && (!type || type in this._callbacks);
   },
 
-  _listen() {}
+  /**
+   * @param {string} type
+   * @param {boolean} isListening
+   */
+  // eslint-disable-next-line no-unused-vars
+  _listen(type, isListening) {}
 
 };

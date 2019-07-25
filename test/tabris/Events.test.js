@@ -309,6 +309,119 @@ describe('Events', function() {
 
   });
 
+  describe('triggerAsync', function() {
+
+    it('triggers listener once', function() {
+      object.on('foo', listener);
+
+      object.triggerAsync('foo');
+
+      expect(listener).to.have.been.calledOnce;
+    });
+
+    it('triggers multiple listener once', function() {
+      object.on('foo', () => listener());
+      object.on('foo', () => listener());
+      object.on('foo', () => listener());
+
+      object.triggerAsync('foo');
+
+      expect(listener).to.have.been.calledThrice;
+    });
+
+    it('triggers listener with default empty event object', function() {
+      object.on('foo', listener);
+
+      object.triggerAsync('foo');
+
+      expect(listener).to.have.been.calledWithMatch({target: object, type: 'foo'});
+    });
+
+    it('triggers listener with extended event object', function() {
+      object.on('foo', listener);
+      const event = {bar: 'bar'};
+
+      object.triggerAsync('foo', event);
+
+      expect(listener).to.have.been.calledWithMatch({target: object, type: 'foo', bar: 'bar'});
+    });
+
+    it('without listeners returns resolved Promise containing reference', function() {
+      const promise = object.triggerAsync('foo');
+
+      expect(promise).to.be.instanceOf(Promise);
+      return promise.then(result => {
+        expect(result).to.equal(object);
+      });
+    });
+
+    it('with synchronous listeners returns resolved Promise containing reference', function() {
+      object.on('foo', () => listener());
+      object.on('foo', () => listener());
+      const promise = object.triggerAsync('foo');
+
+      expect(promise).to.be.instanceOf(Promise);
+      return promise.then(result => {
+        expect(result).to.equal(object);
+        expect(listener).to.have.been.calledTwice;
+      });
+    });
+
+    it('returns Promise waiting for other Promise returned by listener', function() {
+      let resolver = null;
+      let resolved = false;
+      object.on('foo', () => new Promise(resolve => resolver = resolve));
+      object.triggerAsync('foo').then(() => resolved = true);
+      return wait().then(() => {
+        expect(resolver).to.be.instanceOf(Function);
+        expect(resolved).to.be.false;
+        resolver();
+        return wait();
+      }).then(() => expect(resolved).to.be.true);
+    });
+
+    it('returns Promise waiting for all Promise returned by listener', function() {
+      let resolver1 = null;
+      let resolver2 = null;
+      let resolved = false;
+      object.on('foo', () => listener(1));
+      object.on('foo', () => new Promise(resolve => resolver1 = resolve));
+      object.on('foo', () => listener(2));
+      object.on('foo', () => new Promise(resolve => resolver2 = resolve));
+      object.on('foo', () => listener(3));
+      object.triggerAsync('foo').then(() => resolved = true);
+      return wait().then(() => {
+        expect(resolved).to.be.false;
+        expect(resolver1).to.be.instanceOf(Function);
+        expect(resolver2).to.be.instanceOf(Function);
+        resolver1();
+        return wait();
+      }).then(() => {
+        expect(resolved).to.be.false;
+        resolver2();
+        return wait();
+      }).then(() => {
+        expect(resolved).to.be.true;
+        expect(listener).to.have.been.calledThrice;
+        expect(listener).to.have.been.calledWith(1);
+        expect(listener).to.have.been.calledWith(2);
+        expect(listener).to.have.been.calledWith(3);
+      });
+    });
+
+    it('forwards rejected Promise', function() {
+      object.on('foo', () => listener());
+      object.on('foo', () => Promise.resolve());
+      object.on('foo', () => listener());
+      object.on('foo', () => Promise.reject(new Error('fooerror')));
+      object.on('foo', () => listener());
+      return object.triggerAsync('foo')
+        .then(() => { throw new Error('did not fail'); })
+        .catch(ex => expect(ex.message).to.equal('fooerror'));
+    });
+
+  });
+
   describe('_isListening', function() {
 
     describe('when no listeners are attached', function() {
@@ -429,3 +542,7 @@ describe('Events', function() {
   });
 
 });
+
+function wait() {
+  return new Promise(resolve => setTimeout(resolve, 50));
+}

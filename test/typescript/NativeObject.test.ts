@@ -37,6 +37,12 @@ thisReturnValue = nativeObject.trigger(type, eventObject);
 thisReturnValue = nativeObject.trigger(type, {});
 thisReturnValue = nativeObject.trigger(type);
 
+(async () => {
+  thisReturnValue = await nativeObject.triggerAsync(type, eventObject);
+  thisReturnValue = await nativeObject.triggerAsync(type, {});
+  thisReturnValue = await nativeObject.triggerAsync(type);
+})();
+
 // Custom properties
 
 customComponent.set({foo: 'fooValue'});

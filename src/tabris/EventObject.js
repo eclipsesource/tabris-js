@@ -41,3 +41,7 @@ export default class EventObject {
   }
 
 }
+
+Object.defineProperty(EventObject.prototype, 'type', {value: ''});
+Object.defineProperty(EventObject.prototype, 'target', {value: null});
+Object.defineProperty(EventObject.prototype, 'timeStamp', {value: 0});

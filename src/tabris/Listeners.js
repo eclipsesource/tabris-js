@@ -1,7 +1,7 @@
 import Events from './Events';
 import {toValueString} from './Console';
 
-const DELEGATE_FIELDS = ['promise', 'addListener', 'removeListener', 'once', 'trigger'];
+const DELEGATE_FIELDS = ['promise', 'addListener', 'removeListener', 'once', 'trigger', 'triggerAsync'];
 const storeKey = Symbol('ListenersStore');
 
 export default class Listeners {
@@ -52,6 +52,10 @@ export default class Listeners {
   trigger(eventData) {
     this.store.trigger(this.type, eventData);
     return this.target;
+  }
+
+  triggerAsync(eventData) {
+    return this.store.triggerAsync(this.type, eventData).then(() => this.target);
   }
 
   promise() {

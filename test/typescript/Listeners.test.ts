@@ -54,6 +54,12 @@ fooTarget = myFooListeners.once(listener);
 fooTarget = myFooListeners.addListener(listener);
 fooTarget = myFooListeners.removeListener(listener);
 fooTarget = myFooListeners.trigger();
+
+(async () => {
+  fooTarget = await myFooListeners.triggerAsync();
+  fooTarget = await myFooListeners.triggerAsync({foo: 'bar'});
+})();
+
 type = myEventListeners.type;
 type = myFooListeners.type;
 type = myChangeListeners.type;

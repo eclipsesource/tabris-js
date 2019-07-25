@@ -98,6 +98,21 @@
         "returns": "this.target",
         "ts_returns": "TargetType<EventData>"
       }
+    ],
+    "triggerAsync": [
+      {
+        "parameters": [
+          {
+            "name": "eventData",
+            "optional": true,
+            "type": "object",
+            "ts_type": "ListenersTriggerParam<EventData>"
+          }
+        ],
+        "returns": "Promise<this.target>",
+        "ts_returns": "Promise<TargetType<EventData>>",
+        "description": "Like `trigger`, but returns a promise. The promise will resolve when all asynchronous listeners (if any) have resolved. If none of the listeners are asynchronous (return a promise) this method works just like `trigger()`. Useful for unit testing."
+      }
     ]
   },
   "statics": {

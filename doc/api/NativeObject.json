@@ -195,6 +195,52 @@
         "description": "Initializes the given *eventObject* and passes it to all listeners registered for this event *type*. If *eventObject* was already initialized its fields are copied to a new event object.\n\nIn TypeScript you should use the alternative `Listeners` API, e.g. `widget.myEvent.trigger(eventObject);` instead of `widget.trigger('myEvent', eventObject});` The former provides more type information."
       }
     ],
+    "triggerAsync": [
+      {
+        "parameters": [
+          {
+            "name": "type",
+            "type": "string",
+            "description": "The type of event to trigger"
+          }
+        ],
+        "returns": "Promise<this>",
+        "description": "Like `trigger`, but returns a promise. The promise will resolve when all asynchronous listeners (if any) have resolved. If none of the listeners are asynchronous (return a promise) this method works just like `trigger()`. Useful for unit testing."
+      },
+      {
+        "parameters": [
+          {
+            "name": "type",
+            "type": "string",
+            "description": "The type of event to trigger"
+          },
+          {
+            "name": "object",
+            "type": "object",
+            "description": "The data to pass to listener functions."
+          }
+        ],
+        "returns": "Promise<this>",
+        "description": "Notifies all registered listeners for the given *type* with the given data. Unlike `trigger` each asynchronous listener will be awaited, meaning that if a listener returns a promise that will pause event processing until it resolves. Returns a promise that resolves once all listeners have been notified. If any listener returns a rejecting promise the even processing is aborted and the returned promise rejects with the error value. If none of the listeners return a promise this method works just like `trigger()`. \n\nIn TypeScript you should use `widget.myEvent.triggerAsync();` instead"
+      },
+      {
+        "parameters": [
+          {
+            "name": "type",
+            "type": "string",
+            "description": "The type of event to trigger"
+          },
+          {
+            "name": "eventObject",
+            "type": "EventObject",
+            "ts_type": "EventObject<this>",
+            "description": "An instance of `EventObject` (or a subclass) to pass to listener functions."
+          }
+        ],
+        "returns": "Promise<this>",
+        "description": "Notifies all registered listeners for the given *type* with the given `EventObject`. Unlike `trigger` each asynchronous listener will be awaited, meaning that if a listener returns a promise that will pause event processing until it resolves. Returns a promise that resolves once all listeners have been notified. If any listener returns a rejecting promise the even processing is aborted and the returned promise rejects with the error value. If none of the listeners return a promise this method works just like `trigger()`. \n\nIn TypeScript you should use `widget.myEvent.triggerAsync();` instead"
+      }
+    ],
     "set": [
       {
         "generics": "T extends NativeObject = this",
