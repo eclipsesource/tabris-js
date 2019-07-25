@@ -347,8 +347,14 @@ exports.generateDoc = function generateDoc({files, targetPath, version}) {
 
   function renderTypeLink(name) {
     return name.split('|')
-      .map(name => typeLinks[name] ? `[${name}](${typeLinks[name]})` : name)
+      .map(name => typeLinks[name] ? `[${escapeType(name)}](${typeLinks[name]})` : escapeType(name))
       .join('\\|');
+  }
+
+  function escapeType(type) {
+    return type
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
   }
 
 };
