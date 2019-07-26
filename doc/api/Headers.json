@@ -1,0 +1,103 @@
+{
+  "type": "Headers",
+  "namespace": "global",
+  "description": "Represents a set of HTTP headers as used by `fetch()`.",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "headers",
+        "type": "Headers | Array<[string, string]> | {[header: string]: string}",
+        "optional": true
+      }
+    ]
+  },
+  "methods": {
+    "getAll": {
+      "parameters": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "description": "Returns all values associated with a given header.",
+      "returns": "string[]"
+    },
+    "get": {
+      "parameters": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "description": "Returns the first value associated with a given header.",
+      "returns": "string|null"
+    },
+    "has": {
+      "parameters": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "description": "Returns true if there are any values associated with a given header.",
+      "returns": "boolean"
+    },
+    "delete": {
+      "parameters": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "description": "Removes all values associated with a given header."
+    },
+    "append": {
+      "parameters": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "description": "Adds a value to a given header. Any existing values for that header will be retained."
+    },
+    "set": {
+      "parameters": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "description": "Adds a string value associated with a given header. Any existing values for that header will be replaced."
+    },
+    "keys": {
+      "returns": "IterableIterator<string>"
+    },
+    "values": {
+      "returns": "IterableIterator<string>"
+    },
+    "entries": {
+      "returns": "IterableIterator<[string, string]>"
+    },
+    "forEach": {
+      "parameters": [
+        {
+          "name": "callback",
+          "type": "(value: string, name: string) => void"
+        }
+      ]
+    },
+    "[Symbol.iterator]": {
+      "ts_only": true,
+      "returns": "IterableIterator<[string, string]>"
+    }
+  }
+}

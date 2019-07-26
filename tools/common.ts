@@ -49,7 +49,7 @@ export class TextBuilder {
 
   public append(...args: string[]) {
     Array.prototype.forEach.call(arguments, arg => {
-      const lines = typeof arg === 'string' ? arg.split('\n') : arg;
+      const lines = typeof arg === 'string' ? arg.split('\n') : arg || [];
       for (const line of lines) {
         this.lines.push(this._indentLine(line));
       }

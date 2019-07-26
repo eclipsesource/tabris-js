@@ -1,0 +1,97 @@
+{
+  "type": "Response",
+  "namespace": "global",
+  "description": "Represents an HTTP Response as used by `fetch()`.",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "body",
+        "type": "Blob | FormData | string",
+        "optional": true
+      },
+      {
+        "name": "init",
+        "type": "ResponseInit",
+        "optional": true
+      }
+    ]
+  },
+  "properties": {
+    "type": {
+      "type": "string",
+      "readonly": true,
+      "values": ["basic", "cors", "default", "error", "opaque"]
+    },
+    "url": {
+      "type": "string",
+      "readonly": true
+    },
+    "status": {
+      "type": "number",
+      "readonly": true
+    },
+    "ok": {
+      "type": "boolean",
+      "readonly": true
+    },
+    "statusText": {
+      "type": "string",
+      "readonly": true
+    },
+    "headers": {
+      "type": "Headers",
+      "readonly": true
+    },
+    "bodyUsed": {
+      "type": "boolean",
+      "readonly": true
+    }
+  },
+  "methods": {
+    "clone": {
+      "returns": "Response"
+    },
+    "arrayBuffer": {
+      "returns": "Promise<ArrayBuffer>"
+    },
+    "blob": {
+      "returns": "Promise<Blob>"
+    },
+    "text": {
+      "returns": "Promise<string>"
+    },
+    "json": [
+      {
+        "returns": "Promise<any>"
+      },
+      {
+        "generics": "T",
+        "returns": "Promise<T>",
+        "ts_only": true
+      }
+    ]
+  },
+  "statics": {
+    "methods": {
+      "redirect": {
+        "ts_only": true,
+        "parameters": [
+          {
+            "name": "url",
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "type": "number"
+          }
+        ],
+        "returns": "Response"
+      },
+      "error": {
+        "ts_only": true,
+        "returns": "Response"
+      }
+    }
+  }
+}

@@ -115,8 +115,10 @@ class DocumentationGenerator {
 
   private renderAPI() {
     Object.keys(this.defs).forEach(title => {
-      const targetFile = join(this.apiPath, parse(this.defs[title].file).name + '.md');
-      fs.writeFileSync(targetFile, new DocumentRenderer(this, title).render());
+      if (!this.defs[title].interface) {
+        const targetFile = join(this.apiPath, parse(this.defs[title].file).name + '.md');
+        fs.writeFileSync(targetFile, new DocumentRenderer(this, title).render());
+      }
     });
   }
 
@@ -125,7 +127,7 @@ class DocumentationGenerator {
     const sortedAPI = Object.keys(this.defs).map(key => this.defs[key]).sort(compareTitles);
     const render = (def) => `    - title: ${getTitle(def)}\n      url: api/${parse(def.file).name}.html`;
     const content = {
-      api: sortedAPI.filter(def => !def.isWidget).map(render).join('\n'),
+      api: sortedAPI.filter(def => !def.isWidget && !def.interface).map(render).join('\n'),
       widgets: sortedAPI.filter(def => def.isWidget).map(render).join('\n')
     };
     const text = fs.readFileSync(tocFile, 'utf-8').replace(/<%=\s*(\S+)\s*%>/g, (match, word) => content[word]);
@@ -246,14 +248,11 @@ class DocumentRenderer {
   }
 
   private renderInfoFile() {
-    const exampleFile = join(this.apiPath, parse(this.def.file).name + '.md');
-    if (isFileSync(exampleFile)) {
-      return [
-        '## Example',
-        fs.readFileSync(exampleFile, 'utf-8')
-      ].join('\n');
+    const infoFilo = join(this.apiPath, parse(this.def.file).name + '.md');
+    if (isFileSync(infoFilo)) {
+      fs.readFileSync(infoFilo, 'utf-8');
     } else {
-      console.log('No description file for ' + this.title);
+      console.log('No info file for ' + this.title);
     }
   }
 
@@ -616,18 +615,39 @@ class DocumentRenderer {
   }
 
   private renderMethodParamList(parameters: schema.Parameter[], hasContext: boolean) {
-    return 'Parameter|Type|Optional|Description\n-|-|-|-\n' + parameters.map(param => {
-      let type = 'any';
-      if (param.type) {
-        type = this.renderTypeLink(this.decodeType(param.type, hasContext));
+
+    return 'Parameter|Type|Optional|Description\n-|-|-|-\n'
+      + this.flattenParamList(parameters).map(param => {
+        let type = 'any';
+        if (param.type) {
+          type = this.renderTypeLink(this.decodeType(param.type, hasContext));
+        } else {
+          console.log('No type for parameter ' + param.name + ' in ' + this.title);
+        }
+        if (!param.description) {
+          console.log('No description for parameter ' + param.name + ' in ' + this.title);
+        }
+        return [param.name, type, param.optional ? 'Yes' : 'No', param.description || ''].join(' | ');
+      }).join('\n');
+  }
+
+  private flattenParamList(parameters: schema.Parameter[]) {
+    const result: schema.Parameter[] = [];
+    parameters.forEach(param => {
+      if (this.defs[param.type] && this.defs[param.type].interface) {
+        const paramObject = this.defs[param.type];
+        result.push(Object.assign({}, param, {type: 'object'}));
+        Object.keys(paramObject.properties).sort().forEach(name => {
+          result.push({
+            name: param.name + '.' + name,
+            ...paramObject.properties[name]
+          });
+        });
       } else {
-        console.log('No type for parameter ' + param.name + ' in ' + this.title);
+        result.push(param);
       }
-      if (!param.description) {
-        console.log('No description for parameter ' + param.name + ' in ' + this.title);
-      }
-      return [param.name, type, param.optional ? 'Yes' : 'No', param.description || ''].join(' | ');
-    }).join('\n');
+    });
+    return result;
   }
 
   private renderLinks(links: schema.Links) {

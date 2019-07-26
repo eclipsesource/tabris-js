@@ -17,8 +17,13 @@
           "enum": ["global", "tabris"]
         },
         "type": {
-          "description": "Name of the class",
+          "description": "Name of the class/interface",
           "type": "string"
+        },
+        "interface": {
+          "description": "Makes this type an interface. Will be rendered inline where referenced in documentation.",
+          "type": "boolean",
+          "default": false
         },
         "object": {
           "description": "Name of the instance (for singletons)",
@@ -108,6 +113,15 @@
           ]
         }
       ],
+      "not": {
+        "$comment": "Interfaces do not support constructor or statics",
+        "properties": {"interface": {"enum": [true]}},
+        "required": ["interface"],
+        "anyOf": [
+          {"required": ["constructor"]},
+          {"required": ["statics"]}
+        ]
+      },
       "additionalProperties": false
     },
     "statics": {
@@ -152,6 +166,11 @@
           "description": "Mark property as protected",
           "type": "boolean"
         },
+        "optional": {
+          "description": "Is the property optional?",
+          "type": "boolean",
+          "default": false
+        },
         "private": {
           "description": "Mark property as private",
           "type": "boolean"
@@ -178,7 +197,7 @@
           "description": "This property does not produce change events. Implied by 'const'."
         },
         "default": {
-          "type": "string|number|boolean",
+          "anyof": ["string", "number", "boolean"],
           "description": "Default value of this property"
         },
         "values": {

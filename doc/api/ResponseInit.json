@@ -1,0 +1,19 @@
+{
+  "type": "ResponseInit",
+  "namespace": "global",
+  "interface": true,
+  "properties": {
+    "statusText": {
+      "type": "string",
+      "optional": true
+    },
+    "status": {
+      "type": "number",
+      "optional": true
+    },
+    "headers": {
+      "type": "Headers | string[] | { [index: string]: string }",
+      "optional": true
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "type": "RequestInit",
+  "namespace": "global",
+  "interface": true,
+  "properties": {
+    "method": {
+      "type": "string",
+      "optional": true,
+      "description": "The request method, e.g., `'GET'`, `'POST'`."
+    },
+    "headers": {
+      "type": "Headers | string[][] | { [index: string]: string }",
+      "optional": true,
+      "description": "The headers to add to the request."
+    },
+    "body": {
+      "type": "Blob | FormData | string",
+      "optional": true,
+      "description": "The body of the request. GET or HEAD requests can not have a body."
+    },
+    "mode": {
+      "type": "string",
+      "values": [
+        "same-origin",
+        "no-cors",
+        "cors"
+      ],
+      "optional": true
+    },
+    "credentials": {
+      "type": "string",
+      "default": "omit",
+      "values": [
+        "omit",
+        "same-origin",
+        "include"
+      ],
+      "optional": true
+    },
+    "cache": {
+      "type": "string",
+      "values": [
+        "default",
+        "no-store",
+        "reload",
+        "no-cache",
+        "force-cache",
+        "only-if-cached"
+      ],
+      "optional": true
+    }
+  }
+}

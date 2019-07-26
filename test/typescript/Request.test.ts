@@ -4,9 +4,9 @@ declare type T = object;
 
 let result: Promise<Response> = fetch('URL');
 result.then((response) => {
-  let errorResponse: Response = response.error();
+  let errorResponse: Response = Response.error();
   let clonedResponse: Response = response.clone();
-  let redirectedResponse: Response = response.redirect('url', 0);
+  let redirectedResponse: Response = Response.redirect('url', 0);
   let arrayBuffer: Promise<ArrayBuffer> = response.arrayBuffer();
   // let blob: Promise<Blob> = response.blob();
   // let formData: Promise<FormData> = response.formData();

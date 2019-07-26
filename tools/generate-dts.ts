@@ -141,7 +141,7 @@ function renderClass(text: TextBuilder, def: ExtendedApi) {
 
 function renderClassHead(text: TextBuilder, def: ExtendedApi) {
   let str = (def.namespace && def.namespace === 'global') ? 'declare' : ' export';
-  str += ' class ' + genericType(def);
+  str += (def.interface ? ' interface ' : ' class ')  + genericType(def);
   if (def.extends) {
     str += ' extends ' + (def.ts_extends || def.extends);
   }
@@ -292,10 +292,12 @@ function createProperty(name: string, properties: Properties, def: ExtendedApi, 
   const result = [];
   const property = properties[name];
   result.push(createDoc(property));
-  const readonly = property.readonly;
+  const readonly = property.readonly ? 'readonly ' : '';
+  const _static = isStatic ? 'static ' : '';
+  const optional = property.optional ? '?' : '';
   const type = decodeType(property, def, {hasContext: false, excludeConsts: false});
   result.push(
-    `${accessor(property)}${isStatic ? 'static ' : ''}${readonly ? 'readonly ' : ''}${name}: ${type};`
+    `${accessor(property)}${_static}${readonly}${name}${optional}: ${type};`
   );
   return result.join('\n');
 }

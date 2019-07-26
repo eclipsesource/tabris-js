@@ -1,0 +1,134 @@
+{
+  "type": "Request",
+  "namespace": "global",
+  "description": "Represents an HTTP Request as used by `fetch()`.",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "input",
+        "type": "string | Request"
+      },
+      {
+        "name": "init",
+        "type": "RequestInit",
+        "optional": true
+      }
+    ]
+  },
+  "properties": {
+    "method": {
+      "type": "string",
+      "readonly": true
+    },
+    "url": {
+      "type": "string",
+      "readonly": true
+    },
+    "headers": {
+      "type": "Headers",
+      "readonly": true
+    },
+    "context": {
+      "type": "string",
+      "values": [
+        "audio",
+        "beacon",
+        "cspreport",
+        "download",
+        "embed",
+        "eventsource",
+        "favicon",
+        "fetch",
+        "font",
+        "form",
+        "frame",
+        "hyperlink",
+        "iframe",
+        "image",
+        "imageset",
+        "import",
+        "internal",
+        "location",
+        "manifest",
+        "object",
+        "ping",
+        "plugin",
+        "prefetch",
+        "script",
+        "serviceworker",
+        "sharedworker",
+        "subresource",
+        "style",
+        "track",
+        "video",
+        "worker",
+        "xmlhttprequest",
+        "xslt"
+      ],
+      "readonly": true
+    },
+    "referrer": {
+      "type": "string",
+      "readonly": true
+    },
+    "mode": {
+      "type": "string",
+      "values": [
+        "same-origin",
+        "no-cors",
+        "cors"
+      ],
+      "readonly": true
+    },
+    "credentials": {
+      "type": "string",
+      "values": [
+        "omit",
+        "same-origin",
+        "include"
+      ],
+      "readonly": true
+    },
+    "cash": {
+      "type": "string",
+      "values": [
+        "default",
+        "no-store",
+        "reload",
+        "no-cache",
+        "force-cache",
+        "only-if-cached"
+      ],
+      "readonly": true
+    },
+    "bodyUsed": {
+      "type": "boolean",
+      "readonly": true
+    }
+  },
+  "methods": {
+    "clone": {
+      "returns": "Request"
+    },
+    "arrayBuffer": {
+      "returns": "Promise<ArrayBuffer>"
+    },
+    "blob": {
+      "returns": "Promise<Blob>"
+    },
+    "text": {
+      "returns": "Promise<string>"
+    },
+    "json": [
+      {
+        "returns": "Promise<any>"
+      },
+      {
+        "ts_only": true,
+        "generics": "T",
+        "returns": "Promise<T>"
+      }
+    ]
+  }
+}

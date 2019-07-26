@@ -1,0 +1,25 @@
+{
+  "title": "fetch",
+  "namespace": "global",
+  "methods": {
+    "fetch": {
+      "parameters": [
+        {
+          "name": "url",
+          "type": "string | Request"
+        },
+        {
+          "name": "init",
+          "type": "RequestInit",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<Response>"
+    }
+  },
+  "links": [
+    {"path": "./Request.md", "title": "Class `Request`"},
+    {"path": "./Response.md", "title": "Class `Response`"},
+    {"path": "./Headers.md", "title": "Class `Headers`"}
+  ]
+}

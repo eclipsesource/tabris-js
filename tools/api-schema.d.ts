@@ -15,9 +15,13 @@ export interface Api {
   description?: string;
   namespace?: "global" | "tabris";
   /**
-   * Name of the class
+   * Name of the class/interface
    */
   type?: string;
+  /**
+   * Makes this type an interface. Will be rendered inline where referenced in documentation.
+   */
+  interface?: boolean;
   /**
    * Name of the instance (for singletons)
    */
@@ -90,6 +94,10 @@ export interface Property {
    * Mark property as protected
    */
   protected?: boolean;
+  /**
+   * Mark the property as optional
+   */
+  optional?: boolean;
   /**
    * Mark property as private
    */
