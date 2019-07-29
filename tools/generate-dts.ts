@@ -62,7 +62,7 @@ export as namespace tabris;
 const EVENT_OBJECT = 'EventObject<T>';
 const eventObjectNames = [EVENT_OBJECT];
 
-type Config = {files: string[], globalTypeDefFiles: string[], localTypeDefFiles: string, version: string};
+type Config = {files: string, globalTypeDefFiles: string[], localTypeDefFiles: string, version: string};
 
 exports.generateDts = function generateTsd(config: Config) {
   writeGlobalsDts(config);
@@ -74,7 +74,7 @@ exports.generateDts = function generateTsd(config: Config) {
 function writeGlobalsDts(config: Config) {
   const apiDefinitions = readJsonDefs(config.files);
   const globalApiDefinitions = filter(apiDefinitions, def => def.namespace && def.namespace === 'global');
-  const text = new TextBuilder(config.globalTypeDefFiles.map(file => fs.readFileSync(file)));
+  const text = new TextBuilder(config.globalTypeDefFiles.map(file => fs.readFileSync(file, {encoding: 'utf-8'})));
   renderDts(text, globalApiDefinitions);
   fs.writeFileSync('build/tabris/globals.d.ts', text.toString());
 }

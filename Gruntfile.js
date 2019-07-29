@@ -2,6 +2,7 @@ require('ts-node').register({project: './tools/tsconfig.json'});
 const {generateDoc} = require('./tools/generate-doc');
 const {generateDts} = require('./tools/generate-dts');
 const {Validator} = require('jsonschema');
+const {join} = require('path');
 
 module.exports = function(grunt) {
 
@@ -37,7 +38,7 @@ module.exports = function(grunt) {
       }
     },
     doc: {
-      api: 'doc/api/**/*.json',
+      source: 'doc',
       snippets: 'snippets/',
       schema: 'tools/api-schema.json',
       propertyTypes: 'typings/propertyTypes.d.ts',
@@ -117,6 +118,9 @@ module.exports = function(grunt) {
       tslint_snippets: {
         cmd: 'node node_modules/tslint/bin/tslint --project ./snippets'
       },
+      tslint_doc: {
+        cmd: 'node node_modules/tslint/bin/tslint doc/api/*.js doc/api/*.jsx doc/api/*.ts doc/api/*.tsx'
+      },
       bundle_tabris: {
         cmd: 'node node_modules/rollup/bin/rollup --config rollup.config.js -f cjs ' +
           '-o build/tabris-bundle.js -- src/tabris/main.js'
@@ -157,7 +161,7 @@ module.exports = function(grunt) {
   grunt.registerTask('validate-json', () => {
     const validator = new Validator();
     const schema = grunt.file.readJSON(grunt.config('doc').schema);
-    const files = grunt.file.expand(grunt.config('doc').api);
+    const files = grunt.file.expand(grunt.config('doc').source + '/api/*.json');
     const allResults = [];
     files.forEach(file => {
       const results = validator.validate(grunt.file.readJSON(file), schema, {nestedErrors: true});
@@ -170,19 +174,19 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('generate-doc', () => {
+  grunt.registerTask('doc', () => {
     const targetPath = grunt.config('doc').target;
-    const snippets = grunt.config('doc').snippets;
-    const files = grunt.file.expand(grunt.config('doc').api);
+    const snippetsPath = grunt.config('doc').snippets;
+    const sourcePath = grunt.config('doc').source;
     try {
-      generateDoc({files, targetPath, snippets, version});
+      generateDoc({sourcePath, targetPath, snippetsPath, version});
     } catch (ex) {
       grunt.fail.warn(ex.stack);
     }
   });
 
   grunt.registerTask('generate-tsd', () => {
-    const files = grunt.file.expand(grunt.config('doc').api);
+    const files = join(grunt.config('doc').source, 'api');
     const propertyTypes = grunt.file.read(grunt.config('doc').propertyTypes);
     const reExports = grunt.file.read(grunt.config('doc').reExports);
     const globalTypeDefFiles = grunt.file.expand(grunt.config('doc').globalTypings);
@@ -195,9 +199,10 @@ module.exports = function(grunt) {
 
   /* runs static code analysis tools */
   grunt.registerTask('lint', [
-    'exec:eslint',
     'exec:tslint_tools',
+    'exec:eslint',
     'exec:tslint_snippets',
+    'exec:tslint_doc',
     'validate-json'
   ]);
 
@@ -277,12 +282,6 @@ module.exports = function(grunt) {
     'copy:snippets',
     'exec:transpile_snippets',
     'verify_typings_fail'
-  ]);
-
-  /* generates reference documentation */
-  grunt.registerTask('doc', [
-    'copy:doc',
-    'generate-doc'
   ]);
 
   grunt.registerTask('default', [

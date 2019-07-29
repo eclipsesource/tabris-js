@@ -1,5 +1,6 @@
 import * as fs from 'fs-extra';
 import * as schema from './api-schema';
+import {join} from 'path';
 
 const doNotCapitalize = {
   any: true,
@@ -79,8 +80,11 @@ export function filter<T>(obj: T, filterFunction: (v: ExtendedApi) => boolean): 
     }, {}) as T;
 }
 
-export function readJsonDefs(files: string[]) {
+export function readJsonDefs(path: string) {
   const defs = {};
+  const files = fs.readdirSync(path)
+    .filter(file => file.endsWith('.json'))
+    .map(file => join(path, file));
   files.forEach(file => {
     const def = fs.readJsonSync(file);
     def.file = file;

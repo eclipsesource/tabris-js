@@ -15,6 +15,7 @@
     "url": "https://github.com/eclipsesource/tabris-js.git"
   },
   "devDependencies": {
+    "@types/fs-extra": "^8.0.0",
     "@types/mocha": "^5.2.6",
     "@types/sinon": "^7.0.11",
     "@types/sinon-chai": "^3.2.2",

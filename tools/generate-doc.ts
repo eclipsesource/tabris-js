@@ -22,31 +22,41 @@ const LANG_TYPE_LINKS: TypeLinks = {
   'this': '#'
 };
 const PLAYGROUND = 'https://playground.tabris.com/';
+const FILE_TYPES = {
+  js: 'JavaScript',
+  jsx: 'JSX',
+  ts: 'TypeScript',
+  tsx: 'TypeScript/JSX',
+  console: 'Interactive Console'
+};
 
-type Config = {files: string[], targetPath: string, snippets: string, version: string};
+type Config = {sourcePath: string, targetPath: string, snippetsPath: string, version: string};
 
-exports.generateDoc = function generateDoc({files, targetPath, snippets, version}: Config) {
-  const generator = new DocumentationGenerator(targetPath, version, snippets, files);
+exports.generateDoc = function generateDoc(options: Config) {
+  const generator = new DocumentationGenerator(options);
   generator.generate();
 };
 
 class DocumentationGenerator {
 
-  public readonly apiPath: string;
+  public readonly targetPath: string;
+  public readonly sourcePath: string;
+  public readonly apiSourcePath: string;
+  public readonly apiTargetPath: string;
   public readonly defs: ApiDefinitions;
   public readonly snippets: {[name: string]: string} = {};
   public readonly typeLinks: TypeLinks = Object.assign({}, LANG_TYPE_LINKS);
+  public readonly version: string;
 
-  constructor(
-    public readonly targetPath: string,
-    public readonly tabrisVersion: string,
-    snippetsPath: string,
-    files: string[]
-  ) {
-    this.apiPath = join(this.targetPath, 'api');
+  constructor(options: Config) {
+    this.targetPath = options.targetPath;
+    this.sourcePath = options.sourcePath;
+    this.apiSourcePath = join(options.sourcePath, 'api');
+    this.apiTargetPath = join(options.targetPath, 'api');
+    this.copyResources();
     this.readPropertyTypes();
-    this.readSnippets(snippetsPath);
-    this.defs = readJsonDefs(files);
+    this.readSnippets(options.snippetsPath);
+    this.defs = readJsonDefs(this.apiSourcePath);
     this.preProcessDefinitions();
   }
 
@@ -54,6 +64,12 @@ class DocumentationGenerator {
     this.renderOverview();
     this.renderAPI();
     this.renderIndex();
+  }
+
+  private copyResources() {
+    fs.copySync(this.sourcePath, this.targetPath, {
+      filter: (path) => !/[\\\/]api[\\\/].+\./.test(path) || /[\\\/]img[\\\/].+\./.test(path)
+    });
   }
 
   private preProcessDefinitions() {
@@ -94,7 +110,7 @@ class DocumentationGenerator {
 
   private readPropertyTypes() {
     const typesFile = join(this.targetPath, 'types.md');
-    const path = relative(this.apiPath, typesFile).replace(sep, '/');
+    const path = relative(this.apiTargetPath, typesFile).replace(sep, '/');
     const list = fs.readFileSync(typesFile, 'utf-8').match(/^### *(.*)$/gm).map(heading => heading.slice(4));
     for (const type of list) {
       this.addTypeLink(type, `${path}#${type.toLowerCase()}`);
@@ -110,13 +126,13 @@ class DocumentationGenerator {
   }
 
   private renderOverview() {
-    fs.writeFileSync(join(this.apiPath, 'widget-overview.md'), new OverviewRenderer(this).render());
+    fs.writeFileSync(join(this.apiTargetPath, 'widget-overview.md'), new OverviewRenderer(this).render());
   }
 
   private renderAPI() {
     Object.keys(this.defs).forEach(title => {
       if (!this.defs[title].interface) {
-        const targetFile = join(this.apiPath, parse(this.defs[title].file).name + '.md');
+        const targetFile = join(this.apiTargetPath, parse(this.defs[title].file).name + '.md');
         fs.writeFileSync(targetFile, new DocumentRenderer(this, title).render());
       }
     });
@@ -203,21 +219,12 @@ class OverviewRenderer {
 
 class DocumentRenderer {
 
-  private readonly defs: ApiDefinitions;
   private readonly def: ExtendedApi;
-  private readonly typeLinks: TypeLinks;
-  private readonly targetPath: string;
-  private readonly apiPath: string;
-  private readonly tabrisVersion: string;
+  private readonly gen: DocumentationGenerator;
 
   constructor(docGenerator: DocumentationGenerator, private readonly title: string) {
-    this.title = title;
-    this.targetPath = docGenerator.targetPath;
-    this.apiPath = docGenerator.apiPath;
-    this.defs = docGenerator.defs;
-    this.typeLinks = docGenerator.typeLinks;
-    this.tabrisVersion = docGenerator.tabrisVersion;
-    this.def = this.defs[this.title];
+    this.gen = docGenerator;
+    this.def = this.gen.defs[this.title];
   }
 
   public render() {
@@ -237,6 +244,7 @@ class DocumentRenderer {
       renderImages(this.def),
       this.renderSummary(),
       this.renderInfoFile(),
+      this.renderExamples(),
       this.renderLinks(this.def.links),
       this.renderConstructor(),
       this.renderMembers()
@@ -248,12 +256,46 @@ class DocumentRenderer {
   }
 
   private renderInfoFile() {
-    const infoFilo = join(this.apiPath, parse(this.def.file).name + '.md');
-    if (isFileSync(infoFilo)) {
-      fs.readFileSync(infoFilo, 'utf-8');
-    } else {
-      console.log('No info file for ' + this.title);
+    const infoFile = join(this.gen.apiSourcePath, parse(this.def.file).name + '.md');
+    if (!fs.existsSync(infoFile)) {
+      return '';
     }
+    return fs.readFileSync(infoFile, 'utf-8') + '\n';
+  }
+
+  private renderExamples() {
+    const exampleFiles = ['js', 'jsx', 'ts', 'tsx', 'console']
+      .map(lang => join(this.gen.apiSourcePath, parse(this.def.file).name + '.' + lang))
+      .filter(file => fs.existsSync(file));
+    if (!exampleFiles.length) {
+      return '';
+    }
+    return '## Examples\n' + exampleFiles.map(
+      file => this.renderExamplesFile(file)
+    ).join('\n');
+  }
+
+  private renderExamplesFile(path: string) {
+    const content = fs.readFileSync(path, 'utf-8');
+    const segments = content.split(/^\/\/ (.+:)\n\n/gm);
+    const result: string[] = ['### ' + FILE_TYPES[fileExt(path)], ''];
+    if (segments.length % 2 === 1) {
+      if (segments[0].trim()) {
+        segments.unshift('');
+      } else {
+        segments.shift();
+      }
+    }
+    for (let i = 0; i < segments.length; i += 2) {
+      result.push(
+        segments[i],
+        '```' + fileExt(path),
+        segments[i + 1],
+        '```',
+        ''
+      );
+    }
+    return result.join('\n') + '\n';
   }
 
   private renderExtends() {
@@ -266,8 +308,8 @@ class DocumentRenderer {
       hierarchy.unshift(this.renderTypeLink(currentType));
       if (currentType === 'Object') {
         currentType = null;
-      } else if (this.defs[currentType]) {
-        currentType = this.defs[currentType].extends || 'Object';
+      } else if (this.gen.defs[currentType]) {
+        currentType = this.gen.defs[currentType].extends || 'Object';
         currentType = currentType.split('<')[0];
       } else {
         throw new Error('Could not find super type for ' + currentType);
@@ -289,7 +331,7 @@ class DocumentRenderer {
       result.push('Constructor | *', this.def.constructor.access || 'public', '*\n');
       result.push('Singleton | ', this.def.object ? '`' + this.def.object + '`' : '*No*', '\n');
       result.push('Namespace |`', this.def.namespace || 'tabris', '`\n');
-      const subclasses = Object.keys(this.defs).filter(def => this.defs[def].extends === this.def.type);
+      const subclasses = Object.keys(this.gen.defs).filter(def => this.gen.defs[def].extends === this.def.type);
       result.push('Direct subclasses | ');
       if (subclasses.length) {
         result.push(subclasses.map(name => this.renderTypeLink(name)).join(', '), '\n');
@@ -634,8 +676,8 @@ class DocumentRenderer {
   private flattenParamList(parameters: schema.Parameter[]) {
     const result: schema.Parameter[] = [];
     parameters.forEach(param => {
-      if (this.defs[param.type] && this.defs[param.type].interface) {
-        const paramObject = this.defs[param.type];
+      if (this.gen.defs[param.type] && this.gen.defs[param.type].interface) {
+        const paramObject = this.gen.defs[param.type];
         result.push(Object.assign({}, param, {type: 'object'}));
         Object.keys(paramObject.properties).sort().forEach(name => {
           result.push({
@@ -657,7 +699,7 @@ class DocumentRenderer {
     return ['See also:\n'].concat(links.map(link => {
       if (isSnippet(link)) {
         const snippetPath =
-          `${PLAYGROUND}?gitref=v${encodeURIComponent(this.tabrisVersion)}&snippet=${encodeURIComponent(link.snippet)}`;
+          `${PLAYGROUND}?gitref=v${encodeURIComponent(this.gen.version)}&snippet=${encodeURIComponent(link.snippet)}`;
         const snippetType = link.snippet.split('.').pop().toLowerCase();
         const language = `<span class='language ${snippetType}'>${snippetType.toUpperCase()}</span>`;
         const title = `${(link.title || link.snippet)}`;
@@ -671,16 +713,18 @@ class DocumentRenderer {
     return '<span style="white-space:nowrap;">' + type.split('|')
       .map(name => name.trim())
       .map(name => {
-        if (!this.typeLinks[name] && name[0] !== '\'' && name[0] !== '[' && name[0] !== '{') {
+        if (!this.gen.typeLinks[name] && name[0] !== '\'' && name[0] !== '[' && name[0] !== '{') {
           console.log('No type link for ' + name);
         }
-        return this.typeLinks[name] ? `[\`${name}\`](${this.typeLinks[name]})` : '`' + name + '`';
+        return this.gen.typeLinks[name]
+          ? `[\`${name}\`](${this.gen.typeLinks[name]})`
+          : `\`${name}\``;
       })
       .join(' \\| ') + '</span>';
   }
 
   private renderJSXLink(name: string) {
-    return this.typeLinks[name] ? `[\`<${name}/>\`](${this.typeLinks[name]})` : '`<' + name + '/>`';
+    return this.gen.typeLinks[name] ? `[\`<${name}/>\`](${this.gen.typeLinks[name]})` : '`<' + name + '/>`';
   }
 
   private decodeType(type: string, hasContext: boolean) {
@@ -766,4 +810,8 @@ function createImageFigure(def: ExtendedApi, image: string, platform: string): s
 // tslint:disable-next-line: no-any
 function isSnippet(obj: any): obj is schema.Snippet {
   return typeof obj.snippet === 'string';
+}
+
+function fileExt(path: string) {
+  return path.split('.').pop();
 }

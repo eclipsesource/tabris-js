@@ -29,10 +29,6 @@ Tabris supports the timer methods `setTimeout`, `setInterval`, `clearTimeout` an
 
 Tabris supports the [Fetch API](api/fetch.md) to make HTTP request and to read resources that are part of the application.
 
-When a relative URL is given, Tabris.js will interpret it as a path relative to the application's main `package.json`. This allows you to read static resources, i.e. the files residing in your project folder and not excluded via [`.tabrisignore`](./build.md#the-tabrisignore-file). You can also use URLs relative to the current [module](./modules.md) by using the `__dirname` variable, e.g. `fetch(__dirname + "/foo.txt");`.
-
-> :point_right: To enable access to SSL protected resources that use self signed certificates add them to [`app.trustedCertificates`](./api/app.md). Alternatively you can disable the `UseStrictSSL` preference in the config.xml to accept all certificates. See [Building a Tabris.js App](build.md#preferences).
-
 ## Blob
 
 [Blobs](./api/Blob.md) represent raw data that may be created from various sources and can also be read into an `ArrayBuffer` or converted to a string. They are accepted by [fetch](#fetch), [XMLHttpRequest](#xmlhttprequest), [FileSystem](./api/fs.md#writefilepath-text-encoding) and [WebSocket](#websocket) APIs.

@@ -1,5 +1,6 @@
 node_modules/
 build/
+doc/
 dist
 snippets
 *.min.js
