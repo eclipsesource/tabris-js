@@ -35,7 +35,7 @@ Feature|Example
 [const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)|`const a = 1;`
 [Default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters)|`function(a = 1) { … }`
 [Destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)|`[a, b] = [1, 2]`
-[Exponentiation operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators#Exponentiation_(**))|`a ** b`
+[Exponentiation operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators#Exponentiation)|`a ** b`
 [for...of](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/statements/for...of)|`for (let a of b) { … }`
 [Generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators#Generator_functions)|`function*() { … }`
 [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let)|`let a = 1;`
