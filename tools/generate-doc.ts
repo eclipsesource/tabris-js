@@ -654,9 +654,7 @@ class DocumentRenderer {
         if (!this.typeLinks[name] && name[0] !== '\'' && name[0] !== '[' && name[0] !== '{') {
           console.log('No type link for ' + name);
         }
-        return this.typeLinks[name]
-          ? `[\`${escapeType(name)}\`](${this.typeLinks[name]})`
-          : '`' + escapeType(name) + '`';
+        return this.typeLinks[name] ? `[\`${name}\`](${this.typeLinks[name]})` : '`' + name + '`';
       })
       .join(' \\| ') + '</span>';
   }
@@ -748,10 +746,4 @@ function createImageFigure(def: ExtendedApi, image: string, platform: string): s
 // tslint:disable-next-line: no-any
 function isSnippet(obj: any): obj is schema.Snippet {
   return typeof obj.snippet === 'string';
-}
-
-function escapeType(type: string) {
-  return type
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
 }
