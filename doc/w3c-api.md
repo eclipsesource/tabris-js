@@ -43,7 +43,7 @@ When a relative URL is given, Tabris.js will interpret it as a path relative to 
 
 ## FormData
 
-[FormData](./api/FormData.md) can be used to send messages of the `multipart/form-data` MIME type via [`fetch()`](#Fetch) or [`XMLHttpRequest`](#XMLHttpRequest).
+[FormData](./api/FormData.md) can be used to send messages of the `multipart/form-data` MIME type via [`fetch()`](#fetch) or [`XMLHttpRequest`](#xmlhttprequest).
 
 ## XMLHttpRequest
 
