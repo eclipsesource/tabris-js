@@ -1,5 +1,6 @@
 {
   "type": "Image",
+  "category": "data",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -19,19 +20,19 @@
       "readonly": true
     },
     "width": {
-      "type": "number | 'auto'",
+      "type": {"union": ["number", "'auto'"]},
       "description": "Image width in dip. Extracted from the image file when 'auto'.",
       "const": true,
       "readonly": true
     },
     "height": {
-      "type": "number | 'auto'",
+      "type": {"union": ["number", "'auto'"]},
       "description": "Image height in dip. Extracted from the image file when 'auto'.",
       "const": true,
       "readonly": true
     },
     "scale": {
-      "type": "number | 'auto'",
+      "type": {"union": ["number", "'auto'"]},
       "description": "Image scale factor - the image will be scaled down by this factor. See [ImageLikeObject](../types.md#imagelikeobject) for details",
       "const": true,
       "readonly": true
@@ -59,7 +60,8 @@
           }
         ],
         "description": "Returns true if value is an ImageValue. This includes `null`. Use this to check if a value will be accepted by an image property. This is also a valid TypeScript type guard function.",
-        "returns": "value is ImageValue"
+        "returns": "boolean",
+        "ts_returns": "value is ImageValue"
       },
       "isValidImageValue": {
         "parameters": [
@@ -70,7 +72,8 @@
           }
         ],
         "description": "Returns true if value is a valid ImageValue. This excludes `null`. Use this to check if a value will be accepted by Image.from. This is also a valid TypeScript type guard function.",
-        "returns": "value is ImageValue"
+        "returns": "boolean",
+        "ts_returns": "value is ImageValue"
       }
     }
   }

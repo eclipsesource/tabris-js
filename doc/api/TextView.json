@@ -1,5 +1,6 @@
 {
   "type": "TextView",
+  "category": "widget",
   "description": "A widget to display a text. For images, use ImageView.",
   "extends": "Widget",
   "constructor": {
@@ -7,7 +8,10 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<TextView>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["TextView"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -51,7 +55,7 @@
       "description": "The color of the text."
     },
     "maxLines": {
-      "type": "number|null",
+      "type": {"union": ["number", "null"]},
       "default": "null",
       "description": "Limit the number of lines to be displayed to the given maximum. `null` disables this limit."
     },

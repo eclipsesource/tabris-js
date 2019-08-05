@@ -1,8 +1,8 @@
 import * as fs from 'fs-extra';
 import * as schema from './api-schema';
 import {
-  TextBuilder, asArray, filter, ApiDefinitions, ExtendedApi, Methods,
-  readJsonDefs, createDoc, getEventTypeName, capitalizeFirstChar, Properties, hasChangeEvent
+  TextBuilder, asArray, filter, ApiDefinitions, ExtendedApi, readJsonDefs, createDoc, getEventTypeName, isMap,
+  capitalizeFirstChar, Properties, hasChangeEvent, isInterfaceReference, isUnion, isTuple, isIndexedMap, isCallback
 } from './common';
 
 type PropertyOps = {hasContext: boolean, excludeConsts: boolean};
@@ -143,14 +143,14 @@ function renderClassHead(text: TextBuilder, def: ExtendedApi) {
   let str = (def.namespace && def.namespace === 'global') ? 'declare' : ' export';
   str += (def.interface ? ' interface ' : ' class ')  + genericType(def);
   if (def.extends) {
-    str += ' extends ' + (def.ts_extends || def.extends);
+    str += ' extends ' + toTypeScript(def.extends);
   }
   text.append(str + ' {');
 }
 
 function renderConstructor(text: TextBuilder, def: ExtendedApi) {
   const hasConstructor = typeof def.constructor === 'object';
-  const constructor = hasConstructor ? def.constructor : getInheritedConstructor(def.parent);
+  const constructor = hasConstructor ? def.constructor : getInheritedConstructor(def.superAPI);
   if (constructor) {
     text.append('');
     const access = constructor.access ? constructor.access + ' ' : '';
@@ -189,7 +189,9 @@ function renderEventObjectInterface(text: TextBuilder, name: string, def: Extend
     (parameters[param].values || []).sort().forEach(value => {
       values.push(`'${value}'`);
     });
-    text.append(`readonly ${param}: ${union(values) || parameters[param].ts_type || parameters[param].type};`);
+    text.append(
+      `readonly ${param}: ${union(values) || toTypeScript(parameters[param].ts_type || parameters[param].type)};`
+    );
   });
   text.indent--;
   text.append('}');
@@ -201,14 +203,14 @@ function renderEventObjectInterface(text: TextBuilder, name: string, def: Extend
 
 function renderMethods(text: TextBuilder, def: ExtendedApi) {
   Object.keys(def.methods || {}).sort().forEach(name => {
-    asArray(def.methods[name]).forEach(method => {
+    asArray(def.methods[name]).filter(method => !method.docs_only).forEach(method => {
       text.append('');
       text.append(createMethod(name, method, def));
     });
   });
   if (def.statics && def.statics.methods) {
     Object.keys(def.statics.methods).sort().forEach(name => {
-      asArray(def.statics.methods[name]).forEach(method => {
+      asArray(def.statics.methods[name]).filter(method => !method.docs_only).forEach(method => {
         text.append('');
         text.append(createMethod(name, method, def, true));
       });
@@ -223,8 +225,8 @@ function createMethod(
   result.push(createDoc(method));
   const paramList = createParamList(def, method.parameters, {hasContext: true, excludeConsts: true});
   const declaration = (def.type ? createMethodModifiers(method, isStatic) : 'declare function ')
-    + `${name}${method.generics ? `<${method.generics}>` : ''}`
-    + `(${paramList}): ${method.ts_returns || method.returns || 'void'};`;
+    + `${name}${renderGenericsDef(method.generics)}`
+    + `(${paramList}): ${toTypeScript(method.ts_returns || method.returns || 'void')};`;
   result.push(declaration);
   return result.join('\n');
 }
@@ -312,7 +314,7 @@ function decodeType(param: Partial<schema.Parameter & schema.Property>, def: Ext
   if (param.values) {
     return union(param.values);
   }
-  return param.ts_type || param.type;
+  return toTypeScript(param.ts_type || param.type);
 }
 
 function union(values: Array<string | number | boolean>) {
@@ -328,13 +330,13 @@ function getInheritedConstructor(def: ExtendedApi): typeof def.constructor {
   if (typeof def.constructor === 'object') {
     return def.constructor;
   }
-  return def.parent ? getInheritedConstructor(def.parent) : null;
+  return def.superAPI ? getInheritedConstructor(def.superAPI) : null;
 }
 
 function genericType(def: ExtendedApi) {
   let result = def.type;
   if (def.generics) {
-    result += '<' + def.generics + '>';
+    result += renderGenericsDef(def.generics);
   }
   return result;
 }
@@ -347,4 +349,58 @@ function accessor(def: {protected?: boolean, private?: boolean}) {
     return 'private ';
   }
   return '';
+}
+
+function toTypeScript(ref: schema.TypeReference): string {
+  if (typeof ref === 'string') {
+    return ref;
+  }
+  if (isInterfaceReference(ref)) {
+    if (ref.interface === 'Array' && ref.generics.every(type => typeof type === 'string')) {
+      return ref.generics[0] + '[]';
+    }
+    return ref.interface + renderGenerics(ref.generics);
+  }
+  if (isUnion(ref)) {
+    return ref.union.map(toTypeScript).join(' | ');
+  }
+  if (isTuple(ref)) {
+    return '[' + ref.tuple.map(toTypeScript).join(', ') + ']';
+  }
+  if (isMap(ref)) {
+    const {map} = ref;
+    const content = Object.keys(map).map(key =>
+      `${key}${map[key].optional ? '?' : ''}: ${toTypeScript(map[key].ts_type || map[key].type)}`
+    ).join(', ');
+    return '{' + content + '}';
+  }
+  if (isIndexedMap(ref)) {
+    const name = Object.keys(ref.map)[0];
+    const indexType = ref.indexType === 'SelectorString' ? 'string' : ref.indexType;
+    return `{[${name}: ${indexType}]: ${toTypeScript(ref.map[name])}}`;
+  }
+  if (isCallback(ref)) {
+    const parameters = ref.callback.map(
+      arg => arg.name + ':' + toTypeScript(arg.type)
+    ).join(', ');
+    return `((${parameters}) => ${toTypeScript(ref.returns.type)})`;
+  }
+  throw new Error('Can not convert to TypeScript: ' + JSON.stringify(ref));
+}
+
+function renderGenericsDef(generics: schema.GenericsDef): string {
+  if (!generics) {
+    return '';
+  }
+  const content = generics.map(({name, extends: ext, default: def}) =>
+    name + (ext ? ` extends ${toTypeScript(ext)}` : '') + (def ? ` = ${toTypeScript(def)}` : '')
+  ).join(', ');
+  return '<' + content + '>';
+}
+
+function renderGenerics(generics: schema.Generics): string {
+  if (!generics) {
+    return '';
+  }
+  return '<' + generics.map(toTypeScript).join(', ') + '>';
 }

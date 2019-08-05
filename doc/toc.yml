@@ -44,17 +44,33 @@
     - title: Build your app
       url: build.html
 
-- title: API Reference
+- title: Core Classes
   pages:
-    - title: Property Types
-      url: types.html
-<%= api %>
+<%= core %>
 
-- title: Widgets API
+- title: Services
+  pages:
+<%= service %>
+
+- title: Widgets
   pages:
     - title: Overview
       url: api/widget-overview.html
-<%= widgets %>
+<%= widget %>
+
+- title: Popups
+  pages:
+<%= popup %>
+
+- title: Network
+  pages:
+<%= net %>
+
+- title: Data Types
+  pages:
+    - title: Value Types
+      url: types.html
+<%= data %>
 
 - title: Native Custom Widgets
   pages:

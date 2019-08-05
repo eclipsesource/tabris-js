@@ -1,11 +1,18 @@
 {
   "title": "$",
   "namespace": "global",
+  "category": "widget",
   "description": "$ is a global helper function that may be used to create instances of `WidgetCollection`, to generate strings from JSX expressions, or to access specific `NativeObject` instances for debugging purposes.",
   "methods": {
     "$": [
       {
-        "generics": "Result extends tabris.Widget = tabris.Widget",
+        "generics": [
+          {
+            "name": "Result",
+            "extends": "tabris.Widget",
+            "default": "tabris.Widget"
+          }
+        ],
         "parameters": [
           {
             "name": "selector",
@@ -20,6 +27,7 @@
         "description": "A shortcut to [`tabris.contentView.find()`](./Composite.md#findselector). Returns a collection containing all descendants of contentView that match the given selector. This does *not* include any widgets in the drawer, a popover, or encapsulated in a custom component."
       },
       {
+        "ts_only": true,
         "parameters": [
           {
             "type": "{children: tabris.JSXChildren<tabris.Widget>}|null",

@@ -1,5 +1,6 @@
 {
   "type": "Percent",
+  "category": "data",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -51,7 +52,8 @@
           }
         ],
         "description": "Returns true if value is a valid PercentValue. This excludes `null`. Use this to check if a value will be accepted by Percent.from. This is also a valid TypeScript type guard function.",
-        "returns": "value is PercentValue"
+        "returns": "value",
+        "ts_returns": "value is PercentValue"
       }
     }
   }

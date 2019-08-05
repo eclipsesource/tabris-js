@@ -1,11 +1,12 @@
 {
   "type": "Constraint",
+  "category": "data",
   "constructor": {
     "access": "public",
     "parameters": [
       {
         "name": "reference",
-        "type": "Percent|SiblingReference",
+        "type": {"union": ["Percent", "SiblingReference"]},
         "description": "Sets the `reference` property."
       },
       {
@@ -18,7 +19,7 @@
   "description": "Represents a constraint on the layout of a widget that the parent uses to determine the position of one of its edges. See also [ConstraintValue](../types.md#constraintvalue)",
   "properties": {
     "reference": {
-      "type": "Percent|SiblingReference",
+      "type": {"union": ["Percent", "SiblingReference"]},
       "description": "A reference point from which the offset is added. Either a [SiblingReference](../types.md#siblingreference) - indicating the opposing edge of that widget - or a [`Percent`](./Percent.md) instance, indicating a fraction of the width/height (padding excluded) of the parent widget.\n\nIf the sibling reference is a string it will be a valid selector string and not contain any pseudo selectors   (`'next()'`/`'prev()'`).",
       "const": true
     },

@@ -1,5 +1,6 @@
 {
   "type": "Font",
+  "category": "data",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -10,19 +11,19 @@
       },
       {
         "name": "family",
-        "type": "string[]",
+        "type": {"interface": "Array", "generics": ["string"]},
         "description": "Prioritized list of font families",
         "optional": true
       },
       {
         "name": "weight",
-        "type": "'black' | 'bold' | 'medium' | 'thin' | 'light' | 'normal'",
+        "type": {"union": ["'black'", "'bold'", "'medium'", "'thin'", "'light'", "'normal'"]},
         "description": "Boldness of the font",
         "optional": true
       },
       {
         "name": "style",
-        "type": "'italic' | 'normal'",
+        "type": {"union": ["'italic'", "'normal'"]},
         "description": "Face of the font family to be used",
         "optional": true
       }
@@ -37,19 +38,19 @@
       "readonly": true
     },
     "family": {
-      "type": "string[]",
+      "type": {"interface": "Array", "generics": ["string"]},
       "description": "Prioritized list of font families",
       "const": true,
       "readonly": true
     },
     "weight": {
-      "type": "'black' | 'bold' | 'medium' | 'thin' | 'light' | 'normal'",
+      "type": {"union": ["'black'", "'bold'", "'medium'", "'thin'", "'light'", "'normal'"]},
       "description": "Boldness of the font",
       "const": true,
       "readonly": true
     },
     "style": {
-      "type": "'italic' | 'normal'",
+      "type": {"union": ["'italic'", "'normal'"]},
       "description": "Face of the font family to be used",
       "const": true,
       "readonly": true
@@ -89,7 +90,8 @@
           }
         ],
         "description": "Returns true if value is a FontValue. This includes `null` and `'initial'`. Use this to check if a value will be accepted by a font property. This is also a valid TypeScript type guard function.",
-        "returns": "value is FontValue"
+        "returns": "boolean",
+        "ts_returns": "value is FontValue"
       },
       "isValidFontValue": {
         "parameters": [
@@ -100,7 +102,8 @@
           }
         ],
         "description": "Returns true if value is a valid FontValue. This excludes `null` and `'initial'`. Use this to check if a value will be accepted by Font.from. This is also a valid TypeScript type guard function.",
-        "returns": "value is FontValue"
+        "returns": "value is FontValue",
+        "ts_returns": "value is FontValue"
       }
     }
   },

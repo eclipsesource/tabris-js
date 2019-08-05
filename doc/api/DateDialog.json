@@ -1,12 +1,16 @@
 {
   "type": "DateDialog",
+  "category": "popup",
   "extends": "Popup",
   "constructor": {
     "access": "public",
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<DateDialog>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["DateDialog"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -37,7 +41,7 @@
     "close": {
       "parameters": {
         "date": {
-          "type": "Date|null",
+          "type": {"union": ["Date", "null"]},
           "description": "The selected date. Can be `null` when no date was selected."
         }
       },

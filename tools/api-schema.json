@@ -6,6 +6,9 @@
     "api": {
       "type": "object",
       "properties": {
+        "category": {
+          "enum": ["core", "service", "widget", "popup", "net", "data"]
+        },
         "title": {
           "description": "The title of the document. Will default to object or type name.",
           "type": "string"
@@ -29,15 +32,9 @@
           "description": "Name of the instance (for singletons)",
           "type": "string"
         },
-        "extends": {
-          "type": "string"
-        },
-        "ts_extends": {
-          "type": "string"
-        },
+        "extends": {"$ref": "#/definitions/typeReference"},
         "generics": {
-          "description": "Typescript only",
-          "type": "string"
+          "$ref": "#/definitions/genericsDef"
         },
         "constructor": {
           "properties": {
@@ -122,7 +119,130 @@
           {"required": ["statics"]}
         ]
       },
+      "required": ["category"],
       "additionalProperties": false
+    },
+    "typeReference": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "interface": {"type": "string"},
+            "generics": {
+              "$ref": "#/definitions/generics"
+            }
+          },
+          "required": ["interface", "generics"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "union": {
+              "type": "array",
+              "items": {"$ref": "#/definitions/typeReference"}
+            }
+          },
+          "required": ["union"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "tuple": {
+              "type": "array",
+              "items": {"$ref": "#/definitions/typeReference"}
+            }
+          },
+          "required": ["tuple"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "map": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-zA-Z]*$": {"$ref": "#/definitions/property"}
+              },
+              "minProperties": 1,
+              "additionalProperties": false
+            }
+          },
+          "required": ["map"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "map": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-z]\\w+$": {"$ref": "#/definitions/typeReference"}
+              },
+              "minProperties": 1,
+              "maxProperties": 1,
+              "additionalProperties": false
+            },
+            "indexType": {"enum": ["string", "number", "SelectorString"]}
+          },
+          "required": ["map", "indexType"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "callback": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {"$ref": "#/definitions/typeReference"},
+                  "name": {"type": "string"}
+                },
+                "required": ["type", "name"],
+                "additionalProperties": false
+              }
+            },
+            "returns": {
+              "type": "object",
+              "properties": {
+                "type": {"$ref": "#/definitions/typeReference"},
+                "name": {"type": "string"}
+              },
+              "required": ["type"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["callback"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "generics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/typeReference"
+      },
+      "minItems": 1
+    },
+    "genericsDef": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "default": {"$ref": "#/definitions/typeReference"},
+          "extends": {"$ref": "#/definitions/typeReference"},
+          "description": {"type": "string"}
+        },
+        "required": ["name"],
+        "additionalProperties": false
+      },
+      "minItems": 1
     },
     "statics": {
       "type": "object",
@@ -153,10 +273,10 @@
       "properties": {
         "description": {"type": "string"},
         "changeEventDescription": {"type": "string"},
-        "type": {"type": "string"},
+        "type": {"$ref": "#/definitions/typeReference"},
         "ts_type": {
           "description": "Overrides \"type\" for TypeScript declarations",
-          "type": "string"
+          "$ref": "#/definitions/typeReference"
         },
         "ts_only": {
           "description": "Exclude this property from documentation",
@@ -174,10 +294,6 @@
         "private": {
           "description": "Mark property as private",
           "type": "boolean"
-        },
-        "jsxType": {
-          "description": "The type of JSX element that may be used to express the value(s) of this property",
-          "type": "string"
         },
         "jsxContentProperty": {
           "description": "JSX child elements of the matching type are mapped to this property",
@@ -197,7 +313,6 @@
           "description": "This property does not produce change events. Implied by 'const'."
         },
         "default": {
-          "anyof": ["string", "number", "boolean"],
           "description": "Default value of this property"
         },
         "values": {
@@ -244,16 +359,18 @@
             "$ref": "#/definitions/parameter"
           }
         },
-        "returns": {"type": "string"},
+        "returns": {
+          "$ref": "#/definitions/typeReference"
+        },
+        "docs_only": {"type": "boolean"},
         "ts_only": {"type": "boolean"},
         "ts_returns": {
           "description": "Overrides \"returns\" for TypeScript declarations",
-          "type": "string"
+          "$ref": "#/definitions/typeReference"
         },
         "description": {"type": "string"},
         "generics": {
-          "description": "TypeScript only",
-          "type": "string"
+          "$ref": "#/definitions/genericsDef"
         },
         "platforms": {"$ref": "#/definitions/platforms"},
         "protected": {"type": "boolean"},
@@ -268,10 +385,10 @@
       "properties": {
         "name": {"type": "string"},
         "description": {"type": "string"},
-        "type": {"type": "string"},
+        "type": {"$ref": "#/definitions/typeReference"},
         "ts_type": {
           "description": "Overrides \"type\" for TypeScript declarations",
-          "type": "string"
+          "$ref": "#/definitions/typeReference"
         },
         "optional": {
           "description": "Defaults to false",
@@ -295,7 +412,6 @@
         "title": {"type": "string"},
         "path": {"type": "string"}
       },
-      "required": ["title", "path"],
       "additionalProperties": false
     },
     "snippet": {

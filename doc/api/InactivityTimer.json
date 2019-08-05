@@ -1,12 +1,16 @@
 {
   "type": "InactivityTimer",
+  "category": "service",
   "extends": "NativeObject",
   "constructor": {
     "access": "public",
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<InactivityTimer>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["InactivityTimer"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }

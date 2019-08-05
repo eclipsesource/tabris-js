@@ -1,5 +1,6 @@
 {
   "type": "TextInput",
+  "category": "widget",
   "description": "A widget that allows to enter text.",
   "extends": "Widget",
   "constructor": {
@@ -7,7 +8,10 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<TextInput>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["TextInput"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -161,7 +165,7 @@
       }
     },
     "selection": {
-      "type": "number[]",
+      "type": {"interface": "Array", "generics": ["number"]},
       "description": "The `selection` is a two element number array representing the text selections start and end position. The native platform usually shows selection handles so that the selection can be changed by the user. A `selection` array where both numbers are the same represent a single cursor at the given position. The selection start is the index of the first character where as the end is the index of the last character + 1. E.g. to select the word \"ok\" the selection would be `[0, 2]`.\n\nTo make a selection visible the `TextInput` has to be in focus. Consequently the selection is preserved when the focus is lost and regained. When the user gives the `TextInput` focus by tapping on it, the selection is changed to represent his touch position.\n\n Getting the `selection` upon user interaction (e.g. a button press) the focus would be lost and possibly the `selection` altered due to user interaction. In such a scenario it is recommended to set the [`keepFocus`](#keepfocus) property to `true`."
     },
     "font": {
@@ -184,7 +188,7 @@
       "parameters": {
         "selection": {
           "description": "The current `selection` as a two element number array of start and end position.",
-          "type": "number[]"
+          "type": {"interface": "Array", "generics": ["number"]}
         }
       }
     },

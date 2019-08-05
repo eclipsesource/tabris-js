@@ -1,5 +1,6 @@
 {
   "type": "ResponseInit",
+  "category": "net",
   "namespace": "global",
   "interface": true,
   "properties": {
@@ -12,7 +13,13 @@
       "optional": true
     },
     "headers": {
-      "type": "Headers | string[] | { [index: string]: string }",
+      "type": {
+        "union": [
+          "Headers",
+          {"interface": "Array", "generics": [{"tuple": ["string", "string"]}]},
+          {"map": {"header": "string"}, "indexType": "string"}
+        ]
+      },
       "optional": true
     }
   }

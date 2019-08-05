@@ -1,5 +1,6 @@
 {
   "type": "RequestInit",
+  "category": "net",
   "namespace": "global",
   "interface": true,
   "properties": {
@@ -9,12 +10,18 @@
       "description": "The request method, e.g., `'GET'`, `'POST'`."
     },
     "headers": {
-      "type": "Headers | string[][] | { [index: string]: string }",
+      "type": {
+        "union": [
+          "Headers",
+          {"interface": "Array", "generics": [{"tuple": ["string", "string"]}]},
+          {"map": {"header": "string"}, "indexType": "string"}
+        ]
+      },
       "optional": true,
       "description": "The headers to add to the request."
     },
     "body": {
-      "type": "Blob | FormData | string",
+      "type": {"union": ["Blob", "FormData", "string"]},
       "optional": true,
       "description": "The body of the request. GET or HEAD requests can not have a body."
     },

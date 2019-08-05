@@ -1,5 +1,6 @@
 {
   "type": "ImageBitmap",
+  "category": "data",
   "constructor": {
     "access": "private"
   },
@@ -30,11 +31,14 @@
           {
             "name": "image",
             "description": "The data source to create an ImageBitmap instance from.",
-            "type": "Blob|ImageData|ImageBitmap"
+            "type": {"union": ["Blob", "ImageData", "ImageBitmap"]}
           }
         ],
         "description": "Creates a promise that resolves to a new instance of ImageBitmap. Also available in global scope.",
-        "returns": "Promise<ImageBitmap>"
+        "returns": {
+          "interface": "Promise",
+          "generics": ["ImageBitmap"]
+        }
       }
     }
   }

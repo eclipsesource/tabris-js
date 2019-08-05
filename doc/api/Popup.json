@@ -1,5 +1,6 @@
 {
   "type": "Popup",
+  "category": "popup",
   "extends": "NativeObject",
   "constructor": {
     "access": "protected"

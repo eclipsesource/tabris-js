@@ -1,5 +1,6 @@
 {
   "type": "LayoutData",
+  "category": "data",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -13,63 +14,63 @@
   "description": "Provides layout information for a widget to be used by the parent widget when determining its size and position. See also [LayoutDataValue](../types.md#layoutdatavalue)",
   "properties": {
     "left": {
-      "type": "Constraint | 'auto'",
+      "type": {"union": ["Constraint", "'auto'"]},
       "description": "The position of the widget's left edge relative to the parent or a sibling widget. Must not be negative.",
       "const": true,
       "default": "'auto'",
       "readonly": true
     },
     "top": {
-      "type": "Constraint | 'auto'",
+      "type": {"union": ["Constraint", "'auto'"]},
       "description": "The position of the widget's top edge relative to the parent or a sibling widget. Must not be negative.",
       "const": true,
       "default": "'auto'",
       "readonly": true
     },
     "right": {
-      "type": "Constraint | 'auto'",
+      "type": {"union": ["Constraint", "'auto'"]},
       "description": "The position of the widget's right edge relative to the parent or a sibling widget. Must not be negative.",
       "const": true,
       "default": "'auto'",
       "readonly": true
     },
     "bottom": {
-      "type": "Constraint | 'auto'",
+      "type": {"union": ["Constraint", "'auto'"]},
       "description": "The position of the widget's bottom edge relative to the parent or a sibling widget. Must not be negative.",
       "const": true,
       "default": "'auto'",
       "readonly": true
     },
     "width": {
-      "type": "Dimension | 'auto'",
+      "type": {"union": ["Dimension", "'auto'"]},
       "description": "The width of the widget.",
       "const": true,
       "default": "'auto'",
       "readonly": true
     },
     "height": {
-      "type": "Dimension | 'auto'",
+      "type": {"union": ["Dimension", "'auto'"]},
       "description": "The height of the widget.",
       "const": true,
       "default": "'auto'",
       "readonly": true
     },
     "centerX": {
-      "type": "Offset | 'auto'",
+      "type": {"union": ["Offset", "'auto'"]},
       "description": "The horizontal position of the widget's center relative to the parent's center.",
       "const": true,
       "default": "'auto'",
       "readonly": true
     },
     "centerY": {
-      "type": "Offset | 'auto'",
+      "type": {"union": ["Offset", "'auto'"]},
       "description": "The vertical position of the widget's center relative to the parent's center.",
       "const": true,
       "default": "'auto'",
       "readonly": true
     },
     "baseline": {
-      "type": "SiblingReference | 'auto'",
+      "type": {"union": ["SiblingReference", "'auto'"]},
       "description": "The vertical position of the widget's baseline relative to a sibling widget.",
       "const": true,
       "default": "'auto'",

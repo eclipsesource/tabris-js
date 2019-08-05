@@ -1,9 +1,18 @@
 {
   "type": "ContentView",
-  "generics": "ChildType extends Widget = Widget",
+  "category": "widget",
+  "generics": [
+     {
+       "name": "ChildType",
+       "extends": "Widget",
+       "default": "Widget"
+     }
+  ],
   "description": "A composite that does not require (or support) a parent to be visible. It also can not be disposed. Every instance of `ContentView` is controlled by an associated non-widget object, either an instance of `Popover` or the global `tabris` object.",
-  "extends": "Composite",
-  "ts_extends": "Composite<ChildType>",
+  "extends": {
+    "interface": "Composite",
+    "generics": ["ChildType"]
+  },
   "object": "contentView",
   "constructor": {
     "access": "protected",

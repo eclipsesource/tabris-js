@@ -1,5 +1,6 @@
 {
   "type": "Module",
+  "category": "core",
   "description": "Represents a JavaScript module as outlined in the commonJS standard.",
   "constructor": {
     "access": "public",
@@ -10,11 +11,11 @@
        },
        {
          "name": "parent",
-         "type": "Module|null"
+         "type": {"union": ["Module", "null"]}
        },
        {
          "name": "content",
-         "type": "ModuleLoader|object"
+         "type": {"union": ["ModuleLoader", "object"]}
        }
     ]
   },

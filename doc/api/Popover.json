@@ -1,12 +1,16 @@
 {
   "type": "Popover",
+  "category": "popup",
   "extends": "Popup",
   "constructor": {
     "access": "public",
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<Popover>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["Popover"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object on the `Popover`."
       }
@@ -28,13 +32,11 @@
       "description": "The root widget element containing all children of Popover."
     },
     "width": {
-      "type": "dimension",
-      "ts_type": "Dimension",
+      "type": "Dimension",
       "description": "The width of the `Popover` when shown in windowed mode on large screen devices."
     },
     "height": {
-      "type": "dimension",
-      "ts_type": "Dimension",
+      "type": "Dimension",
       "description": "The height of the `Popover` when shown in windowed mode on large screen devices"
     },
     "anchor": {

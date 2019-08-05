@@ -1,5 +1,6 @@
 {
   "type": "ActivityIndicator",
+  "category": "widget",
   "description": "A widget representing a spinning indicator for indeterminate loading / processing time.",
   "extends": "Widget",
   "constructor": {
@@ -7,7 +8,10 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<ActivityIndicator>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["ActivityIndicator"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }

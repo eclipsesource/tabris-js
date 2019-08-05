@@ -1,5 +1,6 @@
 {
   "type": "StatusBar",
+  "category": "service",
   "extends": "NativeObject",
   "description": "The status bar is the area where notifications, status icons and device time are displayed. The singleton instance can be accessed via `statusBar`.",
   "constructor": {
@@ -7,7 +8,10 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<StatusBar>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["StatusBar"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }

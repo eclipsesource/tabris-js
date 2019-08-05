@@ -1,15 +1,26 @@
 {
   "type": "TabFolder",
-  "generics": "ChildType extends Tab = Tab",
+  "category": "widget",
+  "generics": [{
+    "name": "TabType",
+    "extends": "Tab",
+    "default": "Tab",
+    "description": "The common widget class of the children this TabFolder can contain."
+  }],
   "description": "A widget that can switch between [tabs](Tab). Only children of type `Tab` are supported. Since the TabFolder does not compute its own size, the width and height must be defined by the respective layout properties (e.g. either `width` or `left` and `right` must be specified).",
-  "extends": "Composite",
-  "ts_extends": "Composite<ChildType>",
+  "extends": {
+    "interface": "Composite",
+    "generics": ["TabType"]
+  },
   "constructor": {
     "access": "public",
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<TabFolder>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["TabFolder"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -46,8 +57,7 @@
       "description": "Enables swiping through tabs."
     },
     "selection": {
-      "type": "Tab",
-      "ts_type": "ChildType",
+      "type": "TabType",
       "description": "The currently selected tab."
     },
     "selectionIndex": {

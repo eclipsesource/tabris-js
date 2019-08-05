@@ -1,13 +1,22 @@
 {
   "type": "StackLayout",
+  "category": "widget",
   "extends": "Layout",
   "constructor": {
     "access": "public",
     "parameters": [
       {
-        "name": "parameterObject",
+        "name": "options",
         "description": "Sets the alignment and spacing properties.",
-        "type": "{spacing?: number, alignment?: 'left'|'centerX'|'stretchX'|'right'}",
+        "type": {
+          "map": {
+            "spacing": {"type": "number", "optional": true},
+            "alignment": {
+              "type": {"union": ["'left'", "'centerX'", "'stretchX'", "'right'"]},
+              "optional": true
+            }
+          }
+        },
         "optional": true
       }
     ]
@@ -22,7 +31,7 @@
       "readonly": true
     },
     "alignment": {
-      "type": "'left'|'centerX'|'stretchX'|'right'",
+      "type": {"union": ["'left'", "'centerX'", "'stretchX'", "'right'"]},
       "const": true,
       "default": "'left'",
       "description": "Determines the horizontal placement of the children. For the `stretchX` value to work correctly the composite needs to be given a width either by setting `width` or by setting `left` and `right`.",

@@ -1,5 +1,6 @@
 {
   "type": "Action",
+  "category": "widget",
   "description": "An executable item that is integrated in the application's navigation menu. Add a *select* listener to react to action taps.",
   "extends": "Widget",
   "constructor": {
@@ -7,7 +8,10 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<Action>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["Action"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -55,12 +59,21 @@
     },
     "siblings": [
       {
-        "generics": "Result extends Widget = Action|Page",
+        "generics": [
+          {
+            "name": "Result",
+            "extends": "Widget",
+            "default": {"union": ["Action", "Page"]}
+          }
+        ],
         "parameters": [
           {
             "name": "selector",
             "type": "Selector",
-            "ts_type": "Selector<Widget, Result>",
+            "ts_type": {
+              "interface": "Selector",
+              "generics": ["Widget", "Result"]
+            },
             "optional": true,
             "description": "A selector expression or a predicate function to filter the results."
           }

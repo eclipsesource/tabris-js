@@ -1,12 +1,16 @@
 {
   "type": "ActionSheet",
+  "category": "popup",
   "extends": "Popup",
   "constructor": {
     "access": "public",
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<ActionSheet>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["ActionSheet"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -24,10 +28,13 @@
       "description": "A descriptive message for the available actions."
     },
     "actions": {
-      "type": "{title: string, image?: ImageValue, style?: 'default'|'cancel'|'destructive'}[]",
-      "jsxType": "ActionSheetItem",
+      "type": {
+        "interface": "Array",
+        "generics": ["ActionSheetItem"]
+      },
+      "ts_type": "Array<{title: string, image?: ImageValue, style?: 'default'|'cancel'|'destructive'}>",
       "jsxContentProperty": true,
-      "description": "An array of objects describing the actions to be displayed. Each action must have a title and it can also have an image. Actions with the style `cancel` or `destructive` are displayed in a special way.\n\nNote: On iPad, an action with style `cancel` will not be shown in the ActionSheet as per [Apple's design approach](https://developer.apple.com/documentation/uikit/windows_and_screens/getting_the_user_s_attention_with_alerts_and_action_sheets). If such button is added tapping outside of ActionSheet is equivalent to pressing the `cancel` action on iPad. In case of tapping outside an appropriate event will be sent by the native side as if such button was pressed."
+      "description": "An array of objects describing the actions to be displayed. The entries may be instances of `ActionSheetItem` *or plain objects* with some or all of the same properties."
     },
     "jsxAttributes": {
       "const": true,
@@ -40,12 +47,11 @@
     "close": {
       "parameters": {
         "index": {
-          "type": "number|null",
+          "type": {"union": ["number", "null"]},
           "description": "The index of the selected action. If no action was selected the value is `null`."
         },
         "action": {
-          "type": "{title: string, image: ImageValue, style: 'default'|'cancel'|'destructive'}|null",
-          "ts_type": "ActionSheetItem|null",
+          "type": {"union": ["ActionSheetItem", "null"]},
           "description": "A copy of the selected action as an instance of ActionSheetItem. If no action was selected the value is `null`."
         }
       },
@@ -58,8 +64,7 @@
           "description": "The index of the selected action."
         },
         "action": {
-          "type": "{title: string, image: ImageValue, style: 'default'|'cancel'|'destructive'}",
-          "ts_type": "ActionSheetItem",
+          "type": "ActionSheetItem",
           "description": "A copy of the selected action as an instance of ActionSheetItem."
         }
       },

@@ -1,14 +1,25 @@
 {
   "type": "Composite",
+  "category": "widget",
   "description": "An empty widget that can contain other widgets.",
-  "generics": "ChildType extends Widget = Widget",
+  "generics": [
+    {
+      "name": "ChildType",
+      "extends": "Widget",
+      "default": "Widget",
+      "description": "The common widget class of the children this composite can contain."
+    }
+  ],
   "extends": "Widget",
   "constructor": {
     "access": "public",
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<Composite>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["Composite"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -22,7 +33,7 @@
       "type": "JSXAttributes<this> & {children?: JSXChildren<ChildType>}"
     },
     "layout": {
-      "type": "Layout|null",
+      "type": {"union": ["Layout", "null"]},
       "const": true,
       "default": "Layout",
       "description": "The layout manager responsible for interpreting the [`layoutData`](./Widget.md#layoutdata) of the child widgets of this Composite."
@@ -33,7 +44,7 @@
     },
     "$children": {
       "private": true,
-      "type": "Widget[]"
+      "type": {"interface": "Array", "generics": ["Widget"]}
     }
   },
   "methods": {
@@ -42,7 +53,7 @@
         "parameters": [
           {
             "name": "...widgets",
-            "type": "Widget[]",
+            "type": {"interface": "Array", "generics": ["Widget"]},
             "ts_type": "ChildType[]"
           }
         ],
@@ -53,7 +64,7 @@
         "parameters": [
           {
             "name": "widgets",
-            "type": "Widget[]",
+            "type": {"interface": "Array", "generics": ["Widget"]},
             "ts_type": "ChildType[]"
           }
         ],
@@ -74,7 +85,13 @@
     ],
     "children": [
       {
-        "generics": "Result extends ChildType = ChildType",
+        "generics": [
+          {
+            "name": "Result",
+            "extends": "ChildType",
+            "default": "ChildType"
+          }
+        ],
         "parameters": [
           {
             "name": "selector",
@@ -84,14 +101,23 @@
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],
-        "returns": "WidgetCollection",
+        "returns": {
+          "interface": "WidgetCollection",
+          "generics": ["ChildType"]
+        },
         "ts_returns": "WidgetCollection<Result>",
         "description": "Returns a (possibly empty) collection of all children of this widget that match the given selector.\n\nWhen writing custom UI components it may be useful to overwrite this method to prevent access to the internal children by external code. Doing so also affects `find` and `apply`, on this widget as well as on all parents, thereby preventing accidental clashes of widget id or class values. See also `_children`, `_find` and `_apply`."
       }
     ],
     "_children": [
       {
-        "generics": "Result extends ChildType = ChildType",
+        "generics": [
+          {
+            "name": "Result",
+            "extends": "ChildType",
+            "default": "ChildType"
+          }
+        ],
         "protected": true,
         "parameters": [
           {
@@ -107,48 +133,59 @@
         "description": "Identical to the `children` method, but intended to be used by subclasses in case the `children` method was overwritten. See `children` for details."
       }
     ],
-    "find": [
-      {
-        "generics": "Result extends Widget = Widget",
-        "parameters": [
-          {
-            "name": "selector",
-            "type": "Selector",
-            "ts_type": "Selector<Widget, Result>",
-            "optional": true,
-            "description": "A selector expression or a predicate function to filter the results."
-          }
-        ],
-        "returns": "WidgetCollection",
-        "ts_returns": "WidgetCollection<Result>",
-        "description": "Returns a collection containing all descendants of all widgets in this collection that match the given selector.\n\nIf you wish to always exclude specific \"internal\" children from the result, overwrite the `children` method on their parent. See `children` for details."
-      }
-    ],
-    "_find": [
-      {
-        "generics": "Result extends Widget = Widget",
-        "protected": true,
-        "parameters": [
-          {
-            "name": "selector",
-            "type": "Selector",
-            "ts_type": "Selector<Widget, Result>",
-            "optional": true,
-            "description": "A selector expression or a predicate function to filter the results."
-          }
-        ],
-        "returns": "WidgetCollection",
-        "ts_returns": "WidgetCollection<Result>",
-        "description": "Identical to the `find` method, but intended to be used by subclasses in case the `children` method was overwritten. See `children` for details."
-      }
-    ],
+    "find": {
+      "generics": [
+        {
+          "name": "Result",
+          "extends": "ChildType",
+          "default": "ChildType"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "selector",
+          "type": "Selector",
+          "ts_type": "Selector<Widget, Result>",
+          "optional": true,
+          "description": "A selector expression or a predicate function to filter the results."
+        }
+      ],
+      "returns": "WidgetCollection",
+      "ts_returns": "WidgetCollection<Result>",
+      "description": "Returns a collection containing all descendants of all widgets in this collection that match the given selector.\n\nIf you wish to always exclude specific \"internal\" children from the result, overwrite the `children` method on their parent. See `children` for details."
+    },
+    "_find": {
+      "generics": [
+        {
+          "name": "Result",
+          "extends": "Widget",
+          "default": "Widget"
+        }
+      ],
+      "protected": true,
+      "parameters": [
+        {
+          "name": "selector",
+          "type": "Selector",
+          "ts_type": "Selector<Widget, Result>",
+          "optional": true,
+          "description": "A selector expression or a predicate function to filter the results."
+        }
+      ],
+      "returns": "WidgetCollection",
+      "ts_returns": "WidgetCollection<Result>",
+      "description": "Identical to the `find` method, but intended to be used by subclasses in case the `children` method was overwritten. See `children` for details."
+    },
     "apply": {
       "parameters": [
         {
           "name": "properties",
-          "type": "object",
-          "ts_type": "{[selector: string]: Properties<Widget>}",
-          "description": "An object in the format `{Selector: {property: value, property: value, ... }, Selector: ...}`"
+          "type": {
+            "map": {
+              "selector": {"interface": "Properties", "generics": ["Widget"]}
+            },
+            "indexType": "SelectorString"
+          }
         }
       ],
       "returns": "this",
@@ -159,9 +196,12 @@
       "parameters": [
         {
           "name": "properties",
-          "type": "object",
-          "ts_type": "{[selector: string]: Properties<Widget>}",
-          "description": "An object in the format `{Selector: {property: value, property: value, ... }, Selector: ...}`"
+          "type": {
+            "map": {
+              "selector": {"interface": "Properties", "generics": ["Widget"]}
+            },
+            "indexType": "SelectorString"
+          }
         }
       ],
       "returns": "this",
@@ -172,7 +212,11 @@
       "parameters": [
         {
           "name": "props",
-          "type": "{layout?: Layout}",
+          "type": {
+            "map": {
+              "layout": {"type": "Layout", "optional": true}
+            }
+          },
           "optional": true
         }
       ],

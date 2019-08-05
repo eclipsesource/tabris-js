@@ -1,5 +1,6 @@
 {
   "type": "Printer",
+  "category": "service",
   "object": "printer",
   "extends": "NativeObject",
   "description": "Allows to print PDF documents or images from the device. A printer object is always available from tabris.printer.",
@@ -17,12 +18,27 @@
         },
         {
           "name": "options",
-          "type": "{jobName?: string, contentType?: string}",
+          "type": {
+            "map": {
+              "jobName": {
+                "type": "string",
+                "description": "The document name shown the user.",
+                "optional": true
+              },
+              "contentType": {
+                "type": "string",
+                "default": "application/pdf",
+                "description": "Format of the document. Should be set to `image/*` when printing an image.",
+                "optional": true
+              }
+            }
+          },
           "optional": true,
-          "description": "An optional set of configuration parameters. Setting the `jobName` allows to provide the document name shown the user. The `contentType` is required when printing a specific document format. By default `application/pdf` is used but it needs to be changed to `image/*` when printing an image"
+          "description": "An optional set of configuration parameters."
         }
       ],
-      "returns": "Promise<any>",
+      "returns": "Promise",
+      "ts_returns": "Promise<void>",
       "description": "Prints a PDF document using the native printing capabilities of the device. The data has to be provided as an `ArrayBuffer` or typed array. The method returns a promise which resolves to an event object with the property `result`. The `result` can either be `completed` or `canceled`. When printing fails the promise is rejected with an `Error` parameter containing additional information about the error. Supported on iOS and Android 4.4+."
     }
   },

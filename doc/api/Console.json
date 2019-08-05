@@ -1,6 +1,7 @@
 {
   "type": "Console",
-  "description": "The console object provides access to the debugging console",
+  "category": "service",
+  "description": "The console object provides access to the [debugging console](../debug.md).",
   "namespace": "global",
   "object": "console",
   "constructor": {
@@ -19,7 +20,7 @@
           {
             "description": "A list of JavaScript values to output.",
             "name": "...values",
-            "type": "any[]"
+            "type": {"interface": "Array", "generics": ["any"]}
           }
         ]
       }
@@ -69,7 +70,7 @@
           {
             "description": "A list of JavaScript values to output.",
             "name": "...values",
-            "type": "any[]"
+            "type": {"interface": "Array", "generics": ["any"]}
           }
         ]
       }
@@ -91,7 +92,7 @@
           {
             "description": "A list of JavaScript values to output",
             "name": "...values",
-            "type": "any[]"
+            "type": {"interface": "Array", "generics": ["any"]}
           }
         ]
       }
@@ -103,7 +104,7 @@
           {
             "description": "A list of JavaScript values to output.",
             "name": "...values",
-            "type": "any[]"
+            "type": {"interface": "Array", "generics": ["any"]}
           }
         ]
       }
@@ -115,7 +116,7 @@
           {
             "description": "A list of JavaScript values to output.",
             "name": "...values",
-            "type": "any[]"
+            "type": {"interface": "Array", "generics": ["any"]}
           }
         ]
       }
@@ -127,7 +128,7 @@
           {
             "description": "A list of JavaScript values to output.",
             "name": "...values",
-            "type": "any[]"
+            "type": {"interface": "Array", "generics": ["any"]}
           }
         ]
       }
@@ -139,7 +140,7 @@
           {
             "description": "A list of JavaScript values to output.",
             "name": "...values",
-            "type": "any[]"
+            "type": {"interface": "Array", "generics": ["any"]}
           }
         ]
       }

@@ -1,5 +1,6 @@
 {
   "type": "FileSystem",
+  "category": "service",
   "object": "fs",
   "extends": "NativeObject",
   "description": "The `fs` object provides methods to read and write files. All methods are asynchronous and return a promise.",
@@ -30,7 +31,10 @@
             "description": "The path of the file to read."
           }
         ],
-        "returns": "Promise<ArrayBuffer>",
+        "returns": {
+          "interface": "Promise",
+          "generics": ["ArrayBuffer"]
+        },
         "description": "Reads the given file and returns a promise that resolves to the contents of the file on success and rejects with an Error in case of a failure. The file contents are returned as an ArrayBuffer."
       },
       {
@@ -46,7 +50,10 @@
             "description": "The encoding to use to read text files."
           }
         ],
-        "returns": "Promise<string>",
+        "returns": {
+          "interface": "Promise",
+          "generics": ["string"]
+        },
         "description": "Reads the given text file and returns a promise that resolves to the contents of the file on success and rejects with an Error in case of a failure. The file contents are returned as a string."
       }
     ],
@@ -58,7 +65,13 @@
           "description": "The path of the directory to read."
         }
       ],
-      "returns": "Promise<string[]>",
+      "returns": {
+        "interface": "Promise",
+        "generics": [{
+          "interface": "Array",
+          "generics": ["string"]
+        }]
+      },
       "description": "Reads the contents of a given directory. Returns a promise that resolves on success to an array of the names of the files in the directory excluding '.' and '..'. In case of failure, the Promise rejects with an Error."
     },
     "writeFile": [
@@ -71,11 +84,12 @@
           },
           {
             "name": "data",
-            "type": "ArrayBuffer|Blob",
+            "type": {"union": ["ArrayBuffer", "Blob"]},
             "description": "The contents to write to the file."
           }
         ],
-        "returns": "Promise<void>",
+        "returns": "Promise",
+        "ts_returns": "Promise<void>",
         "description": "Writes the given binary contents to the given file. If the file exists, it is overwritten, otherwise it is created. Returns a promise that resolves on success and rejects with an Error in case of a failure."
       },
       {
@@ -97,7 +111,8 @@
             "description": "The encoding to use to write a text file. When omitted, `utf-8` will be used."
           }
         ],
-        "returns": "Promise<void>",
+        "returns": "Promise",
+        "ts_returns": "Promise<void>",
         "description": "Writes the given text to the given file using the given encoding or `utf-8` if no encoding is specified. If the file exists, it is overwritten, otherwise it is created. Returns a promise that resolves on success and rejects with an Error in case of a failure."
       }
     ],
@@ -109,7 +124,8 @@
           "description": "The path of the file to remove."
         }
       ],
-      "returns": "Promise<void>",
+      "returns": "Promise",
+      "ts_returns": "Promise<void>",
       "description": "Removes the given file. Returns a promise that resolves on success and rejects with an Error in case of a failure."
     }
   },

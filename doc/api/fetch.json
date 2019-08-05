@@ -1,12 +1,13 @@
 {
   "title": "fetch",
+  "category": "net",
   "namespace": "global",
   "methods": {
     "fetch": {
       "parameters": [
         {
           "name": "url",
-          "type": "string | Request"
+          "type": {"union": ["string", "Request"]}
         },
         {
           "name": "init",
@@ -14,7 +15,10 @@
           "optional": true
         }
       ],
-      "returns": "Promise<Response>"
+      "returns": {
+        "interface": "Promise",
+        "generics": ["Response"]
+      }
     }
   },
   "links": [

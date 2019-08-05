@@ -1,5 +1,6 @@
 {
   "type": "Tabris",
+  "category": "service",
   "description": "The main object exported by the `tabris` module hosting all the classes and singletons it provides (not listed here). It also provides low-level framework API required for bootstrapping and for some extensions/plug-ins. <b>Caution!</b>: These APIs interact with the internals of the framework. Only use them if you know what you are doing.\n\nThis object is also available in the global namespace as `tabris`. For technical reasons the low-level API is available in TypeScript only when the object is explicitly imported.",
   "extends": "NativeObject",
   "object": "tabris",
@@ -35,7 +36,7 @@
         {
           "name": "options",
           "optional": true,
-          "type": "{headless: boolean}"
+          "type": {"map": {"headless": {"type": "boolean", "optional": true}}}
         }
       ],
       "description": "Initializes the framework and triggers the 'start' event."
@@ -96,7 +97,7 @@
           "type": "string"
         },
         "level": {
-          "type": "'debug'|'info'|'log'|'warn'|'error'"
+          "type": {"union": ["'debug'", "'info'", "'log'", "'warn'", "'error'"]}
         }
       }
     },

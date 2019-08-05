@@ -1,5 +1,6 @@
 {
   "type": "Request",
+  "category": "net",
   "namespace": "global",
   "description": "Represents an HTTP Request as used by `fetch()`.",
   "constructor": {
@@ -7,7 +8,7 @@
     "parameters": [
       {
         "name": "input",
-        "type": "string | Request"
+        "type": {"union": ["string", "Request"]}
       },
       {
         "name": "init",
@@ -112,22 +113,41 @@
       "returns": "Request"
     },
     "arrayBuffer": {
-      "returns": "Promise<ArrayBuffer>"
+      "returns": {
+        "interface": "Promise",
+        "generics": ["ArrayBuffer"]
+      }
     },
     "blob": {
-      "returns": "Promise<Blob>"
+      "returns": {
+        "interface": "Promise",
+        "generics": ["Blob"]
+      }
     },
     "text": {
-      "returns": "Promise<string>"
+      "returns": {
+        "interface": "Promise",
+        "generics": ["string"]
+      }
     },
     "json": [
       {
-        "returns": "Promise<any>"
+        "returns": {
+          "interface": "Promise",
+          "generics": ["any"]
+        }
       },
       {
         "ts_only": true,
-        "generics": "T",
-        "returns": "Promise<T>"
+        "generics": [
+          {
+            "name": "T"
+          }
+        ],
+        "returns": {
+          "interface": "Promise",
+          "generics": ["T"]
+        }
       }
     ]
   }

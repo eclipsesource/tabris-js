@@ -1,5 +1,6 @@
 {
   "type": "Headers",
+  "category": "net",
   "namespace": "global",
   "description": "Represents a set of HTTP headers as used by `fetch()`.",
   "constructor": {
@@ -7,7 +8,13 @@
     "parameters": [
       {
         "name": "headers",
-        "type": "Headers | Array<[string, string]> | {[header: string]: string}",
+        "type": {
+          "union": [
+            "Headers",
+            {"interface": "Array", "generics": [{"tuple": ["string", "string"]}]},
+            {"map": {"header": "string"}, "indexType": "string"}
+          ]
+        },
         "optional": true
       }
     ]
@@ -21,7 +28,10 @@
         }
       ],
       "description": "Returns all values associated with a given header.",
-      "returns": "string[]"
+      "returns": {
+        "interface": "Array",
+        "generics": ["string"]
+      }
     },
     "get": {
       "parameters": [
@@ -31,7 +41,7 @@
         }
       ],
       "description": "Returns the first value associated with a given header.",
-      "returns": "string|null"
+      "returns": {"union": ["string", "null"]}
     },
     "has": {
       "parameters": [
@@ -79,19 +89,31 @@
       "description": "Adds a string value associated with a given header. Any existing values for that header will be replaced."
     },
     "keys": {
-      "returns": "IterableIterator<string>"
+      "returns": {
+        "interface": "IterableIterator",
+        "generics": ["string"]
+      }
     },
     "values": {
-      "returns": "IterableIterator<string>"
+      "returns": {
+        "interface": "IterableIterator",
+        "generics": ["string"]
+      }
     },
     "entries": {
-      "returns": "IterableIterator<[string, string]>"
+      "returns": {
+        "interface": "IterableIterator",
+        "generics": [{"tuple": ["string", "string"]}]
+      }
     },
     "forEach": {
       "parameters": [
         {
           "name": "callback",
-          "type": "(value: string, name: string) => void"
+          "type": {
+            "callback": [{"name": "value", "type": "string"}, {"name": "name", "type": "string"}],
+            "returns": {"type": "void"}
+          }
         }
       ]
     },

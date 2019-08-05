@@ -1,5 +1,6 @@
 {
   "type": "Canvas",
+  "category": "widget",
   "description": "Canvas is a widget that can be used to draw graphics using a [canvas context](./CanvasContext.md).",
   "extends": "Composite",
   "constructor": {
@@ -7,7 +8,10 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<Canvas>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["Canvas"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }

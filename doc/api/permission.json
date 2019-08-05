@@ -1,5 +1,6 @@
 {
   "type": "Permission",
+  "category": "service",
   "object": "permission",
   "extends": "NativeObject",
   "description": "Allows to request runtime permissions which are required to access certain device features. Trying to access a Tabris.js API without a required permission will throw an `Error`.\n\nA permission can be either a category (supported on Android and iOS) or a specific Android permission name.\n\n See the [permissions documentation](../permissions.md) for full details on how to handle runtime permissions.",
@@ -12,7 +13,7 @@
       "parameters": [
         {
           "name": "...permissions",
-          "type": "string[]",
+          "type": {"interface": "Array", "generics": ["string"]},
           "description": "A list of permissions to get the authorization status for."
         }
       ],
@@ -23,7 +24,7 @@
       "parameters": [
         {
           "name": "...permissions",
-          "type": "string[]",
+          "type": {"interface": "Array", "generics": ["string"]},
           "description": "A list of permissions to check its authorization status."
         }
       ],
@@ -34,7 +35,7 @@
       "parameters": [
         {
           "name": "...permissions",
-          "type": "string[]",
+          "type": {"interface": "Array", "generics": ["string"]},
           "description": "A list of permissions to check if authorization is possible."
         }
       ],
@@ -45,18 +46,23 @@
       "parameters": [
         {
           "name": "...permissions",
-          "type": "string[]",
+          "type": {"interface": "Array", "generics": ["string"]},
           "description": "A list of permissions to request authorization for."
         }
       ],
-      "returns": "Promise<string>",
+      "returns": {
+        "interface": "Promise",
+        "generics": ["string"]
+      },
       "description": "Request authorization for a set of permissions.\n\nIf any of the permissions allow to request authorization, the method call will prompt the user to grant the permission and returns the result in the resolved promise. If the status can not be changed, the current status is returned by the resolved promise."
     },
     "withAuthorization": {
       "parameters": [
         {
           "name": "permissions",
-          "type": "string | string[]",
+          "type": {
+            "union": ["string", {"interface": "Array", "generics": ["string"]}]
+          },
           "description": "An individual permission or a list of permissions to gain authorization for."
         },
         {

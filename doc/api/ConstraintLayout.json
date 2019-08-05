@@ -1,11 +1,12 @@
 {
   "type": "ConstraintLayout",
+  "category": "data",
   "extends": "Layout",
   "constructor": {
     "access": "public",
     "parameters": [
       {
-        "name": "parameterObject",
+        "name": "options",
         "type": "{}",
         "optional": true
       }

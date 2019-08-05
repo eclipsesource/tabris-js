@@ -1,12 +1,16 @@
 {
   "type": "TimeDialog",
+  "category": "popup",
   "extends": "Popup",
   "constructor": {
     "access": "public",
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<TimeDialog>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["TimeDialog"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -29,7 +33,7 @@
     "close": {
       "parameters": {
         "date": {
-          "type": "Date|null",
+          "type": {"union": ["Date", "null"]},
           "description": "The selected time. Can be `null` when no date was selected."
         }
       },

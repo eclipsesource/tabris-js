@@ -1,7 +1,53 @@
 ---
 ---
-Data Types
-==========
+Value Types
+===========
+
+## General
+
+### Properties&lt;Widget&gt;
+
+The generic `Properties` type describes an object containing any number of key-value pairs corresponding to the settable properties of a given widget class. Such objects can be givin to a widget constructor or [`set`](./api/NativeObject.md#setproperties) method so set multiple widget properties simultaneously.
+
+```ts
+// Valid:
+video.set({autoPlay: true, url: './myvideo.mp4'});
+// Invalid: duration is read-only and can not be set!
+video.set({duration: 1000});
+```
+
+The TypeScript interface always requires the widget class type parameter:
+
+```ts
+// Correct:
+let props: Properties<Video> = {autoPlay: true, url: './myvideo.mp4'};
+// Compiler Error: duration is read-only and can not be set!
+props = {duration: 1000};
+```
+
+This interface is especially relevant when writing custom components in TypeScript, where it is needed to define the constructor:
+
+```tsx
+class CustomComponent extends Composite {
+
+  constructor(properties: Properties<CustomComponent>) {
+    super(properties);
+  }
+
+}
+```
+
+### PropertyChangedEvent&lt;TargetType, ValueType&gt;
+
+An event object fired when an object property changes. It is an instance of [`EventObject`](./api/EventObject.md) that provides an additional property `value` containing the new value.
+
+The TypeScript interface is generic with two parameter, the type of the target and the type of the value that changed:
+
+```ts
+interface PropertyChangedEvent<TargetType, ValueType> extends EventObject<TargetType> {
+  readonly value: ValueType
+}
+```
 
 ## Layout API
 
@@ -586,11 +632,6 @@ Property | Description
 `width`  | Width in pixels of the ImageData.
 `height` | Height in pixels of the ImageData.
 
-## Selector API
-
-### Selector
-
-See [this article](./selector.md).
 
 ## Animation API
 
@@ -653,8 +694,3 @@ Example:
 ```
 This transformation will make the widget twice as big and rotate it by 135&deg;.
 
-## Event Handling
-
-### PropertyChangedEvent
-
-An event object fired when an object property changes. It is an instance of [`EventObject`](./api/EventObject.md) that provides an additional property `value` containing the new value.

@@ -1,5 +1,6 @@
 {
   "type": "Page",
+  "category": "widget",
   "description": "A container representing a single page of a NavigationView widget.",
   "extends": "Composite",
   "constructor": {
@@ -7,7 +8,10 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<Page>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["Page"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -54,7 +58,13 @@
     },
     "siblings": [
       {
-        "generics": "Result extends Widget = Action|Page",
+        "generics": [
+          {
+            "name": "Result",
+            "extends": "Widget",
+            "default": {"union": ["Action", "Page"]}
+          }
+        ],
         "parameters": [
           {
             "name": "selector",

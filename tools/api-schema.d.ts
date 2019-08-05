@@ -5,9 +5,50 @@
  */
 
 export type TabrisJsApiDefinitionJsonSchema = Api;
+export type TypeReference =
+  | string
+  | {
+      interface: string;
+      generics: Generics;
+    }
+  | {
+      union: TypeReference[];
+    }
+  | {
+      tuple: TypeReference[];
+    }
+  | {
+      map: {
+        [k: string]: Property;
+      };
+    }
+  | {
+      map: {
+        [k: string]: TypeReference;
+      };
+      indexType: "string" | "number" | "SelectorString";
+    }
+  | {
+      callback: {
+        type: TypeReference;
+        name: string;
+      }[];
+      returns?: {
+        type: TypeReference;
+        name?: string;
+      };
+    };
+export type Generics = TypeReference[];
 export type Links = (Link | Snippet)[];
+export type GenericsDef = {
+  name: string;
+  default?: TypeReference;
+  extends?: TypeReference;
+  description?: string;
+}[];
 
 export interface Api {
+  category: "core" | "service" | "widget" | "popup" | "net" | "data";
   /**
    * The title of the document. Will default to object or type name.
    */
@@ -26,12 +67,8 @@ export interface Api {
    * Name of the instance (for singletons)
    */
   object?: string;
-  extends?: string;
-  ts_extends?: string;
-  /**
-   * Typescript only
-   */
-  generics?: string;
+  extends?: TypeReference;
+  generics?: GenericsDef;
   constructor?: {
     access: "public" | "protected" | "private";
     parameters?: Parameter[];
@@ -55,20 +92,10 @@ export interface Api {
   statics?: Statics;
   links?: Links;
 }
-export interface Parameter {
-  name: string;
-  description?: string;
-  type: string;
-  /**
-   * Overrides "type" for TypeScript declarations
-   */
-  ts_type?: string;
-  /**
-   * Defaults to false
-   */
-  optional?: boolean;
-}
 /**
+ * This interface was referenced by `undefined`'s JSON-Schema definition
+ * via the `patternProperty` "^[a-zA-Z]*$".
+ *
  * This interface was referenced by `undefined`'s JSON-Schema definition
  * via the `patternProperty` "(^[_\$]?[a-z]\w+$)|(^\[.*\]$)".
  *
@@ -81,11 +108,43 @@ export interface Parameter {
 export interface Property {
   description?: string;
   changeEventDescription?: string;
-  type: string;
+  type: TypeReference;
   /**
    * Overrides "type" for TypeScript declarations
    */
-  ts_type?: string;
+  ts_type?:
+    | string
+    | {
+        interface: string;
+        generics: Generics;
+      }
+    | {
+        union: TypeReference[];
+      }
+    | {
+        tuple: TypeReference[];
+      }
+    | {
+        map: {
+          [k: string]: Property;
+        };
+      }
+    | {
+        map: {
+          [k: string]: TypeReference;
+        };
+        indexType: "string" | "number" | "SelectorString";
+      }
+    | {
+        callback: {
+          type: TypeReference;
+          name: string;
+        }[];
+        returns?: {
+          type: TypeReference;
+          name?: string;
+        };
+      };
   /**
    * Exclude this property from documentation
    */
@@ -95,17 +154,13 @@ export interface Property {
    */
   protected?: boolean;
   /**
-   * Mark the property as optional
+   * Is the property optional?
    */
   optional?: boolean;
   /**
    * Mark property as private
    */
   private?: boolean;
-  /**
-   * The type of JSX element that may be used to express the value(s) of this property
-   */
-  jsxType?: string;
   /**
    * JSX child elements of the matching type are mapped to this property
    */
@@ -153,19 +208,94 @@ export interface Snippet {
   title?: string;
   snippet: string;
 }
+export interface Parameter {
+  name: string;
+  description?: string;
+  type: TypeReference;
+  /**
+   * Overrides "type" for TypeScript declarations
+   */
+  ts_type?:
+    | string
+    | {
+        interface: string;
+        generics: Generics;
+      }
+    | {
+        union: TypeReference[];
+      }
+    | {
+        tuple: TypeReference[];
+      }
+    | {
+        map: {
+          [k: string]: Property;
+        };
+      }
+    | {
+        map: {
+          [k: string]: TypeReference;
+        };
+        indexType: "string" | "number" | "SelectorString";
+      }
+    | {
+        callback: {
+          type: TypeReference;
+          name: string;
+        }[];
+        returns?: {
+          type: TypeReference;
+          name?: string;
+        };
+      };
+  /**
+   * Defaults to false
+   */
+  optional?: boolean;
+}
 export interface Method {
   parameters?: Parameter[];
-  returns?: string;
+  returns?: TypeReference;
+  docs_only?: boolean;
   ts_only?: boolean;
   /**
    * Overrides "returns" for TypeScript declarations
    */
-  ts_returns?: string;
+  ts_returns?:
+    | string
+    | {
+        interface: string;
+        generics: Generics;
+      }
+    | {
+        union: TypeReference[];
+      }
+    | {
+        tuple: TypeReference[];
+      }
+    | {
+        map: {
+          [k: string]: Property;
+        };
+      }
+    | {
+        map: {
+          [k: string]: TypeReference;
+        };
+        indexType: "string" | "number" | "SelectorString";
+      }
+    | {
+        callback: {
+          type: TypeReference;
+          name: string;
+        }[];
+        returns?: {
+          type: TypeReference;
+          name?: string;
+        };
+      };
   description?: string;
-  /**
-   * TypeScript only
-   */
-  generics?: string;
+  generics?: GenericsDef;
   platforms?: Platforms;
   protected?: boolean;
   private?: boolean;

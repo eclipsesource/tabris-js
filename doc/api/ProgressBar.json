@@ -1,5 +1,6 @@
 {
   "type": "ProgressBar",
+  "category": "widget",
   "description": "A widget representing a numeric value as a horizontal bar with a growing indicator.",
   "extends": "Widget",
   "constructor": {
@@ -7,7 +8,10 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<ProgressBar>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["ProgressBar"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }

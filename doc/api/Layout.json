@@ -1,10 +1,11 @@
 {
   "type": "Layout",
+  "category": "data",
   "constructor": {
     "access": "protected",
     "parameters": [
       {
-        "name": "parameterObject",
+        "name": "options",
         "type": "{}"
       }
     ]

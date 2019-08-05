@@ -1,13 +1,17 @@
 {
   "type": "NavigationBar",
   "extends": "NativeObject",
+  "category": "service",
   "description": "The navigation bar is the onscreen area where *Back*, *Home* and similar buttons are displayed. The singleton instance can be accessed via `navigationBar` and is only supported on Android.",
   "constructor": {
     "access": "private",
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<NavigationBar>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["NavigationBar"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }

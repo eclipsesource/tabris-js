@@ -1,5 +1,6 @@
 {
   "type": "FormData",
+  "category": "data",
   "namespace": "global",
   "constructor": {
     "access": "public"
@@ -14,7 +15,10 @@
         }
       ],
       "description": "Returns all the values associated with a given key.",
-      "returns": "Array<string|File>"
+      "returns": {
+        "interface": "Array",
+        "generics": ["string", "File"]
+      }
     },
     "get": {
       "parameters": [
@@ -24,7 +28,7 @@
         }
       ],
       "description": "Returns the first value associated with a given key.",
-      "returns": "string|File|null"
+      "returns": {"union": ["string", "File", "null"]}
     },
     "has": {
       "parameters": [
@@ -67,7 +71,7 @@
           },
           {
             "name": "value",
-            "type": "Blob|File"
+            "type": {"union": ["Blob", "File"]}
           },
           {
             "name": "filename",
@@ -100,7 +104,7 @@
           },
           {
             "name": "value",
-            "type": "Blob|File"
+            "type": {"union": ["Blob", "File"]}
           },
           {
             "name": "filename",
@@ -112,17 +116,29 @@
       }
     ],
     "keys": {
-      "returns": "IterableIterator<string>"
+      "returns": {
+        "interface": "IterableIterator",
+        "generics": ["string"]
+      }
     },
     "values": {
-      "returns": "IterableIterator<string|File>"
+      "returns": {
+        "interface": "IterableIterator",
+        "generics": [{"union": ["string", "File"]}]
+      }
     },
     "entries": {
-      "returns": "IterableIterator<[string, string|File]>"
+      "returns": {
+        "interface": "IterableIterator",
+        "generics": [{"tuple": ["string", {"union": ["string", "File"]}]}]
+      }
     },
     "[Symbol.iterator]": {
       "ts_only": true,
-      "returns": "IterableIterator<[string, string|File]>"
+      "returns": {
+        "interface": "IterableIterator",
+        "generics": [{"tuple": ["string", {"union": ["string", "File"]}]}]
+      }
     }
   }
 }

@@ -1,12 +1,16 @@
 {
   "type": "NativeObject",
+  "category": "core",
   "description": "Base class for all objects with a native implementation.",
   "constructor": {
     "access": "protected",
     "parameters": [
       {
         "name": "properties",
-        "type": "{[property: string]: any}",
+        "type": {
+          "map": {"property": "any"},
+          "indexType": "string"
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -32,7 +36,7 @@
     },
     "_isDisposed": {
       "protected": true,
-      "type": "true|undefined"
+      "type": {"union": ["true", "undefined"]}
     },
     "$props": {
       "type": "unknown",
@@ -50,9 +54,9 @@
           },
           {
             "name": "listener",
-            "type": "(event: EventObject) => void",
-            "ts_type": "(event: EventObject<NativeObject>) => void",
-            "description": "The listener function to register. This function will be called with an event object.\n\nIn TypeScript you should use the alternative `Listeners` API, e.g. `widget.onResize(listener);` instead of `widget.on({resize: listener});` The former provides more type information."
+            "type": "Function",
+            "ts_type": "(event: EventObject<NativeObject>) => any",
+            "description": "The listener function to register. This function will be called with an [event object](./EventObject.md).\n\nIn TypeScript you should use the alternative `Listeners` API, e.g. `widget.onResize(listener);` instead of `widget.on({resize: listener});` The former provides more type information."
           },
           {
             "name": "context",
@@ -68,7 +72,10 @@
         "parameters": [
           {
             "name": "listeners",
-            "type": "{event: Listener}",
+            "type": {
+              "map": {"eventType": "Function"},
+              "indexType": "string"
+            },
             "ts_type": "{[event: string]: (event: EventObject<NativeObject>) => void}",
             "description": "A key-value map where the keys are event types and the values are the listeners to register for these events, e.g. `{tap: onTap, scroll: onScroll}`."
           }
@@ -87,8 +94,9 @@
           },
           {
             "name": "listener",
-            "type": "(event: EventObject<NativeObject>) => void",
-            "description": "The listener function to register. This function will be called with an event object."
+            "type": "Function",
+            "ts_type": "(event: EventObject<NativeObject>) => any",
+            "description": "The listener function to register. This function will be called with an [event object](./EventObject.md)."
           },
           {
             "name": "context",
@@ -104,7 +112,10 @@
         "parameters": [
           {
             "name": "listeners",
-            "type": "EventsObject",
+            "type": {
+              "map": {"eventType": "Function"},
+              "indexType": "string"
+            },
             "ts_type": "{[event: string]: (event: EventObject<NativeObject>) => void}",
             "description": "A key-value map where the keys are event types and the values are the listeners to register for these events, e.g. `{tap: onTap, scroll: onScroll}`."
           }
@@ -123,7 +134,8 @@
           },
           {
             "name": "listener",
-            "type": "(event: EventObject<NativeObject>) => void",
+            "type": "Function",
+            "ts_type": "(event: EventObject<NativeObject>) => void",
             "description": "The listener function to remove."
           },
           {
@@ -140,7 +152,10 @@
         "parameters": [
           {
             "name": "listeners",
-            "type": "EventsObject",
+            "type": {
+              "map": {"eventType": "Function"},
+              "indexType": "string"
+            },
             "ts_type": "{[event: string]: (event: EventObject<NativeObject>) => void}",
             "description": "A key-value map where the keys are event types and the values are the listeners to deregister from these events, e.g. `{tap: onTap, scroll: onScroll}`."
           }
@@ -169,7 +184,7 @@
             "description": "The type of event to trigger"
           },
           {
-            "name": "object",
+            "name": "eventData",
             "type": "object",
             "description": "The data to pass to listener functions."
           }
@@ -243,14 +258,38 @@
     ],
     "set": [
       {
-        "generics": "T extends NativeObject = this",
+        "docs_only": true,
         "parameters": [
           {
             "name": "properties",
-            "type": "Properties<T>"
+            "type": {
+              "interface": "Properties",
+              "generics": ["this"]
+            }
           }
         ],
-        "description": "Sets all key-value pairs in the properties object as widget properties.\n\n**Important TypeScript note:** When called on `this` you may need to specify your custom type like this: `this.set<MyComponent>({propA: valueA});`",
+        "description": "Sets all key-value pairs in the properties object as widget properties.\n\n**TypeScript note:** When called on `this` from within a subclass constructor (i.e. a custom component/widget) you may have to use the generic version of this method: `this.set<MySubclass>(...);`",
+        "returns": "this"
+      },
+      {
+        "ts_only": true,
+        "generics": [
+          {
+            "name": "T",
+            "extends": "NativeObject",
+            "default": "this"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "properties",
+            "type": {
+              "interface": "Properties",
+              "generics": ["T"]
+            }
+          }
+        ],
+        "description": "Sets all key-value pairs in the properties object as widget properties.\n\n**TypeScript note:** When called on `this` from within a subclass constructor (i.e. a custom component/widget) you may have to use the generic version of this method: `this.set<MySubclass>(...);`",
         "returns": "this"
       }
     ],
@@ -352,7 +391,10 @@
           {
             "name": "param",
             "optional": true,
-            "type": "{[prop: string]: any}",
+            "type": {
+              "map": {"property": "any"},
+              "indexType": "string"
+            },
             "description": "The first argument (if any) given in the constructor call. Will be forwarded to the `set` method after the native object was created."
           }
         ],
@@ -422,12 +464,12 @@
       "parameters": [
         {
           "name": "propertyNames",
-          "type": "string[]",
+          "type": {"interface": "Array", "generics": ["string"]},
           "description": "List of properties to be set to a new value"
         }
       ],
       "description": "Used by the `set` method to determined in which order the given property values are applied. May be overwritten, but the new implementation must pass the propertyNames through a super call at one point.",
-      "returns": "string[]"
+      "returns": {"interface": "Array", "generics": ["string"]}
     },
     "_trigger": [
       {
@@ -504,7 +546,10 @@
     "_getXMLAttributes": [
       {
         "protected": true,
-        "returns": "Array<[string, any]>",
+        "returns": {
+          "interface": "Array",
+          "generics": [{"tuple": ["string", "any"]}]
+        },
         "description": "Used by `console.dirxml()` to produce part of the XML representation of this object. May be overwritten to modify the output. The return value should be an array of tuples consisting of the attribute name and string representation. The new implementation may make a super call to obtain the default list of attributes printed for this object."
       }
     ],
@@ -666,7 +711,7 @@
             },
             {
               "name": "definitions",
-              "type": "object[]"
+              "type": {"interface": "Array", "generics": ["object"]}
             }
           ]
         }
@@ -700,7 +745,7 @@
             },
             {
               "name": "definitions",
-              "type": "object[]"
+              "type": {"interface": "Array", "generics": ["object"]}
             }
           ]
         }

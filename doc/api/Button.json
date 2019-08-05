@@ -1,5 +1,6 @@
 {
   "type": "Button",
+  "category": "widget",
   "description": "A push button. Can contain a text or an image.",
   "extends": "Widget",
   "constructor": {
@@ -7,7 +8,10 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<Button>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["Button"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }

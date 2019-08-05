@@ -1,11 +1,17 @@
 {
   "type": "LinearGradient",
+  "category": "data",
   "constructor": {
     "access": "public",
     "parameters": [
       {
         "name": "colorStops",
-        "type": "(Color | [Color, Percent])[]",
+        "type": {
+          "interface": "Array",
+          "generics": [
+            {"union": ["Color", {"tuple": ["Color", "Percent"]}]}
+          ]
+        },
         "description": "An array with at least one color stop. Defines the position and the offset of the gradient color stop."
       },
       {
@@ -19,7 +25,12 @@
   "description": "Represents a linear gradient. See also [LinearGradientValue](../types.html#lineargradientvalue)",
   "properties": {
     "colorStops": {
-      "type": "(Color | [Color, Percent])[]",
+      "type": {
+        "interface": "Array",
+        "generics": [
+          {"union": ["Color", {"tuple": ["Color", "Percent"]}]}
+        ]
+      },
       "description": "An array with the gradient color stops. Defines the position and the offset of the gradient color stop.",
       "const": true,
       "readonly": true
@@ -59,7 +70,8 @@
           }
         ],
         "description": "Returns true if value is a LinearGradientValue. This includes `null` and `'initial'`. Use this to check if a value will be accepted by a linear gradient property. This is also a valid TypeScript type guard function.",
-        "returns": "value is LinearGradientValue"
+        "returns": "boolean",
+        "ts_returns": "value is LinearGradientValue"
       },
       "isValidLinearGradientValue": {
         "parameters": [
@@ -70,7 +82,8 @@
           }
         ],
         "description": "Returns true if value is a valid LinearGradientValue. This excludes `null` and `'initial'`. Use this to check if a value will be accepted by LinearGradient.from. This is also a valid TypeScript type guard function.",
-        "returns": "value is LinearGradientValue"
+        "returns": "boolean",
+        "ts_returns": "value is LinearGradientValue"
       }
     }
   },

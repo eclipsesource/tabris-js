@@ -197,7 +197,7 @@ button.onSelect.removeListener(listener);
 
 All widgets support property change events that are fired when a property value changes. All change events are named after the property with `Changed` as a postfix, e.g. `myValue` fires `myValueChanged`, so listeners can be registered via `onMyValueChanged`.
 
-In addition to the common event properties, [change events](./types.md#propertychangedevent) have a property `value` that contains the new value of the property.
+In addition to the common event properties, [change events](./types.md#propertychangedeventtargettype-valuetype) have a property `value` that contains the new value of the property.
 
 Example:
 

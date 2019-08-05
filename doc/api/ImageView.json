@@ -1,5 +1,6 @@
 {
   "type": "ImageView",
+  "category": "widget",
   "description": "A widget to display an image.",
   "extends": "Widget",
   "constructor": {
@@ -7,7 +8,10 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<ImageView>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["ImageView"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }

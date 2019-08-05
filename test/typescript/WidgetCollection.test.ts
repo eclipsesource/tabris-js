@@ -81,3 +81,5 @@ fooCollection = fooCollection.concat(fooCollection);
 fooCollection = fooCollection.slice();
 fooCollection = fooCollection.slice(0);
 fooCollection = fooCollection.slice(0, 1);
+widgetCollection = fooCollection.concat(widgetCollection);
+const mixed: WidgetCollection<Foo | Composite> = fooCollection.concat(new Composite());

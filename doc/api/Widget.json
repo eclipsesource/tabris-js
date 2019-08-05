@@ -1,5 +1,6 @@
 {
   "type": "Widget",
+  "category": "widget",
   "description": "Base class for all widgets",
   "extends": "NativeObject",
   "constructor": {
@@ -7,7 +8,10 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<Widget>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["Widget"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -21,7 +25,11 @@
         "description": "Returns the parent of this widget or `null` if this widget is not appended to a parent."
       },
       {
-        "generics": "Result extends Composite = Composite",
+        "generics": [{
+          "name": "Result",
+          "extends": "Composite",
+          "default": "Composite"
+        }],
         "parameters": [
           {
             "name": "selector",
@@ -71,7 +79,11 @@
     },
     "siblings": [
       {
-        "generics": "Result extends Widget = Widget",
+        "generics": [{
+          "name": "Result",
+          "extends": "Widget",
+          "default": "Widget"
+        }],
         "parameters": [
           {
             "name": "selector",
@@ -90,7 +102,12 @@
       "parameters": [
         {
           "name": "properties",
-          "type": "{transform?: Transformation, opacity?: number}",
+          "type": {
+            "map": {
+              "transform": {"type": "Transformation", "optional": true},
+              "opacity": {"type": "number", "optional": true}
+            }
+          },
           "description": "The properties and target values to animate."
         },
         {
@@ -99,7 +116,8 @@
           "description": "Configures the animation itself."
         }
       ],
-      "returns": "Promise<any>",
+      "returns": "Promise",
+      "ts_returns": "Promise<void>",
       "description": "Starts an animation that transforms the given properties from their current values to the given ones. Supported properties are *transform* and *opacity*. Returns a promise that is resolved once the animation is completed and is rejected if the animation is aborted."
     },
     "dispose": {
@@ -132,7 +150,8 @@
       "description": "This function is called to create JSX widget elements. You may override it in your own subclass to create custom JSX behavior. **The function is not called with any context, i.e. `this` is not available.**",
       "type": "JSX.JsxFactory",
       "const": true,
-      "readonly": true
+      "readonly": true,
+      "ts_only": true
     },
     "id": {
       "type": "string",
@@ -143,7 +162,7 @@
       "description": "A class name or a whitespace separated list of class names to identify the widget. Class names are arbitrary strings that describe a state or a category and help to select widgets using a selector expression. A class name may only contain alphanumeric characters, `_` and `-`. Class names can also be added or removed using the field `classList`."
     },
     "classList": {
-      "type": "string[]",
+      "type": {"interface": "Array", "generics": ["string"]},
       "description": "Provides convenient access to the list of class names set to this widget. Class names can either be set using the `class` property or by modifying the `classList` directly."
     },
     "enabled": {
@@ -187,32 +206,32 @@
       "default": "'auto'"
     },
     "width": {
-      "type": "Dimension | 'auto'",
+      "type": {"union": ["Dimension", "'auto'"]},
       "description": "The width of the widget.",
       "default": "'auto'"
     },
     "height": {
-      "type": "Dimension | 'auto'",
+      "type": {"union": ["Dimension", "'auto'"]},
       "description": "The height of the widget.",
       "default": "'auto'"
     },
     "centerX": {
-      "type": "Offset | 'auto' | true",
+      "type": {"union": ["Offset", "'auto'", "true"]},
       "description": "The horizontal position of the widget's center relative to the parent's center. Value `true` is treated like `0` and puts it at the exact center without offset.",
       "default": "'auto'"
     },
     "centerY": {
-      "type": "Offset | 'auto' | true",
+      "type": {"union": ["Offset", "'auto'", "true"]},
       "description": "The vertical position of the widget's center relative to the parent's center. Value `true` is treated like `0` and puts it at the exact center without offset.",
       "default": "'auto'"
     },
     "baseline": {
-      "type": "SiblingReferenceValue | 'auto' | true",
+      "type": {"union": ["SiblingReferenceValue", "'auto'", "true"]},
       "description": "The vertical position of the widget's baseline relative to a sibling widget. Value `true` is treated like `'prev()'` and aligns it with the previous sibling.",
       "default": "'auto'"
     },
     "padding": {
-      "type": "BoxDimensions|null",
+      "type": {"union": ["BoxDimensions", "null"]},
       "const": true,
       "description": "Additional space to add inside the widgets bounds."
     },
@@ -236,7 +255,7 @@
       "description": "The actual location and size of the widget, relative to contentView."
     },
     "background": {
-      "type": "LinearGradientValue | ColorValue | ImageValue",
+      "type": {"union": ["LinearGradientValue", "ColorValue", "ImageValue"]},
       "description": "The background of the widget. If given a plain string it is interpreted first as a gradient, then as a color, and finally as an image path, whichever passes first. Use object literals or instances of `LinearGradient`, `Color` or `Image` to avoid any ambiguity."
     },
     "opacity": {
@@ -267,7 +286,14 @@
       "parameters": {
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number}[]"
+          "type": {
+            "tuple": [{
+              "map": {
+                "x": {"type": "number"},
+                "y": {"type": "number"}
+              }
+            }]
+          }
         }
       }
     },
@@ -276,11 +302,18 @@
       "parameters": {
         "state": {
           "description": "'start' when the widget has been hold down long enough, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
-          "type": "'start' | 'end' | 'cancel'"
+          "type": {"union": ["'start'", "'end'", "'cancel'"]}
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number}[]"
+          "type": {
+            "tuple": [{
+              "map": {
+                "x": {"type": "number"},
+                "y": {"type": "number"}
+              }
+            }]
+          }
         }
       }
     },
@@ -289,11 +322,18 @@
       "parameters": {
         "state": {
           "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
-          "type": "'start' | 'change' | 'end' | 'cancel'"
+          "type": {"union": ["'start'", "'change'", "'end'", "'cancel'"]}
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number}[]"
+          "type": {
+            "tuple": [{
+              "map": {
+                "x": {"type": "number"},
+                "y": {"type": "number"}
+              }
+            }]
+          }
         },
         "translationX": {
           "description": "Current horizontal touch offset relative to the first touch.",
@@ -319,11 +359,18 @@
       "parameters": {
         "state": {
           "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
-          "type": "'start' | 'change' | 'end' | 'cancel'"
+          "type": {"union": ["'start'", "'change'", "'end'", "'cancel'"]}
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number}[]"
+          "type": {
+            "tuple": [{
+              "map": {
+                "x": {"type": "number"},
+                "y": {"type": "number"}
+              }
+            }]
+          }
         },
         "translationX": {
           "description": "Current horizontal touch offset relative to the first touch.",
@@ -349,11 +396,18 @@
       "parameters": {
         "state": {
           "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
-          "type": "'start' | 'change' | 'end' | 'cancel'"
+          "type": {"union": ["'start'", "'change'", "'end'", "'cancel'"]}
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number}[]"
+          "type": {
+            "tuple": [{
+              "map": {
+                "x": {"type": "number"},
+                "y": {"type": "number"}
+              }
+            }]
+          }
         },
         "translationX": {
           "description": "Current horizontal touch offset relative to the first touch.",
@@ -379,11 +433,18 @@
       "parameters": {
         "state": {
           "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
-          "type": "'start' | 'change' | 'end' | 'cancel'"
+          "type": {"union": ["'start'", "'change'", "'end'", "'cancel'"]}
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number}[]"
+          "type": {
+            "tuple": [{
+              "map": {
+                "x": {"type": "number"},
+                "y": {"type": "number"}
+              }
+            }]
+          }
         },
         "translationX": {
           "description": "Current horizontal touch offset relative to the first touch.",
@@ -409,11 +470,18 @@
       "parameters": {
         "state": {
           "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
-          "type": "'start' | 'change' | 'end' | 'cancel'"
+          "type": {"union": ["'start'", "'change'", "'end'", "'cancel'"]}
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number}[]"
+          "type": {
+            "tuple": [{
+              "map": {
+                "x": {"type": "number"},
+                "y": {"type": "number"}
+              }
+            }]
+          }
         },
         "translationX": {
           "description": "Current horizontal touch offset relative to the first touch.",
@@ -439,11 +507,18 @@
       "parameters": {
         "state": {
           "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
-          "type": "'start' | 'change' | 'end' | 'cancel'"
+          "type": {"union": ["'start'", "'change'", "'end'", "'cancel'"]}
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number}[]"
+          "type": {
+            "tuple": [{
+              "map": {
+                "x": {"type": "number"},
+                "y": {"type": "number"}
+              }
+            }]
+          }
         },
         "translationX": {
           "description": "Current horizontal touch offset relative to the first touch.",
@@ -469,11 +544,18 @@
       "parameters": {
         "state": {
           "description": "'start' when the finger starts moving, 'change' while the finger is moving, 'end' when the finger has been lifted and 'cancel' when the gesture has been interrupted.",
-          "type": "'start' | 'change' | 'end' | 'cancel'"
+          "type": {"union": ["'start'", "'change'", "'end'", "'cancel'"]}
         },
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number}[]"
+          "type": {
+            "tuple": [{
+              "map": {
+                "x": {"type": "number"},
+                "y": {"type": "number"}
+              }
+            }]
+          }
         },
         "translationX": {
           "description": "Current horizontal touch offset relative to the first touch.",
@@ -499,7 +581,14 @@
       "parameters": {
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number}[]"
+          "type": {
+            "tuple": [{
+              "map": {
+                "x": {"type": "number"},
+                "y": {"type": "number"}
+              }
+            }]
+          }
         }
       }
     },
@@ -509,7 +598,14 @@
       "parameters": {
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number}[]"
+          "type": {
+            "tuple": [{
+              "map": {
+                "x": {"type": "number"},
+                "y": {"type": "number"}
+              }
+            }]
+          }
         }
       }
     },
@@ -519,7 +615,14 @@
       "parameters": {
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number}[]"
+          "type": {
+            "tuple": [{
+              "map": {
+                "x": {"type": "number"},
+                "y": {"type": "number"}
+              }
+            }]
+          }
         }
       }
     },
@@ -529,7 +632,14 @@
       "parameters": {
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number}[]"
+          "type": {
+            "tuple": [{
+              "map": {
+                "x": {"type": "number"},
+                "y": {"type": "number"}
+              }
+            }]
+          }
         }
       }
     },
@@ -539,7 +649,16 @@
       "parameters": {
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number, absoluteX: number, absoluteY: number}[]"
+          "type": {
+            "tuple": [{
+              "map": {
+                "x": {"type": "number"},
+                "y": {"type": "number"},
+                "absoluteX": {"type": "number"},
+                "absoluteY": {"type": "number"}
+              }
+            }]
+          }
         }
       }
     },
@@ -549,7 +668,16 @@
       "parameters": {
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number, absoluteX: number, absoluteY: number}[]"
+          "type": {
+            "tuple": [{
+              "map": {
+                "x": {"type": "number"},
+                "y": {"type": "number"},
+                "absoluteX": {"type": "number"},
+                "absoluteY": {"type": "number"}
+              }
+            }]
+          }
         }
       }
     },
@@ -559,7 +687,16 @@
       "parameters": {
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number, absoluteX: number, absoluteY: number}[]"
+          "type": {
+            "tuple": [{
+              "map": {
+                "x": {"type": "number"},
+                "y": {"type": "number"},
+                "absoluteX": {"type": "number"},
+                "absoluteY": {"type": "number"}
+              }
+            }]
+          }
         }
       }
     },
@@ -569,7 +706,16 @@
       "parameters": {
         "touches": {
           "description": "Touch coordinates relative to the origin coordinates of the widget.",
-          "type": "{x: number, y: number, absoluteX: number, absoluteY: number}[]"
+          "type": {
+            "tuple": [{
+              "map": {
+                "x": {"type": "number"},
+                "y": {"type": "number"},
+                "absoluteX": {"type": "number"},
+                "absoluteY": {"type": "number"}
+              }
+            }]
+          }
         }
       }
     },

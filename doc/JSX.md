@@ -144,7 +144,7 @@ In TypeScript the attributes that are available on the element are derived from 
 
 #### Data Binding
 
-Declarative data binding via JSX is provided by the [`tabris-decorators` extension](./decorators/index.md). Once installed in your project, you can do [one-way bindings](./decorators/@component.md) between a property of your custom component and the property of a child like this:
+Declarative data binding via JSX is provided by the [`tabris-decorators` extension](./databinding/index.md). Once installed in your project, you can do [one-way bindings](./databinding/@component.md) between a property of your custom component and the property of a child like this:
 
 ```tsx
 @component
@@ -162,7 +162,7 @@ class CustomComponent extends Composite {
 }
 ```
 
-The `tabris-decorators` module also provides [two-way bindings](./decorators/@bind.md).
+The `tabris-decorators` module also provides [two-way bindings](./databinding/@bind.md).
 
 #### Adding Special Attributes
 

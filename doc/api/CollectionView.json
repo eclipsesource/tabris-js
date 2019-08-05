@@ -1,14 +1,29 @@
 {
   "type": "CollectionView",
-  "generics": "Cell extends Widget",
+  "category": "widget",
+  "generics": [
+    {
+      "name": "CellWidgetType",
+      "extends": "Widget",
+      "default": "Widget",
+      "description": "The common widget class used for cells in this collectionView. It is recommended to use different classes for different [cell types](#celltype)."
+    }
+  ],
   "description": "A scrollable list that displays data items in cells, one per row. Cells are created on demand by the *createCell* callback and reused on scrolling.",
-  "extends": "Composite<Cell>",
+  "extends": {
+    "interface": "Composite",
+    "generics": ["CellWidgetType"]
+  },
   "constructor": {
     "access": "public",
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<CollectionView<Cell>> & Partial<Pick<CollectionView<Cell>, 'cellHeight' | 'cellType' | 'createCell' | 'updateCell'>>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["CollectionView"]
+        },
+        "ts_type": "Properties<CollectionView<CellWidgetType>> & Partial<Pick<CollectionView<CellWidgetType>, 'cellHeight' | 'cellType' | 'createCell' | 'updateCell'>>",
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -19,7 +34,7 @@
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXAttributes<this> & Partial<Pick<CollectionView<Cell>, 'cellHeight' | 'cellType' | 'createCell' | 'updateCell'>> & {children?: never}"
+      "type": "JSXAttributes<this> & Partial<Pick<CollectionView<CellWidgetType>, 'cellHeight' | 'cellType' | 'createCell' | 'updateCell'>> & {children?: never}"
     },
     "scrollbarVisible": {
       "type": "boolean",
@@ -27,24 +42,48 @@
       "description": "Allows to show or hide the scroll bar. When the scroll bar is hidden, it will be briefly visible while scrolling."
     },
     "cellHeight": {
-      "type": "number|\"auto\"|((index: number, cellType: string) => number|\"auto\")",
-      "default": "auto",
-      "description": "The height of a collection cell. If set to `\"auto\"`, the cell height will be calculated individually for each cell. If set to a function, this function will be called for every item, providing the item index and the cell type as parameters, and must return the cell height for the given item.\nNote: On iOS `\"auto\"` may cause significant performance downgrade as it requires additional layouting passes to calculate cell height internally. If possible please use a combination of fixed `itemHeight` and `cellType` properties to specify different height for different cells."
+      "type": {
+        "union": [
+          "number",
+          "'auto'",
+          {
+            "callback": [{"name": "index", "type": "number"}, {"name": "cellType", "type": "string"}],
+            "returns": {"name": "cellHeight", "type": {"union": ["number", "'auto'"]}}
+          }
+        ]
+      },
+      "default": "'auto'",
+      "description": "The height of a collection cell. If set to `'auto'`, the cell height will be calculated individually for each cell. If set to a function, this function will be called for every item, providing the item index and the cell type as parameters, and must return the cell height for the given item.\nNote: On iOS `\"auto\"` may cause significant performance downgrade as it requires additional layouting passes to calculate cell height internally. If possible please use a combination of fixed `itemHeight` and `cellType` properties to specify different height for different cells."
     },
     "itemCount": {
       "type": "number",
       "description": "The number of items to display. To add or remove items later, use the methods `insert()` and `remove()` instead of setting the `itemCount`. To display a new list of items, use the `load()` method."
     },
     "createCell": {
-      "type": "(cellType: string) => Cell",
+      "type": {"callback": [
+        {"name": "cellType", "type": "string"}],
+        "returns": {"type": "CellWidgetType"}
+      },
       "description": "A callback used to create a new reusable cell widget for a given type. This callback will be called by the framework and the created cell will be reused for different items. The created widget should be populated in the `updateCell` function."
     },
     "updateCell": {
-      "type": "(cell: Cell, index: number) => void",
+      "type": {
+        "callback": [{"name": "cell", "type": "CellWidgetType"}, {"name": "index", "type": "number"}],
+        "returns": {"type": "void"}
+      },
       "description": "A callback used to update a given cell widget to display the item with the given index. This callback will be called by the framework."
     },
     "cellType": {
-      "type": "string|((index: number) => string)|null",
+      "type": {
+        "union": [
+          "string",
+          {
+            "callback": [{"name": "index", "type": "number"}],
+            "returns": {"name": "cellType", "type": "string"}
+          },
+          "null"
+        ]
+      },
       "description": "The name of the cell type to use for the item at the given index. This name will be passed to the `createCell` and `cellHeight` callbacks. Cells will be reused only for those items that map to the same cell type. If set to a function, this function will be called for every item, providing the item index as a parameter, and must return a unique name for the cell type to use for the given item."
     },
     "refreshEnabled": {
@@ -102,7 +141,14 @@
   "methods": {
     "set": [
       {
-        "generics": "T extends NativeObject = this",
+        "ts_only": true,
+        "generics": [
+          {
+            "name": "T",
+            "extends": "NativeObject",
+            "default": "this"
+          }
+        ],
         "parameters": [
           {
             "name": "properties",
@@ -201,28 +247,28 @@
         }
       ],
       "description": "Returns the cell currently associated with the given item index. Returns `null` if the item is not currently displayed.",
-      "returns": "Cell|null"
+      "returns": {"union": ["CellWidgetType", "null"]}
     }
   },
   "links": [
     {
-      "title": "Creating a simple `CollectionView`",
+      "title": "Creating a simple CollectionView",
       "snippet": "collectionview.jsx"
     },
     {
-      "title": "Creating a `CollectionView` with multiple cell types",
+      "title": "Creating a CollectionView with multiple cell types",
       "snippet": "collectionview-celltype.jsx"
     },
     {
-      "title": "Creating a `CollectionView` with pull-to-refresh support",
+      "title": "Creating a CollectionView with pull-to-refresh support",
       "snippet": "collectionview-refreshenabled.jsx"
     },
     {
-      "title": "Creating a `CollectionView` with sticky headers",
+      "title": "Creating a CollectionView with sticky headers",
       "snippet": "collectionview-scroll.jsx"
     },
     {
-      "title": "Creating a `CollectionView` with dynamic column count",
+      "title": "Creating a CollectionView with dynamic column count",
       "snippet": "collectionview-columncount.jsx"
     }
   ]

@@ -1,5 +1,6 @@
 {
   "type": "File",
+  "category": "data",
   "namespace": "global",
   "extends": "Blob",
   "constructor": {
@@ -7,7 +8,7 @@
     "parameters": [
       {
         "name": "blobParts",
-        "type": "any[]",
+        "type": {"interface": "Array", "generics": ["any"]},
         "description": "Array of ArrayBuffer, Blob, string, or any typed array. Any other type will be stringified. Strings are encoded as UTF-8."
       },
       {
@@ -17,7 +18,12 @@
       },
       {
         "name": "options",
-        "type": "{type?: string, lastModified?: number}",
+        "type": {
+          "map": {
+            "type": {"type": "string", "optional": true},
+            "lastModified": {"type": "number", "optional": true}
+          }
+        },
         "description": "`type` represents the MIME type of the blob content. Defaults to empty string.\n`lastModified` is a unix timestamp of the last known modification of the file. Defaults to the current time.",
         "optional": true
       }

@@ -35,7 +35,8 @@ To configure the TypeScript compiler create a new file called `tsconfig.json` wi
     "alwaysStrict": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "allowJs": true
+    "allowJs": true,
+    "sourceMap": true
   },
   "include": [
     "./src/**/*.ts",
@@ -46,7 +47,7 @@ To configure the TypeScript compiler create a new file called `tsconfig.json` wi
 }
 ```
 
-This is the default configuration for generated TypeScript projects. It includes support for mixed JavaScript/TypeScript projects, [JSX](./jsx.md) and [decorators](./decorators/index.md). It also adds some recommended compiler options for stricter TypeScript interpretation. If you do not need any of these, a minimal `tsconfig.json` would look like this:
+This is the default configuration for generated TypeScript projects. It includes support for mixed JavaScript/TypeScript projects, [JSX](./jsx.md) and [decorators](./databinding/index.md). It also adds some recommended compiler options for stricter TypeScript interpretation. If you do not need any of these, a minimal `tsconfig.json` would look like this:
 
 ```json
 {
@@ -121,7 +122,6 @@ When used in TypeScript the tabris module exports the following additional inter
  * [`BoxDimensions`](./types.md#boxdimensions)
  * [`ImageData`](./types.md#imagedata)
  * [`AnimationOptions`](./types.md#animationoptions)
- * [`PropertyChangedEvent<T, U>`](./types.md#propertychangedevent), same as `EventObject<T> & { readonly value: U }`
+ * [`PropertyChangedEvent<TargetType, ValueType>`](./types.md#propertychangedeventtargettype-valuetype), same as `EventObject<TargetType> & { readonly value: U }`
  * Various `{TargetType}{EventName}Event` interfaces, e.g. `PickerSelectEvent`. Only for events with additional parameters.
- * `Properties<Widget>`, which is the interface of the properties parameter used by the `set` method of the given widget.
- * `Properties<typeof Widget>`, which is the interface of the properties parameter used by the constructor of the given widget.
+ * [`Properties<Widget>`](./types#propertieswidget), which is the interface of the properties parameter used by the constructor and `set` method of the given widget.

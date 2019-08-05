@@ -1,5 +1,6 @@
 {
   "type": "Response",
+  "category": "net",
   "namespace": "global",
   "description": "Represents an HTTP Response as used by `fetch()`.",
   "constructor": {
@@ -7,7 +8,7 @@
     "parameters": [
       {
         "name": "body",
-        "type": "Blob | FormData | string",
+        "type": {"union": ["Blob", "FormData", "string"]},
         "optional": true
       },
       {
@@ -53,21 +54,37 @@
       "returns": "Response"
     },
     "arrayBuffer": {
-      "returns": "Promise<ArrayBuffer>"
+      "returns": {
+        "interface": "Promise",
+        "generics": ["ArrayBuffer"]
+      }
     },
     "blob": {
-      "returns": "Promise<Blob>"
+      "returns": {
+        "interface": "Promise",
+        "generics": ["Blob"]
+      }
     },
     "text": {
-      "returns": "Promise<string>"
+      "returns": {
+        "interface": "Promise",
+        "generics": ["string"]
+      }
     },
     "json": [
       {
         "returns": "Promise<any>"
       },
       {
-        "generics": "T",
-        "returns": "Promise<T>",
+        "generics": [
+          {
+            "name": "T"
+          }
+        ],
+        "returns": {
+          "interface": "Promise",
+          "generics": ["T"]
+        },
         "ts_only": true
       }
     ]

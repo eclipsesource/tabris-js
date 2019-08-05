@@ -1,12 +1,16 @@
 {
   "type": "AlertDialog",
+  "category": "popup",
   "extends": "Popup",
   "constructor": {
     "access": "public",
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<AlertDialog>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["AlertDialog"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -26,13 +30,20 @@
     "textInputs": {
       "const": true,
       "readonly": true,
-      "default": "ContentView",
-      "type": "ContentView",
-      "ts_type": "ContentView<TextInput>",
+      "type": {
+        "interface": "ContentView",
+        "generics": ["TextInput"]
+      },
       "description": "A composite that may contain `TextInput` widgets to be displayed alongside the `title` and `message`. The text values inserted by the user can be read in the dialogs `close` event via its `texts` property. Eg.: `dialog.on('close', (e) => e.texts[0])`\n\nIn an AlertDialog JSX element the TextInput widgets may be given as child elements."
     },
     "buttons": {
-      "type": "{ok?: string, cancel?: string, neutral?: string}",
+      "type": {
+        "map": {
+          "ok": {"type": "string", "optional": true},
+          "cancel": {"type": "string", "optional": true},
+          "neutral": {"type": "string", "optional": true}
+        }
+      },
       "description": "An object with the texts of the buttons to display. There are up to three buttons: `ok`, `cancel` and `neutral`. If no text is given for a button it will not be displayed. Example: `{ok: 'Yes', cancel: 'No'}` shows 'Yes' and 'No', but no 'neutral' button."
     },
     "jsxAttributes": {
@@ -48,11 +59,14 @@
       "parameters": {
         "button": {
           "description": "The type of button that was used to close the dialog. Can also be null, e.g. when the global back button was pressed.",
-          "type": "'ok'|'cancel'|'neutral'|null"
+          "type": {"union": ["'ok'", "'cancel'", "'neutral'", "null"]}
         },
         "texts": {
           "description": "An array containing the corresponding `text` values of all `textInputs` elements.",
-          "type": "string[]"
+          "type": {
+            "interface": "Array",
+            "generics": ["string"]
+          }
         }
       }
     },

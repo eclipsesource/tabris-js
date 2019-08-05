@@ -1,5 +1,6 @@
 {
   "type": "CheckBox",
+  "category": "widget",
   "description": "A check box widget.",
   "extends": "Widget",
   "constructor": {
@@ -7,7 +8,10 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<CheckBox>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["CheckBox"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }

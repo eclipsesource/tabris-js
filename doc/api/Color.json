@@ -1,5 +1,6 @@
 {
   "type": "Color",
+  "category": "data",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -60,7 +61,7 @@
     },
     "toArray": {
       "description": "Returns a array representation of the color in the format of `[red, green, blue, alpha]`. Each value is a number between (and in including) 0 and 255.",
-      "returns": "[number, number, number, number]"
+      "returns": {"tuple": ["number", "number", "number", "number"]}
     }
   },
   "statics": {
@@ -85,7 +86,8 @@
           }
         ],
         "description": "Returns true if value is a ColorValue. This includes `null` and `'initial'`. Use this to check if a value will be accepted by a color property. This is also a valid TypeScript type guard function.",
-        "returns": "value is ColorValue"
+        "returns": "boolean",
+        "ts_returns": "value is ColorValue"
       },
       "isValidColorValue": {
         "parameters": [
@@ -96,7 +98,8 @@
           }
         ],
         "description": "Returns true if value is a valid ColorValue. This excludes `null` and `'initial'`. Use this to check if a value will be accepted by Color.from. This is also a valid TypeScript type guard function.",
-        "returns": "value is ColorValue"
+        "returns": "boolean",
+        "ts_returns": "value is ColorValue"
       }
     },
     "properties": {

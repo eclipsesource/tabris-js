@@ -1,5 +1,6 @@
 {
   "type": "SearchAction",
+  "category": "widget",
   "description": "An action that displays a search text field with dynamic proposals when selected. Add a listener on *select* to implement the action. On *input*, you may set a list of *proposals*.",
   "extends": "Action",
   "constructor": {
@@ -7,7 +8,10 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<SearchAction>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["SearchAction"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -21,7 +25,7 @@
   },
   "properties": {
     "proposals": {
-      "type": "string[]",
+      "type": {"interface": "Array", "generics": ["string"]},
       "default": "[]",
       "description": "The list of proposals to display."
     },

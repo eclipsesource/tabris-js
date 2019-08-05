@@ -1,5 +1,6 @@
 {
   "type": "Picker",
+  "category": "widget",
   "description": "A widget with a drop-down list of items to choose from.",
   "extends": "Widget",
   "constructor": {
@@ -7,7 +8,11 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<Picker> & Partial<Pick<Picker, 'itemText'>>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["Picker"]
+        },
+        "ts_type": "Properties<Picker> & Partial<Pick<Picker, 'itemText'>>",
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -53,7 +58,10 @@
       "description": "The number of items to display."
     },
     "itemText": {
-      "type": "(index: number) => string",
+      "type": {
+        "callback": [{"name": "index", "type": "number"}],
+        "returns": {"type": "string"}
+      },
       "description": "A function that returns the string to display for a given index."
     },
     "selectionIndex": {
@@ -75,7 +83,14 @@
   },
   "methods": {
     "set": [{
-      "generics": "T extends NativeObject = this",
+      "ts_only": true,
+      "generics": [
+        {
+          "name": "T",
+          "extends": "NativeObject",
+          "default": "this"
+        }
+      ],
       "parameters": [
         {
           "name": "properties",

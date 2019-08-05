@@ -1,5 +1,6 @@
 {
   "type": "WebView",
+  "category": "widget",
   "description": "A widget that can display a web page. Since this widget requires a lot of resources it's recommended to have no more than one instance at a time.",
   "extends": "Widget",
   "constructor": {
@@ -7,7 +8,10 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<WebView>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["WebView"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -49,8 +53,8 @@
       "description": "Fired when the WebView is about to navigate to a new URL.\nNote: This event will not be fired on iOS when a page is using `history.pushState()` to navigate between pages.",
       "parameters": {
         "preventDefault": {
-          "description": "Call to intercept the navigation.  Not possible when the event is only an anchor navigation",
-          "type": "() => void"
+          "description": "Call to intercept the navigation. Not possible when the event is only an anchor navigation",
+          "type": "Function"
         },
         "url": {
           "description": "The new URL the WebView is about to navigate to.",

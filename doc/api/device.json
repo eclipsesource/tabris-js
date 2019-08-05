@@ -1,5 +1,6 @@
 {
   "type": "Device",
+  "category": "service",
   "object": "device",
   "extends": "NativeObject",
   "constructor": {

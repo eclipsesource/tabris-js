@@ -1,5 +1,6 @@
 {
   "type": "Slider",
+  "category": "widget",
   "description": "A widget representing a numeric value as an movable indicator on a horizontal line.",
   "extends": "Widget",
   "constructor": {
@@ -7,7 +8,10 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<Slider>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["Slider"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }

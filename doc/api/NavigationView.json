@@ -1,15 +1,34 @@
 {
   "type": "NavigationView",
-  "generics": "PageType extends Page = Page, ActionType extends Action = Action",
+  "category": "widget",
+  "generics": [
+    {
+      "name": "PageType",
+      "extends": "Page",
+      "default": "Page",
+      "description": "The common widget class of the pages this NavigationView can contain."
+    },
+    {
+      "name": "ActionType",
+      "extends": "Action",
+      "default": "Action",
+      "description": "The common widget class of the actions this NavigationView can contain."
+    }
+  ],
   "description": "A widget that displays a stack of [pages](Page) with a toolbar that allows to navigate back. The toolbar also displays the current page's title and the highest priority [actions](Action) that are added to the NavigationView. Only children of type `Page`, `Action` and `SearchAction` are supported. Since the NavigationView does not compute its own size, the width and height must be defined by the respective layout properties (e.g. either `width` or `left` and `right` must be specified).",
-  "extends": "Composite",
-  "ts_extends": "Composite<PageType|ActionType>",
+  "extends": {
+    "interface": "Composite",
+    "generics": [{"union": ["PageType", "ActionType"]}]
+  },
   "constructor": {
     "access": "public",
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<NavigationView>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["NavigationView"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -75,7 +94,12 @@
       },
       {
         "ts_only": true,
-        "generics": "U extends Page",
+        "generics": [
+          {
+            "name": "U",
+            "extends": "Page"
+          }
+        ],
         "parameters": [
           {
             "name": "constructor",

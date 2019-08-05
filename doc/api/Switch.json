@@ -1,5 +1,6 @@
 {
   "type": "Switch",
+  "category": "widget",
   "description": "A switch widget that can be toggled.",
   "extends": "Widget",
   "constructor": {
@@ -7,7 +8,10 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<Switch>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["Switch"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }

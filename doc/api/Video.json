@@ -1,5 +1,6 @@
 {
   "type": "Video",
+  "category": "widget",
   "description": "A widget that plays a video from an URL.",
   "extends": "Widget",
   "constructor": {
@@ -7,7 +8,10 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<Video>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["Video"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }

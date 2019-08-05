@@ -1,6 +1,15 @@
 {
   "type": "Listeners",
-  "generics": "EventData extends {target: object}",
+  "category": "core",
+  "generics": [
+    {
+      "name": "EventData",
+      "extends": {
+        "map": {"target": {"type": "object"}}
+      },
+      "description": "A plain object containing the data to be passed to the listeners in addition to `target`, `type` and `timeStamp`."
+    }
+  ],
   "description": "Objects of the type `Listeners` provide methods to manage listeners and trigger events. They encapsulate the tabris event system in a way that is more convenient to use with TypeScript and the ES2017 `async`/`await` feature.",
   "constructor": {
     "access": "public",
@@ -36,8 +45,9 @@
         "parameters": [
           {
             "name": "listener",
-            "type": "(event: EventObject) => void",
-            "ts_type": "Listener<EventData>"
+            "type": "Function",
+            "ts_type": "Listener<EventData>",
+            "description": "The listener function called with the [event object](./EventObject.md)"
           }
         ],
         "returns": "this.target",
@@ -50,7 +60,7 @@
         "parameters": [
           {
             "name": "listener",
-            "type": "(event: EventObject) => void",
+            "type": "Function",
             "ts_type": "Listener<EventData>"
           }
         ],
@@ -64,8 +74,9 @@
         "parameters": [
           {
             "name": "listener",
-            "type": "(event: EventObject) => void",
-            "ts_type": "Listener<EventData>"
+            "type": "Function",
+            "ts_type": "Listener<EventData>",
+            "description": "The listener function called with the [event object](./EventObject.md)"
           }
         ],
         "returns": "this.target",
@@ -75,7 +86,10 @@
     "promise" : [
       {
         "description": "Returns a promise that resolves the next time an event is issued. The dispatched event object will be used as the resolved value.",
-        "returns": "Promise",
+        "returns": {
+          "interface": "Promise",
+          "generics": ["EventObject"]
+        },
         "ts_returns": "Promise<ExtendedEvent<EventData>>"
       }
     ],
@@ -91,7 +105,7 @@
           {
             "name": "eventData",
             "optional": true,
-            "type": "object",
+            "type": "EventData",
             "ts_type": "ListenersTriggerParam<EventData>"
           }
         ],

@@ -1,0 +1,52 @@
+{
+  "type": "ActionSheetItem",
+  "category": "popup",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": "ActionSheetItem",
+        "ts_type": "{title: string, image?: ImageValue, style?: 'default'|'cancel'|'destructive'}",
+        "optional": true,
+        "description": "Either an instance of `ActionSheetItem` *or a plain object* with some or all of the same properties, e.g. `{title: 'MyTitel'}`"
+      }
+    ]
+  },
+  "description": "Describes an entry in an [`ActionSheet`](./ActionSheet.md).",
+  "properties": {
+    "title": {
+      "type": "string",
+      "const": true,
+      "jsxContentProperty": true,
+      "description": "The text to be displayed for this item in the `ActionSheet`."
+    },
+    "image": {
+      "type": "ImageValue",
+      "const": true,
+      "description": "An image to be displayed for this item in the `ActionSheet`"
+    },
+    "style": {
+      "type": {
+        "union": [
+          "'default'",
+          "'cancel'",
+          "'destructive'"
+        ]
+      },
+      "const": true,
+      "description": "The style of presentation for this item in the `ActionSheet`. With the style `cancel` or `destructive` are displayed in a special way.\n\nNote: On iPad, an action with style `cancel` will not be shown in the ActionSheet as per [Apple's design approach](https://developer.apple.com/documentation/uikit/windows_and_screens/getting_the_user_s_attention_with_alerts_and_action_sheets). If such button is added tapping outside of ActionSheet is equivalent to pressing the `cancel` action on iPad. In case of tapping outside an appropriate event will be sent by the native side as if such button was pressed"
+    },
+    "jsxAttributes": {
+      "const": true,
+      "readonly": true,
+      "ts_only": true,
+      "type": "{title?: string, image?: ImageValue, style?: 'default'|'cancel'|'destructive', children?: string}"
+    },
+    "[JSX.jsxFactory]": {
+      "ts_only": true,
+      "readonly": true,
+      "type": "JSX.JsxFactory"
+    }
+  }
+}

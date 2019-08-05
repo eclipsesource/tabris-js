@@ -337,19 +337,6 @@ export interface PropertyChangedEvent<T,U> extends EventObject<T>{
   readonly value: U
 }
 
-export class ActionSheetItem {
-
-  constructor(props?: Partial<Pick<ActionSheetItem, 'title' | 'image' | 'style'>>);
-
-  readonly title: string;
-  readonly image?: ImageValue;
-  readonly style?: 'default'|'cancel'|'destructive';
-
-  readonly [JSX.jsxFactory]: JSX.JsxFactory;
-  readonly jsxAttributes:  Partial<Pick<ActionSheetItem, 'title' | 'image' | 'style'>> & {children?: string};
-
-}
-
 export class JsxProcessor {
 
   public readonly jsxFactory: Symbol;

@@ -352,7 +352,7 @@ class MyCustomComponent extends Composite {
 }
 ```
 
-Alternatively, when using the (TypeScript-only) [`@component`](./decorators/@component.md) decorator will do this automatically:
+Alternatively, when using the (TypeScript-only) [`@component`](./databinding/@component.md) decorator will do this automatically:
 
 ```ts
 @component

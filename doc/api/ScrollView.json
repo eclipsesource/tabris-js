@@ -1,5 +1,6 @@
 {
   "type": "ScrollView",
+  "category": "widget",
   "description": "A composite that allows its content to overflow either vertically (default) or horizontally. Since the ScrollView does not compute its own size, the width and height must be defined by the respective layout properties (e.g. either `width` or `left` and `right` must be specified).",
   "extends": "Composite",
   "constructor": {
@@ -7,7 +8,10 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<ScrollView>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["ScrollView"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -72,9 +76,13 @@
         },
         {
           "name": "options",
-          "type": "{animate?: boolean}",
+          "type": {
+            "map": {
+              "animate": {"type": "boolean", "optional": true, "default": true}
+            }
+          },
           "optional": true,
-          "description": "An additional object to control the animation. Set to `{animate: false}` to scroll without an animation."
+          "description": "An additional parameter object to control the animation."
         }
       ],
       "returns": "this",
@@ -89,9 +97,13 @@
         },
         {
           "name": "options",
-          "type": "{animate?: boolean}",
+          "type": {
+            "map": {
+              "animate": {"type": "boolean", "optional": true, "default": true}
+            }
+          },
           "optional": true,
-          "description": "An additional object to control the animation. Set to `{animate: false}` to scroll without an animation."
+          "description": "An parameter object to control the animation."
         }
       ],
       "returns": "this",

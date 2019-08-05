@@ -1,5 +1,6 @@
 {
   "title": "Timer",
+  "category": "service",
   "namespace": "global",
   "methods": {
     "setTimeout": {
@@ -17,7 +18,7 @@
         },
         {
           "name": "...params",
-          "type": "any[]",
+          "type": {"interface": "Array", "generics": ["any"]},
           "description": "One or more values passed on to the callback."
         }
       ],
@@ -39,7 +40,7 @@
         },
         {
           "name": "...params",
-          "type": "any[]",
+          "type": {"interface": "Array", "generics": ["any"]},
           "description": "One or more values passed on to the callback."
         }
       ],

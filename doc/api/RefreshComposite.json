@@ -1,5 +1,6 @@
 {
   "type": "RefreshComposite",
+  "category": "widget",
   "description": "A composite allowing to use a pull-to-refresh gesture to trigger and visualize a long running operation.",
   "extends": "Composite",
   "constructor": {
@@ -7,7 +8,10 @@
     "parameters": [
       {
         "name": "properties",
-        "type": "Properties<RefreshComposite>",
+        "type": {
+          "interface": "Properties",
+          "generics": ["RefreshComposite"]
+        },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
