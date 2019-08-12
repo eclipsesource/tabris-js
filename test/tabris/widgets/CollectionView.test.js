@@ -939,18 +939,46 @@ describe('CollectionView', function() {
         client.resetCalls();
       });
 
-      it('calls native reveal with index', function() {
+      it("CALLs 'reveal' with default options", function() {
         view.reveal(1);
 
         const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
-        expect(call.parameters).to.deep.equal({index: 1});
+        expect(call.parameters).to.deep.equal({index: 1, animate: true});
+      });
+
+      it("CALLs 'reveal' with options", function() {
+        view.reveal(1, {animate: false});
+
+        const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
+        expect(call.parameters).to.deep.equal({index: 1, animate: false});
+      });
+
+      it("CALLs 'reveal' with normalized options", function() {
+        view.reveal(1, {animate: 1});
+
+        const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
+        expect(call.parameters).to.deep.equal({index: 1, animate: true});
+      });
+
+      it("CALLs 'reveal' with filtered options", function() {
+        view.reveal(1, {foo: 'bar', animate: true});
+
+        const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
+        expect(call.parameters).to.deep.equal({index: 1, animate: true});
+      });
+
+      it("CALLs 'reveal' with autocompleted options", function() {
+        view.reveal(1, {});
+
+        const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
+        expect(call.parameters).to.deep.equal({index: 1, animate: true});
       });
 
       it('accepts negative index', function() {
         view.reveal(-1);
 
         const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
-        expect(call.parameters).to.deep.equal({index: 2});
+        expect(call.parameters).to.deep.equal({index: 2, animate: true});
       });
 
       it('ignores out-of-bounds index', function() {

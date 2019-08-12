@@ -171,6 +171,12 @@
           "name": "index",
           "type": "number",
           "description": "The index of the item to reveal. If this is negative, it is interpreted as relative to the end"
+        },
+        {
+          "name": "options",
+          "type": "{animate?: boolean}",
+          "optional": true,
+          "description": "An additional object to control the animation. Set to `{animate: false}` to scroll without an animation. The `animate` property defaults to `true` when no options object is given."
         }
       ],
       "description": "Scrolls the item with the given index into view."

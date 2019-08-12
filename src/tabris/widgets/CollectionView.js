@@ -35,11 +35,14 @@ export default class CollectionView extends Composite {
     this._needsReload = true;
   }
 
-  reveal(index) {
+  reveal(index, options) {
     index = this.$checkIndex(index);
     if (index >= 0 && index < this.itemCount) {
       this.$flush();
-      this._nativeCall('reveal', {index});
+      this._nativeCall('reveal', {
+        index,
+        animate: options && 'animate' in options ? !!options.animate : true
+      });
     }
   }
 
