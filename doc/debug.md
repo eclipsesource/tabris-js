@@ -32,7 +32,7 @@ You can debug your app using the Chrome Developer Tools. Detailed Instructions b
 * For Windows only, the [OEM USB driver of your Phone](https://developer.android.com/tools/extras/oem-usb.html).
 
 ### Android Device Requirements
-* An installed Tabris.js app that has been built in debug mode, [either locally](./build.md#local-build) or via the [Tabris.js build service](./build.md#build-service).
+* An installed Tabris.js app that has been built in debug mode, [either locally](./build.md#local-build) or via the [Tabris.js build service](./build.md#build-service).  The Tabris.js developer app from the app stores is not debuggable since the app is built in release mode.
 * [USB Debugging Enabled](https://developer.android.com/studio/debug/dev-options.html)
 
 ### How to Debug
