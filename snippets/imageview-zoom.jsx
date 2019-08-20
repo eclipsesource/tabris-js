@@ -31,7 +31,7 @@ function setZoomEnabled(value) {
 
 /** @param {number} value */
 function setZoomLevel(value) {
-  if (imageView.zoomEnabled && value > imageView.minZoomLevel && value < imageView.maxZoomLevel) {
+  if (imageView.zoomEnabled && value >= imageView.minZoomLevel && value <= imageView.maxZoomLevel) {
     imageView.zoomLevel = value;
   }
 }
