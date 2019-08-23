@@ -1,4 +1,3 @@
-import {imageToArray} from './util-images';
 import NativeObject from './NativeObject';
 import WidgetCollection from './WidgetCollection';
 import Color from './Color';
@@ -6,7 +5,7 @@ import Image from './Image';
 import Font from './Font';
 import LinearGradient from './LinearGradient';
 import {toValueString} from './Console';
-import {allowOnlyKeys} from './util';
+import {allowOnlyKeys, getBytes, getNativeObject} from './util';
 
 const numberRegex = /^[+-]?([0-9]+|[0-9]*\.[0-9]+)$/;
 const transformDefaults = {
@@ -94,11 +93,11 @@ class PropertyTypes {
         } else if (Image.isValidImageValue(value)) {
           return Image.from.call(this, value);
         }
-        throw new Error(`${toValueString(value)} must be a valid LinearGradientValue or ColorValue.`);
+        throw new Error(`${toValueString(value)} must be a valid ImageValue, LinearGradientValue or ColorValue.`);
       },
       encode(value) {
         if (value === 'initial') {
-          return undefined;
+          return null;
         }
         if (value instanceof LinearGradient) {
           const {colorStops, direction} = value;
@@ -113,7 +112,7 @@ class PropertyTypes {
         } else if (value instanceof Color) {
           return {type: 'color', color: value.toArray()};
         } else if (value instanceof Image) {
-          return {type: 'image', image: imageToArray(value)};
+          return {type: 'image', image: self.ImageValue.encode(value)};
         }
         throw new Error(`${toValueString(value)} must be a LinearGradient or Color instance.`);
       }
@@ -134,9 +133,36 @@ class PropertyTypes {
 
     /** @type {PropertyType<Image|null>} */
     this.ImageValue = {
-      convert: value => value ? Image.from.call(this, value) : null,
-      encode: value => value ? imageToArray(value) : value
-    };
+      convert: value => (!value || value === 'initial') ? null : Image.from(value),
+      encode(value) {
+        if (!value) {
+          return null;
+        }
+        const image = Image.from.call(this, value);
+        const width = image.width === 'auto' ? null : image.width;
+        const height = image.height === 'auto' ? null : image.height;
+        const scale = image.scale === 'auto' ? null : image.scale;
+        const src = image.src;
+        if (typeof src === 'string') {
+          return {
+            type: 'uri',
+            src, width, height, scale
+          };
+        }
+        if (getBytes(src)) {
+          return {
+            type: 'encodedImage',
+            src: getBytes(src),
+            width, height, scale
+          };
+        }
+        return {
+          type: 'imageBitmap',
+          src: getNativeObject(src).cid,
+          width, height, scale
+        };
+      }
+    },
 
     /** @type {PropertyType<Partial<BoxDimensionsObject>|'initial'>} */
     this.BoxDimensions = {

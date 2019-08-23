@@ -2,6 +2,7 @@ import {createJsxProcessor} from '../../src/tabris/JsxProcessor';
 import {expect, mockTabris, restore, spy} from '../test';
 import ClientMock from './ClientMock';
 import ActionSheet, {ActionSheetItem} from '../../src/tabris/ActionSheet';
+import Image from '../../src/tabris/Image';
 
 describe('ActionSheet', () => {
 
@@ -271,9 +272,14 @@ describe('ActionSheet', () => {
       );
 
       expect(popup.actions).to.deep.equal([
-        {title: 'foo', image: {src: 'foo.jpg', width: 'auto', height: 'auto', scale: 'auto'}, style: 'cancel'},
+        {
+          title: 'foo',
+          image: {src: 'foo.jpg', width: 'auto', height: 'auto', scale: 'auto'},
+          style: 'cancel'
+        },
         {title: '', image: null, style: 'default'}
       ]);
+      expect(popup.actions[0].image).to.be.instanceOf(Image);
     });
 
     it('with actions property and content', function() {

@@ -1,10 +1,11 @@
 import {colorArrayToString} from './util-colors';
+import {getNativeObject} from './util';
 import Color from './Color';
 import {fontStringToObject, fontObjectToString} from './util-fonts';
 import ImageData from './ImageData';
 import GC from './GC';
 import {hint, toValueString} from './Console';
-import ImageBitmap, {getNativeObject} from './ImageBitmap';
+import ImageBitmap from './ImageBitmap';
 
 export default class CanvasContext {
 

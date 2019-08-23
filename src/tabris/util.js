@@ -196,3 +196,21 @@ export function allowOnlyValues(value, allowed, valueName = 'Value') {
   }
   return value;
 }
+
+const nativeObjectSym = Symbol();
+
+/**
+ * @param {object} object
+ * @param {{cid: string}} nativeObject
+ */
+export function setNativeObject(object, nativeObject) {
+  object[nativeObjectSym] = nativeObject;
+}
+
+/**
+ * @param {object} object
+ * @returns {{cid: string, isDisposed: () => boolean}}
+ */
+export function getNativeObject(object) {
+  return object instanceof Object ? object[nativeObjectSym] : null;
+}

@@ -14,7 +14,7 @@
  *    Image scale factor, the image will be scaled down by this factor. The scale will be inferred from the image file name if it follows the pattern "@\<scale\>x", e.g. `"image@2x.jpg"`. The pattern is ignored if `scale`, `width` or `height` are set to a number or if `scale` is set to `"auto"`.
  */
 
-export type ImageLikeObject = {src: string, scale?: number|"auto", width?: number|"auto", height?: number|"auto"};
+export type ImageLikeObject = {src: string|ImageBitmap|Blob, scale?: number|"auto", width?: number|"auto", height?: number|"auto"};
 
 /**
  * Images can be specified as strings or Image/ImageLikeObject.
@@ -26,7 +26,7 @@ export type ImageLikeObject = {src: string, scale?: number|"auto", width?: numbe
  * The scale can be part of the file name in the pattern of "@\<scale\>x", e.g. `"image@2x.jpg"`. The pattern is ignored if `scale`, `width` or `height` are set to a number or if `scale` is set to `"auto"`.
  */
 
-export type ImageValue = ImageLikeObject|Image|string|null;
+export type ImageValue = ImageLikeObject|Image|string|ImageBitmap|Blob|null;
 
 
 export type ColorArray = [number, number, number, number]|[number, number, number];

@@ -1,13 +1,23 @@
 import Image from '../../src/tabris/Image';
-import {expect, spy, restore} from '../test';
+import {expect, mockTabris, restore, spy, createBitmap} from '../test';
+import ClientMock from './ClientMock';
+import Blob from '../../src/tabris/Blob';
 
 describe('Image', function() {
+
+  /** @type {ClientMock} */
+  let client;
+
+  beforeEach(() => {
+    client = new ClientMock();
+    mockTabris(client);
+  });
 
   afterEach(restore);
 
   describe('constructor', function() {
 
-    it('creates instance', function() {
+    it('creates instance from string', function() {
       expect(new Image({src: 'foo'})).to.deep.equal({src: 'foo', width: 'auto', height: 'auto', scale: 'auto'});
       expect(new Image({src: 'foo', width: 5})).to.deep.equal({src: 'foo', width: 5, height: 'auto', scale: 'auto'});
       expect(new Image({src: 'foo', height: 5})).to.deep.equal({src: 'foo', width: 'auto', height: 5, scale: 'auto'});
@@ -25,6 +35,17 @@ describe('Image', function() {
       });
     });
 
+    it('creates instance from blob', function() {
+      const src = new Blob([new Uint8Array([0, 1,2, 3])]);
+      expect(new Image({src})).to.deep.equal({src, width: 'auto', height: 'auto', scale: 'auto'});
+    });
+
+    it('creates instance from bitmap', function() {
+      return createBitmap(client).then(({bitmap}) => {
+        expect(new Image({src: bitmap})).to.deep.equal({src: bitmap, width: 'auto', height: 'auto', scale: 'auto'});
+      });
+    });
+
     it('throws for invalid parameters', function() {
       // @ts-ignore
       expect(() => new Image()).to.throw('Not enough arguments');
@@ -33,6 +54,7 @@ describe('Image', function() {
       // @ts-ignore
       expect(() => new Image({src: 5})).to.throw('"src" 5 must be a string');
       expect(() => new Image({src: ''})).to.throw('"src" must not be empty');
+      expect(() => new Image({src: new Blob([])})).to.throw('"src" must not be empty');
       expect(() => new Image({src: '..'})).to.throw('Invalid image "src": Path must not start with ".."');
       ['width', 'height'].forEach(property => {
         expect(() => {
@@ -52,6 +74,13 @@ describe('Image', function() {
         expect(() => {
           new Image({src: 'foo', [property]: Infinity});
         }).to.throw(`Image "${property}" is not a dimension: Invalid number Infinity`);
+      });
+    });
+
+    it('throws for closed bitmap', function() {
+      return createBitmap(client).then(({bitmap}) => {
+        bitmap.close();
+        expect(() => new Image({src: bitmap})).to.throw('ImageBitmap is closed');
       });
     });
 
@@ -121,9 +150,28 @@ describe('Image', function() {
       expect(Image.from({src: 'foo'})).to.be.instanceOf(Image);
     });
 
+    it('return image instances from bitmap', function() {
+      return createBitmap(client).then(({bitmap}) => {
+        expect(Image.from(bitmap)).to.be.instanceOf(Image);
+      });
+    });
+
+    it('return image instances from blob', function() {
+      const blob = new Blob([new Uint8Array([0, 1, 2])]);
+      expect(Image.from(blob)).to.be.instanceOf(Image);
+    });
+
     it('passes through image object', function() {
       const image = new Image({src: 'foo'});
       expect(Image.from(image)).to.equal(image);
+    });
+
+    it('rejects image object with closed ImageBitmap', function() {
+      return createBitmap(client).then(({bitmap}) => {
+        const image = new Image({src: bitmap});
+        bitmap.close();
+        expect(() => expect(Image.from(image))).to.throw('ImageBitmap is closed');
+      });
     });
 
     it('accepts image source', function() {

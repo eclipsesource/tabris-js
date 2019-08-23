@@ -1,6 +1,6 @@
 import Blob from './Blob';
 import NativeObject from './NativeObject';
-import {getBytes} from './util';
+import {getBytes, setNativeObject, getNativeObject} from './util';
 import ImageData from './ImageData';
 
 export default class ImageBitmap {
@@ -85,6 +85,11 @@ class _ImageBitmap extends NativeObject {
   }
 
 }
+
+Object.defineProperty(_ImageBitmap.prototype, 'wrapper', {
+  value: /** @type {ImageBitmap} */(null)}
+);
+
 /**
  * @param {(nativeObject: _ImageBitmap) => Promise<any>} cb
  * @returns {Promise<ImageBitmap>}
@@ -92,27 +97,13 @@ class _ImageBitmap extends NativeObject {
 function load(cb) {
   const nativeObject = new _ImageBitmap();
   return cb(nativeObject)
-    .then(resolution => new ImageBitmap(nativeObject, resolution))
+    .then(resolution => {
+      const wrapper = new ImageBitmap(nativeObject, resolution);
+      Object.defineProperty(wrapper, 'wrapper', {value: wrapper});
+      return wrapper;
+    })
     .catch(message => {
       nativeObject.dispose();
       throw new Error(message);
     });
-}
-
-const nativeObjectKey = Symbol();
-
-/**
- * @param {ImageBitmap} imageBitmap
- * @returns {_ImageBitmap}
- */
-export function getNativeObject(imageBitmap) {
-  return imageBitmap[nativeObjectKey];
-}
-
-/**
- * @param {ImageBitmap} imageBitmap
- * @param {_ImageBitmap} nativeObject
- */
-function setNativeObject(imageBitmap, nativeObject) {
-  imageBitmap[nativeObjectKey] = nativeObject;
 }

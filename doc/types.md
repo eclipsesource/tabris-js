@@ -500,13 +500,13 @@ Examples:
 
 ### ImageValue
 
-A `ImageValue` describes an image file path and that image's dimension or scale. This type allows various expressions that can all be used in place of a [`Image`](./api/Image.md) instance for convenience. All API that accept these expressions will convert them to a `Image` object.
+A `ImageValue` describes an image source and optionally that image's dimension or scale it should be displayed at. This type allows various expressions that can all be used in place of a [`Image`](./api/Image.md) instance for convenience. All API that accept these expressions will convert them to a `Image` object.
 
-The **source** (shortened to `src`) is a File system path, relative path or URL. The [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme) scheme is also supported. Relative paths are resolved **relative to the projects 'package.json'**. On Android the name of a bundled [drawable resource](https://developer.android.com/guide/topics/resources/drawable-resource.html) can be provided with the url scheme `android-drawable`, e.g. `android-drawable://ic_info_black`.
+All ImageValue variations require a **source** (shortened to `src`), which is a File system path, relative path, full URL, a [`Blob`](./api/Blob.md) containing a `jpg` or `png` file,  or an [`ImageBitmap`](./api/ImageBitmap.md) instance. The [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme) scheme is also supported. Relative paths are resolved **relative to the projects 'package.json'**. If an `ImageBitmap` is used it may not be [closed](./api/ImageBitmap.md#close) at the time the bitmap is assigned to a property. On Android only the name of a bundled [drawable resource](https://developer.android.com/guide/topics/resources/drawable-resource.html) may be provided via the `android-drawable` url scheme, e.g.  `android-drawable://ic_info_black`.
 
-The **width** and **height** of an image are specified in DIP (device independent pixel). If none are given (e.g. value is `"auto"`) the dimensions from the image file are used in combination with the given **scale**.
+The **width** and **height** of an image may optionally be specified in DIP (device independent pixel). If none are given the dimensions from the image file are used in combination with the given **scale**.
 
-The **scale** is a positive float or `'auto'`. The image will be scaled down by this factor. Ignored if **width** or **height** are given. If neither **scale**, **width** or **height** are given the scale may be extracted from image file name if it follows the pattern "@\<scale\>x", e.g. `"image@2x.jpg"`. If the scale can not be determined by any of these methods it will be treated as `1`.
+The **scale** is a positive float or `'auto'`. The image will be scaled down by this factor. It is ignored if **width** or **height** are given. If neither **scale**, **width** or **height** are given the scale may be extracted from an image URL if the file name contains the pattern "@\<scale\>x", e.g. `"image@2x.jpg"`. If the scale can not be determined by any of these methods it will be treated as `1`.
 
 The scale factor of the image is relevant when the intrinsic size (in DIP) of the image is needed for layouting. On high-density displays (i.e. [devices with a  scale factor higher than 1](./api/device.md#scalefactor)) an undetermined image scale factor (or scale factor `1`) may make the image look blurry at full its full natural size.  It is the application developers responsibility to provide and use image files with the appropriate scale factor for any given device.
 
@@ -523,7 +523,7 @@ Examples:
 ```js
 new Image({src: "http://example.com/catseye.jpg", scale: 2})
 new Image({src: "http://example.com/catseye.jpg", width: 100, height: 200})
-Image.from("images/catseye@2x.jpg");
+Image.from(blob);
 ```
 
 #### ImageLikeObject
@@ -532,20 +532,29 @@ Image.from("images/catseye@2x.jpg");
 
 ```ts
 interface ImageLikeObject {
-  src: string;
+  src: string|ImageBitmap|Blob;
   scale?: number | "auto";
   width?: number | "auto";
   height?: number | "auto";
 }
 ```
 
-An instance of [`Image`](./api/Image.md) class is a valid `ImageLikeObject`.
+Basically it's the interface of the [`Image`](./api/Image.md) class, but with all members except `src` being optional.
 
 Examples:
 
 ```js
 {src: "images/catseye.jpg", width: 300, height: 200}
-{src: "http://example.com/catseye.jpg", scale: 2}
+{src: blob, scale: 2}
+```
+
+#### Image Source
+
+This is just the **source** value of an `Image` by itself, so a `string`, `Blob` or `ImageBitmap`.
+
+```js
+"images/catseye.jpg"  // same as:
+{src: "images/catseye.jpg"}
 ```
 
 ### LinearGradientValue

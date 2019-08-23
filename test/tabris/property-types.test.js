@@ -1,13 +1,14 @@
-import {expect, mockTabris, restore} from '../test';
+import {expect, mockTabris, restore, createBitmap} from '../test';
 import ClientMock from './ClientMock';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 import {types} from '../../src/tabris/property-types';
-import {omit} from '../../src/tabris/util';
+import {omit, getBytes} from '../../src/tabris/util';
 import Color from '../../src/tabris/Color';
 import Image from '../../src/tabris/Image';
 import LinearGradient from '../../src/tabris/LinearGradient';
 import Font from '../../src/tabris/Font';
 import Widget from '../../src/tabris/Widget';
+import Blob from '../../src/tabris/Blob';
 
 describe('property-types', function() {
 
@@ -16,8 +17,11 @@ describe('property-types', function() {
     get _nativeType() { return 'CustomNativeObject'; }
   }
 
+  /** @type {ClientMock} */
+  let client;
+
   beforeEach(function() {
-    const client = new ClientMock();
+    client = new ClientMock();
     mockTabris(client);
   });
 
@@ -59,75 +63,113 @@ describe('property-types', function() {
 
   describe('Shader', function() {
 
-    it('convert translates falsy values to "initial', function() {
-      expect(types.Shader.convert(null)).to.equal('initial');
-      expect(types.Shader.convert(undefined)).to.equal('initial');
-      expect(types.Shader.convert('')).to.equal('initial');
-      expect(types.Shader.convert('initial')).to.equal('initial');
+    describe('convert', function() {
+
+      const convert = types.Shader.convert;
+
+      it('throws for invalid values', function() {
+        expect(() => convert(12)).to.throw('12 must be a valid ImageValue, LinearGradientValue or ColorValue');
+        expect(() => convert('linear-gradient(to right bottom, blue, red)'))
+          .to.throw('Invalid direction "right bottom". Corners are not supported.');
+      });
+
+      it('converts falsy values to "initial', function() {
+        expect(convert(null)).to.equal('initial');
+        expect(convert(undefined)).to.equal('initial');
+        expect(convert('')).to.equal('initial');
+        expect(convert('initial')).to.equal('initial');
+      });
+
+      it('converts linear string to a LinearGradient instance', function() {
+        const instance = /** @type {LinearGradient} */(convert('linear-gradient(red -30%, blue)'));
+        expect(instance).to.be.instanceOf(LinearGradient);
+      });
+
+      it('passes through LinearGradient gradient', function() {
+        const gradient = new LinearGradient([new Color(0, 1, 2), new Color(0, 1, 2)], 0);
+        expect(convert(gradient)).to.equal(gradient);
+      });
+
+      it('converts image uri values to Image instance', function() {
+        expect(convert('foo.png')).to.be.instanceOf(Image);
+        expect(convert({src: 'foo.png'})).to.be.instanceOf(Image);
+      });
+
+      it('converts bitmap to Image instance', function() {
+        return createBitmap(client).then(({bitmap}) => {
+          const result = convert(bitmap);
+          expect(result).be.instanceOf(Image);
+          expect(result.src).be.equal(bitmap);
+        });
+      });
+
+      it('converts blob to Image instance', function() {
+        const blob = new Blob([new Uint8Array([0, 1, 3])]);
+        const result = convert(blob);
+        expect(result).to.be.instanceOf(Image);
+        expect(result.src).be.equal(blob);
+      });
+
+      it('passes through Image instance', function() {
+        return createBitmap(client).then(({bitmap}) => {
+          const image = new Image({src: bitmap});
+
+          const result = convert(image);
+
+          expect(result).to.equal(image);
+          expect(result.src).be.equal(bitmap);
+        });
+      });
+
+      it('converts color values to Color instance', function() {
+        expect(convert('#ff00ff')).to.be.instanceOf(Color);
+        expect(convert({red: 255, green: 0, blue: 255})).to.be.instanceOf(Color);
+      });
+
+      it('passes through Color instance', function() {
+        const color = new Color(0, 1, 3);
+        expect(convert(color)).to.equal(color);
+      });
+
     });
 
-    it('convert throws for invalid values', function() {
-      expect(() => types.Shader.convert(12)).to.throw('12 must be a valid LinearGradientValue or ColorValue');
-      expect(() => {
-        types.Shader.convert('linear-gradient(to right bottom, blue, red)');
-      }).to.throw('Invalid direction "right bottom". Corners are not supported.');
-    });
+    describe('encode', function() {
 
-    it('encode translates "initial" to `undefined`', function() {
-      expect(types.Shader.encode('initial')).to.equal(undefined);
-    });
+      const encode = types.Shader.encode;
 
-    it('convert translates linear string to a LinearGradient instance', function() {
-      const instance = /** @type {LinearGradient} */(types.Shader.convert('linear-gradient(red -30%, blue)'));
-      expect(instance).to.be.instanceOf(LinearGradient);
-    });
+      it('translates "initial" to `null`', function() {
+        expect(encode('initial')).to.be.null;
+      });
 
-    it('encode translates LinearGradient instance to a encoded linear gradient object', function() {
-      const shader = types.Shader.encode(LinearGradient.from('linear-gradient(red -30%, blue)'));
-      expect(shader.type).to.equal('linearGradient');
-      expect(shader.angle).to.equal(180);
-      expect(shader.colors[0]).to.deep.equal([[255, 0, 0, 255], -0.3]);
-      expect(shader.colors[1]).to.deep.equal([[0, 0, 255, 255], null]);
-    });
+      it('translates Image instance to image shader', function() {
+        expect(encode(new Image({src: 'foo.png', scale: 2}))).to.deep.equal({
+          type: 'image',
+          image: {
+            type: 'uri',
+            src: 'foo.png',
+            width: null, height: null, scale: 2
+          }
+        });
+      });
 
-    it('convert translates image values to Image instance', function() {
-      expect(types.Shader.convert('foo.png')).to.be.instanceOf(Image);
-      expect(types.Shader.convert({src: 'foo.png'})).to.be.instanceOf(Image);
-    });
+      it('translates LinearGradient instance to linear gradient shader', function() {
+        expect(encode(LinearGradient.from('linear-gradient(red -30%, blue)'))).to.deep.equal({
+          type: 'linearGradient',
+          angle: 180,
+          colors: [
+            [[255, 0, 0, 255], -0.3],
+            [[0, 0, 255, 255], null]
+          ]
+        });
+      });
 
-    it('convert translates color values to Image instance', function() {
-      expect(types.Shader.convert('#ff00ff')).to.be.instanceOf(Color);
-      expect(types.Shader.convert({red: 255, green: 0, blue: 255})).to.be.instanceOf(Color);
-    });
+      it('translates Color instance to color shader', function() {
+        expect(encode(new Color(255, 0, 255))).to.deep.equal({
+          type: 'color',
+          color: [255, 0, 255, 255]
+        });
+      });
 
-    it('encode translates Image instance to image shader', function() {
-      const shader = types.Shader.encode(new Image({src: 'foo.png'}));
-      expect(shader.type).to.equal('image');
-      expect(shader.image).to.deep.equal(['foo.png', null, null, null]);
-    });
-
-    it('encode translates Image instance with scale to image shader', function() {
-      const shader = types.Shader.encode(new Image({src: 'foo.png', scale: 2}));
-      expect(shader.type).to.equal('image');
-      expect(shader.image).to.deep.equal(['foo.png', null, null, 2]);
-    });
-
-    it('encode translates Image instance with width and height to image shader', function() {
-      const shader = types.Shader.encode(new Image({src: 'foo.png', width: 200, height: 100}));
-      expect(shader.type).to.equal('image');
-      expect(shader.image).to.deep.equal(['foo.png', 200, 100, null]);
-    });
-
-    it('encode translates Image instance with width only to image shader', function() {
-      const shader = types.Shader.encode(new Image({src: 'foo.png', width: 200}));
-      expect(shader.type).to.equal('image');
-      expect(shader.image).to.deep.equal(['foo.png', 200, null, null]);
-    });
-
-    it('encode translates Color instance to color array', function() {
-      const shader = types.Shader.encode(new Color(255, 0, 255));
-      expect(shader.type).to.deep.equal('color');
-      expect(shader.color).to.deep.equal([255, 0, 255, 255]);
     });
 
   });
@@ -189,34 +231,126 @@ describe('property-types', function() {
 
   describe('ImageValue', function() {
 
-    const convert = types.ImageValue.convert;
-    const encode = types.ImageValue.encode;
+    describe('convert', function() {
 
-    it('convert translates falsy values to null', function() {
-      expect(convert(null)).to.be.null;
-      expect(convert(undefined)).to.be.null;
-      expect(convert('')).to.be.null;
+      const convert = types.ImageValue.convert;
+
+      it('translates falsy values to null', function() {
+        expect(convert(null)).to.be.null;
+        expect(convert(undefined)).to.be.null;
+        expect(convert('')).to.be.null;
+      });
+
+      it('translates image uri values to Image instance', function() {
+        expect(convert({src: 'foo.png'})).to.be.instanceOf(Image);
+        expect(convert('foo.png')).to.be.instanceOf(Image);
+      });
+
+      it('fails if value is not an image value', function() {
+        expect(() => convert(/** @type {any} */(23))).to.throw(Error, '23 is not a valid ImageValue');
+        expect(() => convert({})).to.throw(Error, '"src" missing');
+      });
+
+      it('passes through Image instance', function() {
+        const image = new Image({src: 'foo.png'});
+
+        expect(convert(image)).to.equal(image);
+      });
+
+      it('keeps blob instance', function() {
+        const blob = new Blob([new Uint8Array(12)]);
+        const image = Image.from(blob);
+
+        expect(convert(image).src).to.equal(blob);
+        expect(convert(blob).src).to.equal(blob);
+      });
+
+      it('keeps ImageBitmap instance', function() {
+        return createBitmap(client).then(({bitmap}) => {
+          const image = Image.from(bitmap);
+
+          expect(convert(image).src).to.equal(bitmap);
+          expect(convert(bitmap).src).to.equal(bitmap);
+        });
+      });
+
+      it('rejects image object with closed ImageBitmap', function() {
+        return createBitmap(client).then(({bitmap}) => {
+          const image = new Image({src: bitmap});
+          bitmap.close();
+          expect(() => convert(image)).to.throw('ImageBitmap is closed');
+        });
+      });
+
     });
 
-    it('convert translates image values to Image instance', function() {
-      expect(convert({src: 'foo.png'})).to.be.instanceOf(Image);
-      expect(convert('foo.png')).to.be.instanceOf(Image);
-    });
+    describe('encode', function() {
 
-    it('encode translates Image instance to image array', function() {
-      expect(encode(new Image({src: 'foo.png', width: 10, height: 10})))
-        .to.deep.equal(['foo.png', 10, 10, null]);
-      expect(encode(new Image({src: 'foo.png', scale: 1.4})))
-        .to.deep.equal(['foo.png', null, null, 1.4]);
-    });
+      const encode = types.ImageValue.encode;
 
-    it('encode passes through null', function() {
-      expect(encode(null)).to.be.null;
-    });
+      it('passes through null', function() {
+        expect(encode(null)).to.be.null;
+      });
 
-    it('convert fails if value is not an image value', function() {
-      expect(() => convert(/** @type {any} */(23))).to.throw(Error, '23 is not a valid ImageValue');
-      expect(() => convert({})).to.throw(Error, '"src" missing');
+      it('succeeds for image with explicit width and height', function() {
+        const result = encode(Image.from({src: 'foo.png', width: 10, height: 20}));
+
+        expect(result).to.deep.equal({
+          type: 'uri',
+          src: 'foo.png',
+          width: 10,
+          height: 20,
+          scale: null
+        });
+      });
+
+      it('succeeds for image with scale', function() {
+        const result = encode(Image.from({src: 'foo.png', scale: 1.4}));
+        expect(result).to.deep.equal({
+          type: 'uri',
+          src: 'foo.png',
+          width: null, height: null,
+          scale: 1.4
+        });
+      });
+
+      it('succeeds for image without scale or dimension', function() {
+        expect(encode(Image.from('foo.jpg'))).to.deep.equal({
+          type: 'uri',
+          src: 'foo.jpg',
+          width: null, height: null, scale: null
+        });
+      });
+
+      it('succeeds for uri src', function() {
+        return createBitmap(client).then(({bitmap, id}) => {
+          expect(encode(Image.from(bitmap))).to.deep.equal({
+            type: 'imageBitmap',
+            src: id,
+            width: null, height: null, scale: null
+          });
+        });
+      });
+
+      it('succeeds for Blob src', function() {
+        const blob = new Blob([new Uint8Array([0, 1, 2])]);
+        expect(encode(blob)).to.deep.equal({
+          type: 'encodedImage',
+          src: getBytes(blob),
+          width: null, height: null, scale: null
+        });
+      });
+
+      it('succeeds for ImageBitmap src', function() {
+        return createBitmap(client).then(({bitmap, id}) => {
+          expect(encode(Image.from(bitmap))).to.deep.equal({
+            type: 'imageBitmap',
+            src: id,
+            width: null, height: null, scale: null
+          });
+        });
+      });
+
     });
 
   });

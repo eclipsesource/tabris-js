@@ -123,7 +123,14 @@ describe('Widget', function() {
       widget.set({background: {src: 'bar', width: 23, height: 42}});
 
       const call = client.calls({op: 'set'})[0];
-      expect(call.properties.background).to.eql({type: 'image', image: ['bar', 23, 42, null]});
+      expect(call.properties.background).to.deep.equal({
+        type: 'image',
+        image: {
+          type: 'uri',
+          src: 'bar',
+          width: 23, height: 42, scale: null
+        }
+      });
     });
 
     it('decodes bounds', function() {
@@ -1605,6 +1612,14 @@ describe('Widget', function() {
     beforeEach(function() {
       widget = new TestWidget();
       client.resetCalls();
+    });
+
+    it('translates bounds to object', function() {
+      stub(client, 'get').returns([1, 2, 3, 4]);
+
+      const result = widget.bounds;
+
+      expect(result).to.eql({left: 1, top: 2, width: 3, height: 4});
     });
 
     it('translates bounds to object', function() {

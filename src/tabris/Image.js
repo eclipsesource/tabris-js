@@ -1,4 +1,4 @@
-import {normalizePathUrl, checkNumber} from './util';
+import {normalizePathUrl, checkNumber, getNativeObject, getBytes} from './util';
 import {hint, toValueString} from './Console';
 
 export default class Image {
@@ -27,7 +27,13 @@ export default class Image {
    */
   static from(value) {
     if (value instanceof Image) {
+      if (getNativeObject(value.src) && getNativeObject(value.src).isDisposed()) {
+        throw new Error('ImageBitmap is closed');
+      }
       return value;
+    }
+    if (typeof value === 'string' || getNativeObject(value) || getBytes(value)) {
+      return new Image({src: value});
     }
     if (value instanceof Object) {
       if (hasInconsistentDimensions(value)) {
@@ -38,9 +44,6 @@ export default class Image {
         return new Image(Object.assign({}, value, {scale: 'auto'}));
       }
       return new Image(value);
-    }
-    if (typeof value === 'string') {
-      return new Image({src: value});
     }
     throw new Error(`${toValueString(value)} is not a valid ImageValue`);
   }
@@ -54,8 +57,8 @@ export default class Image {
     }
     checkConsistentDimensions(imageLike);
     setSrc(this, imageLike);
-    setDimension(this, 'width', 'width' in imageLike ? imageLike.width : 'auto');
-    setDimension(this, 'height', 'height' in imageLike ? imageLike.height : 'auto');
+    setDimension(this, 'width', hasExplicit(imageLike, 'width') ? imageLike.width : 'auto');
+    setDimension(this, 'height', hasExplicit(imageLike, 'height') ? imageLike.height : 'auto');
     setScale(this, imageLike);
   }
 
@@ -63,7 +66,9 @@ export default class Image {
 
 /** @type {number|Auto} */
 const initDimension = 0;
-Object.defineProperty(Image.prototype, 'src', {value: ''});
+/** @type {string|object} */
+const initSrc = '';
+Object.defineProperty(Image.prototype, 'src', {value: initSrc});
 Object.defineProperty(Image.prototype, 'width', {value: initDimension});
 Object.defineProperty(Image.prototype, 'height', {value: initDimension});
 Object.defineProperty(Image.prototype, 'scale', {value: initDimension});
@@ -72,14 +77,18 @@ Object.defineProperty(Image.prototype, 'scale', {value: initDimension});
  * @param {Image} image
  * @param {ImageLikeObject} imageLike
  */
+
 function setScale(image, imageLike) {
-  let scale = 'scale' in imageLike ? imageLike.scale : 'auto';
-  if (!('scale' in imageLike)) {
-    if (!hasExplicit(imageLike, 'width') && !hasExplicit(imageLike, 'height')) {
-      const autoScaleMatch = /@([0-9]\.?[0-9]*)x/.exec(imageLike.src.split('/').pop());
-      if (autoScaleMatch && autoScaleMatch[1]) {
-        scale = parseFloat(autoScaleMatch[1]);
-      }
+  let scale = hasExplicit(imageLike, 'scale') ? imageLike.scale : 'auto';
+  if (
+    imageLike.scale == null
+    && !hasExplicit(imageLike, 'width')
+    && !hasExplicit(imageLike, 'height')
+    && typeof imageLike.src === 'string'
+  ) {
+    const autoScaleMatch = /@([0-9]\.?[0-9]*)x/.exec(imageLike.src.split('/').pop());
+    if (autoScaleMatch && autoScaleMatch[1]) {
+      scale = parseFloat(autoScaleMatch[1]);
     }
   }
   setDimension(image, 'scale', scale);
@@ -90,7 +99,7 @@ function setScale(image, imageLike) {
  * @param {keyof ImageLikeObject} property
  */
 function hasExplicit(imageLike, property) {
-  return property in imageLike && imageLike[property] !== 'auto';
+  return property in imageLike && imageLike[property] !== 'auto' && imageLike[property] != null;
 }
 
 /**
@@ -99,13 +108,17 @@ function hasExplicit(imageLike, property) {
  */
 function setSrc(image, imageLike) {
   checkSrc(imageLike);
-  let path;
-  try {
-    path = normalizePathUrl(imageLike.src);
-  } catch (err) {
-    throw new Error('Invalid image "src": ' + err.message);
+  if (getNativeObject(imageLike.src) || getBytes(imageLike.src)) {
+    Object.defineProperty(image, 'src', {enumerable: true, value: imageLike.src});
+  } else {
+    let path;
+    try {
+      path = normalizePathUrl(imageLike.src);
+    } catch (err) {
+      throw new Error('Invalid image "src": ' + err.message);
+    }
+    Object.defineProperty(image, 'src', {enumerable: true, value: path});
   }
-  Object.defineProperty(image, 'src', {enumerable: true, value: path});
 }
 
 /**
@@ -115,11 +128,20 @@ function checkSrc(imageLike) {
   if (!('src' in imageLike)) {
     throw new Error('Image "src" missing');
   }
-  if (typeof imageLike.src !== 'string') {
-    throw new Error(`Image "src" ${toValueString(imageLike.src)} must be a string`);
-  }
-  if (!imageLike.src.length) {
-    throw new Error('Image "src" must not be empty');
+  if (getNativeObject(imageLike.src)) {
+    if (getNativeObject(imageLike.src).isDisposed()) {
+      throw new Error('ImageBitmap is closed');
+    }
+  } else if (typeof imageLike.src === 'string') {
+    if (!imageLike.src.length) {
+      throw new Error('Image "src" must not be empty');
+    }
+  } else if (getBytes(imageLike.src)) {
+    if (!imageLike.src.size) {
+      throw new Error('Image "src" must not be empty');
+    }
+  } else {
+    throw new Error(`Image "src" ${toValueString(imageLike.src)} must be a string, ImageBitmap or Blob`);
   }
 }
 

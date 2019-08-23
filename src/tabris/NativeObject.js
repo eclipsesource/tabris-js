@@ -205,7 +205,7 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
       }
     } else if (this._getStoredProperty(name) !== convertedValue || !this._wasSet(name)) {
       this._beforePropertyChange(name, convertedValue);
-      this._nativeSet(name, encodedValue);
+      this._nativeSet(name, encodedValue);//TODO should not happen if changing from unset to default
       this._storeProperty(name, convertedValue, def.const);
     }
   }

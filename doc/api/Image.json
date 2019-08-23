@@ -14,8 +14,14 @@
   "description": "Represents an image. See also [ImageValue](../types.html#imagevalue)",
   "properties": {
     "src": {
-      "type": "string",
-      "description": "File system path, relative path or URL. Android and iOS also support [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme). Relative paths are resolved **relative to ‘package.json’**. On Android the name of a bundled [drawable resource](https://developer.android.com/guide/topics/resources/drawable-resource) can be provided with the url scheme android-drawable, e.g. android-drawable://ic_info_black.",
+      "type": {
+        "union": [
+          "string",
+          "ImageBitmap",
+          "Blob"
+        ]
+      },
+      "description": "As a string this is a file system path, relative path or URL. [Data URIs](https://en.wikipedia.org/wiki/Data_URI_scheme) are also supported. Relative paths are resolved **relative to ‘package.json’**. On Android the name of a bundled [drawable resource](https://developer.android.com/guide/topics/resources/drawable-resource) can be provided with the url scheme android-drawable, e.g. android-drawable://ic_info_black.\nIf a closed ImageBitmap is given the constructor will throw.\nA given Blob must contain an encoded image.",
       "const": true,
       "readonly": true
     },

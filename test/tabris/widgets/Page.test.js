@@ -38,7 +38,11 @@ describe('Page', function() {
     const setCalls = client.calls({op: 'set'});
     expect(setCalls.length).to.equal(1);
     expect(setCalls[0].properties.title).to.equal('title');
-    expect(setCalls[0].properties.image).to.deep.equal(['image', null, null, null]);
+    expect(setCalls[0].properties.image).to.deep.equal({
+      type: 'uri',
+      src: 'image',
+      width: null, height: null, scale: null
+    });
     expect(setCalls[0].properties.background).to.deep.equal({type: 'color', color: [255, 0, 0, 255]});
   });
 

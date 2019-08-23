@@ -4,7 +4,6 @@ declare var tabris: import('./main').TabrisMain;
 declare var console: import('./Console').default;
 
 type Auto = 'auto';
-type ImageLikeObject = {src: string, scale?: number|Auto, width?: number|Auto, height?: number|Auto};
 type ImageValue = ImageLikeObject|import('./Image').default|string|null;
 type ColorArray = [number, number, number, number]|[number, number, number];
 type ColorLikeObject = {red: number, green: number, blue: number, alpha?: number};
@@ -37,6 +36,13 @@ interface LayoutDataLikeObject {
     width?: Auto|null;
     height?: Auto|number;
 }
+
+type ImageLikeObject = {
+  src: string | import('./Blob').default | import('./ImageBitmap').default,
+  scale?: number|Auto,
+  width?: number|Auto,
+  height?: number|Auto
+};
 
 interface LayoutDataProperties {
     left?: Auto|import('./Constraint').default;
