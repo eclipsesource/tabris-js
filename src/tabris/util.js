@@ -89,30 +89,35 @@ export function checkNumber(value, range = [-Infinity, Infinity], errorPrefix = 
   }
 }
 
-const traps = [
-  'getPrototypeOf',
-  'setPrototypeOf',
-  'isExtensible',
-  'preventExtensions',
-  'getOwnPropertyDescriptor',
-  'defineProperty',
-  'has',
-  'get',
-  'set',
-  'deleteProperty',
-  'ownKeys',
-  'apply',
-  'construct'
-];
+/**
+ * Boolean values indicates whether the trap must return true to avoid
+ * exceptions if code is executed in strict mode. (Which is never desired.)
+ */
+const traps = {
+  getPrototypeOf: false,
+  setPrototypeOf: true,
+  isExtensible: false,
+  preventExtensions: false,
+  getOwnPropertyDescriptor: false,
+  defineProperty: true,
+  has: false,
+  get: false,
+  set: true,
+  deleteProperty: true,
+  ownKeys: false,
+  apply: false,
+  construct: false
+};
 
 /**
  * @param {() => object} getTarget
  */
 export function proxify(getTarget) {
   const handler = {};
-  traps.forEach(trap => handler[trap]
-    = (_, ...args) => Reflect[trap](getTarget(), ...args)
-  );
+  Object.keys(traps).forEach(trap => handler[trap] = (_, ...args) => {
+    const result = Reflect[trap](getTarget(), ...args);
+    return traps[trap] ? true : result;
+  });
   return new Proxy({}, handler);
 }
 
