@@ -246,6 +246,20 @@ export class LayoutQueue {
 
 }
 
+export function isValidConstraint(constraint) {
+  if (constraint === 'auto') {
+    return true;
+  }
+  if (constraint.reference instanceof Percent && constraint.reference.percent === 0) {
+    return true;
+  }
+  return false;
+}
+
+export function layoutWarn(child, prop, message) {
+  warn(`Unsupported value for "${prop}": ${message}\nTarget: ${getPath(child)}`);
+}
+
 export function getPath(widget) {
   const path = [widget];
   let parent = widget.parent();
@@ -254,6 +268,18 @@ export function getPath(widget) {
     parent = parent.parent();
   }
   return path.join(' > ');
+}
+
+/**
+ * @param {number} value1
+ * @param {number} value2
+ * @return {number}
+ */
+export function maxPositive(value1, value2) {
+  if (value1 < 0 || value2 < 0) {
+    return 0;
+  }
+  return Math.max(0, Math.max(value1, value2));
 }
 
 function resolveAttribute(value, widget) {

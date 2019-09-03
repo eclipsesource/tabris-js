@@ -26,7 +26,7 @@
     },
     "spacing": {
       "type": "number",
-      "default": 16,
+      "default": 0,
       "const": true,
       "description": "Additional space to add between the children in device independent pixel."
     },

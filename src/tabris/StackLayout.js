@@ -1,4 +1,4 @@
-import Layout, {getPath} from './Layout';
+import Layout, {isValidConstraint, maxPositive, layoutWarn, getPath} from './Layout';
 import LayoutData from './LayoutData';
 import {types} from './property-types';
 import Constraint from './Constraint';
@@ -173,38 +173,4 @@ export default class StackLayout extends Layout {
     return -1;
   }
 
-  _valignTop(allLayoutData) {
-    return allLayoutData[0].top !== 'auto';
-  }
-
-  _valignBottom(allLayoutData) {
-    return allLayoutData[allLayoutData.length - 1].bottom !== 'auto';
-  }
-
-}
-
-function isValidConstraint(constraint) {
-  if (constraint === 'auto') {
-    return true;
-  }
-  if (constraint.reference instanceof Percent && constraint.reference.percent === 0) {
-    return true;
-  }
-  return false;
-}
-
-function layoutWarn(child, prop, message) {
-  warn(`Unsupported value for "${prop}": ${message}\nTarget: ${getPath(child)}`);
-}
-
-/**
- * @param {number} value1
- * @param {number} value2
- * @return {number}
- */
-function maxPositive(value1, value2) {
-  if (value1 < 0 || value2 < 0) {
-    return 0;
-  }
-  return Math.max(0, Math.max(value1, value2));
 }

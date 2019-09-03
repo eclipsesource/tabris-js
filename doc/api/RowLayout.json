@@ -1,0 +1,55 @@
+{
+  "type": "RowLayout",
+  "category": "widget",
+  "extends": "Layout",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "options",
+        "description": "Sets the alignment and spacing properties.",
+        "type": {
+          "map": {
+            "spacing": {"type": "number", "optional": true},
+            "alignment": {
+              "type": {"union": ["'top'", "'centerY'", "'stretchY'", "'bottom'", "'baseline'"]},
+              "optional": true
+            }
+          }
+        },
+        "optional": true
+      }
+    ]
+  },
+  "description": "Row based layout manager. Can be set on the `layout` property of any `Composite` or widget extending `Composite` like `Page` or `Tab` widget. The `Row` uses it as the default `layout`.<br/><br/> All children of the composite are automatically arranged in one horizontal row, starting from the left.",
+  "properties": {
+    "spacing": {
+      "type": "number",
+      "const": true,
+      "default": 0,
+      "description": "The Space between the children in device independent pixel.",
+      "readonly": true
+    },
+    "alignment": {
+      "type": {"union": ["'top'", "'centerY'", "'stretchY'", "'bottom'", "'baseline'"]},
+      "const": true,
+      "default": "'top'",
+      "description": "Determines the vertical placement of the children. For the `stretchY` value to work correctly the composite needs to be given a width either by setting `width` or by setting `top` and `bottom`.",
+      "readonly": true
+    }
+  },
+  "statics": {
+    "properties": {
+      "default": {
+        "description": "Instance of RowLayout used as the default `layout` property value of `Row` widgets. Equivalent to `new RowLayout()`",
+        "type": "RowLayout"
+      }
+    }
+  },
+  "links": [
+    {
+      "title": "Creating a simple `Row` with an included `RowLayout`",
+      "snippet": "row.jsx"
+    }
+  ]
+}

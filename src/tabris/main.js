@@ -26,6 +26,8 @@ import CollectionView from './widgets/CollectionView';
 import Color from './Color';
 import Console from './Console';
 import {format} from './Formatter';
+import Row from './widgets/Row';
+import RowLayout from './RowLayout';
 import Stack from './widgets/Stack';
 import StackLayout from './StackLayout';
 import Composite from './widgets/Composite';
@@ -145,6 +147,8 @@ const tabrisMain = Object.assign(new Tabris(), {
   ProgressEvent,
   RadioButton,
   RefreshComposite,
+  RowLayout,
+  Row,
   ScrollView,
   SearchAction,
   Slider,

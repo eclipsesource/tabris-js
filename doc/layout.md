@@ -14,6 +14,7 @@ Type                 | Default            | Settable
 `ContentView`        | `ConstraintLayout` | No
 `Drawer`             | `ConstraintLayout` | No
 `Canvas`             | `ConstraintLayout` | On creation
+`Row`                | `RowLayout`        | On creation, `RowLayout` instances only
 `Stack`              | `StackLayout`      | On creation, `StackLayout` instances only
 `NavigationView`     | `null`             | No
 `Page`               | `ConstraintLayout` | On creation
@@ -269,3 +270,77 @@ Same code, but using JSX and layoutData shorthand syntax:
 ### Properties "baseline" and "centerY"
 
 These properties are not supported by `StackLayout`.
+
+## RowLayout
+
+The `RowLayout` is the default layout manager of the `Row` widget, but can also be used on `Composite`, `Canvas`, `Page` and `Tab`. It's a convenient way of arranging widgets in a horizontal line, like a single-row table.
+
+> :point_right: `RowLayout` is just a helper, everything it can do can also be achieved with `ConstraintLayout`.
+
+`StackLayout` has two properties, both of which can be set only via its own constructor or the constructor of `Stack`. They are:
+
+Property | Type | Default Value | Description
+---------|------|---------------|------------
+`alignment` | `string`&nbsp;(`'top'`,&nbsp;`'centerY'`,&nbsp;`'stretchY'`&nbsp;or&nbsp;`'bottom'`) | `'top'` | Determines the vertical placement of the children
+`spacing` | `number` | `0` | The default horizontal distance between the children in device independent pixel
+
+The order in which the children are arranged **horizontally** corresponds to the order in which they are appended to the composite. The first child is placed at the very left of the composite, the second to right next to it, etc. The last widget will be placed to the right of all others and any remaining space of the composite (if it is wider than needed) will be left blank. The order may be changed at any time by re-inserting a child at any given position using [`insertAfter`](./api/widget.md#insertafterwidget) and [`insertBefore`](./api/widget.md#insertbeforewidget).
+
+
+The **vertical** layout of each child is controlled by the `alignment` property. If it is set to `'top'`, `'bottom'` or `'centerY'`, all children will have their intrinsic height and placed at the top, bottom or vertical center of the composite. If `alignment` is `'baseline'` all children will be aligned with the text content of their lefthand neighbor. If `alignment` is `'stretchY'`, all children will take all the available vertical space. The composite's padding will be respected in all cases.
+
+> :point_right: When `alignment` is set to `stretchY` the height of the composite needs to be determined by either its `height` property or its  `top` and `bottom` properties. It can not be computed based on the children's intrinsic size.
+
+Examples:
+
+```jsx
+<Row alignment='top' padding={4} spacing={24} >
+  <TextView>lorem</TextView>
+  <TextView>ipsum dolor</TextView>
+  <TextView>sit amet</TextView>
+</Row>
+```
+
+```js
+new Page({
+  layout: new RowLayout({alignment: 'top', padding: 4, spacing: 24})
+});
+```
+
+The `layoutData` of children managed by a `RowLayout` is interpreted differently from `ConstraintLayout`:
+
+### Properties "width" and "height"
+
+Like in `ConstraintLayout`, the `width` and `height` properties define the [dimensions](./types.md#dimension) of the widget in DIPs.
+
+If `width`/`height` is `'auto`' (or not specified) the widget will shrink to its intrinsic width/height. However, if `height` is `'auto'` and the `alignment` of `RowLayout` is `'stretchY'` the height of the widget is determined by the height of the parent.
+
+### Properties "top", "bottom", "centerY" and "baseline"
+
+If all of `top`, `bottom`, `centerY` and `baseline` are set to `'auto'` (or not specified), the vertical position of the widget is controlled by the `alignment` of `RowLayout`. If one of more of them are set to any other value they all behave like they do when controlled by `ConstraintLayout`. The `alignment` is ignored in that case.
+
+### Properties "left" and "right"
+
+In a row layout these properties control the distance to the preceding (for `left`) and following sibling (`right`) in DIPs. If set to `'auto'`, the `'spacing'` of `RowLayout` is determining the distance. If both `left` and `right` are set to a numeric value the widget will be **stretched vertically**, assuming it is the first widget to have that configuration and there is enough vertical space available. The [LayoutData alias](#layoutdata-shorthand) `'stretchX'` has the same effect, as it stands for `{left: 0, right: 0}`:
+
+```js
+new Row().append(
+  new TextView({text: 'Left'}),
+  new TextView({left: 0, right: 0, text: 'Stretch'}),
+  new TextView({text: 'Right'}),
+);
+```
+
+Same code, but using JSX and layoutData shorthand syntax:
+
+```jsx
+<Row>
+  <TextView>Left</TextView>
+  <TextView stretchX>Stretch</TextView>
+  <TextView>Right</TextView>
+</Row>
+```
+
+### Property "centerY"
+
+This property is not supported by `RowLayout`.

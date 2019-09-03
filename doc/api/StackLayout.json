@@ -21,13 +21,13 @@
       }
     ]
   },
-  "description": "Stack based layout manager. Can be set on the `layout` property of any `Composite` or widget extending `Composite` like `Page` or `Tab` widget. The `Stack` uses it as the default `layout`.<br/><br/> All children of the composite are automatically arranged in one vertical stack, starting from the top. The `layoutData` on the children is currently ignored.",
+  "description": "Stack based layout manager. Can be set on the `layout` property of any `Composite` or widget extending `Composite` like `Page` or `Tab` widget. The `Stack` uses it as the default `layout`.<br/><br/> All children of the composite are automatically arranged in one vertical stack, starting from the top.",
   "properties": {
     "spacing": {
       "type": "number",
       "const": true,
       "default": 0,
-      "description": "Additional space to add between the children in device independent pixel.",
+      "description": "The space between the children in device independent pixel.",
       "readonly": true
     },
     "alignment": {

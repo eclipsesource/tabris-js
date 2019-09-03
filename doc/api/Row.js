@@ -1,11 +1,11 @@
-import {Stack, contentView, TextView} from 'tabris';
+import {Row, contentView, TextView} from 'tabris';
 
-const stack = new Stack({
+const row = new Row({
   layoutData: 'stretch',
   spacing: 16
 }).appendTo(contentView);
 
-stack.append(
+row.append(
   new TextView({text: 'one'}),
   new TextView({text: 'two'}),
   new TextView({text: 'three'})

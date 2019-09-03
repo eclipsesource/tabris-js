@@ -9,3 +9,4 @@ let composite: Composite = widget;
 let layout: StackLayout = widget.layout;
 let spacing: number = widget.spacing;
 alignment = widget.alignment;
+alignment = layout.alignment;

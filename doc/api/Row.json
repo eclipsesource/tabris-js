@@ -1,0 +1,54 @@
+{
+  "type": "Row",
+  "category": "widget",
+  "description": "A composite with the `layout` property initialized with a `Row`. All children are automatically arranged in one horizontal row, starting from the left.",
+  "extends": "Composite",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": {
+          "interface": "Properties",
+          "generics": ["Row"]
+        },
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
+  "properties": {
+    "layout": {
+      "type": "RowLayout",
+      "default": "RowLayout",
+      "const": true,
+      "description": "The row layout manager responsible for interpreting the [`layoutData`](./Widget.md#layoutdata) of the child widgets of this Composite."
+    },
+    "spacing": {
+      "type": "number",
+      "default": 0,
+      "const": true,
+      "description": "The space between the children in device independent pixel."
+    },
+    "alignment": {
+      "type": {"union": ["'top'", "'centerY'", "'stretchY'", "'bottom'", "'baseline'"]},
+      "const": true,
+      "default": "'top'",
+      "description": "Determines the vertical placement of the children. For the `stretchY` value to work correctly the `Row` needs to be given a height either by setting `height` or by setting `top` and `bottom`."
+    }
+  },
+  "links": [
+    {
+      "title": "Creating a simple `Row`",
+      "snippet": "row.jsx"
+    },
+    {
+      "title": "Creating a `Row` with vertical alignment",
+      "snippet": "row-alignment.jsx"
+    },
+    {
+      "title": "Creating a `Row` with horizontal alignment",
+      "snippet": "row-halign.jsx"
+    }
+  ]
+}

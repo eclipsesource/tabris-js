@@ -232,7 +232,7 @@ describe('StackLayout', function() {
         expect(all[0]).to.deep.equal({top: 0, left: 0, width: 100});
         expect(all[1]).to.deep.equal({top: [cid[0], 16], left: 0, right: 0, height: 200});
         expect(all[2]).to.deep.equal({top: [cid[1], 16], left: 0, width: 300, height: 400});
-        expect(all[3]).to.deep.equal({top: [cid[2], 16], left: 0, right:0});
+        expect(all[3]).to.deep.equal({top: [cid[2], 16], left: 0, right: 0});
       });
 
       it('renders children layoutData with alternate alignment', function() {
