@@ -27,7 +27,7 @@ Code | Explanation
 -----|------------
 `tabris.contentView`| uses the `tabris` namespace to access the [`contentView`](./api/ContentView.md) widget instance, [which represents the main content of your app](./ui.md).
 `.append(`|calls the append method to add something to that area.
-&nbsp;&nbsp;&nbsp;&nbsp;`<tabris.Button>`| creates the actual button via an [JSX](./jsx.md) expression, similar to an HTML element. This is only supported in  `.jsx` or `.tsx` files in a [compiled project setup](./getting-started.md#create-your-first-app).
+&nbsp;&nbsp;&nbsp;&nbsp;`<tabris.Button>`| creates the actual button via an [JSX](./JSX.md) expression, similar to an HTML element. This is only supported in  `.jsx` or `.tsx` files in a [compiled project setup](./getting-started.md#create-your-first-app).
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`Hello World`| is the text that the button displays. Most widgets that can display text allow defining it that way, but you can also set the `text` attribute.
 &nbsp;&nbsp;&nbsp;&nbsp;`</tabris.Button>`|closes the `Button` element and ends the JSX expression.
 `);`|ends the `append` call.

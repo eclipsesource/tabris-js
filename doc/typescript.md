@@ -47,7 +47,7 @@ To configure the TypeScript compiler create a new file called `tsconfig.json` wi
 }
 ```
 
-This is the default configuration for generated TypeScript projects. It includes support for mixed JavaScript/TypeScript projects, [JSX](./jsx.md) and [decorators](./databinding/index.md). It also adds some recommended compiler options for stricter TypeScript interpretation. If you do not need any of these, a minimal `tsconfig.json` would look like this:
+This is the default configuration for generated TypeScript projects. It includes support for mixed JavaScript/TypeScript projects, [JSX](./JSX.md) and [decorators](./databinding/index.md). It also adds some recommended compiler options for stricter TypeScript interpretation. If you do not need any of these, a minimal `tsconfig.json` would look like this:
 
 ```json
 {
