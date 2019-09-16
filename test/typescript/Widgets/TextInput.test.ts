@@ -25,6 +25,7 @@ let selection: number[];
 let style: 'default' | 'outline' | 'fill' | 'underline' | 'none';
 let font: FontValue;
 let maxChars: number;
+let messageColor: ColorValue;
 
 alignment = widget.alignment;
 autoCapitalize = widget.autoCapitalize;
@@ -45,6 +46,7 @@ selection = widget.selection;
 style = widget.style;
 font = widget.font;
 maxChars = widget.maxChars;
+messageColor = widget.messageColor;
 
 widget.alignment = alignment;
 widget.autoCapitalize = autoCapitalize;
@@ -64,6 +66,7 @@ widget.selection = selection;
 widget.style = style;
 widget.font = font;
 widget.maxChars = maxChars;
+widget.messageColor = messageColor;
 
 let properties: Properties<TextInput> = {
   alignment,

@@ -65,6 +65,10 @@
       "type": "string",
       "description": "A hint text that is displayed when the input field is empty. Does not apply on iOS when `type` is set to `multiline`."
     },
+    "messageColor": {
+      "type": "ColorValue",
+      "description": "Color of the `message` text."
+    },
     "editable": {
       "type": "boolean",
       "default": "true",

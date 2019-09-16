@@ -95,6 +95,7 @@ NativeObject.defineProperties(TextInput.prototype, {
   textColor: {type: 'ColorValue'},
   revealPassword: {type: 'boolean'},
   cursorColor: {type: 'ColorValue'},
+  messageColor: {type: 'ColorValue'},
   selection: {
     type: 'array',
     set(name, value) {
