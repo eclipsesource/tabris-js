@@ -67,7 +67,7 @@
         "finish",
         "fail"
       ],
-      "description": "The current state of the widget."
+      "description": "The current video playback state of the widget.\n\n![Video widget states](./img/Video-state.png)\n\n- `'empty'` -  No `url` has been set.\n- `'open'` - The `url` has been set to a valid value but the widget is not yet ready to play.\n- `'ready'` - The widget has loaded enough content to be ready to play, but is not yet playing.\n- `'play'` - A video is currently playing.\n- `'stale'` - The video is paused because it is buffering more content and will resume playback once it has enough content.\n- `'pause'` - Playback is paused because of user input or `pause()` has been called.\n- `'finish'` - Playback stopped at the end of the video.\n- `'fail'` - An error occurred preventing video playback."
     }
   },
   "methods": {
