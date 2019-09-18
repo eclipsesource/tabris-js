@@ -10,7 +10,8 @@ let textColor: ColorValue;
 let nullValue: null;
 let font: FontValue;
 let style: 'default' | 'elevate' | 'flat' | 'outline' | 'text';
-let imageTintColor: ColorValue;
+let imageTintColor: ColorValue
+let strokeWidth: number | null = null;
 
 alignment = widget.alignment;
 image = widget.image as ImageValue;
@@ -29,6 +30,7 @@ widget.textColor = textColor;
 widget.style = style;
 widget.font = font;
 widget.imageTintColor = imageTintColor;
+widget.strokeWidth = strokeWidth;
 
 let properties: Properties<Button> = {alignment, image, text, textColor, font};
 widget = new Button(properties);

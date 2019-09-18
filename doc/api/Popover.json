@@ -33,11 +33,13 @@
     },
     "width": {
       "type": "Dimension",
-      "description": "The width of the `Popover` when shown in windowed mode on large screen devices."
+      "default": "null",
+      "description": "The width of the `Popover` when shown in windowed mode on large screen devices. Will be a platform specific default if set to null."
     },
     "height": {
       "type": "Dimension",
-      "description": "The height of the `Popover` when shown in windowed mode on large screen devices"
+      "default": "null",
+      "description": "The height of the `Popover` when shown in windowed mode on large screen devices. Will be a platform specific default if set to null."
     },
     "anchor": {
       "type": "Widget",

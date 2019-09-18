@@ -27,12 +27,12 @@
     "minimum": {
       "type": "number",
       "default": "0",
-      "description": "The value that represents a progress of 0%."
+      "description": "The value that represents a progress of 0%. May be negative."
     },
     "maximum": {
       "type": "number",
       "default": "100",
-      "description": "The value that represents a progress of 100%."
+      "description": "The value that represents a progress of 100%. May be negative."
     },
     "tintColor": {
       "type": "ColorValue",

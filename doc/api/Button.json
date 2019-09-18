@@ -42,8 +42,14 @@
       "description": "Controls the line width of a button with the `style` _outline_."
     },
     "strokeWidth": {
-      "type": "number",
-      "description": "Controls the line color of a button with the `style` _outline_."
+      "type": {
+        "union": [
+          "number",
+          "null"
+        ]
+      },
+      "default": "null",
+      "description": "Controls the line color of a button with the `style` _outline_. Uses a platform-specific default if set to `null`."
     },
     "alignment": {
       "type": "string",

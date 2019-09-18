@@ -3,8 +3,8 @@ import {EventObject, Popover, Widget, Properties, ContentView} from 'tabris';
 let popover: Popover = new Popover();
 
 // Properties
-let width: number;
-let height: number;
+let width: number | null;
+let height: number | null;
 let anchor: Widget;
 let contentView: ContentView;
 
