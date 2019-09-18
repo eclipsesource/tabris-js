@@ -3,10 +3,16 @@ import {hint, toValueString} from './Console';
 
 export default class Image {
 
+  /**
+   * @param {any} value
+   */
   static isImageValue(value) {
     return value == null || value === 'initial' || Image.isValidImageValue(value);
   }
 
+  /**
+   * @param {any} value
+   */
   static isValidImageValue(value) {
     try {
       Image.from(value);
@@ -16,6 +22,9 @@ export default class Image {
     }
   }
 
+  /**
+   * @param {any} value
+   */
   static from(value) {
     if (value instanceof Image) {
       return value;
@@ -36,36 +45,58 @@ export default class Image {
     throw new Error(`${toValueString(value)} is not a valid ImageValue`);
   }
 
+  /**
+   * @param {ImageLikeObject} imageLike
+   */
   constructor(imageLike) {
     if (arguments.length < 1) {
       throw new Error('Not enough arguments');
     }
     checkConsistentDimensions(imageLike);
     setSrc(this, imageLike);
-    ['width', 'height'].forEach(property => {
-      setDimension(this, property, property in imageLike ? imageLike[property] : 'auto');
-    });
+    setDimension(this, 'width', 'width' in imageLike ? imageLike.width : 'auto');
+    setDimension(this, 'height', 'height' in imageLike ? imageLike.height : 'auto');
     setScale(this, imageLike);
   }
+
 }
 
+/** @type {number|Auto} */
+const initDimension = 0;
+Object.defineProperty(Image.prototype, 'src', {value: ''});
+Object.defineProperty(Image.prototype, 'width', {value: initDimension});
+Object.defineProperty(Image.prototype, 'height', {value: initDimension});
+Object.defineProperty(Image.prototype, 'scale', {value: initDimension});
+
+/**
+ * @param {Image} image
+ * @param {ImageLikeObject} imageLike
+ */
 function setScale(image, imageLike) {
   let scale = 'scale' in imageLike ? imageLike.scale : 'auto';
   if (!('scale' in imageLike)) {
     if (!hasExplicit(imageLike, 'width') && !hasExplicit(imageLike, 'height')) {
       const autoScaleMatch = /@([0-9]\.?[0-9]*)x/.exec(imageLike.src.split('/').pop());
       if (autoScaleMatch && autoScaleMatch[1]) {
-        scale = parseFloat(autoScaleMatch[1], 10);
+        scale = parseFloat(autoScaleMatch[1]);
       }
     }
   }
   setDimension(image, 'scale', scale);
 }
 
+/**
+ * @param {ImageLikeObject} imageLike
+ * @param {keyof ImageLikeObject} property
+ */
 function hasExplicit(imageLike, property) {
   return property in imageLike && imageLike[property] !== 'auto';
 }
 
+/**
+ * @param {Image} image
+ * @param {ImageLikeObject} imageLike
+ */
 function setSrc(image, imageLike) {
   checkSrc(imageLike);
   let path;
@@ -77,6 +108,9 @@ function setSrc(image, imageLike) {
   Object.defineProperty(image, 'src', {enumerable: true, value: path});
 }
 
+/**
+ * @param {ImageLikeObject} imageLike
+ */
 function checkSrc(imageLike) {
   if (!('src' in imageLike)) {
     throw new Error('Image "src" missing');
@@ -89,16 +123,27 @@ function checkSrc(imageLike) {
   }
 }
 
+/**
+ * @param {ImageLikeObject} imageLike
+ */
 function checkConsistentDimensions(imageLike) {
   if (hasInconsistentDimensions(imageLike)) {
     throw new Error('Image "scale" cannot be used with "width" and "height"');
   }
 }
 
+/**
+ * @param {ImageLikeObject} imageLike
+ */
 function hasInconsistentDimensions(imageLike) {
   return hasExplicit(imageLike, 'scale') && (hasExplicit(imageLike, 'width') || hasExplicit(imageLike, 'height'));
 }
 
+/**
+ * @param {Image} image
+ * @param {keyof Image} property
+ * @param {number|'auto'} value
+ */
 function setDimension(image, property, value) {
   if (value !== 'auto') {
     checkNumber(value, [0, Infinity], `Image "${property}" is not a dimension`);

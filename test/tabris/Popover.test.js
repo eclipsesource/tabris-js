@@ -1,4 +1,4 @@
-import {expect, mockTabris, restore, spy} from './../test';
+import {expect, mockTabris, restore, spy} from '../test';
 import ClientMock from './ClientMock';
 import Popover from './../../src/tabris/Popover';
 import ContentView from './../../src/tabris/widgets/ContentView';

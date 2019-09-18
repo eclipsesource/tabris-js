@@ -26,8 +26,11 @@ describe('Image', function() {
     });
 
     it('throws for invalid parameters', function() {
+      // @ts-ignore
       expect(() => new Image()).to.throw('Not enough arguments');
+      // @ts-ignore
       expect(() => new Image({})).to.throw('"src" missing');
+      // @ts-ignore
       expect(() => new Image({src: 5})).to.throw('"src" 5 must be a string');
       expect(() => new Image({src: ''})).to.throw('"src" must not be empty');
       expect(() => new Image({src: '..'})).to.throw('Invalid image "src": Path must not start with ".."');
@@ -88,9 +91,13 @@ describe('Image', function() {
     it('properties are read-only', function() {
       const image = new Image({src: 'foo'});
 
+      // @ts-ignore
       image.src = 'bar';
+      // @ts-ignore
       image.width = 1;
+      // @ts-ignore
       image.height = 1;
+      // @ts-ignore
       image.scale = 1;
 
       expect(image.src).to.equal('foo');
@@ -100,6 +107,7 @@ describe('Image', function() {
     });
 
     it('properties are enumerable', function() {
+      /** @type {ImageLikeObject} */
       const imageLike = {src: 'foo', width: 5, height: 6, scale: 'auto'};
       expect(Object.assign({}, new Image(imageLike))).to.deep.equal(imageLike);
     });

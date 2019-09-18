@@ -7,10 +7,18 @@ const SIDES = ['left', 'top', 'right', 'bottom'];
 
 export default class LinearGradient {
 
+  /**
+   * @param {any} value
+   * @returns {boolean}
+   */
   static isLinearGradientValue(value) {
     return value == null || value === 'initial' || LinearGradient.isValidLinearGradientValue(value);
   }
 
+  /**
+   * @param {any} value
+   * @returns {boolean}
+   */
   static isValidLinearGradientValue(value) {
     try {
       LinearGradient.from(value);
@@ -20,6 +28,10 @@ export default class LinearGradient {
     }
   }
 
+  /**
+   * @param {any} value
+   * @returns {LinearGradient}
+   */
   static from(value) {
     if (value instanceof LinearGradient) {
       return value;
@@ -33,6 +45,10 @@ export default class LinearGradient {
     throw new Error(`${toValueString(value)} is not a valid LinearGradient`);
   }
 
+  /**
+   * @param {Array<Color|[Color, Percent]>} colorStops
+   * @param {number} direction
+   */
   constructor(colorStops, direction) {
     if (arguments.length < 1) {
       throw new Error('Not enough arguments');
@@ -54,6 +70,13 @@ export default class LinearGradient {
   }
 
 }
+
+Object.defineProperty(LinearGradient.prototype, 'direction', {value: 0});
+Object.defineProperty(
+  LinearGradient.prototype,
+  'colorStops',
+  {value: (/** @type {Array<Color|[Color, Percent]>} */([]))}
+);
 
 function gradientStringToObject(css) {
   let gradient = css.trim();
