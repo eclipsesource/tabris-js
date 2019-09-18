@@ -42,15 +42,15 @@ describe('TextView', function() {
   });
 
   it('maxLines: 0 is mapped to null', function() {
-    new TextView({text: 'foo', maxLines: 0});
+    const textView = new TextView({text: 'foo', maxLines: 0});
 
-    expect(getCreate().properties.maxLines).to.be.null;
+    expect(textView.maxLines).to.be.null;
   });
 
   it('maxLines: values <= 0 are mapped to null', function() {
-    new TextView({text: 'foo', maxLines: -1});
+    const textView = new TextView({text: 'foo', maxLines: -1});
 
-    expect(getCreate().properties.maxLines).to.be.null;
+    expect(textView.maxLines).to.be.null;
   });
 
   describe('JSX', function() {

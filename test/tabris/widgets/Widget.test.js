@@ -12,9 +12,9 @@ import ToggleButton from '../../../src/tabris/widgets/ToggleButton';
 import TextInput from '../../../src/tabris/widgets/TextInput';
 import {omit} from '../../../src/tabris/util';
 import LayoutData from '../../../src/tabris/LayoutData';
-import Image from '../../../src/tabris/Image';
 import Constraint from '../../../src/tabris/Constraint';
 import {toXML} from '../../../src/tabris/Console';
+import Font from '../../../src/tabris/Font';
 
 describe('Widget', function() {
 
@@ -84,18 +84,19 @@ describe('Widget', function() {
           client.resetCalls();
         });
 
-        it('translates font string to object', function() {
+        it('converts font string to Font instance', function() {
+          widget.set({font: '12px Arial'});
+
+          expect(widget.font).to.be.instanceOf(Font);
+          expect(widget.font.size).to.equal(12);
+        });
+
+        it('encodes font string', function() {
           widget.set({font: '12px Arial'});
 
           const call = client.calls({op: 'set'})[0];
           expect(call.properties.font)
             .to.eql({family: ['Arial'], size: 12, style: 'normal', weight: 'normal'});
-        });
-
-        it('normalizes font string', function() {
-          widget.set({font: 'italic bold   12px Arial'});
-
-          expect(widget.font).to.eql('italic bold 12px Arial');
         });
 
         it("support setting initial 'initial'", function() {
@@ -1606,45 +1607,12 @@ describe('Widget', function() {
       client.resetCalls();
     });
 
-    it('translates background color shader to Color', function() {
-      stub(client, 'get').returns({type: 'color', color: [170, 255, 0, 128]});
-
-      const result = widget.background;
-
-      expect(result.toString()).to.equal('rgba(170, 255, 0, 0.5)');
-    });
-
-    it('translates background null to Color', function() {
-      stub(client, 'get').returns(null);
-
-      const result = widget.background;
-
-      expect(result).to.equal('initial');
-    });
-
     it('translates bounds to object', function() {
       stub(client, 'get').returns([1, 2, 3, 4]);
 
       const result = widget.bounds;
 
       expect(result).to.eql({left: 1, top: 2, width: 3, height: 4});
-    });
-
-    it('translates bounds to object', function() {
-      stub(client, 'get').returns([1, 2, 3, 4]);
-
-      const result = widget.bounds;
-
-      expect(result).to.eql({left: 1, top: 2, width: 3, height: 4});
-    });
-
-    it('translates background image shader to Image', function() {
-      stub(client, 'get').returns({type: 'image', image: ['foo', 23, 42]});
-
-      const result = widget.background;
-
-      expect(result).to.be.instanceof(Image);
-      expect(result).to.eql({src: 'foo', width: 23, height: 42, scale: 'auto'});
     });
 
   });

@@ -186,7 +186,7 @@ describe('TabFolder', function() {
 
         tab2.dispose();
 
-        const setCall = client.calls({op: 'set', id: tabFolder.cid})[1];
+        const setCall = client.calls({op: 'set', id: tabFolder.cid})[0];
         expect(setCall.properties.selection).to.equal(tab3.cid);
       });
 
@@ -195,7 +195,7 @@ describe('TabFolder', function() {
 
         tab2.dispose();
 
-        const setCall = client.calls({op: 'set', id: tabFolder.cid})[1];
+        const setCall = client.calls({op: 'set', id: tabFolder.cid})[0];
         expect(setCall.properties.selection).to.equal(tab.cid);
       });
 
@@ -252,7 +252,7 @@ describe('TabFolder', function() {
     it('Setting a Tab SETs tab id', function() {
       tabFolder.selection = tab;
 
-      const setCall = client.calls({op: 'set', id: tabFolder.cid})[1];
+      const setCall = client.calls({op: 'set', id: tabFolder.cid})[0];
       expect(setCall.properties.selection).to.equal(tab.cid);
     });
 
@@ -308,7 +308,7 @@ describe('TabFolder', function() {
       const calls = client.calls({op: 'set', id: tabFolder.cid});
       expect(calls.length).to.equal(0);
       expect(console.warn).to.have.been.calledWithMatch(
-        /TabFolder\[cid=".*"\]: Can not set selection to Tab\[cid=".*"\]/
+        /Can not set selection to Tab\[cid=".*"\]/
       );
     });
 
@@ -320,7 +320,7 @@ describe('TabFolder', function() {
 
       const calls = client.calls({op: 'set', id: tabFolder.cid});
       expect(calls.length).to.equal(0);
-      expect(console.warn).to.have.been.calledWithMatch('Can not set selection to foo');
+      expect(console.warn).to.have.been.calledWithMatch('Not a valid widget: "foo"');
     });
 
     it('get causes SET children', function() {
@@ -409,7 +409,7 @@ describe('TabFolder', function() {
     it('set SETS selection', function() {
       tabFolder.selectionIndex = 1;
 
-      const setCall = client.calls({op: 'set', id: tabFolder.cid})[1];
+      const setCall = client.calls({op: 'set', id: tabFolder.cid})[0];
       expect(setCall.properties.selection).to.equal(tab2.cid);
     });
 
@@ -519,13 +519,6 @@ describe('TabFolder', function() {
       expect(properties.tabBarLocation).to.eql('hidden');
     });
 
-    it("sets tabBarLocation 'auto'", function() {
-      tabFolder = new TabFolder({tabBarLocation: 'auto'});
-
-      const properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
-      expect(properties.tabBarLocation).to.eql('auto');
-    });
-
   });
 
   describe('tabMode property', function() {
@@ -538,13 +531,6 @@ describe('TabFolder', function() {
       expect(tabFolder.onTabModeChanged).to.be.undefined;
     });
 
-    it('passes property to client', function() {
-      tabFolder = new TabFolder({tabMode: 'fixed'});
-
-      const properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
-      expect(properties.tabMode).to.equal('fixed');
-    });
-
     it('property is cached', function() {
       spy(client, 'get');
       tabFolder = new TabFolder({tabMode: 'fixed'});
@@ -553,13 +539,6 @@ describe('TabFolder', function() {
 
       expect(client.get).to.have.not.been.called;
       expect(result).to.equal('fixed');
-    });
-
-    it("sets value tabMode 'fixed'", function() {
-      tabFolder = new TabFolder({tabMode: 'fixed'});
-
-      const properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
-      expect(properties.tabMode).to.eql('fixed');
     });
 
     it("sets tabMode 'scrollable'", function() {
@@ -688,7 +667,7 @@ describe('TabFolder', function() {
         tab2
       );
 
-      const setCall = client.calls({op: 'set', id: widget.cid})[1];
+      const setCall = client.calls({op: 'set', id: widget.cid})[0];
       expect(setCall.properties.selection).to.equal(tab2.cid);
     });
 

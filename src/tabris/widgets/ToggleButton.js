@@ -1,6 +1,7 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 import {JSX} from '../JsxProcessor';
+import {types} from '../property-types';
 
 export default class ToggleButton extends Widget {
 
@@ -29,19 +30,16 @@ export default class ToggleButton extends Widget {
 }
 
 NativeObject.defineProperties(ToggleButton.prototype, {
-  text: {type: 'string', default: ''},
-  image: {type: 'ImageValue', default: null},
-  checked: {type: 'boolean', nocache: true},
-  alignment: {type: ['choice', ['left', 'right', 'centerX']], default: 'centerX'},
-  textColor: {type: 'ColorValue'},
-  font: {
-    type: 'FontValue',
-    set(name, value) {
-      this._nativeSet(name, value);
-      this._storeProperty(name, value);
-    },
-    default: null
+  text: {type: types.string, default: ''},
+  image: {type: types.ImageValue, default: null},
+  checked: {type: types.boolean, nocache: true},
+  alignment: {
+    type: types.string,
+    choice: ['left', 'right', 'centerX'],
+    default: 'centerX'
   },
+  textColor: {type: types.ColorValue, default: 'initial'},
+  font: {type: types.FontValue, default: 'initial'}
 });
 
 NativeObject.defineEvents(ToggleButton.prototype, {

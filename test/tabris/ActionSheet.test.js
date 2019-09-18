@@ -68,7 +68,9 @@ describe('ActionSheet', () => {
 
       actionSheet.actions = [{style: 'foo'}];
 
-      expect(console.warn).to.have.been.calledWithMatch(/Invalid action style/);
+      expect(console.warn).to.have.been.calledWithMatch(
+        /style must be "default", "cancel" or "destructive"", got "foo"/
+      );
       expect(actionSheet.actions).to.deep.equal([]);
     });
 
@@ -89,7 +91,7 @@ describe('ActionSheet', () => {
       expect(client.calls({op: 'set'})[0]).to.deep.equal({
         op: 'set',
         id: actionSheet.cid,
-        properties: {actions: [{title: 'foo'}]}
+        properties: {actions: [{title: 'foo', image: null, style: 'default'}]}
       });
     });
 
@@ -101,12 +103,12 @@ describe('ActionSheet', () => {
       expect(client.calls({op: 'set'})[0]).to.deep.equal({
         op: 'set',
         id: actionSheet.cid,
-        properties: {actions: [{title: 'foo'}]}
+        properties: {actions: [{title: 'foo', image: null, style: 'default'}]}
       });
     });
 
     it('returns ActionSheetItem instance', () => {
-      actionSheet.actions = [{title: 'foo'}];
+      actionSheet.actions = [{title: 'foo', image: null, style: 'default'}];
 
       expect(actionSheet.actions[0]).be.instanceof(ActionSheetItem);
     });
@@ -310,13 +312,14 @@ describe('ActionSheet', () => {
       item.style = null;
 
       expect(item).to.be.instanceOf(ActionSheetItem);
-      expect(item).to.deep.equal({title: 'foo', image: {src: 'foo.jpg'}, style: 'default'});
+      expect(item).to.include({title: 'foo', style: 'default'});
+      expect(item.image).to.include({src: 'foo.jpg'});
     });
 
     it('ActionSheetItem supports text content', function() {
       const item = jsx.createElement(ActionSheetItem, {image: {src: 'foo.jpg'}, style: 'default'}, 'foo');
 
-      expect(item).to.deep.equal({title: 'foo', image: {src: 'foo.jpg'}, style: 'default'});
+      expect(item.title).to.deep.equal('foo');
     });
 
   });

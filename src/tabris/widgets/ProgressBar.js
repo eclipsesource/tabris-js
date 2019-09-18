@@ -1,5 +1,6 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
+import {types} from '../property-types';
 
 export default class ProgressBar extends Widget {
 
@@ -18,9 +19,13 @@ export default class ProgressBar extends Widget {
 }
 
 NativeObject.defineProperties(ProgressBar.prototype, {
-  minimum: {type: 'integer', default: 0},
-  maximum: {type: 'integer', default: 100},
-  tintColor: {type: 'ColorValue'},
-  selection: {type: 'integer', default: 0},
-  state: {type: ['choice', ['normal', 'paused', 'error']], default: 'normal'}
+  minimum: {type: types.integer, default: 0},
+  maximum: {type: types.integer, default: 100},
+  tintColor: {type: types.ColorValue, default: null},
+  selection: {type: types.integer, default: 0},
+  state: {
+    type: types.string,
+    choice: ['normal', 'paused', 'error'],
+    default: 'normal'
+  }
 });

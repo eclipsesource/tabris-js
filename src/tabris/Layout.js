@@ -237,7 +237,7 @@ function toCid(ref, widget) {
     const children = getChildrenInLayout(getParent(widget));
     const index = children.indexOf(widget);
     if (index > 0) {
-      return types.NativeObject.encode(children[index - 1]) || 0;
+      return types.Widget.encode(children[index - 1]) || 0;
     }
     return 0;
   }
@@ -245,16 +245,16 @@ function toCid(ref, widget) {
     const children = getChildrenInLayout(getParent(widget));
     const index = children.indexOf(widget);
     if (index + 1 < children.length) {
-      return types.NativeObject.encode(children[index + 1]) || 0;
+      return types.Widget.encode(children[index + 1]) || 0;
     }
     return 0;
   }
   if (typeof ref === 'string') {
     const sibling = widget.siblings(ref)[0];
-    return types.NativeObject.encode(sibling) || 0;
+    return types.Widget.encode(sibling) || 0;
   }
   if (widget.siblings().toArray().includes(ref)) {
-    return types.NativeObject.encode(ref) || 0;
+    return types.Widget.encode(ref) || 0;
   }
   return 0;
 }

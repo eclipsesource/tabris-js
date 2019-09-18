@@ -1,4 +1,5 @@
 import NativeObject from '../NativeObject';
+import {types} from '../property-types';
 import Composite from './Composite';
 
 export default class ScrollView extends Composite {
@@ -45,15 +46,16 @@ export default class ScrollView extends Composite {
 
 NativeObject.defineProperties(ScrollView.prototype, {
   direction: {
-    type: ['choice', ['horizontal', 'vertical']],
+    type: types.string,
+    choice: ['horizontal', 'vertical'],
     default: 'vertical',
     const: true
   },
-  offsetX: {type: 'number', nocache: true, readonly: true},
-  offsetY: {type: 'number', nocache: true, readonly: true},
-  scrollbarVisible: {type: 'boolean', default: true},
-  scrollXState: {type: 'string', nocache: true, readonly: true},
-  scrollYState: {type: 'string', nocache: true, readonly: true},
+  offsetX: {type: types.number, nocache: true, readonly: true},
+  offsetY: {type: types.number, nocache: true, readonly: true},
+  scrollbarVisible: {type: types.boolean, default: true},
+  scrollXState: {type: types.string, nocache: true, readonly: true},
+  scrollYState: {type: types.string, nocache: true, readonly: true},
 });
 
 NativeObject.defineEvents(ScrollView.prototype, {

@@ -3,6 +3,7 @@ import {hint, toXML} from './Console';
 import EventObject from './EventObject';
 import Events from './Events';
 import Listeners, {ChangeListeners} from './Listeners';
+import {allowOnlyValues, allowOnlyKeys} from './util';
 
 const EventsClass = /** @type {any} */ function EventsClass() {};
 Object.assign(EventsClass.prototype, Events);
@@ -18,8 +19,9 @@ Object.assign(EventsClass.prototype, Events);
 export default class NativeObject extends (/** @type {NativeObjectBase} */(EventsClass)) {
 
   /**
-   * @param {object} target
-   * @param {import('./internals').PropertyDefinitions} definitions
+   * @template {NativeObject} T
+   * @param {T} target
+   * @param {PropertyDefinitions<T>} definitions
    */
   static defineProperties(target, definitions) {
     for (const name in definitions) {
@@ -27,8 +29,14 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     }
   }
 
-  static defineProperty(target, name, definition) {
-    target['$prop_' + name] = normalizeProperty(definition);
+  /**
+   * @param {object} target
+   * @param {string} name
+   * @param {Partial<PropertyDefinition>} property
+   */
+  static defineProperty(target, name, property) {
+    const def = normalizeProperty(property);
+    target['$prop_' + name] = def;
     Object.defineProperty(target, name, {
       set(value) {
         this.$setProperty(name, value);
@@ -37,14 +45,14 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
         return this.$getProperty(name);
       }
     });
-    if (typeof definition !== 'object' || !definition.const) {
+    if (!def.const) {
       this.defineChangeEvent(target, name);
     }
   }
 
   /**
    * @param {NativeObject} target
-   * @param {import('./internals').EventDefinitions} definitions
+   * @param {EventDefinitions} definitions
    */
   static defineEvents(target, definitions) {
     for (const name in definitions) {
@@ -55,7 +63,7 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
   /**
    * @param {NativeObject} target
    * @param {string} name
-   * @param {import('./internals').EventDefinition|true} definition
+   * @param {EventDefinition|true} definition
    */
   static defineEvent(target, name, definition) {
     const property = 'on' + name.charAt(0).toUpperCase() + name.slice(1);
@@ -78,9 +86,17 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     });
   }
 
+  /**
+   * @param {NativeObject} target
+   * @param {string[]} properties
+   */
+  static defineChangeEvents(target, properties) {
+    properties.forEach(property => this.defineChangeEvent(target, property));
+  }
+
   static defineChangeEvent(target, property) {
     const listenersProperty = 'on' + property.charAt(0).toUpperCase() + property.slice(1) + 'Changed';
-    const $listenersProperty = '$' + property;
+    const $listenersProperty = '$' + property + 'Changed';
     Object.defineProperty(target, listenersProperty, {
       get() {
         if (!this[$listenersProperty]) {
@@ -96,7 +112,7 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
       this.$trigger(sourceDef.changes + 'Changed', {value: sourceDef.changeValue(ev)});
     };
     const $changeEventProperty = '$event_' + sourceDef.changes + 'Changed';
-    /** @type {import('./internals').EventDefinition} */
+    /** @type {EventDefinition} */
     const changeEventDef = target[$changeEventProperty] = target[$changeEventProperty] || {listen: []};
     changeEventDef.listen.push((target, listening) => {
       target._onoff(sourceEvent, listening, changeListener);
@@ -114,6 +130,9 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
    */
   constructor(param) {
     super();
+    Object.defineProperty(this, '$props', {
+      writable: true, value: /** @type {{[property: string]: unknown}} */ ({})
+    });
     this._nativeCreate(param);
   }
 
@@ -127,53 +146,119 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     return this;
   }
 
+  /**
+   * @param {string} name
+   */
   $getProperty(name) {
     if (this._isDisposed) {
       hint(this, 'Cannot get property "' + name + '" on disposed object');
       return;
     }
-    const getter = this.$getPropertyGetter(name) || this._getStoredProperty;
-    const value = getter.call(this, name);
-    return this._decodeProperty(this._getTypeDef(name), value);
+    const def = this._getPropertyDefinition(name);
+    if (def.nocache) {
+      const value = this._nativeGet(name);
+      return def.type.decode ? def.type.decode.call(null, value, this) : value;
+    }
+    const storedValue = this._getStoredProperty(name);
+    if (storedValue !== undefined) {
+      return storedValue;
+    }
+    if (def.default !== undefined) {
+      return def.default;
+    }
+    const value = this._nativeGet(name);
+    const decodedValue = def.type.decode ? def.type.decode.call(this, value) : value;
+    this._storeProperty(name, decodedValue);
+    return decodedValue;
   }
 
+  /**
+   * @param {string} name
+   * @param {unknown} value
+   */
   $setProperty(name, value) {
     if (this._isDisposed) {
       hint(this, 'Cannot set property "' + name + '" on disposed object');
       return;
     }
-    const typeDef = this._getTypeDef(name);
-    let encodedValue;
+    const def = this._getPropertyDefinition(name);
+    if (def.readonly) {
+      hint(this, `Can not set read-only property "${name}"`);
+      return;
+    } else if (def.const && this._wasSet(name)) {
+      hint(this, `Can not set const property "${name}"`);
+      return;
+    }
+    let convertedValue = value;
     try {
-      encodedValue = this._encodeProperty(typeDef, value);
+      convertedValue = this._convertValue(def, value, convertedValue);
     } catch (ex) {
-      hint(this, 'Ignored unsupported value for property "' + name + '": ' + ex.message);
+      this._printPropertyWarning(name, ex);
       return;
     }
-    const setter = this.$getPropertySetter(name) || this._storeProperty;
-    setter.call(this, name, encodedValue);
-  }
-
-  _storeProperty(name, encodedValue) {
-    const oldEncodedValue = this._getStoredProperty(name);
-    if (encodedValue === oldEncodedValue) {
-      return;
-    }
-    if (encodedValue === undefined && !this.$props) {
-      return;
-    } else {
-      if (!this.$props) {
-        this.$props = {};
+    const encodedValue = def.type.encode.call(null, convertedValue, this);
+    if (def.nocache) {
+      this._beforePropertyChange(name, convertedValue);
+      this._nativeSet(name, encodedValue);
+      if (!def.const) {
+        this._triggerChangeEvent(name, convertedValue);
       }
-      this.$props[name] = encodedValue;
+    } else if (this._getStoredProperty(name) !== convertedValue || !this._wasSet(name)) {
+      this._beforePropertyChange(name, convertedValue);
+      this._nativeSet(name, encodedValue);
+      this._storeProperty(name, convertedValue, def.const);
     }
-    this._triggerChangeEvent(name, encodedValue);
   }
 
+  /**
+   * @param {PropertyDefinition} def
+   * @param {any} value
+   * @param {any} convertedValue
+   */
+  _convertValue(def, value, convertedValue) {
+    if (!def.nullable || value !== null) {
+      // TODO: ensure convert has no write-access to the NativeObject instance via proxy
+      convertedValue = allowOnlyValues(def.type.convert.call(null, value, this), def.choice);
+    }
+    return convertedValue;
+  }
+
+  /**
+   * @param {string} name
+   * @param {Error} ex
+   */
+  _printPropertyWarning(name, ex) {
+    hint(this, 'Ignored unsupported value for property "' + name + '": ' + ex.message);
+  }
+
+  /**
+   * @param {string} name
+   * @param {unknown} newValue
+   * @param {boolean=} noChangeEvent
+   * @returns {boolean}
+   */
+  _storeProperty(name, newValue, noChangeEvent = false) {
+    if (newValue === this._getStoredProperty(name) && this._wasSet(name)) {
+      return false;
+    }
+    if (newValue === undefined) {
+      return false;
+    } else {
+      this.$props[name] = newValue;
+    }
+    if (!noChangeEvent) {
+      this._triggerChangeEvent(name, newValue);
+    }
+    return true;
+  }
+
+  /**
+   * @param {string} name
+   */
   _getStoredProperty(name) {
     let result = this.$props ? this.$props[name] : undefined;
     if (result === undefined) {
-      result = this._getDefaultPropertyValue(name);
+      result = this._getPropertyDefinition(name).default;
     }
     return result;
   }
@@ -182,22 +267,16 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     return name in (this.$props || {});
   }
 
-  _getTypeDef(name) {
-    const prop = this['$prop_' + name];
-    return prop ? prop.type : null;
-  }
-
-  _getDefaultPropertyValue(name) {
-    const prop = this['$prop_' + name];
-    return prop ? valueOf(prop.default) : undefined;
-  }
-
-  _encodeProperty(typeDef, value) {
-    return (typeDef && typeDef.encode) ? typeDef.encode.call(this, value) : value;
+  /**
+   * @param {string} propertyName
+   * @returns {PropertyDefinition}
+   */
+  _getPropertyDefinition(propertyName) {
+    return this['$prop_' + propertyName] || {};
   }
 
   _decodeProperty(typeDef, value) {
-    return (typeDef && typeDef.decode) ? typeDef.decode.call(this, value) : value;
+    return (typeDef && typeDef.decode) ? typeDef.decode.call(null, value, this) : value;
   }
 
   $getPropertyGetter(name) {
@@ -205,15 +284,8 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     return prop ? prop.get : undefined;
   }
 
-  $getPropertySetter(name) {
-    const prop = this['$prop_' + name];
-    return prop ? prop.set : undefined;
-  }
-
-  _triggerChangeEvent(propertyName, newEncodedValue) {
-    const typeDef = this._getTypeDef(propertyName);
-    const decodedValue = this._decodeProperty(typeDef, newEncodedValue);
-    this.$trigger(propertyName + 'Changed', {value: decodedValue});
+  _triggerChangeEvent(propertyName, value) {
+    this.$trigger(propertyName + 'Changed', {value});
   }
 
   /**
@@ -262,13 +334,23 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
         tabris._nativeBridge.destroy(this.cid);
       }
       tabris._nativeObjectRegistry.remove(this.cid);
-      delete this.$props;
+      this.$props = null;
       this._isDisposed = true;
     }
   }
 
   _release() {
   }
+
+  /**
+   * Called when a property is about to be changed, past conversion and all
+   * other pre-checks. May have side-effects. Exceptions will not be catched.
+   * @param {string} name
+   * @param {any} value
+   */
+  // @ts-ignore
+  // eslint-disable-next-line no-unused-vars
+  _beforePropertyChange(name, value) {}
 
   isDisposed() {
     return !!this._isDisposed;
@@ -378,25 +460,42 @@ function setExistingProperty(name, value) {
 }
 
 /**
- * @param {import('./internals').PropertyDefinition|import('./internals').TabrisType}  property
- * @returns {import('./internals').PropertyDefinition}
+ * @param {Partial<PropertyDefinition>}  config
+ * @returns {PropertyDefinition}
  */
-function normalizeProperty(property) {
-  const config = typeof property === 'string' ? {type: property} : property;
-  return {
-    type: resolveType(config.type || 'any'),
+function normalizeProperty(config) {
+  const def = {
+    type: normalizeType(config.type || {}),
     default: config.default,
-    const: config.const,
-    nocache: config.nocache,
-    set: config.readonly ? readOnlySetter : config.const ? oneTimeSetter : config.set || defaultSetter,
-    get: config.get || defaultGetter
+    nullable: !!config.nullable,
+    const: !!config.const,
+    nocache: !!config.nocache,
+    readonly: !!config.readonly,
+    choice: config.choice
   };
+  if (def.readonly && (def.default !== undefined)) {
+    throw new Error('Can not combine "nocache" with "readonly"');
+  }
+  if (def.readonly && def.nullable) {
+    throw new Error('Can not combine "nullable" with "readonly"');
+  }
+  if (def.readonly && def.choice) {
+    throw new Error('Can not combine "choice" with "readonly"');
+  }
+  if (def.choice && def.choice.length < 2) {
+    throw new Error('"choice" needs at least two entries');
+  }
+  if ((def.default === undefined) && !def.nocache && !def.readonly) {
+    throw new Error('"default" must be given unless "nocache" or "readonly" is true.');
+  }
+  allowOnlyKeys(config, Object.keys(def));
+  return def;
 }
 
 /**
  * @param {string} name
- * @param {import('./internals').EventDefinition|true} definition
- * @returns {import('./internals').EventDefinition}
+ * @param {EventDefinition|true} definition
+ * @returns {EventDefinition}
  */
 function normalizeEvent(name, definition) {
   const result = {listen: []};
@@ -420,71 +519,16 @@ function normalizeEvent(name, definition) {
   return result;
 }
 
-function resolveType(type) {
-  let typeDef = type;
-  if (typeof type === 'string') {
-    typeDef = types[type];
-  } else if (Array.isArray(type)) {
-    typeDef = types[type[0]];
-  }
-  if (typeof typeDef !== 'object') {
-    throw new Error('Can not find property type ' + type);
-  }
-  if (Array.isArray(type)) {
-    typeDef = Object.assign({}, typeDef);
-    const args = type.slice(1);
-    if (typeDef.encode) {
-      typeDef.encode = wrapCoder(typeDef.encode, args);
-    }
-    if (typeDef.decode) {
-      typeDef.decode = wrapCoder(typeDef.decode, args);
-    }
-  }
-  return typeDef;
-}
-
-function wrapCoder(fn, args) {
-  return function(value) {
-    return fn.apply(global, [value].concat(args));
+/**
+ * @param {string|TypeDef<any, any, any>} config
+ * @returns {TypeDef<any, any, any>}
+ */
+function normalizeType(config) {
+  const def = typeof config === 'string' ? types[config] : config;
+  allowOnlyKeys(def, ['convert', 'encode', 'decode']);
+  return {
+    convert: def.convert || (v => v),
+    encode: def.encode || (v => v),
+    decode: def.decode || (v => v)
   };
-}
-
-function readOnlySetter(name) {
-  hint(this, `Can not set read-only property "${name}"`);
-}
-
-/** @this {NativeObject} */
-function oneTimeSetter(name, value) {
-  if (this._wasSet(name)) {
-    hint(this, `Can not re-define property "${name}"`);
-    return;
-  }
-  this._nativeSet(name, value);
-  this._storeProperty(name, value);
-}
-
-/** @this {NativeObject} */
-function defaultSetter(name, value) {
-  if (this['$prop_' + name].nocache) {
-    this._nativeSet(name, value);
-    this._triggerChangeEvent(name, value);
-  } else {
-    if (this._getStoredProperty(name) !== value) {
-      this._nativeSet(name, value);
-      this._storeProperty(name, value);
-    }
-  }
-}
-
-/** @this {NativeObject} */
-function defaultGetter(name) {
-  let result = this._getStoredProperty(name);
-  if (result === undefined) {
-    result = this._nativeGet(name);
-  }
-  return result;
-}
-
-function valueOf(value) {
-  return value instanceof Function ? value() : value;
 }

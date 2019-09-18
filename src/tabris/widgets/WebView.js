@@ -58,10 +58,10 @@ export default class WebView extends Widget {
 NativeObject.defineProperties(WebView.prototype, {
   url: {type: 'string', nocache: true},
   html: {type: 'string', nocache: true},
-  headers: {type: 'any', default: {}},
+  headers: {type: 'any', default: Object.freeze({})},
   canGoBack: {type: 'boolean', readonly: true},
   canGoForward: {type: 'boolean', readonly: true},
-  initScript: {type: 'string'}
+  initScript: {type: 'string', default: null, nullable: true}
 });
 
 NativeObject.defineEvents(WebView.prototype, {

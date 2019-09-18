@@ -145,8 +145,7 @@ describe('AlertDialog', function() {
       dialog.buttons = {
         ok: undefined,
         cancel: 23,
-        neutral: null,
-        doesNotExist: 'bar'
+        neutral: null
       };
 
       const expected = {

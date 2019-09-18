@@ -1,6 +1,7 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 import {JSX} from '../JsxProcessor';
+import {types} from '../property-types';
 
 export default class TextView extends Widget {
 
@@ -54,28 +55,23 @@ export default class TextView extends Widget {
 }
 
 NativeObject.defineProperties(TextView.prototype, {
-  alignment: {type: ['choice', ['left', 'right', 'centerX']], default: 'left'},
-  markupEnabled: {type: 'boolean', default: false},
-  lineSpacing: {type: 'number', default: 1},
-  selectable: {type: 'boolean', default: false},
-  maxLines: {
-    type: ['nullable', 'natural'],
-    default: null,
-    set(name, value) {
-      this._nativeSet(name, value <= 0 ? null : value);
-      this._storeProperty(name, value);
-    }
+  alignment: {
+    type: types.string,
+    choice: ['left', 'right', 'centerX'],
+    default: 'left'
   },
-  text: {type: 'string', default: ''},
-  textColor: {type: 'ColorValue'},
-  font: {
-    type: 'FontValue',
-    set(name, value) {
-      this._nativeSet(name, value);
-      this._storeProperty(name, value);
-    },
-    default: null
-  }
+  markupEnabled: {type: types.boolean, default: false},
+  lineSpacing: {type: types.number, default: 1},
+  selectable: {type: types.boolean, default: false},
+  maxLines: {
+    type: {
+      convert: value => value <= 0 ? null : types.natural.convert(value)},
+    default: null,
+    nullable: true
+  },
+  text: {type: types.string, default: ''},
+  textColor: {type: types.ColorValue, default: 'initial'},
+  font: {type: types.FontValue, default: 'initial'}
 });
 
 NativeObject.defineEvents(TextView.prototype, {

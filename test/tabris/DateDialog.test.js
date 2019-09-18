@@ -30,7 +30,8 @@ describe('DateDialog', function() {
     });
 
     it('can only be set to Date', function() {
-      expect(() => dialog.date = 'foo').to.throw();
+      dialog.date = 'foo';
+      expect(dialog.date).to.be.null;
     });
 
   });
@@ -50,7 +51,8 @@ describe('DateDialog', function() {
     });
 
     it('can only be set to minDate', function() {
-      expect(() => dialog.minDate = 'foo').to.throw();
+      dialog.minDate = 'foo';
+      expect(dialog.minDate).to.be.null;
     });
 
   });
@@ -70,7 +72,8 @@ describe('DateDialog', function() {
     });
 
     it('can only be set to maxDate', function() {
-      expect(() => dialog.maxDate = 'foo').to.throw();
+      dialog.maxDate = 'foo';
+      expect(dialog.maxDate).to.be.null;
     });
 
   });
@@ -108,7 +111,7 @@ describe('DateDialog', function() {
         const newDialog = DateDialog.open(date);
 
         expect(newDialog).to.be.instanceof(DateDialog);
-        expect(newDialog.date.toString()).to.equal(date.toString());
+        expect(newDialog.date).to.equal(date);
         expect(client.calls({op: 'call', id: newDialog.cid})[0].method).to.equal('open');
       });
 

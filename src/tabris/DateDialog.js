@@ -1,6 +1,6 @@
 import Popup from './Popup';
 import NativeObject from './NativeObject';
-import {toValueString} from './Console';
+import {types} from './property-types';
 
 export default class DateDialog extends Popup {
 
@@ -50,21 +50,12 @@ export default class DateDialog extends Popup {
 }
 
 NativeObject.defineProperties(DateDialog.prototype, {
-  date: {type: 'any', default: null, set: setDate},
-  maxDate: {type: 'any', default: null, set: setDate},
-  minDate: {type: 'any', default: null, set: setDate}
+  date: {type: types.Date, default: null},
+  maxDate: {type: types.Date, default: null},
+  minDate: {type: types.Date, default: null}
 });
 
 NativeObject.defineEvents(DateDialog.prototype, {
   select: {native: true},
   close: {native: true}
 });
-
-function setDate(name, value) {
-  if (value instanceof Date) {
-    this._nativeSet(name, value.getTime());
-    this._storeProperty(name, value);
-  } else {
-    throw new Error(`${toValueString(name)} is not of type Date`);
-  }
-}

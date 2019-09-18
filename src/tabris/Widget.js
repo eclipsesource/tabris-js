@@ -6,13 +6,42 @@ import {JSX} from './JsxProcessor';
 import {types} from './property-types';
 import LayoutData, {mergeLayoutData} from './LayoutData';
 import {getFilter} from './util-widget-select';
-import {toValueString} from './Console';
+import {toValueString, hint} from './Console';
+
+/** @type {Array<keyof LayoutData>} */
+const layoutDataProps = ['left', 'right', 'top', 'bottom', 'width', 'height', 'centerX', 'centerY', 'baseline'];
+
+const jsxShorthands = {
+  center: 'layoutData',
+  stretch: 'layoutData',
+  stretchX: 'layoutData',
+  stretchY: 'layoutData'
+};
+
+const defaultGestures = {
+  tap: {type: 'tap'},
+  longPress: {type: 'longPress'},
+  pan: {type: 'pan'},
+  panLeft: {type: 'pan', direction: 'left'},
+  panRight: {type: 'pan', direction: 'right'},
+  panUp: {type: 'pan', direction: 'up'},
+  panDown: {type: 'pan', direction: 'down'},
+  panHorizontal: {type: 'pan', direction: 'horizontal'},
+  panVertical: {type: 'pan', direction: 'vertical'},
+  swipeLeft: {type: 'swipe', direction: 'left'},
+  swipeRight: {type: 'swipe', direction: 'right'},
+  swipeUp: {type: 'swipe', direction: 'up'},
+  swipeDown: {type: 'swipe', direction: 'down'}
+};
 
 /**
  * @abstract
  */
 export default class Widget extends NativeObject {
 
+  /**
+   * @param {import('./widgets/Composite')} widget
+   */
   appendTo(widget) {
     this._checkDisposed();
     widget = widget instanceof WidgetCollection ? widget.first() : widget;
@@ -23,6 +52,9 @@ export default class Widget extends NativeObject {
     return this;
   }
 
+  /**
+   * @param {import('./widgets/Composite')} widget
+   */
   insertBefore(widget) {
     this._checkDisposed();
     widget = widget instanceof WidgetCollection ? widget.first() : widget;
@@ -38,6 +70,9 @@ export default class Widget extends NativeObject {
     return this;
   }
 
+  /**
+   * @param {import('./widgets/Composite')} widget
+   */
   insertAfter(widget) {
     this._checkDisposed();
     widget = widget instanceof WidgetCollection ? widget.first() : widget;
@@ -60,6 +95,9 @@ export default class Widget extends NativeObject {
     return this;
   }
 
+  /**
+   * @param {Selector} selector
+   */
   parent(selector) {
     if (!selector || !this._parent) {
       return this._parent || null;
@@ -72,6 +110,10 @@ export default class Widget extends NativeObject {
     return candidate;
   }
 
+  /**
+   * @param {Selector} selector
+   * @returns {WidgetCollection}
+   */
   siblings(selector) {
     if (!this._parent) {
       return new WidgetCollection([]);
@@ -79,14 +121,66 @@ export default class Widget extends NativeObject {
     return this._parent._children(widget => widget !== this).filter(selector);
   }
 
+  /**
+   * @param {string} value
+   */
+  set class(value) {
+    if (this._isDisposed) {
+      hint(this, 'Cannot set property "class" on disposed object');
+      return;
+    }
+    this._classList = types.string.convert(value).trim().split(/\s+/);
+    this._triggerChangeEvent('class', this.class);
+  }
+
+  get class() {
+    if (this._isDisposed) {
+      return undefined;
+    }
+    return this.classList.join(' ');
+  }
+
+  set layoutData(value) {
+    if (this._isDisposed) {
+      hint(this, 'Cannot set property "layoutData" on disposed object');
+      return;
+    }
+    const oldLayoutData = this._layoutData;
+    /** @type {LayoutData} */
+    this._layoutData = value ? LayoutData.from(value) : new LayoutData({});
+    this._triggerChangeEvent('layoutData', this._layoutData);
+    layoutDataProps.forEach(prop => {
+      const oldValue = oldLayoutData ? oldLayoutData[prop] : 'auto';
+      if (oldValue !== this._layoutData[prop]) {
+        this._triggerChangeEvent(prop, this._layoutData[prop]);
+      }
+    });
+  }
+
+  get layoutData() {
+    if (this._isDisposed) {
+      return undefined;
+    }
+    if (!this._layoutData) {
+      this._layoutData = new LayoutData({});
+    }
+    return this._layoutData;
+  }
+
   get classList() {
+    if (this._isDisposed) {
+      return undefined;
+    }
     if (!this._classList) {
-      this._classList = [];
+      this._classList = /** @type {string[]} */ ([]);
     }
     return this._classList;
   }
 
   get data() {
+    if (this._isDisposed) {
+      return undefined;
+    }
     if (!this.$data) {
       this.$data = {};
     }
@@ -94,7 +188,49 @@ export default class Widget extends NativeObject {
   }
 
   get absoluteBounds() {
-    return types.bounds.decode(this._nativeGet('absoluteBounds'));
+    if (this._isDisposed) {
+      return undefined;
+    }
+    return types.Bounds.decode(this._nativeGet('absoluteBounds'));
+  }
+
+  set id(value) {
+    /** @type {string} */
+    this._id = types.string.convert(value);
+  }
+
+  get id() {
+    if (this._isDisposed) {
+      return undefined;
+    }
+    return this._id || '';
+  }
+
+  set gestures(gestures) {
+    /** @type {typeof defaultGestures} */
+    this._gestures = Object.assign({}, defaultGestures, gestures);
+  }
+
+  get gestures() {
+    if (!this._gestures) {
+      this._gestures = Object.assign({}, defaultGestures);
+    }
+    return this._gestures;
+  }
+
+  set excludeFromLayout(value) {
+    if (this._excludeFromLayout !== !!value) {
+      /** @type {boolean} */
+      this._excludeFromLayout = !!value;
+    }
+    if (this._parent) {
+      this._parent._scheduleRenderChildren();
+    }
+    this._triggerChangeEvent('excludeFromLayout', this._excludeFromLayout);
+  }
+
+  get excludeFromLayout() {
+    return !!this._excludeFromLayout;
   }
 
   toString() {
@@ -132,6 +268,10 @@ export default class Widget extends NativeObject {
     return result;
   }
 
+  /**
+   * @param {import('./widgets/Composite').default} parent
+   * @param {number} index
+   */
   _setParent(parent, index) {
     if (this._parent) {
       this._parent._removeChild(this);
@@ -142,6 +282,10 @@ export default class Widget extends NativeObject {
     }
   }
 
+  /**
+   * @param {string} name
+   * @param {boolean} listening
+   */
   _listen(name, listening) {
     if (this._isDisposed) {
       return;
@@ -174,12 +318,15 @@ export default class Widget extends NativeObject {
     }
   }
 
+  /**
+   * @param {string} name
+   * @param {object} event
+   */
   _trigger(name, event) {
     if (name === 'resize') {
-      super._trigger(name, types.bounds.decode(event.bounds));
-    } else {
-      return super._trigger(name, event);
+      return super._trigger(name, types.Bounds.decode(event.bounds));
     }
+    return super._trigger(name, event);
   }
 
   _release() {
@@ -203,160 +350,73 @@ export default class Widget extends NativeObject {
 
 }
 
-const layoutDataProps = ['left', 'right', 'top', 'bottom', 'width', 'height', 'centerX', 'centerY', 'baseline'];
-
-const jsxShorthands = {
-  center: 'layoutData',
-  stretch: 'layoutData',
-  stretchX: 'layoutData',
-  stretchY: 'layoutData'
-};
-
-const defaultGestures = {
-  tap: {type: 'tap'},
-  longPress: {type: 'longPress'},
-  pan: {type: 'pan'},
-  panLeft: {type: 'pan', direction: 'left'},
-  panRight: {type: 'pan', direction: 'right'},
-  panUp: {type: 'pan', direction: 'up'},
-  panDown: {type: 'pan', direction: 'down'},
-  panHorizontal: {type: 'pan', direction: 'horizontal'},
-  panVertical: {type: 'pan', direction: 'vertical'},
-  swipeLeft: {type: 'swipe', direction: 'left'},
-  swipeRight: {type: 'swipe', direction: 'right'},
-  swipeUp: {type: 'swipe', direction: 'up'},
-  swipeDown: {type: 'swipe', direction: 'down'}
-};
-
 NativeObject.defineProperties(Widget.prototype, {
   enabled: {
-    type: 'boolean',
+    type: types.boolean,
     default: true
   },
   visible: {
-    type: 'boolean',
+    type: types.boolean,
     default: true
   },
   elevation: {
-    type: 'number',
+    type: types.natural,
     default: 0
   },
   bounds: {
-    type: 'bounds',
-    readonly: true
+    type: types.Bounds,
+    readonly: true,
+    nocache: true
   },
   background: {
-    type: 'shader',
-    set(name, value) {
-      this._nativeSet(name, value);
-      this._storeProperty(name, value);
-    }
+    type: types.Shader,
+    default: 'initial'
   },
   opacity: {
-    type: 'opacity',
+    type: types.fraction,
     default: 1
   },
   transform: {
-    type: 'transform',
-    default() {
-      return {
-        rotation: 0,
-        scaleX: 1,
-        scaleY: 1,
-        translationX: 0,
-        translationY: 0,
-        translationZ: 0
-      };
-    }
+    type: types.Transformation,
+    default: Object.freeze({
+      rotation: 0,
+      scaleX: 1,
+      scaleY: 1,
+      translationX: 0,
+      translationY: 0,
+      translationZ: 0
+    })
   },
   highlightOnTouch: {
-    type: 'boolean',
+    type: types.boolean,
     default: false
   },
   cornerRadius: {
-    type: 'number',
+    type: types.number,
     default: 0
   },
-  id: {
-    type: 'string',
-    set(name, value) {
-      this._storeProperty(name, value);
-    },
-    get(name) {
-      return this._getStoredProperty(name);
-    }
-  },
-  class: {
-    type: 'string',
-    set(name, value) {
-      this._classList = value.trim().split(/\s+/);
-    },
-    get() {
-      return this.classList.join(' ');
-    }
-  },
-  gestures: {
-    set(name, gestures) {
-      this._gestures = Object.assign({}, defaultGestures, gestures);
-    },
-    get() {
-      if (!this._gestures) {
-        this._gestures = Object.assign({}, defaultGestures);
-      }
-      return this._gestures;
-    }
-  },
-  layoutData: {
-    set(name, value) {
-      const oldLayoutData = this._layoutData;
-      this._layoutData = value ? LayoutData.from(value) : new LayoutData({});
-      this._triggerChangeEvent(name, this._layoutData);
-      layoutDataProps.forEach(prop => {
-        const oldValue = oldLayoutData ? oldLayoutData[prop] : 'auto';
-        if (oldValue !== this._layoutData[prop]) {
-          this._triggerChangeEvent(prop, this._layoutData[prop]);
-        }
-      });
-    },
-    get() {
-      if (!this._layoutData) {
-        this._layoutData = new LayoutData({});
-      }
-      return this._layoutData;
-    }
-  },
   padding: {
-    type: 'boxDimensions',
-    default: {left: 0, right: 0, top: 0, bottom: 0}
-  },
-  excludeFromLayout: {
-    type: 'boolean',
-    default: false,
-    set(name, value) {
-      if (this._excludeFromLayout !== !!value) {
-        this._excludeFromLayout = !!value;
-        if (this._parent) {
-          this._parent._scheduleRenderChildren();
-        }
-        this._triggerChangeEvent(name, this._excludeFromLayout);
-      }
-    },
-    get() {
-      return !!this._excludeFromLayout;
-    }
+    type: types.BoxDimensions,
+    default: Object.freeze({left: 0, right: 0, top: 0, bottom: 0})
   }
 });
 
 layoutDataProps.forEach(prop => {
-  NativeObject.defineProperty(Widget.prototype, prop, {
-    set(name, value) {
-      this.layoutData = LayoutData.from(Object.assign({}, this.layoutData, {[name]: value}));
+  Object.defineProperty(Widget.prototype, prop, {
+    set(value) {
+      this.layoutData = LayoutData.from(Object.assign({}, this.layoutData, {[prop]: value}));
     },
-    get(name) {
-      return this.layoutData[name];
+    get() {
+      return this.layoutData[prop];
     }
   });
+  NativeObject.defineEvent(Widget.prototype, prop + 'Changed', true);
 });
+
+NativeObject.defineChangeEvents(Widget.prototype, [
+  'layoutData',
+  'class'
+]);
 
 NativeObject.defineEvents(Widget.prototype, {
   tap: true,

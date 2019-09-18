@@ -1,4 +1,5 @@
 import NativeObject from './NativeObject';
+import {types} from './property-types';
 
 export const OPCODES = {
   arc: 1,
@@ -116,4 +117,6 @@ export default class GC extends NativeObject {
 
 }
 
-NativeObject.defineProperties(GC.prototype, {parent: 'NativeObject'});
+NativeObject.defineProperties(GC.prototype,
+  {parent: {type: types.Widget, default: null}}
+);

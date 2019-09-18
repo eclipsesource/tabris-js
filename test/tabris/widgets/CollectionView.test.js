@@ -41,10 +41,27 @@ describe('CollectionView', function() {
       expect(client.calls({op: 'listen', event: 'updateCell'})[0].listen).to.equal(true);
     });
 
+    it('sets itemCount, updateCell, createCell, cellHeight and cellType', function() {
+      const itemCount = 3;
+      const cellHeight = 20;
+      const updateCell = () => {};
+      const createCell = () => {};
+      const cellType = () => {};
+
+      const cv = new CollectionView({itemCount, cellHeight, updateCell, createCell, cellType});
+
+      expect(cv.itemCount).to.equal(itemCount);
+      expect(cv.cellHeight).to.equal(cellHeight);
+      expect(cv.updateCell).to.equal(updateCell);
+      expect(cv.createCell).to.equal(createCell);
+      expect(cv.cellType).to.equal(cellType);
+    });
+
   });
 
   describe('instance', function() {
 
+    /** @type {CollectionView} */
     let view;
 
     beforeEach(function() {
@@ -115,6 +132,18 @@ describe('CollectionView', function() {
         expect(calls).to.be.empty;
       });
 
+      it('fires change events', function() {
+        const listener = spy();
+        const createCell = spy();
+
+        view.onCreateCellChanged(listener);
+
+        view.createCell = createCell;
+
+        expect(listener).to.have.been.calledOnce;
+        expect(listener.firstCall.args[0].value).to.equal(createCell);
+      });
+
     });
 
     describe('updateCell', function() {
@@ -157,6 +186,18 @@ describe('CollectionView', function() {
         const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls).to.be.empty;
       });
+
+      it('fires change events', function() {
+        const listener = spy();
+        const updateCell = spy();
+        view.onUpdateCellChanged(listener);
+
+        view.updateCell = updateCell;
+
+        expect(listener).to.have.been.calledOnce;
+        expect(listener.firstCall.args[0].value).to.equal(updateCell);
+      });
+
     });
 
     describe('creating cells on demand', function() {
@@ -314,6 +355,17 @@ describe('CollectionView', function() {
         expect(calls).to.be.empty;
       });
 
+      it('fires change events', function() {
+        const listener = spy();
+        const updateCell = spy();
+        view.onUpdateCellChanged(listener);
+
+        view.updateCell = updateCell;
+
+        expect(listener).to.have.been.calledOnce;
+        expect(listener.firstCall.args[0].value).to.equal(updateCell);
+      });
+
     });
 
     describe('cellHeight', function() {
@@ -366,6 +418,18 @@ describe('CollectionView', function() {
         const calls = client.calls({op: 'call', id: view.cid, method: 'load'});
         expect(calls).to.be.empty;
       });
+
+      it('fires change events', function() {
+        const listener = spy();
+        const cellHeight = spy();
+        view.onCellHeightChanged(listener);
+
+        view.cellHeight = cellHeight;
+
+        expect(listener).to.have.been.calledOnce;
+        expect(listener.firstCall.args[0].value).to.equal(cellHeight);
+      });
+
     });
 
     describe('scrollbarVisible', function() {
@@ -409,6 +473,16 @@ describe('CollectionView', function() {
 
         const calls = client.calls({op: 'set', id: view.cid});
         expect(calls).to.be.empty;
+      });
+
+      it('fires change events', function() {
+        const listener = spy();
+        view.onItemCountChanged(listener);
+
+        view.itemCount = 11;
+
+        expect(listener).to.have.been.calledOnce;
+        expect(listener.firstCall.args[0].value).to.equal(11);
       });
 
     });

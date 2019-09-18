@@ -1,9 +1,10 @@
 import NativeObject from '../NativeObject';
 import Composite from './Composite';
 import Tab from './Tab';
-import {hint} from '../Console';
 import {JSX} from '../JsxProcessor';
 import {omit, pick} from '../util';
+import {types} from '../property-types';
+import {toValueString, hint} from '../Console';
 
 export default class TabFolder extends Composite {
 
@@ -15,15 +16,28 @@ export default class TabFolder extends Composite {
     this._nativeListen('select', true);
   }
 
+  get _nativeType() {
+    return 'tabris.TabFolder';
+  }
+
+  set selectionIndex(index) {
+    const children = this._children();
+    if (!children[index]) {
+      hint(this, 'Can not set selectionIndex to ' + index + ', value out of bounds');
+      return;
+    }
+    this.selection = children[index];
+  }
+
+  get selectionIndex() {
+    return this._children().indexOf(this.selection);
+  }
+
   _nativeListen(event, state) {
     if (event === 'select' && !state) {
       return;
     }
     super._nativeListen(event, state);
-  }
-
-  get _nativeType() {
-    return 'tabris.TabFolder';
   }
 
   _initLayout() {
@@ -114,49 +128,47 @@ export default class TabFolder extends Composite {
 }
 
 NativeObject.defineProperties(TabFolder.prototype, {
-  paging: {type: 'boolean', default: false},
-  tabBarLocation: {type: ['choice', ['top', 'bottom', 'hidden', 'auto']], default: 'auto', const: true},
-  tabMode: {type: ['choice', ['fixed', 'scrollable']], default: 'fixed', const: true},
+  paging: {type: types.boolean, default: false},
+  tabBarLocation: {
+    choice: ['top', 'bottom', 'hidden', 'auto'],
+    default: 'auto',
+    const: true
+  },
+  tabMode: {
+    type: types.string,
+    choice: ['fixed', 'scrollable'],
+    default: 'fixed',
+    const: true
+  },
   selection: {
-    set(name, tab) {
-      if (this._children().indexOf(tab) < 0) {
-        hint(this, 'Can not set selection to ' + tab);
-        return;
+    type: {
+      convert(value, tabFolder) {
+        const tab = types.Widget.convert(value);
+        if (!tab || !(tab instanceof Tab) || tabFolder._children().indexOf(tab) < 0) {
+          throw new Error('Can not set selection to ' + toValueString(value));
+        }
+        return tab;
+      },
+      encode: types.Widget.encode,
+      decode(value, tabFolder) {
+        if (!tabFolder._children().length) {
+          return null;
+        }
+        return types.Widget.decode(value);
       }
-      if (this.selection === tab) {
-        return;
-      }
-      this._nativeSet('selection', tab.cid);
-      this._triggerChangeEvent('selection', tab);
     },
-    get() {
-      if (!this._children().length) {
-        return null;
-      }
-      const selection = this._nativeGet('selection');
-      return selection ? tabris._nativeObjectRegistry.find(selection) : null;
-    }
+    nocache: true
   },
-  selectionIndex: {
-    type: 'natural',
-    set(name, index) {
-      const children = this._children();
-      if (!children[index]) {
-        hint(this, 'Can not set selectionIndex to ' + index + ', value out of bounds');
-        return;
-      }
-      this.selection = children[index];
-    },
-    get() {
-      return this._children().indexOf(this.selection);
-    }
-  },
-  tabTintColor: {type: 'ColorValue'},
-  selectedTabTintColor: {type: 'ColorValue'},
-  tabBarBackground: {type: 'ColorValue'},
-  tabBarElevation: {type: 'number', nocache: true},
-  selectedTabIndicatorTintColor: {type: 'ColorValue'}
+  tabTintColor: {type: types.ColorValue, default: 'initial'},
+  selectedTabTintColor: {type: types.ColorValue, default: 'initial'},
+  tabBarBackground: {type: types.ColorValue, default: 'initial'},
+  tabBarElevation: {type: types.number, nocache: true},
+  selectedTabIndicatorTintColor: {type: types.ColorValue, default: 'initial'}
 });
+
+NativeObject.defineChangeEvents(TabFolder.prototype, [
+  'selectionIndex'
+]);
 
 NativeObject.defineEvents(TabFolder.prototype, {
   scroll: {native: true},

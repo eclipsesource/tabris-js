@@ -1,6 +1,6 @@
 import Popup from './Popup';
 import NativeObject from './NativeObject';
-import {toValueString} from './Console';
+import {types} from './property-types';
 
 export default class TimeDialog extends Popup {
 
@@ -50,19 +50,10 @@ export default class TimeDialog extends Popup {
 }
 
 NativeObject.defineProperties(TimeDialog.prototype, {
-  date: {type: 'any', default: null, set: setDate},
+  date: {type: types.Date, default: null},
 });
 
 NativeObject.defineEvents(TimeDialog.prototype, {
   select: {native: true},
   close: {native: true}
 });
-
-function setDate(name, value) {
-  if (value instanceof Date) {
-    this._nativeSet(name, value.getTime());
-    this._storeProperty(name, value);
-  } else {
-    throw new Error(`${toValueString(value)} is not of type Date`);
-  }
-}

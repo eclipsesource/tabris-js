@@ -1,6 +1,6 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
-import {hint} from '../Console';
+import {types} from '../property-types';
 import {JSX} from '../JsxProcessor';
 
 export default class Button extends Widget {
@@ -50,44 +50,49 @@ export default class Button extends Widget {
 
 NativeObject.defineProperties(Button.prototype, {
   style: {
-    type: ['choice', ['default', 'elevate', 'flat', 'outline', 'text']],
+    type: types.string,
+    choice: ['default', 'elevate', 'flat', 'outline', 'text'],
+    default: 'default',
     const: true
   },
   strokeColor: {
-    type: 'ColorValue',
-    set(name, value) {
-      if (this.style === 'outline') {
-        this._nativeSet(name, value);
-        this._storeProperty(name, value);
-      } else {
-        hint(this, `The strokeColor can only be set on buttons with style "outline" but it has style ${this.style}.`);
-      }
-    }
+    type: {
+      convert(value, button) {
+        if (button.style !== 'outline') {
+          throw new Error(
+            `The strokeColor can only be set on buttons with style "outline" but it has style ${button.style}.`
+          );
+        }
+        return types.ColorValue.convert(value);
+      },
+      encode: types.ColorValue.encode,
+    },
+    default: 'initial'
   },
   strokeWidth: {
-    type: 'number', nocache: true,
-    set(name, value) {
-      if (this.style === 'outline') {
-        this._nativeSet(name, value);
-        this._storeProperty(name, value);
-      } else {
-        hint(this, `The strokeWidth can only be set on buttons with style "outline" but it has style ${this.style}.`);
+    type: {
+      convert(value, button) {
+        if (button.style !== 'outline') {
+          throw new Error(
+            `The strokeWidth can only be set on buttons with style "outline" but it has style ${button.style}.`
+          );
+        }
+        return types.dimension.convert(value);
       }
-    }
-  },
-  alignment: {type: ['choice', ['left', 'right', 'centerX']], default: 'centerX'},
-  image: {type: 'ImageValue', default: null},
-  imageTintColor: {type: 'ColorValue'},
-  text: {type: 'string', default: ''},
-  textColor: {type: 'ColorValue'},
-  font: {
-    type: 'FontValue',
-    set(name, value) {
-      this._nativeSet(name, value);
-      this._storeProperty(name, value);
     },
+    nullable: true,
     default: null
-  }
+  },
+  alignment: {
+    type: types.string,
+    choice: ['left', 'right', 'centerX'],
+    default: 'centerX'
+  },
+  image: {type: types.ImageValue, default: null},
+  imageTintColor: {type: types.ColorValue, default: 'initial'},
+  text: {type: types.string, default: ''},
+  textColor: {type: types.ColorValue, default: 'initial'},
+  font: {type: types.FontValue, default: 'initial'}
 });
 
 NativeObject.defineEvents(Button.prototype, {

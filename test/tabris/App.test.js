@@ -46,6 +46,7 @@ describe('App', function() {
         tabris.device = {platform: 'Android'};
       });
 
+      // critical?
       it('throws exception when set without "host" property', function() {
         expect(() => {
           app.pinnedCertificates = [{hash: 'sha256/abc'}];
@@ -167,10 +168,15 @@ describe('App', function() {
 
     describe('idleTimeoutEnabled', () => {
 
-      it('throws when idleTimeoutEnabled is accessed on worker', () => {
+      it('warns when idleTimeoutEnabled is accessed on worker', () => {
+        spy(console, 'warn');
         tabris.contentView = null;
-        expect(() => app.idleTimeoutEnabled = true)
-          .to.throw(Error, 'The device property "idleTimeoutEnabled" can only be changed in main context');
+
+        app.idleTimeoutEnabled = false;
+
+        expect(console.warn).to.have.been.calledWithMatch(
+          'The device property "idleTimeoutEnabled" can only be changed in main context'
+        );
       });
 
     });

@@ -10,6 +10,10 @@ export default class CameraView extends Widget {
 }
 
 NativeObject.defineProperties(CameraView.prototype, {
-  camera: {type: 'NativeObject'},
-  scaleMode: {type: ['choice', ['fit', 'fill']], default: 'fit'}
+  camera: {type: {convert: value => value.cid}, default: null, nullable: true},
+  scaleMode: {
+    type: 'string',
+    choice: ['fit', 'fill'],
+    default: 'fit'
+  }
 });

@@ -25,7 +25,7 @@ export default class StackLayout extends Layout {
 
   constructor(properties = {}, queue) {
     super({}, queue);
-    this._spacing = 'spacing' in properties ? types.number.encode(properties.spacing) : 0;
+    this._spacing = 'spacing' in properties ? types.number.convert(properties.spacing) : 0;
     this._alignment = Align[properties.alignment] || Align.left;
     const align = this._alignment;
     this._layoutDataHorizontal = LayoutData.from({

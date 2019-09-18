@@ -27,7 +27,7 @@ NativeObject.defineProperties(Tab.prototype, {
   image: {type: 'ImageValue', default: null},
   selectedImage: {type: 'ImageValue', default: null},
   badge: {type: 'natural', default: 0},
-  badgeColor: {type: 'ColorValue'}
+  badgeColor: {type: 'ColorValue', default: 'initial'}
 });
 
 NativeObject.defineEvents(Tab.prototype, {

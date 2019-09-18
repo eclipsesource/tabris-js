@@ -38,17 +38,25 @@ export default class Device extends NativeObject {
 }
 
 NativeObject.defineProperties(Device.prototype, {
-  model: {readonly: true, get: getOnce, const: true},
-  vendor: {readonly: true, get: getOnce, const: true},
-  platform: {readonly: true, get: getOnce, const: true},
-  version: {readonly: true, get: getOnce, const: true},
+  model: {readonly: true, const: true},
+  vendor: {readonly: true, const: true},
+  platform: {readonly: true, const: true},
+  version: {readonly: true, const: true},
   name: {readonly: true, const: true},
   language: {readonly: true, const: true},
   orientation: {readonly: true},
   screenWidth: {readonly: true, const: true},
   screenHeight: {readonly: true, const: true},
-  scaleFactor: {readonly: true, get: getOnce, const: true},
-  cameras: {readonly: true, get: getCameras, const: true}
+  scaleFactor: {readonly: true, const: true},
+  cameras: {
+    type: {
+      decode(value) {
+        return Object.freeze(value.map((cameraId) => new Camera({cameraId})));
+      }
+    },
+    readonly: true,
+    const: true
+  }
 });
 
 export function create() {
@@ -89,26 +97,4 @@ function defineReadOnlyProperty(target, name, getter) {
     get: getter,
     set() {}
   });
-}
-
-function getOnce(name) {
-  let value = this._getStoredProperty(name);
-  if (!value) {
-    value = this._nativeGet(name);
-    this._storeProperty(name, value);
-  }
-  return value;
-}
-
-function getCameras(name) {
-  let cameras = this._getStoredProperty(name);
-  if (!cameras) {
-    const cameraIds = this._nativeGet(name);
-    if (!(cameraIds instanceof Array)) {
-      throw new Error('Cameras property is not an array of camera ids but ' + JSON.stringify(cameraIds));
-    }
-    cameras = cameraIds.map((cameraId) => new Camera({cameraId}));
-    this._storeProperty(name, cameras);
-  }
-  return cameras;
 }

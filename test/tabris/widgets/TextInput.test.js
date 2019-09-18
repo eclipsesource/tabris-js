@@ -85,7 +85,7 @@ describe('TextInput', function() {
     it('sends null when maxChars is set to `null`', function() {
       new TextInput({maxChars: null});
 
-      expect(getCreate().properties.maxChars).to.equal(undefined);
+      expect(getCreate().properties.maxChars).to.equal(null);
     });
 
     it('throws when maxChars is set to negative number', function() {
@@ -145,11 +145,7 @@ describe('TextInput', function() {
     it('rejects invalid selection', function() {
       widget = new TextInput({text: 'foobar', selection: [1, 3]});
       [[-1, 3], [1, 10], [10, 3], [1, -1]].forEach(sel => {
-        try {
-          widget.selection = sel;
-        } catch (ex) {
-          // expected
-        }
+        widget.selection = sel;
         expect(widget.selection).to.deep.equal([1, 3]);
       });
     });

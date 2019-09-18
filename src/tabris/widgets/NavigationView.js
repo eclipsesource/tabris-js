@@ -3,6 +3,7 @@ import Composite from './Composite';
 import Page from './Page';
 import Action from './Action';
 import SearchAction from './SearchAction';
+import {types} from '../property-types';
 
 export default class NavigationView extends Composite {
 
@@ -107,14 +108,18 @@ export default class NavigationView extends Composite {
 }
 
 NativeObject.defineProperties(NavigationView.prototype, {
-  drawerActionVisible: {type: 'boolean', default: false},
-  toolbarVisible: {type: 'boolean', default: true},
-  toolbarColor: {type: 'ColorValue'},
+  drawerActionVisible: {type: types.boolean, default: false},
+  toolbarVisible: {type: types.boolean, default: true},
+  toolbarColor: {type: types.ColorValue, default: null},
   toolbarHeight: {readonly: true},
-  titleTextColor: {type: 'ColorValue'},
-  actionColor: {type: 'ColorValue'},
-  actionTextColor: {type: 'ColorValue'},
-  pageAnimation: {type: ['choice', ['default', 'none']], default: 'default'}
+  titleTextColor: {type: types.ColorValue, default: null},
+  actionColor: {type: types.ColorValue, default: null},
+  actionTextColor: {type: types.ColorValue, default: null},
+  pageAnimation: {
+    type: types.string,
+    choice: ['default', 'none'],
+    default: 'default'
+  }
 });
 
 NativeObject.defineEvents(NavigationView.prototype, {

@@ -1,28 +1,38 @@
 import NativeObject from './NativeObject';
 import {hint, toValueString} from './Console';
+import {types} from './property-types';
 
 const ANIMATABLE_PROPERTIES = ['opacity', 'transform'];
 
+/** @type {PropertyDefinitions} */
 const PROPERTIES = {
-  properties: {type: 'any'},
-  delay: {type: 'natural'},
-  duration: {type: 'natural'},
+  properties: {default: Object.freeze({})},
+  delay: {type: types.natural, default: 0},
+  duration: {type: types.natural, default: null},
   repeat: {
-    type: 'any',
-    set(name, value) {
-      if (typeof value !== 'number') {
-        throw new Error(`${toValueString(value)} is not a number`);
+    type: {
+      convert(value) {
+        if (typeof value !== 'number') {
+          throw new Error(`${toValueString(value)} is not a number`);
+        }
+        if (!(isFinite(value) || isNaN(value) || value === Infinity)) {
+          throw new Error(`${toValueString(value)} is not a valid number`);
+        }
+        return value;
+      },
+      encode(value) {
+        return value === Infinity ? -1 : value;
       }
-      if (!(isFinite(value) || isNaN(value) || value === Infinity)) {
-        throw new Error(`${toValueString(value)} is not a valid number`);
-      }
-      this._nativeSet(name, value === Infinity ? -1 : value);
-      this._storeProperty(name, value);
-    }
+    },
+    default: 1,
   },
-  reverse: {type: 'boolean'},
-  easing: {type: ['choice', ['linear', 'ease-in', 'ease-out', 'ease-in-out']]},
-  target: {type: 'NativeObject'}
+  reverse: {type: types.boolean, default: false},
+  easing: {
+    type: types.string,
+    choice: ['linear', 'ease-in', 'ease-out', 'ease-in-out'],
+    default: 'liniear'
+  },
+  target: {type: types.Widget, default: null}
 };
 
 class Animation extends NativeObject {
@@ -66,14 +76,20 @@ class Animation extends NativeObject {
 
 NativeObject.defineProperties(Animation.prototype, PROPERTIES);
 
+/**
+ * @this {import('./Widget').default}
+ * @param {{opacity?: number, transform?: Transformation}} properties
+ * @param {AnimationOptions} options
+ * @returns {Promise}
+ */
 export function animate(properties, options) {
   const animatedProps = {};
   for (const property in properties) {
-    if (ANIMATABLE_PROPERTIES.includes(property)) {
+    if (ANIMATABLE_PROPERTIES.indexOf(property) !== -1) {
       try {
-        animatedProps[property] =
-          this._encodeProperty(this._getTypeDef(property), properties[property]);
-        this._storeProperty(property, animatedProps[property], options);
+        const def = this._getPropertyDefinition(property);
+        animatedProps[property] = this._convertValue(def, properties[property]);
+        this._storeProperty(property, animatedProps[property]);
       } catch (ex) {
         hint(this, 'Ignored invalid animation property value for "' + property + '"');
       }

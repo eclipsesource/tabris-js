@@ -1,4 +1,5 @@
 import NativeObject from './NativeObject';
+import {types} from './property-types';
 
 export default class GestureRecognizer extends NativeObject {
 
@@ -17,10 +18,10 @@ export default class GestureRecognizer extends NativeObject {
 }
 
 NativeObject.defineProperties(GestureRecognizer.prototype, {
-  type: 'string',
-  target: 'NativeObject',
-  fingers: 'natural',
-  touches: 'natural',
-  duration: 'natural',
-  direction: 'string'
+  type: {type: types.string, default: null},
+  target: {type: types.Widget, default: null},
+  fingers: {type: types.natural, default: null},
+  touches: {type: types.natural, default: null},
+  duration: {type: types.natural, default: null},
+  direction: {type: types.string, default: null}
 });

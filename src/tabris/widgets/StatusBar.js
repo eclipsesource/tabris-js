@@ -1,4 +1,5 @@
 import NativeObject from '../NativeObject';
+import {types} from '../property-types';
 
 export default class StatusBar extends NativeObject {
 
@@ -33,13 +34,22 @@ export default class StatusBar extends NativeObject {
 }
 
 NativeObject.defineProperties(StatusBar.prototype, {
-  theme: {type: ['choice', ['default', 'light', 'dark']], default: 'default'},
-  displayMode: {type: ['choice', ['default', 'float', 'hide']], default: 'default'},
-  height: {
-    type: 'number',
-    readonly: true
+  theme: {
+    type: types.string,
+    choice: ['default', 'light', 'dark'],
+    default: 'default'
   },
-  background: {type: 'ColorValue', nocache: true}
+  displayMode: {
+    type: types.string,
+    choice: ['default', 'float', 'hide'],
+    default: 'default'
+  },
+  height: {
+    type: types.number,
+    readonly: true,
+    nocache: true
+  },
+  background: {type: types.ColorValue, nocache: true}
 });
 
 NativeObject.defineEvents(StatusBar.prototype, {

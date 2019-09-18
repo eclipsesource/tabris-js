@@ -1,11 +1,12 @@
 import Popup from './Popup';
 import NativeObject from './NativeObject';
-import {capitalizeFirstChar} from './util';
+import {capitalizeFirstChar, allowOnlyKeys} from './util';
 import TextInput from './widgets/TextInput';
 import {JSX} from './JsxProcessor';
 import {create as createContentView} from './widgets/ContentView';
-import {hint, toValueString} from './Console';
+import {hint} from './Console';
 import Composite from './widgets/Composite';
+import {types} from './property-types';
 
 export default class AlertDialog extends Popup {
 
@@ -78,28 +79,20 @@ export default class AlertDialog extends Popup {
 }
 
 NativeObject.defineProperties(AlertDialog.prototype, {
-  title: {type: 'string', default: ''},
-  message: {type: 'string', default: ''},
+  title: {type: types.string, default: ''},
+  message: {type: types.string, default: ''},
   buttons: {
     type: {
-      encode(value) {
-        if (typeof value !== 'object') {
-          throw new Error(toValueString(value) + ' is not an object');
-        }
-        const encoded = {};
-        if ('ok' in value) {
-          encoded.ok = value.ok + '';
-        }
-        if ('cancel' in value) {
-          encoded.cancel = value.cancel + '';
-        }
-        if ('neutral' in value) {
-          encoded.neutral = value.neutral + '';
-        }
-        return encoded;
+      convert(value) {
+        allowOnlyKeys(value, ['ok', 'cancel', 'neutral']);
+        const result = {};
+        if ('ok' in value) { result.ok = value.ok + ''; }
+        if ('cancel' in value) { result.cancel = value.cancel + ''; }
+        if ('neutral' in value) { result.neutral = value.neutral + ''; }
+        return Object.freeze(result);
       }
     },
-    default: () => ({})
+    default: Object.freeze({})
   }
 });
 

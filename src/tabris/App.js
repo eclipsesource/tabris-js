@@ -1,5 +1,6 @@
 import NativeObject from './NativeObject';
 import {toValueString} from './Console';
+import {types} from './property-types';
 
 const CERTIFICATE_ALGORITHMS = ['RSA2048', 'RSA4096', 'ECDSA256'];
 
@@ -15,6 +16,16 @@ export default class App extends NativeObject {
       throw new Error('App can not be created');
     }
     super._nativeCreate();
+  }
+
+  /**
+   * @override
+   * @param {string} name
+   */
+  _beforePropertyChange(name) {
+    if (name === 'pinnedCertificates') {
+      this.on('certificatesReceived', this._validateCertificate, this);
+    }
   }
 
   get id() {
@@ -89,34 +100,78 @@ export default class App extends NativeObject {
     }
   }
 
+  get $pinnedCerts() {
+    const certificates = this.pinnedCertificates;
+    const hashes = {};
+    for (const cert of certificates) {
+      hashes[cert.host] = hashes[cert.host] || [];
+      hashes[cert.host].push(cert.hash);
+    }
+    return hashes;
+  }
+
 }
 
 NativeObject.defineProperties(App.prototype, {
   pinnedCertificates: {
-    type: 'array',
-    default: () => [],
-    set(name, value) {
-      this.$pinnedCerts = checkCertificates(value);
-      this.on('certificatesReceived', this._validateCertificate, this);
-      this._storeProperty(name, value);
-      this._nativeSet(name, value);
-    }
+    type: {
+      convert: certificates => Object.freeze(certificates),
+      encode(certificates) {
+        // Do checks here instead of in convert to force an exception instead of a warning
+        if (!Array.isArray(certificates)) {
+          throw new Error('Not an Array');
+        }
+        for (const cert of certificates) {
+          if (typeof cert.host !== 'string') {
+            throw new Error(`Invalid host ${toValueString(cert.host)}`);
+          }
+          if (typeof cert.hash !== 'string' || !cert.hash.startsWith('sha256/')) {
+            throw new Error(`Invalid hash ${toValueString(cert.hash)} for pinned certificate ${cert.host}`);
+          }
+          if (tabris.device.platform === 'iOS') {
+            if (!('algorithm' in cert)) {
+              throw new Error(`Missing algorithm for pinned certificate ${cert.host}`);
+            }
+            if (typeof cert.algorithm !== 'string' || CERTIFICATE_ALGORITHMS.indexOf(cert.algorithm) === -1) {
+              throw new Error(`Invalid algorithm ${toValueString(cert.algorithm)} for pinned certificate ${cert.host}`);
+            }
+          }
+        }
+        return certificates;
+      }
+    },
+    default: Object.freeze([])
   },
   trustedCertificates: {
-    type: 'array',
-    default: () => [],
-    set(name, value) {
-      for (let i = 0; i < value.length; i++) {
-        const certificate = value[i];
-        if (!(certificate instanceof ArrayBuffer)) {
-          throw new Error(`certificate entry ${toValueString(certificate)} is not an ArrayBuffer`);
+    type: {
+      convert: certificates => Object.freeze(certificates),
+      encode(value) {
+        // Do checks here instead of in convert to force an exception instead of a warning
+        if (!Array.isArray(value)) {
+          throw new Error('Not an Array');
         }
+        for (let i = 0; i < value.length; i++) {
+          const certificate = value[i];
+          if (!(certificate instanceof ArrayBuffer)) {
+            throw new Error(`certificate entry ${toValueString(certificate)} is not an ArrayBuffer`);
+          }
+        }
+        return value;
       }
-      this._storeProperty(name, value);
-      this._nativeSet(name, value);
-    }
+    },
+    default: Object.freeze([])
   },
-  idleTimeoutEnabled: {type: 'boolean', default: true, set: setIdleTimeoutEnabled}
+  idleTimeoutEnabled: {
+    type: {
+      convert(value) {
+        if (!tabris.contentView) {
+          throw new Error('The device property "idleTimeoutEnabled" can only be changed in main context.');
+        }
+        return types.boolean.convert(value);
+      }
+    },
+    default: true
+  },
 });
 
 NativeObject.defineEvents(App.prototype, {
@@ -128,37 +183,6 @@ NativeObject.defineEvents(App.prototype, {
   backNavigation: {native: true},
   certificatesReceived: {native: true},
 });
-
-function checkCertificates(certificates) {
-  const hashes = {};
-  for (const cert of certificates) {
-    if (typeof cert.host !== 'string') {
-      throw new Error(`Invalid host ${toValueString(cert.host)}`);
-    }
-    if (typeof cert.hash !== 'string' || !cert.hash.startsWith('sha256/')) {
-      throw new Error(`Invalid hash ${toValueString(cert.hash)} for pinned certificate ${cert.host}`);
-    }
-    if (tabris.device.platform === 'iOS') {
-      if (!('algorithm' in cert)) {
-        throw new Error(`Missing algorithm for pinned certificate ${cert.host}`);
-      }
-      if (typeof cert.algorithm !== 'string' || CERTIFICATE_ALGORITHMS.indexOf(cert.algorithm) === -1) {
-        throw new Error(`Invalid algorithm ${toValueString(cert.algorithm)} for pinned certificate ${cert.host}`);
-      }
-    }
-    hashes[cert.host] = hashes[cert.host] || [];
-    hashes[cert.host].push(cert.hash);
-  }
-  return hashes;
-}
-
-function setIdleTimeoutEnabled(name, value) {
-  if (!tabris.contentView) {
-    throw new Error('The device property "idleTimeoutEnabled" can only be changed in main context.');
-  }
-  this._nativeSet(name, value);
-  this._storeProperty(name, value);
-}
 
 export function create() {
   return new App(true);

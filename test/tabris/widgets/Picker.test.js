@@ -18,8 +18,18 @@ describe('Picker', function() {
 
   describe('constructor', function() {
 
-    it('creates picker', function() {
+    it('CREATEs picker', function() {
       expect(client.calls({op: 'create'})[0].type).to.deep.equal('tabris.Picker');
+    });
+
+    it('sets itemCount and itemText', function() {
+      const itemCount = 3;
+      const itemText = () => {};
+
+      picker = new Picker({itemCount, itemText});
+
+      expect(picker.itemCount).to.equal(itemCount);
+      expect(picker.itemText).to.equal(itemText);
     });
 
   });

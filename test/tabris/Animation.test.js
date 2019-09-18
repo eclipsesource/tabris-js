@@ -2,6 +2,7 @@ import {expect, mockTabris, restore, spy, stub} from '../test';
 import ClientMock from './ClientMock';
 import {animate} from '../../src/tabris/Animation';
 import NativeObject from '../../src/tabris/NativeObject';
+import {types} from '../../src/tabris/property-types';
 
 describe('Animation', function() {
 
@@ -24,23 +25,21 @@ describe('Animation', function() {
   }
 
   NativeObject.defineProperties(TestWidget.prototype, {
-    foo: 'any',
+    foo: {default: null},
     opacity: {
-      type: 'opacity',
+      type: types.fraction,
       default: 1
     },
     transform: {
-      type: 'transform',
-      default() {
-        return {
-          rotation: 0,
-          scaleX: 1,
-          scaleY: 1,
-          translationX: 0,
-          translationY: 0,
-          translationZ: 0
-        };
-      }
+      type: types.Transformation,
+      default: Object.freeze({
+        rotation: 0,
+        scaleX: 1,
+        scaleY: 1,
+        translationX: 0,
+        translationY: 0,
+        translationZ: 0
+      })
     }
   });
 

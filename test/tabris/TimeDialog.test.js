@@ -30,7 +30,8 @@ describe('TimeDialog', function() {
     });
 
     it('can only be set to Date', function() {
-      expect(() => dialog.date = 'foo').to.throw();
+      dialog.date = 'foo';
+      expect(dialog.date).to.be.null;
     });
 
   });

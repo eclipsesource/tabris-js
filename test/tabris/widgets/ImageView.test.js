@@ -1,4 +1,4 @@
-import {expect, mockTabris, restore, spy, stub} from '../../test';
+import {expect, mockTabris, restore, spy} from '../../test';
 import ClientMock from '../ClientMock';
 import ImageView from '../../../src/tabris/widgets/ImageView';
 
@@ -65,7 +65,9 @@ describe('ImageView', function() {
   describe('properties', function() {
 
     beforeEach(function() {
+      spy(console, 'warn');
       client.resetCalls();
+      client.properties(imageView.cid).zoomLevel = 1;
     });
 
     describe('zoomEnabled', function() {
@@ -95,28 +97,31 @@ describe('ImageView', function() {
 
     describe('zoomLevel', function() {
 
-      it('set throws error when zoom is disabled', function() {
+      it('set warns when zoom is disabled', function() {
         imageView.zoomEnabled = false;
 
-        expect(() => {
-          imageView.zoomLevel = 1.5;
-        }).to.throw('zoomLevel can not be set when zoomEnabled is false');
+        imageView.zoomLevel = 1.5;
+
+        expect(imageView.zoomLevel).to.equal(1);
+        expect(console.warn).to.have.been.calledWithMatch('zoomLevel can not be set when zoomEnabled is false');
       });
 
-      it('set throws error when smaller than minZoomValue', function() {
+      it('set warns when smaller than minZoomValue', function() {
         imageView.minZoomLevel = 2;
 
-        expect(() => {
-          imageView.zoomLevel = 1.5;
-        }).to.throw('zoomLevel can not be smaller than minZoomLevel');
+        imageView.zoomLevel = 1.5;
+
+        expect(imageView.zoomLevel).to.equal(2);
+        expect(console.warn).to.have.been.calledWithMatch('zoomLevel can not be smaller than minZoomLevel');
       });
 
-      it('set throws error when larger than maxZoomValue', function() {
+      it('set warns when larger than maxZoomValue', function() {
         imageView.maxZoomLevel = 2;
 
-        expect(() => {
-          imageView.zoomLevel = 3;
-        }).to.throw('zoomLevel can not be larger than maxZoomLevel');
+        imageView.zoomLevel = 3;
+
+        expect(imageView.zoomLevel).to.equal(1);
+        expect(console.warn).to.have.been.calledWithMatch('zoomLevel can not be larger than maxZoomLevel');
       });
 
       it('set calls native set operation', function() {
@@ -129,24 +134,26 @@ describe('ImageView', function() {
 
     describe('minZoomLevel', function() {
 
-      it('set throws error when zoom is disabled', function() {
+      it('set warns when zoom is disabled', function() {
         imageView.zoomEnabled = false;
 
-        expect(() => {
-          imageView.minZoomLevel = 1.5;
-        }).to.throw('minZoomLevel can not be set when zoomEnabled is false');
+        imageView.minZoomLevel = 1.5;
+
+        expect(imageView.minZoomLevel).to.equal(1);
+        expect(console.warn).to.have.been.calledWithMatch('minZoomLevel can not be set when zoomEnabled is false');
       });
 
-      it('set throws error when larger than maxZoomValue', function() {
+      it('set warns when larger than maxZoomValue', function() {
         imageView.maxZoomLevel = 2;
 
-        expect(() => {
-          imageView.minZoomLevel = 3;
-        }).to.throw('minZoomLevel can not be larger than maxZoomLevel');
+        imageView.minZoomLevel = 3;
+
+        expect(imageView.minZoomLevel).to.equal(1);
+        expect(console.warn).to.have.been.calledWithMatch('minZoomLevel can not be larger than maxZoomLevel');
       });
 
       it('set sets zoomLevel to minZoomLevel when minZoomLevel larger than zoomLevel', function() {
-        stub(client, 'get').returns(2); // return 2 for current zoomLevel
+        client.properties(imageView.cid).zoomLevel = 2;
 
         imageView.minZoomLevel = 2.5;
 
@@ -162,25 +169,26 @@ describe('ImageView', function() {
 
     describe('maxZoomLevel', function() {
 
-      it('set throws error when zoom is disabled', function() {
+      it('set warns when zoom is disabled', function() {
         imageView.zoomEnabled = false;
 
-        expect(() => {
-          imageView.maxZoomLevel = 4;
-        }).to.throw('maxZoomLevel can not be set when zoomEnabled is false');
+        imageView.maxZoomLevel = 2;
+
+        expect(imageView.maxZoomLevel).to.equal(3);
+        expect(console.warn).to.have.been.calledWithMatch('maxZoomLevel can not be set when zoomEnabled is false');
       });
 
-      it('set throws error when smaller than minZoomValue', function() {
+      it('set warns when smaller than minZoomValue', function() {
         imageView.minZoomLevel = 2;
 
-        expect(() => {
-          imageView.maxZoomLevel = 1.5;
-        }).to.throw('maxZoomLevel can not be smaller than minZoomLevel');
+        imageView.maxZoomLevel = 1.5;
+
+        expect(imageView.maxZoomLevel).to.equal(3);
+        expect(console.warn).to.have.been.calledWithMatch('maxZoomLevel can not be smaller than minZoomLevel');
       });
 
       it('set sets zoomLevel to maxZoomLevel when maxZoomLevel smaller than zoomLevel', function() {
-        stub(client, 'get').returns(2.5); // return 2.5 for current zoomLevel
-
+        client.properties(imageView.cid).zoomLevel = 2.5;
         imageView.maxZoomLevel = 2;
 
         expect(client.calls({op: 'set', id: imageView.cid})[0].properties.zoomLevel).to.equal(2);
@@ -190,6 +198,49 @@ describe('ImageView', function() {
         imageView.maxZoomLevel = 2.5;
 
         expect(client.calls({op: 'set', id: imageView.cid})[0].properties.maxZoomLevel).to.equal(2.5);
+      });
+
+    });
+
+    describe('order', function() {
+
+      // These tests need Object.keys keeps the chronological property order
+      // to be meaningful, which is supposed to be the case since ES2015
+
+      it('is preserved', function() {
+        imageView.zoomEnabled = false;
+
+        imageView.set({
+          zoomEnabled: true,
+          zoomLevel: 0.7,
+          minZoomLevel: 0.5,
+          maxZoomLevel: 0.8,
+          height: 200
+        });
+
+        expect(imageView.zoomEnabled).to.be.true;
+        expect(imageView.minZoomLevel).to.equal(0.5);
+        expect(imageView.maxZoomLevel).to.equal(0.8);
+        expect(imageView.zoomLevel).to.equal(0.7);
+        expect(imageView.height).to.equal(200);
+      });
+
+      it('is fixed', function() {
+        imageView.zoomEnabled = false;
+
+        imageView.set({
+          maxZoomLevel: 0.8,
+          minZoomLevel: 0.5,
+          zoomLevel: 0.7,
+          zoomEnabled: true,
+          height: 200
+        });
+
+        expect(imageView.zoomEnabled).to.be.true;
+        expect(imageView.minZoomLevel).to.equal(0.5);
+        expect(imageView.maxZoomLevel).to.equal(0.8);
+        expect(imageView.zoomLevel).to.equal(0.7);
+        expect(imageView.height).to.equal(200);
       });
 
     });

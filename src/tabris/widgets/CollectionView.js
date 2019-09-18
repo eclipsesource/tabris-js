@@ -2,6 +2,7 @@ import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 import Composite from './Composite';
 import {hint, toValueString} from '../Console';
+import {types} from '../property-types';
 
 export default class CollectionView extends Composite {
 
@@ -9,11 +10,23 @@ export default class CollectionView extends Composite {
    * @param {Partial<CollectionView>} properties
    */
   constructor(properties) {
-    super(properties);
+    super();
+    this._needsReload = false;
+    /** @type {(cell: Widget) => void} */
+    this._updateCell = () => {};
+    /** @type {number} */
+    this._itemCount = 0;
+    /** @type {(item: any) => Widget} */
+    this._createCell = () => new Composite();
+    /** @type {number|'auto'|((item: any) => number)} */
+    this._cellHeight = 'auto';
+    /** @type {string|((item: any) => string)} */
+    this._cellType = null;
     /** @type {Map<Widget, number>} */
     this._cellMapping = new Map();
     /** @type {Map<number, Widget>} */
     this._itemMapping = new Map();
+    this.set(properties || {});
     this._nativeListen('requestInfo', true);
     this._nativeListen('createCell', true);
     this._nativeListen('updateCell', true);
@@ -25,13 +38,100 @@ export default class CollectionView extends Composite {
     return 'tabris.CollectionView';
   }
 
-  _initLayout() {}
+  set itemCount(value) {
+    try {
+      const oldValue = this._itemCount;
+      this._itemCount = types.natural.convert(value);
+      // explicit requirement by tests to do this even if the value is unchanged:
+      this._needsReload = true;
+      if (oldValue !== this._itemCount) {
+        this._triggerChangeEvent('itemCount', this._itemCount);
+      }
+    } catch (ex) {
+      this._printPropertyWarning('itemCount', ex);
+    }
+  }
+
+  get itemCount() {
+    return this._itemCount;
+  }
+
+  set cellType(value) {
+    if (value === null || typeof value === 'string' || value instanceof Function) {
+      if (value !== this._cellType) {
+        this._cellType = value;
+        this._needsReload = true;
+        this._triggerChangeEvent('cellType', this._itemCount);
+      }
+    } else {
+      this._printPropertyWarning('cellType', new Error('Not a string or function'));
+    }
+  }
+
+  get cellType() {
+    return this._cellType;
+  }
+
+  set cellHeight(value) {
+    try {
+      const oldValue = this._cellHeight;
+      if (value === 'auto' || value instanceof Function) {
+        this._cellHeight = value;
+      } else {
+        this._cellHeight = types.dimension.convert(value);
+      }
+      if (oldValue !== this._cellHeight) {
+        this._needsReload = true;
+        this._triggerChangeEvent('cellHeight', this._cellHeight);
+      }
+    } catch (ex) {
+      this._printPropertyWarning('cellHeight', ex);
+    }
+  }
+
+  get cellHeight() {
+    return this._cellHeight;
+  }
+
+  /** @type {(item: any) => Widget} */
+  set createCell(value) {
+    if (value instanceof Function) {
+      if (value !== this._createCell) {
+        this._createCell = value;
+        this._needsReload = true;
+        this._triggerChangeEvent('createCell', this._createCell);
+      }
+    } else {
+      this._printPropertyWarning('createCell', new Error('Not a function'));
+    }
+  }
+
+  get createCell() {
+    return this._createCell;
+  }
+
+  /** @type {(cell: Widget) => void} */
+  set updateCell(value) {
+    if (value instanceof Function) {
+      if (this._updateCell !== value) {
+        this._updateCell = value;
+        this._needsReload = true;
+        this._triggerChangeEvent('updateCell', this._updateCell);
+      }
+    } else {
+      this._printPropertyWarning('updateCell', new Error('Not a function'));
+    }
+  }
+
+  get updateCell() {
+    return this._updateCell;
+  }
 
   load(itemCount) {
     if (!isNumber(itemCount) || itemCount < 0) {
       throw new Error(`Invalid itemCount ${toValueString(itemCount)}`);
     }
-    this._storeProperty('itemCount', itemCount);
+    this._itemCount = itemCount;
     this._needsReload = true;
   }
 
@@ -64,7 +164,7 @@ export default class CollectionView extends Composite {
     if (!isNumber(count) || count <= 0) {
       throw new Error(`Invalid insert count ${toValueString(count)}`);
     }
-    this._storeProperty('itemCount', this.itemCount + count);
+    this._itemCount = this.itemCount + count;
     this.$flush();
     this._nativeCall('insert', {index, count});
   }
@@ -77,25 +177,9 @@ export default class CollectionView extends Composite {
       throw new Error(`Invalid remove count ${toValueString(count)}`);
     }
     if (index >= 0 && index < this.itemCount && count > 0) {
-      this._storeProperty('itemCount', this.itemCount - count);
+      this._itemCount = this.itemCount - count;
       this.$flush();
       this._nativeCall('remove', {index, count});
-    }
-  }
-
-  _getXMLAttributes() {
-    return super._getXMLAttributes().concat([
-      ['itemCount', this.itemCount],
-      ['firstVisibleIndex', this.firstVisibleIndex]
-    ]);
-  }
-
-  $flush() {
-    // Load new items if needed after all properties have been set
-    // to avoid intercepting the aggregation of properties in set.
-    if (this._needsReload) {
-      delete this._needsReload;
-      this._nativeCall('load', {itemCount: this.itemCount});
     }
   }
 
@@ -134,11 +218,14 @@ export default class CollectionView extends Composite {
     return null;
   }
 
-  $checkIndex(index) {
-    if (!isNumber(index)) {
-      throw new Error(`${toValueString(index)} is not a valid index`);
+  set layout(value) {
+    if (value) {
+      this._printPropertyWarning('layout', new Error('CollectionView does not support layouts'));
     }
-    return index < 0 ? index + this.itemCount : index;
+  }
+
+  get layout() {
+    return null;
   }
 
   _listen(name, listening) {
@@ -175,6 +262,31 @@ export default class CollectionView extends Composite {
     }
   }
 
+  _initLayout() {}
+
+  _getXMLAttributes() {
+    return super._getXMLAttributes().concat([
+      ['itemCount', this.itemCount],
+      ['firstVisibleIndex', this.firstVisibleIndex]
+    ]);
+  }
+
+  $checkIndex(index) {
+    if (!isNumber(index)) {
+      throw new Error(`${toValueString(index)} is not a valid index`);
+    }
+    return index < 0 ? index + this.itemCount : index;
+  }
+
+  $flush() {
+    // Load new items if needed after all properties have been set
+    // to avoid intercepting the aggregation of properties in set.
+    if (this._needsReload) {
+      delete this._needsReload;
+      this._nativeCall('load', {itemCount: this.itemCount});
+    }
+  }
+
   $createCell(type) {
     const cell = this.createCell(decodeCellType(this, type));
     if (!(cell instanceof Widget)) {
@@ -193,98 +305,50 @@ export default class CollectionView extends Composite {
 }
 
 NativeObject.defineProperties(CollectionView.prototype, {
-  itemCount: {
-    type: 'natural',
-    default: 0,
-    set(name, value) {
-      this._storeProperty(name, value);
-      this._needsReload = true;
-    }
-  },
-  cellType: {
-    type: 'any', // string|function,
-    default: null,
-    set(name, value) {
-      if (value !== this.cellType) {
-        this._storeProperty(name, value);
-        this._needsReload = true;
-      }
-    }
-  },
-  cellHeight: {
-    type: 'any', // natural|auto|function
-    default: 'auto',
-    set(name, value) {
-      if (value !== this.cellHeight) {
-        this._storeProperty(name, value);
-        this._needsReload = true;
-      }
-    }
-  },
-  createCell: {
-    type: 'function',
-    default: () => () => new Composite(),
-    set(name, value) {
-      if (value !== this.createCell) {
-        this._storeProperty(name, value);
-        this._needsReload = true;
-      }
-    }
-  },
-  updateCell: {
-    type: 'function',
-    default: () => () => {},
-    set(name, value) {
-      if (value !== this.updateCell) {
-        this._storeProperty(name, value);
-        this._needsReload = true;
-      }
-    }
-  },
   refreshEnabled: {
-    type: 'boolean',
+    type: types.boolean,
     default: false
   },
   refreshIndicator: {
-    type: 'boolean',
+    type: types.boolean,
     nocache: true
   },
   refreshMessage: {
-    type: 'string',
+    type: types.string,
     default: ''
   },
   firstVisibleIndex: {
-    type: 'number',
-    readonly: true
+    type: types.number,
+    readonly: true,
+    nocache: true
   },
   lastVisibleIndex: {
-    type: 'number',
-    readonly: true
+    type: types.number,
+    readonly: true,
+    nocache: true
   },
   columnCount: {
-    type: 'number',
+    type: types.number,
     default: 1
   },
   scrollbarVisible: {
-    type: 'boolean',
+    type: types.boolean,
     default: true
-  },
-  layout: {
-    set(name, value) {
-      if (value) {
-        throw new Error('CollectionView does not support layouts');
-      }
-    },
-    get() {
-      return null;
-    }
   }
 });
 
 NativeObject.defineEvents(CollectionView.prototype, {
   refresh: {native: true},
-  scroll: {native: true}
+  scroll: {native: true},
 });
+
+NativeObject.defineChangeEvents(CollectionView.prototype, [
+  'createCell',
+  'cellType',
+  'cellHeight',
+  'itemCount',
+  'updateCell'
+]);
 
 function resolveProperty(ctx, name) {
   const value = ctx[name];

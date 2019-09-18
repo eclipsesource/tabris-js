@@ -3,6 +3,7 @@ import NativeObject from './NativeObject';
 import {types} from './property-types';
 import {JSX} from './JsxProcessor';
 import {toValueString} from './Console';
+import {allowOnlyKeys, allowOnlyValues} from './util';
 
 export default class ActionSheet extends Popup {
 
@@ -61,38 +62,26 @@ export default class ActionSheet extends Popup {
 }
 
 NativeObject.defineProperties(ActionSheet.prototype, {
-  title: {type: 'string', default: ''},
-  message: {type: 'string', default: ''},
-  actions: {
+  title: {type: types.string, default: ''},
+  message: {type: types.string, default: ''},
+  actions: /** @type {TabrisProp<readonly ActionSheetItem[], ActionSheetItem[]>} */({
     type: {
-      encode(value) {
+      convert(value) {
         if (!Array.isArray(value)) {
           throw new Error(toValueString(value) + ' is not an array');
         }
-        return value.map(action => {
-          const result = {title: '' + (action.title || '')};
-          if ('image' in action) {
-            result.image = types.ImageValue.encode(action.image);
-          }
-          if ('style' in action) {
-            if (!['default', 'cancel', 'destructive'].includes(action.style)) {
-              throw new Error('Invalid action style ' + toValueString(action.style));
-            }
-            result.style = action.style;
-          }
-          return result;
-        });
+        return Object.freeze(value.map(ActionSheetItem.from));
       },
-      decode(value) {
-        return value.map(action => new ActionSheetItem({
+      encode(value) {
+        return value.map(action => ({
           title: action.title,
-          image: types.ImageValue.decode(action.image),
+          image: types.ImageValue.encode(action.image),
           style: action.style
         }));
       }
     },
-    default: () => []
-  }
+    default: Object.freeze([])
+  })
 });
 
 NativeObject.defineEvents(ActionSheet.prototype, {
@@ -102,10 +91,16 @@ NativeObject.defineEvents(ActionSheet.prototype, {
 
 export class ActionSheetItem {
 
+  /**
+   * @param {{title?: any, image?: any, style?: any}} param0
+   */
   constructor({title, image, style} = {}) {
-    Object.defineProperty(this, 'title', {value: title || '', enumerable: true});
-    Object.defineProperty(this, 'image', {value: image || null, enumerable: true});
-    Object.defineProperty(this, 'style', {value: style || 'default', enumerable: true});
+    Object.defineProperty(this, 'title', {value: types.string.convert(title), enumerable: true});
+    Object.defineProperty(this, 'image', {value: types.ImageValue.convert(image), enumerable: true});
+    Object.defineProperty(this, 'style', {
+      value: allowOnlyValues(style || 'default', ['default', 'cancel', 'destructive'], 'style'),
+      enumerable: true
+    });
   }
 
   toString() {
@@ -119,4 +114,28 @@ export class ActionSheetItem {
     return new Type(this.withContentText(normalAttributes, children, 'title'));
   }
 
+  /**
+   * @param {any} value
+   */
+  static from(value) {
+    if (value instanceof ActionSheetItem) {
+      return value;
+    }
+    if (value.constructor !== Object) {
+      throw new Error('Can not convert a non-object to an ActionSheetItem');
+    }
+    try {
+      return new ActionSheetItem(allowOnlyKeys(value, ['title', 'image', 'style']));
+    } catch (ex) {
+      throw new Error('Can not convert to an ActionSheetItem: ' + ex.message);
+    }
+  }
 }
+
+Object.defineProperty(ActionSheetItem.prototype, 'title', {value: ''});
+Object.defineProperty(ActionSheetItem.prototype, 'image', {
+  value: /** @type {import('./Image').default} */(null)
+});
+Object.defineProperty(ActionSheetItem.prototype, 'style', {
+  value: /** @type {'default'|'cancel'|'destructive'} */('default')}
+);

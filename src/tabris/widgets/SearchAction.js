@@ -1,5 +1,6 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
+import {types} from '../property-types';
 
 export default class SearchAction extends Widget {
 
@@ -26,12 +27,26 @@ export default class SearchAction extends Widget {
 }
 
 NativeObject.defineProperties(SearchAction.prototype, {
-  image: {type: 'ImageValue', default: null},
-  placementPriority: {type: ['choice', ['low', 'high', 'normal']], default: 'normal'},
-  title: {type: 'string', default: ''},
-  proposals: {default() {return [];}},
-  text: {type: 'string', nocache: true},
-  message: {type: 'string', default: ''}
+  image: {type: types.ImageValue, default: null},
+  placementPriority: {
+    type: types.string,
+    choice: ['low', 'high', 'normal'],
+    default: 'normal'
+  },
+  title: {type: types.string, default: ''},
+  proposals: {
+    type: {
+      convert(value) {
+        if (!Array.isArray(value)) {
+          throw new Error('Not an array');
+        }
+        return Object.freeze(value.map(types.string.convert));
+      }
+    },
+    default: Object.freeze([])
+  },
+  text: {type: types.string, nocache: true},
+  message: {type: types.string, default: ''}
 });
 
 NativeObject.defineEvents(SearchAction.prototype, {

@@ -1,6 +1,7 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 import {JSX} from '../JsxProcessor';
+import {types} from '../property-types';
 
 export default class Action extends Widget {
 
@@ -26,12 +27,13 @@ export default class Action extends Widget {
 }
 
 NativeObject.defineProperties(Action.prototype, {
-  image: {type: 'ImageValue', default: null},
+  image: {type: types.ImageValue, default: null},
   placement: {
-    type: ['choice', ['default', 'navigation', 'overflow']],
+    type: types.string,
+    choice: ['default', 'navigation', 'overflow'],
     default: 'default'
   },
-  title: {type: 'string', default: ''}
+  title: {type: types.string, default: ''}
 });
 
 NativeObject.defineEvents(Action.prototype, {

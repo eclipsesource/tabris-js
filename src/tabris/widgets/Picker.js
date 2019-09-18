@@ -1,5 +1,7 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
+import {types} from '../property-types';
+import {pick, omit} from '../util';
 
 export default class Picker extends Widget {
 
@@ -7,13 +9,71 @@ export default class Picker extends Widget {
    * @param {Partial<Picker>} properties
    */
   constructor(properties) {
-    super(properties);
+    super(pick(properties, ['style']));
+    /** @type {number} */
+    this._itemCount = 0;
+    /** @type {Function} */
+    this._itemText = () => '';
+    this.set(omit(properties, ['style']));
     tabris.on('flush', this.$flush, this);
     this.on('dispose', () => tabris.off('flush', this.$flush, this));
   }
 
   get _nativeType() {
     return 'tabris.Picker';
+  }
+
+  set itemCount(value) {
+    try {
+      const oldValue = this._itemCount;
+      this._itemCount = types.natural.convert(value);
+      if (this._itemCount !== oldValue) {
+        this.$needsUpdateItems = true;
+        this._triggerChangeEvent('itemCount');
+      }
+    } catch (ex) {
+      this._printPropertyWarning('itemCount', ex);
+    }
+  }
+
+  get itemCount() {
+    return this._itemCount;
+  }
+
+  set itemText(value) {
+    try {
+      if (!(value instanceof Function)) {
+        throw new Error('Not a Function');
+      }
+      const oldValue = this._itemText;
+      this._itemText = value;
+      if (this._itemText !== oldValue) {
+        this.$needsUpdateItems = true;
+        this._triggerChangeEvent('itemText');
+      }
+    } catch (ex) {
+      this._printPropertyWarning('itemText', ex);
+    }
+  }
+
+  get itemText() {
+    return this._itemText;
+  }
+
+  set selectionIndex(value) {
+    try {
+      const oldValue = this.$newSelectionIndex;
+      this.$newSelectionIndex = types.natural.convert(value);
+      if (this.$newSelectionIndex !== oldValue) {
+        this._triggerChangeEvent('selectionIndex');
+      }
+    } catch (ex) {
+      this._printPropertyWarning('selectionIndex', ex);
+    }
+  }
+
+  get selectionIndex() {
+    return this.$newSelectionIndex >= -1 ? this.$newSelectionIndex : this._nativeGet('selectionIndex');
   }
 
   _getXMLAttributes() {
@@ -51,39 +111,24 @@ export default class Picker extends Widget {
 }
 
 NativeObject.defineProperties(Picker.prototype, {
-  style: {type: ['choice', ['default', 'outline', 'fill', 'underline', 'none']], const: true, default: 'default'},
-  message: {type: 'string', default: ''},
-  floatMessage: {type: 'boolean', default: true},
-  itemCount: {
-    type: 'natural',
-    default: 0,
-    set(name, value) {
-      this._storeProperty(name, value);
-      this.$needsUpdateItems = true;
-    }
+  style: {
+    type: types.string,
+    choice: ['default', 'outline', 'fill', 'underline', 'none'],
+    const: true,
+    default: 'default'
   },
-  itemText: {
-    type: 'function',
-    default: () => () => '',
-    set(name, value) {
-      this.$needsUpdateItems = true;
-      this._storeProperty(name, value);
-    }
-  },
-  selectionIndex: {
-    type: 'integer',
-    default: -1,
-    set(name, value) {
-      this.$newSelectionIndex = value;
-    },
-    get(name) {
-      return this.$newSelectionIndex >= -1 ? this.$newSelectionIndex : this._nativeGet(name);
-    }
-  },
-  borderColor: {type: 'ColorValue', default: null},
-  textColor: {type: 'ColorValue', default: null},
-  font: {type: 'FontValue', default: null}
+  message: {type: types.string, default: ''},
+  floatMessage: {type: types.boolean, default: true},
+  borderColor: {type: types.ColorValue, default: null},
+  textColor: {type: types.ColorValue, default: null},
+  font: {type: types.FontValue, default: null}
 });
+
+NativeObject.defineChangeEvents(Picker.prototype, [
+  'selectionIndex',
+  'itemText',
+  'itemCount'
+]);
 
 NativeObject.defineEvents(Picker.prototype, {
   select: {native: true, changes: 'selectionIndex', changeValue: 'index'},

@@ -1,6 +1,5 @@
 import Composite from './Composite';
 import StackLayout from '../StackLayout';
-import NativeObject from '../NativeObject';
 import {toValueString} from '../Console';
 
 export default class Stack extends Composite {
@@ -8,6 +7,20 @@ export default class Stack extends Composite {
   constructor(properties) {
     super(properties);
   }
+
+  get spacing() {
+    return this._layout.spacing;
+  }
+
+  // prevent error due to _nativeCreate attempting to set
+  set spacing(value) {}
+
+  get alignment() {
+    return this._layout.alignment;
+  }
+
+  // prevent error due to _nativeCreate attempting to set
+  set alignment(value) {}
 
   _initLayout(props = {}) {
     let layout = props.layout || StackLayout.default;
@@ -35,17 +48,3 @@ export default class Stack extends Composite {
   }
 
 }
-
-NativeObject.defineProperties(Stack.prototype, {
-  spacing: {
-    type: 'number',
-    get() {
-      return this._layout.spacing;
-    }
-  },
-  alignment: {
-    get() {
-      return this._layout.alignment;
-    }
-  }
-});

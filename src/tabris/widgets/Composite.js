@@ -5,9 +5,17 @@ import Layout, {ConstraintLayout} from '../Layout';
 import WidgetCollection from '../WidgetCollection';
 import {omit} from '../util';
 import {JSX} from '../JsxProcessor';
-import {toXML, toValueString} from '../Console';
+import {toXML, toValueString, hint} from '../Console';
 
 export default class Composite extends Widget {
+
+  get layout() {
+    return this._layout;
+  }
+
+  set layout(value) {
+    hint(this, 'Can not set read-only property "layout"');
+  }
 
   append() {
     this._checkDisposed();
@@ -183,15 +191,6 @@ export default class Composite extends Widget {
   }
 
 }
-
-NativeObject.defineProperties(Composite.prototype, {
-  layout: {
-    readonly: true,
-    get() {
-      return this._layout;
-    }
-  }
-});
 
 function asArray(value) {
   if (!value) {

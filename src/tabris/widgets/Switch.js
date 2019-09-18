@@ -18,10 +18,10 @@ export default class Switch extends Widget {
 
 NativeObject.defineProperties(Switch.prototype, {
   checked: {type: 'boolean', nocache: true},
-  thumbOnColor: {type: 'ColorValue'},
-  thumbOffColor: {type: 'ColorValue'},
-  trackOnColor: {type: 'ColorValue'},
-  trackOffColor: {type: 'ColorValue'}
+  thumbOnColor: {type: 'ColorValue', default: 'initial'},
+  thumbOffColor: {type: 'ColorValue', default: 'initial'},
+  trackOnColor: {type: 'ColorValue', default: 'initial'},
+  trackOffColor: {type: 'ColorValue', default: 'initial'}
 });
 
 NativeObject.defineEvents(Switch.prototype, {

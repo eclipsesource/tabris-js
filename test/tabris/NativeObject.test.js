@@ -1,9 +1,8 @@
 import {expect, mockTabris, spy, stub, restore} from '../test';
 import NativeObject from '../../src/tabris/NativeObject';
-import NativeObjectRegistry from '../../src/tabris/NativeObjectRegistry';
-import NativeBridge from '../../src/tabris/NativeBridge';
 import EventObject from '../../src/tabris/EventObject';
-import ClientMock from './ClientMock';
+import {types} from '../../src/tabris/property-types';
+import ClientMock, {} from './ClientMock';
 import {toXML} from '../../src/tabris/Console';
 
 describe('NativeObject', function() {
@@ -11,22 +10,32 @@ describe('NativeObject', function() {
   /** @type {ClientMock} */
   let client;
 
+  /**
+   * @typedef {NativeObject & {
+   *   foo?: any,
+   *   bar?: any
+   * }} TestType
+   */
+
+  /** @type {Constructor<TestType>} */
+  let TestType;
+
+  /** @type {TestType} */
+  let object;
+
   beforeEach(function() {
     client = new ClientMock();
     mockTabris(client);
+    TestType = class extends NativeObject {
+      get _nativeType() { return 'TestType'; }
+    };
   });
 
   afterEach(restore);
 
   describe('constructor', function() {
 
-    let TestType, object;
-
-    beforeEach(function() {
-      TestType = class TestType extends NativeObject {
-        get _nativeType() { return 'TestType'; }
-      };
-    });
+    let object;
 
     it('prevents direct instantiation', function() {
       expect(() => {
@@ -35,7 +44,7 @@ describe('NativeObject', function() {
     });
 
     it('calls native create with properties', function() {
-      NativeObject.defineProperties(TestType.prototype, {foo: 'any'});
+      NativeObject.defineProperties(TestType.prototype, {foo: {default: null}});
 
       object = new TestType({foo: 23});
 
@@ -45,7 +54,9 @@ describe('NativeObject', function() {
     });
 
     it('translates properties', function() {
-      NativeObject.defineProperties(TestType.prototype, {bar: {type: 'NativeObject'}});
+      NativeObject.defineProperties(TestType.prototype, {
+        bar: {type: {convert: value => value.cid}, default: null}
+      });
       const other = new TestType();
       client.resetCalls();
 
@@ -59,10 +70,11 @@ describe('NativeObject', function() {
 
   describe('instance', function() {
 
-    let TestType, object;
+    /** @type {TestType} */
+    let object;
 
     beforeEach(function() {
-      TestType = class TestType extends NativeObject {
+      TestType = class extends NativeObject {
         get _nativeType() { return 'TestType'; }
       };
       object = new TestType();
@@ -77,7 +89,7 @@ describe('NativeObject', function() {
 
     describe('set', function() {
 
-      it('calls property setter', function() {
+      it('set calls property setter', function() {
         const setter = spy();
         Object.defineProperty(TestType.prototype, 'foo', {set: setter});
 
@@ -86,44 +98,7 @@ describe('NativeObject', function() {
         expect(setter).to.have.been.calledWith(23);
       });
 
-      it('native-sets cached unchanged property only once', function() {
-        NativeObject.defineProperties(TestType.prototype, {foo: 'number'});
-
-        object.set({foo: 23});
-        tabris.flush();
-        object.set({foo: 23});
-
-        expect(client.calls({op: 'set'}).length).to.equal(1);
-      });
-
-      it('caches nocache property until flush', function() {
-        NativeObject.defineProperties(TestType.prototype, {foo: {type: 'number', nocache: true}});
-        tabris.flush();
-        client.properties(object.cid).foo = 24;
-
-        object.set({foo: 23});
-        const result1 = object.foo;
-        tabris.flush();
-        client.properties(object.cid).foo = 25;
-        const result2 = object.foo;
-        client.properties(object.cid).foo = 26;
-        const result3 = object.foo;
-
-        expect(result1).to.equal(23);
-        expect(result2).to.equal(25);
-        expect(result3).to.equal(25);
-      });
-
-      it('supports multiple property objects', function() {
-        Object.assign(TestType.prototype, {foo: 0, bar: 0});
-
-        object.set({foo: 23, bar: 42});
-
-        expect(object.foo).to.equal(23);
-        expect(object.bar).to.equal(42);
-      });
-
-      it('calls property setter on super class', function() {
+      it('set calls property setter on super class', function() {
         const setter = spy();
         Object.defineProperty(TestType.prototype, 'foo', {set: setter});
         class SubClass extends TestType {}
@@ -132,6 +107,15 @@ describe('NativeObject', function() {
         object.set({foo: 23});
 
         expect(setter).to.have.been.calledWith(23);
+      });
+
+      it('set supports multi-property objects', function() {
+        Object.assign(TestType.prototype, {foo: 0, bar: 0});
+
+        object.set({foo: 23, bar: 42});
+
+        expect(object.foo).to.equal(23);
+        expect(object.bar).to.equal(42);
       });
 
       it('does set non-existing property', function() {
@@ -150,6 +134,16 @@ describe('NativeObject', function() {
         const result = object.set({foo: 23});
 
         expect(result).to.equal(object);
+      });
+
+      it('SET unchanged property only once', function() {
+        NativeObject.defineProperties(TestType.prototype, {foo: {type: types.number, default: null}});
+
+        object.set({foo: 23});
+        tabris.flush();
+        object.set({foo: 23});
+
+        expect(client.calls({op: 'set'}).length).to.equal(1);
       });
 
     });
@@ -262,6 +256,7 @@ describe('NativeObject', function() {
 
     describe('_trigger', function() {
 
+      /** @type {sinon.SinonSpy} */
       let listener;
 
       beforeEach(function() {
@@ -312,6 +307,7 @@ describe('NativeObject', function() {
 
     describe('_triggerChangeEvent', function() {
 
+      /** @type {sinon.SinonSpy} */
       let listener;
 
       beforeEach(function() {
@@ -339,6 +335,7 @@ describe('NativeObject', function() {
 
     describe('on', function() {
 
+      /** @type {sinon.SinonSpy} */
       let listener;
 
       beforeEach(function() {
@@ -377,6 +374,7 @@ describe('NativeObject', function() {
 
     describe('off', function() {
 
+      /** @type {sinon.SinonSpy} */
       let listener;
 
       beforeEach(function() {
@@ -460,6 +458,7 @@ describe('NativeObject', function() {
 
     describe('when disposed', function() {
 
+      /** @type {sinon.SinonSpy} */
       let listener;
 
       beforeEach(function() {
@@ -506,53 +505,228 @@ describe('NativeObject', function() {
 
   });
 
-});
+  describe('NativeObject.defineProperty', function() {
 
-describe('NativeObject.extend', function() {
+    beforeEach(function() {
+      TestType = class extends NativeObject {
+        get _nativeType() { return 'TestType'; }
+      };
+      object = new TestType();
+      client.resetCalls();
+      stub(console, 'warn');
+      stub(console, 'debug');
+    });
 
-  let client, CustomWidget;
+    it('throws for invalid configurations', function() {
+      expect(() => NativeObject.defineProperty(TestType.prototype, 'foo', {
+        readonly: true, default: false
+      })).to.throw(Error);
+      expect(() => NativeObject.defineProperty(TestType.prototype, 'foo', {
+        nullable: true, readonly: true
+      })).to.throw(Error);
+      expect(() => NativeObject.defineProperty(TestType.prototype, 'foo', {
+        choice: ['foo', 'bar'], readonly: true
+      })).to.throw(Error);
+      expect(() => NativeObject.defineProperty(TestType.prototype, 'foo', {
+        choice: ['foo'], default: 'foo'
+      })).to.throw(Error);
+      expect(() => NativeObject.defineProperty(TestType.prototype, 'foo', {
+        choice: [], default: ''
+      })).to.throw(Error);
+      expect(() => NativeObject.defineProperty(TestType.prototype, 'foo', {}))
+        .to.throw(Error);
+    });
 
-  beforeEach(function() {
-    client = new ClientMock();
-    global.tabris = {
-      on: () => {},
-      trigger: () => {},
-      _nativeObjectRegistry: new NativeObjectRegistry()
-    };
-    global.tabris._nativeBridge = new NativeBridge(client);
-    stub(console, 'warn');
-    CustomWidget = NativeObject.extend('custom.Widget');
-    NativeObject.defineProperties(CustomWidget.prototype, {foo: true});
+    it('convert converts value', function() {
+      NativeObject.defineProperty(TestType.prototype, 'foo', {
+        type: {convert: x => Math.round(x)}, default: null
+      });
+
+      object.foo = 1.2;
+
+      expect(object.foo).to.equal(1);
+    });
+
+    it('generate change events with converted value', function() {
+      NativeObject.defineProperty(TestType.prototype, 'foo', {
+        type: {convert: x => Math.round(x)}, default: null
+      });
+      const listener = spy();
+      object.onFooChanged(listener);
+
+      object.foo = 1.2;
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({value: 1});
+    });
+
+    it('convert rejects value', function() {
+      NativeObject.defineProperty(TestType.prototype, 'foo', {
+        type: {convert: () => {throw new Error('bar');}}, default: null
+      });
+
+      object.foo = 1.2;
+
+      expect(object.foo).to.be.null;
+      expect(console.warn).to.have.been
+        .calledWithMatch(/Ignored\sunsupported\svalue\sfor\sproperty\s"foo":\sbar/);
+    });
+
+    it('with nocache flag GETs value from native', function() {
+      NativeObject.defineProperties(TestType.prototype, {foo: {type: {}, nocache: true}});
+      tabris.flush();
+      client.properties(object.cid).foo = 24;
+
+      const result = object.foo;
+
+      expect(result).to.equal(24);
+    });
+
+    it('with nocache flag caches value until flush', function() {
+      NativeObject.defineProperties(TestType.prototype, {foo: {type: types.number, nocache: true}});
+      tabris.flush();
+      client.properties(object.cid).foo = 24;
+
+      object.set({foo: 23});
+      const result1 = object.foo;
+      tabris.flush();
+      client.properties(object.cid).foo = 25;
+      const result2 = object.foo;
+      client.properties(object.cid).foo = 26;
+      const result3 = object.foo;
+
+      expect(result1).to.equal(23);
+      expect(result2).to.equal(25);
+      expect(result3).to.equal(25);
+    });
+
+    it('with readonly flag does not accept any values', function() {
+      NativeObject.defineProperties(TestType.prototype, {foo: {readonly: true}});
+
+      object.set({foo: 23});
+
+      expect(object.foo).to.be.undefined;
+    });
+
+    it('with const flag allows new value only once', function() {
+      NativeObject.defineProperties(TestType.prototype, {foo: {const: true, default: null}});
+
+      object.set({foo: 23});
+      object.set({foo: 24});
+
+      expect(object.foo).to.equal(23);
+    });
+
+    it('with const flag does not generate change events', function() {
+      NativeObject.defineProperties(TestType.prototype, {foo: {const: true, default: null}});
+      const listener = spy();
+      object.on('fooChanged', listener);
+
+      object.set({foo: 23});
+
+      expect(object.onFooChanged).to.be.undefined;
+      expect(listener).not.to.have.been.called;
+    });
+
+    it('omits converter for null when nullable', function() {
+      /** @param {any} v */
+      function neverNull(v) {
+        if (v == null) {
+          throw new Error();
+        }
+        return v + 1;
+      }
+      NativeObject.defineProperties(TestType.prototype, {
+        foo: {type: {convert: neverNull}, default: 1},
+        bar: {type: {convert: neverNull}, nullable: true, default: 1}
+      });
+
+      object.foo = 10;
+      object.foo = 10;
+      object.foo = null;
+      object.bar = null;
+
+      expect(object.foo).to.equal(11);
+      expect(object.bar).to.be.null;
+    });
+
+    it('accepts value given in "choice"', function() {
+      NativeObject.defineProperty(TestType.prototype, 'foo', {
+        choice: ['bar', 'baz'], default: 'bar'
+      });
+
+      object.foo = 'baz';
+
+      expect(object.foo).to.equal('baz');
+    });
+
+    it('rejects value not given in "choice"', function() {
+      NativeObject.defineProperty(TestType.prototype, 'foo', {
+        choice: ['bar', 'baz'], default: 'bar'
+      });
+
+      object.foo = 'asdf';
+
+      expect(object.foo).to.equal('bar');
+      expect(console.warn).to.have.been
+        .calledWithMatch(/Ignored unsupported value for property "foo": Value must be "bar" or "baz"/);
+    });
+
+    it('accepts converted value given in "choice"', function() {
+      NativeObject.defineProperty(TestType.prototype, 'foo', {
+        type: {convert: v => v + 1},
+        choice: [1, 2, 3],
+        default: 2
+      });
+
+      object.foo = 0;
+
+      expect(object.foo).to.equal(1);
+    });
+
   });
 
-  afterEach(restore);
+  describe('NativeObject.extend', function() {
 
-  it('creates a constructor', function() {
-    const instance = new CustomWidget({foo: 42});
+    /** @type {Constructor<NativeObject>} */
+    let CustomWidget;
 
-    expect(instance).to.be.instanceof(CustomWidget);
-    expect(instance).to.be.instanceof(NativeObject);
-  });
+    beforeEach(function() {
+      stub(console, 'warn');
+      CustomWidget = NativeObject.extend('custom.Widget');
+      NativeObject.defineProperties(CustomWidget.prototype, {foo: {default: 1}});
+    });
 
-  it('creates a non-empty cid', function() {
-    const instance = new CustomWidget();
+    afterEach(restore);
 
-    expect(typeof instance.cid).to.equal('string');
-    expect(instance.cid.length).to.be.above(0);
-  });
+    it('creates a constructor', function() {
+      const instance = new CustomWidget({foo: 42});
 
-  it('has no cid change event', function() {
-    const instance = new CustomWidget({foo: 42});
+      expect(instance).to.be.instanceof(CustomWidget);
+      expect(instance).to.be.instanceof(NativeObject);
+    });
 
-    expect(instance.onCidChanged).to.be.undefined;
-  });
+    it('creates a non-empty cid', function() {
+      const instance = new CustomWidget();
 
-  it('issues a create operation with type and properties', function() {
-    const instance = new CustomWidget({foo: 23});
-    const createCall = client.calls({op: 'create', id: instance.cid})[0];
+      expect(typeof instance.cid).to.equal('string');
+      expect(instance.cid.length).to.be.above(0);
+    });
 
-    expect(createCall.type).to.equal('custom.Widget');
-    expect(createCall.properties.foo).to.equal(23);
+    it('has no cid change event', function() {
+      const instance = new CustomWidget({foo: 42});
+
+      expect(instance.onCidChanged).to.be.undefined;
+    });
+
+    it('issues a create operation with type and properties', function() {
+      const instance = new CustomWidget({foo: 23});
+      const createCall = client.calls({op: 'create', id: instance.cid})[0];
+
+      expect(createCall.type).to.equal('custom.Widget');
+      expect(createCall.properties.foo).to.equal(23);
+    });
+
   });
 
 });

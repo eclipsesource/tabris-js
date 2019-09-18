@@ -1,6 +1,7 @@
 import Blob from './Blob';
 import NativeObject from './NativeObject';
-import {setBytes} from './util';
+import {setBytes, allowOnlyKeys} from './util';
+import {types} from './property-types';
 
 export default class Camera extends NativeObject {
 
@@ -40,14 +41,28 @@ export default class Camera extends NativeObject {
 }
 
 NativeObject.defineProperties(Camera.prototype, {
-  cameraId: {type: 'string', const: true},
-  active: {type: 'boolean'},
-  captureResolution: {type: 'any'},
-  position: {type: 'string', const: true, readonly: true},
+  cameraId: {type: types.string, const: true, default: ''},
+  active: {type: types.boolean, default: false},
+  captureResolution: {
+    type: {
+      convert(value) {
+        return Object.freeze(allowOnlyKeys(
+          (/** @type {{width: number, height: number}} */ (value)),
+          ['width', 'height'])
+        );
+      }
+    },
+    default: null,
+    nullable: true
+  },
+  position: {type: types.string, const: true, readonly: true},
   availableCaptureResolutions: {
-    type: 'any',
-    get(name) {
-      return this._nativeGet(name).sort((a, b) => a.width * a.height - b.width * b.height);
-    }
+    type: {
+      decode(value) {
+        return value.sort((a, b) => a.width * a.height - b.width * b.height);
+      }
+    },
+    const: true,
+    readonly: true
   }
 });

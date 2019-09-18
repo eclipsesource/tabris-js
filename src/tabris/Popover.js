@@ -61,9 +61,9 @@ export default class Popover extends Popup {
 }
 
 NativeObject.defineProperties(Popover.prototype, {
-  anchor: {type: 'NativeObject', default: null},
-  width: {type: 'dimension', nocache: true},
-  height: {type: 'dimension', nocache: true},
+  anchor: {type: 'Widget', default: null},
+  width: {type: 'dimension', nocache: true, nullable: true},
+  height: {type: 'dimension', nocache: true, nullable: true},
 });
 
 NativeObject.defineEvents(Popover.prototype, {

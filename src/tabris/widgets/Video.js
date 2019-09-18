@@ -31,12 +31,12 @@ export default class Video extends Widget {
 
   play(speed) {
     this._nativeCall('play', {
-      speed: arguments.length > 0 ? types.number.encode(speed) : 1
+      speed: arguments.length > 0 ? types.number.convert(speed) : 1
     });
   }
 
   seek(position) {
-    this._nativeCall('seek', {position: types.number.encode(position)});
+    this._nativeCall('seek', {position: types.number.convert(position)});
   }
 
   _getXMLAttributes() {

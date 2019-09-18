@@ -2,6 +2,7 @@ import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 import {JSX} from '../JsxProcessor';
 import {toValueString} from '../Console';
+import {types} from '../property-types';
 
 export default class TextInput extends Widget {
 
@@ -58,71 +59,75 @@ export default class TextInput extends Widget {
 }
 
 NativeObject.defineProperties(TextInput.prototype, {
-  type: {type: ['choice', ['default', 'password', 'search', 'multiline']], const: true, default: 'default'},
-  style: {type: ['choice', ['default', 'outline', 'fill', 'underline', 'none']], const: true, default: 'default'},
-  text: {type: 'string', nocache: true},
-  message: {type: 'string', default: ''},
-  floatMessage: {type: 'boolean', default: true},
-  editable: {type: 'boolean', default: true},
-  maxChars: {type: 'natural', default: null},
-  keepFocus: {type: 'boolean', default: false},
-  alignment: {type: ['choice', ['left', 'centerX', 'right']], default: 'left'},
-  autoCorrect: {type: 'boolean', default: false},
+  type: {
+    type: types.string,
+    choice: ['default', 'password', 'search', 'multiline'],
+    const: true,
+    default: 'default'
+  },
+  style: {
+    type: types.string,
+    choice: ['default', 'outline', 'fill', 'underline', 'none'],
+    const: true,
+    default: 'default'
+  },
+  text: {type: types.string, nocache: true},
+  message: {type: types.string, default: ''},
+  floatMessage: {type: types.boolean, default: true},
+  editable: {type: types.boolean, default: true},
+  maxChars: {
+    type: {
+      convert: value => value <= 0 ? null : types.natural.convert(value)},
+    default: null,
+    nullable: true
+  },
+  keepFocus: {type: types.boolean, default: false},
+  alignment: {
+    type: types.string,
+    choice: ['left', 'centerX', 'right'],
+    default: 'left'
+  },
+  autoCorrect: {type: types.boolean, default: false},
   autoCapitalize: {
-    type: ['choice', [true, false, 'none', 'sentence', 'word', 'all']],
-    default: false,
-    set(name, value) {
-      if (value === true) {
-        this._nativeSet(name, 'all');
-      } else if (value === false) {
-        this._nativeSet(name, 'none');
-      } else {
-        this._nativeSet(name, value);
-      }
-      this._storeProperty(name, value);
-    }
+    type: {convert: v => v === true ? 'all' : v || 'none'},
+    choice: ['none', 'sentence', 'word', 'all'],
+    default: false
   },
   keyboard: {
-    type: ['choice', ['ascii', 'decimal', 'email', 'number', 'numbersAndPunctuation', 'phone', 'url', 'default']],
+    type: types.string,
+    choice: ['ascii', 'decimal', 'email', 'number', 'numbersAndPunctuation', 'phone', 'url', 'default'],
     default: 'default'
   },
   enterKeyType: {
-    type: ['choice', ['default', 'done', 'next', 'send', 'search', 'go']],
+    type: types.string,
+    choice: ['default', 'done', 'next', 'send', 'search', 'go'],
     default: 'default'
   },
-  focused: {type: 'boolean', nocache: true},
-  borderColor: {type: 'ColorValue'},
-  textColor: {type: 'ColorValue'},
-  revealPassword: {type: 'boolean'},
-  cursorColor: {type: 'ColorValue'},
-  messageColor: {type: 'ColorValue'},
+  messageColor: {type: types.ColorValue, default: 'initial'},
+  focused: {type: types.boolean, nocache: true},
+  borderColor: {type: types.ColorValue, default: 'initial'},
+  textColor: {type: types.ColorValue, default: 'initial'},
+  revealPassword: {type: types.boolean, default: false},
+  cursorColor: {type: types.ColorValue, default: 'initial'},
   selection: {
-    type: 'array',
-    set(name, value) {
-      if (value.length !== 2) {
-        throw new Error(
-          `Selection has to be a two element array with start and end position but is ${toValueString(value)}`
-        );
+    type: {
+      convert(value, textInput) {
+        if (!(value instanceof Array) || value.length !== 2) {
+          throw new Error(
+            `Selection has to be a two element array with start and end position but is ${toValueString(value)}`
+          );
+        }
+        const textLength = textInput.text.length;
+        const result = value.map(num => types.number.convert(num));
+        if (result[1] > textLength || result[0] > textLength || result[1] < 0 || result[0] < 0) {
+          throw new Error(`The selection has to be in the range of 0 to text length [0-${textLength}] but is ${value}`);
+        }
+        return Object.freeze(result);
       }
-      const textLength = this.text.length;
-      if (value[1] > textLength || value[0] > textLength || value[1] < 0 || value[0] < 0) {
-        throw new Error(`The selection has to be in the range of 0 to text length [0-${textLength}] but is ${value}`);
-      }
-      this._nativeSet(name, value);
-      this._triggerChangeEvent('selection', value);
     },
-    get(name) {
-      return this._nativeGet(name);
-    }
+    nocache: true
   },
-  font: {
-    type: 'FontValue',
-    set(name, value) {
-      this._nativeSet(name, value);
-      this._storeProperty(name, value);
-    },
-    default: null
-  }
+  font: {type: types.FontValue, default: 'initial'}
 });
 
 NativeObject.defineEvents(TextInput.prototype, {

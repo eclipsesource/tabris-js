@@ -1,3 +1,5 @@
+import {toValueString} from './Console';
+
 export function pick(object, keys) {
   const result = {};
   for (const key in object) {
@@ -160,4 +162,37 @@ export function getBytes(blob) {
  */
 export function setBytes(blob, bytes) {
   return blob[bytesSym] = bytes;
+}
+
+/**
+ * @template {object} T
+ * @template {keyof T} U
+ * @param {object} target
+ * @param {U[]} keys
+ * @returns {Partial<Record<U, unknown>>}
+ */
+export function allowOnlyKeys(target, keys) {
+  if (typeof target !== 'object') {
+    throw new Error(toValueString(target) + ' is not an object');
+  }
+  for (const key in target) {
+    if (keys.indexOf(/** @type {U} */(key)) === -1) {
+      throw new Error(`${toValueString(target)} contains unexpected entry "${key}"`);
+    }
+  }
+  return target;
+}
+
+/**
+ * @template {any} T
+ * @param {T} value
+ * @param {any[]|undefined} allowed
+ * @returns T
+ */
+export function allowOnlyValues(value, allowed, valueName = 'Value') {
+  if (allowed && allowed.indexOf(value) === -1) {
+    const expected = `"${allowed.slice(0, -1).join('", "')}" or "${allowed.slice(-1)}"`;
+    throw new Error(`${valueName} must be ${expected}", got ${toValueString(value)}`);
+  }
+  return value;
 }
