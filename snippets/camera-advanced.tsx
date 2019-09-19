@@ -1,11 +1,11 @@
 import {
+  app,
   Button,
   Camera,
   CameraView,
   Composite,
   contentView,
   device,
-  fs,
   ImageView,
   permission,
   Picker,
@@ -15,8 +15,8 @@ import {
   TextView
 } from 'tabris';
 
+app.idleTimeoutEnabled = false;
 const scaleModes: Array<'fit' | 'fill'> = ['fit', 'fill'];
-
 let camera: Camera = device.cameras[0];
 
 permission.withAuthorization('camera',
@@ -71,13 +71,11 @@ function populateResolutionPicker(sourceCamera: Camera) {
 }
 
 async function captureImage() {
-  const image = await camera.captureImage({flash: 'auto'});
-  const imagePath = `${fs.cacheDir}/picture-${new Date().getTime()}.jpg`;
-  await fs.writeFile(imagePath, image.image);
+  const capturedImage = await camera.captureImage({flash: 'auto'});
   $('#imageStrip').only(Composite).append(
     <Stack height={112} left='prev() 16' alignment='centerX' spacing={8}>
-      <ImageView height={80} image={{src: imagePath, width: 80, height: 80}}/>
-      <TextView text={getResolution(image)} font='12px'/>
+      <ImageView height={80} image={{src: capturedImage.image, width: 80, height: 80}}/>
+      <TextView text={getResolution(capturedImage)} font='12px'/>
     </Stack>
   );
 }

@@ -1,8 +1,7 @@
-import {Button, CameraView, contentView, device, fs, ImageView, permission, Popover, Stack} from 'tabris';
+import {app, Button, CameraView, contentView, device, ImageView, permission, Popover, Stack} from 'tabris';
 
+app.idleTimeoutEnabled = false;
 const camera = device.cameras[0];
-const resolutions = camera.availableCaptureResolutions;
-camera.captureResolution = resolutions[resolutions.length - 1];
 
 permission.withAuthorization('camera',
   () => camera.active = true,
@@ -17,12 +16,10 @@ contentView.append(
 );
 
 async function captureImage() {
-  const image = await camera.captureImage({flash: 'auto'});
-  const imagePath = `${fs.cacheDir}/picture-${new Date().getTime()}.jpg`;
-  await fs.writeFile(imagePath, image.image);
+  const capturedImage = await camera.captureImage({flash: 'auto'});
   const popover = Popover.open(
     <Popover width={400} height={300}>
-      <ImageView stretch background='black' image={imagePath} zoomEnabled={true}/>
+      <ImageView stretch background='black' image={capturedImage.image} zoomEnabled={true}/>
       <ImageView left={16} top={16} image='resources/close-white-24dp@3x.png'
         onTap={() => popover.close()}/>
     </Popover>

@@ -1,13 +1,12 @@
-import {TextView, device, contentView} from 'tabris';
+import {contentView, device, TextView} from 'tabris';
 
-const label = new TextView({padding: 16, markupEnabled: true, font: '16px', lineSpacing: 1.4})
-  .appendTo(contentView);
+contentView.append(<TextView padding={16} markupEnabled font={'16px'} lineSpacing={1.4}/>);
 
-device.onOrientationChanged(render);
-render();
+device.onOrientationChanged(renderDeviceProperties);
+renderDeviceProperties();
 
-function render() {
-  label.text =
+function renderDeviceProperties() {
+  $(TextView).only().text =
     <$>
       <b>Platform:</b> {device.platform}<br/>
       <b>Version:</b> {device.version}<br/>
@@ -18,6 +17,7 @@ function render() {
       <b>Orientation:</b> {device.orientation}<br/>
       <b>Screen:</b> {device.screenWidth} x {device.screenHeight}<br/>
       <b>Scale:</b> {device.scaleFactor}<br/>
+      <b>Cameras:</b> {device.cameras ? device.cameras.map(camera => camera.position) : 'none'}<br/>
     </$>
   ;
 }

@@ -34,7 +34,7 @@
   "links": [
     {
       "title": "Simple example to capture an image",
-      "snippet": "camera.jsx"
+      "snippet": "camera.tsx"
     },
     {
       "title": "Control `Camera` and `CameraView` to capture an image",
