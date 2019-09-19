@@ -33,6 +33,11 @@
       "platforms": {
         "windows": false
       }
+    },
+    "idleTimeoutEnabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Allows to control the device idle timout. When disabled the device will not go into sleep mode and turn off the screen to safe battery power.\n\nThe `idleTimeoutEnabled` will disable any system wide enabled idle settings while the app is in the foreground."
     }
   },
   "events": {

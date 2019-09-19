@@ -154,7 +154,8 @@ NativeObject.defineProperties(App.prototype, {
       this._storeProperty(name, value);
       this._nativeSet(name, value);
     }
-  }
+  },
+  idleTimeoutEnabled: {type: 'boolean', default: true, set: setIdleTimeoutEnabled}
 });
 
 function checkCertificates(certificates) {
@@ -178,6 +179,14 @@ function checkCertificates(certificates) {
     hashes[cert.host].push(cert.hash);
   }
   return hashes;
+}
+
+function setIdleTimeoutEnabled(name, value) {
+  if (!tabris.contentView) {
+    throw new Error('The device property "idleTimeoutEnabled" can only be changed in main context.');
+  }
+  this._nativeSet(name, value);
+  this._storeProperty(name, value);
 }
 
 export function create() {
