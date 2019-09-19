@@ -165,6 +165,15 @@ describe('App', function() {
       });
     });
 
+    describe('idleTimeoutEnabled', () => {
+
+      it('throws when idleTimeoutEnabled is accessed on worker', () => {
+        tabris.contentView = null;
+        expect(() => app.idleTimeoutEnabled = true)
+          .to.throw(Error, 'The device property "idleTimeoutEnabled" can only be changed in main context');
+      });
+
+    });
   });
 
   it('listens for pause event', function() {

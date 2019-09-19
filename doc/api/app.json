@@ -46,6 +46,11 @@
     "trustedCertificates": {
       "type": {"interface": "Array", "generics": ["ArrayBuffer"]},
       "description": "Adds a set of certificates to validated ssl connections against. The certificates are applied in addition to the system wide default certificates.\n\nThe `ArrayBuffer` entries of the `trustedCertificates` array consist of the bytes of the certificate files. On Android the certificate file has to be a _*.pem_ (Privacy Enhanced Mail) file whereas on iOS  it has to be _*.der_ (Distinguished Encoding Rules) file."
+    },
+    "idleTimeoutEnabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Allows to control the device idle timout. When disabled the device will not go into sleep mode and turn off the screen to safe battery power.\n\nThe `idleTimeoutEnabled` will disable any system wide enabled idle settings while the app is in the foreground."
     }
   },
   "events": {
