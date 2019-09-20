@@ -1,5 +1,11 @@
 import {
-  Color, EventObject, PropertyChangedEvent, TextInput, TextInputAcceptEvent, TextInputInputEvent, TextInputProperties,
+  Color,
+  EventObject,
+  PropertyChangedEvent,
+  TextInput,
+  TextInputAcceptEvent,
+  TextInputInputEvent,
+  TextInputProperties,
   TextInputSelectEvent
 } from 'tabris';
 
@@ -22,6 +28,7 @@ let text: string;
 let textColor: Color;
 let textInputType: 'default' | 'multiline' | 'password' | 'search';
 let selection: number[];
+let showKeyboardOnFocus: boolean;
 
 alignment = widget.alignment;
 autoCapitalize = widget.autoCapitalize;
@@ -39,6 +46,7 @@ text = widget.text;
 textColor = widget.textColor;
 textInputType = widget.type;
 selection = widget.selection;
+showKeyboardOnFocus = widget.showKeyboardOnFocus;
 
 widget.alignment = alignment;
 widget.autoCapitalize = autoCapitalize;
@@ -56,6 +64,7 @@ widget.text = text;
 widget.textColor = textColor;
 widget.type = textInputType;
 widget.selection = selection;
+widget.showKeyboardOnFocus = showKeyboardOnFocus;
 
 let properties: TextInputProperties = {
   alignment,
@@ -73,6 +82,7 @@ let properties: TextInputProperties = {
   text,
   textColor,
   selection,
+  showKeyboardOnFocus,
   type: textInputType
 };
 widget = new TextInput(properties);

@@ -155,6 +155,14 @@
       "platforms": {
         "windows": false
       }
+    },
+    "showKeyboardOnFocus": {
+      "type": "boolean",
+      "default": "true",
+      "description": "Allows to not show the virtual keyboard when `focused` is set to `true` programmatically. Only the blinking cursor will be shown. Upon touching the `TextInput` the keyboard will be shown.",
+      "platforms": {
+        "ios": false
+      }
     }
   },
   "events": {
