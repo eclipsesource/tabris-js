@@ -22,6 +22,7 @@ let text: string;
 let textColor: ColorValue;
 let textInputType: 'default' | 'multiline' | 'password' | 'search';
 let selection: number[];
+let keyboardAppearanceMode: 'never' | 'ontouch' | 'onfocus';
 let style: 'default' | 'outline' | 'fill' | 'underline' | 'none';
 let font: FontValue;
 let maxChars: number;
@@ -43,6 +44,7 @@ text = widget.text;
 textColor = widget.textColor;
 textInputType = widget.type;
 selection = widget.selection;
+keyboardAppearanceMode = widget.keyboardAppearanceMode;
 style = widget.style;
 font = widget.font;
 maxChars = widget.maxChars;
@@ -63,6 +65,7 @@ widget.message = message;
 widget.text = text;
 widget.textColor = textColor;
 widget.selection = selection;
+widget.keyboardAppearanceMode = keyboardAppearanceMode;
 widget.style = style;
 widget.font = font;
 widget.maxChars = maxChars;
@@ -83,6 +86,7 @@ let properties: Properties<TextInput> = {
   message,
   text,
   textColor,
+  keyboardAppearanceMode,
   selection,
   style: style,
   type: textInputType

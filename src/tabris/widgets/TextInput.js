@@ -127,7 +127,12 @@ NativeObject.defineProperties(TextInput.prototype, {
     },
     nocache: true
   },
-  font: {type: types.FontValue, default: 'initial'}
+  font: {type: types.FontValue, default: 'initial'},
+  keyboardAppearanceMode: {
+    type: types.string,
+    choice: ['never', 'ontouch', 'onfocus'],
+    default: 'onfocus'
+  },
 });
 
 NativeObject.defineEvents(TextInput.prototype, {
