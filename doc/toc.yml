@@ -27,7 +27,7 @@
       url: touch.html
     - title: Permissions
       url: permissions.html
-    - title: W3C Compatibility
+    - title: W3C/WHATWG Compatibility
       url: w3c-api.html
     - title: Cordova Support
       url: cordova.html
@@ -54,8 +54,6 @@
 
 - title: Widgets
   pages:
-    - title: Overview
-      url: api/widget-overview.html
 <%= widget %>
 
 - title: Popups

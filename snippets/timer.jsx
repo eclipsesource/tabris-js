@@ -5,7 +5,7 @@ let startTime;
 let incrementTime;
 let taskId;
 
-contentView.padding = 16;
+contentView.set({padding: 16});
 contentView.append(
   <$>
     <TextView top={8} left right='next() 16' text='Calls per second'/>

@@ -11,6 +11,7 @@ type TypeLinks = {[type: string]: Link};
 type NamedEvents = Array<schema.Event & {name: string}>;
 type Config = {sourcePath: string, targetPath: string, snippetsPath: string, version: string};
 type Member = schema.Method | schema.Method[] | schema.Property;
+type TocEntry = {title: string, url: string, priority?: boolean};
 
 const HTML_LT = '&lt;';
 const HTML_GT = '&gt;';
@@ -103,6 +104,38 @@ const FILE_TYPES = {
   ts: 'TypeScript',
   tsx: 'TypeScript/JSX',
   console: 'Interactive Console'
+};
+const TOC_INCLUDE: {[cat: string]: TocEntry[]} = {
+  core: [],
+  service: [
+    {
+      title: 'Worker',
+      url: 'w3c-api.html#worker'
+    },
+    {
+      title: 'crypto',
+      url: 'w3c-api.html#random-source-crypto'
+    }
+  ],
+  widget: [
+    {
+      title: 'Overview',
+      url: 'api/widget-overview.html',
+      priority: true
+    }
+  ],
+  popup: [],
+  net: [
+    {
+      title: 'XMLHttpRequest',
+      url: 'w3c-api.html#xmlhttprequest'
+    },
+    {
+      title: 'WebSocket',
+      url: 'w3c-api.html#websocket'
+    }
+  ],
+  data: []
 };
 
 exports.generateDoc = function generateDoc(options: Config) {
@@ -225,13 +258,17 @@ class DocumentationGenerator {
 
   private renderIndex() {
     const tocFile = join(this.targetPath, 'toc.yml');
-    const sortedAPI = Object.keys(this.defs).map(key => this.defs[key]).sort(compareTitles);
-    const render = (def) => `    - title: ${getTitle(def)}\n      url: api/${parse(def.file).name}.html`;
+    const toTocEntry = (def: ExtendedApi) => ({title: getTitle(def), url: `api/${parse(def.file).name}.html`});
+    const render = ({title, url}: TocEntry) => `    - title: ${title}\n      url: ${url}`;
     const content = {};
     ['core', 'service', 'widget', 'popup', 'net', 'data'].forEach(category => {
-      content[category] = sortedAPI
+      content[category] = Object.keys(this.defs)
+        .map(key => this.defs[key])
         .filter(def => def.category === category)
         .filter(def => !def.interface)
+        .map(toTocEntry)
+        .concat(TOC_INCLUDE[category])
+        .sort(compareTitles)
         .map(render)
         .join('\n');
     });
@@ -1077,9 +1114,15 @@ class DocumentRenderer {
 
 }
 
-function compareTitles(def1: ExtendedApi, def2: ExtendedApi) {
-  const title1 = getTitle(def1);
-  const title2 = getTitle(def2);
+function compareTitles(entry1: TocEntry, entry2: TocEntry) {
+  if (entry1.priority) {
+    return -1;
+  }
+  if (entry2.priority) {
+    return 1;
+  }
+  const title1 = entry1.title;
+  const title2 = entry2.title;
   if (isLowerCase(title1) !== isLowerCase(title2)) {
     return isLowerCase(title1) ? -1 : 1;
   }
