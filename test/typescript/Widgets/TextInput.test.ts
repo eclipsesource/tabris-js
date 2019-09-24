@@ -28,7 +28,7 @@ let text: string;
 let textColor: Color;
 let textInputType: 'default' | 'multiline' | 'password' | 'search';
 let selection: number[];
-let showKeyboardOnFocus: boolean;
+let keyboardAppearanceMode: 'never' | 'ontouch' | 'onfocus';
 
 alignment = widget.alignment;
 autoCapitalize = widget.autoCapitalize;
@@ -46,7 +46,7 @@ text = widget.text;
 textColor = widget.textColor;
 textInputType = widget.type;
 selection = widget.selection;
-showKeyboardOnFocus = widget.showKeyboardOnFocus;
+keyboardAppearanceMode = widget.keyboardAppearanceMode;
 
 widget.alignment = alignment;
 widget.autoCapitalize = autoCapitalize;
@@ -64,7 +64,7 @@ widget.text = text;
 widget.textColor = textColor;
 widget.type = textInputType;
 widget.selection = selection;
-widget.showKeyboardOnFocus = showKeyboardOnFocus;
+widget.keyboardAppearanceMode = keyboardAppearanceMode;
 
 let properties: TextInputProperties = {
   alignment,
@@ -82,7 +82,7 @@ let properties: TextInputProperties = {
   text,
   textColor,
   selection,
-  showKeyboardOnFocus,
+  keyboardAppearanceMode,
   type: textInputType
 };
 widget = new TextInput(properties);

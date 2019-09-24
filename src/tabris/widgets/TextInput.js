@@ -84,5 +84,6 @@ NativeObject.defineProperties(TextInput.prototype, {
       return this._nativeGet(name);
     }
   },
-  showKeyboardOnFocus: {type: 'boolean', default: true}
+  keyboardAppearanceMode: {type: ['choice', ['never', 'ontouch', 'onfocus']],
+    default: 'onfocus'}
 });

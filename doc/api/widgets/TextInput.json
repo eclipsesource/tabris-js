@@ -156,10 +156,15 @@
         "windows": false
       }
     },
-    "showKeyboardOnFocus": {
-      "type": "boolean",
-      "default": "true",
-      "description": "Allows to not show the virtual keyboard when `focused` is set to `true` programmatically. Only the blinking cursor will be shown. Upon touching the `TextInput` the keyboard will be shown.",
+    "keyboardAppearanceMode": {
+      "type": "string",
+      "values": [
+        "never",
+        "ontouch",
+        "onfocus"
+      ],
+      "default": "onfocus",
+      "description": "Allows to control when to show the virtual keyboard.\n\n- `'never'` - The keyboard is never shown when focus is gained.\n\n- `'ontouch'` - The keyboard is not shown when the `focused` property is set to `true` programmatically. Only the blinking cursor will be shown. Touching the `TextInput` will show the keyboard.\n\n- `'onfocus'` - The keyboard is always shown when the `TextInput` gains focus.",
       "platforms": {
         "ios": false
       }
