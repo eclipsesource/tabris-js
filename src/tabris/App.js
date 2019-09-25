@@ -182,6 +182,7 @@ NativeObject.defineEvents(App.prototype, {
   pause: {native: true},
   resume: {native: true},
   terminate: {native: true},
+  keyPress: {native: true},
   backNavigation: {native: true},
   certificatesReceived: {native: true},
 });
