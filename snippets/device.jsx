@@ -17,7 +17,7 @@ function renderDeviceProperties() {
       <b>Orientation:</b> {device.orientation}<br/>
       <b>Screen:</b> {device.screenWidth} x {device.screenHeight}<br/>
       <b>Scale:</b> {device.scaleFactor}<br/>
-      <b>Cameras:</b> {device.cameras ? device.cameras.map(camera => camera.position) : 'none'}<br/>
+      <b>Cameras:</b> {device.cameras ? device.cameras.map(camera => camera.position).join(', ') : 'none'}<br/>
     </$>
   ;
 }
