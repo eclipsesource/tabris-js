@@ -183,6 +183,7 @@ describe('TabFolder', function() {
       it('SETs selection to the right neighbor', function() {
         const tab2 = new Tab({id: 'foo'}).appendTo(tabFolder);
         const tab3 = new Tab({id: 'foo'}).appendTo(tabFolder);
+        client.resetCalls();
 
         tab2.dispose();
 
@@ -404,13 +405,16 @@ describe('TabFolder', function() {
     beforeEach(function() {
       new Tab().appendTo(tabFolder);
       tab2 = new Tab().appendTo(tabFolder);
+      tabris.flush();
     });
 
-    it('set SETS selection', function() {
+    it('set SETS selection after children are set', function() {
       tabFolder.selectionIndex = 1;
 
-      const setCall = client.calls({op: 'set', id: tabFolder.cid})[0];
-      expect(setCall.properties.selection).to.equal(tab2.cid);
+      const set1 = client.calls({op: 'set', id: tabFolder.cid})[1].properties;
+      const set2 = client.calls({op: 'set', id: tabFolder.cid})[2].properties;
+      expect(set1.children).to.deep.equal([tabFolder.children()[0].cid, tab2.cid]);
+      expect(set2.selection).to.equal(tab2.cid);
     });
 
     it('GET returns selectionIndex', function() {

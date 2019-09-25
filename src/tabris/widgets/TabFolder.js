@@ -33,6 +33,11 @@ export default class TabFolder extends Composite {
     return this._children().indexOf(this.selection);
   }
 
+  _scheduleRenderChildren() {
+    // Skip the queue mechanism to avoid tab selection-before-appended issue
+    this.$flushChildren();
+  }
+
   _nativeListen(event, state) {
     if (event === 'select' && !state) {
       return;
