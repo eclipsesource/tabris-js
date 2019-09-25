@@ -65,7 +65,7 @@ export class PropertyTypes {
 
     /** @type {PropertyType<number>} */
     this.integer = {
-      encode: value => Math.round(convertToNumber(value)),
+      convert: value => Math.round(convertToNumber(value)),
       decode: value => value === undefined ? 0 : value
     };
 

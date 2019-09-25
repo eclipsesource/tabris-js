@@ -63,7 +63,7 @@ export default class Picker extends Widget {
   set selectionIndex(value) {
     try {
       const oldValue = this.$newSelectionIndex;
-      this.$newSelectionIndex = types.natural.convert(value);
+      this.$newSelectionIndex = types.integer.convert(value);
       if (this.$newSelectionIndex !== oldValue) {
         this._triggerChangeEvent('selectionIndex');
       }
