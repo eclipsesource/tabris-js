@@ -524,6 +524,22 @@ function normalizeEvent(name, definition) {
  * @returns {TypeDef<any, any, any>}
  */
 function normalizeType(config) {
+  if (config instanceof Function && config.prototype instanceof NativeObject) {
+    return {
+      convert(value) {
+        if (!(value instanceof config)) {
+          throw new Error('Not an instance of ' + config.name);
+        }
+        return value;
+      },
+      encode(value) {
+        return value ? value.cid : null;
+      },
+      decode(value) {
+        return value ? tabris._nativeObjectRegistry.find(value) : null;
+      }
+    };
+  }
   const def = typeof config === 'string' ? types[config] : config;
   allowOnlyKeys(def, ['convert', 'encode', 'decode']);
   return {

@@ -1,5 +1,6 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
+import Camera from '../Camera';
 
 export default class CameraView extends Widget {
 
@@ -10,7 +11,7 @@ export default class CameraView extends Widget {
 }
 
 NativeObject.defineProperties(CameraView.prototype, {
-  camera: {type: {convert: value => value.cid}, default: null, nullable: true},
+  camera: {type: Camera, default: null, nullable: true},
   scaleMode: {
     type: 'string',
     choice: ['fit', 'fill'],

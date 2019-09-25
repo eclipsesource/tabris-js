@@ -30,7 +30,7 @@ const transformDefaults = {
  * Note: Primitive types and aliases thereof start lower vase,
  * object types other upper case.
  */
-class PropertyTypes {
+export class PropertyTypes {
 
   constructor() {
 

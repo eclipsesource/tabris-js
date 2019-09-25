@@ -191,10 +191,15 @@ interface PropertyDefinition<ApiType = unknown, NativeType = any, Context extend
   const: boolean
 }
 
-type TabrisProp<ApiType, NativeType, Context extends Object> = Partial<PropertyDefinition<ApiType, NativeType, Context>>;
+type TabrisProp<ApiType, NativeType, Context extends Object>
+  = Omit<Partial<PropertyDefinition>, 'type'> & {type?:
+    TypeDef<ApiType, NativeType, Context>
+    | keyof import('./property-types').PropertyTypes
+    | {prototype: import('./NativeObject').default}
+  };
 
 interface PropertyDefinitions<Context extends object> {
-  [property: string]: Partial<PropertyDefinition<any, unknown, Context>>
+  [property: string]: TabrisProp<any, unknown, Context>
 }
 
 declare namespace global {

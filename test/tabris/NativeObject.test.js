@@ -4,6 +4,8 @@ import EventObject from '../../src/tabris/EventObject';
 import {types} from '../../src/tabris/property-types';
 import ClientMock, {} from './ClientMock';
 import {toXML} from '../../src/tabris/Console';
+import ImageView from '../../src/tabris/widgets/ImageView';
+import Composite from '../../src/tabris/widgets/Composite';
 
 describe('NativeObject', function() {
 
@@ -519,6 +521,10 @@ describe('NativeObject', function() {
 
     it('throws for invalid configurations', function() {
       expect(() => NativeObject.defineProperty(TestType.prototype, 'foo', {
+        // @ts-ignore
+        type: Object, default: null
+      })).to.throw(Error);
+      expect(() => NativeObject.defineProperty(TestType.prototype, 'foo', {
         readonly: true, default: false
       })).to.throw(Error);
       expect(() => NativeObject.defineProperty(TestType.prototype, 'foo', {
@@ -537,7 +543,7 @@ describe('NativeObject', function() {
         .to.throw(Error);
     });
 
-    it('convert converts value', function() {
+    it('type.convert converts value', function() {
       NativeObject.defineProperty(TestType.prototype, 'foo', {
         type: {convert: x => Math.round(x)}, default: null
       });
@@ -545,6 +551,55 @@ describe('NativeObject', function() {
       object.foo = 1.2;
 
       expect(object.foo).to.equal(1);
+    });
+
+    it('type.encode encodes value', function() {
+      NativeObject.defineProperty(TestType.prototype, 'foo', {
+        type: {
+          convert: x => parseInt(x, 10),
+          encode: x => x - 1
+        },
+        default: null
+      });
+
+      object.foo = '12';
+
+      expect(object.foo).to.equal(12);
+      expect(client.calls({op: 'set', id: object.cid})[0].properties.foo).to.equal(11);
+    });
+
+    it('type.decode decodes value', function() {
+      NativeObject.defineProperty(TestType.prototype, 'foo', {
+        type: {decode: x => x + 1}, nocache: true
+      });
+      client.properties(object.cid).foo = 10;
+
+      const result = object.foo;
+
+      expect(result).to.equal(11);
+    });
+
+    it('type: string assignes property-types entry', function() {
+      NativeObject.defineProperty(TestType.prototype, 'foo', {
+        type: 'boolean', default: false
+      });
+
+      object.foo = 1;
+
+      expect(object.foo).to.be.true;
+    });
+
+    it('type: Function generates NativeObject type', function() {
+      NativeObject.defineProperty(TestType.prototype, 'foo', {
+        type: ImageView, nocache: true
+      });
+      const widget = new ImageView();
+
+      object.foo = widget;
+      object.foo = new Composite();
+
+      expect(object.foo).to.equal(widget);
+      expect(client.calls({op: 'set', id: object.cid})[0].properties.foo).to.equal(widget.cid);
     });
 
     it('generate change events with converted value', function() {
