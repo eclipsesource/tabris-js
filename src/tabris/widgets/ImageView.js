@@ -33,7 +33,7 @@ export default class ImageView extends Widget {
     if (properties.indexOf('zoomEnabled') !== -1) {
       properties.unshift(properties.splice(properties.indexOf('zoomEnabled'), 1)[0]);
     }
-    return properties;
+    return super._reorderProperties(properties);
   }
 
   _getXMLAttributes() {
