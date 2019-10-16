@@ -182,9 +182,6 @@ function checkCertificates(certificates) {
 }
 
 function setIdleTimeoutEnabled(name, value) {
-  if (!tabris.contentView) {
-    throw new Error('The device property "idleTimeoutEnabled" can only be changed in main context.');
-  }
   this._nativeSet(name, value);
   this._storeProperty(name, value);
 }

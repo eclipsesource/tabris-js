@@ -167,10 +167,15 @@ describe('App', function() {
 
     describe('idleTimeoutEnabled', () => {
 
-      it('throws when idleTimeoutEnabled is accessed on worker', () => {
-        tabris.contentView = null;
-        expect(() => app.idleTimeoutEnabled = true)
-          .to.throw(Error, 'The device property "idleTimeoutEnabled" can only be changed in main context');
+      it('is SET', () => {
+        client.resetCalls();
+
+        app.idleTimeoutEnabled = false;
+
+        let setCall = client.calls({op: 'set', id: app.cid})[0];
+        expect(setCall.properties).to.deep.equal({
+          idleTimeoutEnabled: false
+        });
       });
 
     });
