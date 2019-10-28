@@ -136,11 +136,14 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     this._nativeCreate(param);
   }
 
-  set(properties = {}) {
+  set(properties = undefined) {
+    if (arguments.length === 0) {
+      throw new Error('Not enough arguments');
+    }
     if (arguments.length > 1) {
       throw new Error('Too many arguments');
     }
-    this._reorderProperties(Object.keys(properties)).forEach(function(name) {
+    this._reorderProperties(Object.keys(properties || {})).forEach(function(name) {
       setExistingProperty.call(this, name, properties[name]);
     }, this);
     return this;

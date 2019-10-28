@@ -148,6 +148,18 @@ describe('NativeObject', function() {
         expect(client.calls({op: 'set'}).length).to.equal(1);
       });
 
+      it('throws for no argument', function() {
+        expect(() => object.set()).to.throw();
+      });
+
+      it('throws for too many arguments', function() {
+        expect(() => object.set({}, {})).to.throw();
+      });
+
+      it('ignores falsy argument', function() {
+        expect(() => object.set(undefined)).not.to.throw();
+      });
+
     });
 
     describe('_nativeSet', function() {
