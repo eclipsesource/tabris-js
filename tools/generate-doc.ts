@@ -155,6 +155,16 @@ class DocumentationGenerator {
   public readonly version: string;
 
   constructor(options: Config) {
+    if (
+      !options ||
+      !options.snippetsPath ||
+      !options.sourcePath ||
+      !options.targetPath ||
+      !options.version
+    ) {
+      throw new Error('Missing Option in ' + JSON.stringify(options));
+    }
+    this.version = options.version;
     this.targetPath = options.targetPath;
     this.sourcePath = options.sourcePath;
     this.apiSourcePath = join(options.sourcePath, 'api');
