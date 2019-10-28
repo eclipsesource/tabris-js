@@ -32,10 +32,14 @@ export default class AlertDialog extends Popup {
 
   get textInputs() {
     if (!this._contentView) {
-      this._contentView = createContentView({
-        layout: null,
-        childType: TextInput,
-        phantom: true
+      Object.defineProperty(this, '_contentView', {
+        enumerable: false,
+        writable: false,
+        value: createContentView({
+          layout: null,
+          childType: TextInput,
+          phantom: true
+        })
       });
     }
     return this._contentView;

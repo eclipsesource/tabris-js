@@ -3,12 +3,13 @@ import {format} from './Formatter';
 export default class EventObject {
 
   constructor() {
-    this.$type = '';
-    this.$target = null;
     Object.defineProperties(this, {
       type: {enumerable: true, get: () => this.$type},
       target: {enumerable: true, get: () => this.$target},
-      timeStamp: {enumerable: true, value: Date.now()}
+      timeStamp: {enumerable: true, value: Date.now()},
+      $type: {enumerable: false, writable: true, value: ''},
+      $target: {enumerable: false, writable: true, value: null},
+      $defaultPrevented: {enumerable: false, writable: true, value: false}
     });
   }
 
@@ -22,8 +23,7 @@ export default class EventObject {
 
   toString() {
     const header = this.constructor.name + ' { ';
-    const content = Object.getOwnPropertyNames(this)
-      .filter(prop => prop.indexOf('$') !== 0)
+    const content = Object.keys(this)
       .map(prop =>
         `${prop}: ${typeof this[prop] === 'string' ? JSON.stringify(this[prop]) : format(this[prop])}`
       )

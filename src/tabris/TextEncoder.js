@@ -24,7 +24,11 @@ export default class TextEncoder extends NativeObject {
    */
   static getInstance() {
     if (!this._instance) {
-      this._instance = new TextEncoder();
+      Object.defineProperty(this, '_instance', {
+        enumerable: false,
+        writable: false,
+        value: new TextEncoder()
+      });
     }
     return this._instance;
   }

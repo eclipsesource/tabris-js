@@ -27,7 +27,11 @@ export default {
       hint(this, `Event registration warning: Can not listen for event "${type}" on disposed object`);
     }
     const wasListening = this._isListening(type);
-    this._callbacks = this._callbacks || [];
+    if (!this._callbacks) {
+      Object.defineProperty(this, '_callbacks', {
+        enumerable: false, writable: false, configurable: true, value: []
+      });
+    }
     this._callbacks[type] = (this._callbacks[type] || []).concat();
     const alreadyAdded = this._callbacks[type].some(entry => (
       (entry.fn === callback || '_callback' in callback && entry.fn._callback === callback._callback) &&

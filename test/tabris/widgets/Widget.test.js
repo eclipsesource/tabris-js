@@ -1757,6 +1757,7 @@ describe('Widget', function() {
       other = new TestWidget({id: 'other'}).appendTo(parent);
 
       tabris.flush();
+
       const call = client.calls({op: 'set', id: widget.cid})[0];
       const expected = {left: 23, baseline: other.cid, right: [other.cid, 42]};
       expect(call.properties.layoutData).to.eql(expected);

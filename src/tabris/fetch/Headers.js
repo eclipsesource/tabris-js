@@ -5,7 +5,9 @@
 export default class Headers {
 
   constructor(headers) {
-    this.$map = {};
+    Object.defineProperties(this, {
+      $map: {enumerable: false, writable: true, value: {}}
+    });
     if (headers instanceof Headers) {
       headers.forEach((value, name) => this.append(name, value));
     } else if (Array.isArray(headers)) {

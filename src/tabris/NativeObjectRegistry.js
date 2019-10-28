@@ -1,8 +1,10 @@
 export default class NativeObjectRegistry {
 
   constructor() {
-    this.$idSequence = 1;
-    this.$objects = {};
+    Object.defineProperties(this, {
+      $idSequence: {enumerable: false, writable: true, value: 1},
+      $objects: {enumerable: false, writable: false, value: {}}
+    });
   }
 
   register(nativeObject) {

@@ -55,7 +55,9 @@ export default class WebSocket {
     this.extensions = '';
     addDOMEventTargetMethods(this);
     defineEventHandlerProperties(this, EVENT_TYPES);
-    this._nativeObject = this.$createProxy(url, protocols);
+    Object.defineProperty(this, '_nativeObject', {
+      enumerable: false, writable: false, value: this.$createProxy(url, protocols)
+    });
   }
 
   $createProxy(url, protocols) {

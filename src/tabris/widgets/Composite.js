@@ -70,11 +70,17 @@ export default class Composite extends Widget {
    */
   _initLayout(props = {}) {
     if (!('layout' in props)) {
-      this._layout = ConstraintLayout.default;
+      Object.defineProperty(
+        this, '_layout', {enumerable: false, writable: false, value: ConstraintLayout.default}
+      );
     } else if (props.layout) {
-      this._layout = props.layout;
+      Object.defineProperty(
+        this, '_layout', {enumerable: false, writable: false, value: props.layout}
+      );
     } else {
-      this._layout = null;
+      Object.defineProperty(
+        this, '_layout', {enumerable: false, writable: false, value: null}
+      );
     }
     if (this._layout) {
       this._checkLayout(this._layout);
@@ -125,7 +131,9 @@ export default class Composite extends Widget {
       throw new Error(`${toValueString(child)} could not be appended to ${this}`);
     }
     if (!this.$children) {
-      this.$children = [];
+      Object.defineProperties(this, {
+        $children: {enumerable: false, writable: true, value: []}
+      });
     }
     if (typeof index === 'number') {
       this.$children.splice(index, 0, child);
@@ -153,7 +161,7 @@ export default class Composite extends Widget {
       for (let i = 0; i < children.length; i++) {
         children[i]._dispose(true);
       }
-      delete this.$children;
+      this.$children = undefined;
     }
     if (this._layout) {
       this._layout.remove(this);

@@ -8,10 +8,16 @@ export default class Tabris extends NativeObject {
 
   constructor() {
     super();
-    this._started = false;
-    this._init = this._init.bind(this);
-    this._notify = this._notify.bind(this);
-    this._stackTraceStack = [];
+    Object.defineProperties(this, {
+      _started: {enumerable: false, writable: true, value: false},
+      _init: {enumerable: false, writable: true, value: this._init.bind(this)},
+      _notify: {enumerable: false, writable: true, value: this._notify.bind(this)},
+      _stackTraceStack: {enumerable: false, writable: true, value: []},
+      _nativeObjectRegistry: {enumerable: false, writable: true, value: null},
+      _client: {enumerable: false, writable: true, value: null},
+      _nativeBridge: {enumerable: false, writable: true, value: null},
+      _entryPoint: {enumerable: false, writable: true, value: null}
+    });
     this.$publishProxies();
   }
 

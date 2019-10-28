@@ -7,8 +7,10 @@ export default class Console {
 
   constructor() {
     this._registerPrintMethods(arguments[0]);
-    this._prefixSpaces = 0;
-    this._count = {};
+    Object.defineProperties(this, {
+      _prefixSpaces: {enumerable: false, writable: true, value: 0},
+      _count: {enumerable: false, writable: false, value: {}}
+    });
   }
 
   trace() {
@@ -75,7 +77,9 @@ export default class Console {
   }
 
   _registerPrintMethods(nativeConsole) {
-    this._console = {};
+    Object.defineProperty(this, '_console', {
+      enumerable: false, writable: false, value: {}
+    });
     for (const level of ['debug', 'info', 'log', 'warn', 'error']) {
       this._console[level] = (...args) => {
         const message = this._prepareOutput(...args);

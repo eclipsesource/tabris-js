@@ -10,10 +10,10 @@ export default class Picker extends Widget {
    */
   constructor(properties) {
     super(pick(properties, ['style']));
-    /** @type {number} */
-    this._itemCount = 0;
-    /** @type {Function} */
-    this._itemText = () => '';
+    Object.defineProperties(this, {
+      _itemCount: {enumerable: false, writable: true, value: 0},
+      _itemText: {enumerable: false, writable: true, value: () => ''}
+    });
     this.set(omit(properties, ['style']));
     tabris.on('flush', this.$flush, this);
     this.on('dispose', () => tabris.off('flush', this.$flush, this));
@@ -28,7 +28,7 @@ export default class Picker extends Widget {
       const oldValue = this._itemCount;
       this._itemCount = types.natural.convert(value);
       if (this._itemCount !== oldValue) {
-        this.$needsUpdateItems = true;
+        Object.defineProperty(this, '$needsUpdateItems', {enumerable: false, writable: true, value: true});
         this._triggerChangeEvent('itemCount');
       }
     } catch (ex) {
@@ -48,7 +48,9 @@ export default class Picker extends Widget {
       const oldValue = this._itemText;
       this._itemText = value;
       if (this._itemText !== oldValue) {
-        this.$needsUpdateItems = true;
+        Object.defineProperty(this, '$needsUpdateItems', {
+          enumerable: false, writable: true, value: true
+        });
         this._triggerChangeEvent('itemText');
       }
     } catch (ex) {
@@ -91,13 +93,13 @@ export default class Picker extends Widget {
       }
       this._nativeSet('items', items);
       tabris._nativeBridge.flush();
-      delete this.$needsUpdateItems;
+      this.$needsUpdateItems = false;
     }
     if (this.$newSelectionIndex >= -1) {
       this._nativeSet('selectionIndex', this.$newSelectionIndex);
       this._triggerChangeEvent('selectionIndex', this.$newSelectionIndex);
       tabris._nativeBridge.flush();
-      delete this.$newSelectionIndex;
+      this.$newSelectionIndex = undefined;
     }
   }
 

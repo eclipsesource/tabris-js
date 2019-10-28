@@ -36,7 +36,11 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
    */
   static defineProperty(target, name, property) {
     const def = normalizeProperty(property);
-    target['$prop_' + name] = def;
+    Object.defineProperty(target, '$prop_' + name, {
+      enumerable: false,
+      writable: false,
+      value: def
+    });
     Object.defineProperty(target, name, {
       set(value) {
         this.$setProperty(name, value);
@@ -131,7 +135,9 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
   constructor(param) {
     super();
     Object.defineProperty(this, '$props', {
-      writable: true, value: /** @type {{[property: string]: unknown}} */ ({})
+      enumerable: false,
+      writable: true,
+      value: /** @type {{[property: string]: unknown}} */ ({})
     });
     this._nativeCreate(param);
   }
@@ -328,8 +334,10 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
 
   _dispose(skipNative) {
     if (!this._isDisposed && !this._inDispose) {
-      this._inDispose = true;
-      this._disposedToStringValue = this.toString();
+      Object.defineProperties(this, {
+        _inDispose: {enumerable: false, writable: false, value: true},
+        _disposedToStringValue: {enumerable: false, writable: false, value: this.toString()}
+      });
       this.toString = () => this._disposedToStringValue + ' (disposed)';
       this._trigger('dispose');
       this._release();
@@ -338,7 +346,9 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
       }
       tabris._nativeObjectRegistry.remove(this.cid);
       this.$props = null;
-      this._isDisposed = true;
+      Object.defineProperty(
+        this, '_isDisposed', {enumerable: false, writable: false, value: true}
+      );
     }
   }
 

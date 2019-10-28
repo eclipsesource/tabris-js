@@ -9,7 +9,9 @@ export default class Module {
     let exports = {};
     let resolved = false;
     const require = this.require.bind(this);
-    this._cache = this.parent ? this.parent._cache : {};
+    Object.defineProperty(this, '_cache', {
+      enumerable: false, writable: false, value: this.parent ? this.parent._cache : {}
+    });
     if (id) {
       this._cache[id] = this;
     }

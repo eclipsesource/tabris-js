@@ -13,6 +13,9 @@ export default class TabFolder extends Composite {
    */
   constructor(properties) {
     super(properties);
+    Object.defineProperty(this, '$previousSelection', {
+      enumerable: false, writable: true, value: undefined
+    });
     this._nativeListen('select', true);
   }
 
@@ -46,7 +49,7 @@ export default class TabFolder extends Composite {
   }
 
   _initLayout() {
-    this._layout = null;
+    Object.defineProperty(this, '_layout', {enumerable: false, writable: false, value: null});
   }
 
   _acceptChild(child) {

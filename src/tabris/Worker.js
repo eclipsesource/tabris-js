@@ -28,7 +28,9 @@ export default class Worker {
     }
     addDOMEventTargetMethods(this);
     defineEventHandlerProperties(this, EVENT_TYPES);
-    this._nativeObject = this.$createProxy({scriptPath});
+    Object.defineProperty(this, '_nativeObject', {
+      enumerable: false, writable: false, value: this.$createProxy({scriptPath})
+    });
   }
 
   $createProxy(scriptPath) {

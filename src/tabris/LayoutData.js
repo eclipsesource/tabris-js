@@ -15,11 +15,15 @@ export default class LayoutData {
 
   static get stretch() {
     if (!this._stretch) {
-      this._stretch = new LayoutData({
-        left: ConstraintExports.zero,
-        top: ConstraintExports.zero,
-        right: ConstraintExports.zero,
-        bottom: ConstraintExports.zero
+      Object.defineProperty(this, '_stretch', {
+        enumerable: false,
+        writable: false,
+        value: new LayoutData({
+          left: ConstraintExports.zero,
+          top: ConstraintExports.zero,
+          right: ConstraintExports.zero,
+          bottom: ConstraintExports.zero
+        })
       });
     }
     return this._stretch;
@@ -27,9 +31,13 @@ export default class LayoutData {
 
   static get stretchX() {
     if (!this._stretchX) {
-      this._stretchX = new LayoutData({
-        left: ConstraintExports.zero,
-        right: ConstraintExports.zero,
+      Object.defineProperty(this, '_stretchX', {
+        enumerable: false,
+        writable: false,
+        value: new LayoutData({
+          left: ConstraintExports.zero,
+          right: ConstraintExports.zero,
+        })
       });
     }
     return this._stretchX;
@@ -37,9 +45,13 @@ export default class LayoutData {
 
   static get stretchY() {
     if (!this._stretchY) {
-      this._stretchY = new LayoutData({
-        top: ConstraintExports.zero,
-        bottom: ConstraintExports.zero
+      Object.defineProperty(this, '_stretchY', {
+        enumerable: false,
+        writable: false,
+        value: new LayoutData({
+          top: ConstraintExports.zero,
+          bottom: ConstraintExports.zero
+        })
       });
     }
     return this._stretchY;
@@ -47,7 +59,11 @@ export default class LayoutData {
 
   static get center() {
     if (!this._center) {
-      this._center = new LayoutData({centerX: 0, centerY: 0});
+      Object.defineProperty(this, '_center', {
+        enumerable: false,
+        writable: false,
+        value: new LayoutData({centerX: 0, centerY: 0})
+      });
     }
     return this._center;
   }

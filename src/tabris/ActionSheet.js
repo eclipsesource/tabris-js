@@ -19,8 +19,10 @@ export default class ActionSheet extends Popup {
    */
   constructor(properties) {
     super(properties);
-    this._index = null;
-    this._action = null;
+    Object.defineProperties(this, {
+      _index: {enumerable: false, writable: true, value: null},
+      _action: {enumerable: false, writable: true, value: null}
+    });
     this._autoDispose = true;
     this._nativeListen('select', true);
   }

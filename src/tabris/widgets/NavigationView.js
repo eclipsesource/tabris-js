@@ -17,7 +17,7 @@ export default class NavigationView extends Composite {
   }
 
   _initLayout() {
-    this._layout = null;
+    Object.defineProperty(this, '_layout', {enumerable: false, writable: false, value: null});
   }
 
   _acceptChild(child) {

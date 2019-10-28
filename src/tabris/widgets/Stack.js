@@ -31,7 +31,9 @@ export default class Stack extends Composite {
       });
     }
     this._checkLayout(layout);
-    this._layout = layout;
+    Object.defineProperty(
+      this, '_layout', {enumerable: false, writable: false, value: layout}
+    );
     this._layout.add(this);
   }
 

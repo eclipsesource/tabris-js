@@ -44,7 +44,7 @@ tabris._start = function(client) {
     };
     if (tabris._entryPoint) {
       tabris._entryPoint(loadModule);
-      delete tabris._entryPoint;
+      tabris._entryPoint = null;
     } else {
       loadModule();
     }

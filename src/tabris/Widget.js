@@ -129,7 +129,11 @@ export default class Widget extends NativeObject {
       hint(this, 'Cannot set property "class" on disposed object');
       return;
     }
-    this._classList = types.string.convert(value).trim().split(/\s+/);
+    Object.defineProperty(this, '_classList', {
+      enumerable: true,
+      writable: true,
+      value: types.string.convert(value).trim().split(/\s+/)
+    });
     this._triggerChangeEvent('class', this.class);
   }
 
@@ -146,8 +150,11 @@ export default class Widget extends NativeObject {
       return;
     }
     const oldLayoutData = this._layoutData;
-    /** @type {LayoutData} */
-    this._layoutData = value ? LayoutData.from(value) : new LayoutData({});
+    Object.defineProperty(this, '_layoutData', {
+      enumerable: false,
+      writable: true,
+      value: (/** @type {LayoutData} */(value ? LayoutData.from(value) : new LayoutData({})))
+    });
     this._triggerChangeEvent('layoutData', this._layoutData);
     layoutDataProps.forEach(prop => {
       const oldValue = oldLayoutData ? oldLayoutData[prop] : 'auto';
@@ -162,7 +169,11 @@ export default class Widget extends NativeObject {
       return undefined;
     }
     if (!this._layoutData) {
-      this._layoutData = new LayoutData({});
+      Object.defineProperty(this, '_layoutData', {
+        enumerable: false,
+        writable: true,
+        value: (/** @type {LayoutData} */(new LayoutData({})))
+      });
     }
     return this._layoutData;
   }
@@ -172,7 +183,11 @@ export default class Widget extends NativeObject {
       return undefined;
     }
     if (!this._classList) {
-      this._classList = /** @type {string[]} */ ([]);
+      Object.defineProperty(this, '_classList', {
+        enumerable: true,
+        writable: true,
+        value: []
+      });
     }
     return this._classList;
   }
@@ -182,7 +197,9 @@ export default class Widget extends NativeObject {
       return undefined;
     }
     if (!this.$data) {
-      this.$data = {};
+      Object.defineProperty(this, '$data', {
+        enumerable: false, writable: false, value: {}
+      });
     }
     return this.$data;
   }
@@ -196,7 +213,8 @@ export default class Widget extends NativeObject {
 
   set id(value) {
     /** @type {string} */
-    this._id = types.string.convert(value);
+    const id = types.string.convert(value);
+    Object.defineProperty(this, '_id', {enumerable: false, writable: false, value: id});
   }
 
   get id() {
@@ -208,20 +226,26 @@ export default class Widget extends NativeObject {
 
   set gestures(gestures) {
     /** @type {typeof defaultGestures} */
-    this._gestures = Object.assign({}, defaultGestures, gestures);
+    const value = Object.assign({}, defaultGestures, gestures);
+    Object.defineProperty(this, '_gestures', {enumerable: false, writable: true, value});
   }
 
   get gestures() {
     if (!this._gestures) {
-      this._gestures = Object.assign({}, defaultGestures);
+      /** @type {typeof defaultGestures} */
+      const value = Object.assign({}, defaultGestures);
+      Object.defineProperty(this, '_gestures', {enumerable: false, writable: true, value});
     }
     return this._gestures;
   }
 
   set excludeFromLayout(value) {
     if (this._excludeFromLayout !== !!value) {
-      /** @type {boolean} */
-      this._excludeFromLayout = !!value;
+      Object.defineProperty(
+        this,
+        '_excludeFromLayout',
+        {enumerable: false, writable: true, value: !!value}
+      );
     }
     if (this._parent) {
       this._parent._scheduleRenderChildren();
@@ -276,7 +300,7 @@ export default class Widget extends NativeObject {
     if (this._parent) {
       this._parent._removeChild(this);
     }
-    this._parent = parent;
+    Object.defineProperty(this, '_parent', {enumerable: false, writable: true, value: parent});
     if (this._parent) {
       this._parent._addChild(this, index);
     }
@@ -305,7 +329,11 @@ export default class Widget extends NativeObject {
           super._trigger(name, event);
         });
         if (!this._recognizers) {
-          this._recognizers = {};
+          Object.defineProperty(
+            this,
+            '_recognizers',
+            {enumerable: false, writable: false, value: {}}
+          );
         }
         this._recognizers[name] = recognizer;
         this.on('dispose', recognizer.dispose, recognizer);
@@ -332,7 +360,7 @@ export default class Widget extends NativeObject {
   _release() {
     if (this._parent) {
       this._parent._removeChild(this);
-      delete this._parent;
+      this._parent = null;
     }
   }
 

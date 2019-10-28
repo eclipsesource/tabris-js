@@ -8,14 +8,28 @@ import Blob from '../Blob';
 
 export default class Body {
 
+  constructor() {
+    Object.defineProperties(this, {
+      $bodyUsed: {enumerable: false, writable: true, value: false}
+    });
+  }
+
   _initBody(body) {
-    this._bodyInit = body;
+    Object.defineProperty(this, '_bodyInit', {
+      enumerable: false, writable: false, value: body
+    });
     if (!body) {
-      this._bodyText = '';
+      Object.defineProperty(this, '_bodyText', {
+        enumerable: false, writable: false, value: ''
+      });
     } else if (typeof body === 'string') {
-      this._bodyText = body;
+      Object.defineProperty(this, '_bodyText', {
+        enumerable: false, writable: false, value: body
+      });
     } else if (isReadable(body)) {
-      this._bodyBuffer = read(body);
+      Object.defineProperty(this, '_bodyBuffer', {
+        enumerable: false, writable: false, value: read(body)
+      });
     } else {
       throw new Error('unsupported BodyInit type');
     }

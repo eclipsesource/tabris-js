@@ -9,8 +9,10 @@ export default class ContentView extends Composite {
     if (!properties || properties[creationAllowed] !== true) {
       throw new Error('ContentView can not be created');
     }
-    this._childType = properties.childType;
-    this._phantom = properties.phantom;
+    Object.defineProperties(this, {
+      _childType: {enumerable: false, writable: false, value: properties.childType},
+      _phantom: {enumerable: false, writable: false, value: properties.phantom}
+    });
     delete properties[creationAllowed];
     delete properties.childType;
     delete properties.phantom;

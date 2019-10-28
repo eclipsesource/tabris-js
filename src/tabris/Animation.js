@@ -60,8 +60,10 @@ class Animation extends NativeObject {
 
   start(resolve, reject) {
     this.target.on('dispose', this.abort, this);
-    this._resolve = resolve;
-    this._reject = reject;
+    Object.defineProperties(this, {
+      _resolve: {enumerable: false, writable: false, value: resolve},
+      _reject: {enumerable: false, writable: false, value: reject}
+    });
     this._nativeCall('start');
   }
 

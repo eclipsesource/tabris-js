@@ -62,7 +62,9 @@ export default class App extends NativeObject {
 
   getResourceLocation(path) {
     if (!this._resourceBaseUrl) {
-      this._resourceBaseUrl = this._nativeGet('resourceBaseUrl');
+      Object.defineProperty(this, '_resourceBaseUrl', {
+        enumerable: false, writable: false, value: this._nativeGet('resourceBaseUrl')
+      });
     }
     const subPath = path != null ? '/' + normalizePath('' + path) : '';
     return this._resourceBaseUrl + subPath;

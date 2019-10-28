@@ -2,10 +2,12 @@
 export default class NativeBridge {
 
   constructor(bridge) {
-    this.$bridge = bridge;
-    this.$operations = [];
-    this.$currentOperation = {id: null};
-    this.$propertyCache = {};
+    Object.defineProperties(this, {
+      $bridge: {enumerable: false, writable: false, value: bridge},
+      $operations: {enumerable: false, writable: true, value: []},
+      $currentOperation: {enumerable: false, writable: true, value: {id: null}},
+      $propertyCache: {enumerable: false, writable: true, value: {}},
+    });
   }
 
   create(id, type) {

@@ -23,20 +23,22 @@ const SUPPORTED_SCHEMES = ['http', 'https', 'file'];
 export default class XMLHttpRequest {
 
   constructor() {
-    this.$authorRequestHeaders = {};
-    this.$timeout = 0;
-    this.$status = 0;
-    this.$statusText = '';
-    this.$responseHeaders = '';
-    this.$readyState = UNSENT;
-    this.$responseData = '';
-    this.$withCredentials = false;
-    this.$responseType = '';
-    this.$sendInvoked = false;
-    this.$isSynchronous = false;
-    this.$error = false;
-    this.$uploadComplete = false;
-    Object.defineProperty(this, 'upload', {value: {}});
+    Object.defineProperties(this, {
+      $authorRequestHeaders: {enumerable: false, writable: true, value: {}},
+      $timeout: {enumerable: false, writable: true, value: 0},
+      $status: {enumerable: false, writable: true, value: 0},
+      $statusText: {enumerable: false, writable: true, value: ''},
+      $responseHeaders: {enumerable: false, writable: true, value: ''},
+      $readyState: {enumerable: false, writable: true, value: UNSENT},
+      $responseData: {enumerable: false, writable: true, value: ''},
+      $withCredentials: {enumerable: false, writable: true, value: false},
+      $responseType: {enumerable: false, writable: true, value: ''},
+      $sendInvoked: {enumerable: false, writable: true, value: false},
+      $isSynchronous: {enumerable: false, writable: true, value: false},
+      $error: {enumerable: false, writable: true, value: false},
+      $uploadComplete: {enumerable: false, writable: true, value: false},
+      upload: {value: {}}
+    });
     defineEventHandlerProperties(this, EVENT_TYPES);
     defineEventHandlerProperties(this.upload, UPLOAD_EVENT_TYPES);
     addDOMEventTargetMethods(this);

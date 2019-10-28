@@ -10,9 +10,11 @@ import ImageBitmap from './ImageBitmap';
 export default class CanvasContext {
 
   constructor(gc) {
-    this._gc = gc;
-    this._state = createState();
-    this._savedStates = [];
+    Object.defineProperties(this, {
+      _gc: {enumerable: false, writable: false, value: gc},
+      _state: {enumerable: false, writable: true, value: createState()},
+      _savedStates: {enumerable: false, writable: false, value: []}
+    });
     this.canvas = {
       width: 0,
       height: 0,
@@ -178,10 +180,18 @@ defineMethod('drawImage', 3, function(image, x1, y1, w1, h1, x2, y2, w2, h2) {
 
 CanvasContext.getContext = function(canvas, width, height) {
   if (!canvas._gc) {
-    canvas._gc = new GC({parent: canvas});
+    Object.defineProperty(canvas, '_gc', {
+      enumerable: false,
+      writable: false,
+      value: new GC({parent: canvas})
+    });
   }
   if (!canvas._ctx) {
-    canvas._ctx = new CanvasContext(canvas._gc);
+    Object.defineProperty(canvas, '_ctx', {
+      enumerable: false,
+      writable: false,
+      value: new CanvasContext(canvas._gc)
+    });
   }
   canvas._ctx._init(width, height);
   return canvas._ctx;

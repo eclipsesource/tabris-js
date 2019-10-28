@@ -13,17 +13,49 @@ export default class Layout {
     if (this.constructor === Layout) {
       throw new Error('Can not create instance of abstract class "Layout"');
     }
-    this._layoutQueue = queue || LayoutQueue.instance;
+    Object.defineProperty(this, '_layoutQueue', {
+      enumerable: false, writable: false, value: queue || LayoutQueue.instance
+    });
     if (!(this._layoutQueue instanceof LayoutQueue)) {
       throw new Error('Not a LayoutQueue: ' + this._layoutQueue);
     }
-    this._handleAddChildEvent = this._handleAddChildEvent.bind(this);
-    this._handleRemoveChildEvent = this._handleRemoveChildEvent.bind(this);
-    this._handleChildPropertyChangedEvent = this._handleChildPropertyChangedEvent.bind(this);
-    this._getLayoutData = this._getLayoutData.bind(this);
-    this._renderLayoutData = this._renderLayoutData.bind(this);
-    this._addChild = this._addChild.bind(this);
-    this._removeChild = this._removeChild.bind(this);
+    Object.defineProperties(this, {
+      _handleAddChildEvent: {
+        enumerable: false,
+        writable: false,
+        value: this._handleAddChildEvent.bind(this)
+      },
+      _handleRemoveChildEvent: {
+        enumerable: false,
+        writable: false,
+        value: this._handleRemoveChildEvent.bind(this)
+      },
+      _handleChildPropertyChangedEvent: {
+        enumerable: false,
+        writable: false,
+        value: this._handleChildPropertyChangedEvent.bind(this)
+      },
+      _getLayoutData: {
+        enumerable: false,
+        writable: false,
+        value: this._getLayoutData.bind(this)
+      },
+      _renderLayoutData: {
+        enumerable: false,
+        writable: false,
+        value: this._renderLayoutData.bind(this)
+      },
+      _addChild: {
+        enumerable: false,
+        writable: false,
+        value: this._addChild.bind(this)
+      },
+      _removeChild: {
+        enumerable: false,
+        writable: false,
+        value: this._removeChild.bind(this)
+      }
+    });
   }
 
   add(composite) {
@@ -160,7 +192,12 @@ export class ConstraintLayout extends Layout {
 
   static get default() {
     if (!this._default) {
-      this._default = new ConstraintLayout();
+      Object.defineProperty(this, '_default', {
+        enumerable: false,
+        writable: true,
+        configurable: true,
+        value: new ConstraintLayout()
+      });
     }
     return this._default;
   }
@@ -171,15 +208,22 @@ export class LayoutQueue {
 
   static get instance () {
     if (!this._instance) {
-      this._instance = new LayoutQueue();
+      Object.defineProperty(this, '_instance', {
+        enumerable: false,
+        writable: true,
+        configurable: true,
+        value: new LayoutQueue()
+      });
       tabris.on('layout', () => this._instance.flush());
     }
     return this._instance;
   }
 
   constructor() {
-    this._map = {};
-    this._inFlush = false;
+    Object.defineProperties(this, {
+      _map: {enumerable: false, writable: true, value: {}},
+      _inFlush: {enumerable: false, writable: true, value: false}
+    });
   }
 
   add(composite) {

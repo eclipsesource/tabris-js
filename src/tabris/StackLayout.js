@@ -18,20 +18,39 @@ export default class StackLayout extends Layout {
 
   static get default() {
     if (!this._default) {
-      this._default = new StackLayout();
+      Object.defineProperty(this, '_default', {
+        enumerable: false,
+        writable: true,
+        configurable: true,
+        value: new StackLayout()
+      });
     }
     return this._default;
   }
 
   constructor(properties = {}, queue) {
     super({}, queue);
-    this._spacing = 'spacing' in properties ? types.number.convert(properties.spacing) : 0;
-    this._alignment = Align[properties.alignment] || Align.left;
-    const align = this._alignment;
-    this._layoutDataHorizontal = LayoutData.from({
-      left: (align === Align.left || align === Align.stretchX) ? 0 : 'auto',
-      right: (align === Align.right || align === Align.stretchX) ? 0 : 'auto',
-      centerX: (align === Align.centerX) ? 0 : 'auto'
+    const align = Align[properties.alignment] || Align.left;
+    Object.defineProperties(this, {
+      _spacing: {
+        enumerable: false,
+        writable: false,
+        value: 'spacing' in properties ? types.number.convert(properties.spacing) : 0
+      },
+      _alignment: {
+        enumerable: false,
+        writable: false,
+        value: align
+      },
+      _layoutDataHorizontal: {
+        enumerable: false,
+        writable: false,
+        value: LayoutData.from({
+          left: (align === Align.left || align === Align.stretchX) ? 0 : 'auto',
+          right: (align === Align.right || align === Align.stretchX) ? 0 : 'auto',
+          centerX: (align === Align.centerX) ? 0 : 'auto'
+        })
+      }
     });
   }
 

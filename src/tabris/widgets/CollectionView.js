@@ -11,21 +11,48 @@ export default class CollectionView extends Composite {
    */
   constructor(properties) {
     super();
-    this._needsReload = false;
-    /** @type {(cell: Widget) => void} */
-    this._updateCell = () => {};
-    /** @type {number} */
-    this._itemCount = 0;
-    /** @type {(item: any) => Widget} */
-    this._createCell = () => new Composite();
-    /** @type {number|'auto'|((item: any) => number)} */
-    this._cellHeight = 'auto';
-    /** @type {string|((item: any) => string)} */
-    this._cellType = null;
-    /** @type {Map<Widget, number>} */
-    this._cellMapping = new Map();
-    /** @type {Map<number, Widget>} */
-    this._itemMapping = new Map();
+    Object.defineProperties(this, {
+      _needsReload: {
+        enumerable: false,
+        writable: true,
+        value: false
+      },
+      _updateCell: {
+        enumerable: false,
+        writable: true,
+        value: (/** @type {(cell: Widget) => void} */(() => {}))
+      },
+      _itemCount: {
+        enumerable: false,
+        writable: true,
+        value: (/** @type {number} */(0))
+      },
+      _createCell: {
+        enumerable: false,
+        writable: true,
+        value: (/** @type {(item: any) => Widget} */(() => new Composite()))
+      },
+      _cellHeight: {
+        enumerable: false,
+        writable: true,
+        value: (/** @type {number|'auto'|((item: any) => number)} */('auto'))
+      },
+      _cellType: {
+        enumerable: false,
+        writable: true,
+        value: (/** @type {string|((item: any) => string)} */(null))
+      },
+      _cellMapping: {
+        enumerable: false,
+        writable: true,
+        value: (/** @type {Map<Widget, number>} */(new Map()))
+      },
+      _itemMapping: {
+        enumerable: false,
+        writable: true,
+        value: (/** @type {Map<number, Widget>} */(new Map()))
+      }
+    });
     this.set(properties || {});
     this._nativeListen('requestInfo', true);
     this._nativeListen('createCell', true);
@@ -282,7 +309,7 @@ export default class CollectionView extends Composite {
     // Load new items if needed after all properties have been set
     // to avoid intercepting the aggregation of properties in set.
     if (this._needsReload) {
-      delete this._needsReload;
+      this._needsReload = false;
       this._nativeCall('load', {itemCount: this.itemCount});
     }
   }

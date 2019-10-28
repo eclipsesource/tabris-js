@@ -7,9 +7,11 @@ export default class ProgressEvent extends Event {
       throw new Error('Not enough arguments to ProgressEvent');
     }
     super(type, config);
-    this.$lengthComputable = config && config.lengthComputable || false;
-    this.$loaded = config && config.loaded || 0;
-    this.$total = config && config.total || 0;
+    Object.defineProperties(this, {
+      $lengthComputable: {enumerable: false, writable: true, value: config && config.lengthComputable || false},
+      $loaded: {enumerable: false, writable: true, value: config && config.loaded || 0},
+      $total: {enumerable: false, writable: true, value: config && config.total || 0}
+    });
   }
 
   get lengthComputable() {

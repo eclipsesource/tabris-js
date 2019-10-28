@@ -11,12 +11,14 @@ export default class Event {
     if (arguments.length < 1) {
       throw new Error('Not enough arguments to Event');
     }
-    this.$timeStamp = Date.now();
-    this.$type = type || '';
-    this.$bubbles = config && !!config.bubbles || false;
-    this.$cancelable = config && !!config.cancelable || false;
-    this.$target = null;
-    this.$defaultPrevented = false;
+    Object.defineProperties(this, {
+      $timeStamp: {enumerable: false, writable: true, value: Date.now()},
+      $type: {enumerable: false, writable: true, value: type || ''},
+      $bubbles: {enumerable: false, writable: true, value: config && !!config.bubbles || false},
+      $cancelable: {enumerable: false, writable: true, value: config && !!config.cancelable || false},
+      $target: {enumerable: false, writable: true, value: null},
+      $defaultPrevented: {enumerable: false, writable: true, value: false},
+    });
   }
 
   initEvent(type, bubbles, cancelable) {

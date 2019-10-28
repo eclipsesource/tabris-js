@@ -40,11 +40,13 @@ export default class GC extends NativeObject {
 
   constructor(properties) {
     super(properties);
-    this._operations = [];
-    this._doubles = [];
-    this._booleans = [];
-    this._strings = [];
-    this._ints = [];
+    Object.defineProperties(this, {
+      _operations: {enumerable: false, writable: true, value: []},
+      _doubles: {enumerable: false, writable: true, value: []},
+      _booleans: {enumerable: false, writable: true, value: []},
+      _strings: {enumerable: false, writable: true, value: []},
+      _ints: {enumerable: false, writable: true, value: []}
+    });
     const listener = () => this.flush();
     tabris.on('flush', listener);
     this.on('dispose', () => tabris.off('flush', listener));

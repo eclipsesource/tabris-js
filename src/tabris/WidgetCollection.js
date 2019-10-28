@@ -16,11 +16,14 @@ export default class WidgetCollection {
       throw new Error('WidgetCollection can not be constructed with an selector but no origin');
     }
     const arr = collection instanceof WidgetCollection ? collection.toArray() : collection;
-    this._host = getHost(origin);
+    Object.defineProperty(
+      this, '_host', {enumerable: false, writable: false, value: getHost(origin)}
+    );
     /** @type {Widget[]} */
-    this._array = select(arr, selector || '*', deep, origin instanceof WidgetCollection ? origin : this);
-    for (let i = 0; i < this._array.length; i++) {
-      this[i] = this._array[i];
+    const _array = select(arr, selector || '*', deep, origin instanceof WidgetCollection ? origin : this);
+    Object.defineProperty(this, '_array', {enumerable: false, writable: false, value: _array});
+    for (let i = 0; i < _array.length; i++) {
+      this[i] = _array[i];
     }
   }
 

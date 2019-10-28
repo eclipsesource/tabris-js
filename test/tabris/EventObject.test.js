@@ -95,7 +95,7 @@ describe('EventObject', function() {
 
       it('returns json-like with instance fields', function() {
         event.foo = 'bar';
-        Object.defineProperty(event, 'bar', {value: true});
+        Object.defineProperty(event, 'bar', {value: true, enumerable: true});
 
         expect(event.toString()).to.match(/^EventObject\s{\s[a-z].*\s}$/);
         expect(eval('(' + event.toString().slice(12) + ');')).to.deep.equal({
