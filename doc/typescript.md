@@ -125,3 +125,49 @@ When used in TypeScript the tabris module exports the following additional inter
  * [`PropertyChangedEvent<TargetType, ValueType>`](./types.md#propertychangedeventtargettype-valuetype), same as `EventObject<TargetType> & { readonly value: U }`
  * Various `{TargetType}{EventName}Event` interfaces, e.g. `PickerSelectEvent`. Only for events with additional parameters.
  * [`Properties<Widget>`](./types#propertieswidget), which is the interface of the properties parameter used by the constructor and `set` method of the given widget.
+
+## Developing with Plugins
+
+Plugins expose APIs that aren't part of the standard JavaScript runtime, so special handling is needed to use them with TypeScript. Regardless of whether an app is built with JavaScript or TypeScript the app needs to have the [plugin integrated](./build.md#integrating-cordova-plugins). When the app is built in debug mode it will have the plugin's code integrated and will still have the developer console to allow [code side-loading](./developer-app.md#code-sideloading), logging and [debugging](./debug.md).
+
+For JavaScript projects, global variables are only evaluated at runtime.  However, with TypeScript (or those that want code completion in a JavaScript projects) you need type declarations for each plugin.  There are three sources for declarations:
+
+### From the plugin itself
+
+If the plugin includes typings, the plugin can be added as a **dev** dependency in your project's `package.json`.  Because the plugin's JavaScript/TypeScript code is not being used anywhere in the project, the TypeScript compiler will not automatically include the typings.  It is necessary to explicitly include it in your project's `tsconfig.json` file, for example:
+
+```javascript
+  "include": [
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
+    "./node_modules/cordova.plugins.diagnostic/cordova.plugins.diagnostic.d.ts"
+  ]
+```
+
+### From DefinelyTyped
+
+[DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped) is a repository of community-contributed typings for thousands of packages.  Several Cordova plugins have typings available, and they can be installed by adding them to your devDependencies in `package.json`.
+
+### Generating your own
+
+If the plugin does not provide any nor are typings available in DefinitelyTyped you will need to write your own.
+
+The convention for adding globals to a TypeScript project is to place a `globals.d.ts` or `plugins.d.ts` file in your project's `src` folder.  Multiple plugins can have their typings declared in the same file.
+
+If you just want to resolve the compilation warnings and don't need autocompletion, you can declare them with `any`.  For example, if the plugin provides a global `myPlugin` variable:
+
+```typescript
+declare var myPlugin: any;
+```
+
+If the plugin attaches to the global `cordova` object, e.g. `cordova.plugins.myPlugin`:
+
+```typescript
+interface CordovaPlugins {
+  myPlugin: any
+}
+```
+
+The globals file will automatically become part of your project and there is no need to change `tsconfig.json`.
+
+Of course it's always better to add the definitive types (i.e. functions with all the parameters).  Note the typings need not provide any functionality beyond satisfying the method's return type.
