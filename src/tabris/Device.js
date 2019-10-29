@@ -44,7 +44,7 @@ NativeObject.defineProperties(Device.prototype, {
   version: {readonly: true, const: true},
   name: {readonly: true, const: true},
   language: {readonly: true, const: true},
-  orientation: {readonly: true},
+  orientation: {readonly: true, nocache: true},
   screenWidth: {readonly: true, const: true},
   screenHeight: {readonly: true, const: true},
   scaleFactor: {readonly: true, const: true},

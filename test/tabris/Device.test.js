@@ -51,6 +51,7 @@ describe('Device', function() {
       spy(client, 'set');
       device = createDevice();
     });
+
     it('provides properties', function() {
       expect(device.model).to.equal('x1');
       expect(device.vendor).to.equal('xyz');
@@ -78,6 +79,14 @@ describe('Device', function() {
       expect(device.platform).to.equal('foo');
       expect(device.version).to.equal('23');
       expect(device.scaleFactor).to.equal(2.5);
+    });
+
+    it('does not cache orientation', function() {
+      const orientationOld = device.orientation;
+      results.orientation = 'landscape';
+      tabris.flush();
+      expect(orientationOld).to.equal('portrait');
+      expect(device.orientation).to.equal('landscape');
     });
 
     it('setting properties does not call native SET', function() {
