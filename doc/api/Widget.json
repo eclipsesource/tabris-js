@@ -143,16 +143,28 @@
         }
       ],
       "description": "Sets the parent of the widget. If an index is given the widget will be inserted at that position."
+    },
+    "[JSX.jsxFactory]": {
+      "description": "This function is called to create JSX widget elements. You may override it in your own subclass to create custom JSX behavior. **The function is called with the JSXProcessor as the context (`this`).**",
+      "parameters": [
+        {
+          "name": "this",
+          "type": "tabris.JsxProcessor"
+        },
+        {
+          "name": "type",
+          "type": "{new (...args: any[]): any }"
+        },
+        {
+          "name": "attributes",
+          "type": "object"
+        }
+      ],
+      "returns": "any",
+      "ts_only": true
     }
   },
   "properties": {
-    "[JSX.jsxFactory]": {
-      "description": "This function is called to create JSX widget elements. You may override it in your own subclass to create custom JSX behavior. **The function is not called with any context, i.e. `this` is not available.**",
-      "type": "JSX.JsxFactory",
-      "const": true,
-      "readonly": true,
-      "ts_only": true
-    },
     "id": {
       "type": "string",
       "description": "A string to identify the widget by using selectors. IDs are optional. It is strongly recommended that they are unique within a page."

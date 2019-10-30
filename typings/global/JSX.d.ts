@@ -1,7 +1,7 @@
 declare namespace JSX {
 
   type JsxFactory = (
-    this: object,
+    this: tabris.JsxProcessor,
     type: {new (...args: any[]): any },
     attributes: object
   ) => Element;

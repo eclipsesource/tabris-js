@@ -41,12 +41,20 @@ export default class JsxProcessor {
     }
     if (typeof Type === 'string') {
       return this.createIntrinsicElement(Type, finalAttributes);
+    } else if (Type.prototype && Type.prototype[JSX.jsxFactory]) {
+      return this.createCustomComponent(Type, finalAttributes);
+    } else {
+      return this.createFunctionalComponent(Type, finalAttributes);
     }
-    if (Type.prototype && Type.prototype[JSX.jsxFactory]) {
-      return Type.prototype[JSX.jsxFactory].call(this, Type, finalAttributes);
-    }
+  }
+
+  createCustomComponent(Type, attributes) {
+    return Type.prototype[JSX.jsxFactory].call(this, Type, attributes);
+  }
+
+  createFunctionalComponent(Type, attributes) {
     try {
-      const result = Type.call(this, finalAttributes);
+      const result = Type.call(this, attributes);
       Type[JSX.jsxType] = true;
       if (result instanceof Object) {
         result[JSX.jsxType] = Type;

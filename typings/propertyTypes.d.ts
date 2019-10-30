@@ -342,9 +342,15 @@ export class JsxProcessor {
   public readonly jsxFactory: Symbol;
   public readonly jsxType: Symbol;
 
-  createElement(type: Function|string, attributes: object, ...children: Array<JSX.ElementClass>): JSX.ElementClass;
+  createElement(type: {prototype: JSX.ElementClass, new(): object}|string, attributes: object, ...children: Array<JSX.ElementClass>): JSX.ElementClass | string;
 
-  createNativeObject(Type: {new(): NativeObject} | ((param: any) => NativeObject), attributes: object): NativeObject;
+  createIntrinsicElement(type: string, attributes: object): JSX.ElementClass | string;
+
+  createCustomComponent(type: {prototype: JSX.ElementClass, new(): object}, attributes: object): JSX.ElementClass | string;
+
+  createFunctionalComponent(type: ((param: object) => any), attributes: object): JSX.ElementClass | string;
+
+  createNativeObject(Type: {prototype: JSX.ElementClass, new(): NativeObject}, attributes: object): NativeObject;
 
 }
 
