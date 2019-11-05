@@ -264,6 +264,46 @@ describe('App', function() {
     }).to.throw();
   });
 
+  describe('keyPress', function () {
+
+    it('listens for keyPress event', function () {
+      app.on('keyPress', spy());
+
+      const calls = client.calls({id: app.cid, op: 'listen', event: 'keyPress'});
+
+      expect(calls[0].listen).to.equal(true);
+    });
+
+    it('triggers keyPress event', function () {
+      const listener = spy();
+      app.on('keyPress', listener);
+
+      tabris._notify(app.cid, 'keyPress');
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch({target: app});
+    });
+
+    it('returns false by default', function () {
+      app.on('keyPress', spy());
+
+      const returnValue = tabris._notify(app.cid, 'keyPress');
+
+      expect(returnValue).to.equal(false);
+    });
+
+    it('returns true if preventDefault is called', function () {
+      app.on('keyPress', function (event) {
+        event.preventDefault();
+      });
+
+      const returnValue = tabris._notify(app.cid, 'keyPress');
+
+      expect(returnValue).to.equal(true);
+    });
+
+  });
+
   it('listens for backNavigation event', function() {
     app.on('backNavigation', spy());
 

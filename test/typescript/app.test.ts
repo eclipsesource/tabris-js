@@ -1,4 +1,4 @@
-import {App, app, EventObject, AppBackNavigationEvent} from 'tabris';
+import {App, app, EventObject, AppKeyPressEvent, AppBackNavigationEvent} from 'tabris';
 
 // Properties
 let id: string;
@@ -34,9 +34,22 @@ voidPromiseReturnValue = app.launch(url);
 let target: App = app;
 let timeStamp: number = 0;
 let type: string = 'foo';
+let keyCode: number = 29;
+let character: string = 'A';
+let shiftKey: boolean = true;
+let ctrlKey: boolean = false;
+let altKey: boolean = false;
+let functionKey: boolean = false;
+let action: 'up' | 'down' = 'down';
+let time: number = 1569420619987;
+let deviceId: number = 0;
 let preventDefault: () => void = () => {};
 
 let backgroundEvent: EventObject<App> = {target, timeStamp, type};
+let keyPressEvent: AppKeyPressEvent = {
+  target, timeStamp, type, preventDefault, keyCode, character,
+  shiftKey, ctrlKey, altKey, functionKey, action, time, deviceId
+};
 let backNavigationEvent: AppBackNavigationEvent = {target, timeStamp, type, preventDefault};
 let foregroundEvent: EventObject<App> = {target, timeStamp, type};
 let pauseEvent: EventObject<App> = {target, timeStamp, type};
@@ -45,6 +58,7 @@ let terminateEvent: EventObject<App> = {target, timeStamp, type};
 
 app.on({
   background: (event: EventObject<App>) => {},
+  keyPress: (event: AppKeyPressEvent) => event.preventDefault(),
   backNavigation: (event: EventObject<App>) => {},
   foreground: (event: EventObject<App>) => {},
   pause: (event: EventObject<App>) => {},

@@ -1,7 +1,7 @@
 import NativeObject from './NativeObject';
 
 const CERTIFICATE_ALGORITHMS = ['RSA2048', 'RSA4096', 'ECDSA256'];
-const EVENT_TYPES = ['foreground', 'background', 'pause', 'resume', 'terminate', 'backNavigation',
+const EVENT_TYPES = ['foreground', 'background', 'pause', 'resume', 'terminate', 'keyPress', 'backNavigation',
   'certificatesReceived'];
 
 export default class App extends NativeObject {
