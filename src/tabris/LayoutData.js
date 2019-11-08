@@ -132,6 +132,21 @@ export default class LayoutData {
     });
   }
 
+  equals(value) {
+    if (!(value instanceof LayoutData)) {
+      return false;
+    }
+    return equals(value.left, this.left)
+      && equals(value.right, this.right)
+      && equals(value.top, this.top)
+      && equals(value.bottom, this.bottom)
+      && equals(value.centerX, this.centerX)
+      && equals(value.centerY, this.centerY)
+      && equals(value.baseline, this.baseline)
+      && equals(value.width, this.width)
+      && equals(value.height, this.height);
+  }
+
 }
 
 export function mergeLayoutData(targetValue, sourceValue) {
@@ -184,4 +199,14 @@ function setSiblingReference(layoutData, parameters, property) {
     checkIsValidSiblingReference(value);
   }
   return Object.defineProperty(layoutData, property, {enumerable: true, value});
+}
+
+function equals(a, b) {
+  if (a === b) {
+    return true;
+  }
+  if ((a instanceof ConstraintExports.default) && (b instanceof ConstraintExports.default)) {
+    return a.equals(b);
+  }
+  return false;
 }

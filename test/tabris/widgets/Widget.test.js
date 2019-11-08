@@ -1732,6 +1732,21 @@ describe('Widget', function() {
       expect(listener).to.have.been.calledWithMatch({value: layoutData});
     });
 
+    it('does not fire layoutDataChanged if new layoutData is equal', function() {
+      const listener = spy();
+      const layoutDataA = LayoutData.from({top: 10, left: ['#other', 10]});
+      const layoutDataB = LayoutData.from({top: 10, left: ['#other', 10]});
+      widget.layoutData = layoutDataA;
+      widget.onLayoutDataChanged(listener);
+
+      widget.layoutData = layoutDataB;
+
+      expect(listener).not.to.have.been.called;
+      expect(widget.layoutData).to.equal(layoutDataA);
+      expect(widget.layoutData).not.to.equal(layoutDataB);
+      expect(widget.layoutData.equals(layoutDataB)).to.be.true;
+    });
+
     it('fires change event for individual constraint properties', function() {
       const listenerLeft = spy();
       const listenerTop = spy();
@@ -1840,6 +1855,16 @@ describe('Widget', function() {
         expect(listener).to.have.been.calledWithMatch({value: widget.layoutData});
       });
 
+      it('does not fire layoutDataChanged if new constraint is equal', function() {
+        widget[attr] = ['#other', 10];
+        const listener = spy();
+        widget.onLayoutDataChanged(listener);
+
+        widget[attr] = ['#other', 10];
+
+        expect(listener).not.to.have.been.called;
+      });
+
       it('resets layoutData properties', function() {
         const layoutData = {left: 1, right: 2, top: 3, bottom: 4};
         widget.layoutData = layoutData;
@@ -1873,6 +1898,17 @@ describe('Widget', function() {
         const call = client.calls({op: 'set', id: widget.cid})[0];
         const expected = {[attr]: 23};
         expect(call.properties.layoutData).to.eql(expected);
+      });
+
+      it('does not SET layoutData if new Constraint is equal', function() {
+        widget[attr] = 23;
+        tabris.flush();
+        client.resetCalls();
+
+        widget[attr] = 23;
+        tabris.flush();
+
+        expect(client.calls({op: 'set', id: widget.cid}).length).to.equal(0);
       });
 
     });

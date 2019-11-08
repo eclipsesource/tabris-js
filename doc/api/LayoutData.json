@@ -81,6 +81,11 @@
     "toString": {
       "description": "Returns a string representation of LayoutData.",
       "returns": "string"
+    },
+    "equals": {
+      "description": "Tests if the given value is a `LayoutData` instance that is deeply equal to this one.",
+      "parameters": [{"name": "value", "type": "LayoutData"}],
+      "returns": "boolean"
     }
   },
   "statics": {

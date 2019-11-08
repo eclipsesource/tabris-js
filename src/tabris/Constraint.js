@@ -64,6 +64,19 @@ export default class Constraint {
     return [this.reference, this.offset];
   }
 
+  equals(value) {
+    if (!(value instanceof Constraint)) {
+      return false;
+    }
+    if (value.offset !== this.offset) {
+      return false;
+    }
+    if (value.reference instanceof Percent && this.reference instanceof Percent) {
+      return value.reference.percent === this.reference.percent;
+    }
+    return value.reference === this.reference;
+  }
+
 }
 
 Constraint.next = Symbol('next()');

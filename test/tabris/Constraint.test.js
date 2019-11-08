@@ -353,4 +353,37 @@ describe('Constraint', function() {
 
   });
 
+  describe('equals', function() {
+
+    it('returns false for non Constraint instance values', function() {
+      const constraint = Constraint.from({reference: '#foo', offset: 0});
+      [NaN, undefined, null, Infinity, {}, {reference: '#foo', offset: 0}, [], ['#foo', 23, 23]].forEach(value => {
+        expect(constraint.equals(value)).to.be.false;
+      });
+    });
+
+    it('returns true for equal Constraint instance values', function() {
+      expect(new Constraint('#foo', 0).equals(new Constraint('#foo', 0))).to.be.true;
+      expect(new Constraint('.foo', 0).equals(new Constraint('.foo', 0))).to.be.true;
+      expect(new Constraint('#foo', 10).equals(new Constraint('#foo', 10))).to.be.true;
+      expect(new Constraint(Constraint.prev, 10).equals(new Constraint(Constraint.prev, 10))).to.be.true;
+      expect(new Constraint(Constraint.next, 10).equals(new Constraint(Constraint.next, 10))).to.be.true;
+      expect(new Constraint(new Percent(0), 10).equals(new Constraint(new Percent(0), 10))).to.be.true;
+      expect(new Constraint(new Percent(10), 10).equals(new Constraint(new Percent(10), 10))).to.be.true;
+      expect(new Constraint(widget, 10).equals(new Constraint(widget, 10))).to.be.true;
+    });
+
+    it('returns false for non-equal Constraint instance values', function() {
+      expect(new Constraint('#foo', 0).equals(new Constraint('.foo', 0))).to.be.false;
+      expect(new Constraint('.foo', 0).equals(new Constraint('.foo', 1))).to.be.false;
+      expect(new Constraint(Constraint.prev, 10).equals(new Constraint(Constraint.next, 10))).to.be.false;
+      expect(new Constraint(new Percent(0), 10).equals(new Constraint('#foo', 10))).to.be.false;
+      expect(new Constraint(new Percent(0), 10).equals(new Constraint(new Percent(1), 10))).to.be.false;
+      expect(new Constraint(widget, 10).equals(new Constraint(Constraint.next, 10))).to.be.false;
+      expect(new Constraint(widget, 10).equals(new Constraint(new Percent(10), 10))).to.be.false;
+      expect(new Constraint(widget, 10).equals(new Constraint(new Composite(), 10))).to.be.false;
+    });
+
+  });
+
 });

@@ -40,6 +40,7 @@ num = layoutData.height;
 num = layoutData.centerX;
 num = layoutData.centerY;
 siblingReference = layoutData.baseline;
+let bool: boolean = layoutData.equals(layoutData);
 
 // LayoutDataValue
 let layoutDataValue: LayoutDataValue = {};

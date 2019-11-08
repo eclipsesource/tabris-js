@@ -37,6 +37,11 @@
     "toArray": {
       "description": "A tuple consisting of the values of the `reference` and `offset` properties, i.e. `[reference, offset]`.",
       "returns": "ConstraintArray"
+    },
+    "equals": {
+      "description": "Tests if the given value is a `Constraint` instance that is deeply equal to this one.",
+      "parameters": [{"name": "value", "type": "Constraint"}],
+      "returns": "boolean"
     }
   },
   "statics": {

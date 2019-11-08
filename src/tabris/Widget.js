@@ -150,6 +150,9 @@ export default class Widget extends NativeObject {
       return;
     }
     const oldLayoutData = this._layoutData;
+    if (oldLayoutData && oldLayoutData.equals(value)) {
+      return;
+    }
     Object.defineProperty(this, '_layoutData', {
       enumerable: false,
       writable: true,

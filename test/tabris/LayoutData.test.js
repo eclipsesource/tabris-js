@@ -366,4 +366,69 @@ describe('LayoutData', function() {
 
   });
 
+  describe('equals', function() {
+
+    const exampleData = {
+      left: 0,
+      top: '1% 1',
+      width: '100',
+      baseline: true,
+      centerX: 10,
+      bottom: '2% 2',
+      right: ['3%', 3],
+      height: 50,
+      centerY: true
+    };
+
+    it('returns false for non LayoutData instance values', function() {
+      const layoutData = LayoutData.from({centerX: true});
+      [NaN, undefined, null, Infinity, {}, {centerX: true}, [], 'centerX'].forEach(value => {
+        expect(layoutData.equals(value)).to.be.false;
+      });
+    });
+
+    it('returns true for equal LayoutData instance values', function() {
+      expect(LayoutData.from({}).equals(LayoutData.from({
+        left: 'auto',
+        top: 'auto',
+        width: 'auto',
+        baseline: 'auto',
+        centerX: 'auto',
+        bottom: 'auto',
+        right: 'auto',
+        height: 'auto',
+        centerY: 'auto'
+      }))).to.be.true;
+      expect(LayoutData.from('stretch').equals(LayoutData.stretch)).to.be.true;
+      expect(LayoutData.from('center').equals(LayoutData.center)).to.be.true;
+      expect(LayoutData.from('stretchX').equals(LayoutData.stretchX)).to.be.true;
+      expect(LayoutData.from('stretchY').equals(LayoutData.stretchY)).to.be.true;
+      expect(LayoutData.from(exampleData).equals(LayoutData.from(exampleData))).to.be.true;
+    });
+
+    it('returns false for non-equal LayoutData instance values', function() {
+      expect(LayoutData.from('stretch').equals(LayoutData.center)).to.be.false;
+      expect(LayoutData.from('stretchX').equals(LayoutData.stretchY)).to.be.false;
+      expect(LayoutData.from(Object.assign({}, exampleData, {left: 10}))
+        .equals(LayoutData.from(exampleData))).to.be.false;
+      expect(LayoutData.from(Object.assign({}, exampleData, {right: widget}))
+        .equals(LayoutData.from(exampleData))).to.be.false;
+      expect(LayoutData.from(Object.assign({}, exampleData, {top: new Percent(0)}))
+        .equals(LayoutData.from(exampleData))).to.be.false;
+      expect(LayoutData.from(Object.assign({}, exampleData, {bottom: 'auto'}))
+        .equals(LayoutData.from(exampleData))).to.be.false;
+      expect(LayoutData.from(Object.assign({}, exampleData, {centerY: 'auto'}))
+        .equals(LayoutData.from(exampleData))).to.be.false;
+      expect(LayoutData.from(Object.assign({}, exampleData, {centerX: 0}))
+        .equals(LayoutData.from(exampleData))).to.be.false;
+      expect(LayoutData.from(Object.assign({}, exampleData, {baseline: 'auto'}))
+        .equals(LayoutData.from(exampleData))).to.be.false;
+      expect(LayoutData.from(Object.assign({}, exampleData, {width: 'auto'}))
+        .equals(LayoutData.from(exampleData))).to.be.false;
+      expect(LayoutData.from(Object.assign({}, exampleData, {height: 10}))
+        .equals(LayoutData.from(exampleData))).to.be.false;
+    });
+
+  });
+
 });

@@ -55,6 +55,7 @@ percent = constraint.reference as Percent;
 reference = constraint.reference;
 siblingReference = constraint.reference as SiblingReference;
 constraintArray = constraint.toArray();
+let bool: boolean = constraint.equals(constraint);
 
 // ConstraintValue
 let constraintValue: ConstraintValue = constraint;
