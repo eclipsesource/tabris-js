@@ -1,11 +1,12 @@
 import Blob from './Blob';
 import NativeObject from './NativeObject';
 import {getBytes} from './util';
+import ImageData from './ImageData';
 
 export default class ImageBitmap {
 
   /**
-   * @param {Blob} image
+   * @param {Blob|ImageData} image
    */
   static createImageBitmap(image) {
     if (arguments.length !== 1) {
@@ -15,6 +16,8 @@ export default class ImageBitmap {
     }
     if (image instanceof Blob) {
       return load(_image => _image.loadEncodedImage(getBytes(image)));
+    } else if (image instanceof ImageData) {
+      return load(_image => _image.loadImageData(image.data, image.width, image.height));
     }
     return Promise.reject(new TypeError(
       'Argument 1 of createImageBitmap could not be converted to any of: Blob.'
@@ -63,7 +66,19 @@ class _ImageBitmap extends NativeObject {
     );
   }
 
+  /**
+   *  @param {Uint8ClampedArray} image
+   *  @param {number} width
+   *  @param {number} height
+   **/
+  loadImageData(image, width, height) {
+    return new Promise((onSuccess, onError) =>
+      this._nativeCall('loadImageData', {image, width, height, onSuccess, onError})
+    );
+  }
+
 }
+
 /**
  * @param {(nativeObject: _ImageBitmap) => Promise<any>} cb
  * @returns {Promise<ImageBitmap>}
