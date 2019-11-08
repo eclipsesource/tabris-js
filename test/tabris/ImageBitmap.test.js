@@ -2,6 +2,7 @@
 import {expect, mockTabris, restore} from '../test';
 import ClientStub from './ClientStub';
 import ImageBitmap from '../../src/tabris/ImageBitmap';
+import ImageData from '../../src/tabris/ImageData';
 import Blob from '../../src/tabris/Blob';
 
 const createImageBitmap = ImageBitmap.createImageBitmap;
@@ -162,6 +163,64 @@ describe('ImageBitmap', function() {
 
         it('DESTROYs native objects', function() {
           expect(client.calls({op: 'destroy', id}).length).to.equal(1);
+        });
+
+      });
+
+    });
+
+    describe('with ImageData', function() {
+
+      /** @type {Promise<ImageBitmap>} */
+      let result;
+
+      /** @type {Uint8ClampedArray} */
+      let data;
+
+      /** @type {string} */
+      let id;
+
+      beforeEach(function() {
+        data = new Uint8ClampedArray(60);
+        data[0] = 101;
+        data[59] = 102;
+        result = createImageBitmap(new ImageData(data, 3, 5));
+        id = client.calls({type: 'tabris.ImageBitmap', op: 'create'})[0].id;
+      });
+
+      it('calls CREATE once', function() {
+        expect(client.calls({type: 'tabris.ImageBitmap', op: 'create'}).length).to.equal(1);
+      });
+
+      describe('on success', function() {
+
+        /** @type {any} */
+        let param;
+
+        /** @type {ImageBitmap} */
+        let image;
+
+        beforeEach(function() {
+          param = client.calls({op: 'call', method: 'loadImageData', id})[0].parameters;
+          param.onSuccess({width: 100, height: 200});
+          return result.then(value => {
+            image = value;
+          });
+        });
+
+        it('received typed array and dimension', function() {
+          expect(param.image).to.deep.equal(data);
+          expect(param.width).to.equal(3);
+          expect(param.height).to.equal(5);
+        });
+
+        it('resolves with ImageBitmap', function() {
+          expect(image).to.be.instanceOf(ImageBitmap);
+        });
+
+        it('sets dimension', function() {
+          expect(image.width).to.equal(100);
+          expect(image.height).to.equal(200);
         });
 
       });
