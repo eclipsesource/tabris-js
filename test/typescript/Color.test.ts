@@ -32,6 +32,7 @@ color = Color.navy;
 color = Color.blue;
 color = Color.teal;
 color = Color.aqua;
+let bool: boolean = color.equals(color);
 
 let num: number;
 num = color.red;

@@ -44,6 +44,13 @@
       "readonly": true
     }
   },
+  "methods": {
+    "equals": {
+      "description": "Tests if the given value is a `Image` instance that is deeply equal to this one.",
+      "parameters": [{"name": "value", "type": "Image"}],
+      "returns": "boolean"
+    }
+  },
   "statics": {
     "methods": {
       "from": {

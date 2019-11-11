@@ -329,4 +329,29 @@ describe('Color', function() {
 
   });
 
+  describe('equals', function() {
+
+    it('returns false for non Color instance values', function() {
+      const color = new Color(0, 0, 0, 0);
+      [NaN, undefined, null, Infinity, {}, [0, 1, 2, 3], {red: 1, green: 2, blue: 3}].forEach(value => {
+        expect(color.equals(value)).to.be.false;
+      });
+    });
+
+    it('returns true for equal Color instance values', function() {
+      expect(Color.from([0, 1, 2, 1]).equals(Color.from([0, 1, 2, 1]))).to.be.true;
+      expect(Color.from([0, 1, 2, 0]).equals(Color.from([0, 1, 2, 0]))).to.be.true;
+      expect(Color.from([0, 1, 2]).equals(Color.from([0, 1, 2]))).to.be.true;
+      expect(Color.from([255, 255, 255]).equals(Color.from([255, 255, 255]))).to.be.true;
+    });
+
+    it('returns false for non-equal Color instance values', function() {
+      expect(Color.from([0, 1, 2]).equals(Color.from([0, 1, 2, 0]))).to.be.false;
+      expect(Color.from([1, 1, 1, 1]).equals(Color.from([1, 1, 2, 1]))).to.be.false;
+      expect(Color.from([1, 1, 1, 1]).equals(Color.from([1, 0, 1, 1]))).to.be.false;
+      expect(Color.from([1, 1, 1, 1]).equals(Color.from([3, 1, 1, 1]))).to.be.false;
+    });
+
+  });
+
 });

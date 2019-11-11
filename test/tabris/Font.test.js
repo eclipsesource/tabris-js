@@ -330,4 +330,44 @@ describe('Font', function() {
 
   });
 
+  describe('equals', function() {
+
+    it('returns false for non Font instance values', function() {
+      const font = new Font(12);
+      [NaN, undefined, null, Infinity, {}, {size: 12}, '12px'].forEach(value => {
+        expect(font.equals(value)).to.be.false;
+      });
+    });
+
+    it('returns true for equal Font instance values', function() {
+      expect(new Font(12, [Font.sansSerif]).equals(new Font(12, [Font.sansSerif]))).to.be.true;
+      expect(new Font(13, [Font.sansSerif, Font.serif]).equals(new Font(13, [Font.sansSerif, Font.serif]))).to.be.true;
+      expect(new Font(14, []).equals(new Font(14))).to.be.true;
+      expect(new Font(15, [], 'bold').equals(new Font(15, [], 'bold'))).to.be.true;
+      expect(new Font(16, [], 'normal', 'normal').equals(new Font(16))).to.be.true;
+      expect(new Font(17, [], 'normal', 'italic').equals(new Font(17, [], 'normal', 'italic'))).to.be.true;
+      expect(
+        new Font(18, [Font.sansSerif, Font.serif], 'black', 'italic').equals(
+          new Font(18, [Font.sansSerif, Font.serif], 'black', 'italic')
+        )
+      ).to.be.true;
+    });
+
+    it('returns false for non-equal Font instance values', function() {
+      expect(new Font(12, [Font.sansSerif]).equals(new Font(13, [Font.sansSerif]))).to.be.false;
+      expect(new Font(13, [Font.sansSerif, Font.serif]).equals(new Font(13, [Font.serif, Font.sansSerif]))).to.be.false;
+      expect(new Font(13, [Font.serif]).equals(new Font(13, [Font.serif, Font.sansSerif]))).to.be.false;
+      expect(new Font(14, []).equals(new Font(14, [], 'normal', 'italic'))).to.be.false;
+      expect(new Font(15, [], 'bold').equals(new Font(15, [], 'normal'))).to.be.false;
+      expect(new Font(16, [], 'normal', 'normal').equals(new Font(17))).to.be.false;
+      expect(new Font(17, [], 'bold', 'italic').equals(new Font(17, [], 'normal', 'italic'))).to.be.false;
+      expect(
+        new Font(18, [Font.sansSerif, Font.serif], 'black', 'italic').equals(
+          new Font(18, [Font.sansSerif, Font.serif, Font.condensed], 'black', 'italic')
+        )
+      ).to.be.false;
+    });
+
+  });
+
 });

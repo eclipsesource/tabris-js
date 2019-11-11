@@ -69,6 +69,17 @@ export default class Font {
     return fontObjectToString(this);
   }
 
+  equals(value) {
+    if (!(value instanceof Font)) {
+      return false;
+    }
+    return value.size === this.size
+      && value.weight === this.weight
+      && value.style === this.style
+      && value.family.length === this.family.length
+      && value.family.every((family, index) => this.family[index] === family);
+  }
+
 }
 
 function setFamily(font, family) {

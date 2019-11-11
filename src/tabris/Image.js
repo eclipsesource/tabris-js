@@ -62,6 +62,16 @@ export default class Image {
     setScale(this, imageLike);
   }
 
+  equals(value) {
+    if (!(value instanceof Image)) {
+      return false;
+    }
+    return value.src === this.src
+      && value.scale === this.scale
+      && value.width === this.width
+      && value.height === this.height;
+  }
+
 }
 
 /** @type {number|Auto} */

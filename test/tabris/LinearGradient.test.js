@@ -335,4 +335,61 @@ describe('LinearGradient', function() {
 
   });
 
+  describe('equals', function() {
+
+    it('returns false for non LinearGradient instance values', function() {
+      const lg = new LinearGradient([Color.red, Color.blue], 90);
+      [NaN, undefined, null, Infinity, {}, 'linear-gradient(to right, red, blue)'].forEach(value => {
+        expect(lg.equals(value)).to.be.false;
+      });
+    });
+
+    it('returns true for equal LinearGradient instance values', function() {
+      expect(
+        new LinearGradient([Color.red, Color.yellow], 90).equals(
+          new LinearGradient([Color.red, Color.yellow], 90)
+        )
+      ).to.be.true;
+      expect(
+        new LinearGradient([[Color.red, new Percent(5)], Color.yellow], 45).equals(
+          new LinearGradient([[Color.red, new Percent(5)], Color.yellow], 45)
+        )
+      ).to.be.true;
+      expect(
+        new LinearGradient([Color.red, Color.yellow]).equals(
+          new LinearGradient([Color.red, Color.yellow])
+        )
+      ).to.be.true;
+    });
+
+    it('returns false for non-equal LinearGradient instance values', function() {
+      expect(
+        new LinearGradient([Color.red, Color.yellow], 90).equals(
+          new LinearGradient([Color.red, Color.yellow], 91)
+        )
+      ).to.be.false;
+      expect(
+        new LinearGradient([[Color.red, new Percent(4)], Color.yellow], 45).equals(
+          new LinearGradient([[Color.red, new Percent(5)], Color.yellow], 45)
+        )
+      ).to.be.false;
+      expect(
+        new LinearGradient([Color.red, Color.yellow], 45).equals(
+          new LinearGradient([[Color.red, new Percent(0)], Color.yellow], 45)
+        )
+      ).to.be.false;
+      expect(
+        new LinearGradient([Color.green, Color.yellow]).equals(
+          new LinearGradient([Color.red, Color.yellow])
+        )
+      ).to.be.false;
+      expect(
+        new LinearGradient([Color.green, Color.yellow]).equals(
+          new LinearGradient([Color.green, Color.red])
+        )
+      ).to.be.false;
+    });
+
+  });
+
 });

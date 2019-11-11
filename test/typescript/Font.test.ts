@@ -40,6 +40,8 @@ font = Font.from({size: 16, weight: 'thin'});
 font = Font.from({size: 16, family: []});
 font = Font.from({size: 16, family: ['foo']});
 font = Font.from({size: 16, family: ['foo', 'bar']});
+const bool: boolean = font.equals(font);
+
 
 let str: string;
 str = font.toString();

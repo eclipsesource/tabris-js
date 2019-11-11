@@ -62,7 +62,13 @@
     "toArray": {
       "description": "Returns a array representation of the color in the format of `[red, green, blue, alpha]`. Each value is a number between (and in including) 0 and 255.",
       "returns": {"tuple": ["number", "number", "number", "number"]}
+    },
+    "equals": {
+      "description": "Tests if the given value is a `Color` instance that is deeply equal to this one.",
+      "parameters": [{"name": "value", "type": "Color"}],
+      "returns": "boolean"
     }
+
   },
   "statics": {
     "methods": {

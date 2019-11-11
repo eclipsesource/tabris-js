@@ -24,6 +24,7 @@ gradient = LinearGradient.from({colorStops: ['red', ['blue', '5%']]});
 
 let colorStops: (Color | [Color, Percent])[] = gradient.colorStops;
 let direction: number = gradient.direction;
+let bool: boolean = gradient.equals(gradient);
 
 let str: string;
 str = gradient.toString();

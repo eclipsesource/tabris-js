@@ -47,7 +47,7 @@ export default class LinearGradient {
 
   /**
    * @param {Array<Color|[Color, Percent]>} colorStops
-   * @param {number} direction
+   * @param {number=} direction
    */
   constructor(colorStops, direction) {
     if (arguments.length < 1) {
@@ -69,6 +69,15 @@ export default class LinearGradient {
     return `linear-gradient(${directionPart}${colorStopsPart})`;
   }
 
+  equals(value) {
+    if (!(value instanceof LinearGradient)) {
+      return false;
+    }
+    return value.direction === this.direction
+      && value.colorStops.length === this.colorStops.length
+      && value.colorStops.every((stop, index) => equalColorStops(stop, this.colorStops[index]));
+  }
+
 }
 
 Object.defineProperty(LinearGradient.prototype, 'direction', {value: 0});
@@ -77,6 +86,16 @@ Object.defineProperty(
   'colorStops',
   {value: (/** @type {Array<Color|[Color, Percent]>} */([]))}
 );
+
+function equalColorStops(a, b) {
+  if (a instanceof Color && b instanceof Color) {
+    return a.equals(b);
+  }
+  if (a instanceof Array && b instanceof Array) {
+    return a[0].equals(b[0]) && a[1].percent === b[1].percent;
+  }
+  return false;
+}
 
 function gradientStringToObject(css) {
   let gradient = css.trim();

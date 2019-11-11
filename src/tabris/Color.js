@@ -57,6 +57,16 @@ export default class Color {
     return [this.red, this.green, this.blue, this.alpha];
   }
 
+  equals(value) {
+    if (!(value instanceof Color)) {
+      return false;
+    }
+    return value.red === this.red
+      && value.green === this.green
+      && value.blue === this.blue
+      && value.alpha === this.alpha;
+  }
+
 }
 
 Object.keys(NAMES).forEach(name => {

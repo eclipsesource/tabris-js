@@ -46,6 +46,11 @@
     "toString": {
       "description": "Returns a CSS string representation of the linear gradient.",
       "returns": "string"
+    },
+    "equals": {
+      "description": "Tests if the given value is a `LinearGradient` instance that is deeply equal to this one.",
+      "parameters": [{"name": "value", "type": "LinearGradient"}],
+      "returns": "boolean"
     }
   },
   "statics": {

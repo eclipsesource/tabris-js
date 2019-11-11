@@ -60,7 +60,13 @@
     "toString": {
       "description": "Returns a string representation of the font using the CSS font shorthand syntax.",
       "returns": "string"
+    },
+    "equals": {
+      "description": "Tests if the given value is a `Font` instance that is deeply equal to this one.",
+      "parameters": [{"name": "value", "type": "Font"}],
+      "returns": "boolean"
     }
+
   },
   "statics": {
     "properties": {

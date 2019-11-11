@@ -21,6 +21,7 @@ image = Image.from({src: 'foo', height: 5});
 image = Image.from({src: 'foo', width: 5, height: 5});
 image = Image.from({src: 'foo', scale: 5});
 image = Image.from({src: 'foo', scale: 5, width: 5, height: 5});
+const bool: boolean = image.equals(image);
 
 let obj: object = {};
 

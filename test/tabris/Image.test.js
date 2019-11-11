@@ -234,4 +234,64 @@ describe('Image', function() {
 
   });
 
+  describe('equals', function() {
+
+    it('returns false for non Image instance values', function() {
+      const image = new Image({src: 'foo.png'});
+      [NaN, undefined, null, Infinity, {}, {src: 'foo.png'}, 'foo.png'].forEach(value => {
+        expect(image.equals(value)).to.be.false;
+      });
+    });
+
+    it('returns true for equal Image instance values', function() {
+      const blob = new Blob([new Uint8Array([0, 1, 2])]);
+      expect(new Image({src: 'foo.png'}).equals(new Image({src: 'foo.png'}))).to.be.true;
+      expect(
+        new Image({src: 'foo.png', width: 100, height: 200}).equals(
+          new Image({src: 'foo.png', width: 100, height: 200})
+        )
+      ).to.be.true;
+      expect(
+        new Image({src: 'foo.png', scale: 2}).equals(
+          new Image({src: 'foo.png', scale: 2})
+        )
+      ).to.be.true;
+      expect(new Image({src: blob}).equals(new Image({src: blob}))).to.be.true;
+      return createBitmap(client).then(({bitmap}) => {
+        expect(new Image({src: bitmap}).equals(new Image({src: bitmap}))).to.be.true;
+      });
+    });
+
+    it('returns false for non-equal Image instance values', function() {
+      expect(new Image({src: 'foo.png'}).equals(new Image({src: 'bar.png'}))).to.be.false;
+      expect(
+        new Image({src: 'foo.png', width: 100, height: 100}).equals(
+          new Image({src: 'foo.png', width: 100, height: 200})
+        )
+      ).to.be.false;
+      expect(
+        new Image({src: 'foo.png', width: 100, height: 100}).equals(
+          new Image({src: 'foo.png', width: 100, height: 200})
+        )
+      ).to.be.false;
+      expect(
+        new Image({src: 'foo.png', scale: 2}).equals(
+          new Image({src: 'foo.png', scale: 1})
+        )
+      ).to.be.false;
+      expect(
+        new Image({src: new Blob([new Uint8Array([0, 1, 2])])}).equals(
+          new Image({src: new Blob([new Uint8Array([0, 1, 2])])})
+        )
+      ).to.be.false;
+      return createBitmap(client).then(({bitmap: bitmapA}) => {
+        client.resetCalls();
+        return createBitmap(client).then(({bitmap: bitmapB}) => {
+          expect(new Image({src: bitmapA}).equals(new Image({src: bitmapB}))).to.be.false;
+        });
+      });
+    });
+
+  });
+
 });
