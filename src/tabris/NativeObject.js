@@ -3,8 +3,7 @@ import {hint, toXML} from './Console';
 import EventObject from './EventObject';
 import Events from './Events';
 import Listeners, {ChangeListeners} from './Listeners';
-import {allowOnlyValues, allowOnlyKeys} from './util';
-import * as symbols from './symbols';
+import {allowOnlyValues, allowOnlyKeys, equals} from './util';
 
 const EventsClass = /** @type {any} */ function EventsClass() {};
 Object.assign(EventsClass.prototype, Events);
@@ -471,18 +470,6 @@ function setExistingProperty(name, value) {
     hint(this, 'There is no setter for property "' + name + '"');
   }
   this[name] = value;
-}
-
-function equals(a, b) {
-  if ((a instanceof Object)
-    && (b instanceof Object)
-    && a[symbols.equals] instanceof Function
-    && b[symbols.equals] instanceof Function
-    && (a[symbols.equals] === b[symbols.equals])
-  ) {
-    return a[symbols.equals](b);
-  }
-  return a === b;
 }
 
 /**

@@ -50,6 +50,17 @@ describe('SearchAction', function() {
       expect(call.properties.placementPriority).to.equal('low');
     });
 
+    it('SETs equal proposals only once', function() {
+      action.proposals = ['a', 'b', 'c'];
+      tabris.flush();
+
+      action.proposals = ['a', 'b', 'c'];
+
+      tabris.flush();
+      expect(client.calls({op: 'set'}).length).to.equal(1);
+      expect(client.calls({op: 'set'})[0].properties.proposals).to.deep.equal(['a', 'b', 'c']);
+    });
+
   });
 
   describe('get', function() {

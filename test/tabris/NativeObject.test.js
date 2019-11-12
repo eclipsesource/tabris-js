@@ -175,6 +175,58 @@ describe('NativeObject', function() {
         expect(client.calls({op: 'set'}).length).to.equal(1);
       });
 
+      it('SET shallow-equal object property only once', function() {
+        NativeObject.defineProperties(TestType.prototype, {
+          foo: {type: types.any, default: null}
+        });
+
+        object.set({foo: {bar: 1, baz: 2}});
+        tabris.flush();
+        object.set({foo: {bar: 1, baz: 2}});
+
+        expect(client.calls({op: 'set'}).length).to.equal(1);
+      });
+
+      it('SET shallow-non-equal object property again', function() {
+        NativeObject.defineProperties(TestType.prototype, {
+          foo: {type: types.any, default: null}
+        });
+
+        object.set({foo: {bar: 1, baz: 2}});
+        tabris.flush();
+        object.set({foo: {bar: 1, baz: 2, x: 12}});
+        tabris.flush();
+        object.set({foo: {bar: 2, baz: 2, x: 12}});
+
+        expect(client.calls({op: 'set'}).length).to.equal(3);
+      });
+
+      it('SET shallow-equal array property only once', function() {
+        NativeObject.defineProperties(TestType.prototype, {
+          foo: {type: types.any, default: null}
+        });
+
+        object.set({foo: [1, 2]});
+        tabris.flush();
+        object.set({foo: [1, 2]});
+
+        expect(client.calls({op: 'set'}).length).to.equal(1);
+      });
+
+      it('SET shallow-non-equal array property again', function() {
+        NativeObject.defineProperties(TestType.prototype, {
+          foo: {type: types.any, default: null}
+        });
+
+        object.set({foo: [1, 2]});
+        tabris.flush();
+        object.set({foo: [1, 2, 3]});
+        tabris.flush();
+        object.set({foo: [3, 2, 3]});
+
+        expect(client.calls({op: 'set'}).length).to.equal(3);
+      });
+
       it('throws for no argument', function() {
         expect(() => object.set()).to.throw();
       });

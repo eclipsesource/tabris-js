@@ -83,6 +83,28 @@ describe('Widget', function() {
       expect(client.calls({op: 'set'}).length).to.equal(1);
     });
 
+    it('SETs equal padding only once', function() {
+      widget.set({padding: 2});
+      tabris.flush();
+      widget.set({padding: 2});
+
+      expect(client.calls({op: 'set'}).length).to.equal(1);
+      expect(client.calls({op: 'set'})[0].properties.padding).to.deep.equal({
+        left: 2, top: 2, right: 2, bottom: 2
+      });
+    });
+
+    it('SETs equal transform only once', function() {
+      widget.set({transform: {scaleX: 2, scaleY: 3}});
+      tabris.flush();
+      widget.set({transform: {scaleX: 2, scaleY: 3}});
+
+      expect(client.calls({op: 'set'}).length).to.equal(1);
+      expect(client.calls({op: 'set'})[0].properties.transform).to.deep.equal({
+        rotation: 0, scaleX: 2, scaleY: 3, translationX: 0, translationY: 0, translationZ: 0
+      });
+    });
+
     it('SETs non-equal background color', function() {
       widget.set({background: 'rgba(1, 2, 3, 0.5)'});
       tabris.flush();

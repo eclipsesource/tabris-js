@@ -1,4 +1,5 @@
 import {toValueString} from './Console';
+import * as symbols from './symbols';
 
 export function pick(object, keys) {
   const result = {};
@@ -229,4 +230,38 @@ export function createNativeCallback(cb, target, args) {
     tabris.flush();
     tabris._stackTraceStack = oldStack;
   };
+}
+
+export function equals(a, b) {
+  if (a === b) {
+    return true;
+  }
+  if (a instanceof Object
+    && b instanceof Object
+    && a[symbols.equals] instanceof Function
+    && b[symbols.equals] instanceof Function
+    && (a[symbols.equals] === b[symbols.equals])
+  ) {
+    return a[symbols.equals](b);
+  }
+  if (a instanceof Object
+    && a.constructor === Object
+    && b instanceof Object
+    && b.constructor === Object
+  ) {
+    const keysA = Reflect.ownKeys(a).sort();
+    const keysB = Reflect.ownKeys(b).sort();
+    return (keysA.length === keysB.length) && keysA.every((keyA, index) => {
+      const keyB = keysB[index];
+      return (keyA === keyB) && (a[keyA] === b[keyB]);
+    });
+  }
+  if (a instanceof Array
+    && a.constructor === Array
+    && b instanceof Array
+    && b.constructor === Array
+  ) {
+    return (a.length === b.length) && a.every((itemA, index) => itemA === b[index]);
+  }
+  return false;
 }
