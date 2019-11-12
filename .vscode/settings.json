@@ -7,5 +7,10 @@
         "url": "./tools/api-schema.json"
     }
   ],
-  "tslint.jsEnable": true
+  "tslint.jsEnable": true,
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#0088d1",
+    "activityBar.foreground": "#ffffff",
+    "activityBar.inactiveForeground": "#ffffff70"
+  }
 }
