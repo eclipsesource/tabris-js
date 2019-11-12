@@ -10,6 +10,7 @@ import {
 } from './util-fonts';
 import {checkNumber} from './util';
 import {toValueString} from './Console';
+import * as symbols from './symbols';
 
 export default class Font {
 
@@ -81,6 +82,8 @@ export default class Font {
   }
 
 }
+
+Font.prototype[symbols.equals] = Font.prototype.equals;
 
 function setFamily(font, family) {
   family.forEach(validateFamily);

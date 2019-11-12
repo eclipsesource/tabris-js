@@ -1,5 +1,6 @@
 import {normalizePathUrl, checkNumber, getNativeObject, getBytes} from './util';
 import {hint, toValueString} from './Console';
+import * as symbols from './symbols';
 
 export default class Image {
 
@@ -73,6 +74,8 @@ export default class Image {
   }
 
 }
+
+Image.prototype[symbols.equals] = Image.prototype.equals;
 
 /** @type {number|Auto} */
 const initDimension = 0;

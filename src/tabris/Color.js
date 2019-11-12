@@ -1,6 +1,7 @@
 import {colorStringToArray, NAMES} from './util-colors';
 import {checkNumber} from './util';
 import {toValueString} from './Console';
+import * as symbols from './symbols';
 
 export default class Color {
 
@@ -68,6 +69,8 @@ export default class Color {
   }
 
 }
+
+Color.prototype[symbols.equals] = Color.prototype.equals;
 
 Object.keys(NAMES).forEach(name => {
   let value; // create lazy to avoid circular dependency issues

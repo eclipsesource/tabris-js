@@ -4,6 +4,7 @@ import EventObject from './EventObject';
 import Events from './Events';
 import Listeners, {ChangeListeners} from './Listeners';
 import {allowOnlyValues, allowOnlyKeys} from './util';
+import * as symbols from './symbols';
 
 const EventsClass = /** @type {any} */ function EventsClass() {};
 Object.assign(EventsClass.prototype, Events);
@@ -212,7 +213,7 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
       if (!def.const) {
         this._triggerChangeEvent(name, convertedValue);
       }
-    } else if (this._getStoredProperty(name) !== convertedValue || !this._wasSet(name)) {
+    } else if (!equals(this._getStoredProperty(name), convertedValue) || !this._wasSet(name)) {
       this._beforePropertyChange(name, convertedValue);
       this._nativeSet(name, encodedValue);//TODO should not happen if changing from unset to default
       this._storeProperty(name, convertedValue, def.const);
@@ -470,6 +471,18 @@ function setExistingProperty(name, value) {
     hint(this, 'There is no setter for property "' + name + '"');
   }
   this[name] = value;
+}
+
+function equals(a, b) {
+  if ((a instanceof Object)
+    && (b instanceof Object)
+    && a[symbols.equals] instanceof Function
+    && b[symbols.equals] instanceof Function
+    && (a[symbols.equals] === b[symbols.equals])
+  ) {
+    return a[symbols.equals](b);
+  }
+  return a === b;
 }
 
 /**

@@ -75,6 +75,22 @@ describe('Widget', function() {
       expect(call.properties.background).to.eql({type: 'color', color: ([1, 2, 3, 128])});
     });
 
+    it('SETs equal background colors only once', function() {
+      widget.set({background: 'rgba(1, 2, 3, 0.5)'});
+      tabris.flush();
+      widget.set({background: 'rgba(1, 2, 3, 0.5)'});
+
+      expect(client.calls({op: 'set'}).length).to.equal(1);
+    });
+
+    it('SETs non-equal background color', function() {
+      widget.set({background: 'rgba(1, 2, 3, 0.5)'});
+      tabris.flush();
+      widget.set({background: 'rgba(1, 2, 3, 0.3)'});
+
+      expect(client.calls({op: 'set'}).length).to.equal(2);
+    });
+
     [TextView, RadioButton, CheckBox, ToggleButton, TextInput].forEach((type) => {
 
       describe(type.name + ' font', function() {
@@ -115,6 +131,14 @@ describe('Widget', function() {
           expect(client.get).not.to.have.been.called;
         });
 
+        it('SETs equal font only once', function() {
+          widget.set({font: '12px Arial'});
+          tabris.flush();
+          widget.set({font: '12px Arial'});
+
+          expect(client.calls({op: 'set'}).length).to.equal(1);
+        });
+
       });
 
     });
@@ -131,6 +155,14 @@ describe('Widget', function() {
           width: 23, height: 42, scale: null
         }
       });
+    });
+
+    it('SETs equal background gradients only once', function() {
+      widget.set({background: {src: 'bar', width: 23, height: 42}});
+      tabris.flush();
+      widget.set({background: {src: 'bar', width: 23, height: 42}});
+
+      expect(client.calls({op: 'set'}).length).to.equal(1);
     });
 
     it('decodes bounds', function() {

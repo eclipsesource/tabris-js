@@ -6,6 +6,7 @@ import ClientMock, {} from './ClientMock';
 import {toXML} from '../../src/tabris/Console';
 import ImageView from '../../src/tabris/widgets/ImageView';
 import Composite from '../../src/tabris/widgets/Composite';
+import * as symbols from '../../src/tabris/symbols';
 
 describe('NativeObject', function() {
 
@@ -138,12 +139,38 @@ describe('NativeObject', function() {
         expect(result).to.equal(object);
       });
 
-      it('SET unchanged property only once', function() {
+      it('SET strict-equal property only once', function() {
         NativeObject.defineProperties(TestType.prototype, {foo: {type: types.number, default: null}});
 
         object.set({foo: 23});
         tabris.flush();
         object.set({foo: 23});
+
+        expect(client.calls({op: 'set'}).length).to.equal(1);
+      });
+
+      it('SET custom-equal property only once', function() {
+        class CustomType {
+          constructor(num) {
+            this.num = num;
+          }
+          [symbols.equals](value) {
+            return (value instanceof CustomType) && value.num === this.num;
+          }
+        }
+        NativeObject.defineProperties(TestType.prototype, {
+          foo: {
+            type: {
+              encode: value => value.num,
+              decode: value => new CustomType(value.num)
+            },
+            default: null
+          }
+        });
+
+        object.set({foo: new CustomType(1)});
+        tabris.flush();
+        object.set({foo: new CustomType(1)});
 
         expect(client.calls({op: 'set'}).length).to.equal(1);
       });

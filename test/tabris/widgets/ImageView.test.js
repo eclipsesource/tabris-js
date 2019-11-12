@@ -202,6 +202,20 @@ describe('ImageView', function() {
 
     });
 
+    describe('image', function() {
+
+      it('SETs equal images only once', function() {
+        imageView.image = 'foo.png';
+        tabris.flush();
+        client.resetCalls();
+
+        imageView.image = 'foo.png';
+
+        expect(client.calls({op: 'set'}).length).to.equal(0);
+      });
+
+    });
+
     describe('order', function() {
 
       // These tests need Object.keys keeps the chronological property order

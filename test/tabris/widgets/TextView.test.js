@@ -53,6 +53,16 @@ describe('TextView', function() {
     expect(textView.maxLines).to.be.null;
   });
 
+  it('SETs equal text colors only once', function() {
+    const textView = new TextView({textColor: 'blue'});
+    tabris.flush();
+    client.resetCalls();
+
+    textView.set({textColor: 'blue'});
+
+    expect(client.calls({op: 'set'}).length).to.equal(0);
+  });
+
   describe('JSX', function() {
 
     /** @type {import('../../../src/tabris/JsxProcessor').default} */
