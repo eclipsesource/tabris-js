@@ -1,7 +1,6 @@
 import {expect, mockTabris, restore, spy} from '../../test';
 import ClientStub from '../ClientStub';
 import Composite from '../../../src/tabris/widgets/Composite';
-import Canvas from '../../../src/tabris/widgets/Canvas';
 import Button from '../../../src/tabris/widgets/Button';
 import CheckBox from '../../../src/tabris/widgets/CheckBox';
 import ImageView from '../../../src/tabris/widgets/ImageView';
@@ -68,14 +67,6 @@ describe('Common Widgets', function() {
     expect(listener).to.have.been.calledOnce;
     expect(listener).to.have.been.calledWithMatch({target: widget});
     checkListen('select');
-  });
-
-  it('Canvas', function() {
-    let canvas = new Canvas({visible: false});
-
-    expect(getCreate().type).to.equal('tabris.Canvas');
-    expect(getCreate().properties.visible).to.be.false;
-    expect(canvas.constructor.name).to.equal('Canvas');
   });
 
   it('CheckBox', function() {

@@ -35,6 +35,31 @@
       ],
       "description": "Returns the drawing context with the given size.",
       "returns": "CanvasContext"
+    },
+    "toBlob": {
+      "parameters": [
+        {
+          "name": "callback",
+          "type": "Function",
+          "ts_type": "(blob: Blob) => void",
+          "description": "Callback that will be called with the resulting blob."
+        },
+        {
+          "name": "mimeType",
+          "type": "string",
+          "values": ["image/png", "image/jpeg", "image/webp"],
+          "description": "The expected image format. If `mimeType` is not specified or invalid, the image type is `image/png`. **On iOS the type `image/webp` is not supported. A png will be returned instead.**",
+          "optional": true
+        },
+        {
+          "name": "quality",
+          "type": "number",
+          "description": "A Number between 0 and 1 specifying the image quality. A lower number results in a smaller file size at the same resolution. If `quality` is not specified or invalid the value `0.92` is for `image/jpeg` and  `0.80` for `image/webp` respectively. The value has no effect for `image/png`.",
+          "optional": true
+        }
+      ],
+      "returns": "undefined",
+      "description": "Creates a Blob object representing the image contained in the canvas. This is a non-blocking operation."
     }
   },
   "links": [
