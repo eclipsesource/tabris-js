@@ -4,6 +4,7 @@ import ClientMock from './ClientMock';
 import ImageBitmap from '../../src/tabris/ImageBitmap';
 import Blob from '../../src/tabris/Blob';
 import ImageData from '../../src/tabris/ImageData';
+import Canvas from '../../src/tabris/widgets/Canvas';
 
 const createImageBitmap = ImageBitmap.createImageBitmap;
 
@@ -45,7 +46,7 @@ describe('ImageBitmap', function() {
       }).catch(ex => {
         expect(ex).to.be.instanceOf(TypeError);
         expect(ex.message).to.equal(
-          'Argument 1 of createImageBitmap could not be converted to any of: Blob, ImageData, ImageBitmap.'
+          'Argument 1 of createImageBitmap could not be converted to any of: Blob, ImageData, ImageBitmap, Canvas.'
         );
       });
     });
@@ -278,6 +279,62 @@ describe('ImageBitmap', function() {
 
         it('received id ', function() {
           expect(param.image).to.equal(orgId);
+        });
+
+        it('resolves with ImageBitmap', function() {
+          expect(image).to.be.instanceOf(ImageBitmap);
+        });
+
+        it('sets dimension', function() {
+          expect(image.width).to.equal(300);
+          expect(image.height).to.equal(400);
+        });
+
+      });
+
+    });
+
+    describe('with Canvas', function() {
+
+      /** @type {Canvas} */
+      let canvas;
+
+      beforeEach(function() {
+        canvas = new Canvas();
+      });
+
+      it('fails if canvas is disposed', function() {
+        canvas.dispose();
+        return createImageBitmap(canvas)
+          .catch(ex => {
+            expect(ex).to.be.instanceOf(TypeError);
+            expect(ex.message).to.equal('Can not create ImageBitmap from a disposed Canvas');
+          });
+      });
+
+      describe('on success', function() {
+
+        /** @type {any} */
+        let param;
+
+        /** @type {ImageBitmap} */
+        let image;
+
+        /** @type {string} */
+        let id;
+
+        beforeEach(function() {
+          const result = createImageBitmap(canvas);
+          id = client.calls({type: 'tabris.ImageBitmap', op: 'create'})[0].id;
+          param = client.calls({op: 'call', method: 'loadCanvas', id})[0].parameters;
+          param.onSuccess({width: 300, height: 400});
+          return result.then(value => {
+            image = value;
+          });
+        });
+
+        it('received id ', function() {
+          expect(param.image).to.equal(canvas.cid);
         });
 
         it('resolves with ImageBitmap', function() {

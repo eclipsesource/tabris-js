@@ -2,30 +2,36 @@ import Blob from './Blob';
 import NativeObject from './NativeObject';
 import {getBytes, setNativeObject, getNativeObject} from './util';
 import ImageData from './ImageData';
+import Canvas from './widgets/Canvas';
 
 export default class ImageBitmap {
 
   /**
-   * @param {Blob|ImageData|ImageBitmap} image
+   * @param {Blob|ImageData|ImageBitmap|Canvas} imageSource
    */
-  static createImageBitmap(image) {
+  static createImageBitmap(imageSource) {
     if (arguments.length !== 1) {
       return Promise.reject(new TypeError(
         `${arguments.length} is not a valid argument count for any overload of createImageBitmap.`
       ));
     }
-    if (image instanceof Blob) {
-      return load(_image => _image.loadEncodedImage(getBytes(image)));
-    } else if (image instanceof ImageData) {
-      return load(_image => _image.loadImageData(image.data, image.width, image.height));
-    } else if (image instanceof ImageBitmap) {
-      if (getNativeObject(image).isDisposed()) {
+    if (imageSource instanceof Blob) {
+      return load(_image => _image.loadEncodedImage(getBytes(imageSource)));
+    } else if (imageSource instanceof ImageData) {
+      return load(_image => _image.loadImageData(imageSource.data, imageSource.width, imageSource.height));
+    } else if (imageSource instanceof ImageBitmap) {
+      if (getNativeObject(imageSource).isDisposed()) {
         return Promise.reject(new TypeError('Can not create ImageBitmap from another closed ImageBitmap'));
       }
-      return load(_image => _image.loadImageBitmap(getNativeObject(image).cid));
+      return load(_image => _image.loadImageBitmap(getNativeObject(imageSource).cid));
+    } else if (imageSource instanceof Canvas) {
+      if (imageSource.isDisposed()) {
+        return Promise.reject(new TypeError('Can not create ImageBitmap from a disposed Canvas'));
+      }
+      return load(_image => _image.loadCanvas(imageSource.cid));
     }
     return Promise.reject(new TypeError(
-      'Argument 1 of createImageBitmap could not be converted to any of: Blob, ImageData, ImageBitmap.'
+      'Argument 1 of createImageBitmap could not be converted to any of: Blob, ImageData, ImageBitmap, Canvas.'
     ));
   }
 
@@ -81,6 +87,13 @@ class _ImageBitmap extends NativeObject {
   loadImageBitmap(image) {
     return new Promise((onSuccess, onError) =>
       this._nativeCall('loadImageBitmap', {image, onSuccess, onError})
+    );
+  }
+
+  /** @param {string} image */
+  loadCanvas(image) {
+    return new Promise((onSuccess, onError) =>
+      this._nativeCall('loadCanvas', {image, onSuccess, onError})
     );
   }
 

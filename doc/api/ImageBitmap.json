@@ -29,9 +29,9 @@
       "createImageBitmap": {
         "parameters": [
           {
-            "name": "image",
+            "name": "imageSource",
             "description": "The data source to create an ImageBitmap instance from.",
-            "type": {"union": ["Blob", "ImageData", "ImageBitmap"]}
+            "type": {"union": ["Blob", "ImageData", "ImageBitmap", "Canvas"]}
           }
         ],
         "description": "Creates a promise that resolves to a new instance of ImageBitmap. Also available in global scope.",
