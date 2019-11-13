@@ -1,3 +1,5 @@
+import {createNativeCallback} from './util';
+
 export function addWindowTimerMethods(target) {
 
   if (typeof target.setTimeout === 'function') {
@@ -7,18 +9,11 @@ export function addWindowTimerMethods(target) {
   let idSequence = 0;
 
   function createTimer(fn, delay, repeat, args) {
-    const stackTraceStack = [new Error().stack].concat(tabris._stackTraceStack);
     const id = idSequence++;
     // If tabris is not ready, create the timer on load.
     // However, clearTimeout won't work until after load.
     const create = () => tabris.app._nativeCall('startTimer', {
-      id, delay, repeat, callback: () => {
-        const oldStack = tabris._stackTraceStack;
-        tabris._stackTraceStack = stackTraceStack;
-        fn.apply(target, args);
-        tabris.flush();
-        tabris._stackTraceStack = oldStack;
-      }
+      id, delay, repeat, callback: createNativeCallback(fn, target, args)
     });
     if (tabris.started) {
       create();

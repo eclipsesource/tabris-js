@@ -214,3 +214,19 @@ export function setNativeObject(object, nativeObject) {
 export function getNativeObject(object) {
   return object instanceof Object ? object[nativeObjectSym] : null;
 }
+
+/**
+ * @param {Function} cb
+ * @param {object=} target
+ * @param {any[]=} args
+ */
+export function createNativeCallback(cb, target, args) {
+  const stackTraceStack = [new Error().stack].concat(tabris._stackTraceStack);
+  return function() {
+    const oldStack = tabris._stackTraceStack;
+    tabris._stackTraceStack = stackTraceStack;
+    cb.apply(target ? target : global, args ? args : arguments);
+    tabris.flush();
+    tabris._stackTraceStack = oldStack;
+  };
+}

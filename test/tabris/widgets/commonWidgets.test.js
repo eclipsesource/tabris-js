@@ -1,7 +1,6 @@
 import {expect, mockTabris, restore, spy, stub} from '../../test';
 import ClientMock from '../ClientMock';
 import Composite from '../../../src/tabris/widgets/Composite';
-import Canvas from '../../../src/tabris/widgets/Canvas';
 import Button from '../../../src/tabris/widgets/Button';
 import CheckBox from '../../../src/tabris/widgets/CheckBox';
 import ImageView from '../../../src/tabris/widgets/ImageView';
@@ -106,14 +105,6 @@ describe('Common Widgets', function() {
     widget = new Button({text: 'foo'});
     stub(client, 'get').withArgs(widget.cid, 'bounds').returns({});
     expect(widget[toXML]()).to.match(/<Button .* text='foo'\/>/);
-  });
-
-  it('Canvas', function() {
-    const canvas = new Canvas({visible: false});
-
-    expect(getCreate().type).to.equal('tabris.Canvas');
-    expect(getCreate().properties.visible).to.be.false;
-    expect(canvas.constructor.name).to.equal('Canvas');
   });
 
   it('CheckBox', function() {
