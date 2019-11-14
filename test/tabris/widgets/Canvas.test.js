@@ -16,18 +16,6 @@ describe('Canvas', function() {
   /** @type {sinon.SinonSpy} */
   let cb;
 
-  /**
-   * @returns {{onSuccess: Function, quality: number, mimeType: string}}
-   */
-  function getCall() {
-    const calls = client.calls({id: canvas.cid, op: 'call', method: 'toBlob'});
-    if (calls.length !== 1) {
-      throw new Error(`Got ${calls.length} toBlob native calls`);
-    }
-    // @ts-ignore
-    return calls[0].parameters;
-  }
-
   beforeEach(function() {
     client = new ClientMock();
     mockTabris(client);
@@ -53,12 +41,39 @@ describe('Canvas', function() {
 
   describe('toBlob', function() {
 
+    /**
+     * @returns {{onSuccess: Function, quality: number, mimeType: string}}
+     */
+    function getCall() {
+      const calls = client.calls({id: canvas.cid, op: 'call', method: 'toBlob'});
+      if (calls.length !== 1) {
+        throw new Error(`Got ${calls.length} toBlob native calls`);
+      }
+      // @ts-ignore
+      return calls[0].parameters;
+    }
+
     it('throws for missing callback', function() {
       expect(() => canvas.toBlob()).to.throw(TypeError);
     });
 
     it('throws for invalid callback', function() {
       expect(() => canvas.toBlob(null)).to.throw(TypeError);
+    });
+
+    it('it CALLs draw on GC', function() {
+      const ctx = canvas.getContext('2d', 100, 100);
+      ctx.rect(10, 10, 40, 40);
+      canvas.toBlob(cb);
+
+      const gcId = client.calls({op: 'create', type: 'tabris.GC'})[0].id;
+      const nativeCalls = client.calls({op: 'call'});
+      expect(nativeCalls[0].id).to.equal(gcId);
+      expect(nativeCalls[0].method).to.equal('init');
+      expect(nativeCalls[1].id).to.equal(gcId);
+      expect(nativeCalls[1].method).to.equal('draw');
+      expect(nativeCalls[2].id).to.equal(canvas.cid);
+      expect(nativeCalls[2].method).to.equal('toBlob');
     });
 
     it('it CALLs with default parameters', function() {

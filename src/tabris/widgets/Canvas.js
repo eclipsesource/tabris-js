@@ -21,6 +21,12 @@ export default class Canvas extends Composite {
     return 'tabris.Canvas';
   }
 
+  /**
+   * @param {string} type
+   * @param {number} width
+   * @param {number} height
+   * @returns {CanvasContext}
+   */
   getContext(type, width, height) {
     if (type === '2d') {
       return CanvasContext.getContext(this, width, height);
@@ -39,6 +45,9 @@ export default class Canvas extends Composite {
     }
     if (!(callback instanceof Function)) {
       throw new TypeError('Argument 1 of Canvas.toBlob is not a function');
+    }
+    if (this._ctx) {
+      this._ctx._gc.flush();
     }
     const isValidQuality
       = typeof quality === 'number' && !isNaN(quality) && quality >= 0 && quality <= 1;
