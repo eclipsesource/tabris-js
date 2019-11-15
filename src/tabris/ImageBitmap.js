@@ -28,7 +28,7 @@ export default class ImageBitmap {
       if (imageSource.isDisposed()) {
         return Promise.reject(new TypeError('Can not create ImageBitmap from a disposed Canvas'));
       }
-      return load(_image => _image.loadCanvas(imageSource.cid));
+      return load(_image => _image.loadCanvas(imageSource));
     }
     return Promise.reject(new TypeError(
       'Argument 1 of createImageBitmap could not be converted to any of: Blob, ImageData, ImageBitmap, Canvas.'
@@ -73,28 +73,31 @@ class _ImageBitmap extends NativeObject {
   }
 
   /**
-   *  @param {Uint8ClampedArray} image
+   *  @param {Uint8ClampedArray} imageData
    *  @param {number} width
    *  @param {number} height
    **/
-  loadImageData(image, width, height) {
+  loadImageData(imageData, width, height) {
     return new Promise((onSuccess, onError) =>
-      this._nativeCall('loadImageData', {image, width, height, onSuccess, onError})
+      this._nativeCall('loadImageData', {image: imageData, width, height, onSuccess, onError})
     );
   }
 
-  /** @param {string} image */
-  loadImageBitmap(image) {
+  /** @param {string} imageBitmap */
+  loadImageBitmap(imageBitmap) {
     return new Promise((onSuccess, onError) =>
-      this._nativeCall('loadImageBitmap', {image, onSuccess, onError})
+      this._nativeCall('loadImageBitmap', {image: imageBitmap, onSuccess, onError})
     );
   }
 
-  /** @param {string} image */
-  loadCanvas(image) {
-    return new Promise((onSuccess, onError) =>
-      this._nativeCall('loadCanvas', {image, onSuccess, onError})
-    );
+  /** @param {Canvas} canvas */
+  loadCanvas(canvas) {
+    return new Promise((onSuccess, onError) => {
+      if (canvas._ctx) {
+        canvas._ctx._gc.flush();
+      }
+      this._nativeCall('loadCanvas', {image: canvas.cid, onSuccess, onError});
+    });
   }
 
 }

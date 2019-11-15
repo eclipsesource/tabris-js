@@ -324,6 +324,8 @@ describe('ImageBitmap', function() {
         let id;
 
         beforeEach(function() {
+          const ctx = canvas.getContext('2d', 100, 100);
+          ctx.rect(10, 10, 40, 40);
           const result = createImageBitmap(canvas);
           id = client.calls({type: 'tabris.ImageBitmap', op: 'create'})[0].id;
           param = client.calls({op: 'call', method: 'loadCanvas', id})[0].parameters;
@@ -331,6 +333,17 @@ describe('ImageBitmap', function() {
           return result.then(value => {
             image = value;
           });
+        });
+
+        it('it CALLs draw on GC', function() {
+          const gcId = client.calls({op: 'create', type: 'tabris.GC'})[0].id;
+          const nativeCalls = client.calls({op: 'call'});
+          expect(nativeCalls[0].id).to.equal(gcId);
+          expect(nativeCalls[0].method).to.equal('init');
+          expect(nativeCalls[1].id).to.equal(gcId);
+          expect(nativeCalls[1].method).to.equal('draw');
+          expect(nativeCalls[2].id).to.equal(id);
+          expect(nativeCalls[2].method).to.equal('loadCanvas');
         });
 
         it('received id ', function() {
