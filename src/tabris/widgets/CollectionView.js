@@ -193,6 +193,17 @@ export default class CollectionView extends Composite {
     }
     this._itemCount = this.itemCount + count;
     this.$flush();
+    for (let i = index; i < index + count; i++) {
+      this._itemMapping.delete(i);
+    }
+    for (const cell of this.children()) {
+      const oldIndex = this._cellMapping.get(cell);
+      if (oldIndex >= index) {
+        const newIndex = oldIndex + count;
+        this._cellMapping.set(cell, newIndex);
+        this._itemMapping.set(newIndex, cell);
+      }
+    }
     this._nativeCall('insert', {index, count});
   }
 
@@ -206,6 +217,22 @@ export default class CollectionView extends Composite {
     if (index >= 0 && index < this.itemCount && count > 0) {
       this._itemCount = this.itemCount - count;
       this.$flush();
+      for (let i = this._itemCount; i < this.itemCount + count; i++) {
+        this._itemMapping.delete(i);
+      }
+      for (const cell of this.children()) {
+        const oldIndex = this._cellMapping.get(cell);
+        if (oldIndex >= index) {
+          if (oldIndex < index + count) {
+            this._cellMapping.delete(cell);
+            this._itemMapping.delete(oldIndex);
+          } else {
+            const newIndex = oldIndex - count;
+            this._cellMapping.set(cell, newIndex);
+            this._itemMapping.set(newIndex, cell);
+          }
+        }
+      }
       this._nativeCall('remove', {index, count});
     }
   }

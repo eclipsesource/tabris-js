@@ -669,6 +669,7 @@ describe('CollectionView', function() {
         const registry = tabris._nativeObjectRegistry;
         cellA = registry.find(view._trigger('createCell', {type: 0}));
         cellB = registry.find(view._trigger('createCell', {type: 0}));
+        view.itemCount = 5;
       });
 
       it('throws for invalid values`', function() {
@@ -706,6 +707,56 @@ describe('CollectionView', function() {
         expect(view.itemIndex(cellA)).to.equal(4);
       });
 
+      it('returns shifted association', function() {
+        view._trigger('updateCell', {widget: cellA.cid, index: 2});
+        view._trigger('updateCell', {widget: cellB.cid, index: 3});
+
+        view.insert(1, 2);
+
+        expect(view.itemIndex(cellA)).to.equal(4);
+        expect(view.itemIndex(cellB)).to.equal(5);
+      });
+
+      it('keeps non-shifted association', function() {
+        view._trigger('updateCell', {widget: cellA.cid, index: 1});
+        view._trigger('updateCell', {widget: cellB.cid, index: 2});
+
+        view.insert(3, 2);
+
+        expect(view.itemIndex(cellA)).to.equal(1);
+        expect(view.itemIndex(cellB)).to.equal(2);
+      });
+
+      it('returns unshifted association', function() {
+        view._trigger('updateCell', {widget: cellA.cid, index: 3});
+        view._trigger('updateCell', {widget: cellB.cid, index: 4});
+
+        view.remove(1, 2);
+
+        expect(view.itemIndex(cellA)).to.equal(1);
+        expect(view.itemIndex(cellB)).to.equal(2);
+      });
+
+      it('keeps non-unshifted association', function() {
+        view._trigger('updateCell', {widget: cellA.cid, index: 1});
+        view._trigger('updateCell', {widget: cellB.cid, index: 2});
+
+        view.remove(3, 2);
+
+        expect(view.itemIndex(cellA)).to.equal(1);
+        expect(view.itemIndex(cellB)).to.equal(2);
+      });
+
+      it('clears removed association', function() {
+        view._trigger('updateCell', {widget: cellA.cid, index: 1});
+        view._trigger('updateCell', {widget: cellB.cid, index: 2});
+
+        view.remove(0, 2);
+
+        expect(view.itemIndex(cellA)).to.equal(-1);
+        expect(view.itemIndex(cellB)).to.equal(0);
+      });
+
     });
 
     describe('cellByItemIndex', function() {
@@ -717,6 +768,7 @@ describe('CollectionView', function() {
         const registry = tabris._nativeObjectRegistry;
         cellA = registry.find(view._trigger('createCell', {type: 0}));
         cellB = registry.find(view._trigger('createCell', {type: 0}));
+        view.itemCount = 5;
       });
 
       it('throws for invalid values`', function() {
@@ -742,11 +794,34 @@ describe('CollectionView', function() {
         expect(view.cellByItemIndex(4)).to.equal(cellB);
       });
 
-      it('always returns latest association', function() {
+      it('returns latest association', function() {
         view._trigger('updateCell', {widget: cellA.cid, index: 3});
         view._trigger('updateCell', {widget: cellA.cid, index: 4});
 
         expect(view.cellByItemIndex(4)).to.equal(cellA);
+        expect(view.cellByItemIndex(3)).to.be.null;
+      });
+
+      it('returns shifted association', function() {
+        view._trigger('updateCell', {widget: cellA.cid, index: 1});
+        view._trigger('updateCell', {widget: cellB.cid, index: 2});
+
+        view.insert(1, 2);
+
+        expect(view.cellByItemIndex(1)).to.be.null;
+        expect(view.cellByItemIndex(2)).to.be.null;
+        expect(view.cellByItemIndex(3)).to.equal(cellA);
+        expect(view.cellByItemIndex(4)).to.equal(cellB);
+      });
+
+      it('returns unshifted association', function() {
+        view._trigger('updateCell', {widget: cellA.cid, index: 3});
+        view._trigger('updateCell', {widget: cellB.cid, index: 4});
+
+        view.remove(1, 2);
+
+        expect(view.cellByItemIndex(1)).to.equal(cellA);
+        expect(view.cellByItemIndex(2)).to.equal(cellB);
         expect(view.cellByItemIndex(3)).to.be.null;
       });
 
