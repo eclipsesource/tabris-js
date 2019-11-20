@@ -196,7 +196,7 @@ export default class CollectionView extends Composite {
     for (let i = index; i < index + count; i++) {
       this._itemMapping.delete(i);
     }
-    for (const cell of this.children()) {
+    for (const cell of this._children()) {
       const oldIndex = this._cellMapping.get(cell);
       if (oldIndex >= index) {
         const newIndex = oldIndex + count;
@@ -220,7 +220,7 @@ export default class CollectionView extends Composite {
       for (let i = this._itemCount; i < this.itemCount + count; i++) {
         this._itemMapping.delete(i);
       }
-      for (const cell of this.children()) {
+      for (const cell of this._children()) {
         const oldIndex = this._cellMapping.get(cell);
         if (oldIndex >= index) {
           if (oldIndex < index + count) {

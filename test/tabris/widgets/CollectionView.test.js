@@ -3,6 +3,7 @@ import ClientMock from '../ClientMock';
 import CollectionView from '../../../src/tabris/widgets/CollectionView';
 import Composite from '../../../src/tabris/widgets/Composite';
 import {toXML} from '../../../src/tabris/Console';
+import WidgetCollection from '../../../src/tabris/WidgetCollection';
 
 describe('CollectionView', function() {
 
@@ -815,6 +816,31 @@ describe('CollectionView', function() {
       });
 
       it('returns unshifted association', function() {
+        view._trigger('updateCell', {widget: cellA.cid, index: 3});
+        view._trigger('updateCell', {widget: cellB.cid, index: 4});
+
+        view.remove(1, 2);
+
+        expect(view.cellByItemIndex(1)).to.equal(cellA);
+        expect(view.cellByItemIndex(2)).to.equal(cellB);
+        expect(view.cellByItemIndex(3)).to.be.null;
+      });
+
+      it('returns shifted association with overwritten children()', function() {
+        view.children = () => new WidgetCollection([]);
+        view._trigger('updateCell', {widget: cellA.cid, index: 1});
+        view._trigger('updateCell', {widget: cellB.cid, index: 2});
+
+        view.insert(1, 2);
+
+        expect(view.cellByItemIndex(1)).to.be.null;
+        expect(view.cellByItemIndex(2)).to.be.null;
+        expect(view.cellByItemIndex(3)).to.equal(cellA);
+        expect(view.cellByItemIndex(4)).to.equal(cellB);
+      });
+
+      it('returns unshifted association overwritten children()', function() {
+        view.children = () => new WidgetCollection([]);
         view._trigger('updateCell', {widget: cellA.cid, index: 3});
         view._trigger('updateCell', {widget: cellB.cid, index: 4});
 
