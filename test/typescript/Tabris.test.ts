@@ -16,3 +16,5 @@ tabris.onLog(({message, level}) => {
   const fn: Function = console[level];
   const str2: string = message;
 });
+
+const symbol: Symbol = tabris.symbols.equals;

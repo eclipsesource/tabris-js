@@ -1,5 +1,6 @@
 import File from './File';
 import Blob from './Blob';
+import {data as dataSym} from './symbols';
 
 export default class FormData {
 
@@ -136,17 +137,15 @@ export function formDataToBlob(formData) {
   return new Blob(parts, {type: 'multipart/form-data; boundary=' + boundary});
 }
 
-const dataKey = Symbol();
-
 /**
  * @param {FormData} formData
  * @returns {{[name: string]: Array<string|File>}}
  */
 function data(formData) {
-  if (!formData[dataKey]) {
-    formData[dataKey] = {};
+  if (!formData[dataSym]) {
+    formData[dataSym] = {};
   }
-  return formData[dataKey];
+  return formData[dataSym];
 }
 
 function normalize(value, filename) {

@@ -1,5 +1,6 @@
 import NativeObject from '../NativeObject';
-import ContentView, {creationAllowed} from './ContentView';
+import ContentView from './ContentView';
+import {creationAllowed} from '../symbols';
 
 export default class Drawer extends ContentView {
 

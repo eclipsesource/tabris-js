@@ -20,6 +20,9 @@
       "readonly": true,
       "const": true,
       "description": "The version of the tabris module."
+    },
+    "symbols": {
+      "type": {"indexType": "string", "map": {"symbol": "Symbol"}}
     }
   },
   "methods": {

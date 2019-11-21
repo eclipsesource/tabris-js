@@ -1,6 +1,5 @@
 import Composite from './Composite';
-
-export const creationAllowed = Symbol();
+import {creationAllowed} from '../symbols';
 
 export default class ContentView extends Composite {
 

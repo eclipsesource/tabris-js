@@ -2,8 +2,7 @@ import {isObject} from './util';
 import EventObject from './EventObject';
 import {omit} from './util';
 import {hint, toValueString} from './Console';
-
-const notify = Symbol('notify');
+import {notify} from './symbols';
 
 export default {
 

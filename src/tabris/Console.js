@@ -1,7 +1,8 @@
 import {format} from './Formatter';
 import {getStackTrace, getCurrentLine} from './util-stacktrace';
+import {toXML as toXMLSym} from './symbols';
 
-export const toXML = Symbol();
+export const toXML = toXMLSym;
 
 export default class Console {
 

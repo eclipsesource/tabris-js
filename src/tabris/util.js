@@ -1,5 +1,6 @@
 import {toValueString} from './Console';
 import * as symbols from './symbols';
+import {bytes as bytesSym, nativeObject as nativeObjectSym} from './symbols';
 
 export function pick(object, keys) {
   const result = {};
@@ -147,8 +148,6 @@ export function read(value) {
   throw new Error(`${typeof value} is not an ArrayBuffer, Blob or typed`);
 }
 
-const bytesSym = Symbol();
-
 /**
  * @param {any} blob
  * @returns {ArrayBuffer}
@@ -197,8 +196,6 @@ export function allowOnlyValues(value, allowed, valueName = 'Value') {
   }
   return value;
 }
-
-const nativeObjectSym = Symbol();
 
 /**
  * @param {object} object

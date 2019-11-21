@@ -1,8 +1,8 @@
 import Events from './Events';
 import {toValueString} from './Console';
+import {listenersStore as storeSym} from './symbols';
 
 const DELEGATE_FIELDS = ['promise', 'addListener', 'removeListener', 'once', 'trigger', 'triggerAsync'];
-const storeKey = Symbol('ListenersStore');
 
 export default class Listeners {
 
@@ -12,10 +12,10 @@ export default class Listeners {
     if (target.on instanceof Function) {
       return target;
     }
-    if (!target[storeKey]) {
-      target[storeKey] = Object.assign({$eventTarget: target}, Events);
+    if (!target[storeSym]) {
+      target[storeSym] = Object.assign({$eventTarget: target}, Events);
     }
-    return target[storeKey];
+    return target[storeSym];
   }
 
   constructor(target, type) {
