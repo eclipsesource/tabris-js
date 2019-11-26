@@ -3,7 +3,7 @@
   "category": "service",
   "object": "app",
   "extends": "NativeObject",
-  "description": "Provides information about the application.",
+  "description": "Provides information about the application and allows to handle global application ui events.",
   "constructor": {
     "access": "private",
     "parameters": []
@@ -25,13 +25,13 @@
       "type": "boolean",
       "const": true,
       "readonly": true,
-      "description": "Returns `false` if this app was build build in production mode, otherwise `true`. In production mode no debugger can be attached to the JavaScript VM."
+      "description": "Returns `false` if this app was build build in production mode, otherwise `true`. In production mode no debugger can be attached to the JavaScript VM or native runtime."
     },
     "version": {
       "type": "string",
       "const": true,
       "readonly": true,
-      "description": "The user facing version number, e.g. '2.1-beta3'."
+      "description": "The user facing version number of the app."
     },
     "versionCode": {
       "type": "number",
@@ -40,11 +40,21 @@
       "description": "An alternative version number used in app stores to identify different versions of an app. Usually incremented with each release. This property reflects the `versionCode` on Android and `CFBundleVersion` on iOS."
     },
     "pinnedCertificates": {
-      "type": {"interface": "Array", "generics": ["any"]},
+      "type": {
+        "interface": "Array",
+        "generics": [
+          "any"
+        ]
+      },
       "description": "Enables certificate pinning for HTTP requests. When pinned certificates are defined for a host, connections to this host will only be permitted if the server provides a matching certificate. Connections to hosts that are not in the list are not affected.\n\nCertificate pinning affects the following components: XHR/fetch, WebSockets and image loading. It does *not* affect WebViews.\n\nThe list of pinned certificates has to be in the form of `[{host: <string>, hash: <string>, algorithm: <RSA2048|RSA4096|ECDSA256>}, ..]`.\n\n- The `host` attribute denotes the host name (including subdomain) of the host to be pinned ([wildcards allowed](https://en.wikipedia.org/wiki/Wildcard_DNS_record)).\n- The `hash` attribute is the base64 encoded sha256 fingerprint of the _subjectPublicKeyInfo_, prefixed with `sha256/`.\n- The `algorithm` attribute denotes the public key algorithm of the SSL certificate and can have the values `RSA2048`, `RSA4096` or `ECDSA256`. This attribute is only required on iOS.\n\nExample: `[{host: 'freegeoip.net', hash: 'sha256/+SVYjThgePRQxQ0e8bWTQDRtPYR/xBRufqyMoeaWteo=', algorithm: 'ECDSA256'}]`\n\nFor further details see https://www.owasp.org/index.php/Certificate_and_Public_Key_Pinning."
     },
     "trustedCertificates": {
-      "type": {"interface": "Array", "generics": ["ArrayBuffer"]},
+      "type": {
+        "interface": "Array",
+        "generics": [
+          "ArrayBuffer"
+        ]
+      },
       "description": "Adds a set of certificates to validated ssl connections against. The certificates are applied in addition to the system wide default certificates.\n\nThe `ArrayBuffer` entries of the `trustedCertificates` array consist of the bytes of the certificate files. On Android the certificate file has to be a _*.pem_ (Privacy Enhanced Mail) file whereas on iOS  it has to be _*.der_ (Distinguished Encoding Rules) file."
     },
     "idleTimeoutEnabled": {
@@ -70,10 +80,10 @@
       "description": "Fired when the app is being destroyed. After this callback no more interaction with the app is possible."
     },
     "keyPress": {
-      "description": "Fired when a hardware key is pressed on Android. It intercepts all key events before they are dispatched to the app widgets.",
+      "description": "Fired when a hardware key is pressed. Note that these events stem from physical hardware, not from the virtual keyboard.\n\nWhen invoking `event.preventDefault()` the key event is not propagated to the widget hierarchy. However, a `TextInput` with focus will still receives the key event.",
       "parameters": {
         "keyCode": {
-          "description": "The key code of the key event. This is the physical key that was pressed, not the Unicode character.",
+          "description": "The key code of the key event. It represents the physical key that was pressed, not the Unicode character.",
           "type": "number"
         },
         "character": {
@@ -81,7 +91,7 @@
           "type": "string"
         },
         "shiftKey": {
-          "description": "The pressed state of the SHIF key.",
+          "description": "The pressed state of the SHIFT key.",
           "type": "boolean"
         },
         "ctrlKey": {
@@ -98,7 +108,12 @@
         },
         "action": {
           "description": "The action of this key event.",
-          "type": {"union": ["'up'", "'down'"]}
+          "type": {
+            "union": [
+              "'up'",
+              "'down'"
+            ]
+          }
         },
         "time": {
           "description": "The time this event occurred, in the android.os.SystemClock#uptimeMillis time base.",
@@ -109,20 +124,26 @@
           "type": "number"
         },
         "preventDefault": {
-          "description": "Call to suppress the key events to be dispatched to the app widgets.",
+          "description": "Call to suppress the key events to be dispatched to the apps widget hierarchy. Note that a `TextInput` with focus will still receive the event and add a character to its text accordingly.",
           "type": "Function",
           "ts_type": "() => void"
         }
+      },
+      "platforms": {
+        "ios": false
       }
     },
     "backNavigation": {
-      "description": "Fired when the back button is pressed on Android.",
+      "description": "Fired when a back navigation is invoked by the user.",
       "parameters": {
         "preventDefault": {
           "description": "Call to suppress the default back navigation behavior.",
           "type": "Function",
           "ts_type": "() => void"
         }
+      },
+      "platforms": {
+        "ios": false
       }
     }
   },
