@@ -2,7 +2,7 @@
   "type": "App",
   "object": "app",
   "extends": "NativeObject",
-  "description": "Provides information about the application.",
+  "description": "Provides information about the application and allows to handle global application ui events.",
   "constructor": {
     "access": "private",
     "parameters": []
@@ -16,7 +16,7 @@
     "version": {
       "type": "string",
       "readonly": true,
-      "description": "The user facing version number, e.g. '2.1-beta3'."
+      "description": "The user facing version number of the app."
     },
     "versionCode": {
       "type": "number",
@@ -63,10 +63,10 @@
       }
     },
     "keyPress": {
-      "description": "Fired when a hardware key is pressed on Android. It intercepts all key events before they are dispatched to the app widgets.",
+      "description": "Fired when a hardware key is pressed. Note that these events stem from physical hardware, not from the virtual keyboard.\n\nWhen invoking `event.preventDefault()` the key event is not propagated to the widget hierarchy. However, a `TextInput` with focus will still receives the key event.",
       "parameters": {
         "keyCode": {
-          "description": "The key code of the key event. This is the physical key that was pressed, not the Unicode character.",
+          "description": "The key code of the key event. It represents the physical key that was pressed, not the Unicode character.",
           "type": "number"
         },
         "character": {
@@ -74,7 +74,7 @@
           "type": "string"
         },
         "shiftKey": {
-          "description": "The pressed state of the SHIF key.",
+          "description": "The pressed state of the SHIFT key.",
           "type": "boolean"
         },
         "ctrlKey": {
@@ -102,19 +102,27 @@
           "type": "number"
         },
         "preventDefault": {
-          "description": "Call to suppress the key events to be dispatched to the app widgets.",
+          "description": "Call to suppress the key events to be dispatched to the apps widget hierarchy. Note that a `TextInput` with focus will still receive the event and add a character to its text accordingly.",
           "type": "Function",
           "ts_type": "() => void"
         }
+      },
+      "platforms": {
+        "ios": false,
+        "windows": false
       }
     },
     "backNavigation": {
-      "description": "Fired when the back button is pressed on Android.",
+      "description": "Fired when a back navigation is invoked by the user.",
       "parameters": {
         "preventDefault": {
           "description": "Call to suppress the default back navigation behavior.",
           "type": "() => void"
         }
+      },
+      "platforms": {
+        "ios": false,
+        "windows": false
       }
     }
   },
