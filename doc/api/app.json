@@ -63,7 +63,7 @@
       }
     },
     "keyPress": {
-      "description": "Fired when a hardware key is pressed. Note that these events stem from physical hardware, not from the virtual keyboard.\n\nWhen invoking `event.preventDefault()` the key event is not propagated to the widget hierarchy. However, a `TextInput` with focus will still receives the key event.",
+      "description": "Fired when a hardware key is pressed. Note that these events stem from physical hardware, not from the virtual keyboard.\n\nWhen invoking `event.preventDefault()` the key event is not propagated to the widget hierarchy. However, a `TextInput` with focus will still receive the key event.",
       "parameters": {
         "keyCode": {
           "description": "The key code of the key event. It represents the physical key that was pressed, not the Unicode character.",
