@@ -4,16 +4,18 @@ let widget: Button = new Button();
 
 // Properties
 let alignment: 'centerX' | 'left' | 'right';
+let autoCapitalize: 'default' | 'none' | 'all';
 let image: ImageValue;
 let text: string;
 let textColor: ColorValue;
 let nullValue: null;
 let font: FontValue;
 let style: 'default' | 'elevate' | 'flat' | 'outline' | 'text';
-let imageTintColor: ColorValue
+let imageTintColor: ColorValue;
 let strokeWidth: number | null = null;
 
 alignment = widget.alignment;
+autoCapitalize = widget.autoCapitalize;
 image = widget.image as ImageValue;
 nullValue = widget.image as null;
 text = widget.text;
@@ -23,6 +25,7 @@ font = widget.font;
 imageTintColor = widget.imageTintColor;
 
 widget.alignment = alignment;
+widget.autoCapitalize = autoCapitalize;
 widget.image = image;
 widget.image = nullValue;
 widget.text = text;
@@ -32,7 +35,7 @@ widget.font = font;
 widget.imageTintColor = imageTintColor;
 widget.strokeWidth = strokeWidth;
 
-let properties: Properties<Button> = {alignment, image, text, textColor, font};
+let properties: Properties<Button> = {alignment, autoCapitalize, image, text, textColor, font};
 widget = new Button(properties);
 widget.set(properties);
 

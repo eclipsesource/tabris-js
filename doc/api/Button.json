@@ -81,6 +81,11 @@
     "textColor": {
       "type": "ColorValue",
       "description": "The color of the text."
+    },
+    "autoCapitalize": {
+      "type": {"union": ["'default'", "'none'", "'all'"]},
+      "default": "'default'",
+      "description": "Control how the button text is capitalized.\n\n* `'default'` - The platform decides on the capitalization\n* `'none'` - The text is displayed unaltered\n* `'all'` - Every letter is capitalized"
     }
   },
   "events": {

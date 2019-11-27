@@ -88,6 +88,11 @@ NativeObject.defineProperties(Button.prototype, {
     choice: ['left', 'right', 'centerX'],
     default: 'centerX'
   },
+  autoCapitalize: {
+    type: types.string,
+    choice: ['default', 'none', 'all'],
+    default: 'default'
+  },
   image: {type: types.ImageValue, default: null},
   imageTintColor: {type: types.ColorValue, default: 'initial'},
   text: {type: types.string, default: ''},
