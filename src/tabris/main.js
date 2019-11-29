@@ -64,6 +64,7 @@ import RadioButton from './widgets/RadioButton';
 import RefreshComposite from './widgets/RefreshComposite';
 import ScrollView from './widgets/ScrollView';
 import SearchAction from './widgets/SearchAction';
+import SizeMeasurement, {create as createSizeMeasurement} from './SizeMeasurement';
 import Slider from './widgets/Slider';
 import StatusBar, {create as createStatusBar} from './widgets/StatusBar';
 import Switch from './widgets/Switch';
@@ -151,6 +152,7 @@ const tabrisMain = Object.assign(new Tabris(), {
   Row,
   ScrollView,
   SearchAction,
+  SizeMeasurement,
   Slider,
   Storage,
   StackLayout,
@@ -219,6 +221,7 @@ tabrisMain.on('start', (options) => {
     tabris.$permission = createPermission();
     tabris.JSX.install(createJsxProcessor());
   }
+  tabris.$sizeMeasurement = createSizeMeasurement();
   tabris.$device = createDevice();
   tabris.$fs = createFileSystem();
   publishDeviceProperties(tabris.device, global);
