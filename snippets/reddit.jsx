@@ -7,7 +7,7 @@ let items = [];
 
 contentView.append(
   <NavigationView stretch toolbarColor={device.platform === 'iOS' ? 'white' : null}>
-    <Page title='Pets on Reddit'>
+    <Page title='Flowers on Reddit'>
       <CollectionView
         stretch
         background='#f5f5f5'
@@ -43,7 +43,7 @@ function createItemCell() {
 }
 
 function createLoadingCell() {
-  return <TextView centerY alignment='centerX' text='Loading more pets...'/>;
+  return <TextView centerY alignment='centerX' text='Loading more flowers...'/>;
 }
 
 function updateCell(view, index) {
@@ -111,7 +111,7 @@ function loadNewItems() {
 }
 
 function createUrl(params) {
-  return 'http://www.reddit.com/r/petpictures.json?' +
+  return 'http://www.reddit.com/r/flowers.json?' +
     Object.keys(params).map(key => key + '=' + params[key]).join('&');
 }
 
