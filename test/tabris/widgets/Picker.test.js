@@ -165,7 +165,7 @@ describe('Picker', function() {
         expect(client.calls({op: 'set', id: picker.cid})[0].properties).to.deep.equal({selectionIndex: 23});
       });
 
-      it('gets native property `selectionIndex`', function() {
+      it('GETs native property `selectionIndex`', function() {
         stub(client, 'get').returns(23);
 
         expect(picker.selectionIndex).to.equal(23);
@@ -179,6 +179,24 @@ describe('Picker', function() {
 
         expect(picker.selectionIndex).to.equal(23);
         expect(client.get).not.to.have.been.called;
+      });
+
+      it('GETs native property after flush', function() {
+        picker.selectionIndex = 23;
+        stub(client, 'get').returns(24);
+
+        tabris.flush();
+
+        expect(picker.selectionIndex).to.equal(24);
+      });
+
+      it('gets cached property in selectionIndexChanged event', function() {
+        let result = null;
+        picker.onSelectionIndexChanged(() => result = picker.selectionIndex);
+
+        tabris._notify(picker.cid, 'select', {selectionIndex: 23});
+
+        expect(result).to.equal(23);
       });
 
     });

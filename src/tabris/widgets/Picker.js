@@ -133,5 +133,9 @@ NativeObject.defineChangeEvents(Picker.prototype, [
 ]);
 
 NativeObject.defineEvents(Picker.prototype, {
-  select: {native: true, changes: 'selectionIndex', changeValue: 'index'},
+  select: {
+    native: true,
+    changes: 'selectionIndex',
+    changeValue: ev => 'index' in ev ? ev.index : ev.selectionIndex
+  },
 });
