@@ -10,7 +10,7 @@ let navigationView = new NavigationView({
 }).appendTo(ui.contentView);
 
 let page = new Page({
-  title: 'Reddit - Pets'
+  title: 'Flowers on reddit'
 }).appendTo(navigationView);
 
 let collectionView = new CollectionView({
@@ -91,7 +91,7 @@ function createLoadingCell() {
   return new TextView({
     centerY: 0,
     alignment: 'center',
-    text: 'Loading...'
+    text: 'Loading more flowers...'
   });
 }
 
@@ -140,7 +140,7 @@ function loadMoreItems() {
 }
 
 function createUrl(params) {
-  return 'http://www.reddit.com/r/petpictures.json?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
+  return 'http://www.reddit.com/r/flowers.json?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
 }
 
 function getFirstId() {
