@@ -72,7 +72,7 @@ exports.generateDts = function generateTsd(config: Config) {
 //#region read/write
 
 function writeGlobalsDts(config: Config) {
-  const apiDefinitions = readJsonDefs(config.files);
+  const apiDefinitions = filter(readJsonDefs(config.files), def => !def.markdown_only);
   const globalApiDefinitions = filter(apiDefinitions, def => def.namespace && def.namespace === 'global');
   const text = new TextBuilder(config.globalTypeDefFiles.map(file => fs.readFileSync(file, {encoding: 'utf-8'})));
   renderDts(text, globalApiDefinitions);
@@ -80,7 +80,7 @@ function writeGlobalsDts(config: Config) {
 }
 
 function writeTabrisDts(config: Config) {
-  const apiDefinitions = readJsonDefs(config.files);
+  const apiDefinitions = filter(readJsonDefs(config.files), def => !def.markdown_only);
   const tabrisApiDefinitions = filter(apiDefinitions, def => !def.namespace || def.namespace === 'tabris');
   const text = new TextBuilder([HEADER.replace(/\${VERSION}/g, config.version), config.localTypeDefFiles]);
   renderDts(text, tabrisApiDefinitions);

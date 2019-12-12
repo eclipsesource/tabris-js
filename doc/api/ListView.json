@@ -1,0 +1,111 @@
+{
+    "category": "widget",
+    "type": "ListView",
+    "extends": {
+      "interface": "CollectionView",
+      "generics": ["Cell"]
+    },
+    "markdown_only": true,
+    "module": "tabris-decorators",
+    "generics": [{"name": "ItemType"}],
+    "namespace": false,
+    "jsxChildren": ["Cell"],
+    "links": [
+      {
+        "path": "https://github.com/eclipsesource/tabris-decorators/tree/master/examples/listview-cells",
+        "title": "TypeScript/JSX Examples for defining the look and selection behavior of a list views"
+      },
+      {
+        "path": "https://github.com/eclipsesource/tabris-decorators/tree/master/examples/bind-listview-list",
+        "title": "Data Binding Example"
+      }
+    ],
+    "statics": {
+      "methods": {
+        "selectPrimary": {
+          "parameters": [{"name": "ev", "type": "EventObject"}],
+          "description": "Triggers a `select` event on the `ListView` containing the given event's target. The `action` value on the `ListViewSelectEvent` event will be set to `ItemAction.Primary`, which is `1`.\n\nThis method can easily be used within a cell via `onSourceEvent={ListView.selectPrimary}`."
+        },
+        "selectSecondary": {
+          "parameters": [{"name": "ev", "type": "EventObject"}],
+          "description": "Triggers a `select` event on the `ListView` containing the given event's target. The `action` value on the `ListViewSelectEvent` event will be set to `ItemAction.Secondary`, which is `2`.\n\nThis method can easily be used within a cell via `onSourceEvent={ListView.selectSecondary}`."
+        },
+        "selectToggle": {
+          "parameters": [{"name": "ev", "type": "EventObject"}],
+          "description": "Triggers a `select` event on the `ListView` containing the given event's target. The `action` value on the `ListViewSelectEvent` event will be set to `ItemAction.Toggle`, which is `3`.\n\nThis method can easily be used within a cell via `onSourceEvent={ListView.selectPrimary}`."
+        },
+        "selectDismiss": {
+          "parameters": [{"name": "ev", "type": "EventObject"}],
+          "description": "Triggers a `select` event on the `ListView` containing the given event's target. The `action` value on the `ListViewSelectEvent` event will be set to `ItemAction.Dismiss`, which is `4`.\n\nThis method can easily be used within a cell via `onSourceEvent={ListView.selectDismiss}`."
+        },
+        "select": {
+          "parameters": [
+            {
+              "name": "ev",
+              "type": "EventObject"
+            },
+            {
+              "name": "action",
+              "type": "number",
+              "optional": true
+            }
+          ],
+          "description": "Triggers a `select` event on the `ListView` containing the given event's target. The `action` value is set on the resulting `ListViewSelectEvent` event.\n\nThis method can easily be used within a cell via `onSourceEvent={ev => ListView.select(ev, someNumber)}`.\n\n Use `selectPrimary`, `selectSecondary`, `selectToggle` or `selectDismiss` as a shorthand to trigger `select` with a specific value for `action`, or just set the [`selectable`](./Cell.md#selectable) property of `Cell`."
+        }
+      }
+    },
+    "constructor": {
+      "access": "public",
+      "parameters": [
+        {
+          "name": "properties",
+          "type": {
+            "interface": "Properties",
+            "generics": ["ListView"]
+          },
+          "optional": true,
+          "description": "Sets all key-value pairs in the properties object as widget properties."
+        }
+      ]
+    },
+    "events": {
+      "select": {
+        "parameters": {
+          "item": {
+            "type": "ItemType",
+            "description": "The item currently associated with the Cell that triggered the event."
+          },
+          "itemIndex": {
+            "type": "number",
+            "description": "The index of the item within the `items` list/array."
+          },
+          "originalEvent": {
+            "type": "EventObject",
+            "description": "The event that was the cause of this select event."
+          },
+          "action": {
+            "type": "number",
+            "description": "A general-purpose parameter passed on when the event was triggered. This is meant to be used to indicate different kind of interactions.\n\n`tabris-decorators` exports a `ItemAction` enum defining 4 pre-defined values for use with this property: `Primary`, `Secondary`, `Toggle` and `Dismiss`. These are set when using the corresponding [trigger methods](#selectprimaryev)."
+          }
+        },
+        "description": "An event that may be triggered by a `Cell` as the result of any kind of user interaction. By default cells do not trigger `select` events, they have to be explicitly configured to do so. This can be done via the [`selectable`](./Cell.md#selectable) property on `Cell` or the static [`select`](#selectprimaryev) trigger methods."
+      }
+    },
+    "properties": {
+      "items": {
+        "type": {
+          "union": [
+            {
+              "interface": "List",
+              "generics": ["ItemType"]
+            },
+            {
+              "interface": "Array",
+              "generics": ["ItemType"]
+            }
+          ]
+        },
+        "description": "List or Array containing the items that to be displayed. If a `List` is used any changes to the list (items added/removed/replaced) the `ListView` updates itself automatically. The updated will be animated if possible."
+      }
+    }
+  }

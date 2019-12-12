@@ -54,11 +54,14 @@ export interface Api {
    */
   title?: string;
   description?: string;
-  namespace?: "global" | "tabris";
+  namespace?: "global" | "tabris" | false;
+  module?: "tabris" | "tabris-decorators";
+  markdown_only?: boolean;
   /**
    * Name of the class/interface
    */
   type?: string;
+  jsxChildren?: string[];
   /**
    * Makes this type an interface. Will be rendered inline where referenced in documentation.
    */

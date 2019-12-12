@@ -1,0 +1,62 @@
+{
+    "category": "widget",
+    "type": "Cell",
+    "extends": "Composite",
+    "markdown_only": true,
+    "module": "tabris-decorators",
+    "generics": [{"name": "ItemType", "extends": "any"}],
+    "constructor": {
+      "access": "public",
+      "parameters": [
+        {
+          "name": "properties",
+          "type": {
+            "interface": "Properties",
+            "generics": ["Cell"]
+          },
+          "optional": true,
+          "description": "Sets all key-value pairs in the properties object as widget properties."
+        }
+      ]
+    },
+    "namespace": false,
+    "properties": {
+      "item": {
+        "type": "ItemType",
+        "readonly": true,
+        "description": "The `ListView` item currently assigned to this cell. Child elements of `<Cell>` can bind properties to it used the `bind-<widgetProperty>='item.itemProperty` [syntax](../databinding/@component#one-way-bindings)."
+      },
+      "itemIndex": {
+        "type": "number",
+        "readonly": true,
+        "description": "The index (within the `items` of `ListView`) of the item currently assigned to this cell."
+      },
+      "selectable": {
+        "type": "boolean",
+        "const": true,
+        "default": "false",
+        "description": "If set to true (e.g. `<Cell selectable>`), the cell will trigger the `select` event of [`ListView`](./ListView.md) when tapped.\n\nAlternatively, any of the static `ListView` [`select`](#selectprimaryev) trigger methods can be registered as listeners of any event of `Cell` or its child elements. This allows `select` events to be triggered on more specific user interactions."
+      },
+      "itemType": {
+        "type": {
+          "union": ["Constructor", "'string'", "'number'", "'boolean'"]
+        },
+        "default": "null",
+        "const": true,
+        "description": "The class (constructor) or name (`typeof` value) of the item type this cell can display. This is used to determine which `<Cell>` template to use when multiple are given in a `<ListView>` element. May be used instead or in addition to [`itemCheck`](#itemcheck).\n\nSetting this property also enables runtime item type checks, so it can be useful to set it even if only one `<Cell>` element is present."
+      },
+      "itemCheck": {
+        "type": {
+          "callback": [
+            {
+              "name": "value",
+              "type": "any"
+            }
+          ],
+          "returns": {"type": "boolean"}
+        },
+        "default": "null",
+        "description": "A callback that must return `true` for any item this cell can display. This is used to determine which `<Cell>` template to use when multiple are given in a `<ListView>` element. May be used instead or in addition to [`itemType`](#itemtype).\n\nSetting this property also enables runtime item type checks, so it can be useful to set it even if only one `<Cell>` element is present."
+      }
+    }
+  }

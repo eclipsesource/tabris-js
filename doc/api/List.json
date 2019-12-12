@@ -1,0 +1,8 @@
+{
+  "type": "List",
+  "category": "data",
+  "module": "tabris-decorators",
+  "generics": [{"name": "T", "extends": "any"}],
+  "namespace": false,
+  "markdown_only": true
+}

@@ -21,13 +21,13 @@ export type ExtendedApi = schema.Api & Partial<{
   file: string,
   isWidget: boolean
   isPopup: boolean,
-  jsxParents: string[],
-  jsxChildren: string[]
+  jsxParents: string[]
 }>;
 export type ApiDefinitions = {[name: string]: ExtendedApi};
 export type Methods = schema.Method | schema.Method[];
 export type Properties = {[name: string]: schema.Property};
 export type NamedType = {name: string, type: TypeReference};
+export type JSXContentType = 'element' | 'text' | 'value';
 
 export function capitalizeType(type: string) {
   if (type.indexOf('=>') !== -1) {
@@ -144,13 +144,27 @@ export function hasChangeEvent(property: schema.Property, isStatic: boolean = fa
   return !isStatic && !property.const && !property.noChangeEvent && !property.protected && !property.private;
 }
 
-export function getJSXChildType(def: ExtendedApi, type: schema.TypeReference): string {
+export function getJSXContentType(
+  defs: ApiDefinitions,
+  api: ExtendedApi,
+  propertyType: TypeReference
+): JSXContentType {
+  if (propertyType === 'string') {
+    return 'text';
+  }
+  const elementType = getJSXChildElementType(api, propertyType);
+  if (elementType && defs[elementType]) {
+    return 'element';
+  }
+  return 'value';
+}
+
+export function getJSXChildElementType(def: ExtendedApi, type: schema.TypeReference): string {
   const jsxType = resolveGenerics(def, type);
   if (isInterfaceReference(jsxType) && jsxType.interface === 'Array') {
     return plainType(jsxType.generics[0]);
-  } else {
-    throw new Error('JSX Children type must be array');
   }
+  return null;
 }
 
 export function supportsJsx(def: ExtendedApi) {
@@ -203,15 +217,21 @@ function extendTypeDefs(defs: ApiDefinitions) {
       defs[name].superAPI = defs[ext];
     }
     defs[name].jsxChildren = getJsxChildren(defs, name);
-    defs[name].jsxChildren.forEach(childType => {
-      const jsxParents = defs[childType].jsxParents = defs[childType].jsxParents || [];
-      jsxParents.push(name);
-    });
+    defs[name].jsxChildren
+      .map(childType => defs[childType])
+      .filter(v => v != null)
+      .forEach(def => {
+        const jsxParents = def.jsxParents = def.jsxParents || [];
+        jsxParents.push(name);
+      });
   });
 }
 
 function getJsxChildren(defs: ApiDefinitions, name: string): string[] {
   const def = defs[name];
+  if (def.jsxChildren) {
+    return def.jsxChildren;
+  }
   if (!supportsJsx(def) || def.type === 'CollectionView') {
     return [];
   }
@@ -229,12 +249,19 @@ function getJsxChildren(defs: ApiDefinitions, name: string): string[] {
       result.push(...getAllOfType(defs, childTypeParam));
     }
   }
-  // Non-Widget Child Elements:
+  // Non-Widget Children:
   Object.keys(def.properties || {})
-    .map(propName => def.properties[propName])
-    .filter(prop => prop.jsxContentProperty && prop.type !== 'string')
-    .forEach(prop => result.push(getJSXChildType(def, prop.type)));
+    .filter(propName => isJSXElementProperty(defs, def, propName))
+    .map(propName => def.properties[propName].type)
+    .forEach(propType => result.push(getJSXChildElementType(def, propType)));
   return result;
+}
+
+function isJSXElementProperty(defs: ApiDefinitions, api: ExtendedApi, propName: string): boolean {
+  if (!api.properties[propName].jsxContentProperty) {
+    return false;
+  }
+  return getJSXContentType(defs, api, api.properties[propName].type) === 'element';
 }
 
 function getAllOfType(defs: ApiDefinitions, type: schema.TypeReference): string[] {

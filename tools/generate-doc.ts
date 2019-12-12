@@ -2,7 +2,8 @@ import * as fs from 'fs-extra';
 import * as schema from './api-schema';
 import {
   ApiDefinitions, asArray, ExtendedApi, getTitle, readJsonDefs, hasChangeEvent, plainType, isInterfaceReference,
-  isUnion, isTuple, isMap, isIndexedMap, isCallback, getEventTypeName, getJSXChildType, supportsJsx
+  isUnion, isTuple, isMap, isIndexedMap, isCallback, getEventTypeName, getJSXChildElementType, supportsJsx,
+  getJSXContentType
 } from './common';
 import { join, parse, relative, sep } from 'path';
 
@@ -474,10 +475,24 @@ class DocumentRenderer {
         'Constructor: | ',
         this.def.constructor.access || 'public', '\n',
         'Singleton:', ' | ',
-        this.def.object ? '`' + this.def.object + '`' : 'No', '\n',
-        'Namespace: |',
-        this.renderHtmlLink(this.def.namespace || 'tabris', {href: '../modules.md#startup'}), '\n'
+        this.def.object ? '`' + this.def.object + '`' : 'No', '\n'
       );
+      if (this.def.module) {
+        result.push(
+          '**Module:** |',
+          this.renderHtmlLink(
+            '**' + this.def.module + '**',
+            {href: 'https://www.npmjs.com/package/' + this.def.module}
+          ),
+          '\n'
+        );
+      }
+      if (this.def.namespace !== false) {
+        result.push(
+          'Namespace: |',
+          this.renderHtmlLink(this.def.namespace || 'tabris', {href: '../modules.md#startup'}), '\n'
+        );
+      }
       const subclasses = Object.keys(this.gen.defs).filter(def => this.gen.defs[def].extends === this.def.type);
       result.push('Direct subclasses: | ');
       if (subclasses.length) {
@@ -521,13 +536,17 @@ class DocumentRenderer {
       result.push(this.renderParentElements());
       result.push('<br/>');
       result.push('Child Elements: ', this.renderChildElements(), '<br/>');
-      result.push('Text Content: ');
-      const textContentProperty = Object.keys(this.def.properties || {})
-        .find(prop => this.def.properties[prop].jsxContentProperty);
-      if (textContentProperty) {
-          result.push('[', code(textContentProperty), '](#' + textContentProperty.toLowerCase() + ')');
+      const contentProperties = Object.keys(this.def.properties || {})
+        .filter(prop => this.def.properties[prop].jsxContentProperty);
+      if (contentProperties.length) {
+        if (contentProperties.length > 1) {
+          result.push('Element Content Property: ');
         } else {
-          result.push('*Not supported*');
+          result.push('Element Content Properties: ');
+        }
+        result.push(contentProperties.map(property =>
+          `[${code(property)}](#${property.toLowerCase()})`
+        ).join(', '));
       }
     } else {
       result.push('No\n');
@@ -672,20 +691,20 @@ class DocumentRenderer {
     if (publicPropertyKeys.length) {
       result.push('## Properties\n\n');
       publicPropertyKeys.forEach(name => {
-        result.push(this.renderProperty(properties, name, type));
+        result.push(this.renderProperty(properties, name));
       });
     }
     if (protectedPropertyKeys.length) {
       result.push('## Protected Properties\n\n');
       result.push(`These properties are accessible only in classes extending ${code(type)}.\n\n`);
       protectedPropertyKeys.forEach(name => {
-        result.push(this.renderProperty(properties, name, type));
+        result.push(this.renderProperty(properties, name));
       });
     }
     if (staticPropertyKeys.length) {
       result.push('## Static Properties\n\n');
       staticPropertyKeys.forEach(name => {
-        result.push(this.renderProperty(statics.properties, name, type, true));
+        result.push(this.renderProperty(statics.properties, name, true));
       });
     }
     return result.join('');
@@ -693,7 +712,7 @@ class DocumentRenderer {
 
   private renderProperty(
     properties: {[key: string]: schema.Property},
-    name: string, type: string,
+    name: string,
     isStatic: boolean = false
   ) {
     const result = [];
@@ -704,12 +723,15 @@ class DocumentRenderer {
     }
     result.push(this.renderPropertySummary(property, name, isStatic), '\n\n');
     if (property.jsxContentProperty) {
+      const kind = getJSXContentType(this.gen.defs, this.def, property.type);
       result.push(`\n\nWhen using ${this.def.type} as an JSX element `);
-      if (property.type === 'string') {
+      if (kind === 'text') {
         result.push('the elements Text content is');
-      } else {
-        result.push(code(this.renderJSXLink(getJSXChildType(this.def, property.type))));
+      } else if (kind === 'element') {
+        result.push(code(this.renderJSXLink(getJSXChildElementType(this.def, property.type))));
         result.push(' child elements are');
+      } else {
+        result.push('the elements content value is');
       }
       result.push(' mapped to this property.');
     }
@@ -743,11 +765,8 @@ class DocumentRenderer {
 
   private renderPropertySummary(property: schema.Property, name: string, isStatic: boolean) {
     const result = ['\nType: |'];
-    if (property.values) { // TODO: remove in favor of using only union types
-      result.push(code(pipeOr(property.values.map(v => this.literal(v, property.type)))));
-    } else {
-      result.push(code(this.renderTypeRef(property.type, false)));
-    }
+    const propertyTypeText = this.renderPropertyTypeReference(property);
+    result.push(code(propertyTypeText));
     result.push('\n');
     if ('default' in property) {
       // tslint:disable-next-line: no-any
@@ -780,19 +799,31 @@ class DocumentRenderer {
       } else {
         result.push(`Not supported`);
       }
-      result.push('\n');
     }
-    if (property.jsxContentProperty && property.type === 'string') {
-      result.push('JSX Text Property: | [Yes](../JSX.md)\n');
-    } else if (property.jsxContentProperty) {
-      result.push('JSX Child Element: | ');
-      result.push(code(this.renderJSXLink(getJSXChildType(this.def, property.type))), '\n');
+    if (property.jsxContentProperty) {
+      const kind = getJSXContentType(this.gen.defs, this.def, property.type);
+      result.push('\nJSX Content Type: | ');
+      if (kind === 'text') {
+        result.push('[Text](../JSX.md)\n');
+      } else if (kind === 'element') {
+        result.push(code(this.renderJSXLink(getJSXChildElementType(this.def, property.type))), '\n');
+      } else {
+        result.push(code(propertyTypeText));
+      }
     }
+    result.push('\n');
     if (!property.default && !property.readonly) {
       // TODO: how to handle non-primitives?
       console.log('No default value for ' + this.title + ' property ' + name);
     }
     return result.join('');
+  }
+
+  private renderPropertyTypeReference(property: schema.Property): string {
+    if (property.values) { // TODO: remove in favor of using only union types
+      return pipeOr(property.values.map(v => this.literal(v, property.type)));
+    }
+    return this.renderTypeRef(property.type, false);
   }
 
   private renderAllEvents() {
@@ -1093,10 +1124,10 @@ class DocumentRenderer {
   private renderJSXLink(type: schema.TypeReference) {
     const name = plainType(type);
     const element = tag(name + '/');
-    if (!this.gen.typeLinks[name]) {
+    if (!this.getTypeLink(name)) {
       throw new Error('No type link for ' + name);
     }
-    return this.renderHtmlLink(element, this.gen.typeLinks[name]);
+    return this.renderHtmlLink(element, this.getTypeLink(name));
   }
 
   private renderGenericsDef(generics: schema.GenericsDef) {

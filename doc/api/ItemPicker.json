@@ -1,0 +1,82 @@
+{
+    "category": "widget",
+    "type": "ItemPicker",
+    "extends": "Picker",
+    "markdown_only": true,
+    "module": "tabris-decorators",
+    "generics": [{"name": "ItemType", "extends": "any"}],
+    "namespace": false,
+    "links": [
+      {
+        "path": "https://github.com/eclipsesource/tabris-decorators/tree/master/examples/itempicker",
+        "title": "TypeScript/JSX Examples"
+      },
+      {
+        "path": "https://github.com/eclipsesource/tabris-decorators/tree/master/examples/bind-itempicker-list",
+        "title": "Data Binding Example"
+      }
+    ],
+    "constructor": {
+      "access": "public",
+      "parameters": [
+        {
+          "name": "properties",
+          "type": {
+            "interface": "Properties",
+            "generics": ["ItemPicker"]
+          },
+          "optional": true,
+          "description": "Sets all key-value pairs in the properties object as widget properties."
+        }
+      ]
+    },
+    "events": {
+      "itemSelect": {
+        "description": "Fired when an item was selected by the user. Same as the `select` event, except that it provides not just the item index, but also the item and the item text.",
+        "parameters": {
+          "item": {"type": "ItemType"},
+          "itemIndex": {"type": "number"},
+          "itemText": {"type": "string"}
+        }
+      }
+    },
+    "properties": {
+      "items": {
+        "type": {
+          "union": [
+            {
+              "interface": "List",
+              "generics": ["ItemType"]
+            },
+            {
+              "interface": "Array",
+              "generics": ["ItemType"]
+            }
+          ]
+        },
+        "jsxContentProperty": true,
+        "default": null,
+        "description": "List or Array containing the items that can be selected. If a `List` is used any changes to the list (items added/removed/replaced) are applied to the `ItemPicker` automatically.\n\nWhen `items` changes - either by modifying `List` or setting a new `Array` - the selection state will be preserved if the index currently selected item remains unchanged.\n\nItems can also be provided as an array literal (within curly braces) or plain text with the `<ItemPicker`> JSX element. If text is given it will be interpreted as a comma separated list."
+      },
+      "selection": {
+        "type": "ItemType",
+        "description": "The currently selected item. Corresponds to the `itemIndex` property. The value is adjusted automatically if `items` is manipulated. In this case a `selectionChanged` event is fired, but no `select` event."
+      },
+      "textSource": {
+        "type": {
+          "union": [
+            "null",
+            "string",
+            {
+              "map": {
+                "path": {"type": "string"},
+                "converter": {"type": "Function"}
+              }
+            }
+          ]
+        },
+        "description": "Controls how the text representing an item is determined.\n\nIf this property is not set, the item is simply stringified. This works best when the item is a string already or implements a `toString()` method.\n\nIf the value is a string, it is interpreted as the name of a property of the item object. That property is used as the text. The string can also point to a sub-property, like a [data binding path](../databinding/@component#one-way-bindings). If the property is [`@property`](../databinding/@property.md)-decorated, changes will be applied automatically.\n\nLastly, a `path` string can be combined with a `converter` function in a plain object.",
+        "default": null
+      }
+    }
+  }

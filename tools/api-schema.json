@@ -17,11 +17,20 @@
           "type": "string"
         },
         "namespace": {
-          "enum": ["global", "tabris"]
+          "enum": ["global", "tabris", false]
+        },
+        "module": {
+          "enum": ["tabris", "tabris-decorators"]
+        },
+        "markdown_only": {
+          "type": "boolean"
         },
         "type": {
           "description": "Name of the class/interface",
           "type": "string"
+        },
+        "jsxChildren": {
+          "items": {"type": "string"}
         },
         "interface": {
           "description": "Makes this type an interface. Will be rendered inline where referenced in documentation.",
