@@ -53,19 +53,19 @@ describe('SizeMeasurement', function() {
       });
     });
 
-    it('rejects invalid argument type`', function() {
+    it('rejects invalid argument type', function() {
       return sizeMeasurement.measureTexts(23).then(expectFail, error => {
         expect(error.message).to.equal('The text measurement configs have to be an array');
       });
     });
 
-    it('rejects missing text property`', function() {
+    it('rejects missing text property', function() {
       return sizeMeasurement.measureTexts([{font: '12px'}]).then(expectFail, error => {
         expect(error.message).to.equal('A text measurement configuration has to provide a "text" value');
       });
     });
 
-    it('calls native `measureTexts`', function() {
+    it('calls native measureTexts', function() {
       spy(client, 'call');
 
       sizeMeasurement.measureTexts([{text: 'Hello World', font: '12px Arial'}]);
@@ -91,6 +91,41 @@ describe('SizeMeasurement', function() {
         expect(err).to.be.instanceOf(Error);
         expect(err.message).to.equal('Could not measure texts');
       });
+    });
+
+  });
+
+  describe('measureTextsSync', function() {
+
+    it('throws if parameter missing', function() {
+      expect(() => sizeMeasurement.measureTextsSync()).to.throw('Not enough arguments to measure texts');
+    });
+
+    it('throws on invalid argument type', function() {
+      expect(() => sizeMeasurement.measureTextsSync(23)).to.throw('The text measurement configs have to be an array');
+    });
+
+    it('throws on missing text property', function() {
+      expect(() => sizeMeasurement.measureTextsSync([{font: '12px'}]))
+        .to.throw('A text measurement configuration has to provide a "text" value');
+    });
+
+    it('calls native measureTextsSync', function() {
+      spy(client, 'call');
+
+      sizeMeasurement.measureTextsSync([{text: 'Hello World', font: '12px Arial'}]);
+
+      expect(client.call).to.have.been.calledWithMatch(sizeMeasurement.cid, 'measureTextsSync', {
+        configs: [{text: 'Hello World', font: new Font(12, ['Arial']), markupEnabled: false, maxWidth: undefined}]
+      });
+    });
+
+    it('returns on successful measureTextsSync', function() {
+      stub(client, 'call').callsFake(() => [{width: 128, height: 24}]);
+
+      const result = sizeMeasurement.measureTextsSync([{text: 'Hello World', font: '12px'}]);
+
+      expect(result).to.deep.equal([{width: 128, height: 24}]);
     });
 
   });

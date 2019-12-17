@@ -25,16 +25,32 @@ export default class SizeMeasurement extends NativeObject {
         throw new Error('The text measurement configs have to be an array');
       }
       this._nativeCall('measureTexts', {
-        configs: configs.map((config) => ({
-          text: checkText(config.text),
-          font: checkFont(config.font),
-          markupEnabled: !!config.markupEnabled,
-          maxWidth: 'maxWidth' in config ? types.dimension.convert(config.maxWidth) : undefined,
-        })),
+        configs: this._createTextMeasureConfigs(configs),
         onResult: (result) => resolve(result),
         onError: (error) => reject(new Error(error)),
       });
     });
+  }
+
+  measureTextsSync(configs) {
+    if (arguments.length < 1) {
+      throw new Error('Not enough arguments to measure texts');
+    }
+    if (!Array.isArray(configs)) {
+      throw new Error('The text measurement configs have to be an array');
+    }
+    return this._nativeCall('measureTextsSync', {
+      configs: this._createTextMeasureConfigs(configs),
+    });
+  }
+
+  _createTextMeasureConfigs(configs) {
+    return configs.map((config) => ({
+      text: checkText(config.text),
+      font: checkFont(config.font),
+      markupEnabled: !!config.markupEnabled,
+      maxWidth: 'maxWidth' in config ? types.dimension.convert(config.maxWidth) : undefined,
+    }));
   }
 
   dispose() {

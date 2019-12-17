@@ -51,7 +51,7 @@
             "map": {
               "width": {
                 "type": "number",
-                "description": "The width of the measure text"
+                "description": "The width of the measured text"
               },
               "height": {
                 "type": "number",
@@ -62,6 +62,61 @@
         ]
       },
       "description": "Measures the given text. The method returns a `Promise` which resolves to an array of `{width: number, height: number}`.",
+      "provisional": true
+    },
+    "measureTextsSync": {
+      "parameters": [
+        {
+          "name": "configs",
+          "type": {
+            "interface": "Array",
+            "generics": [
+              {
+                "map": {
+                  "text": {
+                    "type": "string",
+                    "description": "The text to measure."
+                  },
+                  "font": {
+                    "type": "FontValue",
+                    "description": "The font to use when measuring the text. Requires to provide at least the font size."
+                  },
+                  "maxWidth": {
+                    "type": "number",
+                    "description": "The maximum width after which to break a text string to a new line.",
+                    "optional": true
+                  },
+                  "markupEnabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Whether the texts html markup should be processed before measuring. Supports the same tags as `TextView`.",
+                    "optional": true
+                  }
+                }
+              }
+            ]
+          },
+          "description": "The text configurations to measure. A text configuration has to provide at least a `text` and `fontSize` property."
+        }
+      ],
+      "returns": {
+        "interface": "Array",
+        "generics": [
+          {
+            "map": {
+              "width": {
+                "type": "number",
+                "description": "The width of the measured text"
+              },
+              "height": {
+                "type": "number",
+                "description": "The height of the measured text"
+              }
+            }
+          }
+        ]
+      },
+      "description": "Measures the given text. The method returns an array of `{width: number, height: number}`.",
       "provisional": true
     }
   },
