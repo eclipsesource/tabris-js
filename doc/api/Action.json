@@ -104,7 +104,7 @@
         "navigation"
       ],
       "default": "default",
-      "description": "Actions with 'default' placement will be visible in the toolbar if enough space is available, otherwise moved to the overflow section. Setting the property to 'overflow' makes the action appear there exclusively. Lastly, 'navigation' puts the action in the position normally occupied by the drawer/back button. If multiple actions have this value only the first one is displayed."
+      "description": "Actions with 'default' placement will be visible in the toolbar if enough space is available, otherwise moved to the overflow section. Setting the property to 'overflow' makes the action appear there exclusively. Lastly, 'navigation' puts the action in the position normally occupied by the drawer/back button. When 'navigation' is used, only the `Action` image will be shown. If multiple actions have this value only the first one is displayed."
     },
     "title": {
       "type": "string",
