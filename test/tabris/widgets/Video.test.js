@@ -50,6 +50,28 @@ describe('Video', function() {
       expect(video.state).to.equal('native value');
     });
 
+    it('does not cache read-only properties', function() {
+      client.properties(video.cid).speed = 0;
+      client.properties(video.cid).position = 0.5;
+      client.properties(video.cid).duration = 5000;
+      client.properties(video.cid).state = 'pause';
+      // eslint-disable-next-line no-unused-vars
+      let foo = video.speed;
+      foo = video.position;
+      foo = video.duration;
+      foo = video.state;
+      tabris.flush();
+      client.properties(video.cid).speed = 1;
+      client.properties(video.cid).position = 0.6;
+      client.properties(video.cid).duration = 6000;
+      client.properties(video.cid).state = 'play';
+
+      expect(video.speed).to.equal(1);
+      expect(video.position).to.equal(0.6);
+      expect(video.duration).to.equal(6000);
+      expect(video.state).to.equal('play');
+    });
+
   });
 
   describe('stateChanged', function() {

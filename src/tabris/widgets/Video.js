@@ -63,8 +63,8 @@ NativeObject.defineProperties(Video.prototype, {
   url: {type: 'string', default: ''},
   controlsVisible: {type: 'boolean', default: true},
   autoPlay: {type: 'boolean', default: true},
-  speed: {readonly: true},
-  position: {readonly: true},
-  duration: {readonly: true},
-  state: {readonly: true}
+  speed: {readonly: true, nocache: true},
+  position: {readonly: true, nocache: true},
+  duration: {readonly: true, nocache: true},
+  state: {readonly: true, nocache: true}
 });
