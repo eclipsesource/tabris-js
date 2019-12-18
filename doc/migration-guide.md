@@ -81,6 +81,10 @@ Alternatively JSX my be used:
 
 These properties are replaced by a new property `placement` on the `Action` widget. It accepts the values `'default'` (same as `placementPriority = 'normal'`), `'overflow'` (same as a `placementPriority = 'low'`) and `'navigation'`, which puts the action in the place usually reserved by the drawer icon.
 
+### Removed property `topToolbarHeight` and `bottomToolbarHeight` on `NavigationView`
+
+On iOS a toolbar at the bottom of a `NavigationView` has been used for actions with low priority. With the introduction of the new `Action` `placement` property the bottom toolbar has been removed along with the respective properties `topToolbarHeight` and `bottomToolbarHeight`. In their place a new property `toolbarHeight` has been added.  
+
 ### Removed widgetCollection.find
 
 This method has been removed due to its ambiguous nature. This does not affect `composite.find` which still exists.
