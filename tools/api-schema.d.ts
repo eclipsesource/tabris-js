@@ -210,6 +210,7 @@ export interface Link {
 export interface Snippet {
   title?: string;
   snippet: string;
+  repo?: "tabris" | "tabris-decorators";
 }
 export interface Parameter {
   name: string;

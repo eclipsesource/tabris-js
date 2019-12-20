@@ -8,12 +8,14 @@
     "namespace": false,
     "links": [
       {
-        "path": "https://github.com/eclipsesource/tabris-decorators/tree/master/examples/itempicker",
-        "title": "TypeScript/JSX Examples"
+        "title": "Example with various item types",
+        "snippet": "itempicker",
+        "repo": "tabris-decorators"
       },
       {
-        "path": "https://github.com/eclipsesource/tabris-decorators/tree/master/examples/bind-itempicker-list",
-        "title": "Data Binding Example"
+        "title": "Data Binding Example",
+        "snippet": "bind-itempicker-list",
+        "repo": "tabris-decorators"
       }
     ],
     "constructor": {

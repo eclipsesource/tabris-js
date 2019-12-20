@@ -12,12 +12,14 @@
     "jsxChildren": ["Cell"],
     "links": [
       {
-        "path": "https://github.com/eclipsesource/tabris-decorators/tree/master/examples/listview-cells",
-        "title": "TypeScript/JSX Examples for defining the look and selection behavior of a list views"
+        "title": "Examples with various cell types and selection events",
+        "snippet": "listview-cells",
+        "repo": "tabris-decorators"
       },
       {
-        "path": "https://github.com/eclipsesource/tabris-decorators/tree/master/examples/bind-listview-list",
-        "title": "Data Binding Example"
+        "title": "Data Binding Example",
+        "snippet": "bind-listview-list",
+        "repo": "tabris-decorators"
       }
     ],
     "statics": {

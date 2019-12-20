@@ -424,11 +424,12 @@
       "additionalProperties": false
     },
     "snippet": {
-      "required": ["snippet"],
       "properties": {
         "title": {"type": "string"},
-        "snippet": {"type": "string"}
+        "snippet": {"type": "string"},
+        "repo": {"enum": ["tabris", "tabris-decorators"]}
       },
+      "required": ["snippet"],
       "additionalProperties": false
     },
     "links": {

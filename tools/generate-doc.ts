@@ -99,6 +99,7 @@ const LANG_TYPE_LINKS: TypeLinks = {
   }
 };
 const PLAYGROUND = 'https://playground.tabris.com/';
+const DECORATORS_TREE = 'https://github.com/eclipsesource/tabris-decorators/tree/';
 const FILE_TYPES = {
   js: 'JavaScript',
   jsx: 'JSX',
@@ -298,6 +299,7 @@ class DocumentationGenerator {
     const links = target.links = target.links || [];
     const snippets = links
       .filter(isSnippet)
+      .filter(snippet => snippet.repo !== 'tabris-decorators')
       .map(entry => {
         if (!this.snippets[entry.snippet]) {
           throw new Error(title + ' - No such snippet: '  + entry.snippet);
@@ -539,11 +541,7 @@ class DocumentRenderer {
       const contentProperties = Object.keys(this.def.properties || {})
         .filter(prop => this.def.properties[prop].jsxContentProperty);
       if (contentProperties.length) {
-        if (contentProperties.length > 1) {
-          result.push('Element Content Property: ');
-        } else {
-          result.push('Element Content Properties: ');
-        }
+        result.push('Element content sets: ');
         result.push(contentProperties.map(property =>
           `[${code(property)}](#${property.toLowerCase()})`
         ).join(', '));
@@ -976,12 +974,24 @@ class DocumentRenderer {
     }
     return ['See also:\n'].concat(links.map(link => {
       if (isSnippet(link)) {
-        const snippetPath =
-          `${PLAYGROUND}?gitref=v${encodeURIComponent(this.gen.version)}&snippet=${encodeURIComponent(link.snippet)}`;
-        const snippetType = link.snippet.split('.').pop().toLowerCase();
-        const language = `<span class='language ${snippetType}'>${snippetType.toUpperCase()}</span>`;
         const title = `${(link.title || link.snippet)}`;
-        return `[${language} ${title}](${snippetPath})`;
+        const preRelease = this.gen.version.indexOf('-') !== -1;
+        if (link.repo === 'tabris-decorators') {
+          const gitHubUrl = [
+            DECORATORS_TREE,
+            preRelease ? 'master' : this.gen.version,
+            '/examples/',
+            link.snippet
+          ].join('');
+          const language = `<span class='language tsx'>TSX</span>`;
+          return `[${language} ${title}](${gitHubUrl})`;
+        } else {
+          const snippetPath =
+            `${PLAYGROUND}?gitref=v${encodeURIComponent(this.gen.version)}&snippet=${encodeURIComponent(link.snippet)}`;
+          const snippetType = link.snippet.split('.').pop().toLowerCase();
+          const language = `<span class='language ${snippetType}'>${snippetType.toUpperCase()}</span>`;
+          return `[${language} ${title}](${snippetPath})`;
+        }
       }
       return `[${link.title}](${link.path})`;
     })).join('  \n') + '\n';
