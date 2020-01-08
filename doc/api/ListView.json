@@ -24,22 +24,6 @@
     ],
     "statics": {
       "methods": {
-        "selectPrimary": {
-          "parameters": [{"name": "ev", "type": "EventObject"}],
-          "description": "Triggers a `select` event on the `ListView` containing the given event's target. The `action` value on the `ListViewSelectEvent` event will be set to `ItemAction.Primary`, which is `1`.\n\nThis method can easily be used within a cell via `onSourceEvent={ListView.selectPrimary}`."
-        },
-        "selectSecondary": {
-          "parameters": [{"name": "ev", "type": "EventObject"}],
-          "description": "Triggers a `select` event on the `ListView` containing the given event's target. The `action` value on the `ListViewSelectEvent` event will be set to `ItemAction.Secondary`, which is `2`.\n\nThis method can easily be used within a cell via `onSourceEvent={ListView.selectSecondary}`."
-        },
-        "selectToggle": {
-          "parameters": [{"name": "ev", "type": "EventObject"}],
-          "description": "Triggers a `select` event on the `ListView` containing the given event's target. The `action` value on the `ListViewSelectEvent` event will be set to `ItemAction.Toggle`, which is `3`.\n\nThis method can easily be used within a cell via `onSourceEvent={ListView.selectPrimary}`."
-        },
-        "selectDismiss": {
-          "parameters": [{"name": "ev", "type": "EventObject"}],
-          "description": "Triggers a `select` event on the `ListView` containing the given event's target. The `action` value on the `ListViewSelectEvent` event will be set to `ItemAction.Dismiss`, which is `4`.\n\nThis method can easily be used within a cell via `onSourceEvent={ListView.selectDismiss}`."
-        },
         "select": {
           "parameters": [
             {
@@ -49,10 +33,27 @@
             {
               "name": "action",
               "type": "number",
-              "optional": true
+              "optional": true,
+              "description": "A numeric value passed on to the `select` event object, defaults to `0`."
             }
           ],
-          "description": "Triggers a `select` event on the `ListView` containing the given event's target. The `action` value is set on the resulting `ListViewSelectEvent` event.\n\nThis method can easily be used within a cell via `onSourceEvent={ev => ListView.select(ev, someNumber)}`.\n\n Use `selectPrimary`, `selectSecondary`, `selectToggle` or `selectDismiss` as a shorthand to trigger `select` with a specific value for `action`, or just set the [`selectable`](./Cell.md#selectable) property of `Cell`."
+          "description": "This is a helper method intended to be used in an event listener of any event of `Cell` or its children. It triggers a `select` event on the `ListView` containing the cell. [The `action` value is set on the resulting `ListViewSelectEvent` event object](#select).\n\nExample usage: `onTap={ev => ListView.select(ev, someNumber)}`.\n\n Use `selectPrimary`, `selectSecondary`, `selectToggle` or `selectDismiss` as a shorthand to trigger `select` with a specific value for `action`, **or just set the [`selectable`](./Cell.md#selectable) property of `Cell`**."
+        },
+        "selectPrimary": {
+          "parameters": [{"name": "ev", "type": "EventObject"}],
+          "description": "This is a helper method intended to be used directly as an event listener of any event of `Cell` or its children. Like [the `select` method](#selectev-action) it triggers a `select` event on the `ListView` containing the cell. This difference is only semantic: [The `action` value on the `ListViewSelectEvent` event object](#select) will be set to `ItemAction.Primary` (i.e. `1`), indicating a 'normal' selection.\n\nExample usage: `onTap={ListView.selectPrimary}`."
+        },
+        "selectSecondary": {
+          "parameters": [{"name": "ev", "type": "EventObject"}],
+          "description": "This is a helper method intended to be used directly as an event listener of any event of `Cell` or its children. Like [the `select` method](#selectev-action) it  triggers a `select` event on the `ListView` containing the cell. This difference is only semantic: [The `action` value on the `ListViewSelectEvent` event object](#select) will be set to `ItemAction.Secondary` (i.e. `2`), indicating some alternative kind of selection.\n\nExample usage: `onSomeEvent={ListView.selectSecondary}`."
+        },
+        "selectToggle": {
+          "parameters": [{"name": "ev", "type": "EventObject"}],
+          "description": "This is a helper method intended to be used directly as an event listener of any event of `Cell` or its children. Like [the `select` method](#selectev-action) it  triggers a `select` event on the `ListView` containing the cell. This difference is only semantic: [The `action` value on the `ListViewSelectEvent` event object](#select) will be set to `ItemAction.Toggle` (i.e. `3`), typically indicating the item should be marked as checked or unchecked.\n\nExample usage: `onSomeEvent={ListView.selectToggle}`."
+        },
+        "selectDismiss": {
+          "parameters": [{"name": "ev", "type": "EventObject"}],
+          "description": "This is a helper method intended to be used directly as an event listener of any event of `Cell` or its children. Like [the `select` method](#selectev-action) it  triggers a `select` event on the `ListView` containing the cell. This difference is only semantic: [The `action` value on the `ListViewSelectEvent` event object](#select) will be set to `ItemAction.Dismiss` (i.e. `4`), typically indicating the item should be removed .\n\nExample usage:`onSomeEvent={ListView.selectDismiss}`."
         }
       }
     },
@@ -87,7 +88,7 @@
           },
           "action": {
             "type": "number",
-            "description": "A general-purpose parameter passed on when the event was triggered. This is meant to be used to indicate different kind of interactions.\n\n`tabris-decorators` exports a `ItemAction` enum defining 4 pre-defined values for use with this property: `Primary`, `Secondary`, `Toggle` and `Dismiss`. These are set when using the corresponding [trigger methods](#selectprimaryev)."
+            "description": "A general-purpose parameter passed on when the event was triggered by one of the [static `select` methods](#selectev-action). This is meant to be used by the application to differentiate between different kind of interactions. It can be safely ignored if there is only one kind of selection, such as tapping a cell.\n\n`tabris-decorators` exports a `ItemAction` enum defining 4 pre-defined values for use with this property: `Primary`, `Secondary`, `Toggle` and `Dismiss`. These are set when using the corresponding [trigger methods](#selectprimaryev)."
           }
         },
         "description": "An event that may be triggered by a `Cell` as the result of any kind of user interaction. By default cells do not trigger `select` events, they have to be explicitly configured to do so. This can be done via the [`selectable`](./Cell.md#selectable) property on `Cell` or the static [`select`](#selectprimaryev) trigger methods."
