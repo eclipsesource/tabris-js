@@ -277,7 +277,7 @@ The `RowLayout` is the default layout manager of the `Row` widget, but can also 
 
 > :point_right: `RowLayout` is just a helper, everything it can do can also be achieved with `ConstraintLayout`.
 
-`StackLayout` has two properties, both of which can be set only via its own constructor or the constructor of `Stack`. They are:
+`RowLayout` has two properties, both of which can be set only via its own constructor or the constructor of `Row`. They are:
 
 Property | Type | Default Value | Description
 ---------|------|---------------|------------

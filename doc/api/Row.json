@@ -1,7 +1,7 @@
 {
   "type": "Row",
   "category": "widget",
-  "description": "A composite with the `layout` property initialized with a `Row`. All children are automatically arranged in one horizontal row, starting from the left.",
+  "description": "A composite with the `layout` property initialized with a `RowLayout`. All children are automatically arranged in one horizontal row, starting from the left.",
   "extends": "Composite",
   "constructor": {
     "access": "public",

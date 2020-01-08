@@ -1,7 +1,7 @@
 {
   "type": "Stack",
   "category": "widget",
-  "description": "A composite with the `layout` property initialized with a `Stack`. All children are automatically arranged in one vertical stack, starting from the top. The `layoutData` on the children is ignored.",
+  "description": "A composite with the `layout` property initialized with a `StackLayout`. All children are automatically arranged in one vertical stack, starting from the top. The `layoutData` on the children is ignored.",
   "extends": "Composite",
   "constructor": {
     "access": "public",
