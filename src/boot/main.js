@@ -7,7 +7,7 @@ global.tabris = {};
 tabris._start = function(client) {
   try {
     tabris._client = client;
-    const rootModule = new Module();
+    const rootModule = Module.root;
     global.module = rootModule;
     global.require = rootModule.require.bind(rootModule);
     global.exports = rootModule.exports;

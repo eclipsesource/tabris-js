@@ -105,6 +105,24 @@
         ],
         "returns": "string",
         "description": "Loads a text from the given (local or http) url and returns its content. File is expected to be utf-8 encoded. This is a blocking operation, in almost all cases it is preferable to use `fetch()` or the file system API to read a text file."
+      },
+      "createRequire": {
+        "parameters": [
+          {
+            "name": "path",
+            "type": "string",
+            "description": "An absolute path, beginning with \"/\". The path does not have to point to an existing file."
+          }
+        ],
+        "returns": {
+          "callback": [
+            {"name": "request", "type": "string"}
+          ],
+          "returns": {
+            "name": "exports", "type": "object"
+          }
+        },
+        "description": "Creates a \"require\" function that finds a module relative to the given path. If found the exports are returned. Throws if no matching module can be found."
       }
     }
   },

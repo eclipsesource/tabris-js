@@ -80,7 +80,18 @@ export default class Module {
     return tabris._client.load(url);
   }
 
+  static createRequire(path) {
+    if ((typeof path !== 'string') || path[0] !== '/') {
+      throw new Error(`The argument 'path' must be an absolute path string. Received ${path}`);
+    }
+    return function(request) {
+      return Module.root.require(normalizePath(dirname('.' + path) + '/' + request));
+    };
+  }
+
 }
+
+Module.root = new Module();
 
 function findFileModule(request) {
   const path = normalizePath(dirname(this.id) + '/' + request);

@@ -3,18 +3,6 @@ import Module from '../../src/boot/Module';
 
 describe('Module', function() {
 
-  beforeEach(function() {
-    global.tabris = {};
-    tabris._client = {
-      load: () => '',
-      loadAndExecute: () => ({
-        executeResult: (module) => {
-          module.exports = module;
-        }
-      })
-    };
-  });
-
   afterEach(restore);
 
   describe('constructor', function() {
@@ -67,6 +55,18 @@ describe('Module', function() {
   });
 
   describe('instance', function() {
+
+    beforeEach(function() {
+      global.tabris = {};
+      tabris._client = {
+        load: () => '',
+        loadAndExecute: () => ({
+          executeResult: (module) => {
+            module.exports = module;
+          }
+        })
+      };
+    });
 
     let instance;
 
@@ -534,6 +534,53 @@ describe('Module', function() {
 
       });
 
+    });
+
+  });
+
+  describe('Module.createRequire', function() {
+
+    beforeEach(function() {
+      Module.root = new Module();
+      stub(Module, 'createLoader').callsFake((path) => {
+        if (path === './foo/baz.js') {
+          return module => module.exports = module;
+        }
+        return null;
+      });
+    });
+
+    it('throws for missing argument', function() {
+      const msg = 'The argument \'path\' must be an absolute path string. Received undefined';
+      expect(() => Module.createRequire()).to.throw(Error, msg);
+    });
+
+    it('throws for invalid string', function() {
+      const msg = 'The argument \'path\' must be an absolute path string. Received foo';
+      expect(() => Module.createRequire('foo')).to.throw(Error, msg);
+    });
+
+    it('returns function for valid arguments', function() {
+      expect(Module.createRequire('/package.json')).to.be.instanceOf(Function);
+    });
+
+    it('does not parse js module', function() {
+      Module.createRequire('/package.json');
+      expect(Module.createLoader).not.to.have.been.called;
+    });
+
+    it('does not parse json module', function() {
+      spy(Module, 'readJSON');
+      Module.createRequire('/package.json');
+      expect(Module.readJSON).not.to.have.been.called;
+    });
+
+    it('returns require for given path', function() {
+      expect(Module.createRequire('/foo/bar')('./baz').id).to.equal('./foo/baz.js');
+    });
+
+    it('returns require for root path', function() {
+      expect(Module.createRequire('/')('./foo/baz').id).to.equal('./foo/baz.js');
     });
 
   });

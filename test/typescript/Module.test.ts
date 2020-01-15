@@ -12,6 +12,7 @@ m = new Module('my-module', m, (a, b, c, d, e) => {
 let unknown: unknown = Module.getSourceMap('foo.js');
 unknown = Module.execute('1+2;', 'foo.js');
 unknown = Module.readJSON('foo.json');
+unknown = Module.createRequire('/foo/bar')('./baz');
 let str: string = Module.load('foo.js');
 const loader = Module.createLoader('foo.js');
 loader(m, {}, (x) => ({[x]: 'foo'}), 'foo.js', 'foo.js');
