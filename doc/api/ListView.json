@@ -7,7 +7,7 @@
     },
     "markdown_only": true,
     "module": "tabris-decorators",
-    "generics": [{"name": "ItemType"}],
+    "generics": [{"name": "ItemType", "default": "any"}],
     "namespace": false,
     "jsxChildren": ["Cell"],
     "links": [
