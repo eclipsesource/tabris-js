@@ -733,7 +733,7 @@ class DocumentRenderer {
       }
       result.push(' mapped to this property.');
     }
-    if (property.const && !isStatic) {
+    if (property.const && !isStatic && !this.def.object && this.def.constructor.access === 'public') {
       result.push('\n\nThis property can only be set via constructor');
       if (this.def.isWidget || this.def.extends === 'Popup') {
         result.push(' or JSX');
