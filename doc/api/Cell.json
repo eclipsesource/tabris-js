@@ -35,7 +35,7 @@
         "type": "boolean",
         "const": true,
         "default": "false",
-        "description": "If set to true (e.g. `<Cell selectable>`), the cell will trigger the `select` event of [`ListView`](./ListView.md) when tapped.\n\nAlternatively, any of the static `ListView` [`select`](#selectprimaryev) trigger methods can be registered as listeners of any event of `Cell` or its child elements. This allows `select` events to be triggered on more specific user interactions."
+        "description": "If set to true (e.g. `<Cell selectable>`), the cell will trigger the `select` event of [`ListView`](./ListView.md) when tapped.\n\nAlternatively, any of the static `ListView` [`select`](./ListView.md#selectprimaryev) trigger methods can be registered as listeners of any event of `Cell` or its child elements. This allows `select` events to be triggered on more specific user interactions."
       },
       "itemType": {
         "type": {

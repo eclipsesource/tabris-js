@@ -4,7 +4,7 @@
   "constructor": {
     "access": "private"
   },
-  "description": "Represents an in-memory Image. Unlike ImageData it is immutable, but can be created from a number of sources via [createImageBitmap](#createimagebitmapimage).",
+  "description": "Represents an in-memory Image. Unlike ImageData it is immutable, but can be created from a number of sources via [createImageBitmap](#createimagebitmapimagesource).",
   "properties": {
     "width": {
       "type": "number",

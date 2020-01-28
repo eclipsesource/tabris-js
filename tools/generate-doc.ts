@@ -979,7 +979,7 @@ class DocumentRenderer {
         if (link.repo === 'tabris-decorators') {
           const gitHubUrl = [
             DECORATORS_TREE,
-            preRelease ? 'master' : this.gen.version,
+            preRelease ? 'master' : 'v' + this.gen.version,
             '/examples/',
             link.snippet
           ].join('');
