@@ -35,7 +35,7 @@
           "interface": "Promise",
           "generics": ["ArrayBuffer"]
         },
-        "description": "Reads the given file and returns a promise that resolves to the contents of the file on success and rejects with an Error in case of a failure. The file contents are returned as an ArrayBuffer."
+        "description": "Reads the given file and returns a promise that resolves to the contents of the file on success and rejects with an error object if no file exists at that path. The file contents are returned as an ArrayBuffer."
       },
       {
         "parameters": [
@@ -54,7 +54,7 @@
           "interface": "Promise",
           "generics": ["string"]
         },
-        "description": "Reads the given text file and returns a promise that resolves to the contents of the file on success and rejects with an Error in case of a failure. The file contents are returned as a string."
+        "description": "Reads the given text file and returns a promise that resolves to the contents of the file on success and rejects with an Error if no file exists at that path. The file contents are returned as a string."
       }
     ],
     "readDir": {
@@ -72,7 +72,7 @@
           "generics": ["string"]
         }]
       },
-      "description": "Reads the contents of a given directory. Returns a promise that resolves on success to an array of the names of the files in the directory excluding '.' and '..'. In case of failure, the Promise rejects with an Error."
+      "description": "Reads the contents of a given directory. Returns a promise that resolves on success to an array of the names of the files in the directory excluding '.' and '..'. If no directory exists at that path the Promise rejects with an error object."
     },
     "writeFile": [
       {
@@ -88,8 +88,10 @@
             "description": "The contents to write to the file."
           }
         ],
-        "returns": "Promise",
-        "ts_returns": "Promise<void>",
+        "returns": {
+          "interface": "Promise",
+          "generics": ["void"]
+        },
         "description": "Writes the given binary contents to the given file. If the file exists, it is overwritten, otherwise it is created. Returns a promise that resolves on success and rejects with an Error in case of a failure."
       },
       {
@@ -111,9 +113,57 @@
             "description": "The encoding to use to write a text file. When omitted, `utf-8` will be used."
           }
         ],
-        "returns": "Promise",
-        "ts_returns": "Promise<void>",
+        "returns": {
+          "interface": "Promise",
+          "generics": ["void"]
+        },
         "description": "Writes the given text to the given file using the given encoding or `utf-8` if no encoding is specified. If the file exists, it is overwritten, otherwise it is created. Returns a promise that resolves on success and rejects with an Error in case of a failure."
+      }
+    ],
+    "appendToFile": [
+      {
+        "parameters": [
+          {
+            "name": "path",
+            "type": "string",
+            "description": "The path of the file to append."
+          },
+          {
+            "name": "data",
+            "type": {"union": ["ArrayBuffer", "Blob"]},
+            "description": "The content to append to the file."
+          }
+        ],
+        "returns": {
+          "interface": "Promise",
+          "generics": ["boolean"]
+        },
+        "description": "Writes the given binary content to the given file. If the file exists, it is appended, otherwise it is created. Returns a promise that resolves with `true` if a new file was created, or with `false` if the file already existed. It rejects with an Error if the path points to a directory."
+      },
+      {
+        "parameters": [
+          {
+            "name": "path",
+            "type": "string",
+            "description": "The path of the file to append."
+          },
+          {
+            "name": "text",
+            "type": "string",
+            "description": "The text to write to the file."
+          },
+          {
+            "name": "encoding",
+            "type": "string",
+            "optional": true,
+            "description": "The encoding to use to write a text file. When omitted, `utf-8` will be used."
+          }
+        ],
+        "returns": {
+          "interface": "Promise",
+          "generics": ["boolean"]
+        },
+        "description": "Writes the given text to the given file using the given encoding or `utf-8` if no encoding is specified. If the file exists, it is appended, otherwise it is created. Returns a promise that resolves with `true` if a new file was created, or with `false` if the file already existed. It rejects with an Error if the path points to a directory."
       }
     ],
     "removeFile": {
@@ -124,9 +174,75 @@
           "description": "The path of the file to remove."
         }
       ],
-      "returns": "Promise",
-      "ts_returns": "Promise<void>",
-      "description": "Removes the given file. Returns a promise that resolves on success and rejects with an Error in case of a failure."
+      "returns": {
+        "interface": "Promise",
+        "generics": ["void"]
+      },
+      "description": "Removes the given file if it exists. Returns a promise that resolves with `true` on success or with `false` if no directory exists at that path. If the path points to a directory the promise rejects."
+    },
+    "createDir": {
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "description": "The path of the directory to create."
+        }
+      ],
+      "returns": {
+        "interface": "Promise",
+        "generics": ["boolean"]
+      },
+      "description": "Creates a directory on the given path, including intermediate directories. Returns a promise that resolves with `true` if the directory was created, or with `false` if it  already existed. If the path points to a file the promise rejects."
+    },
+    "removeDir": {
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "description": "The path of the directory to remove. Must be empty."
+        }
+      ],
+      "returns": {
+        "interface": "Promise",
+        "generics": ["void"]
+      },
+      "description": "Removes the given directory if it exists. If the directory is not empty all its contents will also be deleted. Returns a promise that resolves if the directory was deleted or none existed at that path. If the path points to a file the promise rejects."
+    },
+    "remove": {
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "description": "The path to the file or directory to remove."
+        }
+      ],
+      "returns": {
+        "interface": "Promise",
+        "generics": ["boolean"]
+      },
+      "description": "Removes the given file or directory. If the directory is not empty all its contents will also be deleted. If there is no file or directory at the given path nothing will happen. Returns a promise that resolves with `true` if something was deleted, otherwise `false`. Rejects with an error object only in case of an access error."
+    },
+    "isFile": {
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "description": "The path of the file."
+        }
+      ],
+      "returns": "boolean",
+      "description": "Returns `true` if there is a file at the given path. Otherwise (no file, or is a directory) it returns `false`."
+    },
+    "isDir": {
+      "parameters": [
+        {
+          "name": "path",
+          "type": "string",
+          "description": "The path of the directory."
+        }
+      ],
+      "returns": "boolean",
+      "description": "Returns `true` if there is a directory at the given path. Otherwise (no directory, or is a file) it returns `false`."
     }
   },
   "links": [

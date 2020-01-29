@@ -43,7 +43,7 @@ export default class FileSystem extends NativeObject {
         throw new Error('Not enough arguments to readFile');
       }
       this._nativeCall('readFile', {
-        path: checkPath(path),
+        path: checkPath(path, 'file name'),
         onError: (err) => reject(createError(err, path)),
         onSuccess: (data) => encoding ? TextDecoder.decode(data, encoding).then(resolve, reject) : resolve(data)
       });
@@ -56,10 +56,29 @@ export default class FileSystem extends NativeObject {
         throw new Error('Not enough arguments to writeFile');
       }
       const write = finalData => this._nativeCall('writeFile', {
-        path: checkPath(path),
+        path: checkPath(path, 'file name'),
         data: checkBuffer(finalData),
         onError: (err) => reject(createError(err, path)),
         onSuccess: () => resolve()
+      });
+      if (typeof data === 'string') {
+        TextEncoder.encode(data, encoding || 'utf-8').then(write, reject);
+      } else {
+        write(data);
+      }
+    });
+  }
+
+  appendToFile(path, data, encoding) {
+    return new Promise((resolve, reject) => {
+      if (arguments.length < 2) {
+        throw new Error('Not enough arguments to appendToFile');
+      }
+      const write = finalData => this._nativeCall('appendToFile', {
+        path: checkPath(path, 'file name'),
+        data: checkBuffer(finalData),
+        onError: (err) => reject(createError(err, path)),
+        onSuccess: (fileCreated) => resolve(fileCreated)
       });
       if (typeof data === 'string') {
         TextEncoder.encode(data, encoding || 'utf-8').then(write, reject);
@@ -75,7 +94,7 @@ export default class FileSystem extends NativeObject {
         throw new Error('Not enough arguments to removeFile');
       }
       this._nativeCall('removeFile', {
-        path: checkPath(path),
+        path: checkPath(path, 'file name'),
         onError: (err) => reject(createError(err, path)),
         onSuccess: () => resolve()
       });
@@ -88,10 +107,67 @@ export default class FileSystem extends NativeObject {
         throw new Error('Not enough arguments to readDir');
       }
       this._nativeCall('readDir', {
-        path: checkPath(path),
+        path: checkPath(path, 'directory'),
         onError: (err) => reject(createError(err, path)),
         onSuccess: (data) => resolve(data)
       });
+    });
+  }
+
+  createDir(path) {
+    return new Promise((resolve, reject) => {
+      if (arguments.length < 1) {
+        throw new Error('Not enough arguments to createDir');
+      }
+      this._nativeCall('createDir', {
+        path: checkPath(path, 'directory'),
+        onError: (err) => reject(createError(err, path)),
+        onSuccess: () => resolve()
+      });
+    });
+  }
+
+  removeDir(path) {
+    return new Promise((resolve, reject) => {
+      if (arguments.length < 1) {
+        throw new Error('Not enough arguments to removeDir');
+      }
+      this._nativeCall('removeDir', {
+        path: checkPath(path, 'directory'),
+        onError: (err) => reject(createError(err, path)),
+        onSuccess: () => resolve()
+      });
+    });
+  }
+
+  remove(path) {
+    return new Promise((resolve, reject) => {
+      if (arguments.length < 1) {
+        throw new Error('Not enough arguments to remove');
+      }
+      this._nativeCall('remove', {
+        path: checkPath(path, 'file or directory'),
+        onError: (err) => reject(createError(err, path)),
+        onSuccess: (success) => resolve(success)
+      });
+    });
+  }
+
+  isFile(path) {
+    if (arguments.length < 1) {
+      throw new Error('Not enough arguments to isFile');
+    }
+    return this._nativeCall('isFile', {
+      path: checkPath(path, 'file name')
+    });
+  }
+
+  isDir(path) {
+    if (arguments.length < 1) {
+      throw new Error('Not enough arguments to isDir');
+    }
+    return this._nativeCall('isDir', {
+      path: checkPath(path, 'directory')
     });
   }
 
@@ -116,11 +192,11 @@ export function createError(err, path) {
   return error;
 }
 
-function checkPath(path) {
+function checkPath(path, type) {
   try {
     return normalizePath(path);
   } catch (err) {
-    throw new Error(`${toValueString(path)} is not a valid file name. ${err.message}`);
+    throw new Error(`${toValueString(path)} is not a valid ${type}. ${err.message}`);
   }
 }
 

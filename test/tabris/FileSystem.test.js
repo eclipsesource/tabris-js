@@ -140,7 +140,7 @@ describe('FileSystem', function() {
         return fs.readDir('/../bar').then(expectFail, err => {
           expect(err).to.be.instanceOf(Error);
           expect(err.message).to.equal(
-            '"/../bar" is not a valid file name. Path must not start with ".."'
+            '"/../bar" is not a valid directory. Path must not start with ".."'
           );
         });
       });
@@ -164,6 +164,68 @@ describe('FileSystem', function() {
           expect(err).to.be.instanceOf(Error);
           expect(err.message).to.equal('Not a directory: /foo');
         });
+      });
+
+    });
+
+    describe('isFile', function() {
+
+      it('throws if parameter missing', function() {
+        expect(() => fs.isFile()).to.throw(Error, 'Not enough arguments to isFile');
+      });
+
+      it('throws for invalid path', function() {
+        expect(() => fs.isFile('/../bar')).to.throw(
+          Error,
+          '"/../bar" is not a valid file name. Path must not start with ".."'
+        );
+      });
+
+      it('calls native method', function() {
+        spy(client, 'call');
+        fs.isFile('/foo');
+        expect(client.call).to.have.been.calledWithMatch(fs.cid, 'isFile', {path: '/foo'});
+      });
+
+      it('returns true', function() {
+        stub(client, 'call').returns(true);
+        expect(fs.isFile('/foo')).to.be.true;
+      });
+
+      it('returns false', function() {
+        stub(client, 'call').returns(false);
+        expect(fs.isFile('/foo')).to.be.false;
+      });
+
+    });
+
+    describe('isDir', function() {
+
+      it('throws if parameter missing', function() {
+        expect(() => fs.isDir()).to.throw(Error, 'Not enough arguments to isDir');
+      });
+
+      it('throws for invalid path', function() {
+        expect(() => fs.isDir('/../bar')).to.throw(
+          Error,
+          '"/../bar" is not a valid directory. Path must not start with ".."'
+        );
+      });
+
+      it('calls native method', function() {
+        spy(client, 'call');
+        fs.isDir('/foo');
+        expect(client.call).to.have.been.calledWithMatch(fs.cid, 'isDir', {path: '/foo'});
+      });
+
+      it('returns true', function() {
+        stub(client, 'call').returns(true);
+        expect(fs.isDir('/foo')).to.be.true;
+      });
+
+      it('returns false', function() {
+        stub(client, 'call').returns(false);
+        expect(fs.isDir('/foo')).to.be.false;
       });
 
     });
@@ -268,6 +330,154 @@ describe('FileSystem', function() {
 
     });
 
+    describe('appendToFile', function() {
+
+      it('rejects if parameter missing', function() {
+        return fs.appendToFile('/foo').then(expectFail, err => {
+          expect(err).to.be.instanceOf(Error);
+          expect(err.message).to.equal('Not enough arguments to appendToFile');
+        });
+      });
+
+      it('rejects invalid path', function() {
+        return fs.appendToFile('/../bar', data).then(expectFail, err => {
+          expect(err).to.be.instanceOf(Error);
+          expect(err.message).to.equal('"/../bar" is not a valid file name. Path must not start with ".."');
+        });
+      });
+
+      it('rejects invalid data', function() {
+        return fs.appendToFile('/foo', new Date()).then(expectFail, err => {
+          expect(err).to.be.instanceOf(Error);
+          expect(err.message).to.equal('Date is not an ArrayBuffer');
+        });
+      });
+
+      it('rejects invalid encoding', function() {
+        return fs.appendToFile('/foo', 'string', 'foo').then(expectFail, err => {
+          expect(err).to.be.instanceOf(Error);
+          expect(err.message).to.equal('Unsupported encoding: "foo"');
+        });
+      });
+
+      it('calls native method', function() {
+        spy(client, 'call');
+        fs.appendToFile('/foo', data);
+        expect(client.call).to.have.been.calledWithMatch(fs.cid, 'appendToFile', {
+          path: '/foo',
+          data: match.same(data)
+        });
+      });
+
+      it('converts typed array to arrayBuffer', function() {
+        spy(client, 'call');
+        const arr = new Uint8Array(data);
+        fs.appendToFile('/foo', arr);
+        expect(client.call).to.have.been.calledWithMatch(fs.cid, 'appendToFile', {
+          path: '/foo',
+          data: match.same(data)
+        });
+      });
+
+      it('converts blob to arrayBuffer', function() {
+        spy(client, 'call');
+        fs.appendToFile('/foo', new Blob([data]));
+        expect(client.call).to.have.been.calledWithMatch(fs.cid, 'appendToFile', {
+          path: '/foo',
+          data: match.has('byteLength', data.byteLength)
+        });
+      });
+
+      it('encodes text with given encoding', function() {
+        stub(TextEncoder, 'encode').returns(Promise.resolve(data));
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess());
+        return fs.appendToFile('/foo', text, 'ascii').then(() => {
+          expect(TextEncoder.encode).to.have.been.calledWith(text, 'ascii');
+        });
+      });
+
+      it('encodes text with utf-8 by default', function() {
+        stub(TextEncoder, 'encode').returns(Promise.resolve(data));
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess());
+        return fs.appendToFile('/foo', text).then(() => {
+          expect(TextEncoder.encode).to.have.been.calledWith(text, 'utf-8');
+        });
+      });
+
+      it('calls native method with encoded text', function() {
+        stub(TextEncoder, 'encode').withArgs(text, 'utf-8').returns(Promise.resolve(data));
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess());
+        return fs.appendToFile('/foo', text, 'utf-8').then(() => {
+          expect(client.call).to.have.been.calledWithMatch(fs.cid, 'appendToFile', {path: '/foo', data});
+          expect(client.call.args[0][2].data).to.deep.equal(data);
+        });
+      });
+
+      it('resolves true on file created', function() {
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess(true));
+        return fs.appendToFile('/foo', data).then(result => {
+          expect(result).to.be.true;
+        });
+      });
+
+      it('resolves false on file appended', function() {
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess(false));
+        return fs.appendToFile('/foo', data).then(result => {
+          expect(result).to.be.false;
+        });
+      });
+
+      it('rejects in case of error', function() {
+        stub(client, 'call').callsFake((id, method, args) => args.onError('ENOENT'));
+        return fs.appendToFile('/foo', data).then(expectFail, err => {
+          expect(err).to.be.instanceOf(Error);
+          expect(err.message).to.equal('No such file or directory: /foo');
+        });
+      });
+
+    });
+
+    describe('createDir', function() {
+
+      it('rejects if parameter missing', function() {
+        return fs.createDir().then(expectFail, err => {
+          expect(err).to.be.instanceOf(Error);
+          expect(err.message).to.equal('Not enough arguments to createDir');
+        });
+      });
+
+      it('rejects invalid path', function() {
+        return fs.createDir('/../bar').then(expectFail, err => {
+          expect(err).to.be.instanceOf(Error);
+          expect(err.message).to.equal('"/../bar" is not a valid directory. Path must not start with ".."');
+        });
+      });
+
+      it('calls native method', function() {
+        spy(client, 'call');
+        fs.createDir('/foo', data);
+        expect(client.call).to.have.been.calledWithMatch(fs.cid, 'createDir', {
+          path: '/foo'
+        });
+      });
+
+      it('resolves on success', function() {
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess());
+        return fs.createDir('/foo').then(result => {
+          expect(result).to.be.undefined;
+        });
+      });
+
+      it('rejects in case of error', function() {
+        stub(client, 'call').callsFake((id, method, args) => args.onError('EACCES'));
+        return fs.createDir('/foo', data).then(expectFail, err => {
+          expect(err).to.be.instanceOf(Error);
+          expect(err.message).to.equal('Permission denied: /foo');
+        });
+      });
+
+    });
+
     describe('removeFile', function() {
 
       it('rejects if parameter missing', function() {
@@ -309,6 +519,53 @@ describe('FileSystem', function() {
 
     });
 
+    describe('remove', function() {
+
+      it('rejects if parameter missing', function() {
+        return fs.remove().then(expectFail, err => {
+          expect(err).to.be.instanceOf(Error);
+          expect(err.message).to.equal('Not enough arguments to remove');
+        });
+      });
+
+      it('rejects invalid path', function() {
+        return fs.remove('/../bar').then(expectFail, err => {
+          expect(err).to.be.instanceOf(Error);
+          expect(err.message).to.equal(
+            '"/../bar" is not a valid file or directory. Path must not start with ".."'
+          );
+        });
+      });
+
+      it('calls native method', function() {
+        spy(client, 'call');
+        fs.remove('/foo');
+        expect(client.call).to.have.been.calledWithMatch(fs.cid, 'remove', {path: '/foo'});
+      });
+
+      it('resolves with true on success', function() {
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess(true));
+        return fs.remove('/foo').then(result => {
+          expect(result).to.be.true;
+        });
+      });
+
+      it('resolve with false if nothing existed', function() {
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess(false));
+        return fs.remove('/foo').then(result => {
+          expect(result).to.be.false;
+        });
+      });
+
+      it('rejects in case of error', function() {
+        stub(client, 'call').callsFake((id, method, args) => args.onError('EACCES'));
+        return fs.remove('/foo').then(expectFail, err => {
+          expect(err.message).to.equal('Permission denied: /foo');
+        });
+      });
+
+    });
+
     it('can not be disposed', function() {
       expect(() => {
         fs.dispose();
@@ -333,7 +590,9 @@ describe('FileSystem', function() {
 
     it('includes path and code', function() {
       const error = createError('ENOENT', '/foo');
+      // @ts-ignore
       expect(error.path).to.equal('/foo');
+      // @ts-ignore
       expect(error.code).to.equal('ENOENT');
     });
 
