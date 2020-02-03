@@ -91,7 +91,7 @@
       ],
       "readonly": true
     },
-    "cash": {
+    "cache": {
       "type": "string",
       "values": [
         "default",
