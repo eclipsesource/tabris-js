@@ -21,8 +21,8 @@ app.onPause(async () => {
   label.text = `Welcome back!\nYou were gone for ${(diff / 1000).toFixed(1)} seconds.`;
 });
 
-app.onBackNavigation(event => {
+app.onBackNavigation(async event => {
   event.preventDefault();
   label.set({opacity: 0, text: 'Back navigation prevented.'});
-  label.animate({opacity: 1}, {duration: 300});
+  await label.animate({opacity: 1}, {duration: 300});
 });

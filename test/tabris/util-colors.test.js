@@ -99,7 +99,7 @@ describe('util-colors', function() {
       expect(colorStringToArray('navy')).to.eql([0, 0, 128, 255]);
     });
 
-    it("accepts 'transparent'", function() {
+    it('accepts \'transparent\'', function() {
       expect(colorStringToArray('transparent')).to.eql([0, 0, 0, 0]);
     });
 

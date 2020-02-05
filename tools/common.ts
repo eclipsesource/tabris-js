@@ -19,7 +19,7 @@ export type ExtendedApi = schema.Api & Partial<{
   isNativeObject: boolean,
   superAPI: ExtendedApi,
   file: string,
-  isWidget: boolean
+  isWidget: boolean,
   isPopup: boolean,
   jsxParents: string[]
 }>;
@@ -58,7 +58,7 @@ export class TextBuilder {
   }
 
   public append(...args: string[]) {
-    Array.prototype.forEach.call(arguments, arg => {
+    args.forEach(arg => {
       const lines = typeof arg === 'string' ? arg.split('\n') : arg || [];
       for (const line of lines) {
         this.lines.push(this._indentLine(line));
@@ -293,41 +293,41 @@ export function getEventTypeName(def: ExtendedApi, eventName: string, parameters
   return parameters ? def.type + capitalizeFirstChar(eventName) + 'Event' : 'EventObject';
 }
 
-// tslint:disable-next-line: no-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isExtendedAPI(value: any): value is ExtendedApi {
   return value instanceof Object && 'category' in value;
 }
 
-// tslint:disable-next-line: no-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isUnion(value: any): value is {union: TypeReference[]} {
   return value instanceof Object && 'union' in value;
 }
 
-// tslint:disable-next-line: no-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isTuple(value: any): value is {tuple: TypeReference[]} {
   return value instanceof Object && 'tuple' in value;
 }
 
-// tslint:disable-next-line: no-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isMap(value: any): value is {map: Properties} {
   return value instanceof Object && 'map' in value && !('indexType' in value);
 }
 
-// tslint:disable-next-line: no-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isIndexedMap(value: any):
   value is {map: {[key: string]: TypeReference}, indexType: 'string' | 'number' | 'SelectorString'}
 {
   return value instanceof Object && 'map' in value && ('indexType' in value);
 }
 
-// tslint:disable-next-line: no-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isCallback(value: any):
   value is {callback: NamedType[], returns: NamedType}
 {
   return value instanceof Object && 'callback' in value;
 }
 
-// tslint:disable-next-line: no-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isInterfaceReference(value: any): value is {interface: string, generics?: schema.Generics} {
   return value instanceof Object && typeof value.interface === 'string';
 }
@@ -361,7 +361,7 @@ export function plainType(ref: TypeReference): string {
   return undefined;
 }
 
-// tslint:disable-next-line: no-any
-export function has<Key extends string>(value: any, property: Key, type: 'string'): value is {[key in Key]: string} {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function has<Key extends string>(value: any, property): value is {[key in Key]: string} {
   return value && typeof value[property] === 'string';
 }

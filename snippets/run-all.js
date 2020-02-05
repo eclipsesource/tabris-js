@@ -3,11 +3,10 @@ import {
   NativeObject, contentView, TextView, app, Button, Picker, Composite, CheckBox, Page, NavigationView, Action, device,
   SearchAction, TabFolder, Popover, ProgressBar, RadioButton, RefreshComposite, ScrollView, Slider, Switch,
   ToggleButton, TextInput, CollectionView, TimeDialog, Video, WebView, ImageView, ActivityIndicator, AlertDialog,
-  ActionSheet, Canvas, DateDialog, drawer, Color, ContentView
+  ActionSheet, Canvas, DateDialog, drawer, Color
 } from 'tabris';
 
 // Use these to exclude tests where they are broken due to a platform bug
-const ios = device.platform === 'iOS';
 const android = device.platform === 'Android';
 
 const snippets = [
@@ -40,7 +39,7 @@ const snippets = [
   }],
   ['app-info.js', async () => {
     await confirm(TextView, {text: /Id.*com\.eclipsesource\.tabris.*/});
-    await confirm(TextView, {text: /Version.*3\.[0-9]\.[0-9][\-0-9]*/});
+    await confirm(TextView, {text: /Version.*3\.[0-9]\.[0-9][-0-9]*/});
     await confirm(TextView, {text: /Version Code.*[0-9]+/});
   }],
   ['app-events.js', async () => {
@@ -109,12 +108,12 @@ const snippets = [
     await scroll(find(CollectionView));
   }],
   ['collectionview-scroll.js', async () => {
-     await confirm(CollectionView);
-     await scroll(find(CollectionView));
+    await confirm(CollectionView);
+    await scroll(find(CollectionView));
   }],
   ['collectionview-scroll-ts.js', async () => {
-     await confirm(CollectionView);
-     await scroll(find(CollectionView));
+    await confirm(CollectionView);
+    await scroll(find(CollectionView));
   }],
   ['composite.js', () => confirm(Composite, {}, 2)],
   ['console.js', async () => {
@@ -146,7 +145,7 @@ const snippets = [
     await wait(500);
   }],
   ['device.js', async () => {
-    await confirm(TextView, {text: /\<b\>Version:\<\/b\>\s.+/});
+    await confirm(TextView, {text: /<b>Version:<\/b>\s.+/});
     await wait(1000);
   }],
   ['drawer.js', async () => {
@@ -555,7 +554,7 @@ const snippets = [
   }],
   ['widget-cornerradius.js', async () => {
     confirm(Composite, {
-    cornerRadius: 24});
+      cornerRadius: 24});
   }],
   ['widget-elevation.js', async () => {
     confirm(Composite, {elevation: 8});
@@ -621,7 +620,7 @@ const snippets = [
   }]
 ].filter(v => v);
 
-//#region test controls
+// #region test controls
 
 const KEY_SNIPPET_INDEX = `__${module.id}__SNIPPET_INDEX`;
 const KEY_AUTO_CONTINUE = `__${module.id}__AUTO_CONTINUE`;
@@ -641,8 +640,8 @@ if (!showIntro()) {
       require('./' + file);
       return test().catch(ex => console.error(ex.message + '\n' + ex.stack)).then(() => console.log('test finished'));
     }).then(errorCheck)
-    .then(() => showOptions(file + ' - OK', 'next'))
-    .catch(ex => {
+      .then(() => showOptions(file + ' - OK', 'next'))
+      .catch(ex => {
         console.log(ex.stack);
         showOptions(file + ' - ' + ex, 'error');
       });
@@ -686,7 +685,6 @@ function initErrorLog() {
   const orgTrigger = NativeObject.prototype._trigger;
   NativeObject.prototype._trigger = function() {
     try {
-      // tslint:disable-next-line:no-invalid-this
       orgTrigger.apply(this, arguments);
     } catch (ex) {
       console.log('trigger error');
@@ -825,9 +823,9 @@ function getSnippetIndex() {
   return parseInt(localStorage.getItem(KEY_SNIPPET_INDEX), 10);
 }
 
-//#endregion
+// #endregion
 
-//#region test helpers
+// #region test helpers
 
 function confirm(type, props = {}, count = 1) {
   return wait(300).then(() => {
@@ -1043,4 +1041,4 @@ function timeout(promise, time = 6000, allowContinue) {
   ]);
 }
 
-//#endregion
+// #endregion

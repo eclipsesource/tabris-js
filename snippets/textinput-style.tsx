@@ -1,4 +1,4 @@
-import { contentView, Stack, TextInput } from 'tabris';
+import {contentView, Stack, TextInput} from 'tabris';
 
 contentView.append(
   <Stack stretch spacing={16} padding={16} alignment='stretchX'>

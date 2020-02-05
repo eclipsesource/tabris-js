@@ -88,6 +88,7 @@ export default {
       return this;
     }
     const self = this;
+    /** @this {object} */
     const wrappedCallback = function() {
       if (!self._isDisposed) {
         self.off(type, wrappedCallback, context);

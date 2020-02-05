@@ -9,7 +9,7 @@ contentView.set({padding: 16}).append(
         onCheckedChanged={() => label.text = switcher.checked ? MSG_CHECKED : MSG_UNCHECKED}/>
     <TextView left='prev() 16' baseline text={MSG_CHECKED}/>
     <Button top='Switch 16' text='Toggle Switch'
-      onSelect={() => switcher.checked = !switcher.checked}/>
+        onSelect={() => switcher.checked = !switcher.checked}/>
   </$>
 );
 

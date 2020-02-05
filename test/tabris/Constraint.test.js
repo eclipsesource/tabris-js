@@ -7,7 +7,6 @@ import ClientMock from './ClientMock';
 
 describe('Constraint', function() {
 
-  let constraint;
   let widget;
   let client;
 
@@ -17,7 +16,6 @@ describe('Constraint', function() {
     client = new ClientMock();
     mockTabris(client);
     widget = new Composite();
-    constraint = new Constraint(widget, 0.2);
   });
 
   describe('constructor', function() {
@@ -177,12 +175,14 @@ describe('Constraint', function() {
   describe('widget instance constraint', function() {
 
     it ('converts to string', function() {
+      const constraint = new Constraint(widget, 0.2);
       const cid = widget.cid;
       // TODO: We should actually support this as a selector for consistency
       expect(constraint.toString()).to.equal(`Composite[cid="${cid}"] 0.2`);
     });
 
     it ('converts to array', function() {
+      const constraint = new Constraint(widget, 0.2);
       expect(constraint.toArray()).to.deep.equal([widget, 0.2]);
     });
 

@@ -21,7 +21,7 @@ describe('Percent', function() {
 
   });
 
-  describe('instance', function () {
+  describe('instance', function() {
 
     it('properties are read-only', function() {
       const percent = new Percent(5);

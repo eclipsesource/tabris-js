@@ -1,7 +1,8 @@
-node_modules/
-build/
-doc/
-dist
-snippets
-*.min.js
-*~
+tools/*.d.ts
+test/typescript/*
+build
+node_modules
+*.json
+*.md
+$.jsx
+typings

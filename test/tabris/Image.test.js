@@ -115,7 +115,7 @@ describe('Image', function() {
     });
   });
 
-  describe('instance', function () {
+  describe('instance', function() {
 
     it('properties are read-only', function() {
       const image = new Image({src: 'foo'});

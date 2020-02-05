@@ -10,7 +10,7 @@ const Align = {
   centerY: 'centerY',
   baseline: 'baseline',
   bottom: 'bottom',
-  stretchY: 'stretchY',
+  stretchY: 'stretchY'
 };
 
 const zero = new Percent(0);

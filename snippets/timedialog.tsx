@@ -1,4 +1,4 @@
-import { TimeDialog, Button, Stack, TextView, contentView } from 'tabris';
+import {TimeDialog, Button, Stack, TextView, contentView} from 'tabris';
 
 contentView.append(
   <Stack stretch padding={16} spacing={16} alignment='stretchX'>

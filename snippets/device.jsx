@@ -1,12 +1,12 @@
 import {contentView, device, TextView} from 'tabris';
 
-contentView.append(<TextView padding={16} markupEnabled font={'16px'} lineSpacing={1.4}/>);
+contentView.append(<TextView padding={16} markupEnabled font='16px' lineSpacing={1.4}/>);
 
 device.onOrientationChanged(renderDeviceProperties);
 renderDeviceProperties();
 
 function renderDeviceProperties() {
-  $(TextView).only().text =
+  $(TextView).only().text = (
     <$>
       <b>Platform:</b> {device.platform}<br/>
       <b>Version:</b> {device.version}<br/>
@@ -19,5 +19,5 @@ function renderDeviceProperties() {
       <b>Scale:</b> {device.scaleFactor}<br/>
       <b>Cameras:</b> {device.cameras ? device.cameras.map(camera => camera.position).join(', ') : 'none'}<br/>
     </$>
-  ;
+  );
 }

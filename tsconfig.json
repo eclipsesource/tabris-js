@@ -10,6 +10,7 @@
   },
   "include": [
     "src/tabris/**/*",
-    "test/tabris/**/*"
+    "test/tabris/**/*",
+    "doc/**/*"
   ]
 }

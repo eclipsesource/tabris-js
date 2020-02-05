@@ -33,7 +33,7 @@ export default class Headers {
   }
 
   has(name) {
-    return this.$map.hasOwnProperty(normalizeName(name));
+    return Object.prototype.hasOwnProperty.call(this.$map, normalizeName(name));
   }
 
   set(name, value) {
@@ -42,7 +42,7 @@ export default class Headers {
 
   forEach(callback, thisArg) {
     for (const name in this.$map) {
-      if (this.$map.hasOwnProperty(name)) {
+      if (Object.prototype.hasOwnProperty.call(this.$map, name)) {
         callback.call(thisArg, this.$map[name], name, this);
       }
     }

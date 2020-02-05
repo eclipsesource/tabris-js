@@ -135,7 +135,7 @@ describe('SearchAction', function() {
       action = new SearchAction();
     });
 
-    it("invokes 'open' call operation on native bridge", function() {
+    it('invokes \'open\' call operation on native bridge', function() {
       spy(client, 'call');
 
       action.open();

@@ -108,12 +108,12 @@ describe('fetch', function() {
       nativeObject._trigger('stateChanged', {
         state: 'headers',
         code: 418,
-        message: "I'm a teapot",
+        message: 'I\'m a teapot',
         headers: {'X-Foo': '23,42'}
       });
       nativeObject._trigger('stateChanged', {
         state: 'finished',
-        response: "I can't brew coffee!"
+        response: 'I can\'t brew coffee!'
       });
     });
 
@@ -122,7 +122,7 @@ describe('fetch', function() {
         expect(response).to.be.instanceOf(Response);
         expect(response.url).to.equal('http://example.org');
         expect(response.status).to.equal(418);
-        expect(response.statusText).to.equal("I'm a teapot");
+        expect(response.statusText).to.equal('I\'m a teapot');
         expect(Array.from(response.headers)).to.deep.equal([['x-foo', '23,42']]);
       });
     });

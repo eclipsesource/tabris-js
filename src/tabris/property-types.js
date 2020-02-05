@@ -116,9 +116,9 @@ export class PropertyTypes {
         }
         throw new Error(`${toValueString(value)} must be a LinearGradient or Color instance.`);
       }
-    },
+    };
 
-    /** @type {ColorValue: PropertyType<Color|'initial'>} */
+    /** @type {PropertyType<Color|'initial'>} */
     this.ColorValue = {
       convert: value => !value || value === 'initial' ? 'initial' : Color.from(value),
       encode: value => value === 'initial' ? undefined : value.toArray(),
@@ -162,7 +162,7 @@ export class PropertyTypes {
           width, height, scale
         };
       }
-    },
+    };
 
     /** @type {PropertyType<Partial<BoxDimensionsObject>|'initial'>} */
     this.BoxDimensions = {
@@ -201,7 +201,7 @@ export class PropertyTypes {
           throw new Error(`${toValueString(value)} is not a valid BoxDimensions value: ${ex.message}`);
         }
       }
-    },
+    };
 
     /** @type {PropertyType<{left: number, top: number, width: number, height: number}>} */
     this.Bounds = {

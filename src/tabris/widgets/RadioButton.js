@@ -38,5 +38,5 @@ NativeObject.defineProperties(RadioButton.prototype, {
 });
 
 NativeObject.defineEvents(RadioButton.prototype, {
-  select: {native: true, changes: 'checked'},
+  select: {native: true, changes: 'checked'}
 });

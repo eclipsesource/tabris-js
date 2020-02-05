@@ -2,7 +2,7 @@
   "name": "tabris-js-snippets",
   "version": "3.2.1",
   "dependencies": {
-    "tabris": "3.2.1"
+    "tabris": "^3.3.0"
   },
   "devDependencies": {
     "typescript": "3.3.x"

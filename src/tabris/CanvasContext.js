@@ -9,6 +9,9 @@ import ImageBitmap from './ImageBitmap';
 
 export default class CanvasContext {
 
+  /**
+   * @param {GC} gc
+   */
   constructor(gc) {
     Object.defineProperties(this, {
       _gc: {enumerable: false, writable: false, value: gc},
@@ -65,13 +68,27 @@ export default class CanvasContext {
 
 }
 
+/** @typedef {{[Key in keyof typeof properties]: any}} State */
+
+Object.defineProperty(CanvasContext.prototype, '_gc', {
+  enumerable: false, value: (/** @type {GC} */(null))
+});
+
+Object.defineProperty(CanvasContext.prototype, '_state', {
+  enumerable: false, writable: true, value: (/** @type {State} */(null))
+});
+
+Object.defineProperty(CanvasContext.prototype, '_savedStates', {
+  enumerable: false, writable: false, value: (/** @type {State[]} */(null))
+});
+
 // State operations
 
-defineMethod('save', 0, function() {
+defineMethod('save', 0, /** @this {CanvasContext} */ function() {
   this._savedStates.push(Object.assign({}, this._state));
 });
 
-defineMethod('restore', 0, function() {
+defineMethod('restore', 0, /** @this {CanvasContext} */ function() {
   this._state = this._savedStates.pop() || this._state;
 });
 
@@ -81,78 +98,78 @@ defineMethod('beginPath');
 
 defineMethod('closePath');
 
-defineMethod('lineTo', 2, function(x, y) {
+defineMethod('lineTo', 2, /** @this {CanvasContext} */ function(x, y) {
   this._gc.addDouble(x, y);
 });
 
-defineMethod('moveTo', 2, function(x, y) {
+defineMethod('moveTo', 2, /** @this {CanvasContext} */ function(x, y) {
   this._gc.addDouble(x, y);
 });
 
-defineMethod('bezierCurveTo', 6, function(cp1x, cp1y, cp2x, cp2y, x, y) {
+defineMethod('bezierCurveTo', 6, /** @this {CanvasContext} */ function(cp1x, cp1y, cp2x, cp2y, x, y) {
   this._gc.addDouble(cp1x, cp1y, cp2x, cp2y, x, y);
 });
 
-defineMethod('quadraticCurveTo', 4, function(cpx, cpy, x, y) {
+defineMethod('quadraticCurveTo', 4, /** @this {CanvasContext} */ function(cpx, cpy, x, y) {
   this._gc.addDouble(cpx, cpy, x, y);
 });
 
-defineMethod('rect', 4, function(x, y, width, height) {
+defineMethod('rect', 4, /** @this {CanvasContext} */ function(x, y, width, height) {
   this._gc.addDouble(x, y, width, height);
 });
 
-defineMethod('arc', 5, function(x, y, radius, startAngle, endAngle, anticlockwise) {
+defineMethod('arc', 5, /** @this {CanvasContext} */ function(x, y, radius, startAngle, endAngle, anticlockwise) {
   this._gc.addDouble(x, y, radius, startAngle, endAngle);
   this._gc.addBoolean(!!anticlockwise);
 });
 
-defineMethod('arcTo', 5, function(x1, y1, x2, y2, radius) {
+defineMethod('arcTo', 5, /** @this {CanvasContext} */ function(x1, y1, x2, y2, radius) {
   this._gc.addDouble(x1, y1, x2, y2, radius);
 });
 
 // Transformations
 
-defineMethod('scale', 2, function(x, y) {
+defineMethod('scale', 2, /** @this {CanvasContext} */ function(x, y) {
   this._gc.addDouble(x, y);
 });
 
-defineMethod('rotate', 1, function(angle) {
+defineMethod('rotate', 1, /** @this {CanvasContext} */ function(angle) {
   this._gc.addDouble(angle);
 });
 
-defineMethod('translate', 2, function(x, y) {
+defineMethod('translate', 2, /** @this {CanvasContext} */ function(x, y) {
   this._gc.addDouble(x, y);
 });
 
-defineMethod('transform', 6, function(a, b, c, d, e, f) {
+defineMethod('transform', 6, /** @this {CanvasContext} */ function(a, b, c, d, e, f) {
   this._gc.addDouble(a, b, c, d, e, f);
 });
 
-defineMethod('setTransform', 6, function(a, b, c, d, e, f) {
+defineMethod('setTransform', 6, /** @this {CanvasContext} */ function(a, b, c, d, e, f) {
   this._gc.addDouble(a, b, c, d, e, f);
 });
 
 // Drawing operations
 
-defineMethod('clearRect', 4, function(x, y, width, height) {
+defineMethod('clearRect', 4, /** @this {CanvasContext} */ function(x, y, width, height) {
   this._gc.addDouble(x, y, width, height);
 });
 
-defineMethod('fillRect', 4, function(x, y, width, height) {
+defineMethod('fillRect', 4, /** @this {CanvasContext} */ function(x, y, width, height) {
   this._gc.addDouble(x, y, width, height);
 });
 
-defineMethod('strokeRect', 4, function(x, y, width, height) {
+defineMethod('strokeRect', 4, /** @this {CanvasContext} */ function(x, y, width, height) {
   this._gc.addDouble(x, y, width, height);
 });
 
-defineMethod('fillText', 3, function(text, x, y /* , maxWidth */) {
+defineMethod('fillText', 3, /** @this {CanvasContext} */ function(text, x, y /* , maxWidth */) {
   this._gc.addString(text);
   this._gc.addBoolean(false, false, false);
   this._gc.addDouble(x, y);
 });
 
-defineMethod('strokeText', 3, function(text, x, y /* , maxWidth */) {
+defineMethod('strokeText', 3, /** @this {CanvasContext} */ function(text, x, y /* , maxWidth */) {
   this._gc.addString(text);
   this._gc.addBoolean(false, false, false);
   this._gc.addDouble(x, y);
@@ -162,7 +179,7 @@ defineMethod('fill');
 
 defineMethod('stroke');
 
-defineMethod('drawImage', 3, function(image, x1, y1, w1, h1, x2, y2, w2, h2) {
+defineMethod('drawImage', 3, /** @this {CanvasContext} */ function(image, x1, y1, w1, h1, x2, y2, w2, h2) {
   if (!(image instanceof ImageBitmap)) {
     throw new TypeError('First argument of CanvasContext.drawImage must be of type ImageBitmap');
   }
@@ -278,6 +295,7 @@ function passThrough(value) {
   return value;
 }
 
+/** @this {{values: any[]}} */
 function checkValue(value) {
   if (value in this.values) {
     return value;
@@ -301,8 +319,13 @@ function createState() {
   return state;
 }
 
+/**
+ * @param {string} name
+ * @param {number=} reqArgCount
+ * @param {((this: CanvasContext, ...args: any[]) => any)=} fn
+ */
 function defineMethod(name, reqArgCount, fn) {
-  CanvasContext.prototype[name] = function() {
+  CanvasContext.prototype[name] = /** @this {CanvasContext} */ function() {
     checkRequiredArgs(arguments, reqArgCount, 'CanvasContext.' + name);
     this._gc.addOperation(name);
     if (fn) {

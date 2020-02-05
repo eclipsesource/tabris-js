@@ -21,7 +21,7 @@ describe('Button', function() {
   describe('constructor', function() {
 
     it('CREATEs Button', function() {
-      const button = new Button();
+      button = new Button();
 
       expect(client.calls({type: 'tabris.Button'})[0].id).to.equal(button.cid);
     });

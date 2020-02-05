@@ -50,7 +50,7 @@ export default class TimeDialog extends Popup {
 }
 
 NativeObject.defineProperties(TimeDialog.prototype, {
-  date: {type: types.Date, default: null},
+  date: {type: types.Date, default: null}
 });
 
 NativeObject.defineEvents(TimeDialog.prototype, {

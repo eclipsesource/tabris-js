@@ -59,7 +59,7 @@ export default class Worker {
         }
       } else if (typeof (message) === 'object') {
         for (const property in message) {
-          if (message.hasOwnProperty(property)) {
+          if (Object.prototype.hasOwnProperty.call(message, property)) {
             this._validateMessage(message[property]);
           }
         }

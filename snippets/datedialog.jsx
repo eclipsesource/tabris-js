@@ -1,4 +1,4 @@
-import { DateDialog, Button, Stack, TextView, contentView } from 'tabris';
+import {DateDialog, Button, Stack, TextView, contentView} from 'tabris';
 
 contentView.append(
   <Stack stretch padding={16} spacing={16} alignment='stretchX'>
@@ -26,8 +26,8 @@ async function showMinMaxDate() {
   const now = new Date().getTime();
   DateDialog.open(
     <DateDialog
-      minDate={new Date(now - FIVE_DAYS)}
-      maxDate={new Date(now + FIVE_DAYS)}
-      onClose={({date}) => textView.text = date ? `Picked ${date.toDateString()}` : 'Canceled'}/>
+        minDate={new Date(now - FIVE_DAYS)}
+        maxDate={new Date(now + FIVE_DAYS)}
+        onClose={({date}) => textView.text = date ? `Picked ${date.toDateString()}` : 'Canceled'}/>
   );
 }

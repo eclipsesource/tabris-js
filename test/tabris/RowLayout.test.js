@@ -160,7 +160,7 @@ describe('RowLayout', function() {
 
       it('renders children layoutData with spacing', function() {
         const all = render({spacing: 16, alignment: 'centerY'});
-        const cid = parent.children().toArray().map(child => child.cid);
+        cid = parent.children().toArray().map(child => child.cid);
 
         expect(all[0]).to.deep.equal({left: 0, centerY: 0});
         expect(all[1]).to.deep.equal({left: [cid[0], 16], centerY: 0});
@@ -205,7 +205,7 @@ describe('RowLayout', function() {
 
       it('renders children layoutData', function() {
         const all = render({alignment: 'stretchY'});
-        const cid = parent.children().toArray().map(child => child.cid);
+        cid = parent.children().toArray().map(child => child.cid);
 
         expect(all[0]).to.deep.equal({left: 0, top: 0, bottom: 0});
         expect(all[1]).to.deep.equal({left: [cid[0], 0], top: 0, bottom: 0});
@@ -217,7 +217,7 @@ describe('RowLayout', function() {
 
       it('renders children layoutData with spacing', function() {
         const all = render({spacing: 16, alignment: 'stretchY'});
-        const cid = parent.children().toArray().map(child => child.cid);
+        cid = parent.children().toArray().map(child => child.cid);
 
         expect(all[0]).to.deep.equal({left: 0, top: 0, bottom: 0});
         expect(all[1]).to.deep.equal({left: [cid[0], 16], top: 0, bottom: 0});
@@ -262,7 +262,7 @@ describe('RowLayout', function() {
 
       it('renders children layoutData', function() {
         const all = render({alignment: 'bottom'});
-        const cid = parent.children().toArray().map(child => child.cid);
+        cid = parent.children().toArray().map(child => child.cid);
 
         expect(all[0]).to.deep.equal({left: 0, bottom: 0});
         expect(all[1]).to.deep.equal({left: [cid[0], 0], bottom: 0});
@@ -274,7 +274,7 @@ describe('RowLayout', function() {
 
       it('renders children layoutData with spacing', function() {
         const all = render({spacing: 16, alignment: 'bottom'});
-        const cid = parent.children().toArray().map(child => child.cid);
+        cid = parent.children().toArray().map(child => child.cid);
 
         expect(all[0]).to.deep.equal({left: 0, bottom: 0});
         expect(all[1]).to.deep.equal({left: [cid[0], 16], bottom: 0});
@@ -319,7 +319,7 @@ describe('RowLayout', function() {
 
       it('renders children layoutData', function() {
         const all = render({alignment: 'baseline'});
-        const cid = parent.children().toArray().map(child => child.cid);
+        cid = parent.children().toArray().map(child => child.cid);
 
         expect(all[0]).to.deep.equal({left: 0, top: 0});
         expect(all[1]).to.deep.equal({left: [cid[0], 0], baseline: cid[0]});
@@ -331,7 +331,7 @@ describe('RowLayout', function() {
 
       it('renders children layoutData with spacing', function() {
         const all = render({spacing: 16, alignment: 'baseline'});
-        const cid = parent.children().toArray().map(child => child.cid);
+        cid = parent.children().toArray().map(child => child.cid);
 
         expect(all[0]).to.deep.equal({left: 0, top: 0});
         expect(all[1]).to.deep.equal({left: [cid[0], 16], baseline: cid[0]});

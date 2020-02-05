@@ -206,17 +206,17 @@ describe('Layout', function() {
 
   describe('getLayoutData', function() {
 
-    let parent;
+    let page;
 
     function check(layoutData) {
-      const widget = new TestWidget({layoutData: LayoutData.from(layoutData), layout: null})
-        .appendTo(parent);
-      return layout.getLayoutData(widget);
+      const child = new TestWidget({layoutData: LayoutData.from(layoutData), layout: null})
+        .appendTo(page);
+      return layout.getLayoutData(child);
     }
 
     beforeEach(function() {
       stub(console, 'warn');
-      parent = new Page({layout: null}).appendTo(new NavigationView({id: 'root', layout: null}));
+      page = new Page({layout: null}).appendTo(new NavigationView({id: 'root', layout: null}));
     });
 
     it('raises a warning for inconsistent layoutData (width)', function() {
@@ -322,14 +322,14 @@ describe('Layout', function() {
       expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
-    it("translates 'prev()' selector to id", function() {
+    it('translates \'prev()\' selector to id', function() {
       const input = {baseline: 'prev()', left: ['prev()', 42]};
       const expected = {baseline: widget.cid, left: [widget.cid, 42]};
 
       expect(resolve(input, other)).to.deep.equal(expected);
     });
 
-    it("translates 'prev()' when parent children() is overwritten", function() {
+    it('translates \'prev()\' when parent children() is overwritten', function() {
       parent.children = () => new WidgetCollection([]);
       const input = {baseline: 'prev()', left: ['prev()', 42]};
       const expected = {baseline: widget.cid, left: [widget.cid, 42]};
@@ -337,21 +337,21 @@ describe('Layout', function() {
       expect(resolve(input, other)).to.deep.equal(expected);
     });
 
-    it("translates 'prev()' selector to 0 on first widget", function() {
+    it('translates \'prev()\' selector to 0 on first widget', function() {
       const input = {baseline: 'prev()', left: ['prev()', 42]};
       const expected = {baseline: 0, left: [0, 42]};
 
       expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
-    it("translates 'next()' selector to id", function() {
+    it('translates \'next()\' selector to id', function() {
       const input = {baseline: 'next()', left: ['next()', 42]};
       const expected = {baseline: other.cid, left: [other.cid, 42]};
 
       expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
-    it("translates 'next()' selector to id when parent children() is overwritten", function() {
+    it('translates \'next()\' selector to id when parent children() is overwritten', function() {
       parent.children = () => new WidgetCollection([]);
       const input = {baseline: 'next()', left: ['next()', 42]};
       const expected = {baseline: other.cid, left: [other.cid, 42]};
@@ -359,7 +359,7 @@ describe('Layout', function() {
       expect(resolve(input, widget)).to.deep.equal(expected);
     });
 
-    it("translates 'next()' selector to 0 on last widget", function() {
+    it('translates \'next()\' selector to 0 on last widget', function() {
       const input = {baseline: 'next()', left: ['next()', 42]};
       const expected = {baseline: 0, left: [0, 42]};
 

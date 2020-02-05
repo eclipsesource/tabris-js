@@ -1,16 +1,18 @@
 {
   "json.schemas": [
     {
-        "fileMatch": [
-            "doc/**/*.json"
-        ],
-        "url": "./tools/api-schema.json"
+      "fileMatch": [
+        "doc/**/*.json"
+      ],
+      "url": "./tools/api-schema.json"
     }
   ],
-  "tslint.jsEnable": true,
   "workbench.colorCustomizations": {
     "activityBar.background": "#0088d1",
     "activityBar.foreground": "#ffffff",
     "activityBar.inactiveForeground": "#ffffff70"
-  }
+  },
+  "eslint.alwaysShowStatus": true,
+  "eslint.lintTask.enable": true,
+  "eslint.enable": true
 }

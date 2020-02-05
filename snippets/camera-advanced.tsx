@@ -30,22 +30,22 @@ contentView.append(
     <CameraView top bottom={16} background='#dddddd' camera={camera}/>
     <ScrollView height={128} direction='horizontal' background='#dddddd'>
       <Composite id='imageStrip' padding={{top: 16, bottom: 0, right: 16}}
-        onResize={({width}) => $(ScrollView).only().scrollToX(width)}/>
+          onResize={({width}) => $(ScrollView).only().scrollToX(width)}/>
     </ScrollView>
     <Picker message='Camera'
-      itemCount={device.cameras.length}
-      itemText={index => device.cameras[index].position}
-      selectionIndex={0}
-      onSelect={cameraSelected}/>
+        itemCount={device.cameras.length}
+        itemText={index => device.cameras[index].position}
+        selectionIndex={0}
+        onSelect={cameraSelected}/>
     <Picker
-      message='Scale mode'
-      itemCount={scaleModes.length}
-      itemText={index => scaleModes[index]}
-      selectionIndex={0}
-      onSelect={e => $(CameraView).only().scaleMode = scaleModes[e.index]}/>
+        message='Scale mode'
+        itemCount={scaleModes.length}
+        itemText={index => scaleModes[index]}
+        selectionIndex={0}
+        onSelect={e => $(CameraView).only().scaleMode = scaleModes[e.index]}/>
     <Picker id='resolution'
-      message='Capture resolution'
-      onSelect={({index}) => camera.captureResolution = camera.availableCaptureResolutions[index]}/>
+        message='Capture resolution'
+        onSelect={({index}) => camera.captureResolution = camera.availableCaptureResolutions[index]}/>
     <Button text='Take picture' onSelect={captureImage}/>
   </Stack>
 );

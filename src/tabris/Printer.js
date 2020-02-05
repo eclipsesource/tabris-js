@@ -26,7 +26,7 @@ export default class Printer extends NativeObject {
         data: data instanceof ArrayBuffer ? data : data.buffer,
         options,
         onResult: (result) => resolve({result}),
-        onError: (error) => reject(new Error(error)),
+        onError: (error) => reject(new Error(error))
       });
     });
   }

@@ -57,7 +57,7 @@ function animateInFromRight(widget, delay) {
     transform: {translationX: 0}
   }, {
     duration: 500,
-    delay: delay,
+    delay,
     easing: 'ease-out'
   });
 }
@@ -68,7 +68,7 @@ function animateInScaleUp(widget, delay) {
     opacity: 1.0,
     transform: {scaleX: 1.0, scaleY: 1.0}
   }, {
-    delay: delay,
+    delay,
     duration: 400,
     easing: 'ease-out'
   });
@@ -138,7 +138,7 @@ function createPersonThumb(person, thumbsize) {
     alignment: 'centerX',
     left: 0, top: personView, width: thumbsize,
     text: person.firstName,
-    font: font
+    font
   }).appendTo(composite);
   return composite;
 }

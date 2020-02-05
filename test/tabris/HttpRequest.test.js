@@ -32,7 +32,7 @@ describe('HttpRequest', function() {
       expect(calls.map(call => [call.event, call.listen])).to.deep.equal([
         ['stateChanged', true],
         ['downloadProgress', true],
-        ['uploadProgress', true],
+        ['uploadProgress', true]
       ]);
     });
 

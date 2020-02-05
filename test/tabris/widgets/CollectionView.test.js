@@ -500,7 +500,7 @@ describe('CollectionView', function() {
           results = [
             view._trigger('requestInfo', {index: 0}),
             view._trigger('requestInfo', {index: 1}),
-            view._trigger('requestInfo', {index: 2}),
+            view._trigger('requestInfo', {index: 2})
           ];
         });
 
@@ -534,7 +534,7 @@ describe('CollectionView', function() {
           results = [
             view._trigger('requestInfo', {index: 0}),
             view._trigger('requestInfo', {index: 1}),
-            view._trigger('requestInfo', {index: 2}),
+            view._trigger('requestInfo', {index: 2})
           ];
         });
 
@@ -1114,35 +1114,35 @@ describe('CollectionView', function() {
         client.resetCalls();
       });
 
-      it("CALLs 'reveal' with default options", function() {
+      it('CALLs \'reveal\' with default options', function() {
         view.reveal(1);
 
         const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
         expect(call.parameters).to.deep.equal({index: 1, animate: true});
       });
 
-      it("CALLs 'reveal' with options", function() {
+      it('CALLs \'reveal\' with options', function() {
         view.reveal(1, {animate: false});
 
         const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
         expect(call.parameters).to.deep.equal({index: 1, animate: false});
       });
 
-      it("CALLs 'reveal' with normalized options", function() {
+      it('CALLs \'reveal\' with normalized options', function() {
         view.reveal(1, {animate: 1});
 
         const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
         expect(call.parameters).to.deep.equal({index: 1, animate: true});
       });
 
-      it("CALLs 'reveal' with filtered options", function() {
+      it('CALLs \'reveal\' with filtered options', function() {
         view.reveal(1, {foo: 'bar', animate: true});
 
         const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
         expect(call.parameters).to.deep.equal({index: 1, animate: true});
       });
 
-      it("CALLs 'reveal' with autocompleted options", function() {
+      it('CALLs \'reveal\' with autocompleted options', function() {
         view.reveal(1, {});
 
         const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
@@ -1184,7 +1184,7 @@ describe('CollectionView', function() {
     });
 
     it('does not crash when disposed right after setting itemCount (bugfix)', function() {
-      const view = new CollectionView();
+      view = new CollectionView();
       view.itemCount = 23;
       view.dispose();
       tabris.flush();

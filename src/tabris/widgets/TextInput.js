@@ -132,7 +132,7 @@ NativeObject.defineProperties(TextInput.prototype, {
     type: types.string,
     choice: ['never', 'ontouch', 'onfocus'],
     default: 'onfocus'
-  },
+  }
 });
 
 NativeObject.defineEvents(TextInput.prototype, {

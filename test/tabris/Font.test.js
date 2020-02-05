@@ -35,7 +35,7 @@ describe('Font', function() {
       expect(() => new Font(NaN)).to.throw('Invalid font size: Invalid number NaN');
       expect(() => new Font(Infinity)).to.throw('Invalid font size: Invalid number Infinity');
       expect(() => new Font(5, ['"f"oo'])).to.throw('Invalid font family: "f"oo');
-      expect(() => new Font(5, ["'f'oo"])).to.throw("Invalid font family: 'f'oo");
+      expect(() => new Font(5, ['\'f\'oo'])).to.throw('Invalid font family: \'f\'oo');
       expect(() => new Font(5, undefined, 'foo')).to.throw('Invalid font weight foo');
       expect(() => new Font(5, undefined, undefined, 'foo')).to.throw('Invalid font style foo');
       expect(() => new Font()).to.throw('Not enough arguments');
@@ -43,7 +43,7 @@ describe('Font', function() {
 
   });
 
-  describe('instance', function () {
+  describe('instance', function() {
 
     it('properties are read-only', function() {
       const font = new Font(5, ['foo'], 'bold', 'italic');

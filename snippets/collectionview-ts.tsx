@@ -1,4 +1,4 @@
-import { CollectionView, Composite, $, ImageView, TextView, contentView, AlertDialog, Properties } from 'tabris';
+import {CollectionView, Composite, $, ImageView, TextView, contentView, AlertDialog, Properties} from 'tabris';
 
 type Person = {firstName: string, lastName: string};
 
@@ -16,7 +16,7 @@ const people: Person[] = [
 contentView.append(
   <CollectionView stretch itemCount={people.length} cellHeight={256}
       createCell={() => new Cell()}
-      updateCell={(cell, index) => cell.person = people[index]} />
+      updateCell={(cell, index) => cell.person = people[index]}/>
 );
 
 class Cell extends Composite {
@@ -27,20 +27,20 @@ class Cell extends Composite {
     super(properties);
     this.append(
       <$>
-        <ImageView top={16} centerX={0} width={200} height={200} />
+        <ImageView top={16} centerX={0} width={200} height={200}/>
         <TextView left={30} top='prev() 16' right={30} alignment='centerX'/>
       </$>
     );
     this.onTap(this._handleTap);
   }
 
-  set person(value: Person) {
+  public set person(value: Person) {
     this._person = value;
     this.find(ImageView).only().image = `resources/${this._person.firstName.toLowerCase()}.jpg`;
     this.find(TextView).only().text = this._person.lastName;
   }
 
-  get person() {
+  public get person() {
     return this._person;
   }
 

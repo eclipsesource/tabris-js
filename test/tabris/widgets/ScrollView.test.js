@@ -70,7 +70,7 @@ describe('ScrollView', function() {
 
   });
 
-  describe("when created with direction 'vertical'", function() {
+  describe('when created with direction \'vertical\'', function() {
 
     let createCalls;
 
@@ -132,7 +132,7 @@ describe('ScrollView', function() {
 
   });
 
-  describe("when created with direction 'horizontal'", function() {
+  describe('when created with direction \'horizontal\'', function() {
 
     let createCalls;
 
@@ -204,7 +204,7 @@ describe('ScrollView', function() {
       expect(scrollView.scrollToX(100)).to.equal(scrollView);
     });
 
-    it("CALLs 'scrollToX' with default options", function() {
+    it('CALLs \'scrollToX\' with default options', function() {
       scrollView.scrollToX(100);
 
       const calls = client.calls({op: 'call', id: scrollView.cid});
@@ -219,7 +219,7 @@ describe('ScrollView', function() {
       }]);
     });
 
-    it("CALLs 'scrollToX' with options", function() {
+    it('CALLs \'scrollToX\' with options', function() {
       scrollView.scrollToX(101, {animate: false});
 
       const calls = client.calls({op: 'call', id: scrollView.cid});
@@ -234,7 +234,7 @@ describe('ScrollView', function() {
       }]);
     });
 
-    it("CALLs 'scrollToX' with normalized options", function() {
+    it('CALLs \'scrollToX\' with normalized options', function() {
       scrollView.scrollToX(101, {animate: 1});
 
       const calls = client.calls({op: 'call', id: scrollView.cid});
@@ -249,7 +249,7 @@ describe('ScrollView', function() {
       }]);
     });
 
-    it("CALLs 'scrollToX' with filtered options", function() {
+    it('CALLs \'scrollToX\' with filtered options', function() {
       scrollView.scrollToX(101, {foo: 'bar', animate: true});
 
       const calls = client.calls({op: 'call', id: scrollView.cid});
@@ -264,7 +264,7 @@ describe('ScrollView', function() {
       }]);
     });
 
-    it("CALLs 'scrollToX' with autocompleted options", function() {
+    it('CALLs \'scrollToX\' with autocompleted options', function() {
       scrollView.scrollToX(101, {});
 
       const calls = client.calls({op: 'call', id: scrollView.cid});
@@ -291,7 +291,7 @@ describe('ScrollView', function() {
       expect(scrollView.scrollToY(100)).to.equal(scrollView);
     });
 
-    it("CALLs 'scrollToY' with default options", function() {
+    it('CALLs \'scrollToY\' with default options', function() {
       scrollView.scrollToY(100);
 
       const calls = client.calls({op: 'call', id: scrollView.cid});
@@ -306,7 +306,7 @@ describe('ScrollView', function() {
       }]);
     });
 
-    it("CALLs 'scrollToY' with options", function() {
+    it('CALLs \'scrollToY\' with options', function() {
       scrollView.scrollToY(101, {animate: false});
 
       const calls = client.calls({op: 'call', id: scrollView.cid});
@@ -321,7 +321,7 @@ describe('ScrollView', function() {
       }]);
     });
 
-    it("CALLs 'scrollToY' with normalized options", function() {
+    it('CALLs \'scrollToY\' with normalized options', function() {
       scrollView.scrollToY(101, {animate: 1});
 
       const calls = client.calls({op: 'call', id: scrollView.cid});
@@ -336,7 +336,7 @@ describe('ScrollView', function() {
       }]);
     });
 
-    it("CALLs 'scrollToY' with filtered options", function() {
+    it('CALLs \'scrollToY\' with filtered options', function() {
       scrollView.scrollToY(101, {foo: 'bar', animate: true});
 
       const calls = client.calls({op: 'call', id: scrollView.cid});
@@ -351,7 +351,7 @@ describe('ScrollView', function() {
       }]);
     });
 
-    it("CALLs 'scrollToY' with autocompleted options", function() {
+    it('CALLs \'scrollToY\' with autocompleted options', function() {
       scrollView.scrollToY(101, {});
 
       const calls = client.calls({op: 'call', id: scrollView.cid});

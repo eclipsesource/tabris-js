@@ -27,7 +27,7 @@ export default class SizeMeasurement extends NativeObject {
       this._nativeCall('measureTexts', {
         configs: this._createTextMeasureConfigs(configs),
         onResult: (result) => resolve(result),
-        onError: (error) => reject(new Error(error)),
+        onError: (error) => reject(new Error(error))
       });
     });
   }
@@ -40,7 +40,7 @@ export default class SizeMeasurement extends NativeObject {
       throw new Error('The text measurement configs have to be an array');
     }
     return this._nativeCall('measureTextsSync', {
-      configs: this._createTextMeasureConfigs(configs),
+      configs: this._createTextMeasureConfigs(configs)
     });
   }
 
@@ -49,7 +49,7 @@ export default class SizeMeasurement extends NativeObject {
       text: checkText(config.text),
       font: checkFont(config.font),
       markupEnabled: !!config.markupEnabled,
-      maxWidth: 'maxWidth' in config ? types.dimension.convert(config.maxWidth) : undefined,
+      maxWidth: 'maxWidth' in config ? types.dimension.convert(config.maxWidth) : undefined
     }));
   }
 

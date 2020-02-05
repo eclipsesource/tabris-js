@@ -19,4 +19,4 @@ import {Canvas, contentView, device} from 'tabris';
     ctx.drawImage(image, 50, 50);
   }
 
-})();
+})().catch(ex => console.error(ex));

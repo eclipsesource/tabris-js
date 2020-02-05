@@ -8,6 +8,6 @@ contentView.append(
       <b>Version Code:</b> {app.versionCode}<br/>
     </TextView>
     <CheckBox text='Idle Timout Enabled' font='16px' checked={app.idleTimeoutEnabled}
-      onCheckedChanged={({value: checked}) => app.idleTimeoutEnabled = checked}/>
+        onCheckedChanged={({value: checked}) => app.idleTimeoutEnabled = checked}/>
   </Stack>
 );

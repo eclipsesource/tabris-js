@@ -264,16 +264,16 @@ describe('App', function() {
     }).to.throw();
   });
 
-  describe('keyPress', function () {
+  describe('keyPress', function() {
 
-    it('listens for keyPress event', function () {
+    it('listens for keyPress event', function() {
       app.onKeyPress(spy());
 
       const calls = client.calls({id: app.cid, op: 'listen', event: 'keyPress'});
       expect(calls[0].listen).to.equal(true);
     });
 
-    it('triggers keyPress event', function () {
+    it('triggers keyPress event', function() {
       const listener = spy();
       app.onKeyPress(listener);
 
@@ -283,7 +283,7 @@ describe('App', function() {
       expect(listener).to.have.been.calledWithMatch({target: app});
     });
 
-    it('returns false by default', function () {
+    it('returns false by default', function() {
       app.onKeyPress(spy());
 
       const returnValue = tabris._notify(app.cid, 'keyPress');
@@ -291,8 +291,8 @@ describe('App', function() {
       expect(returnValue).to.equal(false);
     });
 
-    it('returns true if preventDefault is called', function () {
-      app.onKeyPress(function (event) {
+    it('returns true if preventDefault is called', function() {
+      app.onKeyPress(function(event) {
         event.preventDefault();
       });
 

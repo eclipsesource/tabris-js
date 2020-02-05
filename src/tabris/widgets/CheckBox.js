@@ -38,5 +38,5 @@ NativeObject.defineProperties(CheckBox.prototype, {
 });
 
 NativeObject.defineEvents(CheckBox.prototype, {
-  select: {native: true, changes: 'checked'},
+  select: {native: true, changes: 'checked'}
 });

@@ -53,7 +53,7 @@ NativeObject.defineProperties(StatusBar.prototype, {
 });
 
 NativeObject.defineEvents(StatusBar.prototype, {
-  tap: true,
+  tap: true
 });
 
 export function create() {

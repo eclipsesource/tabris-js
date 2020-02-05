@@ -32,7 +32,7 @@ export default class Camera extends NativeObject {
               height: result.height
             });
           },
-          onError: (error) => reject(new Error(error)),
+          onError: (error) => reject(new Error(error))
         });
       }
     });

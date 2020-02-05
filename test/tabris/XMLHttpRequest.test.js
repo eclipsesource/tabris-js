@@ -12,9 +12,9 @@ describe('XMLHttpRequest', function() {
 
   let nativeObject, client, xhr;
 
-  function sendRequest(xhr) {
-    xhr.open('GET', 'http://foo.com');
-    xhr.send();
+  function sendRequest(target) {
+    target.open('GET', 'http://foo.com');
+    target.send();
   }
 
   beforeEach(function() {
@@ -54,13 +54,13 @@ describe('XMLHttpRequest', function() {
     it('fails without method', function() {
       expect(() => {
         xhr.open(undefined, 'http://foo.com');
-      }).to.throw(Error, "Method argument should be specified to execute 'open'");
+      }).to.throw(Error, 'Method argument should be specified to execute \'open\'');
     });
 
     it('fails without url', function() {
       expect(() => {
         xhr.open('foo', undefined);
-      }).to.throw(Error, "URL argument should be specified to execute 'open'");
+      }).to.throw(Error, 'URL argument should be specified to execute \'open\'');
     });
 
     it('fails for synchronous requests', function() {
@@ -78,10 +78,10 @@ describe('XMLHttpRequest', function() {
     it('fails with method name containing space', function() {
       expect(() => {
         xhr.open('ba r', 'http://foo.com');
-      }).to.throw(Error, "Invalid HTTP method, failed to execute 'open'");
+      }).to.throw(Error, 'Invalid HTTP method, failed to execute \'open\'');
     });
 
-    it("doesn't fail with method name containing '!'", function() {
+    it('doesn\'t fail with method name containing \'!\'', function() {
       expect(() => {
         xhr.open('ba!r', 'http://foo.com');
       }).to.not.throw();
@@ -90,10 +90,10 @@ describe('XMLHttpRequest', function() {
     it('fails with method name containing (del)', function() {
       expect(() => {
         xhr.open('ba' + String.fromCharCode(127) + 'r', 'http://foo.com');
-      }).to.throw(Error, "Invalid HTTP method, failed to execute 'open'");
+      }).to.throw(Error, 'Invalid HTTP method, failed to execute \'open\'');
     });
 
-    it("doesn't fail with method name containing '~'", function() {
+    it('doesn\'t fail with method name containing \'~\'', function() {
       expect(() => {
         xhr.open('ba~r', 'http://foo.com');
       }).to.not.throw();
@@ -103,23 +103,23 @@ describe('XMLHttpRequest', function() {
       expect(() => {
         xhr.open('CONNECT', 'http://foo.com');
       }).to.throw(Error, 'SecurityError: ' +
-                      "'CONNECT' HTTP method is not secure, failed to execute 'open'");
+                      '\'CONNECT\' HTTP method is not secure, failed to execute \'open\'');
     });
 
     it('fails with forbidden non-uppercase method name', function() {
       expect(() => {
         xhr.open('coNnEcT', 'http://foo.com');
       }).to.throw(Error, 'SecurityError: ' +
-                      "'CONNECT' HTTP method is not secure, failed to execute 'open'");
+                      '\'CONNECT\' HTTP method is not secure, failed to execute \'open\'');
     });
 
     it('fails with unsupported URL scheme', function() {
       expect(() => {
         xhr.open('GET', 'foo:bar');
-      }).to.throw(Error, "Unsupported URL scheme, failed to execute 'open'");
+      }).to.throw(Error, 'Unsupported URL scheme, failed to execute \'open\'');
     });
 
-    it("sets object state to 'OPENED'", function() {
+    it('sets object state to \'OPENED\'', function() {
       xhr.open('GET', 'http://foo.com');
       expect(xhr.readyState).to.equal(1);
     });
@@ -167,11 +167,11 @@ describe('XMLHttpRequest', function() {
       expect(nativeObject).not.to.be.undefined;
     });
 
-    it("fails when state not 'opened'", function() {
+    it('fails when state not \'opened\'', function() {
       expect(() => {
         xhr.send();
       }).to.throw(Error, 'InvalidStateError: ' +
-                      "Object's state must be 'OPENED', failed to execute 'send'");
+                      'Object\'s state must be \'OPENED\', failed to execute \'send\'');
     });
 
     it('fails if send invoked', function() {
@@ -179,7 +179,7 @@ describe('XMLHttpRequest', function() {
       xhr.send();
       expect(() => {
         xhr.send();
-      }).to.throw(Error, "InvalidStateError: 'send' invoked, failed to execute 'send'");
+      }).to.throw(Error, 'InvalidStateError: \'send\' invoked, failed to execute \'send\'');
     });
 
     it('calls nativeObject send with request URL specified as open argument', function() {
@@ -230,9 +230,9 @@ describe('XMLHttpRequest', function() {
       xhr.send(data);
       data[0] = 23;
       expect(nativeObject.send).to.have.been.calledWithMatch(
-        match(({data}) => {
-          const arr = new Uint8Array(data);
-          return data instanceof ArrayBuffer && arr[0] === 201;
+        match(({data: nativeData}) => {
+          const arr = new Uint8Array(nativeData);
+          return nativeData instanceof ArrayBuffer && arr[0] === 201;
         })
       );
     });
@@ -358,13 +358,13 @@ describe('XMLHttpRequest', function() {
         sendRequest(xhr);
       });
 
-      it("doesn't fail when onreadystatechange not implemented", function() {
+      it('doesn\'t fail when onreadystatechange not implemented', function() {
         expect(() => {
           nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
         }).to.not.throw();
       });
 
-      it("sets readystatechange event type to 'readystatechange'", function() {
+      it('sets readystatechange event type to \'readystatechange\'', function() {
         xhr.onreadystatechange = spy();
         nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
         expect(xhr.onreadystatechange).to.have.been.calledWith(match({
@@ -372,25 +372,25 @@ describe('XMLHttpRequest', function() {
         }));
       });
 
-      it("calls onreadystatechange on nativeObject event state 'headers'", function() {
+      it('calls onreadystatechange on nativeObject event state \'headers\'', function() {
         xhr.onreadystatechange = spy();
         nativeObject.trigger('stateChanged', {state: 'headers'});
         expect(xhr.onreadystatechange).to.have.been.called;
       });
 
-      it("calls onreadystatechange on nativeObject event state 'loading'", function() {
+      it('calls onreadystatechange on nativeObject event state \'loading\'', function() {
         xhr.onreadystatechange = spy();
         nativeObject.trigger('stateChanged', {state: 'loading'});
         expect(xhr.onreadystatechange).to.have.been.called;
       });
 
-      it("calls onreadystatechange on nativeObject event state 'finished'", function() {
+      it('calls onreadystatechange on nativeObject event state \'finished\'', function() {
         xhr.onreadystatechange = spy();
         nativeObject.trigger('stateChanged', {state: 'finished'});
         expect(xhr.onreadystatechange).to.have.been.called;
       });
 
-      it("calls upload progress events on nativeObject event state 'headers'", function() {
+      it('calls upload progress events on nativeObject event state \'headers\'', function() {
         progressEvents.forEach((event) => {
           const handler = 'on' + event;
           xhr.upload[handler] = spy();
@@ -399,7 +399,7 @@ describe('XMLHttpRequest', function() {
         });
       });
 
-      it("calls progress events on nativeObject event state 'finished'", function() {
+      it('calls progress events on nativeObject event state \'finished\'', function() {
         progressEvents.forEach((event) => {
           const handler = 'on' + event;
           xhr[handler] = spy();
@@ -409,7 +409,7 @@ describe('XMLHttpRequest', function() {
         });
       });
 
-      it("calls upload progress events on nativeObject event state 'finished'", function() {
+      it('calls upload progress events on nativeObject event state \'finished\'', function() {
         progressEvents.forEach((event) => {
           const handler = 'on' + event;
           xhr.upload[handler] = spy();
@@ -428,22 +428,22 @@ describe('XMLHttpRequest', function() {
         }));
       });
 
-      it("sets state to 'HEADERS_RECEIVED' when nativeObject event state 'headers'", function() {
+      it('sets state to \'HEADERS_RECEIVED\' when nativeObject event state \'headers\'', function() {
         nativeObject.trigger('stateChanged', {state: 'headers'});
         expect(xhr.readyState).to.equal(xhr.HEADERS_RECEIVED);
       });
 
-      it("sets HTTP status code to 'code' when state 'headers'", function() {
+      it('sets HTTP status code to \'code\' when state \'headers\'', function() {
         nativeObject.trigger('stateChanged', {state: 'headers', code: 200});
         expect(xhr.status).to.equal(200);
       });
 
-      it("sets HTTP statusText to 'message' when state 'headers'", function() {
+      it('sets HTTP statusText to \'message\' when state \'headers\'', function() {
         nativeObject.trigger('stateChanged', {state: 'headers', message: 'OK'});
         expect(xhr.statusText).to.equal('OK');
       });
 
-      it("sets response headers to headers when nativeObject event state 'headers'", function() {
+      it('sets response headers to headers when nativeObject event state \'headers\'', function() {
         nativeObject.trigger('stateChanged', {
           state: 'headers',
           code: 200,
@@ -452,22 +452,22 @@ describe('XMLHttpRequest', function() {
         expect(xhr.getAllResponseHeaders()).to.equal('Header-Name1: foo\r\nHeader-Name2: bar, baz');
       });
 
-      it("sets state to 'LOADING' when nativeObject event state 'loading'", function() {
+      it('sets state to \'LOADING\' when nativeObject event state \'loading\'', function() {
         nativeObject.trigger('stateChanged', {state: 'loading'});
         expect(xhr.readyState).to.equal(xhr.LOADING);
       });
 
-      it("sets state to 'DONE' when nativeObject event state 'finished'", function() {
+      it('sets state to \'DONE\' when nativeObject event state \'finished\'', function() {
         nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
         expect(xhr.readyState).to.equal(xhr.DONE);
       });
 
-      it("sets responseText to 'response' when nativeObject event state 'finished'", function() {
+      it('sets responseText to \'response\' when nativeObject event state \'finished\'', function() {
         nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
         expect(xhr.responseText).to.equal('foo');
       });
 
-      it("sets state to 'DONE' on request error", function() {
+      it('sets state to \'DONE\' on request error', function() {
         requestErrors.forEach((entry) => {
           nativeObject.trigger('stateChanged', {state: entry});
           expect(xhr.readyState).to.equal(xhr.DONE);
@@ -513,7 +513,7 @@ describe('XMLHttpRequest', function() {
         });
       });
 
-      it("doesn't call upload event handler on request error when upload complete", function() {
+      it('doesn\'t call upload event handler on request error when upload complete', function() {
         requestErrors.forEach((entry) => {
           const handler = 'on' + entry;
           xhr.upload.onprogress = spy();
@@ -536,7 +536,7 @@ describe('XMLHttpRequest', function() {
         expect(xhr.responseText).to.equal('');
       });
 
-      it("calls onprogress on nativeObject event 'downloadProgress'", function() {
+      it('calls onprogress on nativeObject event \'downloadProgress\'', function() {
         xhr.onprogress = spy();
         nativeObject.trigger('downloadProgress', {lengthComputable: true, loaded: 50, total: 100});
         expect(xhr.onprogress).to.have.been.calledWith(match({
@@ -546,7 +546,7 @@ describe('XMLHttpRequest', function() {
         }));
       });
 
-      it("calls upload.onprogress on nativeObject event 'UploadRequest'", function() {
+      it('calls upload.onprogress on nativeObject event \'UploadRequest\'', function() {
         xhr.upload.onprogress = spy();
         nativeObject.trigger('uploadProgress', {lengthComputable: true, loaded: 50, total: 100});
         expect(xhr.upload.onprogress).to.have.been.calledWith(match({
@@ -556,7 +556,7 @@ describe('XMLHttpRequest', function() {
         }));
       });
 
-      it("disposes of nativeObject on error nativeObject event states and 'finished'", function() {
+      it('disposes of nativeObject on error nativeObject event states and \'finished\'', function() {
         requestErrors.concat('finished').forEach((state) => {
           xhr.onreadystatechange = spy();
           nativeObject.trigger('stateChanged', {state});
@@ -565,7 +565,7 @@ describe('XMLHttpRequest', function() {
         });
       });
 
-      it("doesn't dispose of nativeObject on nativeObject event states 'headers' and 'loading'", function() {
+      it('doesn\'t dispose of nativeObject on nativeObject event states \'headers\' and \'loading\'', function() {
         ['headers', 'loading'].forEach((state) => {
           xhr.onreadystatechange = spy();
           nativeObject.trigger('stateChanged', {state});
@@ -582,7 +582,7 @@ describe('XMLHttpRequest', function() {
 
     const handlers = ['onprogress', 'onloadend', 'onabort'];
 
-    it("doesn't fail without nativeObject", function() {
+    it('doesn\'t fail without nativeObject', function() {
       expect(() => {
         xhr.abort();
       }).to.not.throw();
@@ -594,7 +594,7 @@ describe('XMLHttpRequest', function() {
       expect(nativeObject.abort).to.have.been.called;
     });
 
-    it("changes state to 'UNSENT' with states 'UNSENT' and 'OPENED' if send() not invoked", function() {
+    it('changes state to \'UNSENT\' with states \'UNSENT\' and \'OPENED\' if send() not invoked', function() {
       xhr.abort();
       expect(xhr.readyState).to.equal(xhr.UNSENT);
       xhr.open('GET', 'http://foobar.com');
@@ -602,7 +602,7 @@ describe('XMLHttpRequest', function() {
       expect(xhr.readyState).to.equal(xhr.UNSENT);
     });
 
-    it("changes state to 'UNSENT' with state 'DONE'", function() {
+    it('changes state to \'UNSENT\' with state \'DONE\'', function() {
       sendRequest(xhr);
       nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
       xhr.abort();
@@ -617,7 +617,7 @@ describe('XMLHttpRequest', function() {
       expect(xhr.onreadystatechange).to.have.been.called;
     });
 
-    it("doesn't dispatch readystatechange event when send not interrupted", function() {
+    it('doesn\'t dispatch readystatechange event when send not interrupted', function() {
       xhr.onreadystatechange = spy();
       xhr.abort();
       expect(xhr.onreadystatechange).to.have.not.been.called;
@@ -643,7 +643,7 @@ describe('XMLHttpRequest', function() {
       });
     });
 
-    it("doesn't dispatch upload progress events when send interrupted and upload complete", function() {
+    it('doesn\'t dispatch upload progress events when send interrupted and upload complete', function() {
       handlers.forEach((handler) => {
         xhr.open('GET', 'http://www.foo.com');
         xhr.send();
@@ -662,11 +662,11 @@ describe('XMLHttpRequest', function() {
 
   describe('setRequestHeader', function() {
 
-    it("fails when state not 'opened'", function() {
+    it('fails when state not \'opened\'', function() {
       expect(() => {
         xhr.setRequestHeader();
       }).to.throw(Error,
-        "InvalidStateError: Object's state must be 'OPENED', failed to execute 'setRequestHeader'"
+        'InvalidStateError: Object\'s state must be \'OPENED\', failed to execute \'setRequestHeader\''
       );
     });
 
@@ -675,7 +675,7 @@ describe('XMLHttpRequest', function() {
       expect(() => {
         xhr.setRequestHeader('foo bar', 'bar');
       }).to.throw(Error,
-        "Invalid HTTP header name, failed to execute 'open'"
+        'Invalid HTTP header name, failed to execute \'open\''
       );
     });
 
@@ -684,18 +684,18 @@ describe('XMLHttpRequest', function() {
       expect(() => {
         xhr.setRequestHeader('Foo', 'bar\n');
       }).to.throw(Error,
-        "Invalid HTTP header value, failed to execute 'open'"
+        'Invalid HTTP header value, failed to execute \'open\''
       );
     });
 
-    it("doesn't fail with HTTP header values containing numbers", function() {
+    it('doesn\'t fail with HTTP header values containing numbers', function() {
       xhr.open('GET', 'http://foo.com');
       expect(() => {
         xhr.setRequestHeader('Foo', '1234');
       }).to.not.throw();
     });
 
-    it("doesn't fail with HTTP header values containing wildcards", function() {
+    it('doesn\'t fail with HTTP header values containing wildcards', function() {
       expect(() => {
         xhr.open('GET', 'http://foo.com');
         xhr.setRequestHeader('Foo', '*/*');
@@ -708,7 +708,7 @@ describe('XMLHttpRequest', function() {
       expect(() => {
         xhr.setRequestHeader('Foo', 'Bar');
       }).to.throw(Error,
-        "InvalidStateError: cannot set request header if 'send()' invoked and request not completed"
+        'InvalidStateError: cannot set request header if \'send()\' invoked and request not completed'
       );
     });
 
@@ -890,14 +890,14 @@ describe('XMLHttpRequest', function() {
         expect(xhr.response).to.equal('foo');
       });
 
-      it("returns response text when responseType is 'text'", function() {
+      it('returns response text when responseType is \'text\'', function() {
         xhr.responseType = 'text';
         sendRequest(xhr);
         nativeObject.trigger('stateChanged', {state: 'finished', response: 'foo'});
         expect(xhr.response).to.equal('foo');
       });
 
-      it("returns response data when responseType is 'arraybuffer'", function() {
+      it('returns response data when responseType is \'arraybuffer\'', function() {
         const buffer = new ArrayBuffer(8);
         xhr.responseType = 'arraybuffer';
         sendRequest(xhr);
@@ -938,7 +938,7 @@ describe('XMLHttpRequest', function() {
       it('throws when setting unsupported response type', function() {
         expect(() => {
           xhr.responseType = 'document';
-        }).to.throw(Error, "Unsupported responseType, only 'text' and 'arraybuffer' are supported");
+        }).to.throw(Error, 'Unsupported responseType, only \'text\' and \'arraybuffer\' are supported');
       });
 
       it('accepts responseType `text`', function() {
@@ -957,7 +957,7 @@ describe('XMLHttpRequest', function() {
 
   describe('readyState', function() {
 
-    it("is initialized with the 'UNSENT' state value", function() {
+    it('is initialized with the \'UNSENT\' state value', function() {
       expect(xhr.timeout).to.equal(xhr.UNSENT);
     });
 
@@ -976,7 +976,7 @@ describe('XMLHttpRequest', function() {
 
     describe('set', function() {
 
-      it("doesn't set timeout if timeout not a number", function() {
+      it('doesn\'t set timeout if timeout not a number', function() {
         xhr.timeout = 'foo';
         expect(xhr.timeout).to.equal(0);
       });
@@ -1074,7 +1074,7 @@ describe('XMLHttpRequest', function() {
         nativeObject.trigger('stateChanged', {state: 'headers', message: 'OK'});
         expect(() => {
           xhr.withCredentials = true;
-        }).to.throw(Error, "InvalidStateError: state must be 'UNSENT' or 'OPENED' when setting withCredentials");
+        }).to.throw(Error, 'InvalidStateError: state must be \'UNSENT\' or \'OPENED\' when setting withCredentials');
       });
 
       it('fails when send invoked', function() {
@@ -1082,7 +1082,7 @@ describe('XMLHttpRequest', function() {
         xhr.send();
         expect(() => {
           xhr.withCredentials = true;
-        }).to.throw(Error, "InvalidStateError: 'send' invoked, failed to set 'withCredentials'");
+        }).to.throw(Error, 'InvalidStateError: \'send\' invoked, failed to set \'withCredentials\'');
       });
 
       it('sets withCredentials', function() {
@@ -1091,7 +1091,7 @@ describe('XMLHttpRequest', function() {
         expect(xhr.withCredentials).to.equal(true);
       });
 
-      it("doesn't set withCredentials if value not boolean", function() {
+      it('doesn\'t set withCredentials if value not boolean', function() {
         xhr.open('GET', 'http://www.foo.com');
         xhr.withCredentials = 'foo';
         expect(xhr.withCredentials).to.equal(false);
@@ -1110,9 +1110,9 @@ describe('XMLHttpRequest', function() {
 
   const describeEventHandlers = function(name, eventTypes, property) {
 
-    const getTarget = function(property) {
-      if (property) {
-        return xhr[property];
+    const getTarget = function(target) {
+      if (target) {
+        return xhr[target];
       }
       return xhr;
     };
@@ -1128,7 +1128,7 @@ describe('XMLHttpRequest', function() {
 
       describe('set', function() {
 
-        it("doesn't set value when value not a function", function() {
+        it('doesn\'t set value when value not a function', function() {
           eventTypes.forEach((type) => {
             const handler = 'on' + type;
             getTarget(property)[handler] = 'foo';

@@ -42,8 +42,8 @@ describe('Module', function() {
     });
 
     it('runs loader lazily', function() {
-      const loader = spy(module => {
-        module.exports.foo = 'bar';
+      const loader = spy(mod => {
+        mod.exports.foo = 'bar';
       });
 
       const module = new Module('foo', null, loader);
@@ -68,52 +68,52 @@ describe('Module', function() {
 
   describe('instance', function() {
 
-    let module;
+    let instance;
 
     beforeEach(function() {
-      module = new Module();
+      instance = new Module();
     });
 
     describe('require', function() {
 
       it('returns exports', function() {
-        stub(Module, 'createLoader').returns((module, exports) => {
+        stub(Module, 'createLoader').returns((mod, exports) => {
           exports.bar = 1;
         });
 
-        const foo = module.require('./foo');
+        const foo = instance.require('./foo');
 
         expect(foo.bar).to.equal(1);
       });
 
       it('returns same exports for subsequent calls', function() {
-        const exports1 = module.require('./foo');
-        const exports2 = module.require('./foo');
+        const exports1 = instance.require('./foo');
+        const exports2 = instance.require('./foo');
 
         expect(exports1).to.equal(exports2);
       });
 
       it('returns module that is currently loading', function() {
-        stub(Module, 'createLoader').returns((module, exports) => {
+        stub(Module, 'createLoader').returns((mod, exports) => {
           exports.foo = 1;
-          module.require('./foo').bar = 2;
+          instance.require('./foo').bar = 2;
         });
 
-        expect(module.require('./foo')).to.eql({foo: 1, bar: 2});
+        expect(instance.require('./foo')).to.eql({foo: 1, bar: 2});
       });
 
       it('returns native module', function() {
-        const native = new Module('native', module, {});
+        const native = new Module('native', instance, {});
 
-        expect(module.require('native')).to.equal(native.exports);
+        expect(instance.require('native')).to.equal(native.exports);
       });
 
       it('returns same exports from different modules', function() {
-        stub(Module, 'createLoader').returns((module, exports) => {
+        stub(Module, 'createLoader').returns((mod, exports) => {
           exports.bar = 1;
         });
-        const module1 = new Module('./module1', module);
-        const module2 = new Module('./module2', module);
+        const module1 = new Module('./module1', instance);
+        const module2 = new Module('./module2', instance);
 
         const export1 = module1.require('./foo');
         const export2 = module2.require('./foo');
@@ -123,22 +123,22 @@ describe('Module', function() {
       });
 
       it('requests url only once', function() {
-        stub(Module, 'createLoader').returns((module) => {
-          module.exports = module;
+        stub(Module, 'createLoader').returns(mod => {
+          mod.exports = mod;
         });
 
-        module.require('./foo');
-        module.require('./foo');
+        instance.require('./foo');
+        instance.require('./foo');
 
         expect(Module.createLoader.callCount).to.equal(1);
       });
 
       it('requests loader with request as path', function() {
-        stub(Module, 'createLoader').returns((module) => {
-          module.exports = module;
+        stub(Module, 'createLoader').returns(mod => {
+          mod.exports = mod;
         });
 
-        module.require('./bar');
+        instance.require('./bar');
 
         expect(Module.createLoader).to.have.been.calledWith('./bar');
       });
@@ -146,11 +146,11 @@ describe('Module', function() {
       it('requests alternate file name .js', function() {
         stub(Module, 'createLoader').callsFake((path) => {
           if (path === './foo.js') {
-            return module => module.exports = module;
+            return mod => mod.exports = mod;
           }
         });
 
-        const foo = module.require('./foo');
+        const foo = instance.require('./foo');
 
         expect(foo.id).to.equal('./foo.js');
         expect(Module.createLoader).to.have.been.calledWith('./foo');
@@ -161,7 +161,7 @@ describe('Module', function() {
         stub(Module, 'createLoader').returns(undefined);
         stub(Module, 'readJSON').returns({data: 'bar'});
 
-        const foo = module.require('./foo');
+        const foo = instance.require('./foo');
 
         expect(Module.createLoader).to.have.been.calledWith('./foo');
         expect(Module.createLoader).to.have.been.calledWith('./foo.js');
@@ -179,7 +179,7 @@ describe('Module', function() {
           }
         });
 
-        const foo = module.require('./foo');
+        const foo = instance.require('./foo');
 
         expect(Module.createLoader).to.have.been.calledWith('./foo/bar');
         expect(Module.createLoader).to.have.been.calledWith('./foo/bar.js');
@@ -189,7 +189,7 @@ describe('Module', function() {
         expect(foo).to.eql({modulename: 'bar'});
       });
 
-      it("requests file specified in /package.json containing '.' segment", function() {
+      it('requests file specified in /package.json containing \'.\' segment', function() {
         stub(Module, 'createLoader').returns(undefined);
         stub(Module, 'readJSON').callsFake((url) => {
           if (url === './foo/package.json') {
@@ -200,7 +200,7 @@ describe('Module', function() {
           }
         });
 
-        const foo = module.require('./foo');
+        const foo = instance.require('./foo');
 
         expect(Module.createLoader).to.have.been.calledWith('./foo/bar');
         expect(Module.createLoader).to.have.been.calledWith('./foo/bar.js');
@@ -214,11 +214,11 @@ describe('Module', function() {
         spy(Module, 'readJSON');
         stub(Module, 'createLoader').callsFake((path) => {
           if (path === './foo/index.js') {
-            return module => module.exports = module;
+            return mod => mod.exports = mod;
           }
         });
 
-        const foo = module.require('./foo');
+        const foo = instance.require('./foo');
 
         expect(foo.id).to.equal('./foo/index.js');
         expect(Module.createLoader).to.have.been.calledWith('./foo');
@@ -230,16 +230,16 @@ describe('Module', function() {
       it('requests index.js if package.json has no main', function() {
         stub(Module, 'readJSON').callsFake((url) => {
           if (url === './foo/package.json') {
-            return {not_main: './bar'};
+            return {notMain: './bar'};
           }
         });
         stub(Module, 'createLoader').callsFake((path) => {
           if (path === './foo/index.js') {
-            return module => module.exports = module;
+            return mod => mod.exports = mod;
           }
         });
 
-        const foo = module.require('./foo');
+        const foo = instance.require('./foo');
 
         expect(foo.id).to.equal('./foo/index.js');
       });
@@ -252,7 +252,7 @@ describe('Module', function() {
           }
         });
 
-        const foo = module.require('./foo');
+        const foo = instance.require('./foo');
 
         expect(Module.createLoader).to.have.been.calledWith('./foo');
         expect(Module.createLoader).to.have.been.calledWith('./foo.js');
@@ -267,8 +267,9 @@ describe('Module', function() {
         stub(Module, 'readJSON').returns(undefined);
 
         try {
-          module.require('./foo/');
+          instance.require('./foo/');
         } catch (error) {
+          // expected
         }
 
         expect(Module.createLoader).not.to.have.been.calledWith('./foo');
@@ -287,7 +288,7 @@ describe('Module', function() {
           }
         });
 
-        module.require('foo');
+        instance.require('foo');
 
         expect(Module.createLoader).to.have.been.calledWith('./node_modules/foo');
         expect(Module.createLoader).to.have.been.calledWith('./node_modules/foo.js');
@@ -301,8 +302,8 @@ describe('Module', function() {
         stub(Module, 'readJSON').returns(undefined);
 
         expect(() => {
-          module.require('foo');
-        }).to.throw("Cannot find module 'foo'");
+          instance.require('foo');
+        }).to.throw('Cannot find module \'foo\'');
 
         expect(Module.createLoader).to.have.been.calledWith('./node_modules/foo');
         expect(Module.createLoader).to.have.been.calledWith('./node_modules/foo.js');
@@ -312,13 +313,14 @@ describe('Module', function() {
       });
 
       it('requests modules from node_modules folder at top-level', function() {
-        module = new Module('./foo/script.js');
+        instance = new Module('./foo/script.js');
         stub(Module, 'createLoader').returns(undefined);
         stub(Module, 'readJSON').returns(undefined);
 
         try {
-          module.require('bar');
+          instance.require('bar');
         } catch (error) {
+          // expected
         }
 
         expect(Module.readJSON).to.have.been.calledWith('./foo/node_modules/bar/package.json');
@@ -326,13 +328,14 @@ describe('Module', function() {
       });
 
       it('does not requests modules node_modules/node_modules folder', function() {
-        module = new Module('./node_modules/foo/script.js');
+        instance = new Module('./node_modules/foo/script.js');
         stub(Module, 'createLoader').returns(undefined);
         stub(Module, 'readJSON').returns(undefined);
 
         try {
-          module.require('bar');
+          instance.require('bar');
         } catch (error) {
+          // expected
         }
 
         expect(Module.readJSON).to.have.been.calledWith('./node_modules/foo/node_modules/bar/package.json');
@@ -341,7 +344,7 @@ describe('Module', function() {
       });
 
       it('does not request module from node_modules folder at top-level', function() {
-        module = new Module('./foo/script.js');
+        instance = new Module('./foo/script.js');
         stub(Module, 'createLoader').callsFake((path) => {
           if (path === './foo/node_modules/bar/script2.js') {
             return (module) => module.exports = 2;
@@ -353,7 +356,7 @@ describe('Module', function() {
           }
         });
 
-        expect(module.require('bar')).to.equal(2);
+        expect(instance.require('bar')).to.equal(2);
 
         expect(Module.readJSON).to.have.been.calledWith('./foo/node_modules/bar/package.json');
         expect(Module.createLoader).to.have.been.calledWith('./foo/node_modules/bar/script2.js');
@@ -365,7 +368,7 @@ describe('Module', function() {
         stub(Module, 'readJSON').returns(undefined);
 
         expect(() => {
-          module.require('foo');
+          instance.require('foo');
         }).to.throw();
 
         expect(Module.createLoader).to.have.been.calledWith('./node_modules/foo');
@@ -379,10 +382,10 @@ describe('Module', function() {
         stub(Module, 'createLoader').returns(undefined);
         stub(Module, 'readJSON').returns({});
 
-        module.require('./foo');
+        instance.require('./foo');
         Module.createLoader.reset();
         Module.readJSON.reset();
-        module.require('./foo');
+        instance.require('./foo');
 
         expect(Module.createLoader.callCount).to.equal(0);
         expect(Module.readJSON.callCount).to.equal(0);
@@ -395,7 +398,7 @@ describe('Module', function() {
           }
         });
 
-        const exports = module.require('./node_modules/foo/package.json');
+        const exports = instance.require('./node_modules/foo/package.json');
 
         expect(exports).to.eql({main: 'foo.js'});
       });
@@ -412,10 +415,10 @@ describe('Module', function() {
           }
         });
 
-        const foo1 = module.require('./foo');
+        const foo1 = instance.require('./foo');
         Module.createLoader.reset();
         Module.readJSON.reset();
-        const foo2 = module.require('./foo');
+        const foo2 = instance.require('./foo');
 
         expect(Module.createLoader).to.have.not.been.called;
         expect(Module.readJSON).to.have.not.been.called;
@@ -445,7 +448,7 @@ describe('Module', function() {
           }
         });
 
-        const exports = module.require('foo');
+        const exports = instance.require('foo');
 
         expect(exports).to.eql({x: 1, y: 2});
       });
@@ -453,20 +456,20 @@ describe('Module', function() {
       describe('from plain module', function() {
 
         it('creates module with id', function() {
-          const result = module.require('./bar');
+          const result = instance.require('./bar');
 
           expect(result.id).to.equal('./bar');
         });
 
         it('creates module with nested id', function() {
-          const result = module.require('./bar/baz');
+          const result = instance.require('./bar/baz');
 
           expect(result.id).to.equal('./bar/baz');
         });
 
         it('fails if requested id is outside of module root', function() {
           expect(() => {
-            module.require('../bar');
+            instance.require('../bar');
           }).to.throw();
         });
 
@@ -475,11 +478,11 @@ describe('Module', function() {
       describe('from nested module', function() {
 
         beforeEach(function() {
-          module.id = './foo/bar.js';
+          instance.id = './foo/bar.js';
         });
 
         it('creates module with plain id', function() {
-          const result = module.require('./baz');
+          const result = instance.require('./baz');
 
           expect(result.id).to.equal('./foo/baz');
         });
@@ -494,37 +497,37 @@ describe('Module', function() {
             }
           });
 
-          const result = module.require('./baz');
+          const result = instance.require('./baz');
 
           expect(result.id).to.equal('./foo/foo.js');
         });
 
-        it("handles path that starts with '../'", function() {
-          const result = module.require('../baz');
+        it('handles path that starts with \'../\'', function() {
+          const result = instance.require('../baz');
 
           expect(result.id).to.equal('./baz');
         });
 
-        it("handles nested path that starts with '../'", function() {
-          const result = module.require('../bar/baz');
+        it('handles nested path that starts with \'../\'', function() {
+          const result = instance.require('../bar/baz');
 
           expect(result.id).to.equal('./bar/baz');
         });
 
-        it("handles path with enclosed '/../'", function() {
-          const result = module.require('./bar/../baz');
+        it('handles path with enclosed \'/../\'', function() {
+          const result = instance.require('./bar/../baz');
 
           expect(result.id).to.equal('./foo/baz');
         });
 
-        it("handles path with enclosed '/./'", function() {
-          const result = module.require('./bar/./baz');
+        it('handles path with enclosed \'/./\'', function() {
+          const result = instance.require('./bar/./baz');
 
           expect(result.id).to.equal('./foo/bar/baz');
         });
 
-        it("handles path with multiple enclosed '/./' and '/../'", function() {
-          const result = module.require('././bar/.././baz');
+        it('handles path with multiple enclosed \'/./\' and \'/../\'', function() {
+          const result = instance.require('././bar/.././baz');
 
           expect(result.id).to.equal('./foo/baz');
         });

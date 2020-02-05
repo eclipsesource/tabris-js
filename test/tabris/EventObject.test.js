@@ -98,6 +98,7 @@ describe('EventObject', function() {
         Object.defineProperty(event, 'bar', {value: true, enumerable: true});
 
         expect(event.toString()).to.match(/^EventObject\s{\s[a-z].*\s}$/);
+        // eslint-disable-next-line no-eval
         expect(eval('(' + event.toString().slice(12) + ');')).to.deep.equal({
           type: 'foo',
           target: 'Foo',

@@ -173,7 +173,7 @@ NativeObject.defineProperties(App.prototype, {
       }
     },
     default: true
-  },
+  }
 });
 
 NativeObject.defineEvents(App.prototype, {
@@ -184,7 +184,7 @@ NativeObject.defineEvents(App.prototype, {
   terminate: {native: true},
   keyPress: {native: true},
   backNavigation: {native: true},
-  certificatesReceived: {native: true},
+  certificatesReceived: {native: true}
 });
 
 export function create() {

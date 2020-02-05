@@ -55,7 +55,7 @@ NativeObject.defineProperties(ScrollView.prototype, {
   offsetY: {type: types.number, nocache: true, readonly: true},
   scrollbarVisible: {type: types.boolean, default: true},
   scrollXState: {type: types.string, nocache: true, readonly: true},
-  scrollYState: {type: types.string, nocache: true, readonly: true},
+  scrollYState: {type: types.string, nocache: true, readonly: true}
 });
 
 NativeObject.defineEvents(ScrollView.prototype, {

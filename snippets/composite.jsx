@@ -1,4 +1,4 @@
-import { Composite, TextView, contentView } from 'tabris';
+import {Composite, TextView, contentView} from 'tabris';
 
 contentView.append(
   <$>

@@ -1,4 +1,4 @@
-import { TextInput, contentView } from 'tabris';
+import {TextInput, contentView} from 'tabris';
 
 new TextInput({
   top: 25, left: '20%', right: '20%',

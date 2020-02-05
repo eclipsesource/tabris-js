@@ -43,5 +43,5 @@ NativeObject.defineProperties(ToggleButton.prototype, {
 });
 
 NativeObject.defineEvents(ToggleButton.prototype, {
-  select: {native: true, changes: 'checked'},
+  select: {native: true, changes: 'checked'}
 });

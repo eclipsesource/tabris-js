@@ -1,4 +1,4 @@
-import { CollectionView, TextView, ImageView, contentView, ImageValue } from 'tabris';
+import {CollectionView, TextView, ImageView, contentView, ImageValue} from 'tabris';
 
 type Section = {type: 'section', image: ImageValue};
 type Item = {type: 'item', text: string};

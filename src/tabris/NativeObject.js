@@ -112,14 +112,15 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
   }
 
   static synthesizeChangeEvents(target, sourceEvent, sourceDef) {
-    const changeListener = function (ev) {
+    /** @this {NativeObject} */
+    const changeListener = function(ev) {
       this.$trigger(sourceDef.changes + 'Changed', {value: sourceDef.changeValue(ev)});
     };
     const $changeEventProperty = '$event_' + sourceDef.changes + 'Changed';
     /** @type {EventDefinition} */
     const changeEventDef = target[$changeEventProperty] = target[$changeEventProperty] || {listen: []};
-    changeEventDef.listen.push((target, listening) => {
-      target._onoff(sourceEvent, listening, changeListener);
+    changeEventDef.listen.push((instance, listening) => {
+      instance._onoff(sourceEvent, listening, changeListener);
     });
   }
 
@@ -165,8 +166,8 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     }
     const def = this._getPropertyDefinition(name);
     if (def.nocache) {
-      const value = this._nativeGet(name);
-      return def.type.decode ? def.type.decode.call(null, value, this) : value;
+      const nativeValue = this._nativeGet(name);
+      return def.type.decode ? def.type.decode.call(null, nativeValue, this) : nativeValue;
     }
     const storedValue = this._getStoredProperty(name);
     if (storedValue !== undefined) {
@@ -214,7 +215,7 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
       }
     } else if (!equals(this._getStoredProperty(name), convertedValue) || !this._wasSet(name)) {
       this._beforePropertyChange(name, convertedValue);
-      this._nativeSet(name, encodedValue);//TODO should not happen if changing from unset to default
+      this._nativeSet(name, encodedValue);// TODO should not happen if changing from unset to default
       this._storeProperty(name, convertedValue, def.const);
     }
   }
@@ -397,7 +398,11 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
   }
 
   _onoff(name, listening, listener) {
-    listening ? this.on(name, listener) : this.off(name, listener);
+    if (listening) {
+      this.on(name, listener);
+    } else {
+      this.off(name, listener);
+    }
   }
 
   _checkDisposed() {
@@ -465,6 +470,11 @@ NativeObject.defineEvents(NativeObject.prototype, {
   dispose: true
 });
 
+/**
+ * @this {NativeObject}
+ * @param {string} name
+ * @param {any} value
+ */
 function setExistingProperty(name, value) {
   if (!(name in this)) {
     hint(this, 'There is no setter for property "' + name + '"');

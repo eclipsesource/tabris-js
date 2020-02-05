@@ -38,9 +38,9 @@ describe('WebSocket', function() {
         .to.throw('WebSocket url 123 is not a string');
     });
 
-    it("fails when scheme of url parameter is not 'ws' or 'wss'", function() {
+    it('fails when scheme of url parameter is not \'ws\' or \'wss\'', function() {
       expect(() => new WebSocket('http://url.com'))
-        .to.throw("WebSocket url has to have a scheme of 'ws' or 'wss' but is 'http'");
+        .to.throw('WebSocket url has to have a scheme of \'ws\' or \'wss\' but is \'http\'');
     });
 
     it('fails when protocol is omitted', function() {
@@ -210,17 +210,17 @@ describe('WebSocket', function() {
 
     it('throws when readyState is CONNECTING', function() {
       expect(() => webSocket.send('hello'))
-        .to.throw("Can not 'send' WebSocket message when WebSocket state is CONNECTING");
+        .to.throw('Can not \'send\' WebSocket message when WebSocket state is CONNECTING');
     });
 
     it('throws when data is not string, typedarray or arraybuffer', function() {
       tabris._notify(webSocket._nativeObject.cid, 'open', {});
 
       expect(() => webSocket.send(123))
-        .to.throw("Data of type number is not supported in WebSocket 'send' operation");
+        .to.throw('Data of type number is not supported in WebSocket \'send\' operation');
     });
 
-    it("calls 'send' with string data", function() {
+    it('calls \'send\' with string data', function() {
       tabris._notify(webSocket._nativeObject.cid, 'open', {});
 
       webSocket.send('hello');
@@ -228,7 +228,7 @@ describe('WebSocket', function() {
       expect(client.call).to.have.been.calledWith(webSocket._nativeObject.cid, 'send', {data: 'hello'});
     });
 
-    it("calls 'send' with typedarray data", function() {
+    it('calls \'send\' with typedarray data', function() {
       tabris._notify(webSocket._nativeObject.cid, 'open', {});
 
       webSocket.send(new Int8Array([1, 2, 3]));
@@ -239,7 +239,7 @@ describe('WebSocket', function() {
         });
     });
 
-    it("calls 'send' with arraybuffer data", function() {
+    it('calls \'send\' with arraybuffer data', function() {
       tabris._notify(webSocket._nativeObject.cid, 'open', {});
       const data = new Int8Array([1, 2, 3]).buffer;
 
@@ -248,7 +248,7 @@ describe('WebSocket', function() {
       expect(client.call).to.have.been.calledWith(webSocket._nativeObject.cid, 'send', {data});
     });
 
-    it("calls 'send' with arraybuffer from blob", function() {
+    it('calls \'send\' with arraybuffer from blob', function() {
       tabris._notify(webSocket._nativeObject.cid, 'open', {});
       const data = new Blob([new Int8Array([1, 2, 3]).buffer]);
 
@@ -291,7 +291,7 @@ describe('WebSocket', function() {
       expect(webSocket.readyState).to.equal(webSocket.CLOSING);
     });
 
-    it("does not call 'close' when readyState is CLOSING", function() {
+    it('does not call \'close\' when readyState is CLOSING', function() {
       webSocket.readyState = webSocket.CLOSING;
 
       webSocket.close();
@@ -299,7 +299,7 @@ describe('WebSocket', function() {
       expect(client.call).to.have.not.been.called;
     });
 
-    it("does not call 'close' when readyState is CLOSED", function() {
+    it('does not call \'close\' when readyState is CLOSED', function() {
       webSocket.readyState = webSocket.CLOSED;
 
       webSocket.close();
@@ -307,7 +307,7 @@ describe('WebSocket', function() {
       expect(client.call).to.have.not.been.called;
     });
 
-    it("calls 'close' with code and reason", function() {
+    it('calls \'close\' with code and reason', function() {
       webSocket.close(1000, 'message');
 
       expect(client.call).to.have.been

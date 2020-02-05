@@ -206,7 +206,7 @@ export class ConstraintLayout extends Layout {
 
 export class LayoutQueue {
 
-  static get instance () {
+  static get instance() {
     if (!this._instance) {
       Object.defineProperty(this, '_instance', {
         enumerable: false,

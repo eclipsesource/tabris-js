@@ -1,4 +1,4 @@
-/*global document: true */
+/* global document: true */
 import Module from './Module';
 
 global.window = global.self = global;
@@ -61,5 +61,9 @@ tabris._notify = function() {
 };
 
 function printError(msg, error) {
-  console.print ? console.print('error', msg + (error.stack || error)) : console.error(msg, error);
+  if (console.print) {
+    console.print('error', msg + (error.stack || error));
+  } else {
+    console.error(msg, error);
+  }
 }

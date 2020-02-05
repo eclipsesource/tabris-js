@@ -168,7 +168,7 @@ function cameraViewSnippet(parent) {
   dimen(parent, large, large);
   permission.withAuthorization('camera', () => {
     const camera = device.cameras[0];
-    const cameraView = new CameraView({left: 16, right: 16, top: 16, bottom: 16, camera: camera});
+    const cameraView = new CameraView({left: 16, right: 16, top: 16, bottom: 16, camera});
     cameraView.appendTo(parent);
     camera.active = true;
   }, () => console.log('Permission required.'), (e) => console.error(e));

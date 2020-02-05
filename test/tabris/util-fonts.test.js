@@ -25,7 +25,7 @@ describe('util-fonts', function() {
       expect(parse('italic 12px').size).to.equal(12);
       expect(parse('italic bold 12px').size).to.equal(12);
       expect(parse('12px Arial, Fantasy').size).to.equal(12);
-      expect(parse("12px 'Times New Roman', Arial").size).to.equal(12);
+      expect(parse('12px \'Times New Roman\', Arial').size).to.equal(12);
       expect(parse('12px "Times New Roman", Arial').size).to.equal(12);
     });
 

@@ -69,7 +69,7 @@ exports.generateDts = function generateTsd(config: Config) {
   writeTabrisDts(config);
 };
 
-//#region read/write
+// #region read/write
 
 function writeGlobalsDts(config: Config) {
   const apiDefinitions = filter(readJsonDefs(config.files), def => !def.markdown_only);
@@ -87,9 +87,9 @@ function writeTabrisDts(config: Config) {
   fs.writeFileSync('build/tabris/tabris.d.ts', text.toString());
 }
 
-//#endregion
+// #endregion
 
-//#region render objects/types
+// #region render objects/types
 
 function renderDts(text: TextBuilder, apiDefinitions: ApiDefinitions) {
   text.append('');
@@ -154,14 +154,14 @@ function renderConstructor(text: TextBuilder, def: ExtendedApi) {
   if (constructor) {
     text.append('');
     const access = constructor.access ? constructor.access + ' ' : '';
-    const paramList = createParamList(def, constructor.parameters || [], {hasContext: false, excludeConsts: false});
+    const paramList = createParamList(def, constructor.parameters || []);
     text.append(`${access}constructor(${paramList});`);
   }
 }
 
-//#endregion
+// #endregion
 
-//#region render events interfaces
+// #region render events interfaces
 
 function renderEventObjectInterfaces(text: TextBuilder, def: ExtendedApi) {
   if (def.events) {
@@ -181,8 +181,8 @@ function renderEventObjectInterface(text: TextBuilder, name: string, def: Extend
   text.append(
     `export interface ${getEventTypeName(def, name, parameters)}<Target = ${def.generics ? 'object' : def.type}>`
   );
-  text.append(` extends EventObject<Target>`);
-  text.append(`{`);
+  text.append(' extends EventObject<Target>');
+  text.append('{');
   text.indent++;
   Object.keys(parameters).sort().forEach(param => {
     const values = [];
@@ -197,9 +197,9 @@ function renderEventObjectInterface(text: TextBuilder, name: string, def: Extend
   text.append('}');
 }
 
-//#endregion
+// #endregion
 
-//#region render members
+// #region render members
 
 function renderMethods(text: TextBuilder, def: ExtendedApi) {
   Object.keys(def.methods || {}).sort().forEach(name => {
@@ -223,7 +223,7 @@ function createMethod(
 ) {
   const result = [];
   result.push(createDoc(method));
-  const paramList = createParamList(def, method.parameters, {hasContext: true, excludeConsts: true});
+  const paramList = createParamList(def, method.parameters);
   const declaration = (def.type ? createMethodModifiers(method, isStatic) : 'declare function ')
     + `${name}${renderGenericsDef(method.generics)}`
     + `(${paramList}): ${toTypeScript(method.ts_returns || method.returns || 'void')};`;
@@ -261,10 +261,10 @@ function renderEventProperties(text: TextBuilder, def: ExtendedApi) {
         .filter(name => hasChangeEvent(def.properties[name]))
         .sort()
         .forEach(
-      name => {
-        text.append('');
-        text.append(createPropertyChangedEventProperty(def, name));
-      });
+          name => {
+            text.append('');
+            text.append(createPropertyChangedEventProperty(def, name));
+          });
     }
   }
 }
@@ -297,20 +297,20 @@ function createProperty(name: string, properties: Properties, def: ExtendedApi, 
   const readonly = property.readonly ? 'readonly ' : '';
   const _static = isStatic ? 'static ' : '';
   const optional = property.optional ? '?' : '';
-  const type = decodeType(property, def, {hasContext: false, excludeConsts: false});
+  const type = decodeType(property);
   result.push(
     `${accessor(property)}${_static}${readonly}${name}${optional}: ${type};`
   );
   return result.join('\n');
 }
 
-function createParamList(def: ExtendedApi, parameters: schema.Parameter[], ops: PropertyOps) {
+function createParamList(def: ExtendedApi, parameters: schema.Parameter[]) {
   return (parameters || []).map(param =>
-    `${param.name}${param.optional ? '?' : ''}: ${decodeType(param, def, ops)}`
+    `${param.name}${param.optional ? '?' : ''}: ${decodeType(param)}`
   ).join(', ');
 }
 
-function decodeType(param: Partial<schema.Parameter & schema.Property>, def: ExtendedApi, ops: PropertyOps) {
+function decodeType(param: Partial<schema.Parameter & schema.Property>) {
   if (param.values) {
     return union(param.values);
   }
@@ -321,7 +321,7 @@ function union(values: Array<string | number | boolean>) {
   return (values || []).sort().map(value => typeof value === 'string' ? `'${value}'` : `${value}`).join(' | ');
 }
 
-//#endregion
+// #endregion
 
 function getInheritedConstructor(def: ExtendedApi): typeof def.constructor {
   if (!def) {

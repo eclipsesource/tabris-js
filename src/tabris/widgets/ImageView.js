@@ -38,7 +38,7 @@ export default class ImageView extends Widget {
 
   _getXMLAttributes() {
     return super._getXMLAttributes().concat([
-      ['image', (this.image || {src: ''}).src],
+      ['image', (this.image || {src: ''}).src]
     ]);
   }
 
@@ -84,7 +84,7 @@ NativeObject.defineProperties(ImageView.prototype, {
         return num;
       }
     },
-    default: 1.0,
+    default: 1.0
   },
   maxZoomLevel: {
     type: {

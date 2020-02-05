@@ -180,23 +180,23 @@ describe('TextInput', function() {
     });
 
     it('with text property', function() {
-      const widget = jsx.createElement(
+      const textInput = jsx.createElement(
         TextInput,
         {text: 'Hello World!'}
       );
 
-      expect(widget.text).to.equal('Hello World!');
+      expect(textInput.text).to.equal('Hello World!');
     });
 
     it('with text content', function() {
-      const widget = jsx.createElement(
+      const textInput = jsx.createElement(
         TextInput,
         null,
         'Hello  ',
         'World!'
       );
 
-      expect(widget.text).to.equal('Hello  World!');
+      expect(textInput.text).to.equal('Hello  World!');
     });
 
     it('with text content and text property', function() {

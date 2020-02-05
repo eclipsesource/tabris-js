@@ -634,7 +634,7 @@ describe('property-types', function() {
 
   });
 
-  describe('BoxDimensions', function () {
+  describe('BoxDimensions', function() {
 
     const convert = types.BoxDimensions.convert;
 

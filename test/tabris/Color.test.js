@@ -48,7 +48,7 @@ describe('Color', function() {
 
   });
 
-  describe('instance', function () {
+  describe('instance', function() {
 
     it('properties are read-only', function() {
       const color = new Color(255, 128, 0, 100);
@@ -224,7 +224,7 @@ describe('Color', function() {
       expect(Color.from('navy').toArray()).to.deep.equal([0, 0, 128, 255]);
     });
 
-    it("accepts 'transparent'", function() {
+    it('accepts \'transparent\'', function() {
       expect(Color.from('transparent').toArray()).to.deep.equal([0, 0, 0, 0]);
     });
 

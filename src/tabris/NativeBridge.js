@@ -6,7 +6,7 @@ export default class NativeBridge {
       $bridge: {enumerable: false, writable: false, value: bridge},
       $operations: {enumerable: false, writable: true, value: []},
       $currentOperation: {enumerable: false, writable: true, value: {id: null}},
-      $propertyCache: {enumerable: false, writable: true, value: {}},
+      $propertyCache: {enumerable: false, writable: true, value: {}}
     });
   }
 

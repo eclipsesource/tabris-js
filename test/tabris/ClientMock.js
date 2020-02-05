@@ -77,6 +77,7 @@ export default class ClientMock {
 }
 
 function select(filterProperties) {
+  // eslint-disable-next-line no-invalid-this
   return this.filter((call) => {
     for (const key in filterProperties) {
       if (filterProperties[key] !== call[key]) {

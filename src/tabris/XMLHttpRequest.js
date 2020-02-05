@@ -111,7 +111,7 @@ export default class XMLHttpRequest {
     }
     // currently only the response types 'text' and 'arraybuffer' are supported
     if (['blob', 'document', 'json'].indexOf(value) > -1) {
-      throw new Error("Unsupported responseType, only 'text' and 'arraybuffer' are supported");
+      throw new Error('Unsupported responseType, only \'text\' and \'arraybuffer\' are supported');
     }
     this.$responseType = value;
   }
@@ -143,11 +143,11 @@ export default class XMLHttpRequest {
   set withCredentials(value) {
     if (this.$readyState !== UNSENT && this.$readyState !== OPENED) {
       throw new Error(
-        "InvalidStateError: state must be 'UNSENT' or 'OPENED' when setting withCredentials"
+        'InvalidStateError: state must be \'UNSENT\' or \'OPENED\' when setting withCredentials'
       );
     }
     if (this.$sendInvoked) {
-      throw new Error("InvalidStateError: 'send' invoked, failed to set 'withCredentials'");
+      throw new Error('InvalidStateError: \'send\' invoked, failed to set \'withCredentials\'');
     }
     // (3): superfluous as we don't support synchronous requests
     // mimicking Chromium and Firefox behaviour when setting a non-boolean value:
@@ -191,11 +191,11 @@ export default class XMLHttpRequest {
       .on('uploadProgress', event => dispatchProgressEvent('progress', this.upload, event));
     if (this.$readyState !== OPENED) { // (1)
       throw new Error(
-        "InvalidStateError: Object's state must be 'OPENED', failed to execute 'send'"
+        'InvalidStateError: Object\'s state must be \'OPENED\', failed to execute \'send\''
       );
     }
     if (this.$sendInvoked) { // (2)
-      throw new Error("InvalidStateError: 'send' invoked, failed to execute 'send'");
+      throw new Error('InvalidStateError: \'send\' invoked, failed to execute \'send\'');
     }
     if (['GET', 'HEAD'].indexOf(this.$requestMethod) > -1) { // (3)
       data = null;
@@ -256,17 +256,17 @@ export default class XMLHttpRequest {
   setRequestHeader(header, value) { // #dom-xmlhttprequest-setrequestheader
     if (this.$readyState !== OPENED) { // (1)
       throw new Error('InvalidStateError: ' +
-              "Object's state must be 'OPENED', failed to execute 'setRequestHeader'");
+              'Object\'s state must be \'OPENED\', failed to execute \'setRequestHeader\'');
     }
     if (this.$sendInvoked) { // (2)
       throw new Error('InvalidStateError: ' +
-              "cannot set request header if 'send()' invoked and request not completed");
+              'cannot set request header if \'send()\' invoked and request not completed');
     }
     if (!validHttpToken(header)) { // (3)
-      throw new TypeError("Invalid HTTP header name, failed to execute 'open'");
+      throw new TypeError('Invalid HTTP header name, failed to execute \'open\'');
     }
     if (!isValidHttpHeaderValue(value)) { // (4)
-      throw new TypeError("Invalid HTTP header value, failed to execute 'open'");
+      throw new TypeError('Invalid HTTP header value, failed to execute \'open\'');
     }
     // (5) (No headers are filtered out as this restriction does not apply to native apps)
     if (header in this.$authorRequestHeaders) { // (6):
@@ -370,10 +370,10 @@ function handleRequestError(type, xhr) {
 
 function validateRequiredOpenArgs(method, url) {
   if (!method) {
-    throw new TypeError("Method argument should be specified to execute 'open'");
+    throw new TypeError('Method argument should be specified to execute \'open\'');
   }
   if (!url) {
-    throw new TypeError("URL argument should be specified to execute 'open'");
+    throw new TypeError('URL argument should be specified to execute \'open\'');
   }
   validateMethod(method);
   validateUrl(url);
@@ -381,7 +381,7 @@ function validateRequiredOpenArgs(method, url) {
 
 function validateMethod(method) {
   if (!validHttpToken(method)) {
-    throw new TypeError("Invalid HTTP method, failed to execute 'open'");
+    throw new TypeError('Invalid HTTP method, failed to execute \'open\'');
   }
   // (6):
   const tokens = ['CONNECT', 'DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'TRACE', 'TRACK'];
@@ -413,7 +413,7 @@ function validateUrl(url) {
   // TODO: rewrite (8),(9)
   const scheme = extractScheme(url);
   if (scheme && (SUPPORTED_SCHEMES.indexOf(scheme) === -1)) {
-    throw new SyntaxError("Unsupported URL scheme, failed to execute 'open'");
+    throw new SyntaxError('Unsupported URL scheme, failed to execute \'open\'');
   }
 }
 

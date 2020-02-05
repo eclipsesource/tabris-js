@@ -52,7 +52,7 @@ describe('Storage', function() {
       it('fails with missing argument', function() {
         expect(() => {
           storage.setItem('foo');
-        }).to.throw("Not enough arguments to 'setItem'");
+        }).to.throw('Not enough arguments to \'setItem\'');
       });
 
       it('calls nativeObject add with key and value', function() {
@@ -88,7 +88,7 @@ describe('Storage', function() {
       it('fails with missing argument', function() {
         expect(() => {
           storage.getItem();
-        }).to.throw("Not enough arguments to 'getItem'");
+        }).to.throw('Not enough arguments to \'getItem\'');
       });
 
       it('calls nativeObject get with key', function() {
@@ -134,7 +134,7 @@ describe('Storage', function() {
       it('fails with missing argument', function() {
         expect(() => {
           storage.removeItem();
-        }).to.throw("Not enough arguments to 'removeItem'");
+        }).to.throw('Not enough arguments to \'removeItem\'');
       });
 
       it('calls nativeObject remove with keys array', function() {

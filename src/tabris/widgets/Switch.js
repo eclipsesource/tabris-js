@@ -25,5 +25,5 @@ NativeObject.defineProperties(Switch.prototype, {
 });
 
 NativeObject.defineEvents(Switch.prototype, {
-  select: {native: true, changes: 'checked'},
+  select: {native: true, changes: 'checked'}
 });

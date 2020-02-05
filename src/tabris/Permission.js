@@ -46,7 +46,7 @@ export default class Permission extends NativeObject {
           } else {
             resolve(result.status);
           }
-        },
+        }
       });
     });
   }

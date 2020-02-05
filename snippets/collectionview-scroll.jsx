@@ -6,19 +6,19 @@ const SectionCell = attributes =>
 
 /** @param {tabris.Attributes<TextView>=} attributes */
 const ItemCell = attributes =>
-  <TextView padding={[2, 5]} font='14px' alignment='left' {...attributes} />;
+  <TextView padding={[2, 5]} font='14px' alignment='left' {...attributes}/>;
 
 const items = createItems();
 
 contentView.append(
   <$>
     <CollectionView stretch
-                    itemCount={items.length}
-                    cellType={index => items[index].type}
-                    cellHeight={(_, type) => type === 'section' ? 48 : 32}
-                    createCell={type => type === 'section' ? SectionCell() : ItemCell()}
-                    updateCell={(cell, index) => cell.text = items[index].name}
-                    onScroll={handleScroll}/>
+        itemCount={items.length}
+        cellType={index => items[index].type}
+        cellHeight={(_, type) => type === 'section' ? 48 : 32}
+        createCell={type => type === 'section' ? SectionCell() : ItemCell()}
+        updateCell={(cell, index) => cell.text = items[index].name}
+        onScroll={handleScroll}/>
     <SectionCell stretchX height={48} id='floatingSection' text={items[0].name}/>
   </$>
 );

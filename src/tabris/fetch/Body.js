@@ -64,6 +64,8 @@ export default class Body {
     this.$bodyUsed = true;
   }
 
-  get _encoding() {}
+  get _encoding() {
+    return undefined;
+  }
 
 }

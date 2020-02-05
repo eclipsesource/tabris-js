@@ -39,8 +39,8 @@ async function showTextInputDialog() {
   const dialog = AlertDialog.open(
     <AlertDialog title='Sign-in required' buttons={{ok: 'Sign-in', cancel: 'Cancel'}}>
       Provide sign-in credentials to access your personalized content.
-      <TextInput message='Username' />
-      <TextInput type='password' message='Password' />
+      <TextInput message='Username'/>
+      <TextInput type='password' message='Password'/>
     </AlertDialog>
   );
   const {texts, button} = await dialog.onClose.promise();

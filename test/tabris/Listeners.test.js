@@ -191,7 +191,7 @@ describe('Listeners', function() {
       expect(listener).not.to.have.been.called;
     });
 
-    it('notifies listeners once ', function () {
+    it('notifies listeners once ', function() {
       myListeners.once(listener);
 
       myListeners.trigger();
@@ -281,7 +281,7 @@ describe('Listeners', function() {
       let resolver = null;
       let result = null;
       myListeners.addListener(() => new Promise(resolve => resolver = resolve));
-      myListeners.triggerAsync('foo').then(target => result = target);
+      myListeners.triggerAsync('foo').then(arg => result = arg);
       return new Promise(resolve => setTimeout(resolve, 50)).then(() => {
         expect(resolver).to.be.instanceOf(Function);
         expect(result).to.be.null;
@@ -338,7 +338,7 @@ describe('Listeners', function() {
   describe('created via ChangeListeners constructor', function() {
 
     it('sets type and target', function() {
-      const target = {foo: 'bar'};
+      target = {foo: 'bar'};
       const changeListeners = new ChangeListeners(target, 'foo');
 
       expect(changeListeners.target).to.equal(target);
@@ -346,19 +346,19 @@ describe('Listeners', function() {
     });
 
     it('sets original with correct prototype', function() {
-      const target = {foo: 'bar'};
+      target = {foo: 'bar'};
       const changeListeners = new ChangeListeners(target, 'foo');
 
       expect(changeListeners.original).to.be.instanceOf(ChangeListeners);
     });
 
     it('throws if property is missing', function() {
-      const target = {foo: 'bar'};
+      target = {foo: 'bar'};
       expect(() => new ChangeListeners(target, 'bar2')).to.throw('Target has no property "bar2"');
     });
 
     it('creates delegate function', function() {
-      const target = {foo: 'bar'};
+      target = {foo: 'bar'};
       const changeListeners = new ChangeListeners(target, 'foo');
 
       // @ts-ignore
@@ -370,7 +370,7 @@ describe('Listeners', function() {
     });
 
     it('makes trigger throw when property value is missing', function() {
-      const target = {foo: 'bar'};
+      target = {foo: 'bar'};
       const changeListeners = new ChangeListeners(target, 'foo');
       // @ts-ignore
       changeListeners(listener);

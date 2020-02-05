@@ -28,7 +28,7 @@ describe('$', function() {
 
   describe('width selector parameter', function() {
 
-    beforeEach(function () {
+    beforeEach(function() {
       const parent = new Composite();
       parent.append(new TextView({id: 'foo'}));
       parent.append(new TextView({id: 'bar'}));

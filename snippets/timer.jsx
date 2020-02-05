@@ -17,7 +17,7 @@ contentView.append(
       <Composite stretchX>
         <TextView centerY text='Delay (ms)'/>
         <Slider id='delay' left='prev() 8' right={64} centerY maximum={3000} selection={1000}
-          onSelectionChanged={e => { e.target.siblings(TextView).last().text = `${e.value} ms`; }}/>
+            onSelectionChanged={e => { e.target.siblings(TextView).last().text = `${e.value} ms`; }}/>
         <TextView right={0} centerY text='1000 ms'/>
       </Composite>
       <Composite top='prev() 16' stretchX>

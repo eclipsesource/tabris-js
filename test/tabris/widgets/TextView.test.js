@@ -75,12 +75,12 @@ describe('TextView', function() {
     });
 
     it('creates widget with text property as-is', function() {
-      const widget = jsx.createElement(
+      const textView = jsx.createElement(
         TextView,
         {text: 'Hello <br/> World!'}
       );
 
-      expect(widget.text).to.equal('Hello <br/> World!');
+      expect(textView.text).to.equal('Hello <br/> World!');
     });
 
     it('creates widget with text content as-is', function() {

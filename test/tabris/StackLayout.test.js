@@ -155,7 +155,7 @@ describe('StackLayout', function() {
 
       it('renders children layoutData with spacing', function() {
         const all = render({spacing: 16, alignment: 'centerX'});
-        const cid = parent.children().toArray().map(child => child.cid);
+        cid = parent.children().toArray().map(child => child.cid);
 
         expect(all[0]).to.deep.equal({top: 0, centerX: 0});
         expect(all[1]).to.deep.equal({top: [cid[0], 16], centerX: 0});
@@ -200,7 +200,7 @@ describe('StackLayout', function() {
 
       it('renders children layoutData', function() {
         const all = render({alignment: 'stretchX'});
-        const cid = parent.children().toArray().map(child => child.cid);
+        cid = parent.children().toArray().map(child => child.cid);
 
         expect(all[0]).to.deep.equal({top: 0, left: 0, right: 0});
         expect(all[1]).to.deep.equal({top: [cid[0], 0], left: 0, right: 0});
@@ -212,7 +212,7 @@ describe('StackLayout', function() {
 
       it('renders children layoutData with spacing', function() {
         const all = render({spacing: 16, alignment: 'stretchX'});
-        const cid = parent.children().toArray().map(child => child.cid);
+        cid = parent.children().toArray().map(child => child.cid);
 
         expect(all[0]).to.deep.equal({top: 0, left: 0, right: 0});
         expect(all[1]).to.deep.equal({top: [cid[0], 16], left: 0, right: 0});
@@ -257,7 +257,7 @@ describe('StackLayout', function() {
 
       it('renders children layoutData', function() {
         const all = render({alignment: 'right'});
-        const cid = parent.children().toArray().map(child => child.cid);
+        cid = parent.children().toArray().map(child => child.cid);
 
         expect(all[0]).to.deep.equal({top: 0, right: 0});
         expect(all[1]).to.deep.equal({top: [cid[0], 0], right: 0});
@@ -269,7 +269,7 @@ describe('StackLayout', function() {
 
       it('renders children layoutData with spacing', function() {
         const all = render({spacing: 16, alignment: 'right'});
-        const cid = parent.children().toArray().map(child => child.cid);
+        cid = parent.children().toArray().map(child => child.cid);
 
         expect(all[0]).to.deep.equal({top: 0, right: 0});
         expect(all[1]).to.deep.equal({top: [cid[0], 16], right: 0});

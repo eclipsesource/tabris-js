@@ -8,15 +8,15 @@ type ImageValue = ImageLikeObject|import('./Image').default|string|null;
 type ColorArray = [number, number, number, number]|[number, number, number];
 type ColorLikeObject = {red: number, green: number, blue: number, alpha?: number};
 type ColorValue = ColorLikeObject|ColorArray|string|'initial'|null;
-type FontWeight = 'black' | 'bold' | 'medium' | 'thin' | 'light' | 'normal';
-type FontStyle = 'italic' | 'normal';
+type FontWeight = 'black' | 'bold' | 'medium' | 'thin' | 'light' | 'normal';
+type FontStyle = 'italic' | 'normal';
 type FontLikeObject = {size: number, family?: string[], weight?: FontWeight, style?: FontStyle};
 type FontValue = FontLikeObject|string|'initial'|null;
 type PercentLikeObject = {percent: number};
 type PercentValue = string|PercentLikeObject;
 type LayoutDataValue = LayoutDataLikeObject|'center'|'stretch'|'stretchX'|'stretchY';
 type LinearGradientValue = LinearGradientLikeObject|string|'initial'|null;
-type Constructor<T> = {new(...args: any[]): T; }
+type Constructor<T> = new(...args: any[]) => T;
 type SFC<T> = (attributes: object|null, children: any[]) => T;
 type EventObjectBase = import('./EventObject').default;
 type SiblingReference = import('./Widget').default | typeof import('./Constraint').default.next | typeof import('./Constraint').default.prev | string;
@@ -57,9 +57,9 @@ interface LayoutDataProperties {
 }
 
 type LinearGradientLikeObject = {
-  colorStops: Array<ColorValue | [ColorValue, PercentValue]>,
+  colorStops: Array<ColorValue | [ColorValue, PercentValue]>,
   direction?: number | 'left' | 'top' | 'right' | 'bottom'
-}
+};
 
 interface Bounds {
   left: number;
@@ -86,11 +86,11 @@ type SelectorFunction<Candidate extends import('./Widget').default>
   = (widget: Candidate, index: number, collection: import('./WidgetCollection').default) => boolean;
 
 type ConstraintLikeObject = {
-  reference: SiblingReferenceValue | PercentValue;
-  offset?: number;
+  reference: SiblingReferenceValue | PercentValue,
+  offset?: number
 }|{
-  reference?: SiblingReferenceValue | PercentValue;
-  offset: number;
+  reference?: SiblingReferenceValue | PercentValue,
+  offset: number
 };
 
 type ConstraintValue = import('./Constraint').default
@@ -104,22 +104,22 @@ type ConstraintValue = import('./Constraint').default
 interface AnimationOptions {
   delay?: number;
   duration?: number;
-  easing?: "linear"|"ease-in"|"ease-out"|"ease-in-out";
+  easing?: 'linear'|'ease-in'|'ease-out'|'ease-in-out';
   repeat?: number;
   reverse?: boolean;
   name?: string;
 }
 
 type BoxDimensionsObject = {
-  left?: number;
-  right?: number;
-  top?: number;
-  bottom?: number;
-}
+  left?: number,
+  right?: number,
+  top?: number,
+  bottom?: number
+};
 
 type BoxDimensions = number | string | BoxDimensionsObject;
 
-type Converter<InType, OutType> = {(value: InType): OutType};
+type Converter<InType, OutType> = (value: InType) => OutType;
 
 interface EventDefinition {
   native?: boolean;
@@ -145,7 +145,7 @@ interface EventDefinitions {
 }
 
 interface PropertyChangedEvent<T,U> extends EventObjectBase {
-  readonly value: U
+  readonly value: U;
 }
 
 type TypeDef<ApiType, NativeType, Context extends object> = {
@@ -165,7 +165,7 @@ type TypeDef<ApiType, NativeType, Context extends object> = {
    * Only useful for nocache properties.
    */
   decode?: (v: NativeType, context: Context) => ApiType
- }
+ };
 
 interface PropertyDefinition<ApiType = unknown, NativeType = any, Context extends object = object> {
   /** Entry from property-types indicating the public API type */
@@ -188,10 +188,10 @@ interface PropertyDefinition<ApiType = unknown, NativeType = any, Context extend
    * If set to true no change events are supported.
    * The value can be set once, unless it's also 'readonly'
    */
-  const: boolean
+  const: boolean;
 }
 
-type TabrisProp<ApiType, NativeType, Context extends Object>
+type TabrisProp<ApiType, NativeType, Context extends Record<string, any>>
   = Omit<Partial<PropertyDefinition>, 'type'> & {type?:
     TypeDef<ApiType, NativeType, Context>
     | keyof import('./property-types').PropertyTypes
@@ -199,7 +199,7 @@ type TabrisProp<ApiType, NativeType, Context extends Object>
   };
 
 interface PropertyDefinitions<Context extends object> {
-  [property: string]: TabrisProp<any, unknown, Context>
+  [property: string]: TabrisProp<any, unknown, Context>;
 }
 
 declare namespace global {
@@ -216,7 +216,7 @@ declare namespace JSX {
 
   type JsxFactory = (
     this: object,
-    type: {new (...args: any[]): any },
+    type: new (...args: any[]) => any,
     attributes: object
   ) => any;
 

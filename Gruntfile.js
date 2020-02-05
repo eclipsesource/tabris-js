@@ -110,16 +110,7 @@ module.exports = function(grunt) {
         cmd: `node node_modules/mocha/bin/mocha --colors --require babel-core/register "${grunt.option('spec')}"`
       },
       eslint: {
-        cmd: 'node node_modules/eslint/bin/eslint.js --color .'
-      },
-      tslint_tools: {
-        cmd: 'node node_modules/tslint/bin/tslint --project ./tools'
-      },
-      tslint_snippets: {
-        cmd: 'node node_modules/tslint/bin/tslint --project ./snippets'
-      },
-      tslint_doc: {
-        cmd: 'node node_modules/tslint/bin/tslint doc/api/*.js doc/api/*.jsx doc/api/*.ts doc/api/*.tsx'
+        cmd: 'npx eslint --color --f visualstudio --ext .js,.jsx,.ts,.tsx .'
       },
       bundle_tabris: {
         cmd: 'node node_modules/rollup/bin/rollup --config rollup.config.js -f cjs ' +
@@ -199,10 +190,7 @@ module.exports = function(grunt) {
 
   /* runs static code analysis tools */
   grunt.registerTask('lint', [
-    'exec:tslint_tools',
     'exec:eslint',
-    'exec:tslint_snippets',
-    'exec:tslint_doc',
     'validate-json'
   ]);
 

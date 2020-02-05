@@ -36,7 +36,7 @@ export default class LayoutData {
         writable: false,
         value: new LayoutData({
           left: ConstraintExports.zero,
-          right: ConstraintExports.zero,
+          right: ConstraintExports.zero
         })
       });
     }

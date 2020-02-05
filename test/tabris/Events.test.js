@@ -209,7 +209,6 @@ describe('Events', function() {
     });
 
     it('uses given context', function() {
-      const context = {};
       object.once('foo', listener, context);
 
       object.trigger('foo');

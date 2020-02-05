@@ -96,11 +96,11 @@ function normalizeStackLine(line) {
   return `${mapped.fn} (${mapped.url}:${mapped.line}:${mapped.column})`;
 }
 
-function parseLine(line) {
+function parseLine(str) {
   const regex = tabris.device.platform === 'Android' ? androidStackLineRegex : iosStackLineRegex;
   const noNameRegex = tabris.device.platform === 'Android' ? androidStackLineNoNameRegex : iosStackLineNoNameRegex;
-  const fullMatch = line.match(regex);
-  const noNameMatch = line.match(noNameRegex);
+  const fullMatch = str.match(regex);
+  const noNameMatch = str.match(noNameRegex);
   if (fullMatch && fullMatch.length === 5) {
     const  [, fn, url, line, column] = fullMatch;
     return {

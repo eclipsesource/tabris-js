@@ -9,16 +9,15 @@ contentView.append(
   <NavigationView stretch toolbarColor={device.platform === 'iOS' ? 'white' : null}>
     <Page title='Flowers on Reddit'>
       <CollectionView
-        stretch
-        background='#f5f5f5'
-        refreshEnabled
-        cellHeight={96}
-        cellType={index => items[index].loading ? 'loading' : 'normal'}
-        createCell={(type) => type === 'normal' ? createItemCell() : createLoadingCell()}
-        updateCell={updateCell}
-        onRefresh={loadNewItems}
-        onScroll={checkToLoadItems}
-      />
+          stretch
+          background='#f5f5f5'
+          refreshEnabled
+          cellHeight={96}
+          cellType={index => items[index].loading ? 'loading' : 'normal'}
+          createCell={(type) => type === 'normal' ? createItemCell() : createLoadingCell()}
+          updateCell={updateCell}
+          onRefresh={loadNewItems}
+          onScroll={checkToLoadItems}/>
     </Page>
   </NavigationView>
 );
@@ -26,13 +25,13 @@ contentView.append(
 const navigationView = $(NavigationView).only();
 const collectionView = $(CollectionView).only();
 
-loadInitialItems();
+loadInitialItems().catch(ex => console.error(ex));
 
 function createItemCell() {
   return (
     <Composite>
       <Composite id='container' left={16} right={16} top={8} bottom={8} cornerRadius={2} elevation={2}
-        background='white' highlightOnTouch onTap={showImage}>
+          background='white' highlightOnTouch onTap={showImage}>
         <ImageView id='image' width={80} height={80} background='#e0e0e0' scaleMode='fill'/>
         <TextView id='name' top={8} left='prev() 16' right={16} textColor='#202020' font='medium 14px' maxLines={2}/>
         <TextView id='comment' bottom={8} right={16} alignment='right' textColor='#7CB342' font='12px'/>
@@ -57,32 +56,31 @@ function updateCell(view, index) {
   }
 }
 
-function loadInitialItems() {
+async function loadInitialItems() {
   collectionView.refreshIndicator = true;
-  getJSON(createUrl({limit: ITEM_FETCH_COUNT})).then(json => {
-    items = json.data.children;
-    collectionView.itemCount = items.length;
-    collectionView.refreshIndicator = false;
-  });
+  const json = await getJSON(createUrl({limit: ITEM_FETCH_COUNT}));
+  items = json.data.children;
+  collectionView.itemCount = items.length;
+  collectionView.refreshIndicator = false;
 }
 
-function checkToLoadItems({target: scrollView, deltaY}) {
+async function checkToLoadItems({target: scrollView, deltaY}) {
   if (deltaY > 0) {
     const remaining = items.length - scrollView.lastVisibleIndex;
     if (remaining < 20) {
-      loadMoreItems();
+      await loadMoreItems();
     }
   }
 }
 
-function loadMoreItems() {
+async function loadMoreItems() {
   if (!loading) {
     loading = true;
     const lastId = getLastId();
     // insert placeholder item
     items.push({loading: true});
     collectionView.insert(items.length, 1);
-    getJSON(createUrl({limit: ITEM_FETCH_COUNT, after: lastId})).then(json => {
+    await getJSON(createUrl({limit: ITEM_FETCH_COUNT, after: lastId})).then(json => {
       loading = false;
       // remove placeholder item
       items.splice(items.length - 1, 1);
@@ -95,18 +93,17 @@ function loadMoreItems() {
   }
 }
 
-function loadNewItems() {
+async function loadNewItems() {
   if (!loading) {
     loading = true;
-    getJSON(createUrl({limit: ITEM_FETCH_COUNT, before: getFirstId()})).then(json => {
-      loading = false;
-      collectionView.refreshIndicator = false;
-      if (json.data.children.length > 0) {
-        items.splice(0, 0, json.data.children);
-        collectionView.insert(0, json.data.children.length);
-        collectionView.reveal(0);
-      }
-    });
+    const json = await getJSON(createUrl({limit: ITEM_FETCH_COUNT, before: getFirstId()}));
+    loading = false;
+    collectionView.refreshIndicator = false;
+    if (json.data.children.length > 0) {
+      items.splice(0, 0, json.data.children);
+      collectionView.insert(0, json.data.children.length);
+      collectionView.reveal(0);
+    }
   }
 }
 
@@ -127,7 +124,7 @@ function getRedditId(item) {
   return item ? item.kind + '_' + item.data.id : null;
 }
 
-function showImage(event) {
+async function showImage(event) {
   const data = event.target.item.data;
   if (data.url.substr(-4, 4) === '.jpg') {
     navigationView.append(
@@ -136,10 +133,10 @@ function showImage(event) {
       </Page>
     );
   } else {
-    app.launch(data.url);
+    await app.launch(data.url);
   }
 }
 
-function getJSON(url) {
+async function getJSON(url) {
   return fetch(url).then(response => response.json());
 }

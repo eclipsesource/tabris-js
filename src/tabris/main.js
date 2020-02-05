@@ -177,7 +177,7 @@ const tabrisMain = Object.assign(new Tabris(), {
   format,
   Headers,
   Request,
-  Response,
+  Response
 });
 
 /** @typedef {typeof tabrisMain} TabrisMain */
@@ -232,7 +232,7 @@ tabrisMain.on('start', (options) => {
     tabris.$secureStorage = {};
   }
   tabris.$crypto = new Crypto();
-  if (global.console['print']) {
+  if ('print' in global.console) {
     global.console = createConsole(global.console);
   }
   tabris.$pkcs5 = new Pkcs5();

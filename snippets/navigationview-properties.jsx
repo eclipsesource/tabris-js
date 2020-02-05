@@ -1,4 +1,6 @@
-import {Action, CheckBox, NavigationView, Page, Picker, TextView, contentView, drawer, device, StackLayout} from 'tabris';
+import {
+  Action, CheckBox, NavigationView, Page, Picker, TextView, contentView, drawer, device, StackLayout
+} from 'tabris';
 
 const colors = ['initial', 'red', 'green', 'blue', 'rgba(0, 0, 0, 0.25)'];
 const isAndroid = device.platform === 'Android';

@@ -21,7 +21,7 @@ contentView.append(
 );
 
 /** @param {tabris.WidgetResizeEvent<Canvas>} ev */
-async function handleDrawing({target: canvas, width, height}) {
+async function handleDrawing({target: canvas, width}) {
   canvas.height = canvas.bounds.width;
   const scale = device.scaleFactor;
   const size = width * scale;

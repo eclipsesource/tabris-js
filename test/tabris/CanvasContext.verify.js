@@ -19,7 +19,7 @@ describe('CanvasContext', function() {
       call: () => {},
       create: () => {},
       get: () => {},
-      set: () => {},
+      set: () => {}
     });
     tabris._init(client);
     context = new tabris.Canvas().getContext('2d', 200, 200);

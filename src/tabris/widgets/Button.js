@@ -65,7 +65,7 @@ NativeObject.defineProperties(Button.prototype, {
         }
         return types.ColorValue.convert(value);
       },
-      encode: types.ColorValue.encode,
+      encode: types.ColorValue.encode
     },
     default: 'initial'
   },
@@ -101,5 +101,5 @@ NativeObject.defineProperties(Button.prototype, {
 });
 
 NativeObject.defineEvents(Button.prototype, {
-  select: {native: true},
+  select: {native: true}
 });

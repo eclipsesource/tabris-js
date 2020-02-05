@@ -166,7 +166,7 @@ describe('Event', function() {
 
     it('does not overwrite existing window methods', function() {
       const orig = function() {};
-      const target = {
+      target = {
         addEventListener: orig,
         removeEventListener: orig,
         dispatchEvent: orig

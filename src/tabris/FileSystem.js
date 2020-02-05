@@ -55,9 +55,9 @@ export default class FileSystem extends NativeObject {
       if (arguments.length < 2) {
         throw new Error('Not enough arguments to writeFile');
       }
-      const write = data => this._nativeCall('writeFile', {
+      const write = finalData => this._nativeCall('writeFile', {
         path: checkPath(path),
-        data: checkBuffer(data),
+        data: checkBuffer(finalData),
         onError: (err) => reject(createError(err, path)),
         onSuccess: () => resolve()
       });

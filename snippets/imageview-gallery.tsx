@@ -1,4 +1,4 @@
-import { contentView, EventObject, Image, ImageValue, ImageView, Properties, ScrollView, statusBar } from 'tabris';
+import {contentView, EventObject, Image, ImageValue, ImageView, Properties, ScrollView, statusBar} from 'tabris';
 
 const IMAGES = ['cover.jpg', 'salad.jpg', 'landscape.jpg', 'ian.jpg', 'target_200.png']
   .map((image) => `resources/${image}`);
@@ -58,14 +58,15 @@ statusBar.set({
 contentView.append(
   <$>
     <ImageView stretch zoomEnabled scaleMode='fit' image={IMAGES[0]}
-      onTap={() => $(FilmStrip).only().toggleShowing()}/>
+        onTap={() => $(FilmStrip).only().toggleShowing()}/>
     <FilmStrip stretchX bottom height={112} background='#00000044'
-      onScrollX={(e) => e.target.resetHideTimeout()}>
+        onScrollX={(e) => e.target.resetHideTimeout()}>
       {
         IMAGES.map((image) =>
           <ImageView top={8} left='prev() 8' width={IMAGE_SIZE} height={IMAGE_SIZE}
-            highlightOnTouch image={{src: image, width: IMAGE_SIZE, height: IMAGE_SIZE}}
-            scaleMode='fill' onTap={(e: EventObject<ImageView>) => showImage(e.target.image)}/>)
+              highlightOnTouch image={{src: image, width: IMAGE_SIZE, height: IMAGE_SIZE}}
+              scaleMode='fill' onTap={(e: EventObject<ImageView>) => showImage(e.target.image)}/>
+        )
       }
     </FilmStrip>
   </$>

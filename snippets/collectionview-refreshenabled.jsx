@@ -11,7 +11,7 @@ contentView.append(
       onRefresh={refresh}/>
 );
 
-refresh();
+refresh().catch(ex => console.error(ex));
 
 async function refresh() {
   const cv = $(CollectionView).only();

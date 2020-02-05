@@ -137,7 +137,7 @@ describe('Widget', function() {
             .to.eql({family: ['Arial'], size: 12, style: 'normal', weight: 'normal'});
         });
 
-        it("support setting initial 'initial'", function() {
+        it('support setting initial \'initial\'', function() {
           widget.set({font: '23px Arial'});
           client.resetCalls();
           widget.set({font: 'initial'});
@@ -146,7 +146,7 @@ describe('Widget', function() {
           expect(call.properties.font).to.be.null;
         });
 
-        it("returns 'initial' when no font value is cached", function() {
+        it('returns \'initial\' when no font value is cached', function() {
           spy(client, 'get');
 
           expect(widget.font).to.eql('initial');
@@ -220,7 +220,7 @@ describe('Widget', function() {
       expect(call.properties.cornerRadius).to.equal(4);
     });
 
-    it("support 'initial' for background", function() {
+    it('support \'initial\' for background', function() {
       widget.set({background: 'green'});
       client.resetCalls();
       widget.set({background: 'initial'});
@@ -436,7 +436,7 @@ describe('Widget', function() {
         expect(client.calls({op: 'destroy', id: child.cid}).length).to.equal(0);
       });
 
-      it("notifies parent's `removeChild` listener", function() {
+      it('notifies parent\'s `removeChild` listener', function() {
         const listener = spy();
         parent.onRemoveChild(listener);
 
@@ -448,7 +448,7 @@ describe('Widget', function() {
         expect(listener.getCall(0).args[0].index).to.equal(0);
       });
 
-      it("notifies parent's `removeChild` listener with correct index", function() {
+      it('notifies parent\'s `removeChild` listener with correct index', function() {
         new TestWidget().insertBefore(child);
         const listener = spy();
         parent.onRemoveChild(listener);
@@ -460,7 +460,7 @@ describe('Widget', function() {
         expect(listener.getCall(0).args[0].index).to.equal(1);
       });
 
-      it("notifies all children's dispose listeners", function() {
+      it('notifies all children\'s dispose listeners', function() {
         const log = [];
         const child2 = new TestWidget().appendTo(parent);
         parent.onDispose(() => log.push('parent'));
@@ -472,7 +472,7 @@ describe('Widget', function() {
         expect(log).to.eql(['parent', 'child', 'child2']);
       });
 
-      it("notifies children's dispose listeners recursively", function() {
+      it('notifies children\'s dispose listeners recursively', function() {
         const log = [];
         child = new TestWidget().appendTo(parent);
         const grandchild = new TestWidget().appendTo(child);
@@ -572,10 +572,10 @@ describe('Widget', function() {
 
     describe('append', function() {
 
-      let widget, child1, child2, listener, result;
+      let parent, child1, child2, listener, result;
 
       beforeEach(function() {
-        widget = new TestWidget();
+        parent = new TestWidget();
         child1 = new TestWidget({id: 'child1'});
         child2 = new TestWidget({id: 'child2'});
         client.resetCalls();
@@ -585,44 +585,44 @@ describe('Widget', function() {
       describe('when called with a widget', function() {
 
         beforeEach(function() {
-          widget.onAddChild(listener);
-          result = widget.append(child1);
+          parent.onAddChild(listener);
+          result = parent.append(child1);
         });
 
         it('SETs children', function() {
           const calls = client.calls();
           expect(calls.length).to.equal(1);
-          expect(calls[0]).to.eql({op: 'set', id: widget.cid, properties: {children: [child1.cid]}});
+          expect(calls[0]).to.eql({op: 'set', id: parent.cid, properties: {children: [child1.cid]}});
         });
 
         it('returns self to allow chaining', function() {
-          expect(result).to.equal(widget);
+          expect(result).to.equal(parent);
         });
 
         it('notifies `addChild` listener with arguments parent, child, event', function() {
           expect(listener).to.have.been.calledOnce;
-          expect(listener.getCall(0).args[0].target).to.equal(widget);
+          expect(listener.getCall(0).args[0].target).to.equal(parent);
           expect(listener.getCall(0).args[0].child).to.equal(child1);
           expect(listener.getCall(0).args[0].index).to.equal(0);
         });
 
         it('children() returns WidgetCollection with host', function() {
-          expect(widget.children()).to.be.instanceOf(WidgetCollection);
-          expect(widget.children().host).to.equal(widget);
+          expect(parent.children()).to.be.instanceOf(WidgetCollection);
+          expect(parent.children().host).to.equal(parent);
         });
 
         it('children() contains appended child', function() {
-          expect(widget.children().toArray()).to.contain(child1);
+          expect(parent.children().toArray()).to.contain(child1);
         });
 
         it('children() returns a safe copy', function() {
-          widget.children()[0] = null;
-          expect(widget.children().toArray()).to.deep.contain(child1);
+          parent.children()[0] = null;
+          expect(parent.children().toArray()).to.deep.contain(child1);
         });
 
         it('_children() contains appended child when children() is overwritten', function() {
-          widget.children = () => new WidgetCollection();
-          expect(widget._children().toArray()).to.contain(child1);
+          parent.children = () => new WidgetCollection();
+          expect(parent._children().toArray()).to.contain(child1);
         });
 
       });
@@ -630,40 +630,40 @@ describe('Widget', function() {
       describe('when called with multiple widgets', function() {
 
         beforeEach(function() {
-          result = widget.append(child1, child2);
+          result = parent.append(child1, child2);
         });
 
         it('SETs children after flush', function() {
           tabris.flush();
           const calls = client.calls();
           expect(calls.length).to.equal(1);
-          expect(calls[0]).to.eql({op: 'set', id: widget.cid, properties: {children: [child1.cid, child2.cid]}});
+          expect(calls[0]).to.eql({op: 'set', id: parent.cid, properties: {children: [child1.cid, child2.cid]}});
         });
 
         it('SETs children only once', function() {
           child1.detach();
           child2.detach();
-          widget.append(child1, child2);
+          parent.append(child1, child2);
 
           tabris.flush();
 
           const calls = client.calls();
           expect(calls.length).to.equal(1);
-          expect(calls[0]).to.eql({op: 'set', id: widget.cid, properties: {children: [child1.cid, child2.cid]}});
+          expect(calls[0]).to.eql({op: 'set', id: parent.cid, properties: {children: [child1.cid, child2.cid]}});
         });
 
         it('returns self to allow chaining', function() {
-          expect(result).to.equal(widget);
+          expect(result).to.equal(parent);
         });
 
         it('children() contains appended children', function() {
-          expect(widget.children().toArray()).to.contain(child1);
-          expect(widget.children().toArray()).to.contain(child2);
+          expect(parent.children().toArray()).to.contain(child1);
+          expect(parent.children().toArray()).to.contain(child2);
         });
 
         it('children() with matcher contains filtered children', function() {
-          expect(widget.children('#child1').toArray()).to.eql([child1]);
-          expect(widget.children('#child2').toArray()).to.eql([child2]);
+          expect(parent.children('#child1').toArray()).to.eql([child1]);
+          expect(parent.children('#child2').toArray()).to.eql([child2]);
         });
 
       });
@@ -671,22 +671,22 @@ describe('Widget', function() {
       describe('when called with an array of widgets', function() {
 
         beforeEach(function() {
-          result = widget.append([child1, child2]);
+          result = parent.append([child1, child2]);
           tabris.flush();
         });
 
         it('SETs children', function() {
           const calls = client.calls();
           expect(calls.length).to.equal(1);
-          expect(calls[0]).to.eql({op: 'set', id: widget.cid, properties: {children: [child1.cid, child2.cid]}});
+          expect(calls[0]).to.eql({op: 'set', id: parent.cid, properties: {children: [child1.cid, child2.cid]}});
         });
 
         it('adds the widgets to children list', function() {
-          expect(widget.children().toArray()).to.eql([child1, child2]);
+          expect(parent.children().toArray()).to.eql([child1, child2]);
         });
 
         it('returns self to allow chaining', function() {
-          expect(result).to.equal(widget);
+          expect(result).to.equal(parent);
         });
 
       });
@@ -694,22 +694,22 @@ describe('Widget', function() {
       describe('when called with a widget collection', function() {
 
         beforeEach(function() {
-          result = widget.append(new WidgetCollection([child1, child2]));
+          result = parent.append(new WidgetCollection([child1, child2]));
           tabris.flush();
         });
 
         it('SETs children', function() {
           const calls = client.calls();
           expect(calls.length).to.equal(1);
-          expect(calls[0]).to.eql({op: 'set', id: widget.cid, properties: {children: [child1.cid, child2.cid]}});
+          expect(calls[0]).to.eql({op: 'set', id: parent.cid, properties: {children: [child1.cid, child2.cid]}});
         });
 
         it('adds the widgets to children list', function() {
-          expect(widget.children().toArray()).to.eql([child1, child2]);
+          expect(parent.children().toArray()).to.eql([child1, child2]);
         });
 
         it('returns self to allow chaining', function() {
-          expect(result).to.equal(widget);
+          expect(result).to.equal(parent);
         });
 
       });
@@ -718,8 +718,8 @@ describe('Widget', function() {
 
         it('throws an error', function() {
           expect(() => {
-            widget.append({});
-          }).to.throw(Error, `Cannot append non-widget {} to TestWidget[cid="${widget.cid}"]`);
+            parent.append({});
+          }).to.throw(Error, `Cannot append non-widget {} to TestWidget[cid="${parent.cid}"]`);
         });
 
       });
@@ -728,8 +728,8 @@ describe('Widget', function() {
 
         it('throws an error', function() {
           expect(() => {
-            widget.append(widget);
-          }).to.throw(Error, `Cannot append widget TestWidget[cid="${widget.cid}"] to itself`);
+            parent.append(parent);
+          }).to.throw(Error, `Cannot append widget TestWidget[cid="${parent.cid}"] to itself`);
         });
 
       });
@@ -738,12 +738,12 @@ describe('Widget', function() {
 
         it('throws an error', function() {
           const child = new TestWidget();
-          stub(widget, '_acceptChild').callsFake(() => false);
+          stub(parent, '_acceptChild').callsFake(() => false);
 
           expect(() => {
-            widget.append(child);
+            parent.append(child);
           }).to.throw(Error, /TestWidget\[cid=".*"\] could not be appended to TestWidget\[cid=".*"\]/);
-          expect(widget.children().toArray()).not.to.contain(child);
+          expect(parent.children().toArray()).not.to.contain(child);
         });
 
       });
@@ -845,7 +845,7 @@ describe('Widget', function() {
           expect(calls[0]).to.eql({op: 'set', id: parent1.cid, properties: {children: [widget.cid]}});
         });
 
-        it("is added to parent's children list", function() {
+        it('is added to parent\'s children list', function() {
           expect(parent1.children().toArray()).to.contain(widget);
         });
 
@@ -863,11 +863,11 @@ describe('Widget', function() {
           tabris.flush();
         });
 
-        it("is removed from old parent's children list", function() {
+        it('is removed from old parent\'s children list', function() {
           expect(parent1.children().toArray()).not.to.contain(widget);
         });
 
-        it("is added to new parent's children list", function() {
+        it('is added to new parent\'s children list', function() {
           expect(parent2.children().toArray()).to.contain(widget);
         });
 
@@ -887,24 +887,24 @@ describe('Widget', function() {
 
       describe('when called with a collection', function() {
 
-        let parent1, parent2, result;
+        let parent2, parent3;
 
         beforeEach(function() {
-          parent1 = new TestWidget();
           parent2 = new TestWidget();
+          parent3 = new TestWidget();
           client.resetCalls();
-          result = widget.appendTo(new WidgetCollection([parent1, parent2]));
+          result = widget.appendTo(new WidgetCollection([parent3, parent2]));
         });
 
         it('returns self to allow chaining', function() {
           expect(result).to.equal(widget);
         });
 
-        it("first entry is added to parent's children list", function() {
-          expect(parent1.children().toArray()).to.contain(widget);
+        it('first entry is added to parent\'s children list', function() {
+          expect(parent3.children().toArray()).to.contain(widget);
         });
 
-        it("other entry not added to parent's children list", function() {
+        it('other entry not added to parent\'s children list', function() {
           expect(parent2.children().toArray()).not.to.contain(widget);
         });
 
@@ -965,12 +965,12 @@ describe('Widget', function() {
           client.resetCalls();
         });
 
-        it("removes widget from its old parent's children list", function() {
+        it('removes widget from its old parent\'s children list', function() {
           widget.insertBefore(other);
           expect(parent1.children().toArray()).not.to.contain(widget);
         });
 
-        it("adds widget to new parent's children list", function() {
+        it('adds widget to new parent\'s children list', function() {
           widget.insertBefore(other);
           expect(parent2.children().toArray()).to.contain(widget);
         });
@@ -1119,12 +1119,12 @@ describe('Widget', function() {
           client.resetCalls();
         });
 
-        it("removes widget from its old parent's children list", function() {
+        it('removes widget from its old parent\'s children list', function() {
           widget.insertAfter(other);
           expect(parent1.children().toArray()).not.to.contain(widget);
         });
 
-        it("adds widget to new parent's children list", function() {
+        it('adds widget to new parent\'s children list', function() {
           widget.insertAfter(other);
           expect(parent2.children().toArray()).to.contain(widget);
         });
@@ -1351,7 +1351,7 @@ describe('Widget', function() {
         widget.append(child1, child2, child3);
         let filterCollection = null;
 
-        const result = child2.siblings((widget, index, collection) => filterCollection = collection);
+        const result = child2.siblings((sibling, index, collection) => filterCollection = collection);
 
         expect(filterCollection).to.not.equal(result);
         expect(filterCollection.toArray()).to.eql([child1, child3]);
@@ -1361,6 +1361,7 @@ describe('Widget', function() {
     });
 
     describe('find', function() {
+      /* eslint-disable camelcase */
 
       let child1, child2, child1_1, child1_2, child1_2_1;
 

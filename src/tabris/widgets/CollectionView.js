@@ -393,7 +393,7 @@ NativeObject.defineProperties(CollectionView.prototype, {
 
 NativeObject.defineEvents(CollectionView.prototype, {
   refresh: {native: true},
-  scroll: {native: true},
+  scroll: {native: true}
 });
 
 NativeObject.defineChangeEvents(CollectionView.prototype, [
@@ -441,11 +441,13 @@ const triggerChangeLastVisibleIndex = createDelegate('lastVisibleIndex');
 
 function createDelegate(prop) {
   return function() {
-    const actual = this[prop];
-    if (actual !== this['_prev:' + prop]) {
-      this._triggerChangeEvent(prop, actual);
+    // eslint-disable-next-line no-invalid-this
+    const instance = this;
+    const actual = instance[prop];
+    if (actual !== instance['_prev:' + prop]) {
+      instance._triggerChangeEvent(prop, actual);
     }
-    this['_prev:' + prop] = actual;
+    instance['_prev:' + prop] = actual;
   };
 }
 

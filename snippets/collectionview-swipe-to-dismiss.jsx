@@ -12,11 +12,11 @@ const items = [
 
 contentView.append(
   <CollectionView
-    stretch
-    itemCount={items.length}
-    cellHeight={64}
-    createCell={createCell}
-    updateCell={updateCell}/>
+      stretch
+      itemCount={items.length}
+      cellHeight={64}
+      createCell={createCell}
+      updateCell={updateCell}/>
 );
 
 function createCell() {
@@ -42,15 +42,15 @@ function updateCell(view, index) {
   view.find(TextView).only('#timeText').text = item.time;
 }
 
-function handlePan(event) {
+async function handlePan(event) {
   const {target, state, translationX} = event;
   target.transform = {translationX};
   if (state === 'end') {
-    handlePanFinished(event);
+    await handlePanFinished(event);
   }
 }
 
-function handlePanFinished({target, velocityX, translationX}) {
+async function handlePanFinished({target, velocityX, translationX}) {
   const beyondCenter = Math.abs(translationX) > target.bounds.width / 2;
   const fling = Math.abs(velocityX) > 200;
   const sameDirection = direction(velocityX) === direction(translationX);
@@ -58,9 +58,9 @@ function handlePanFinished({target, velocityX, translationX}) {
   // Otherwise, detect a dismiss only if flinged in the same direction.
   const dismiss = beyondCenter ? (sameDirection || !fling) : (sameDirection && fling);
   if (dismiss) {
-    animateDismiss(target, translationX);
+    await animateDismiss(target, translationX);
   } else {
-    animateCancel(target);
+    await animateCancel(target);
   }
 }
 
@@ -76,8 +76,8 @@ async function animateDismiss(target, translationX) {
   $(CollectionView).only().remove(index);
 }
 
-function animateCancel(target) {
-  target.animate({transform: {translationX: 0}}, {duration: 200, easing: 'ease-out'});
+async function animateCancel(target) {
+  return target.animate({transform: {translationX: 0}}, {duration: 200, easing: 'ease-out'});
 }
 
 function direction(offset) {

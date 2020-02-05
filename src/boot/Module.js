@@ -1,3 +1,4 @@
+/* eslint-disable no-invalid-this */
 const FILE_POSTFIXES = ['', '.js', '.json', '/package.json', '/index.js', '/index.json'];
 const FOLDER_POSTFIXES = ['/package.json', '/index.js', '/index.json'];
 
@@ -85,7 +86,7 @@ function findFileModule(request) {
   const path = normalizePath(dirname(this.id) + '/' + request);
   const result = findModule.call(this, path, getPostfixes(request));
   if (!result) {
-    throw new Error("Cannot find module '" + request + "'");
+    throw new Error('Cannot find module \'' + request + '\'');
   }
   return result;
 }
@@ -104,7 +105,7 @@ function findNodeModule(request) {
     }
   } while (!result && currentDir);
   if (!result) {
-    throw new Error("Cannot find module '" + request + "'");
+    throw new Error('Cannot find module \'' + request + '\'');
   }
   return result;
 }

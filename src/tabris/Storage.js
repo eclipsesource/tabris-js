@@ -57,7 +57,7 @@ export default class Storage {
 
   setItem(key, value) {
     if (arguments.length < 2) {
-      throw new TypeError("Not enough arguments to 'setItem'");
+      throw new TypeError('Not enough arguments to \'setItem\'');
     }
     this._nativeObject._nativeCall('add', {
       key: encode(key),
@@ -67,7 +67,7 @@ export default class Storage {
 
   getItem(key) {
     if (arguments.length < 1) {
-      throw new TypeError("Not enough arguments to 'getItem'");
+      throw new TypeError('Not enough arguments to \'getItem\'');
     }
     const result = this._nativeObject._nativeCall('get', {key: encode(key)});
     // Note: iOS can not return null, only undefined:
@@ -76,7 +76,7 @@ export default class Storage {
 
   removeItem(key) {
     if (arguments.length < 1) {
-      throw new TypeError("Not enough arguments to 'removeItem'");
+      throw new TypeError('Not enough arguments to \'removeItem\'');
     }
     this._nativeObject._nativeCall('remove', {keys: [encode(key)]});
   }

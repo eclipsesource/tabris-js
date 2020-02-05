@@ -222,7 +222,7 @@ describe('Blob', function() {
         '{',
         new Uint8Array([226]),
         new Int8Array([130, 172]).buffer,
-        {toString() { return '}'; }},
+        {toString() { return '}'; }}
       ]);
       return blob.text().then(str => {
         expect(str).to.equal('{€}');

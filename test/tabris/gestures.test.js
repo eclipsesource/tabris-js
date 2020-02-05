@@ -68,9 +68,10 @@ describe('gestures:', function() {
 
     describe('and adding matching gesture listener', function() {
 
-      const listener = function() {};
+      let listener;
 
       beforeEach(function() {
+        listener = spy();
         widget.on('foo', listener);
       });
 
@@ -117,7 +118,6 @@ describe('gestures:', function() {
       describe(', then notifying the recognizer', function() {
 
         it('triggers matching widget event', function() {
-          const listener = spy();
           widget.on('foo', listener);
 
           tabris._notify(gestureCreate()[0].id, 'gesture', {});
@@ -126,7 +126,6 @@ describe('gestures:', function() {
         });
 
         it('forwards event object', function() {
-          const listener = spy();
           widget.on('foo', listener);
 
           tabris._notify(gestureCreate()[0].id, 'gesture', {state: 'recognized'});

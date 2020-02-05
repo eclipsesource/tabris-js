@@ -2,7 +2,7 @@ const PHASE_CONSTANTS = {
   NONE: {value: 0},
   CAPTURING_PHASE: {value: 1},
   AT_TARGET: {value: 2},
-  BUBBLING_PHASE: {value: 3},
+  BUBBLING_PHASE: {value: 3}
 };
 
 export default class Event {
@@ -17,7 +17,7 @@ export default class Event {
       $bubbles: {enumerable: false, writable: true, value: config && !!config.bubbles || false},
       $cancelable: {enumerable: false, writable: true, value: config && !!config.cancelable || false},
       $target: {enumerable: false, writable: true, value: null},
-      $defaultPrevented: {enumerable: false, writable: true, value: false},
+      $defaultPrevented: {enumerable: false, writable: true, value: false}
     });
   }
 
@@ -91,7 +91,7 @@ export function addDOMEventTargetMethods(target) {
 
   let listeners;
 
-  target.addEventListener = function(type, listener /*, useCapture*/) {
+  target.addEventListener = function(type, listener /* , useCapture*/) {
     if (arguments.length < 2) {
       throw new Error('Not enough arguments to addEventListener');
     }
@@ -106,7 +106,7 @@ export function addDOMEventTargetMethods(target) {
     }
   };
 
-  target.removeEventListener = function(type, listener /*, useCapture*/) {
+  target.removeEventListener = function(type, listener /* , useCapture */) {
     if (arguments.length < 2) {
       throw new Error('Not enough arguments to removeEventListener');
     }

@@ -134,23 +134,23 @@ describe('Common Widgets', function() {
   });
 
   it('CheckBox JSX with text property', function() {
-    const widget = jsx.createElement(
+    const checkBox = jsx.createElement(
       CheckBox,
       {text: 'Hello World!'}
     );
 
-    expect(widget.text).to.equal('Hello World!');
+    expect(checkBox.text).to.equal('Hello World!');
   });
 
   it('CheckBox JSX with text content', function() {
-    const widget = jsx.createElement(
+    const checkBox = jsx.createElement(
       CheckBox,
       null,
       'Hello  ',
       'World!'
     );
 
-    expect(widget.text).to.equal('Hello  World!');
+    expect(checkBox.text).to.equal('Hello  World!');
   });
 
   it('CheckBox JSX with text content and text property', function() {
@@ -237,12 +237,12 @@ describe('Common Widgets', function() {
   });
 
   it('RadioButton JSX with text property', function() {
-    const widget = jsx.createElement(
+    const radioButton = jsx.createElement(
       RadioButton,
       {text: 'Hello World!'}
     );
 
-    expect(widget.text).to.equal('Hello World!');
+    expect(radioButton.text).to.equal('Hello World!');
   });
 
   it('RadioButton JSX with text content', function() {
@@ -418,12 +418,12 @@ describe('Common Widgets', function() {
   });
 
   it('ToggleButton JSX with text property', function() {
-    const widget = jsx.createElement(
+    const toggleButton = jsx.createElement(
       ToggleButton,
       {text: 'Hello World!'}
     );
 
-    expect(widget.text).to.equal('Hello World!');
+    expect(toggleButton.text).to.equal('Hello World!');
   });
 
   it('ToggleButton JSX with text content', function() {

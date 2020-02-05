@@ -231,7 +231,7 @@ describe('TabFolder', function() {
       tabFolder.paging = true;
     });
 
-    it("sets the 'paging' property", function() {
+    it('sets the \'paging\' property', function() {
       const setOp = client.calls({id: tabFolder.cid, op: 'create'})[0];
       expect(setOp.properties.paging).to.eql(true);
     });
@@ -502,21 +502,21 @@ describe('TabFolder', function() {
       expect(result).to.equal('top');
     });
 
-    it("sets value tabBarLocation 'top'", function() {
+    it('sets value tabBarLocation \'top\'', function() {
       tabFolder = new TabFolder({tabBarLocation: 'top'});
 
       const properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
       expect(properties.tabBarLocation).to.eql('top');
     });
 
-    it("sets tabBarLocation 'bottom'", function() {
+    it('sets tabBarLocation \'bottom\'', function() {
       tabFolder = new TabFolder({tabBarLocation: 'bottom'});
 
       const properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
       expect(properties.tabBarLocation).to.eql('bottom');
     });
 
-    it("sets tabBarLocation 'hidden'", function() {
+    it('sets tabBarLocation \'hidden\'', function() {
       tabFolder = new TabFolder({tabBarLocation: 'hidden'});
 
       const properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;
@@ -545,7 +545,7 @@ describe('TabFolder', function() {
       expect(result).to.equal('fixed');
     });
 
-    it("sets tabMode 'scrollable'", function() {
+    it('sets tabMode \'scrollable\'', function() {
       tabFolder = new TabFolder({tabMode: 'scrollable'});
 
       const properties = client.calls({id: tabFolder.cid, op: 'create'})[0].properties;

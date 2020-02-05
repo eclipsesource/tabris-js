@@ -7,6 +7,7 @@ contentView.append(
 );
 
 (async () => {
+
   try {
     const response = await fetch('http://lorempixel.com/400/200/');
     if (!response.ok) {
@@ -18,4 +19,5 @@ contentView.append(
   } catch (ex) {
     console.error(ex);
   }
-})();
+
+})().catch(ex => console.error(ex));

@@ -5,6 +5,7 @@
     "lib": ["es6", "es2015.promise"]
   },
   "include": [
-    "./*.ts"
+    "./*.ts",
+    "./*.js"
   ]
 }

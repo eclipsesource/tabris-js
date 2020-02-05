@@ -1,4 +1,4 @@
-import { Composite, contentView, PropertyChangedEvent, Stack, Switch, TextInput } from 'tabris';
+import {Composite, contentView, PropertyChangedEvent, Stack, Switch, TextInput} from 'tabris';
 
 contentView.append(
   <Stack stretch alignment='stretchX' padding={16} spacing={16}>

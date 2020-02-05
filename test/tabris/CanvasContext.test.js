@@ -93,7 +93,7 @@ describe('CanvasContext', function() {
     });
 
     it('creates and returns graphics context', function() {
-      const ctx = canvas.getContext('2d', 100, 200);
+      ctx = canvas.getContext('2d', 100, 200);
 
       expect(ctx).to.be.an.instanceof(CanvasContext);
     });
@@ -176,7 +176,7 @@ describe('CanvasContext', function() {
 
     describe('lineCap', function() {
 
-      it("defaults to 'butt'", function() {
+      it('defaults to \'butt\'', function() {
         expect(ctx.lineCap).to.equal('butt');
       });
 
@@ -208,7 +208,7 @@ describe('CanvasContext', function() {
 
     describe('lineJoin', function() {
 
-      it("defaults to 'miter'", function() {
+      it('defaults to \'miter\'', function() {
         expect(ctx.lineJoin).to.equal('miter');
       });
 
@@ -301,7 +301,7 @@ describe('CanvasContext', function() {
 
     describe('textAlign', function() {
 
-      it("defaults to 'start'", function() {
+      it('defaults to \'start\'', function() {
         expect(ctx.textAlign).to.equal('start');
       });
 
@@ -332,7 +332,7 @@ describe('CanvasContext', function() {
 
     describe('textBaseline', function() {
 
-      it("defaults to 'alphabetic'", function() {
+      it('defaults to \'alphabetic\'', function() {
         expect(ctx.textBaseline).to.equal('alphabetic');
       });
 
@@ -459,7 +459,7 @@ describe('CanvasContext', function() {
 
   describe('path operations', function() {
 
-    it("aren't rendered before flush", function() {
+    it('aren\'t rendered before flush', function() {
       ctx.beginPath();
       ctx.moveTo(10, 20);
       ctx.lineTo(30, 40);
@@ -502,7 +502,7 @@ describe('CanvasContext', function() {
 
   describe('transformations', function() {
 
-    it("aren't rendered before flush", function() {
+    it('aren\'t rendered before flush', function() {
       ctx.setTransform(1, 2, 3, 4, 5, 6);
       ctx.transform(1, 2, 3, 4, 5, 6);
       ctx.translate(23, 42);

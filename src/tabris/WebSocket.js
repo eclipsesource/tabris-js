@@ -43,7 +43,7 @@ export default class WebSocket {
     }
     const scheme = extractScheme(url);
     if (!(scheme === 'ws' || scheme === 'wss')) {
-      throw new Error("The WebSocket url has to have a scheme of 'ws' or 'wss' but is '" + scheme + "'");
+      throw new Error('The WebSocket url has to have a scheme of \'ws\' or \'wss\' but is \'' + scheme + '\'');
     }
     if (typeof protocol !== 'string' && !Array.isArray(protocol)) {
       throw new Error('The WebSocket protocol has too be a string or an array of strings');
@@ -100,14 +100,14 @@ export default class WebSocket {
 
   send(data) {
     if (this.readyState === CONNECTING) {
-      throw new Error("Can not 'send' WebSocket message when WebSocket state is CONNECTING");
+      throw new Error('Can not \'send\' WebSocket message when WebSocket state is CONNECTING');
     }
     if (typeof data === 'string') {
       this._nativeObject._nativeCall('send', {data});
     } else if (isReadable(data)) {
       this._nativeObject._nativeCall('send', {data: read(data)});
     } else {
-      throw new Error('Data of type ' + typeof data + " is not supported in WebSocket 'send' operation");
+      throw new Error('Data of type ' + typeof data + ' is not supported in WebSocket \'send\' operation');
     }
   }
 

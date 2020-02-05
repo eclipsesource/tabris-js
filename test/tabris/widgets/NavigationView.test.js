@@ -226,7 +226,7 @@ describe('NavigationView', function() {
       });
 
       it('accepts a selector argument', function() {
-        const pages = navigationView.pages('#page1').toArray();
+        pages = navigationView.pages('#page1').toArray();
         expect(pages).to.deep.equal([page1]);
       });
 

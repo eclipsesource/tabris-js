@@ -5,7 +5,7 @@ import {
   isUnion, isTuple, isMap, isIndexedMap, isCallback, getEventTypeName, getJSXChildElementType, supportsJsx,
   getJSXContentType
 } from './common';
-import { join, parse, relative, sep } from 'path';
+import {join, parse, relative, sep} from 'path';
 
 type Link = {href?: string, title?: string};
 type TypeLinks = {[type: string]: Link};
@@ -186,7 +186,7 @@ class DocumentationGenerator {
 
   private copyResources() {
     fs.copySync(this.sourcePath, this.targetPath, {
-      filter: (path) => !/[\\\/]api[\\\/].+\./.test(path) || /[\\\/]img[\\\/].+\./.test(path)
+      filter: (path) => !/[\\/]api[\\/].+\./.test(path) || /[\\/]img[\\/].+\./.test(path)
     });
   }
 
@@ -208,7 +208,7 @@ class DocumentationGenerator {
           `${title}-${method}`,
           signature
         )
-      ));
+        ));
       Object.keys(this.defs[title].events || {}).forEach(event => this.addSnippets(
         `${title}-${event}`,
         this.defs[title].events[event]
@@ -222,7 +222,7 @@ class DocumentationGenerator {
           `${title}-${method}`,
           signature
         )
-      ));
+        ));
       this.addSnippets(title, this.defs[title]);
       if (this.defs[title].links.length === 0) {
         console.warn('No links or snippets given for ' + title);
@@ -615,7 +615,7 @@ class DocumentRenderer {
       `### new ${this.def.type}${this.renderSignature(this.def.constructor.parameters)}\n\n`
     ];
     if (this.def.constructor.parameters && this.def.constructor.parameters.length) {
-      result.push(this.renderMethodParamList(this.def.constructor.parameters, false));
+      result.push(this.renderMethodParamList(this.def.constructor.parameters));
       result.push('\n');
     }
     return result.join('');
@@ -670,7 +670,7 @@ class DocumentRenderer {
       console.log('No description for ' + this.title + ' method ' + name);
     }
     if (method.parameters && method.parameters.length) {
-      result.push('\n\n', this.renderMethodParamList(method.parameters, true), '\n\n');
+      result.push('\n\n', this.renderMethodParamList(method.parameters), '\n\n');
     }
     result.push('\nReturns: ', code(this.renderTypeRef(method.returns)), '\n');
     result.push(this.renderLinks(method.links));
@@ -740,7 +740,7 @@ class DocumentRenderer {
       }
       result.push('. Once set, it cannot change anymore.\n\n');
     }
-    result.push(this.renderLinks(property.links)),
+    result.push(this.renderLinks(property.links));
     result.push('\n\n');
     return result.join('');
   }
@@ -767,11 +767,11 @@ class DocumentRenderer {
     result.push(code(propertyTypeText));
     result.push('\n');
     if ('default' in property) {
-      // tslint:disable-next-line: no-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const def: any = property.default;
       result.push(
         'Default: | ',
-        (def === '' || def === '""' || def === `''`)
+        (def === '' || def === '""' || def === '\'\'')
           ? this.renderTypeLink('(empty string)', 'string')
           : code(this.literal(property.default, property.type)),
         '\n'
@@ -783,7 +783,7 @@ class DocumentRenderer {
         this.renderHtmlLink(
           property.readonly ? 'No'
             : property.const ? 'By Constructor or JSX'
-            : 'Yes',
+              : 'Yes',
           {href: '../widget-basics.html#widget-properties'}
         )
       );
@@ -795,7 +795,7 @@ class DocumentRenderer {
       if (hasChangeEvent(property, isStatic)) {
         result.push(`[\`${name}Changed\`](#${name.toLocaleLowerCase()}changed)`);
       } else {
-        result.push(`Not supported`);
+        result.push('Not supported');
       }
     }
     if (property.jsxContentProperty) {
@@ -929,7 +929,7 @@ class DocumentRenderer {
     return code(type, tag(target));
   }
 
-  private renderMethodParamList(parameters: schema.Parameter[], hasContext: boolean) {
+  private renderMethodParamList(parameters: schema.Parameter[]) {
     return 'Parameter|Type|Description\n-|-|-\n'
       + this.flattenParamList(parameters).map(param => {
         let type = 'any';
@@ -983,7 +983,7 @@ class DocumentRenderer {
             '/examples/',
             link.snippet
           ].join('');
-          const language = `<span class='language tsx'>TSX</span>`;
+          const language = '<span class=\'language tsx\'>TSX</span>';
           return `[${language} ${title}](${gitHubUrl})`;
         } else {
           const snippetPath =
@@ -1231,7 +1231,7 @@ function createImageFigure(def: ExtendedApi, image: string, platform: string): s
   }
 }
 
-// tslint:disable-next-line: no-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isSnippet(obj: any): obj is schema.Snippet {
   return typeof obj.snippet === 'string';
 }

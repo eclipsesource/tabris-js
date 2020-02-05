@@ -38,7 +38,7 @@ function clearAll() {
 
 function showKeys() {
   const keys = [];
-  for (var i = 0; i < localStorage.length; i++) {
+  for (let i = 0; i < localStorage.length; i++) {
     keys.push(`"${localStorage.key(i)}"`);
   }
   output.text = keys.join(', ');

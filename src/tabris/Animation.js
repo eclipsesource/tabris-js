@@ -24,7 +24,7 @@ const PROPERTIES = {
         return value === Infinity ? -1 : value;
       }
     },
-    default: 1,
+    default: 1
   },
   reverse: {type: types.boolean, default: false},
   easing: {

@@ -1,4 +1,4 @@
-import { CollectionView, Composite, contentView, Properties, TextView } from 'tabris';
+import {CollectionView, Composite, contentView, Properties, TextView} from 'tabris';
 
 type Item = {name: string, type: 'section' | 'item'};
 
@@ -48,7 +48,7 @@ class ItemsView extends Composite {
     const bounds = nextSectionCell ? nextSectionCell.absoluteBounds : null;
     this._floatingSection.text = currentSection ? currentSection.name : this._items[0].name;
     this._floatingSection.transform = bounds ? {translationY: Math.min(bounds.top - bounds.height, 0)} : {};
-  }
+  };
 
 }
 

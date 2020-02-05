@@ -1,4 +1,4 @@
-import { AlertDialog, Button, Composite, contentView, permission, Properties, Stack, TextView } from 'tabris';
+import {AlertDialog, Button, Composite, contentView, permission, Properties, Stack, TextView} from 'tabris';
 
 const PERMISSIONS = [
   'camera',
@@ -20,10 +20,10 @@ class PermissionView extends Composite {
     this.append(
       <$>
         <TextView id='name' left right='next() 16' centerY font='14px ' maxLines={2}
-          text={properties.permission.replace('android.permission.', '')}/>
+            text={properties.permission.replace('android.permission.', '')}/>
         <TextView id='status' right='next() 16' centerY alignment='right' font='14px monospace' maxLines={1}/>
         <Button id='requestButton' centerY right style='outline' text='Request'
-          onSelect={() => handlePermissions(this._permission)}/>
+            onSelect={() => handlePermissions(this._permission)}/>
       </$>
     );
     this.update();
@@ -49,8 +49,8 @@ contentView.append(
     {PERMISSIONS.map((entry) => <PermissionView permission={entry}/>)}
     <Button top={24} text='Request all permission' onSelect={() => handlePermissions(...PERMISSIONS)}/>
     <TextView top={device.platform === 'Android' ? 16 : 24} font='italic 14px' alignment='centerX'
-      markupEnabled lineSpacing={1.2} textColor='gray'
-      text='To reset the permissions<br/>clear the app settings or reinstall the app.'/>
+        markupEnabled lineSpacing={1.2} textColor='gray'
+        text='To reset the permissions<br/>clear the app settings or reinstall the app.'/>
   </Stack>
 );
 
@@ -72,8 +72,8 @@ async function requestPermissions(...permissions: string[]) {
   } else if (requestResult === 'declined') {
     AlertDialog.open(
       <AlertDialog title='User needs explanation' buttons={{ok: 'Ok', neutral: 'Request permission'}}
-        message={`Provide more details why the user should grant the ${JSON.stringify(permissions)} permissions.`}
-        onCloseNeutral={() => handlePermissions(...permissions)}/>
+          message={`Provide more details why the user should grant the ${JSON.stringify(permissions)} permissions.`}
+          onCloseNeutral={() => handlePermissions(...permissions)}/>
     ).open();
   } else {
     AlertDialog.open(`The permissions ${JSON.stringify(permissions)} have been denied.`);

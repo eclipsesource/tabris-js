@@ -193,7 +193,7 @@ describe('util', function() {
 
     let org, proxy;
 
-    beforeEach(function () {
+    beforeEach(function() {
       org = new Test();
       proxy = proxify(() => org);
     });

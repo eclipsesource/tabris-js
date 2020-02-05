@@ -38,8 +38,6 @@ describe('NativeObject', function() {
 
   describe('constructor', function() {
 
-    let object;
-
     it('prevents direct instantiation', function() {
       expect(() => {
         new NativeObject();
@@ -72,9 +70,6 @@ describe('NativeObject', function() {
   });
 
   describe('instance', function() {
-
-    /** @type {TestType} */
-    let object;
 
     beforeEach(function() {
       TestType = class extends NativeObject {

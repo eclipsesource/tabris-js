@@ -1,7 +1,5 @@
 import {Canvas, contentView, device} from 'tabris';
 
-const ARC_RADIUS = 20;
-
 contentView.append(
   <Canvas center width={300} height={300} onResize={(e) => drawTexts(e)}/>
 );

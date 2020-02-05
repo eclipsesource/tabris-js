@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /**
  * Implementation based on https://github.com/then/promise
  *
@@ -95,7 +96,7 @@ export default function Promise(fn) {
     _state: {value: 0, writable: true},
     _value: {value: null, writable: true},
     _stackTraceStack: {value: stackTraceStack, writable: false},
-    _deferreds: {value: null, writable: true},
+    _deferreds: {value: null, writable: true}
   });
   if (fn === noop) {return;}
   doResolve(fn, this);
@@ -255,7 +256,7 @@ function doResolve(fn, promise) {
 
 // --- es6-extensions.js ---
 
-//This file contains the ES6 extensions to the core Promises/A+ API
+// This file contains the ES6 extensions to the core Promises/A+ API
 
 /* Static Functions */
 

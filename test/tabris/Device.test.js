@@ -161,7 +161,7 @@ describe('Device', function() {
 
   describe('publishDeviceProperties', function() {
 
-    let target, device;
+    let target;
 
     beforeEach(function() {
       device = {

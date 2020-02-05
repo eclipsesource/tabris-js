@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 const {Button, TextInput, TextView, contentView} = require('tabris');
 
 // Create a worker that receives two numbers, adds them and sends the result back to the main script

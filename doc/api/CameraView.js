@@ -5,5 +5,5 @@ camera.active = true;
 
 new CameraView({
   layoutData: 'stretch',
-  camera: camera
+  camera
 }).appendTo(contentView);

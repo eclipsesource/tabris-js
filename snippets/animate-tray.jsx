@@ -18,11 +18,11 @@ contentView.append(
     <Composite id='shade' stretch background='black' opacity={0}/>
     <Composite id='tray' stretchX top='50%' bottom>
       <Composite id='strap' top centerX width={72} height={56} background='#259b24' elevation={8}
-        onPanVertical={moveTray} onTap={toggleTrayState}>
+          onPanVertical={moveTray} onTap={toggleTrayState}>
         <ImageView id='strapIcon' stretchX bottom top={4} image='resources/arrow-upward-white-24pt@3x.png'/>
       </Composite>
       <Composite id='trayContent' left={16} right={16} top='prev()' bottom background='#8bc34a' elevation={8}
-        onResize={doSomething} onPanVertical={moveTray}>
+          onResize={doSomething} onPanVertical={moveTray}>
         <TextView padding={16} center text='Tray content' font='bold 24px' textColor='white'/>
       </Composite>
     </Composite>
@@ -34,17 +34,17 @@ const shade = $('#shade').only();
 const trayContent = $('#trayContent').only();
 const strapIcon = $('#strapIcon').only();
 
-function doSomething() {
+async function doSomething() {
   const bounds = trayContent.bounds;
   trayHeight = bounds.height;
   if (trayState === 'dragging') {
-    positionTrayInRestingState(2000);
+    await positionTrayInRestingState(2000);
   } else {
     tray.transform = {translationY: trayHeight};
   }
 }
 
-function moveTray({state, translationY, velocityY}) {
+async function moveTray({state, translationY, velocityY}) {
   if (state === 'start' && (trayState === 'up' || trayState === 'down')) {
     trayState = 'dragging';
     dragOffset = tray.transform.translationY - translationY;
@@ -56,13 +56,13 @@ function moveTray({state, translationY, velocityY}) {
     strapIcon.transform = getStrapIconTransform(offsetY);
   }
   if (state === 'end' && trayState === 'dragging') {
-    positionTrayInRestingState(velocityY);
+    await positionTrayInRestingState(velocityY);
   }
 }
 
-function toggleTrayState() {
+async function toggleTrayState() {
   if (trayState === 'up' || trayState === 'down') {
-    positionTrayInRestingState(trayState === 'down' ? -1000 : 1000);
+    await positionTrayInRestingState(trayState === 'down' ? -1000 : 1000);
   }
 }
 
@@ -70,9 +70,11 @@ async function positionTrayInRestingState(velocity) {
   trayState = 'animating';
   const translationY = velocity > 0 ? trayHeight : 0;
   const options = {duration: Math.min(Math.abs(trayHeight / velocity * 1000), 800)};
-  shade.animate({opacity: getShadeOpacity(translationY)}, options);
-  strapIcon.animate({transform: getStrapIconTransform(translationY)}, options);
-  await tray.animate({transform: {translationY: translationY}}, options);
+  await Promise.all([
+    shade.animate({opacity: getShadeOpacity(translationY)}, options),
+    strapIcon.animate({transform: getStrapIconTransform(translationY)}, options),
+    tray.animate({transform: {translationY}}, options)
+  ]);
   trayState = velocity > 0 ? 'down' : 'up';
 }
 

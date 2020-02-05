@@ -82,7 +82,7 @@ describe('WindowTimers', () => {
         expect(nextTimerId).to.be.above(timerId);
       });
 
-      it("returned numbers don't clash with other method", () => {
+      it('returned numbers don\'t clash with other method', () => {
         const otherMethod = isInterval ? 'setTimeout' : 'setInterval';
         const timeoutTimerId = target[otherMethod](callback, delay);
         expect(timeoutTimerId).to.be.above(timerId);

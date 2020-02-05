@@ -415,7 +415,7 @@ describe('WidgetCollection', function() {
     });
 
     it('children() returns empty array for non-composite entries', function() {
-      const collection = new WidgetCollection([new TextView()]);
+      collection = new WidgetCollection([new TextView()]);
 
       expect(collection.children().toArray()).to.deep.equal([]);
     });

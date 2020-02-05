@@ -116,7 +116,8 @@ _notify@[native code]`
       describe('grouping', function() {
 
         it('prints spaces', function() {
-          const groupTitle = 'group message', groupMessage = 'this message should contains prefix spaces';
+          const groupTitle = 'group message',
+            groupMessage = 'this message should contains prefix spaces';
 
           console.group(groupTitle);
           console[method](groupMessage);
@@ -126,7 +127,8 @@ _notify@[native code]`
         });
 
         it('does not print space after groupEnd method', function() {
-          const groupTitle = 'group message', groupMessage = 'this message should contains prefix spaces',
+          const groupTitle = 'group message',
+            groupMessage = 'this message should contains prefix spaces',
             normalMessage = 'this is a normal message without prefix spaces';
 
           console.group(groupTitle);
@@ -179,7 +181,8 @@ _notify@[native code]`
       });
 
       it('does not reset when different label is used', function() {
-        const label = 'my label', secondLabel = 'my second label';
+        const label = 'my label';
+        const secondLabel = 'my second label';
 
         console.count(label);
         console.count(secondLabel);
@@ -235,7 +238,7 @@ _notify@[native code]`
       it('does not print xml tree when object does not have toXML', function() {
         const object = {id: 'widget'};
         console.dirxml(object);
-        expect(nativeConsole.print).to.have.been.calledWithMatch('log', "{ id: 'widget' }");
+        expect(nativeConsole.print).to.have.been.calledWithMatch('log', '{ id: \'widget\' }');
       });
 
     });

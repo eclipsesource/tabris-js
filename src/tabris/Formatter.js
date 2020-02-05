@@ -44,8 +44,8 @@ function tryStringify(arg) {
     if (!CIRCULAR_ERROR_MESSAGE) {
       try {
         const a = {}; a.a = a; JSON.stringify(a);
-      } catch (err) {
-        CIRCULAR_ERROR_MESSAGE = err.message;
+      } catch (innerErr) {
+        CIRCULAR_ERROR_MESSAGE = innerErr.message;
       }
     }
     if (err.name === 'TypeError' && err.message === CIRCULAR_ERROR_MESSAGE) {
@@ -70,8 +70,8 @@ export function format(f) {
   let a = 1;
   let lastPos = 0;
   for (let i = 0; i < f.length;) {
-    if (f.charCodeAt(i) === 37/*'%'*/ && i + 1 < f.length) {
-      if (f.charCodeAt(i + 1) !== 37/*'%'*/ && a >= arguments.length) {
+    if (f.charCodeAt(i) === 37/* '%' */ && i + 1 < f.length) {
+      if (f.charCodeAt(i + 1) !== 37/* '%' */ && a >= arguments.length) {
         ++i;
         continue;
       }
@@ -378,7 +378,7 @@ function formatPrimitive(ctx, value) {
   if (type === 'string') {
     const simple = JSON.stringify(value)
       .replace(/^"|"$/g, '')
-      .replace(/'/g, "\\'")
+      .replace(/'/g, '\\\'')
       .replace(/\\"/g, '"');
     return `'${simple}'`;
   }
@@ -516,9 +516,9 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
     if (/^"[a-zA-Z_][a-zA-Z_0-9]*"$/.test(name)) {
       name = name.substr(1, name.length - 2);
     } else {
-      name = name.replace(/'/g, "\\'")
+      name = name.replace(/'/g, '\\\'')
         .replace(/\\"/g, '"')
-        .replace(/^"|"$/g, "'")
+        .replace(/^"|"$/g, '\'')
         .replace(/\\\\/g, '\\');
     }
   }

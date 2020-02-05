@@ -137,5 +137,5 @@ NativeObject.defineEvents(Picker.prototype, {
     native: true,
     changes: 'selectionIndex',
     changeValue: ev => 'index' in ev ? ev.index : ev.selectionIndex
-  },
+  }
 });

@@ -3,17 +3,17 @@ import {CheckBox, Composite, contentView, ImageView, Slider, Stack, TextView} fr
 contentView.append(
   <Stack stretch alignment='stretchX'>
     <ImageView stretchY zoomEnabled image='resources/salad.jpg' background='#f5f5f5'
-      onZoom={ev => zoomLevelSlider.selection = ev.zoomLevel * 10}/>
+        onZoom={ev => zoomLevelSlider.selection = ev.zoomLevel * 10}/>
     <Stack height={device.platform === 'iOS' ? 196 : undefined} alignment='stretchX'
-      padding={{bottom: 12, top: 12}} background='white' elevation={8}>
+        padding={{bottom: 12, top: 12}} background='white' elevation={8}>
       <CheckBox left={device.platform === 'iOS' ? 16 : 9} height={48} stretchX checked text='Zoom enabled'
-        onCheckedChanged={ev => setZoomEnabled(ev.value)}/>
+          onCheckedChanged={ev => setZoomEnabled(ev.value)}/>
       <LabeledSlider id='zoomLevel' text='Zoom level' selection={10}
-        onSelectionChanged={ev => setZoomLevel(ev.value / 10)}/>
+          onSelectionChanged={ev => setZoomLevel(ev.value / 10)}/>
       <LabeledSlider id='minZoomLevel' text='Min zoom' selection={10}
-        onSelectionChanged={ev => setMinZoomLevel(ev.value / 10)}/>
+          onSelectionChanged={ev => setMinZoomLevel(ev.value / 10)}/>
       <LabeledSlider id='maxZoomLevel' text='Max zoom' selection={30}
-        onSelectionChanged={ev => setMaxZoomLevel(ev.value / 10)}/>
+          onSelectionChanged={ev => setMaxZoomLevel(ev.value / 10)}/>
     </Stack>
   </Stack>
 );

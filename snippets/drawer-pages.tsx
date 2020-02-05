@@ -33,10 +33,10 @@ drawer.append(
       <ImageView center image={{src: 'resources/cloud-check.png', scale: 3}} tintColor='white'/>
     </Composite>
     <CollectionView stretchX bottom top='prev() 8'
-      itemCount={ITEMS.length}
-      cellHeight={48}
-      createCell={createCell}
-      updateCell={updateCell}/>
+        itemCount={ITEMS.length}
+        cellHeight={48}
+        createCell={createCell}
+        updateCell={updateCell}/>
   </$>
 );
 
@@ -71,7 +71,7 @@ function showPage(index: number) {
 
 function MyPage(attributes: Attributes<Page>) {
   return (
-    <Page  {...attributes}>
+    <Page {...attributes}>
       <Button left={16} right={16} top={16} stretchX onSelect={addPage}>Create page in drawer</Button>
     </Page>
   );

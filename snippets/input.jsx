@@ -29,7 +29,7 @@ contentView.append(
     <TextView text='Luggage weight' font='medium 16px'/>
     <Composite height={48}>
       <Slider id='luggage' left right='56' centerY maximum={20} selection={15}
-              onSelectionChanged={e => { e.target.siblings(TextView).only().text = `${e.value} kg`; }}/>
+          onSelectionChanged={e => { e.target.siblings(TextView).only().text = `${e.value} kg`; }}/>
       <TextView right={16} centerY text='15 kg'/>
     </Composite>
     <CheckBox id='vegetarian' text='Vegetarian' checked/>

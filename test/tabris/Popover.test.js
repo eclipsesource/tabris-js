@@ -148,7 +148,7 @@ describe('Popover', () => {
     });
 
     it('with all properties', function() {
-      const popover = jsx.createElement(
+      popover = jsx.createElement(
         Popover,
         {width: 100, height: 200, anchor: widgets[0]}
       );
@@ -165,7 +165,7 @@ describe('Popover', () => {
     });
 
     it('with no properties', function() {
-      const popover = jsx.createElement(Popover);
+      popover = jsx.createElement(Popover);
 
       expect(popover).to.be.instanceOf(Popover);
       expect(client.calls({
@@ -178,7 +178,7 @@ describe('Popover', () => {
     });
 
     it('with widget content', function() {
-      const popup = jsx.createElement(
+      popover = jsx.createElement(
         Popover,
         null,
         widgets[0],
@@ -186,7 +186,7 @@ describe('Popover', () => {
         new WidgetCollection([widgets[3], widgets[4]])
       );
 
-      expect(popup.contentView.children().toArray()).to.deep.equal(widgets);
+      expect(popover.contentView.children().toArray()).to.deep.equal(widgets);
     });
 
     it('with widget content via property', function() {
