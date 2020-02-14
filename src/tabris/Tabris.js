@@ -86,7 +86,7 @@ export default class Tabris extends NativeObject {
   $publishProxies() {
     [
       'contentView', 'drawer', 'navigationBar', 'statusBar', 'permission', 'printer', 'device', 'app', 'localStorage',
-      'secureStorage', 'crypto', 'fs', 'pkcs5', 'sizeMeasurement'
+      'secureStorage', 'crypto', 'fs', 'pkcs5', 'sizeMeasurement', 'devTools'
     ].forEach(name => {
       const value = proxify(() => this['$' + name]);
       Object.defineProperty(this, name, {value});

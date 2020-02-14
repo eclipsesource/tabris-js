@@ -7,6 +7,7 @@ import Printer, {create as createPrinter} from './Printer';
 import Permission , {create as createPermission} from './Permission';
 import App, {create as createApp} from './App';
 import FileSystem, {create as createFileSystem} from './FileSystem';
+import DevTools, {create as createDevTools} from './DevTools';
 import {createConsole} from './Console';
 import Constraint from './Constraint';
 import {addDOMDocument} from './Document';
@@ -117,6 +118,7 @@ const tabrisMain = Object.assign(new Tabris(), {
   Crypto,
   DateDialog,
   Device,
+  DevTools,
   Drawer,
   Event,
   EventObject,
@@ -221,6 +223,7 @@ tabrisMain.on('start', (options) => {
     tabris.$permission = createPermission();
     tabris.JSX.install(createJsxProcessor());
   }
+  tabris.$devTools = createDevTools();
   tabris.$sizeMeasurement = createSizeMeasurement();
   tabris.$device = createDevice();
   tabris.$fs = createFileSystem();

@@ -254,6 +254,7 @@ describe('tabris', function() {
       expect(tabris.app).to.be.instanceOf(tabris.App);
       expect(tabris.device).to.be.instanceOf(tabris.Device);
       expect(tabris.fs).to.be.instanceOf(tabris.FileSystem);
+      expect(tabris.devTools).to.be.instanceOf(tabris.DevTools);
     });
 
     it('creates DOM API singletons', function() {

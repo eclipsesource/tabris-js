@@ -1,0 +1,23 @@
+{
+  "type": "DevTools",
+  "category": "service",
+  "object": "devTools",
+  "extends": "NativeObject",
+  "description": "The `devTools` object provides methods that can assist in App development.",
+  "constructor": {
+    "access": "private"
+  },
+  "methods": {
+    "showUi": {
+      "description": "Shows the developer tools UI if available and not already visible. Returns `true` if the UI is now visible. Returns `false` if the UI can not be shown [because `EnableDeveloperConsole` is not set to `true` in `config.xml`](../build.md#preferences).\n\nNote this causes a re-layout since the [`contentView`](./ContentView.md) shrinks.",
+      "returns": "boolean"
+    },
+    "hideUi": {
+      "description": "Hides the developer tools UI if currently visible. Note that this can cause a re-layout since the [`contentView`](./ContentView.md) grows."
+    },
+    "isUiVisible": {
+      "description": "Returns `true` if the developer tools UI is currently visible.",
+      "returns": "boolean"
+    }
+  }
+}
