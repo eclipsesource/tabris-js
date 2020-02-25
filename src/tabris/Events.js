@@ -131,7 +131,7 @@ export default {
           const value = callback.fn.call(callback.ctx || this, dispatchObject);
           if (value instanceof Promise) {
             value.catch(ex => console.error(
-              `Listener for ${target.constructor.name} event "${type}" rejected with ${ex.stack || ex}`
+              `Listener for ${target.constructor.name} event "${type}" rejected:\n${ex.toString()}`
             ));
           }
           returnValues.push(value);
