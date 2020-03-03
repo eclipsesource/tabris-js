@@ -72,6 +72,11 @@ describe('ImageView', function() {
 
     describe('zoomEnabled', function() {
 
+      it('false in constructor does not warn', function() {
+        new ImageView({zoomEnabled: false});
+        expect(console.warn).not.to.have.been.called;
+      });
+
       it('set false resets zoomLevel, minZoomLevel and maxZoomLevel', function() {
         imageView.minZoomLevel = 2;
         imageView.maxZoomLevel = 5;

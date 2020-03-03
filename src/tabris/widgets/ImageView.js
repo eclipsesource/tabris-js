@@ -56,7 +56,7 @@ NativeObject.defineProperties(ImageView.prototype, {
   zoomLevel: {
     type: {
       convert(value, imageView) {
-        if (!imageView.zoomEnabled) {
+        if (!imageView.zoomEnabled && value !== 1) {
           throw new Error('zoomLevel can not be set when zoomEnabled is false');
         }
         const num = types.number.convert(value);
@@ -74,7 +74,7 @@ NativeObject.defineProperties(ImageView.prototype, {
   minZoomLevel: {
     type: {
       convert(value, imageView) {
-        if (!imageView.zoomEnabled) {
+        if (!imageView.zoomEnabled && value !== 1) {
           throw new Error('minZoomLevel can not be set when zoomEnabled is false');
         }
         const num = types.number.convert(value);
@@ -89,7 +89,7 @@ NativeObject.defineProperties(ImageView.prototype, {
   maxZoomLevel: {
     type: {
       convert(value, imageView) {
-        if (!imageView.zoomEnabled) {
+        if (!imageView.zoomEnabled && value !== 3) {
           throw new Error('maxZoomLevel can not be set when zoomEnabled is false');
         }
         const num = types.number.convert(value);
