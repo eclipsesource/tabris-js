@@ -9,11 +9,21 @@
     "links": [
       {
         "title": "Example with various item types",
-        "snippet": "itempicker",
+        "snippet": "itempicker-jsx",
         "repo": "tabris-decorators"
       },
       {
         "title": "Data Binding Example",
+        "snippet": "bind-itempicker-list-jsx",
+        "repo": "tabris-decorators"
+      },
+      {
+        "title": "Example with various item types (TypeScript variant)",
+        "snippet": "itempicker",
+        "repo": "tabris-decorators"
+      },
+      {
+        "title": "Data Binding Example (TypeScript variant)",
         "snippet": "bind-itempicker-list",
         "repo": "tabris-decorators"
       }

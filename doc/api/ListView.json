@@ -13,11 +13,21 @@
     "links": [
       {
         "title": "Examples with various cell types and selection events",
-        "snippet": "listview-cells",
+        "snippet": "listview-cells-jsx",
         "repo": "tabris-decorators"
       },
       {
         "title": "Data Binding Example",
+        "snippet": "bind-listview-list-jsx",
+        "repo": "tabris-decorators"
+      },
+      {
+        "title": "Examples with various cell types and selection events (TypeScript variant)",
+        "snippet": "listview-cells",
+        "repo": "tabris-decorators"
+      },
+      {
+        "title": "Data Binding Example (TypeScript variant)",
         "snippet": "bind-listview-list",
         "repo": "tabris-decorators"
       }

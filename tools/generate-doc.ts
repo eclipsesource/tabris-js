@@ -983,7 +983,9 @@ class DocumentRenderer {
             '/examples/',
             link.snippet
           ].join('');
-          const language = '<span class=\'language tsx\'>TSX</span>';
+          const language = link.snippet.endsWith('jsx')
+            ? '<span class=\'language jsx\'>JSX</span>'
+            : '<span class=\'language tsx\'>TSX</span>';
           return `[${language} ${title}](${gitHubUrl})`;
         } else {
           const snippetPath =
