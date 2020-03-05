@@ -4,7 +4,7 @@ const DIR = fs.cacheDir + '/logs';
 const FILE = DIR + '/fs.log';
 
 contentView.append(
-  <Stack>
+  <Stack stretch padding={8} spacing={8} alignment='stretchX'>
     <TextInput>Hello World</TextInput>
     <Button onSelect={append}>Append text to file</Button>
     <Button onSelect={view}>View file</Button>
@@ -25,7 +25,9 @@ async function append() {
 }
 
 async function view() {
-  AlertDialog.open(await fs.readFile(FILE, 'utf-8'));
+  if (fs.isFile(FILE)) {
+    AlertDialog.open(await fs.readFile(FILE, 'utf-8'));
+  }
 }
 
 async function clean() {
