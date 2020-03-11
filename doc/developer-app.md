@@ -8,20 +8,13 @@ It is available for free in the app stores – just follow the links below or se
 [![Tabris.js on Google play](https://tabrisjs.com/assets/img/playstore-badge.png)](https://play.google.com/store/apps/details?id=com.eclipsesource.tabris.js)
 [![Tabris.js on Apple App Store](https://tabrisjs.com/assets/img/appstore-badge.png)](https://itunes.apple.com/us/app/tabris-js/id939600018?mt=8)
 
-## The Developer Console
+## The Developer Tools
 
-While running Tabris.js scripts in the Developer App, you can open a developer console by sliding from the right edge of the screen to the left.
-On iPads you may have to start sliding from the edge itself with two fingers. You can also use a four-finger double tap instead.
+In the developer tools toolbar at the top, you'll find an URL input text field and a *Reload* action that loads and starts the running script from scratch. In the overflow menu your find the *Home* action which lets you go back to the Developer App (on Android you can also press the back button). You'll also find the actions to clear, filter and share the log.
 
-In the developer console you'll see messages and errors logged by the running script.
-You can also enter JavaScript expressions that will be evaluated in the context of your script, for example `tabris.device.platform`.
+While running Tabris.js scripts in the Developer App, you can open the log console by tapping on the "console" button in the developer tools toolbar at the top. In it you'll see messages and errors logged by the running script. You can also enter JavaScript expressions that will be evaluated in the context of your script, for example `tabris.device.platform`.
 
-In the header, you'll find a *Reload* action that loads and starts the running script from scratch.
-The *Home* action lets you go back to the Developer App.
-You'll also find actions to filter the log and to share it (e.g. by email).
-Finally, you can enter a different script URL directly in the header.
-
-![Developer Console](img/console-android.png)
+![Developer Tools](img/devtools-android.png)
 
 ## Play with the Playground
 
