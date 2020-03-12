@@ -643,5 +643,8 @@
         "description": "Draws a section (sx, sy, sWidth, sHeight) of the given ImageBitmap at the given coordinates (dx, dy) in the given dimension (dWidth, dHeight)."
       }
     ]
+  },
+  "relatedTypes": {
+    "ImageData": "imagedata"
   }
 }

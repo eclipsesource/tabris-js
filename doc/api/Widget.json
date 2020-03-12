@@ -194,7 +194,7 @@
     },
     "layoutData": {
       "type": "LayoutDataValue",
-      "description": "Provides information for a widget to be used by the parent when determining its size and position. While this property accepts any valid LayoutData expression (see [LayoutDataValue](../types.md#layoutdatavalue), it will always return an instance of the class [LayoutData](./LayoutData.md).\n\n Widget provides an alias property for each property of LayoutData. Setting these properties will change the value of the `layoutData` property, while getting them is the same as accessing them via the `layoutData` property. I.e. `widget.left === widget.layoutData.left`.\n\nThere are multiple presets for layoutData available as static properties on the `LayoutData` class: [center](./LayoutData.md#center)`, [stretch](./LayoutData.md#stretch)`, [stretchX](./LayoutData.md#stretchx)` and [stretchY](./LayoutData.md#stretchy)`. They may be set directly (`new TextView({layoutData: LayoutData.stretch});`), via string (e.g. `new TextView({layoutData: 'stretch'});`), or in JSX via a special shorthand syntax: `<TextView stretch/>`. The presets can be merged with widget properties, e.g. `<TextView stretch left={10}/>` or `<TextView stretchX centerY/>`",
+      "description": "Provides information for a widget to be used by the parent when determining its size and position. While this property accepts any valid LayoutData expression (see ${doc:LayoutDataValue}), it will always return an instance of the class [LayoutData](./LayoutData.md).\n\n Widget provides an alias property for each property of LayoutData. Setting these properties will change the value of the `layoutData` property, while getting them is the same as accessing them via the `layoutData` property. I.e. `widget.left === widget.layoutData.left`.\n\nThere are multiple presets for layoutData available as static properties on the `LayoutData` class: [center](./LayoutData.md#center)`, [stretch](./LayoutData.md#stretch)`, [stretchX](./LayoutData.md#stretchx)` and [stretchY](./LayoutData.md#stretchy)`. They may be set directly (`new TextView({layoutData: LayoutData.stretch});`), via string (e.g. `new TextView({layoutData: 'stretch'});`), or in JSX via a special shorthand syntax: `<TextView stretch/>`. The presets can be merged with widget properties, e.g. `<TextView stretch left={10}/>` or `<TextView stretchX centerY/>`",
       "default": "LayoutData"
     },
     "left": {
@@ -779,5 +779,13 @@
       "title": "Using touch events on a `Widget`",
       "snippet": "widget-longpress-to-drag.js"
     }
-  ]
+  ],
+  "relatedTypes": {
+    "Dimension": "dimension",
+    "BoxDimensions": "boxdimensions",
+    "Bounds": "bounds",
+    "AnimationOptions": "animationoptions",
+    "Transformation": "transformation",
+    "Properties": "propertieswidget"
+  }
 }

@@ -16,7 +16,10 @@ export type BaseConstructor<T> = Function & { prototype: T };
  *    Image scale factor, the image will be scaled down by this factor. The scale will be inferred from the image file name if it follows the pattern "@\<scale\>x", e.g. `"image@2x.jpg"`. The pattern is ignored if `scale`, `width` or `height` are set to a number or if `scale` is set to `"auto"`.
  */
 
- export type ImageLikeObject = {src: string|ImageBitmap|Blob, scale?: number|"auto", width?: number|"auto", height?: number|"auto"};
+
+export type ImageSource = string | ImageBitmap | Blob;
+
+ export type ImageLikeObject = {src: ImageSource, scale?: number | "auto", width?: number | "auto", height?: number | "auto"};
 
 /**
  * Images can be specified as strings or Image/ImageLikeObject.
@@ -28,7 +31,7 @@ export type BaseConstructor<T> = Function & { prototype: T };
  * The scale can be part of the file name in the pattern of "@\<scale\>x", e.g. `"image@2x.jpg"`. The pattern is ignored if `scale`, `width` or `height` are set to a number or if `scale` is set to `"auto"`.
  */
 
-export type ImageValue = ImageLikeObject|Image|string|ImageBitmap|Blob|null;
+export type ImageValue = ImageLikeObject | Image | ImageSource | null;
 
 
 export type ColorArray = [number, number, number, number]|[number, number, number];
@@ -60,7 +63,7 @@ export type ColorLikeObject = {red: number, green: number, blue: number, alpha?:
  *
  * Type guards for `ColorValue` are available as **Color.isColorValue** and **Color.isValidColorValue**
  */
-export type ColorValue = ColorLikeObject|ColorArray|string|'initial'|null;
+export type ColorValue = ColorLikeObject | ColorArray | string | 'initial' | null;
 
 export type FontWeight = 'black' | 'bold' | 'medium' | 'thin' | 'light' | 'normal';
 export type FontStyle = 'italic' | 'normal';
@@ -80,7 +83,12 @@ export type FontLikeObject = {size: number, family?: string[], weight?: FontWeig
  */
 export type FontValue = FontLikeObject|string|'initial'|null;
 
-export type PercentLikeObject = {percent: number};
+export interface PercentLikeObject {
+  percent: number;
+}
+
+export type PercentString = string;
+
 /**
  *
  * Percents can be specified as strings or Percent/Percent-like objects.
@@ -92,8 +100,7 @@ export type PercentLikeObject = {percent: number};
  * A percent string contains a number between and including 0 and 100 and and ends with `%`.
  *
  */
-
-export type PercentValue = string|PercentLikeObject;
+export type PercentValue = PercentString | PercentLikeObject;
 
 /**
  * Defines how the widget should be arranged. When setting the layout of a widget using **LayoutData**, all currently set layout attributes not in the new LayoutData object will be implicitly reset to null (i.e. "not specified").
@@ -101,27 +108,27 @@ export type PercentValue = string|PercentLikeObject;
 export type LayoutDataValue = LayoutDataLikeObject|'center'|'stretch'|'stretchX'|'stretchY';
 
 export interface LayoutDataLikeObject {
-    left?: 'auto'|ConstraintValue;
-    right?: 'auto'|ConstraintValue;
-    top?: 'auto'|ConstraintValue;
-    bottom?: 'auto'|ConstraintValue;
-    centerX?: 'auto'|Offset|true;
-    centerY?: 'auto'|Offset|true;
-    baseline?: 'auto'|SiblingReferenceValue|true;
-    width?: 'auto'|Dimension;
-    height?: 'auto'|Dimension;
+    left?: 'auto' | ConstraintValue;
+    right?: 'auto' | ConstraintValue;
+    top?: 'auto' | ConstraintValue;
+    bottom?: 'auto' | ConstraintValue;
+    centerX?: 'auto' | Offset | true;
+    centerY?: 'auto' | Offset | true;
+    baseline?: 'auto' | SiblingReferenceValue |true;
+    width?: 'auto' | Dimension;
+    height?: 'auto' | Dimension;
 }
 
 export interface LayoutDataProperties {
-    left?: 'auto'|Constraint;
-    right?: 'auto'|Constraint;
-    top?: 'auto'|Constraint;
-    bottom?: 'auto'|Constraint;
-    centerX?: 'auto'|Offset;
-    centerY?: 'auto'|Offset;
-    baseline?: 'auto'|SiblingReference;
-    width?: 'auto'|Dimension;
-    height?: 'auto'|Dimension;
+    left?: 'auto' | Constraint;
+    right?: 'auto' | Constraint;
+    top?: 'auto' | Constraint;
+    bottom?: 'auto' | Constraint;
+    centerX?: 'auto' | Offset;
+    centerY?: 'auto' | Offset;
+    baseline?: 'auto' | SiblingReference;
+    width?: 'auto' | Dimension;
+    height?: 'auto' | Dimension;
 }
 
 export type LinearGradientLikeObject = {
@@ -147,7 +154,7 @@ export type LinearGradientLikeObject = {
  * <linear-gradient> ::= linear-gradient( [ <number>deg | to ( left | top | right | bottom ), ] <color-stop> { , <color-stop> } )
  */
 
-export type LinearGradientValue = LinearGradientLikeObject|string|'initial'|null;
+export type LinearGradientValue = LinearGradientLikeObject | string | 'initial' | null;
 
 
 /**
@@ -213,6 +220,8 @@ export interface Transformation {
 
 export type SelectorString = string;
 
+export type SiblingSelectorString = string;
+
 /**
  * An expression or a predicate function to select a set of widgets.
  */
@@ -235,9 +244,11 @@ export type Offset = number;
 export type PrevString = 'prev()';
 type NextString = 'next()';
 
-export type SiblingReference = Widget | typeof LayoutData.next | typeof LayoutData.prev | SelectorString;
+export type SiblingReferenceSymbol = typeof LayoutData.next | typeof LayoutData.prev
 
-export type SiblingReferenceValue = Widget | typeof LayoutData.next | typeof LayoutData.prev | SelectorString;
+export type SiblingReference = Widget | SiblingReferenceSymbol | SiblingSelectorString;
+
+export type SiblingReferenceValue = Widget | SiblingReferenceSymbol | SiblingSelectorString;
 
 export type ConstraintArray = [SiblingReferenceValue | PercentValue, Offset];
 
@@ -335,7 +346,7 @@ export type BoxDimensions = number | string | [number, number?, number?, number?
 
 }
 
-export interface PropertyChangedEvent<T,U> extends EventObject<T>{
+export interface PropertyChangedEvent<T, U> extends EventObject<T>{
   readonly value: U
 }
 

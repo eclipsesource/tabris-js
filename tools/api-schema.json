@@ -92,7 +92,17 @@
           "additionalProperties": false
         },
         "statics": {"$ref": "#/definitions/statics"},
-        "links": {"$ref": "#/definitions/links"}
+        "links": {"$ref": "#/definitions/links"},
+        "relatedTypes": {
+          "type": "object",
+          "patternProperties": {
+            "^[A-Z][A-Za-z]+$": {
+              "type": "string",
+              "pattern": "^[a-z-]+$"
+            }
+          },
+          "description": "A list of additional types described in this document via markdown. Keys are the type, values are the html/markdown anchors for deep-linking.."
+        }
       },
       "dependencies": {
         "extends": ["type"],

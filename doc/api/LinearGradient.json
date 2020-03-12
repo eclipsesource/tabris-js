@@ -22,7 +22,7 @@
       }
     ]
   },
-  "description": "Represents a linear gradient. See also [LinearGradientValue](../types.html#lineargradientvalue)",
+  "description": "Represents a linear gradient. See also ${doc:LinearGradientValue}",
   "properties": {
     "colorStops": {
       "type": {
@@ -97,5 +97,8 @@
       "title": "Creating various types of linear gradients",
       "snippet": "widget-lineargradient.js"
     }
-  ]
+  ],
+  "relatedTypes": {
+    "LinearGradientValue": "lineargradientvalue"
+  }
 }

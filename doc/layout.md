@@ -26,19 +26,19 @@ Type                 | Default            | Settable
 
 ## LayoutData Properties
 
-All widgets have a property [`layoutData`](./api/Widget.md#layoutdata) that influences how the widget will be arranged. The exact syntax supported by `layoutData` is described [here](./types.md#layoutdatavalue), but most commonly it is assigned a plain object containing any of these properties:
+All widgets have a property [`layoutData`](./api/Widget.md#layoutdata) that influences how the widget will be arranged. The exact syntax supported by `layoutData` is described [here](${doc:LayoutDataValueUrl}), but most commonly it is assigned a plain object containing any of these properties:
 
 Property  | Type
 ----------|--------------------------------------
-left      | [constraint or number](./types.md#constraintvalue)
-top       | [constraint or number](./types.md#constraintvalue)
-right     | [constraint or number](./types.md#constraintvalue)
-bottom    | [constraint or number](./types.md#constraintvalue)
-width     | [number](./types.md#dimension)
-heigh     | [number](./types.md#dimension)
-centerX   | [number](./types.md#offset)
-centerY   | [number](./types.md#offset)
-baseline  | [sibling](./types.md#siblingreferencevalue)
+left      | [constraint or number](${doc:ConstraintValueUrl})
+top       | [constraint or number](${doc:ConstraintValueUrl})
+right     | [constraint or number](${doc:ConstraintValueUrl})
+bottom    | [constraint or number](${doc:ConstraintValueUrl})
+width     | [number](${doc:DimensionUrl})
+heigh     | [number](${doc:DimensionUrl})
+centerX   | [number](${doc:OffsetUrl})
+centerY   | [number](${doc:OffsetUrl})
+baseline  | [sibling](${doc:SiblingReferenceValueUrl})
 
 Example:
 ```js
@@ -66,7 +66,7 @@ How `layoutData` is interpreted depends on the layout manager of the parent and 
 
 ### LayoutData Shorthand
 
-LayoutData supports some [string aliases](./types.md#layoutdata-string) for either centering or stretching the widget:
+LayoutData supports some [string aliases](${doc:LayoutDataStringUrl}) for either centering or stretching the widget:
 
 ```js
 widget.layoutData = 'center';
@@ -106,7 +106,7 @@ widget = <Composite centerX={0} baseline='prev()'/>;
 
 ## Properties "bounds" and "absoluteBounds"
 
-The `layoutData` property always reflects the values set by the application, *not* the actual outcome of the layout process. For example, if `width` is left on `'auto'` it will always be `'auto'`, not visible on-screen widget width. However, that value can be obtained via the read-only properties [`bounds`](./types.md#bounds) and [`absoluteBounds`](./types.md#bounds). They provide the position and size of any widget in relation to its parent or assigned contentView respectively.
+The `layoutData` property always reflects the values set by the application, *not* the actual outcome of the layout process. For example, if `width` is left on `'auto'` it will always be `'auto'`, not visible on-screen widget width. However, that value can be obtained via the read-only properties [`bounds`](${doc:BoundsUrl}) and [`absoluteBounds`](${doc:BoundsUrl}). They provide the position and size of any widget in relation to its parent or assigned contentView respectively.
 
 Note that there is a short delay needed for the layout calculation before changes to `layoutData` are reflected in `bounds`. You can be notified of any changes of `bounds` by listening to the [`resize`](/api/Widget.md#resize) or [`boundsChanged`](/api/Widget.md#boundschanged) events. (They are fired at the same time.) However, there is no event to get notified when the `absoluteBounds` property changes, specifically its `top` and `left` values may change without a `resize` event.
 
@@ -118,7 +118,7 @@ This is the default layout used by `Composite` and most of its subclasses like `
 
 ### Properties "width" and "height"
 
-The `width` and `height` properties define the [dimensions](./types.md#dimension) of the widget in DIPs. The value can be a positive float, `0` or `'auto'`. The default value is `'auto'`.
+The `width` and `height` properties define the [dimensions](${doc:DimensionUrl}) of the widget in DIPs. The value can be a positive float, `0` or `'auto'`. The default value is `'auto'`.
 
 If `width` is `'auto`' (or not specified), the actual width is computed based on the position of the left and right edge defined by the `left` and `right` properties. If either `left` or `right` is also `'auto'`, the widget will shrink to its intrinsic width, i.e. the minimal width required to display its content.
 
@@ -126,7 +126,7 @@ The same logic applies to `height`/`top`/`bottom`.
 
 ### Properties "top", "right", "bottom", "left"
 
-The `top`, `right`, `bottom` and `left` properties put a constraint on the the position of the child's edge. For detailed syntax see [ConstraintValue](./types.md#constraintvalue). The position may be given as an absolute (`number`) or relative (percentage) distance in relation to either the parent's opposing edge or a sibling's opposing edge.
+The `top`, `right`, `bottom` and `left` properties put a constraint on the the position of the child's edge. For detailed syntax see ${doc:ConstraintValue}. The position may be given as an absolute (`number`) or relative (percentage) distance in relation to either the parent's opposing edge or a sibling's opposing edge.
 
 Example Values  | Description
 ----------------|-------------
@@ -150,13 +150,13 @@ Sibling references are resolved dynamically, that is, if a referenced widget is 
 
 These properties allow positioning a widget relative to its parent's center.
 
-A numeric value ([may be 0 or negative](./types.md#offset)) for `centerX` defines the distance of this widget's vertical center from the parent's vertical center in DIPs. The default value is `'auto'`, which indicates that the `left` and `right` properties take priority. Can also be set to `true`, which is treated like `0`.
+A numeric value ([may be 0 or negative](${doc:OffsetUrl})) for `centerX` defines the distance of this widget's vertical center from the parent's vertical center in DIPs. The default value is `'auto'`, which indicates that the `left` and `right` properties take priority. Can also be set to `true`, which is treated like `0`.
 
 The same logic applies for `centerY` in relation to `top`/`bottom`.
 
 ### Property "baseline"
 
-Defines the vertical position of the widget relative to another widget's text baseline. The value must be [a reference to a sibling widget](./types.md#siblingreferencevalue), for example via `'prev()'` or `'#id'`. (For more examples see left/right/top/bottom properties above.) Can also be set to `true`, which is treated like `'prev()'`.
+Defines the vertical position of the widget relative to another widget's text baseline. The value must be [a reference to a sibling widget](${doc:SiblingReferenceValueUrl}), for example via `'prev()'` or `'#id'`. (For more examples see left/right/top/bottom properties above.) Can also be set to `true`, which is treated like `'prev()'`.
 
 This property is only supported for widgets that contain text, i.e. both the actual and the referenced widget must be one of `TextView`, `TextInput`, or `Button`.
 
@@ -168,7 +168,7 @@ This property cannot be used in combination with either of `top`, `bottom`, and 
 
 When the layout definition results in widgets overlapping one another, the z-order (drawing order) is defined by the order in which the widgets are appended to their parent. New widgets will be rendered on top of those widgets that have already been appended. This is the same order as given via the parent's [`children()`](./api/Composite.md#childrenselector) method, with the last child in the returned [`WidgetCollection`](./api/WidgetCollection.md) being placed on top of all other siblings.
 
-This order can be changed via the [`insertAfter`](./api/widget.md#insertafterwidget) and [`insertBefore`](./api/widget.md#insertbeforewidget):
+This order can be changed via the [`insertAfter`](./api/Widget.md#insertafterwidget) and [`insertBefore`](./api/Widget.md#insertbeforewidget):
 
 ```js
 child.insertAfter(parent.children().last()); // now drawn on top of all other children
@@ -210,7 +210,7 @@ Property | Type | Default Value | Description
 `alignment` | `'left'` \| `'centerX'` \| `'stretchX'` \| `'right'` | `'left'` | Determines the horizontal placement of the children
 `spacing` | `number` | `0` | The default vertical distance between the children in device independent pixel
 
-The order in which the children are arranged **vertically** corresponds to the order in which they are appended to the composite. The first child is placed at the very top of the composite, the second below that, etc. The last widget will be placed below all others and any remaining space of the composite (if it is higher than needed) will be left blank. The order may be changed at any time by re-inserting a child at any given position using [`insertAfter`](./api/widget.md#insertafterwidget) and [`insertBefore`](./api/widget.md#insertbeforewidget).
+The order in which the children are arranged **vertically** corresponds to the order in which they are appended to the composite. The first child is placed at the very top of the composite, the second below that, etc. The last widget will be placed below all others and any remaining space of the composite (if it is higher than needed) will be left blank. The order may be changed at any time by re-inserting a child at any given position using [`insertAfter`](./api/Widget.md#insertafterwidget) and [`insertBefore`](./api/Widget.md#insertbeforewidget).
 
 
 The **horizontal** layout of each child is controlled by the `alignment` property. If it is set to `'left'`, `'right'` or `'centerX'`, all children will have their intrinsic width and placed at the left, right or horizontal center of the composite. If `alignment` is `'stretchX'`, all children will take all the available horizontal space. The composite's padding will be respected in all cases.
@@ -237,7 +237,7 @@ The `layoutData` of children managed by a `StackLayout` is interpreted different
 
 ### Properties "width" and "height"
 
-Like in `ConstraintLayout`, the `width` and `height` properties define the [dimensions](./types.md#dimension) of the widget in DIPs.
+Like in `ConstraintLayout`, the `width` and `height` properties define the [dimensions](${doc:DimensionUrl}) of the widget in DIPs.
 
 If `width`/`height` is `'auto`' (or not specified) the widget will shrink to its intrinsic width/height. However, if `width` is `'auto'` and the `alignment` of `StackLayout` is `'stretchX'` the width of the widget is determined by the width of the parent.
 
@@ -284,7 +284,7 @@ Property | Type | Default Value | Description
 `alignment` | `'top'` \| `'centerY'` \| `'stretchY'` \| `'bottom'` | `'top'` | Determines the vertical placement of the children
 `spacing` | `number` | `0` | The default horizontal distance between the children in device independent pixel
 
-The order in which the children are arranged **horizontally** corresponds to the order in which they are appended to the composite. The first child is placed at the very left of the composite, the second to right next to it, etc. The last widget will be placed to the right of all others and any remaining space of the composite (if it is wider than needed) will be left blank. The order may be changed at any time by re-inserting a child at any given position using [`insertAfter`](./api/widget.md#insertafterwidget) and [`insertBefore`](./api/widget.md#insertbeforewidget).
+The order in which the children are arranged **horizontally** corresponds to the order in which they are appended to the composite. The first child is placed at the very left of the composite, the second to right next to it, etc. The last widget will be placed to the right of all others and any remaining space of the composite (if it is wider than needed) will be left blank. The order may be changed at any time by re-inserting a child at any given position using [`insertAfter`](./api/Widget.md#insertafterwidget) and [`insertBefore`](./api/Widget.md#insertbeforewidget).
 
 
 The **vertical** layout of each child is controlled by the `alignment` property. If it is set to `'top'`, `'bottom'` or `'centerY'`, all children will have their intrinsic height and placed at the top, bottom or vertical center of the composite. If `alignment` is `'baseline'` all children will be aligned with the text content of their lefthand neighbor. If `alignment` is `'stretchY'`, all children will take all the available vertical space. The composite's padding will be respected in all cases.
@@ -311,7 +311,7 @@ The `layoutData` of children managed by a `RowLayout` is interpreted differently
 
 ### Properties "width" and "height"
 
-Like in `ConstraintLayout`, the `width` and `height` properties define the [dimensions](./types.md#dimension) of the widget in DIPs.
+Like in `ConstraintLayout`, the `width` and `height` properties define the [dimensions](${doc:DimensionUrl}) of the widget in DIPs.
 
 If `width`/`height` is `'auto`' (or not specified) the widget will shrink to its intrinsic width/height. However, if `height` is `'auto'` and the `alignment` of `RowLayout` is `'stretchY'` the height of the widget is determined by the height of the parent.
 

@@ -29,7 +29,7 @@
       }
     ]
   },
-  "description": "Represents a font. See also [FontValue](../types.html#fontvalue)",
+  "description": "Represents a font. See also ${doc:FontValue}",
   "properties": {
     "size": {
       "type": "number",
@@ -112,6 +112,11 @@
         "ts_returns": "value is FontValue"
       }
     }
+  },
+  "relatedTypes": {
+    "FontValue": "fontvalue",
+    "FontLikeObject": "fontlikeobject",
+    "FontString": "fontstring"
   },
   "links": [
     {

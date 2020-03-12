@@ -7,11 +7,11 @@
       {
         "name": "imageLike",
         "type": "ImageLikeObject",
-        "description": "An image configuration. See [ImageLikeObject](../types.html#imagelikeobject)"
+        "description": "An image configuration. See ${doc:ImageLikeObject}"
       }
     ]
   },
-  "description": "Represents an image. See also [ImageValue](../types.html#imagevalue)",
+  "description": "This class represents an image source and optionally that image's dimension or the scale it should be displayed at. **For convenience there are [various expressions](#imagevalue) that may be used in place of an `Image` instance.** All API that accept these expressions will convert them to a `Image` object.",
   "properties": {
     "src": {
       "type": {
@@ -21,7 +21,7 @@
           "Blob"
         ]
       },
-      "description": "As a string this is a file system path, relative path or URL. [Data URIs](https://en.wikipedia.org/wiki/Data_URI_scheme) are also supported. Relative paths are resolved **relative to ‘package.json’**. On Android the name of a bundled [drawable resource](https://developer.android.com/guide/topics/resources/drawable-resource) can be provided with the url scheme android-drawable, e.g. android-drawable://ic_info_black.\nIf a closed ImageBitmap is given the constructor will throw.\nA given Blob must contain an encoded image.",
+      "description": "As a string this is a file system path, relative path, full URL, a [`Blob`](./api/Blob.md) containing a `jpg` or `png` file, or an [`ImageBitmap`](./api/ImageBitmap.md) instance. [Data URIs](https://en.wikipedia.org/wiki/Data_URI_scheme) are also supported. Relative paths are resolved **relative to ‘package.json’**. On Android the name of a bundled [drawable resource](https://developer.android.com/guide/topics/resources/drawable-resource) can be provided with the url scheme android-drawable, e.g. android-drawable://ic_info_black.\nIf a closed ImageBitmap is given the constructor will throw.\nA given Blob must contain an encoded image.",
       "const": true,
       "readonly": true
     },
@@ -39,7 +39,7 @@
     },
     "scale": {
       "type": {"union": ["number", "'auto'"]},
-      "description": "Image scale factor - the image will be scaled down by this factor. See [ImageLikeObject](../types.md#imagelikeobject) for details",
+      "description": "Image scale factor - the image will be scaled down by this factor. See ${doc:ImageLikeObject} for details",
       "const": true,
       "readonly": true
     }
@@ -57,7 +57,7 @@
         "parameters": [
           {
             "name": "imageValue",
-            "description": "The value to create an Image instance from. See [ImageValue](../types.html#imagevalue)",
+            "description": "The value to create an Image instance from. See ${doc:ImageValue}",
             "type": "ImageValue"
           }
         ],
@@ -89,5 +89,10 @@
         "ts_returns": "value is ImageValue"
       }
     }
+  },
+  "relatedTypes": {
+    "ImageValue": "imagevalue",
+    "ImageLikeObject": "imagelikeobject",
+    "ImageSource": "imagesource"
   }
 }

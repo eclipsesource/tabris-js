@@ -16,11 +16,11 @@
       }
     ]
   },
-  "description": "Represents a constraint on the layout of a widget that the parent uses to determine the position of one of its edges. See also [ConstraintValue](../types.md#constraintvalue)",
+  "description": "Represents a constraint on the layout of a widget that the parent uses to determine the position of one of its edges. See also ${doc:ConstraintValue}",
   "properties": {
     "reference": {
       "type": {"union": ["Percent", "SiblingReference"]},
-      "description": "A reference point from which the offset is added. Either a [SiblingReference](../types.md#siblingreference) - indicating the opposing edge of that widget - or a [`Percent`](./Percent.md) instance, indicating a fraction of the width/height (padding excluded) of the parent widget.\n\nIf the sibling reference is a string it will be a valid selector string and not contain any pseudo selectors   (`'next()'`/`'prev()'`).",
+      "description": "A reference point from which the offset is added. Either a ${doc:SiblingReference} - indicating the opposing edge of that widget - or a ${doc:Percent} instance, indicating a fraction of the width/height (padding excluded) of the parent widget.\n\nIf the sibling reference is a string it will be a valid selector string and not contain any pseudo selectors   (`'next()'`/`'prev()'`).",
       "const": true
     },
     "offset": {
@@ -54,7 +54,7 @@
             "type": "ConstraintValue"
           }
         ],
-        "description": "Creates a new instance of Constraint using [any valid constraint expression](../types.md#constraintvalue). For any other value, including `null` and `'auto'`, the method throws.",
+        "description": "Creates a new instance of Constraint using [any valid constraint expression](${doc:ConstraintValueUrl}). For any other value, including `null` and `'auto'`, the method throws.",
         "returns": "Constraint"
       }
     },
@@ -62,13 +62,24 @@
       "next": {
         "readonly": true,
         "type": "unique symbol",
-        "description": "A [SiblingReference](../types.md#siblingreference) indicating the next widget in the list of children attached to the same parent. Used by the [`reference`](#reference) property. Also available as `LayoutData.next`."
+        "description": "A ${doc:SiblingReference} indicating the next widget in the list of children attached to the same parent. Used by the [`reference`](#reference) property. Also available as `LayoutData.next`."
       },
       "prev": {
         "readonly": true,
         "type": "unique symbol",
-        "description": "A [SiblingReference](../types.md#siblingreference) indicating the previous widget in the list of children attached to the same parent. Used by the [`reference`](#reference) property. Also available as `LayoutData.prev`."
+        "description": "A ${doc:SiblingReference} indicating the previous widget in the list of children attached to the same parent. Used by the [`reference`](#reference) property. Also available as `LayoutData.prev`."
       }
     }
+  },
+  "relatedTypes": {
+    "ConstraintValue": "constraintvalue",
+    "ConstraintLikeObject": "constraintlikeobject",
+    "ConstraintArrayValue": "constraintarrayvalue",
+    "ConstraintString": "constraintstring",
+    "SiblingReferenceValue": "siblingreferencevalue",
+    "SiblingReference": "siblingreference",
+    "SiblingSelectorString": "siblingselectorstring",
+    "SiblingSelectorSymbol": "siblingselectorsymbol",
+    "Offset": "offset"
   }
 }

@@ -27,7 +27,7 @@
       }
     ]
   },
-  "description": "Represents a color. See also [ColorValue](../types.html#colorvalue)",
+  "description": "Represents a color. See also ${doc:ColorValue}",
   "properties": {
     "red": {
       "type": "number",
@@ -127,5 +127,11 @@
       "aqua": {"type": "Color", "const": true, "readonly": true},
       "transparent": {"type": "Color", "const": true, "readonly": true}
     }
+  },
+  "relatedTypes": {
+    "ColorValue": "colorvalue",
+    "ColorLikeObject": "colorlikeobject",
+    "ColorArray": "colorarray",
+    "ColorString": "colorstring"
   }
 }

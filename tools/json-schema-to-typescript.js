@@ -1,5 +1,5 @@
-import {compile} from 'json-schema-to-typescript';
-import fs from 'fs';
+const {compile} = require('json-schema-to-typescript');
+const fs = require('fs');
 
 // Run this script to regenerate api-schema.d.ts after changing api-schema.json:
 // `node tools/json-schema-to-typescript.js`

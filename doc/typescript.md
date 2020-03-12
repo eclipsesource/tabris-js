@@ -101,30 +101,30 @@ Tabris.js specific recommendations:
 
 General TypeScript recommendations:
 * Avoid `any`. An implicit `any` may occur if you do not give a type for a variable, field or parameter, and none can be inferred by assignment.
-* Avoid explicit casting, Use [type guards](http://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types) instead. Tabris.js provides some for [`ColorValue`](./types.md#colorvalue),
+* Avoid explicit casting, Use [type guards](http://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types) instead. Tabris.js provides some for ${doc:ColorValue}.
 * When using third-party libraries you may have to <em>[manually install declaration files](http://www.typescriptlang.org/docs/handbook/declaration-files/consumption.html)</em> to be type safe.
 
 ## Interfaces
 
 When used in TypeScript the tabris module exports the following additional interfaces:
 
- * [`ImageValue`](./types.md#imagevalue), a union of all types accepted as images
- * [`ColorValue`](./types.md#colorvalue), a union of all types accepted as colors
- * [`FontValue`](./types.md#fontvalue), a union of all types accepted as fonts
- * [`PercentValue`](./types.md#percentvalue), a union of all  types accepted as percentages
- * [`PercentValue`](./types.md#percentvalue), a union of all types accepted as percentages
- * [`LinearGradientValue`](./types.md#lineargradientvalue), a union of all types accepted as gradients
- * [`Selector`](./selector.md), a union of all types accepted as gradients
- * [`Bounds`](./types.md#bounds)
- * [`Transformation`](./types.md#transformation)
- * [`Dimension`](./types.md#dimension), alias for `number`
- * [`Offset`](./types.md#offset), alias for `number`
- * [`BoxDimensions`](./types.md#boxdimensions)
- * [`ImageData`](./types.md#imagedata)
- * [`AnimationOptions`](./types.md#animationoptions)
- * [`PropertyChangedEvent<TargetType, ValueType>`](./types.md#propertychangedeventtargettype-valuetype), same as `EventObject<TargetType> & { readonly value: U }`
+ * ${doc:ImageValue}, a union of all types accepted as images
+ * ${doc:ColorValue}, a union of all types accepted as colors
+ * ${doc:FontValue}, a union of all types accepted as fonts
+ * ${doc:PercentValue}, a union of all  types accepted as percentages
+ * ${doc:PercentValue}, a union of all types accepted as percentages
+ * ${doc:LinearGradientValue}, a union of all types accepted as gradients
+ * ${doc:Selector},a union of all types accepted as gradients
+ * ${doc:Bounds}
+ * ${doc:Transformation}
+ * ${doc:Dimension}, alias for `number`
+ * ${doc:Offset}, alias for `number`
+ * ${doc:BoxDimensions}
+ * ${doc:ImageData}
+ * ${doc:AnimationOptions}
+ * [`PropertyChangedEvent<TargetType, ValueType>`](${doc:PropertyChangedEventUrl}), same as `EventObject<TargetType> & { readonly value: U }`
  * Various `{TargetType}{EventName}Event` interfaces, e.g. `PickerSelectEvent`. Only for events with additional parameters.
- * [`Properties<Widget>`](./types#propertieswidget), which is the interface of the properties parameter used by the constructor and `set` method of the given widget.
+ * [`Properties<Widget>`](${doc:PropertiesUrl}), which is the interface of the properties parameter used by the constructor and `set` method of the given widget.
 
 ## Developing with Plugins
 

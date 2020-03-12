@@ -11,7 +11,7 @@
       }
     ]
   },
-  "description": "Provides layout information for a widget to be used by the parent widget when determining its size and position. See also [LayoutDataValue](../types.md#layoutdatavalue)",
+  "description": "Provides layout information for a widget to be used by the parent widget when determining its size and position. See also ${doc:LayoutDataValue}",
   "properties": {
     "left": {
       "type": {"union": ["Constraint", "'auto'"]},
@@ -106,12 +106,12 @@
       "next": {
         "readonly": true,
         "type": "typeof Constraint.next",
-        "description": "A [SiblingReference](../types.md#siblingreference) indicating the next widget in the list of children attached to the same parent. Used by the [`baseline`](#baseline) property. An alias of `Constraint.next`."
+        "description": "A ${doc:SiblingReference} indicating the next widget in the list of children attached to the same parent. Used by the [`baseline`](#baseline) property. An alias of `Constraint.next`."
       },
       "prev": {
         "readonly": true,
         "type": "typeof Constraint.prev",
-        "description": "A [SiblingReference](../types.md#siblingreference) indicating the previous widget in the list of children attached to the same parent. Used by the [`baseline`](#baseline) property. An alias of `Constraint.next`."
+        "description": "A ${doc:SiblingReference} indicating the previous widget in the list of children attached to the same parent. Used by the [`baseline`](#baseline) property. An alias of `Constraint.next`."
       },
       "center": {
         "readonly": true,
@@ -134,5 +134,10 @@
         "description": "An instance of LayoutData that makes a widget as high as its parent (padding excluded). Equivalent to `LayoutData.from({top: 0, bottom: 0})`."
       }
     }
+  },
+  "relatedTypes": {
+    "LayoutDataValue": "layoutdatavalue",
+    "LayoutDataLikeObject": "layoutdatalikeobject",
+    "LayoutDataString": "layoutdatastring"
   }
 }

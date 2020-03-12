@@ -11,7 +11,7 @@
       }
     ]
   },
-  "description": "Represents a percentage. See also [PercentValue](../types.html#percentvalue)",
+  "description": "Represents a percentage. See also ${doc:PercentValue}",
   "properties": {
     "percent": {
       "type": "number",
@@ -56,5 +56,10 @@
         "ts_returns": "value is PercentValue"
       }
     }
+  },
+  "relatedTypes": {
+    "PercentValue": "percentvalue",
+    "PercentLikeObject": "percentlikeobject",
+    "PercentString": "percentstring"
   }
 }

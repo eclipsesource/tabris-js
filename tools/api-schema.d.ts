@@ -94,6 +94,16 @@ export interface Api {
   };
   statics?: Statics;
   links?: Links;
+  /**
+   * A list of additional types described in this document via markdown. Keys are the type, values are the html/markdown anchors for deep-linking..
+   */
+  relatedTypes?: {
+    /**
+     * This interface was referenced by `undefined`'s JSON-Schema definition
+     * via the `patternProperty` "^[A-Z][A-Za-z]+$".
+     */
+    [k: string]: string;
+  };
 }
 /**
  * This interface was referenced by `undefined`'s JSON-Schema definition

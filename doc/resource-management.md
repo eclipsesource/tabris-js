@@ -64,13 +64,13 @@ Create a separate directory dedicated to your resource dictionaries. The example
 
 If your project has a `tsconfig.json` or `jsconfig.json` make sure it contains the compiler option `"resolveJsonModule": true`. This makes it possible to consume the _.json_ files as modules without loosing type safety.
 
-The `index.js` (or `index.ts`) module will take care of converting the raw data to resources dictionaries and exporting them from the `resources` directory. (Hint: A file named "index.js" allows [treating an entire directory as a single module](https://nodejs.org/api/modules.html#modules_folders_as_modules).) An example for this can be found [here](https://github.com/eclipsesource/tabris-js/blob/v${moduleversion}/snippets/resources/index.ts).
+The `index.js` (or `index.ts`) module will take care of converting the raw data to resources dictionaries and exporting them from the `resources` directory. (Hint: A file named "index.js" allows [treating an entire directory as a single module](https://nodejs.org/api/modules.html#modules_folders_as_modules).) An example for this can be found [here](https://github.com/eclipsesource/tabris-js/blob/v${doc:moduleversion}/snippets/resources/index.ts).
 
 > Note: You don't need to follow this exact layout of course, but it is the assumed configuration used in all examples below.
 
 ## FontResources
 
-A font may be defined as a [string or object](./types.md#fontvalue). In the resource dictionary both will be converted to an instance of [Font](./api/Font.md).
+A font may be defined as a [string or object](${doc:FontValueUrl}). In the resource dictionary both will be converted to an instance of [Font](./api/Font.md).
 
 The following snippet shows an example _fonts.json_ file that defines two fonts aliased as "buttonLabel" and "counter". It also showcases selecting a resource based on the platform (operating system) of the device:
 
@@ -117,7 +117,7 @@ myTextView.font = fonts.counter;
 
 ## ColorResources
 
-A color may be defined as a [string or array](./types.md#colorvalue). In the resource dictionary both will be converted to an instance of [Color](./api/Color.md).
+A color may be defined as a [string or array](${doc:ColorValueUrl}). In the resource dictionary both will be converted to an instance of [Color](./api/Color.md).
 
 The following snippet shows an example _colors.json_ file that defines colors via hex notation, in some cases based on the device platform. It also shows how to [back reference](#resource-reference) an already defined resource in the case of the `tint` entry.
 
@@ -222,7 +222,7 @@ const imageResourceBuilder = Resources.build({
   converter: Image.from
 });
 ```
-The resulting `ResourceBuilder` has only one method `from()`, which takes either just the raw resource data, or a "base" dictionary and the resource data. It will create a dictionary of `Image` objects, where the input object may take any valid [`ImageValue`](./types.md#imagevalue) such as strings.
+The resulting `ResourceBuilder` has only one method `from()`, which takes either just the raw resource data, or a "base" dictionary and the resource data. It will create a dictionary of `Image` objects, where the input object may take any valid ${doc:ImageValue} such as strings.
 
 Since there is no JSON schema provided by Tabris.js for this data type there is not much benefit to extracting a _.json_ file. If we don't want to re-used the builder either the entire process of creating an image resource dictionary can be condensed like this:
 

@@ -68,8 +68,6 @@
 
 - title: Data Types
   pages:
-    - title: Value Types
-      url: types.html
 <%= data %>
 
 - title: Native Custom Widgets

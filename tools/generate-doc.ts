@@ -5,7 +5,7 @@ import {
   isUnion, isTuple, isMap, isIndexedMap, isCallback, getEventTypeName, getJSXChildElementType, supportsJsx,
   getJSXContentType
 } from './common';
-import {join, parse, relative, sep, resolve} from 'path';
+import {join, parse, resolve} from 'path';
 
 type Link = {href?: string, title?: string};
 type TypeLinks = {[type: string]: Link};
@@ -76,14 +76,6 @@ const LANG_TYPE_LINKS: TypeLinks = {
   ArrayBuffer: {
     href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer',
     title: mdnTitle('ArrayBuffer')
-  },
-  Properties: {
-    href: '../types.md#propertieswidget',
-    title: 'Properties&lt;Widget&gt;'
-  },
-  PropertyChangedEvent: {
-    href: '../types.md#propertychangedeventtargettype-valuetype',
-    title: 'PropertyChangedEvent&lt;TargetType, ValueType&gt;'
   },
   Selector: {
     href: '../selector.md',
@@ -174,11 +166,10 @@ class DocumentationGenerator {
     this.sourcePath = options.sourcePath;
     this.apiSourcePath = join(options.sourcePath, 'api');
     this.apiTargetPath = join(options.targetPath, 'api');
-    this.copyResources();
-    this.readPropertyTypes();
     this.readSnippets(options.snippetsPath);
     this.defs = readJsonDefs(this.apiSourcePath);
     this.preProcessDefinitions();
+    this.copyResources();
   }
 
   public generate() {
@@ -193,7 +184,10 @@ class DocumentationGenerator {
     });
     getFiles(this.targetPath)
       .filter(path => /\.md$/.test(path))
-      .forEach(path => fs.writeFileSync(path, this.replaceVariables(fs.readFileSync(path).toString())));
+      .forEach(path => fs.writeFileSync(
+        path,
+        this.replaceVariables(fs.readFileSync(path).toString(), '.')
+      ));
   }
 
   private preProcessDefinitions() {
@@ -203,6 +197,13 @@ class DocumentationGenerator {
           this.defs[title].type,
           `${parse(this.defs[title].file).name}.md`,
           title + (this.defs[title].object ? ' Object' : ' Class') + ' Reference'
+        );
+      }
+      for (const related in (this.defs[title].relatedTypes || {})) {
+        this.addTypeLink(
+          related,
+          `${parse(this.defs[title].file).name}.md#${this.defs[title].relatedTypes[related]}`,
+          title + (this.defs[title].object ? ' Object' : ' Class') + ' Type'
         );
       }
       Object.keys(this.defs[title].properties || {}).forEach(property => this.addSnippets(
@@ -236,19 +237,6 @@ class DocumentationGenerator {
     });
   }
 
-  private readPropertyTypes() {
-    const typesFile = join(this.targetPath, 'types.md');
-    const path = relative(this.apiTargetPath, typesFile).replace(sep, '/');
-    const list = fs.readFileSync(typesFile, 'utf-8').match(/^### *(.*)$/gm).map(heading => heading.slice(4));
-    for (const type of list) {
-      this.addTypeLink(
-        type,
-        `${path}#${type.toLowerCase()}`,
-        type + ' Type Reference'
-      );
-    }
-  }
-
   private readSnippets(path: string) {
     fs.readdirSync(path).forEach(snippet => {
       if (snippet.endsWith('.js') || snippet.endsWith('.jsx') || snippet.endsWith('.ts') || snippet.endsWith('.tsx')) {
@@ -266,7 +254,10 @@ class DocumentationGenerator {
       try {
         if (!this.defs[title].interface) {
           const targetFile = join(this.apiTargetPath, parse(this.defs[title].file).name + '.md');
-          fs.writeFileSync(targetFile, this.replaceVariables(new DocumentRenderer(this, title).render()));
+          fs.writeFileSync(
+            targetFile,
+            this.replaceVariables(new DocumentRenderer(this, title).render(), './api')
+          );
         }
       } catch (ex) {
         throw new Error(title + ': ' + ex.message + '\n' + ex.stack);
@@ -274,8 +265,24 @@ class DocumentationGenerator {
     });
   }
 
-  private replaceVariables(contents) {
-    return contents.replace(/\$\{moduleversion\}/g, this.version);
+  private replaceVariables(contents: string, cwd: '.' | './api'): string {
+    const apiDir = cwd === '.' ? './api/' : './';
+    return contents.replace(/\$\{doc:[A-Za-z]+\}/g, subString => {
+      const varName = subString.slice(6, -1);
+      if (varName === 'moduleversion') {
+        return this.version;
+      }
+      if (this.typeLinks[varName]) {
+        const href = this.typeLinks[varName].href;
+        const link = href.startsWith('http') ? href : apiDir + href;
+        return '[`' + varName + '`](' + link + ')';
+      }
+      if (varName.endsWith('Url')) {
+        const href = this.typeLinks[varName.slice(0, -3)].href;
+        return href.startsWith('http') ? href : apiDir + href;
+      }
+      throw new Error('No replacement for ' + subString);
+    });
   }
 
   private renderIndex() {
@@ -396,7 +403,8 @@ class DocumentRenderer {
       this.renderExamples(),
       this.renderLinks(this.def.links),
       this.renderConstructor(),
-      this.renderMembers()
+      this.renderMembers(),
+      this.renderInfoFile('.post')
     ].filter(value => !!value).join('\n');
   }
 
@@ -404,8 +412,8 @@ class DocumentRenderer {
     return this.def.description ? this.def.description + '\n\n' : '';
   }
 
-  private renderInfoFile() {
-    const infoFile = join(this.gen.apiSourcePath, parse(this.def.file).name + '.md');
+  private renderInfoFile(postfix = '') {
+    const infoFile = join(this.gen.apiSourcePath, parse(this.def.file).name + postfix + '.md');
     if (!fs.existsSync(infoFile)) {
       return '';
     }
@@ -614,7 +622,7 @@ class DocumentRenderer {
       this.renderAllMethods(),
       this.renderAllProperties(),
       this.renderAllEvents()
-    ].filter(value => !!value).join('\n');
+    ].filter(value => !!value).join('\n') + '\n';
   }
 
   private renderConstructor() {
@@ -1266,7 +1274,7 @@ function fileExt(path: string) {
 }
 
 // Source: https://stackoverflow.com/a/45130990
-function getFiles(dir) {
+function getFiles(dir): string[] {
   const dirents = fs.readdirSync(dir, {withFileTypes: true});
   const files = dirents.map((dirent) => {
     const res = resolve(dir, dirent.name);

@@ -47,7 +47,7 @@ The Node.js implementation is the standard that Tabris.js follows and aims to be
 
 ## Virtual Modules
 
-A module is usually define by a file, but it is also possible to define a module at runtime at any path. This is done using [`Module.define`](./api/Module#definepathexports):
+A module is usually define by a file, but it is also possible to define a module at runtime at any path. This is done using [`Module.define`](./api/Module#definepath-exports):
 
 ```js
 const {Module} = require('tabris');
