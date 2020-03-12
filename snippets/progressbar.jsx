@@ -10,12 +10,3 @@ setInterval(() => {
   const selection = progressBar.selection + 1;
   progressBar.selection = selection > 300 ? 0 : selection;
 }, 20);
-
-throw new Error(
-  <$>
-    Foo Bar Foo
-    Foo Bar Foo
-    Foo Bar Foo
-    Foo Bar Foo
-  </$>
-);
