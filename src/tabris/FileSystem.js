@@ -37,6 +37,14 @@ export default class FileSystem extends NativeObject {
     return this._nativeGet('cacheDir');
   }
 
+  get externalFileDirs() {
+    return this._nativeGet('externalFileDirs');
+  }
+
+  get externalCacheDirs() {
+    return this._nativeGet('externalCacheDirs');
+  }
+
   readFile(path, encoding) {
     return new Promise((resolve, reject) => {
       if (arguments.length < 1) {

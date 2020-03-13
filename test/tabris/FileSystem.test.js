@@ -59,6 +59,27 @@ describe('FileSystem', function() {
 
     }));
 
+    ['externalCacheDirs', 'externalFileDirs'].forEach(prop => describe(prop, function() {
+
+      it('gets native property', function() {
+        stub(client, 'get').callsFake(() => ['/path']);
+        expect(fs[prop]).to.deep.equal(['/path']);
+      });
+
+      it('does not set native property', function() {
+        spy(client, 'set');
+        fs[prop] = ['/other'];
+        expect(client.set).to.not.have.been.called;
+      });
+
+      it('can not be modified', function() {
+        stub(client, 'get').callsFake(() => ['/path']);
+        fs[prop] = ['/other'];
+        expect(fs[prop]).to.deep.equal(['/path']);
+      });
+
+    }));
+
     it('has no listener registration functions for static properties', function() {
       expect(fs.onCacheDirChanged).to.be.undefined;
       expect(fs.onFilesDirChanged).to.be.undefined;
