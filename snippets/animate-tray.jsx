@@ -70,11 +70,13 @@ async function positionTrayInRestingState(velocity) {
   trayState = 'animating';
   const translationY = velocity > 0 ? trayHeight : 0;
   const options = {duration: Math.min(Math.abs(trayHeight / velocity * 1000), 800)};
-  await Promise.all([
-    shade.animate({opacity: getShadeOpacity(translationY)}, options),
-    strapIcon.animate({transform: getStrapIconTransform(translationY)}, options),
-    tray.animate({transform: {translationY}}, options)
-  ]);
+  if (tray.transform.translationY !== translationY) { // workaround eclipsesource/tabris-js#1988
+    await Promise.all([
+      shade.animate({opacity: getShadeOpacity(translationY)}, options),
+      strapIcon.animate({transform: getStrapIconTransform(translationY)}, options),
+      tray.animate({transform: {translationY}}, options)
+    ]);
+  }
   trayState = velocity > 0 ? 'down' : 'up';
 }
 
