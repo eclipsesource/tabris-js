@@ -77,7 +77,7 @@
       "description": "Fired when the app becomes invisible. Either because another app is in the foreground or the user has returned to the home screen."
     },
     "terminate": {
-      "description": "Fired when the app is being destroyed. After this callback no more interaction with the app is possible."
+      "description": "Fired when the app is being destroyed. After this callback no more interaction with the app is possible.\n\n On Android the terminate event is fired when closing the app via the back navigation or when the system shuts down the app to reclaim memory. In case the app is hard killed by eg. clearing it from the app switcher, the event is not fired.\n\n On iOS the event might not always be fired reliably due to the scheduling behavior of the underlying operating system.\n\nIt is therefore recommended to use the event to clean up resources but not to rely on it for mission critical operations."
     },
     "keyPress": {
       "description": "Fired when a hardware key is pressed. Note that these events stem from physical hardware, not from the virtual keyboard.\n\nWhen invoking `event.preventDefault()` the key event is not propagated to the widget hierarchy. However, a `TextInput` with focus will still receive the key event.",
