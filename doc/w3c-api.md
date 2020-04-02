@@ -10,7 +10,7 @@ In JavaScript there is always an object that represents the global scope. All gl
 
 ## console object
 
-The Tabris console object implements a subset of the WHATWG Console standard. As in the browser, messages can be logged to the [developer console](developer-app.md#the-developer-console) with different methods indicating different log levels:
+The Tabris console object implements a subset of the WHATWG Console standard. As in the browser, messages can be logged to the [developer console](developer-app.md#the-developer-tools) with different methods indicating different log levels:
 
 ```js
 console.log("A log message");

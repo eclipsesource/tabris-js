@@ -168,7 +168,7 @@ In addition to the settings described in the [Cordova config.xml Guide](http://c
 
 | Name                   | Allowed Values | Default Value | Description |
 |------------------------|----------------|---------------|-------------|
-| EnableDeveloperConsole | true/false     | false         | Enables/Disables the [Tabris.js Developer Console](developer-app.md#the-developer-console). Setting the value to `$IS_DEBUG` will make the value follow the value for [debug mode](#settings)|
+| EnableDeveloperConsole | true/false     | false         | Enables/Disables the [Tabris.js Developer Tools](developer-app.md#the-developer-tools). Setting the value to `$IS_DEBUG` will make the value follow the value for [debug mode](#settings)|
 | UseStrictSSL           | true/false     | true          | Activate/Deactivate SSL certificate validation on [XHR](w3c-api.md#xmlhttprequest). When disabled self signed SSL certificates are accepted. Should be enabled in production. |
 
 Example:
@@ -219,7 +219,7 @@ After your app has become valid, you are ready to execute the first build. Just 
 * **Environment Variables:** Key/Value pairs that will be stored and transferred encrypted to the build machines. They can be used within the config.xml or custom hooks. Use cases are adding plug-ins from private git repositories or handling access keys.
 * **Builds to keep:** Specifies the number of builds that should be kept before deleting them automatically.
 * **Tabris.js Version:** The Tabris.js *client* version to use in the app. In contrast to the "tabris" dependency to your `package.json` which defines the version of the JavaScript module, this setting defines the version of the native client that will interpret your JavaScript code. In most cases, the value `latest` is good enough here. But if you want to stick to a fixed Tabris.js version you can configure it here.
-* **Debug:** Enables the *debug mode*. If set to `ON`, your app will be built including debug symbols and enabled [developer console](./developer-app.md#the-developer-console). (Assuming `EnableDeveloperConsole` is set to `$IS_DEBUG` in your [config.xml](#preferences).) That enables [code side-loading](./developer-app.md#code-sideloading), logging and [attaching a debugger](./debug.md). Please be aware that debug versions can not be submitted to the app stores. Debug `OFF` means your app will be built to be ready for release.
+* **Debug:** Enables the *debug mode*. If set to `ON`, your app will be built including debug symbols and enabled [developer tools](./developer-app.md#the-developer-tools). (Assuming `EnableDeveloperConsole` is set to `$IS_DEBUG` in your [config.xml](#preferences).) That enables [code side-loading](./developer-app.md#code-sideloading), logging and [attaching a debugger](./debug.md). Please be aware that debug versions can not be submitted to the app stores. Debug `OFF` means your app will be built to be ready for release.
 
 ## Local Build
 

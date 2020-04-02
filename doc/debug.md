@@ -2,24 +2,14 @@
 ---
 # Debugging Tabris.js
 
-Tabris.js provides a global [`console`](./api/console.md) object with various useful logging functions including `console.trace()`. The [developer console](./developer-app.md#the-developer-console) also allows entering javascript commands at runtime, as does the CLI using the `-i` switch, e.g. `tabris serve -i`. Since the tabris module exports are available as a global object the application state can be inspected. For example:
+Tabris.js provides a global [`console`](./api/console.md) object with various useful logging functions including `console.trace()`. The [developer console](./developer-app.md#the-developer-tools) also allows entering javascript commands at runtime, as does the CLI using the `-i` switch, e.g. `tabris serve -i`. Since the tabris module exports are available as a global object the application state can be inspected. For example:
 
 Print the app version:
 ```
 console.log(tabris.app.version);
 ```
 
-Print main UI tree:
-```
-console.dirxml(tabris.contentView);
-```
-
-Inspect localStorage:
-```
-console.dirxml(localStorage);
-```
-
-However, for more complex applications it is sometimes requires to use a full-fledged debugger that lets you pause script execution.
+The CLI also provides [various keyboard shortcuts](./CLI.md#keyboard-shortcuts) to interact with the connect app.
 
 ## Android
 
@@ -115,7 +105,7 @@ Select the _"Debug"_ button and WebStorm will connect to the Tabris.js debugger.
 * Requires macOS
 * Safari Browser, with the developer Menu enabled under "Safari -> Preferences -> Advanced".
 
-#### iOS device 
+#### iOS device
 
 * An installed Tabris.js app that has been built in debug mode, [either locally](./build.md#local-build) or via the [Tabris.js build service](./build.md#build-service).
 * Web Inspector enabled in "Settings -> Safari -> Advanced"

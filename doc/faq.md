@@ -102,7 +102,7 @@ No, plug-ins that access the DOM of an HTML page won't work because Tabris.js us
 You can test several prepackaged plug-ins directly from the [Tabris.js developer app](../latest/developer-app.md).
 These include camera, device motion and more (see [Default Plug-ins](../latest/cordova.md#cordova-plug-ins-support)).
 
-In order to test additional plug-ins you will need to [add them to your `config.xml`](../latest/build.md#integrating-cordova-plugins) and [build the app](build.md). If [you enable the debug option](../latest/build.md#settings), the developer console will still be available and allow you to load newer app code via [developer console](../latest/developer-app.md#the-developer-console) without re-building the entire app.
+In order to test additional plug-ins you will need to [add them to your `config.xml`](../latest/build.md#integrating-cordova-plugins) and [build the app](build.md). If [you enable the debug option](../latest/build.md#settings) you can still side load newer app code via the [developer tool bar](../latest/developer-app.md#the-developer-tools) without re-building the entire app.
 
 ### Can I create my own native plugins?
 
