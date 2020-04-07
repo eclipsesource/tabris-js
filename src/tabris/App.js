@@ -1,6 +1,8 @@
 import NativeObject from './NativeObject';
 import {toValueString} from './Console';
+import File from './File';
 import {types} from './property-types';
+import {getBytes} from './util';
 
 const CERTIFICATE_ALGORITHMS = ['RSA2048', 'RSA4096', 'ECDSA256'];
 
@@ -58,6 +60,48 @@ export default class App extends NativeObject {
         onSuccess: () => resolve()
       });
     });
+  }
+
+  share(data) {
+    return new Promise((resolve, reject) => {
+      if (arguments.length < 1) {
+        throw new Error('The share functions requires a data object');
+      }
+      if (typeof data !== 'object'
+        || (data.text == null && data.title == null && data.url == null && data.files == null)) {
+        throw new TypeError(
+          `Invalid data object: ${JSON.stringify(data)}. At least one of title, text, url or files is required`
+        );
+      }
+      this._nativeCall('share', {
+        data: this._prepareShareData(data),
+        onSuccess: (target) => resolve(target),
+        onError: (err) => reject(new Error(err))
+      });
+    });
+  }
+
+  _prepareShareData(data) {
+    const shareData = {};
+    if (data.title) {
+      shareData.title = String(data.title);
+    }
+    if (data.text) {
+      shareData.text = String(data.text);
+    }
+    if (data.url) {
+      shareData.url = String(data.url);
+    }
+    if (data.files) {
+      if (!Array.isArray(data.files)) {
+        throw new Error('The share data "files" is not an array');
+      }
+      if (!data.files.every((file) => file instanceof File)) {
+        throw new Error('The share data "files" array can only contain File objects');
+      }
+      shareData.files = data.files.map(file => ({name: file.name, type: file.type, data: getBytes(file)}));
+    }
+    return shareData;
   }
 
   getResourceLocation(path) {

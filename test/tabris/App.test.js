@@ -1,6 +1,7 @@
 import {expect, mockTabris, restore, spy, stub} from '../test';
 import NativeObject from '../../src/tabris/NativeObject';
 import ClientMock from './ClientMock';
+import File from '../../src/tabris/File';
 import App, {create} from '../../src/tabris/App';
 
 describe('App', function() {
@@ -372,6 +373,80 @@ describe('App', function() {
       return app.launch('tel:123-45-67').then(expectFail, err => {
         expect(err).to.be.instanceOf(Error);
         expect(err.message).to.equal('Bang');
+      });
+    });
+
+  });
+
+  describe('share', function() {
+
+    it('rejects if parameter missing', function() {
+      return app.share().then(expectFail, error => {
+        expect(error.message).to.equal('The share functions requires a data object');
+      });
+    });
+
+    it('rejects invalid data type`', function() {
+      return app.share({key: 'value'}).then(expectFail, error => {
+        expect(error.message).to.equal('Invalid data object: {"key":"value"}.' +
+          ' At least one of title, text, url or files is required');
+      });
+    });
+
+    it('rejects invalid files type`', function() {
+      return app.share({files: 'value'}).then(expectFail, error => {
+        expect(error.message).to.equal('The share data "files" is not an array');
+      });
+    });
+
+    it('rejects invalid files values`', function() {
+      return app.share({files: ['value']}).then(expectFail, error => {
+        expect(error.message).to.equal('The share data "files" array can only contain File objects');
+      });
+    });
+
+    it('calls native `share`', function() {
+      spy(client, 'call');
+
+      app.share({title: 'hello', text: 'text', url: 'url'});
+
+      expect(client.call).to.have.been.calledWithMatch(app.cid, 'share', {
+        data: {title: 'hello', text: 'text', url: 'url'}
+      });
+    });
+
+    it('calls native `share` with stringified values', function() {
+      spy(client, 'call');
+
+      app.share({title: 1, text: true});
+
+      expect(client.call).to.have.been.calledWithMatch(app.cid, 'share', {
+        data: {title: '1', text: 'true'}
+      });
+    });
+
+    it('calls native `share` with destructured files', function() {
+      spy(client, 'call');
+
+      app.share({files: [new File([new Uint8Array(1)], 'file.jpg', {type: 'image/jpeg'})]});
+
+      expect(client.call).to.have.been.calledWithMatch(app.cid, 'share', {
+        data: {files: [{data: new Uint8Array(1).buffer, name: 'file.jpg', type: 'image/jpeg'}]}
+      });
+    });
+
+    it('resolves on success', function() {
+      stub(client, 'call').callsFake((id, method, args) => args.onSuccess('success'));
+      return app.share({title: 'hello'}).then(result => {
+        expect(result).to.equal('success');
+      });
+    });
+
+    it('rejects in case of error', function() {
+      stub(client, 'call').callsFake((id, method, args) => args.onError('incorrect'));
+      return app.share({title: 'hello'}).then(expectFail, err => {
+        expect(err).to.be.instanceOf(Error);
+        expect(err.message).to.equal('incorrect');
       });
     });
 

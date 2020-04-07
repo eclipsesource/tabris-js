@@ -160,6 +160,50 @@
       "ts_returns": "Promise<void>",
       "description": "Asks the operating system to open the given URL in an external app. Operating systems usually support a variety of URL schemes including `http`, `https`, `mailto`, `tel`, and `sms`. Apps can also register for custom URL schemes."
     },
+    "share": {
+      "parameters": [
+        {
+          "name": "data",
+          "type": {
+            "map": {
+              "title": {
+                "type": "string",
+                "description": "An informative text to show in the share dialog.",
+                "optional": true
+              },
+              "text": {
+                "type": "string",
+                "description": "A piece of text to share with another app.",
+                "optional": true
+              },
+              "url": {
+                "type": "string",
+                "description": "A url to share with another app. On iOS the content of the `url` is previewed in the native share dialog. On Android it is treated as regular text. When both `text` and `url` are given on Android the two strings are concatenated with a blank space as defined in the [W3C Web Share API](https://www.w3.org/TR/web-share/).",
+                "optional": true
+              },
+              "files": {
+                "type": {
+                  "interface": "Array",
+                  "generics": [
+                    "File"
+                  ]
+                },
+                "description": "An array of `File` objects to share with another app. The files need to have a `name` and mime `type` set.",
+                "optional": true
+              }
+            }
+          },
+          "description": "The data to share. The object must contain at least one of the properties: `title`, `text`, `url` or `files`."
+        }
+      ],
+      "returns": {
+        "interface": "Promise",
+        "generics": [
+          "string"
+        ]
+      },
+      "description": "Asks the operating system to share data with another installed app. The returned promise resolves successfully when the data was shared with another app. The resolved promise contains a string providing platform specific information about the share target. In case sharing was not possible or the share operation has been canceled by the user, the promise is rejected with an appropriate error message.\n\nThe behavior of this API follows the [W3C Web Share API](https://www.w3.org/TR/web-share/).\n\nIn order to be able to share an image to the photo app on iOS, the Tabris.js app has to include the text string `NSPhotoLibraryAddUsageDescription` in its plist file. The string is used in the native permission dialog. See the [`'camera' permissions`](../permissions.md#category-camera) docs for examples on how to configure the string."
+    },
     "reload": {
       "parameters": [
         {
@@ -221,6 +265,10 @@
     {
       "title": "Register and use an external font",
       "snippet": "textview-font-external.js"
+    },
+    {
+      "title": "Share various types of data with the `share()` API",
+      "snippet": "share.jsx"
     }
   ]
 }

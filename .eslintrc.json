@@ -30,7 +30,8 @@
     "module": false,
     "createImageBitmap": false,
     "require": false,
-    "FormData": false
+    "FormData": false,
+    "File": false
   },
   "rules": {
     "no-console": "off",
