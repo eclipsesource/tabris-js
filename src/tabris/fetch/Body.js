@@ -3,8 +3,9 @@
  * Implementation based on https://github.com/github/fetch
  */
 import TextDecoder from '../TextDecoder';
-import {isReadable, read} from '../util';
+import {isReadable, read, setBytes} from '../util';
 import Blob from '../Blob';
+import TextEncoder from '../TextEncoder';
 
 export default class Body {
 
@@ -46,11 +47,19 @@ export default class Body {
   }
 
   blob() {
-    return this.arrayBuffer().then(buffer => new Blob([buffer]));
+    return this.arrayBuffer().then(buffer => {
+      const blob = new Blob([], {
+        type: this.headers ? this.headers.get('content-type') : ''
+      });
+      setBytes(blob, buffer);
+      return blob;
+    });
   }
 
   arrayBuffer() {
-    return this.$consumed() || Promise.resolve(this._bodyBuffer.slice(0));
+    return this.$consumed() || Promise.resolve(this._bodyBuffer ?
+      this._bodyBuffer :
+      TextEncoder.encode(this._bodyText, this._encoding));
   }
 
   get bodyUsed() {

@@ -1,6 +1,7 @@
-import {expect} from '../../test';
+import {expect, mockTabris, restore} from '../../test';
 import Response from '../../../src/tabris/fetch/Response';
 import Headers from '../../../src/tabris/fetch/Headers';
+import ClientMock from '../ClientMock';
 
 describe('Response', function() {
 
@@ -210,6 +211,30 @@ describe('Response', function() {
 
       it('rejects non-redirect status codes', function() {
         expect(() => Response.redirect('http://example.com/', 200)).to.throw(Error, 'Invalid status code');
+      });
+
+    });
+
+    describe('blob', function() {
+
+      beforeEach(function() {
+        mockTabris(new ClientMock());
+        response = new Response('{foo: "bar"}', {
+          headers: {'content-type': 'application/json'}
+        });
+      });
+
+      afterEach(restore);
+
+      it('contains data', function() {
+        response.blob()
+          .then(blob => blob.text())
+          .then(text => expect(text).to.equal('{foo: "bar"}'));
+      });
+
+      it('contains type', function() {
+        response.blob()
+          .then(blob => expect(blob.type).to.equal('application/json'));
       });
 
     });
