@@ -59,9 +59,9 @@ describe('SizeMeasurement', function() {
       });
     });
 
-    it('rejects missing text property', function() {
+    it('rejects missing text string property', function() {
       return sizeMeasurement.measureTexts([{font: '12px'}]).then(expectFail, error => {
-        expect(error.message).to.equal('A text measurement configuration has to provide a "text" value');
+        expect(error.message).to.equal('A text measurement configuration has to provide a "text" string');
       });
     });
 
@@ -107,7 +107,7 @@ describe('SizeMeasurement', function() {
 
     it('throws on missing text property', function() {
       expect(() => sizeMeasurement.measureTextsSync([{font: '12px'}]))
-        .to.throw('A text measurement configuration has to provide a "text" value');
+        .to.throw('A text measurement configuration has to provide a "text" string');
     });
 
     it('calls native measureTextsSync', function() {

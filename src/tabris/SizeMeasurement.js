@@ -60,8 +60,8 @@ export default class SizeMeasurement extends NativeObject {
 }
 
 function checkText(text) {
-  if (!text) {
-    throw new Error('A text measurement configuration has to provide a "text" value');
+  if (typeof text !== 'string') {
+    throw new Error('A text measurement configuration has to provide a "text" string');
   }
   return text;
 }
