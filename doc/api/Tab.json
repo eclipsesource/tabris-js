@@ -94,7 +94,7 @@
     },
     "badge": {
       "type": "number",
-      "description": "A badge to attach on the tab. The property only has an effect when the parent `TabFolder` has its `tabBarLocation` set to `bottom`. Setting the `badge` to `0` hides the badge. The background color of the badge can be controlled with the `badgeColor` property."
+      "description": "A badge to attach on the tab. Setting the `badge` to `0` hides the badge. The background color of the badge can be controlled with the `badgeColor` property.\n\nOn iOS the property only has an effect when the parent `TabFolder` has its `tabBarLocation` set to `bottom`."
     },
     "badgeColor": {
       "type": "ColorValue",
