@@ -42,6 +42,7 @@ module.exports = function(grunt) {
       snippets: 'snippets/',
       schema: 'tools/api-schema.json',
       propertyTypes: 'typings/propertyTypes.d.ts',
+      resourcesDataTypes: 'src/tabris/resourcesDataTypes.d.ts',
       reExports: 'typings/reExports.d.ts',
       globalTypings: 'typings/global/*.d.ts',
       target: 'build/doc/'
@@ -180,9 +181,15 @@ module.exports = function(grunt) {
     const files = join(grunt.config('doc').source, 'api');
     const propertyTypes = grunt.file.read(grunt.config('doc').propertyTypes);
     const reExports = grunt.file.read(grunt.config('doc').reExports);
+    const resourcesDataTypes = grunt.file.read(grunt.config('doc').resourcesDataTypes);
     const globalTypeDefFiles = grunt.file.expand(grunt.config('doc').globalTypings);
     try {
-      generateDts({files, localTypeDefFiles: propertyTypes + '\n\n' + reExports, globalTypeDefFiles, version});
+      generateDts({
+        files,
+        localTypeDefFiles: [propertyTypes, reExports, resourcesDataTypes].join('\n\n'),
+        globalTypeDefFiles,
+        version
+      });
     } catch (ex) {
       grunt.fail.warn(ex.stack);
     }

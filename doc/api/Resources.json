@@ -1,0 +1,20 @@
+{
+  "type": "Resources",
+  "category": "data",
+  "generics": [
+    {"name": "ResourceType"},
+    {"name": "RawType", "default": "ResourceType"}
+  ],
+  "constructor": {
+    "access": "protected",
+    "parameters": [
+      {
+        "name": "options",
+        "type": {
+          "interface": "ResourcesConstructorOptions",
+          "generics": ["ResourceType", "RawType"]
+        }
+      }
+    ]
+  }
+}

@@ -361,3 +361,7 @@ export type ModuleLoader = (
   __filename: string,
   __dirname: string
 ) => void;
+
+export type ResourceData<Resources extends ResourceBaseData<any>, RawType = any> = Record<keyof Resources, Selectable<RawType>>;
+
+export type ResourceBase<Resources extends ResourceBaseData<any>> = {[P in keyof Resources]: Resources[P]}

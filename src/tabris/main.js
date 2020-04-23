@@ -63,6 +63,7 @@ import NavigationView from './widgets/NavigationView';
 import NavigationBar, {create as createNavigationBar} from './widgets/NavigationBar';
 import RadioButton from './widgets/RadioButton';
 import RefreshComposite from './widgets/RefreshComposite';
+import Resources from './Resources';
 import ScrollView from './widgets/ScrollView';
 import SearchAction from './widgets/SearchAction';
 import SizeMeasurement, {create as createSizeMeasurement} from './SizeMeasurement';
@@ -90,6 +91,7 @@ import Headers from './fetch/Headers';
 import Request from './fetch/Request';
 import Response from './fetch/Response';
 
+// @ts-ignore
 if (global.tabris && global.tabris.version) {
   throw new Error('tabris module already loaded. Ensure the module is installed only once.');
 }
@@ -150,6 +152,7 @@ const tabrisMain = Object.assign(new Tabris(), {
   ProgressEvent,
   RadioButton,
   RefreshComposite,
+  Resources,
   RowLayout,
   Row,
   ScrollView,
@@ -183,10 +186,10 @@ const tabrisMain = Object.assign(new Tabris(), {
 });
 
 /** @typedef {typeof tabrisMain} TabrisMain */
-
-// @ts-ignore
 module.exports = tabrisMain;
+// @ts-ignore
 global.tabris = tabrisMain;
+// @ts-ignore
 global.tabris.tabris = tabrisMain;
 
 Object.assign(global, {
@@ -210,6 +213,10 @@ Object.assign(global, {
 });
 
 tabrisMain.on('start', (options) => {
+  // @ts-ignore
+  if (global.console.print) {
+    global.console = createConsole(global.console);
+  }
   patchError(Error);
   tabris.$app = createApp();
   checkVersion(tabris.version, tabris.app._nativeGet('tabrisJsVersion'));
@@ -239,11 +246,16 @@ tabrisMain.on('start', (options) => {
     global.console = createConsole(global.console);
   }
   tabris.$pkcs5 = new Pkcs5();
+  // @ts-ignore
   global.localStorage = tabrisMain.localStorage;
+  // @ts-ignore
   global.secureStorage = tabrisMain.secureStorage;
+  // @ts-ignore
   global.crypto = tabrisMain.crypto;
+  // @ts-ignore
   global.JSX = tabrisMain.JSX;
 });
+
 addDOMDocument(global);
 addDOMEventTargetMethods(global);
 addWindowTimerMethods(global);
