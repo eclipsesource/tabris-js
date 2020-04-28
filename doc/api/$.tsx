@@ -2,7 +2,7 @@
 
 const str: string = (
   <$>
-    This is <b>some text</b>
-    with multiple lines
+    This is <b>some</b> text
+    across multiple lines
   </$>
 );

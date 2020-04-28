@@ -341,6 +341,7 @@
         "@typescript-eslint/unified-signatures": "error",
         "react/jsx-uses-vars": "error", // mark imports used as JSX elements as used
         "react/jsx-indent-props": "error", // works better than built-in "indent" rule
+        "react/jsx-child-element-spacing": "error",
         "react/jsx-boolean-value": "error",
         "react/jsx-closing-tag-location": "error",
         "react/jsx-curly-brace-presence": "error",
