@@ -52,7 +52,7 @@
       ],
       "returns": {
         "interface": "Promise",
-        "generics": ["string"]
+        "generics": [{"union": ["'undetermined'", "'granted'", "'declined'", "'denied'", "'rejected'"]}]
       },
       "description": "Request authorization for a set of permissions.\n\nIf any of the permissions allow to request authorization, the method call will prompt the user to grant the permission and returns the result in the resolved promise. If the status can not be changed, the current status is returned by the resolved promise."
     },
@@ -67,17 +67,17 @@
         },
         {
           "name": "onAuthorized",
-          "type": "Function",
+          "type": "() => any",
           "description": "A callback to be invoked if the desired permissions could be granted. The permissions will have the status `'granted`'."
         },
         {
           "name": "onUnauthorized",
-          "type": "Function",
+          "type": "() => any",
           "description": "A callback to be invoked when the desired permissions could not be granted."
         },
         {
           "name": "onError",
-          "type": "Function",
+          "type": "(error: Error) => any",
           "description": "A callback to be invoked if the request failed."
         }
       ],
