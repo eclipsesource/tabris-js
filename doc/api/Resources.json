@@ -2,8 +2,13 @@
   "type": "Resources",
   "category": "data",
   "generics": [
-    {"name": "ResourceType"},
-    {"name": "RawType", "default": "ResourceType"}
+    {
+      "name": "ResourceType"
+    },
+    {
+      "name": "RawType",
+      "default": "ResourceType"
+    }
   ],
   "constructor": {
     "access": "protected",
@@ -12,9 +17,71 @@
         "name": "options",
         "type": {
           "interface": "ResourcesConstructorOptions",
-          "generics": ["ResourceType", "RawType"]
+          "generics": [
+            "ResourceType",
+            "RawType"
+          ]
         }
       }
     ]
+  },
+  "statics": {
+    "methods": {
+      "build": [
+        {
+          "generics": [
+            {
+              "name": "ResourceType"           }
+          ],
+          "parameters": [
+            {
+              "name": "options",
+              "type": {
+                "interface": "ResourceBuildOptions",
+                "generics": [
+                  "ResourceType"
+                ]
+              }
+            }
+          ],
+          "returns": {
+            "interface": "ResourceBuilder",
+            "generics": [
+              "ResourceType",
+              "ResourceType"
+            ]
+          }
+        },
+        {
+          "generics": [
+            {
+              "name": "ResourceType"
+            },
+            {
+              "name": "RawType"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "options",
+              "type": {
+                "interface": "ResourceBuildConvertOptions",
+                "generics": [
+                  "ResourceType",
+                  "RawType"
+                ]
+              }
+            }
+          ],
+          "returns": {
+            "interface": "ResourceBuilder",
+            "generics": [
+              "ResourceType",
+              "RawType"
+            ]
+          }
+        }
+      ]
+    }
   }
 }

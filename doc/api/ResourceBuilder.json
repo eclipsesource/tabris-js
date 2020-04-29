@@ -1,0 +1,92 @@
+{
+  "type": "ResourceBuilder",
+  "category": "data",
+  "generics": [
+    {
+      "name": "ResourceType"
+    },
+    {
+      "name": "RawType",
+      "default": "ResourceType"
+    }
+  ],
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "options",
+        "type": {
+          "interface": "ResourceBuilderConstructorOptions",
+          "generics": [
+            "ResourceType",
+            "RawType"
+          ]
+        }
+      }
+    ]
+  },
+  "methods": {
+    "from": [
+      {
+        "generics": [
+          {
+            "name": "Base",
+            "extends": {
+              "interface": "NamedResources",
+              "generics": [
+                "ResourceType",
+                "keyof Base"
+              ]
+            }
+          },
+          {
+            "name": "Data",
+            "extends": {
+              "interface": "ResourceDataWithConfig",
+              "generics": [
+                "RawType"
+              ]
+            }
+          }
+        ],
+        "parameters": [
+          {
+            "name": "base",
+            "type": "Base"
+          },
+          {
+            "name": "data",
+            "type": "Data"
+          }
+        ],
+        "returns": {
+          "interface": "NamedResources",
+          "generics": ["ResourceType", "keyof (Base & Data)"]
+        }
+      },
+      {
+        "generics": [
+          {
+            "name": "Data",
+            "extends": {
+              "interface": "ResourceDataWithConfig",
+              "generics": [
+                "RawType"
+              ]
+            }
+          }
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "type": "Data"
+          }
+        ],
+        "returns": {
+          "interface": "NamedResources",
+          "generics": ["ResourceType", "keyof Data"]
+        }
+      }
+    ]
+  }
+}

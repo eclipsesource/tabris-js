@@ -2,6 +2,7 @@ import {expect, mockTabris} from '../test';
 import Resources from '../../src/tabris/Resources';
 import ClientMock from './ClientMock';
 import Color from '../../src/tabris/Color';
+import ResourceBuilder from '../../src/tabris/ResourceBuilder';
 
 describe('Resources', function() {
 
@@ -634,6 +635,110 @@ describe('Resources', function() {
       // @ts-ignore
       expect(myColors2.foo.toArray()).to.deep.equal([0, 1, 4, 255]);
     });
+
+  });
+
+  describe('build()', function() {
+
+    /** @type {ResourceBuilder<Color, ColorValue>} */
+    let colorResources;
+
+    beforeEach(function() {
+      colorResources = Resources.build(
+        // @ts-ignore
+        {converter: Color.from, type: Color, validator: Color.isValidColorValue}
+      );
+    });
+
+    it('requires at least one parameter that can be used to infer resource type', function() {
+      // @ts-ignore
+      expect(() => Resources.build()).to.throw(Error, 'Expected 1 parameter, got 0');
+      // @ts-ignore
+      expect(() => Resources.build(12)).to.throw(Error, 'Expected object, got number');
+      // @ts-ignore
+      expect(() => Resources.build({})).to.throw(Error, 'At least one option required');
+      expect(Resources.build({converter: Color.from})).to.be.instanceOf(ResourceBuilder);
+      // @ts-ignore
+      expect(Resources.build({type: Color})).to.be.instanceOf(ResourceBuilder);
+      // @ts-ignore
+      expect(Resources.build({validator: Color.isValidColorValue})).to.be.instanceOf(ResourceBuilder);
+    });
+
+    it('stores options as read-only', function() {
+      colorResources.converter = null;
+      colorResources.type = null;
+      colorResources.validator = null;
+
+      expect(colorResources.converter).to.equal(Color.from);
+      expect(colorResources.type).to.equal(Color);
+      expect(colorResources.validator).to.equal(Color.isValidColorValue);
+    });
+
+    it('creates resources from data', function() {
+      tabris.device.platform = 'Android';
+
+      const myColors = colorResources.from({
+        // @ts-ignore
+        foo: 'red',
+        bar: {
+          // @ts-ignore
+          android: {red: 0, green: 1, blue: 2},
+          ios: new Color(3, 4, 5)
+        }
+      });
+
+      expect(myColors.foo.toArray()).to.deep.equal(Color.from('red').toArray());
+      expect(myColors.bar.toArray()).to.deep.equal([0, 1, 2, 255]);
+    });
+
+    it('creates resources with inheritance', function() {
+      tabris.device.platform = 'Android';
+
+      const myColors = colorResources.from({
+        // @ts-ignore
+        foo: 'red',
+        bar: {
+          // @ts-ignore
+          android: {red: 0, green: 1, blue: 2},
+          ios: new Color(3, 4, 5)
+        },
+        // @ts-ignore
+        baz: [6, 7, 8]
+      });
+      const myColors2 = colorResources.from(myColors, {
+        foo: [0, 1, 4],
+        bar: {android: {inherit: true}, ios: 'red'}
+      });
+
+      // @ts-ignore
+      expect(myColors2.foo.toArray()).to.deep.equal([0, 1, 4, 255]);
+      // @ts-ignore
+      expect(myColors2.bar.toArray()).to.deep.equal([0, 1, 2, 255]);
+      // @ts-ignore
+      expect(myColors2.baz.toArray()).to.deep.equal([6, 7, 8, 255]);
+    });
+
+    it('creates resources with in-data configuration', function() {
+      tabris.device.language = 'de-DE';
+      tabris.device.scaleFactor = 2.5;
+
+      const myColors = colorResources.from({
+        // @ts-ignore
+        $schema: 'ignoreThis',
+        // @ts-ignore
+        $fallbackLanguage: 'fr',
+        // @ts-ignore
+        $scaleFactor: 'higher',
+        // @ts-ignore
+        foo: {en: [0, 1, 2], fr: [3, 4, 5]},
+        // @ts-ignore
+        bar: {'2x': [6, 7, 8], '4x': [9, 10, 11]}
+      });
+
+      expect(myColors.bar.toArray()).to.deep.equal([9, 10, 11, 255]);
+      expect(myColors.foo.toArray()).to.deep.equal([3, 4, 5, 255]);
+    });
+
   });
 
 });

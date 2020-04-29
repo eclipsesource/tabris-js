@@ -1,4 +1,5 @@
 import {processResources, isInherit} from './util-resources';
+import ResourceBuilder from './ResourceBuilder';
 
 const RESOURCE_REGEX = /^[a-z][a-zA-Z][a-zA-Z0-9]+$/ ;
 
@@ -16,6 +17,19 @@ const ALLOWED_OPTIONS = ['data', 'config', 'base', 'converter', 'type', 'validat
  * @template {unknown} RawType
  */
 export default class Resources {
+
+  /**
+   * @template ResourceType
+   * @template RawType
+   * @param {ResourceBuildConvertOptions<ResourceType, RawType>} options
+   * @returns {ResourceBuilder<ResourceType, RawType>}
+   */
+  static build(options) {
+    if (arguments.length !== 1) {
+      throw new Error(`Expected 1 parameter, got ${arguments.length}`);
+    }
+    return new ResourceBuilder(options);
+  }
 
   /**
    * @param {ResourcesConstructorOptions<ResourceType, RawType>} options
