@@ -1,6 +1,14 @@
 {
   "version": "0.2.0",
-  "configurations": [
+  "inputs": [
+    {
+      "id": "debugAddress",
+      "type": "promptString",
+      "default": "localhost",
+      "description": "IP Address of Android Device"
+    }
+  ],
+"configurations": [
     {
       "name": "Debug Test",
       "type": "node",
@@ -20,13 +28,17 @@
       "internalConsoleOptions": "openOnSessionStart"
     },
     {
-      "name": "Attach to Port",
+      "name": "Debug Tabris on Android",
       "type": "node",
       "protocol": "inspector",
       "request": "attach",
-      "port": 9229,
-      "address": "localhost",
-      "localRoot": "${workspaceRoot}"
+      "port": 9090,
+      "address": "${input:debugAddress}",
+      "stopOnEntry": false,
+      "cwd": "${workspaceFolder}/snippets",
+      "trace": true,
+      "sourceMaps": true,
+      "restart": true
     }
   ]
 }
