@@ -1,0 +1,160 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tabris.com/colors-schema.json",
+  "title": "Tabris.js Color Resources JSON Schema",
+  "definitions": {
+    "colorResources": {
+      "type": "object",
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "$scaleFactor": {
+          "enum": [
+            "nearest",
+            "lower",
+            "higher"
+          ]
+        },
+        "$fallbackLanguage": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z][a-zA-Z]?(-[\\-a-zA-Z0-9]+)?$"
+        }
+      },
+      "patternProperties": {
+        "^[a-z][a-zA-Z][a-zA-Z0-9]+$": {
+          "$ref": "#/definitions/colorResource"
+        }
+      },
+      "additionalProperties": false
+    },
+    "colorResource": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/colorDefinition"
+        },
+        {
+          "$ref": "#/definitions/colorSelector"
+        }
+      ]
+    },
+    "colorSelector": {
+      "oneOf": [
+        {
+          "description": "Platform Selector",
+          "type": "object",
+          "properties": {
+            "ios": {
+              "$ref": "#/definitions/colorResource"
+            },
+            "android": {
+              "$ref": "#/definitions/colorResource"
+            }
+          },
+          "required": [
+            "ios",
+            "android"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "description": "Resource Reference",
+          "type": "object",
+          "required": [
+            "ref"
+          ],
+          "properties": {
+            "ref": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "Inherit Marker",
+          "type": "object",
+          "properties": {
+            "inherit": {
+              "enum": [
+                true
+              ]
+            }
+          },
+          "required": [
+            "inherit"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "description": "Scale Selector",
+          "type": "object",
+          "patternProperties": {
+            "^([0-9]\\.?[0-9]*)x$": {
+              "$ref": "#/definitions/colorResource"
+            }
+          },
+          "additionalProperties": false,
+          "minProperties": 1
+        },
+        {
+          "description": "Locale Selector",
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z][a-zA-Z][a-zA-Z]?(-[\\-a-zA-Z0-9]+)?$": {
+              "$ref": "#/definitions/colorResource"
+            }
+          },
+          "additionalProperties": false,
+          "minProperties": 1,
+          "not": {
+            "required": ["ios"]
+          }
+        }
+      ]
+    },
+    "colorDefinition": {
+      "oneOf": [
+        {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 4,
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 255
+          }
+        },
+        {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F]?[0-9a-fA-F]?$"
+        },
+        {
+          "enum": [
+            "black",
+            "silver",
+            "gray",
+            "white",
+            "maroon",
+            "red",
+            "purple",
+            "fuchsia",
+            "green",
+            "lime",
+            "olive",
+            "yellow",
+            "navy",
+            "blue",
+            "teal",
+            "aqua",
+            "transparent"
+          ]
+        }
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/definitions/colorResources"
+    }
+  ]
+}

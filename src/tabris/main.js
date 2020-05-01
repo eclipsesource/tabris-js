@@ -25,6 +25,7 @@ import Canvas from './widgets/Canvas';
 import CheckBox from './widgets/CheckBox';
 import CollectionView from './widgets/CollectionView';
 import Color from './Color';
+import ColorResources from './ColorResources';
 import Console from './Console';
 import {format} from './Formatter';
 import Row from './widgets/Row';
@@ -110,6 +111,7 @@ const tabrisMain = Object.assign(new Tabris(), {
   CheckBox,
   CollectionView,
   Color,
+  ColorResources,
   ConstraintLayout,
   Camera,
   CameraView,

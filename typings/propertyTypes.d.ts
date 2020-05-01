@@ -363,3 +363,5 @@ export type ModuleLoader = (
 ) => void;
 
 export type ResourceData<Resources extends ResourceBaseData<any>, RawType = any> = Record<keyof Resources, Selectable<RawType>>;
+
+export type ColorResourceData<Resources extends {[P in keyof Resources]: Color}> = Record<keyof Resources, Selectable<ColorValue>>;

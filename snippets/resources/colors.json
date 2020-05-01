@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schema/colors.json",
+  "myBackground": "#CCB979",
+  "myBlue": "#072FCF",
+  "myRed": {
+    "android": "#8F0B12",
+    "ios": "#EC2121"
+  },
+  "tint": {
+    "android": {"ref": "myBlue"},
+    "ios": {"ref": "myRed"}
+  }
+}

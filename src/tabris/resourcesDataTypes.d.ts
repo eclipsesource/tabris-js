@@ -56,7 +56,7 @@ type NamedResources<ResourceType, Keys extends string | symbol | number> = {
   [T in Exclude<Keys, ReservedResourceKeys>]: ResourceType
 };
 
-type ReservedResourceKeys = keyof NeverResources | 'toString' | 'valueOf' | symbol | number;
+type ReservedResourceKeys = keyof ResourceInlineConfig | keyof NeverResources | 'toString' | 'valueOf' | symbol | number;
 
 // TypeScript does now allow reg-ex checks,
 // so these only catch the "worst" cases

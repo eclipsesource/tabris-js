@@ -1,0 +1,92 @@
+{
+  "type": "ColorResources",
+  "category": "data",
+  "extends": {
+    "interface": "Resources",
+    "generics": [
+      "Color",
+      "ColorValue"
+    ]
+  },
+  "constructor": {
+    "access": "protected",
+    "parameters": [
+      {
+        "name": "options",
+        "type": {
+          "interface": "ResourcesConstructorOptions",
+          "generics": [
+            "Color",
+            "ColorValue"
+          ]
+        }
+      }
+    ]
+  },
+  "statics": {
+    "methods": {
+      "from": [
+        {
+          "generics": [
+            {
+              "name": "Base",
+              "extends": {
+                "interface": "NamedResources",
+                "generics": [
+                  "Color",
+                  "keyof Base"
+                ]
+              }
+            },
+            {
+              "name": "Data",
+              "extends": {
+                "interface": "ResourceDataWithConfig",
+                "generics": [
+                  "ColorValue"
+                ]
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "name": "base",
+              "type": "Base"
+            },
+            {
+              "name": "data",
+              "type": "Data"
+            }
+          ],
+          "returns": {
+            "interface": "NamedResources",
+            "generics": ["Color", "keyof (Base & Data)"]
+          }
+        },
+        {
+          "generics": [
+            {
+              "name": "Data",
+              "extends": {
+                "interface": "ResourceDataWithConfig",
+                "generics": [
+                  "ColorValue"
+                ]
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "name": "data",
+              "type": "Data"
+            }
+          ],
+          "returns": {
+            "interface": "NamedResources",
+            "generics": ["Color", "keyof Data"]
+          }
+        }
+      ]
+    }
+  }
+}
