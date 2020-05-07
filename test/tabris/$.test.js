@@ -26,7 +26,7 @@ describe('$', function() {
     expect(() => $({foo: 'bar'}, ['foo'])).to.throw(Error, '$ does not support attributes');
   });
 
-  describe('width selector parameter', function() {
+  describe('with selector parameter', function() {
 
     beforeEach(function() {
       const parent = new Composite();

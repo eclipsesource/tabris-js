@@ -128,7 +128,7 @@ export default class JsxProcessor {
     if (!attributes || !('children' in attributes)) {
       return null;
     }
-    return normalizeChildren(attributes.children);
+    return flattenChildren(attributes.children);
   }
 
   withoutChildren(attributes) {
@@ -205,14 +205,14 @@ export default class JsxProcessor {
 /**
  * Converts any value to a flat array.
  */
-export function normalizeChildren(children) {
+export function flattenChildren(children) {
   if (children instanceof Array) {
     let result = [];
     for (const child of children) {
       if (child && child.toArray) {
-        result = result.concat(normalizeChildren(child.toArray()));
+        result = result.concat(flattenChildren(child.toArray()));
       } else if (child instanceof Array) {
-        result = result.concat(normalizeChildren(child));
+        result = result.concat(flattenChildren(child));
       } else {
         result.push(child);
       }

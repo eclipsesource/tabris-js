@@ -1,4 +1,4 @@
-import {joinTextContent, normalizeChildren} from './JsxProcessor';
+import {joinTextContent, flattenChildren} from './JsxProcessor';
 import WidgetCollection from './WidgetCollection';
 import Widget from './Widget';
 import TextView from './widgets/TextView';
@@ -26,25 +26,29 @@ export default function $(param) {
   if (Object.keys(param).length > 1 || !('children' in param)) {
     throw new Error('$ does not support attributes');
   }
-  const flat = normalizeChildren(param.children);
-  if (flat.some(entry => entry instanceof Widget)) {
-    const result = [];
-    let str = [];
-    flat.forEach(entry => {
-      if (entry instanceof Widget) {
-        if (str.length) {
-          result.push(new TextView({text: joinTextContent(str, false)}));
-          str = [];
-        }
-        result.push(entry);
-      } else {
-        str.push(entry);
-      }
-    });
-    if (str.length) {
-      result.push(new TextView({text: joinTextContent(str, false)}));
-    }
-    return new WidgetCollection(result);
+  const flat = flattenChildren(param.children);
+  if (flat.some(entry => entry instanceof Widget) || flat.length < 1) {
+    return toWidgetCollection(flat);
   }
   return joinTextContent(flat, false);
+}
+
+function toWidgetCollection(flat) {
+  const result = [];
+  let str = [];
+  flat.forEach(entry => {
+    if (entry instanceof Widget) {
+      if (str.length) {
+        result.push(new TextView({text: joinTextContent(str, false)}));
+        str = [];
+      }
+      result.push(entry);
+    } else {
+      str.push(entry);
+    }
+  });
+  if (str.length) {
+    result.push(new TextView({text: joinTextContent(str, false)}));
+  }
+  return new WidgetCollection(result);
 }

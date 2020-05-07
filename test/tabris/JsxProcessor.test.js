@@ -502,6 +502,31 @@ describe('JsxProcessor', function() {
         expect(collection[2]).to.be.instanceof(Switch);
       });
 
+      it('creates widgetCollection from empty WidgetCollection', function() {
+        const collection = jsx.createElement(
+          $,
+          null,
+          jsx.createElement(WidgetCollection)
+        );
+
+        expect(collection).to.be.instanceOf(WidgetCollection);
+        expect(collection.length).to.equal(0);
+      });
+
+      it('creates widgetCollection from non-empty WidgetCollection', function() {
+        const collection = jsx.createElement(
+          $,
+          null,
+          jsx.createElement(WidgetCollection, null,
+            jsx.createElement(Button)
+          )
+        );
+
+        expect(collection).to.be.instanceOf(WidgetCollection);
+        expect(collection.length).to.equal(1);
+        expect(collection[0]).to.be.instanceof(Button);
+      });
+
       it('creates widgetCollection from widget array', function() {
         const collection = jsx.createElement(
           $,
