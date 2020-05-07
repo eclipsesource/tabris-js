@@ -79,6 +79,13 @@ describe('Promise', function() {
       expect(getPromiseResult(promise)).to.equal(23);
     });
 
+    it('returns promise resolved with null', function() {
+      const promise = Promise.resolve(null);
+      expect(isPending(promise)).to.be.false;
+      expect(isRejected(promise)).to.be.false;
+      expect(getPromiseResult(promise)).to.equal(null);
+    });
+
   });
 
   describe('reject()', function() {

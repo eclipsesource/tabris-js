@@ -268,7 +268,9 @@ function valuePromise(value) {
 }
 Promise.resolve = function(value) {
   if (value instanceof Promise) {return value;}
-
+  if (value === null) {
+    return valuePromise(null);
+  }
   if (typeof value === 'object' || typeof value === 'function') {
     try {
       const then = value.then;
