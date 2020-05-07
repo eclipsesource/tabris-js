@@ -206,7 +206,9 @@ describe('tabris', function() {
     expect(tabris.Widget).to.be.a('function');
     expect(tabris.Constraint).to.be.a('function');
     expect(tabris.Font).to.be.a('function');
+    expect(tabris.FontResources).to.be.a('function');
     expect(tabris.Color).to.be.a('function');
+    expect(tabris.ColorResources).to.be.a('function');
     expect(tabris.LayoutData).to.be.a('function');
     expect(tabris.Image).to.be.a('function');
     expect(tabris.Layout).to.be.a('function');

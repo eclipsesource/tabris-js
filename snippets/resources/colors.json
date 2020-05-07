@@ -1,7 +1,7 @@
 {
   "$schema": "../../schema/colors.json",
-  "myBackground": "#CCB979",
-  "myBlue": "#072FCF",
+  "myBackground": "#DFFF94",
+  "myBlue": "#435FBD",
   "myRed": {
     "android": "#8F0B12",
     "ios": "#EC2121"

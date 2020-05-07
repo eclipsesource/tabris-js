@@ -1,0 +1,92 @@
+{
+  "type": "FontResources",
+  "category": "data",
+  "extends": {
+    "interface": "Resources",
+    "generics": [
+      "Font",
+      "FontValue"
+    ]
+  },
+  "constructor": {
+    "access": "protected",
+    "parameters": [
+      {
+        "name": "options",
+        "type": {
+          "interface": "ResourcesConstructorOptions",
+          "generics": [
+            "Font",
+            "FontValue"
+          ]
+        }
+      }
+    ]
+  },
+  "statics": {
+    "methods": {
+      "from": [
+        {
+          "generics": [
+            {
+              "name": "Base",
+              "extends": {
+                "interface": "NamedResources",
+                "generics": [
+                  "Font",
+                  "keyof Base"
+                ]
+              }
+            },
+            {
+              "name": "Data",
+              "extends": {
+                "interface": "ResourceDataWithConfig",
+                "generics": [
+                  "FontResourceValue"
+                ]
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "name": "base",
+              "type": "Base"
+            },
+            {
+              "name": "data",
+              "type": "Data"
+            }
+          ],
+          "returns": {
+            "interface": "NamedResources",
+            "generics": ["Font", "keyof (Base & Data)"]
+          }
+        },
+        {
+          "generics": [
+            {
+              "name": "Data",
+              "extends": {
+                "interface": "ResourceDataWithConfig",
+                "generics": [
+                  "FontResourceValue"
+                ]
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "name": "data",
+              "type": "Data"
+            }
+          ],
+          "returns": {
+            "interface": "NamedResources",
+            "generics": ["Font", "keyof Data"]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -48,7 +48,7 @@ type ResourceInlineConfig = {
 
 type ScaleFactor = 'nearest' | 'higher' | 'lower';
 
-type Selectable<T> = T | {[key: string]: Selectable<T>} | undefined | {inherit: true} | {ref: string};
+type Selectable<T> = T | {[key: string]: Selectable<T>} | undefined | {inherit: boolean} | {ref: string};
 
 type ResourceBaseData<ResourceType> = NeverResources & {readonly [resourceName: string]: ResourceType | undefined};
 
@@ -69,3 +69,6 @@ type NeverResources = {
   ' '?: never,
   'on'?: never
 };
+
+// This type needs to be less strict than FontLikeObject to satisfy tsc when using FontResources.from with JSON
+type FontResourceValue = {size: number, family?: string[], weight?: string, style?: string} | string;

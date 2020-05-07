@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schema/fonts.json",
+  "main": {
+    "1x": "medium 22px 'serif'",
+    "2x": "medium 26px 'serif'"
+  },
+  "emphasis": {
+    "1x": {
+      "android": {
+        "size": 22,
+        "family": ["san-serif"],
+        "style": "italic"
+      },
+      "ios": {
+        "size": 22,
+        "family": ["san-serif"],
+        "weight": "black"
+      }
+    },
+    "2x": {
+      "size": 26,
+      "family": ["san-serif"],
+      "weight": "black",
+      "style": "italic"
+    }
+  }
+}

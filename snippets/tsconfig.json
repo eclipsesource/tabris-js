@@ -16,6 +16,7 @@
     "./*.js",
     "./*.jsx",
     "./*.ts",
-    "./*.tsx"
+    "./*.tsx",
+    "./resources/index.ts",
   ]
 }

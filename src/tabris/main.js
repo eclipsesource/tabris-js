@@ -43,6 +43,7 @@ import EventObject from './EventObject';
 import File from './File';
 import FormData from './FormData';
 import Font from './Font';
+import FontResources from './FontResources';
 import Image from './Image';
 import ImageData from './ImageData';
 import ImageBitmap from './ImageBitmap';
@@ -130,6 +131,7 @@ const tabrisMain = Object.assign(new Tabris(), {
   File,
   FormData,
   Font,
+  FontResources,
   Image,
   ImageData,
   ImageBitmap,

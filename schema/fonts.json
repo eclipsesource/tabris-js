@@ -1,0 +1,183 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tabris.com/fonts-schema.json",
+  "title": "Tabris.js Font Resources JSON Schema",
+  "definitions": {
+    "fontResources": {
+      "type": "object",
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "$scaleFactor": {
+          "enum": [
+            "nearest",
+            "lower",
+            "higher"
+          ]
+        },
+        "$fallbackLanguage": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z][a-zA-Z]?(-[\\-a-zA-Z0-9]+)?$"
+        }
+      },
+      "patternProperties": {
+        "^[a-z][a-zA-Z][a-zA-Z0-9]+$": {
+          "$ref": "#/definitions/fontResource"
+        }
+      },
+      "additionalProperties": false
+    },
+    "fontResource": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/fontDefinition"
+        },
+        {
+          "$ref": "#/definitions/fontSelector"
+        }
+      ]
+    },
+    "fontSelector": {
+      "oneOf": [
+        {
+          "description": "Platform Selector",
+          "type": "object",
+          "properties": {
+            "ios": {
+              "$ref": "#/definitions/fontResource"
+            },
+            "android": {
+              "$ref": "#/definitions/fontResource"
+            }
+          },
+          "required": [
+            "ios",
+            "android"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "description": "Resource Reference",
+          "type": "object",
+          "required": [
+            "ref"
+          ],
+          "properties": {
+            "ref": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "Inherit Marker",
+          "type": "object",
+          "properties": {
+            "inherit": {
+              "enum": [
+                true
+              ]
+            }
+          },
+          "required": [
+            "inherit"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "description": "Scale Selector",
+          "type": "object",
+          "patternProperties": {
+            "^([0-9]\\.?[0-9]*)x$": {
+              "$ref": "#/definitions/fontResource"
+            }
+          },
+          "additionalProperties": false,
+          "minProperties": 1
+        },
+        {
+          "description": "Locale Selector",
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z][a-zA-Z][a-zA-Z]?(-[\\-a-zA-Z0-9]+)?$": {
+              "$ref": "#/definitions/fontResource"
+            }
+          },
+          "additionalProperties": false,
+          "minProperties": 1,
+          "not": {
+            "required": [
+              "ios"
+            ]
+          }
+        }
+      ]
+    },
+    "fontDefinition": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "family": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/fontFamily"
+              }
+            },
+            "size": {
+              "type": "number",
+              "minimum": 1
+            },
+            "style": {
+              "enum": [
+                "italic",
+                "normal"
+              ]
+            },
+            "weight": {
+              "enum": [
+                "black",
+                "bold",
+                "medium",
+                "thin",
+                "light",
+                "normal"
+              ]
+            }
+          },
+          "required": [
+            "size"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "string",
+          "pattern": "^((italic|normal) )?((black|bold|medium|thin|light|normal) )?[1-9][0-9]*px( ([A-Za-z\\-]+|'[A-Za-z \\-]+')(, ?([A-Za-z\\-]+|'[A-Za-z \\-]+'))*)?$"
+        }
+      ]
+    },
+    "fontFamily": {
+      "anyOf": [
+        {
+          "enum": [
+            "serif",
+            "san-serif",
+            "monospace",
+            "condensed"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z \\-]+$"
+        }
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/definitions/fontResources"
+    }
+  ]
+}
