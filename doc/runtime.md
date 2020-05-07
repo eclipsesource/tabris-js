@@ -20,17 +20,18 @@ Which language features are available to you depends on the exact JavaScript eng
 
 ### Vanilla JavaScript Projects
 
-> :warning: Some examples in the official Tabris.js documentation make use of modern features that do not work with Vanilla JavaScript Projects. We recommend using a setup with a compiler as explained in the next section.
+You get this "vanilla" JS kind of project setup if you choose the Template "Hello World (JavaScript)" when running the `tabris init` command, or by just typing `npm init && npm i tabris` in an empty directory.
 
-You get this kind of project setup if you choose "Vanilla JavaScript" running the `tabris init` command, or by just typing `npm init && npm i tabris` in an empty directory.
+> **Important:** Many examples in the official Tabris.js documentation make use of the ES6 module syntax and JSX. These features do not work with vanilla JS projects. The details are explained below and in [this article](./widget-basics.md).
 
-For these kind of projects your code will be executed exactly as written, and which language features are available depends entirely on the JavaScript engine. In general both engines support most of the [ECMAScript 2017](https://www.ecma-international.org/ecma-262/8.0/) standard, but not the [ES6 Module syntax](./modules.md).
+In vanilla JS projects your code will be executed exactly as written, and which language features are available depends entirely on the JavaScript engine. In general both platforms (iOS/Android) support most of the [ECMAScript 2017](https://www.ecma-international.org/ecma-262/8.0/) standard, but not the [ES6 Module syntax](./modules.md).
 
 Notable supported features:
 
 Feature|Example
 --- | ---
 [Arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)|`(a, b) => a + b`
+[async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function)*|`await fn();`|`fn().then(cb);`
 [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)|`class { … }`
 [const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)|`const a = 1;`
 [Default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters)|`function(a = 1) { … }`
@@ -56,21 +57,22 @@ Feature|Example
 [WeakMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap)|`new WeakMap(iterable)`
 [WeakSet](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet)|`new WeakSet(iterable)`
 
+*) Since Tabris.js 3.3
+
 Notable feature NOT supported:
 
 Feature|Example|Alternative
 --- | --- | ---
 [import/](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)[export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export)|`import * as foo from 'foo';`|`const foo = require('foo');`
-[async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function)|`await fn();`|`fn().then(cb);`
 [JSX](./JSX.md)|`<TextView />`|`new TextView()`
 [Types/Interfaces](./typescript.md)|`const foo: string;`|`const foo;`
 
 ### Compiled JavaScript Projects
 
-There are various tools that provide some kind of JavaScript pre-processing to allow the use of constructs (and sometimes APIs) that would otherwise not be supported at runtime, or to optimize the code in some way. Particularly popular in this category is [Babel](https://babeljs.io/), which  works fine with Tabris.js. However, using the `tabris init` command and choosing the "Compiled" option will create a project using the [TypeScript](http://typescriptlang.org/) compiler [`tsc`](http://www.typescriptlang.org/docs/handbook/compiler-options.html), which we recommend even for JavaScript projects. Not only is this a less complex setup than a comparable *Babel* configuration, it can also provide better auto completion support and eases migration to TypeScript should this be desired later on.
+There are many tools (e.g. [TypeScript](http://typescriptlang.org/),  [Babel](https://babeljs.io/), [WebPack](https://webpack.js.org/)) that provide some kind of JavaScript pre-processing. In Tabris.js this can enable the use of syntax (see above) that would otherwise not be supported at runtime.
 
-With this kind of setup `.js` files now can use the ES6 module syntax ([import/](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)[export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export)) and async functions ([async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function)). It also supports [JSX](./JSX.md) syntax in `.jsx` files.
+The Tabris.js project templates provided by the `tabris init` command use the [TypeScript](http://typescriptlang.org/) compiler ([`tsc`](http://www.typescriptlang.org/docs/handbook/compiler-options.html)) to provide ES6 Module syntax and JSX support in JavaScript code. We generally recommend `tsc` over Babel, even for non-TypeScript projects. This is because it requires less dependencies and configuration, provides better auto completion in your IDE, and eases migration to TypeScript should this be desired later on.
 
 ### TypeScript Projects
 
-TypeScript is recommended over JavaScript for all serious software development efforts. Since `tabris init` creates a JavaScript/TypeScript hybrid project, everything from the previous section still applies here. You simply create `.ts` and `.tsx` files instead of `.js` and `.jsx` files. Further notes on TypeScript support can be found [here](./typescript.md).
+Since `tabris init` creates a JavaScript/TypeScript hybrid projects, everything from the previous section still applies here. You simply create `.ts` and `.tsx` files instead of `.js` and `.jsx` files. Further notes on TypeScript support can be found [here](./typescript.md).
