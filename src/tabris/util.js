@@ -30,16 +30,21 @@ export function capitalizeFirstChar(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function normalizePath(path) {
+/**
+ * @param {string} path
+ * @param {'unix' | 'win'} outputStyle
+ */
+export function normalizePath(path, outputStyle = 'unix') {
   if (typeof path !== 'string') {
     throw new Error('must be a string');
   }
   if (path === '') {
     throw new Error('must not be empty');
   }
+  // const prefix = path.startsWith('./') ? './' : path[0] === '/' ? '/' : '';
   const prefix = path.startsWith('/') ? '/' : '';
   const segments = [];
-  const pathSegments = path.split('/');
+  const pathSegments = path.split(/[\\/]/);
   for (let i = 0; i < pathSegments.length; i++) {
     const segment = pathSegments[i];
     if (segment === '..') {
@@ -54,7 +59,7 @@ export function normalizePath(path) {
   if (!segments.length) {
     return prefix || '.';
   }
-  return prefix + segments.join('/');
+  return prefix + segments.join(outputStyle === 'win' ? '\\' : '/');
 }
 
 export function normalizePathUrl(url) {
@@ -70,11 +75,20 @@ export function normalizePathUrl(url) {
   return schema + normalizePath(content);
 }
 
-export function dirname(path) {
-  if (!path || path.slice(0, 1) !== '.') {
-    return './';
+/**
+ * Returns the directory portion of the given file path.
+ * The result is not normalized and relative paths stay relative.
+ * @param {string} path
+ * @param {'unix' | 'win'} inputStyle
+ */
+export function dirname(path, inputStyle = 'unix') {
+  if (!path) {
+    return '';
   }
-  return path.slice(0, path.lastIndexOf('/'));
+  if ((inputStyle === 'unix') && (path[0] !== '.') && (path[0] !== '/')) {
+    return './'; // path was just a file name
+  }
+  return path.slice(0, path.lastIndexOf(inputStyle === 'win' ? '\\' : '/'));
 }
 
 /**

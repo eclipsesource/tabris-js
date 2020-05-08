@@ -22,13 +22,22 @@ describe('util-stacktrace', function() {
   at Tabris._notify (./node_modules/tabris/tabris.min.js:1:74931)`,
       debug:
 `Error
-  at doSomethingElse (./dist/console.js:23:2)
-  at doSomething (./dist/console.js:20:5)
-  at Button.start (./dist/console.js:17:17)
+  at doSomethingElse (/absolute/path/dist/console.js:23:2)
+  at doSomething (/absolute/path/dist/console.js:20:5)
+  at Button.start (/absolute/path/dist/console.js:17:17)
   at ./node_modules/tabris/tabris.js:1:27243
   at Button.trigger (./node_modules/tabris/tabris.js:1:27407)
   at Button.$trigger (./node_modules/tabris/tabris.js:1:48355)
   at Tabris._notify (./node_modules/tabris/tabris.js:1:74931)`,
+      win:
+`Error
+  at doSomethingElse (C:\\absolute\\path\\dist\\console.js:23:2)
+  at doSomething (C:\\absolute\\path\\dist\\console.js:20:5)
+  at Button.start (C:\\absolute\\path\\dist\\console.js:17:17)
+  at ./node_modules/tabris/tabris.min.js:1:27243
+  at Button.trigger (./node_modules/tabris/tabris.min.js:1:27407)
+  at Button.$trigger (./node_modules/tabris/tabris.min.js:1:48355)
+  at Tabris._notify (./node_modules/tabris/tabris.min.js:1:74931)`,
       timer2:
 `Error
   at done (./dist/timer.js:19:17)
@@ -75,13 +84,22 @@ $trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:48355
 _notify@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:74931
 _notify@[native code]`,
       debug:
-`doSomethingElse@http://192.168.6.77:8080/dist/console.js:23:2
-doSomething@http://192.168.6.77:8080/dist/console.js:20:5
-start@http://192.168.6.77:8080/dist/console.js:17:17
+`doSomethingElse@/absolute/path/dist/console.js:23:2
+doSomething@/absolute/path/dist/console.js:20:5
+start@/absolute/path/dist/console.js:17:17
 http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:27243
 trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:27407
 $trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:48355
 _notify@http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:74931
+_notify@[native code]`,
+      win:
+`doSomethingElse@C:\\absolute\\path\\dist\\console.js:23:2
+doSomething@C:\\absolute\\path\\dist\\console.js:20:5
+start@C:\\absolute\\path\\dist\\console.js:17:17
+http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:27243
+trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:27407
+$trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:48355
+_notify@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:74931
 _notify@[native code]`,
       timer2:
 `_notify@[native code]
@@ -122,13 +140,24 @@ start (./dist/console.js:17:17)`,
   at doSomething (./dist/console.js:20:5)
   at start (./dist/console.js:17:17)`,
       full:
-`doSomethingElse (./dist/console.js:23:2)
-doSomething (./dist/console.js:20:5)
-start (./dist/console.js:17:17)
+`doSomethingElse (/absolute/path/dist/console.js:23:2)
+doSomething (/absolute/path/dist/console.js:20:5)
+start (/absolute/path/dist/console.js:17:17)
 ./node_modules/tabris/tabris.js:1:27243
 trigger (./node_modules/tabris/tabris.js:1:27407)
 $trigger (./node_modules/tabris/tabris.js:1:48355)
 _notify (./node_modules/tabris/tabris.js:1:74931)`,
+      mapped: `doSomethingElse (/absolute/path/console.js:26:0)
+doSomething (/absolute/path/console.js:22:2)
+start (/absolute/path/console.js:18:23)
+./node_modules/tabris/tabris.js:1:27243
+trigger (./node_modules/tabris/tabris.js:1:27407)
+$trigger (./node_modules/tabris/tabris.js:1:48355)
+_notify (./node_modules/tabris/tabris.js:1:74931)`,
+      win:
+`doSomethingElse (C:\\absolute\\path\\console.js:26:0)
+doSomething (C:\\absolute\\path\\console.js:22:2)
+start (C:\\absolute\\path\\console.js:18:23)`,
       timer:
 `done (./dist/timer.js:19:17)
 sayThanks (./dist/timer.js:16:5)
@@ -212,31 +241,32 @@ showActionSheet (./dist/actionsheet.js:15:25)`
             mappings: ';;AAAA,mCAA6C;AAE7C,IAAI,YAAY,GAAG,IAAI,kBAAS,CAAC;IAC/B,IAAI,EAAE,EAAE,EAAE,GAAG,EAAE,EAAE,EAAE,KAAK,EAAE,EAAE;IAC5B,IAAI,EAAE,SAAS;IACf,OAAO,EAAE,aAAa;CACvB,CAAC,CAAC,QAAQ,CAAC,WAAE,CAAC,WAAW,CAAC,CAAC;AAE5B,CAAC,OAAO,EAAE,KAAK,EAAE,MAAM,EAAE,MAAM,EAAE,OAAO,EAAE,OAAO,CAAC,CAAC,OAAO,CAAC,CAAC,MAAM,EAAE,EAAE;IACpE,IAAI,eAAM,CAAC;QACT,IAAI,EAAE,EAAE,EAAE,KAAK,EAAE,EAAE,EAAE,GAAG,EAAE,WAAW;QACrC,IAAI,EAAE,MAAM;KACb,CAAC,CAAC,EAAE,CAAC,QAAQ,EAAG,KAAK,CAAC;SACtB,QAAQ,CAAC,WAAE,CAAC,WAAW,CAAC,CAAC;AAC5B,CAAC,CAAC,CAAC;AAEH,SAAS,KAAK;IACZ,MAAM,GAAG,GAAW,WAAW,EAAE,CAAC;AACpC,CAAC;AAED,SAAS,WAAW;IACnB,eAAe,EAAE,CAAC;AACnB,CAAC;AAED,SAAS,eAAe;IACtB,OAAO,CAAC,GAAG,CAAC,IAAI,KAAK,EAAE,CAAC,KAAK,CAAC,CAAC;AACjC,CAAC'// eslint-disable-line
           };
 
-          const sourceMappedStack = 'doSomethingElse (./console.js:26:0)\n' +
-            'doSomething (./console.js:22:2)\n' +
-            'start (./console.js:18:23)';
-
           beforeEach(function() {
             sourceMapCopy = Object.assign({}, sourceMap);
           });
 
           it('prints source-mapped stack trace', function() {
-            stub(tabris.Module, 'getSourceMap').withArgs('./dist/console.js').returns(sourceMapCopy);
-            expect(getStackTrace({stack: stacks[platform].production})).to.equal(sourceMappedStack);
+            stub(tabris.Module, 'getSourceMap').withArgs('/absolute/path/dist/console.js').returns(sourceMapCopy);
+            expect(getStackTrace({stack: stacks[platform].debug})).to.equal(stacks.expected.mapped);
+          });
+
+          it('prints source-mapped stack trace (windows file system)', function() {
+            stub(tabris.Module, 'getSourceMap').withArgs('C:\\absolute\\path\\dist\\console.js').returns(sourceMapCopy);
+            expect(getStackTrace({stack: stacks[platform].win})).to.equal(stacks.expected.win);
           });
 
           it('caches parsed mappings', function() {
-            stub(tabris.Module, 'getSourceMap').withArgs('./dist/console.js').returns(sourceMapCopy);
-            getStackTrace({stack: stacks[platform].production});
+            stub(tabris.Module, 'getSourceMap').withArgs('/absolute/path/dist/console.js').returns(sourceMapCopy);
+            getStackTrace({stack: stacks[platform].debug});
 
             sourceMapCopy.mappings = '';
 
-            expect(getStackTrace({stack: stacks[platform].production})).to.equal(sourceMappedStack);
+            expect(getStackTrace({stack: stacks[platform].debug})).to.equal(stacks.expected.mapped);
           });
 
           it('does not cache source map itself', function() {
             stub(tabris.Module, 'getSourceMap').withArgs('./dist/console.js').returns(sourceMapCopy);
-            getStackTrace({stack: stacks[platform].production});
+            getStackTrace({stack: stacks[platform].debug});
             tabris.Module.getSourceMap.resetBehavior();
 
             expect(getStackTrace({stack: stacks[platform].production})).to.equal(stacks.expected.simplified);
@@ -259,8 +289,8 @@ showActionSheet (./dist/actionsheet.js:15:25)`
           });
 
           it('truncates stack traces over threshold length', function() {
-            stub(tabris.Module, 'getSourceMap').withArgs('./dist/console.js').returns(sourceMapCopy);
-            const oldStack = stacks[platform].production.split('\n');
+            stub(tabris.Module, 'getSourceMap').withArgs('/absolute/path/dist/console.js').returns(sourceMapCopy);
+            const oldStack = stacks[platform].debug.split('\n');
             const tooLong = oldStack.concat();
             const line1 = tooLong.shift();
             const line2 = tooLong.shift();
@@ -271,9 +301,9 @@ showActionSheet (./dist/actionsheet.js:15:25)`
 
             const result = getStackTrace({stack: tooLong.join('\n')}).split('\n');
 
-            const mapped = sourceMappedStack.split('\n');
+            const mapped = stacks.expected.mapped.split('\n');
             expect(result.length).to.equal(301);
-            expect(result).to.contain('[52 more lines...]');
+            expect(result).to.contain('[56 more lines...]');
             expect(result[0]).to.equal(mapped[0]);
             expect(result[300]).to.equal(mapped[mapped.length - 1]);
           });
@@ -289,7 +319,7 @@ showActionSheet (./dist/actionsheet.js:15:25)`
           }
 
           beforeEach(function() {
-            global.Error = CustomError;
+            global.Error = (/** @type {any} */(CustomError));
             timers = {};
             addWindowTimerMethods(timers);
           });
@@ -336,7 +366,7 @@ showActionSheet (./dist/actionsheet.js:15:25)`
         describe('with Promises', function() {
 
           beforeEach(function() {
-            global.Error = CustomError;
+            global.Error = (/** @type {any} */(CustomError));
           });
 
           it('prints stack trace across one Promise', function() {

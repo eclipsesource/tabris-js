@@ -137,6 +137,9 @@ function fixUrl(url) {
   return url;
 }
 
+/**
+ * @param {{fn: string, url: string, line: number, column: number}} stackLineData
+ */
 function applySourceMap(stackLineData) {
   if (!stackLineData) {
     return null;
@@ -152,7 +155,11 @@ function applySourceMap(stackLineData) {
     if (match && match.length >= 4) {
       // TODO: use name index (match[4] if present) to rename "fn"
       const [generatedColumn, orgFile, orgLine, orgColumn] = match;
-      url = './' + normalizePath(dirname(url) + '/' + sourceMap.sources[orgFile]);
+      const style = /^[A-Za-z]:/.test(url) ? 'win' : 'unix';
+      url = normalizePath(dirname(url, style) + '/' + sourceMap.sources[orgFile], style);
+      if (style === 'unix' && !url.startsWith('/') && !url.startsWith('./')) {
+        url = './' + url;
+      }
       line = orgLine + 1;
       column = column + (orgColumn - generatedColumn);
     } else {
