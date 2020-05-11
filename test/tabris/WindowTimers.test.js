@@ -1,4 +1,4 @@
-import {expect, mockTabris, restore, spy} from '../test';
+import {expect, mockTabris, restore, stub} from '../test';
 import ClientMock from './ClientMock';
 import {addWindowTimerMethods} from '../../src/tabris/WindowTimers';
 import {create} from '../../src/tabris/App';
@@ -43,8 +43,18 @@ describe('WindowTimers', () => {
 
     beforeEach(() => {
       addWindowTimerMethods(target);
-      callback = spy();
+      callback = stub();
       method = target[name];
+    });
+
+    it('when called with a callback throwing an error, an error is logged', async () => {
+      stub(console, 'error');
+      callback.throws('error');
+      method(callback);
+
+      startTimer().parameters.callback();
+
+      expect(console.error).to.have.been.calledWithMatch(/Uncaught error/);
     });
 
     describe('when called without parameters', () => {

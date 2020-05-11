@@ -237,7 +237,11 @@ export function createNativeCallback(cb, target, args) {
   return function() {
     const oldStack = tabris._stackTraceStack;
     tabris._stackTraceStack = stackTraceStack;
-    cb.apply(target ? target : global, args ? args : arguments);
+    try {
+      cb.apply(target ? target : global, args ? args : arguments);
+    } catch(e) {
+      console.error('Uncaught ' + e);
+    }
     tabris.flush();
     tabris._stackTraceStack = oldStack;
   };
