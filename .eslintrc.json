@@ -27,6 +27,7 @@
     "global": false,
     "__dirname": false,
     "setTimeout": false,
+    "clearTimeout": false,
     "module": false,
     "createImageBitmap": false,
     "require": false,

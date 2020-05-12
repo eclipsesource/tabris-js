@@ -150,7 +150,7 @@ describe('format', function() {
 
   it('formats rejected promises', function() {
     const result = format(Promise.reject('error'));
-    expect(result).to.equal('Promise { <rejected> \'error\' }');
+    expect(result).to.match(/^Promise { <rejected> 'error'/);
   });
 
   it('formats resolved promises', function() {

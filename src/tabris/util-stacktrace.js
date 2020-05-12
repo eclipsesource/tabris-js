@@ -9,7 +9,7 @@ const urlBaseRegEx = /^[a-z]+:\/\/[^/]+\//;
 
 export function getStackTrace(error) {
   try {
-    return getStackArray(error).join('\n');
+    return getStackArray(error.stack).join('\n');
   } catch (ex) {
     const minimalError = (ex && ex.constructor && ex.message) ? ex.constructor.name + ': ' + ex.message : '';
     warn(`Could not process stack trace (${minimalError || ex}), printing original.`);
@@ -32,7 +32,7 @@ export function formatError(error) {
     if (!(error instanceof Error)) {
       return error.constructor.name + ': ' + error.toString();
     } else {
-      stack = getStackArray(error).map(line => '  at ' + line).join('\n');
+      stack = getStackArray(error.stack).map(line => '  at ' + line).join('\n');
     }
   } catch (ex) {
     stack = error.stack;
@@ -40,20 +40,26 @@ export function formatError(error) {
   return error.constructor.name + ': ' + error.message + '\n' + stack;
 }
 
+/**
+ *
+ * @param {string} stack
+ */
+export function formatStack(stack) {
+  return getStackArray(stack).map(line => '  at ' + line).join('\n');
+}
+
 export function getCurrentLine(error) {
   try {
-    return getStackArray(error)[0].trim();
+    return getStackArray(error.stack)[0].trim();
   } catch (ex) {
     return '';
   }
 }
 
-function getStackArray(error) {
-  const stack = limitStack(
-    ([error.stack].concat(tabris._stackTraceStack).join('\n').split('\n')).filter(filterStackLine)
-  );
-  const formattedStack = stack
-    .map(normalizeStackLine)
+function getStackArray(stack) {
+  const formattedStack = limitStack(
+    ([stack].concat(tabris._stackTraceStack).join('\n').split('\n')).filter(filterStackLine)
+  ) .map(normalizeStackLine)
     .filter(line => !!line);
   if (!formattedStack.length) {
     throw new Error('Empty stacktrace');

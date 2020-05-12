@@ -23,6 +23,8 @@
  * THE SOFTWARE.
  */
 
+import {formatStack} from './util-stacktrace';
+
 function asap(fn) {
   setTimeout(fn, 0);
 }
@@ -101,8 +103,6 @@ export default function Promise(fn) {
   if (fn === noop) {return;}
   doResolve(fn, this);
 }
-Promise._onHandle = null;
-Promise._onReject = null;
 Promise._noop = noop;
 
 Promise.prototype.then = function(onFulfilled, onRejected) {
@@ -346,3 +346,43 @@ export function isRejected(promise) {
 export function getPromiseResult(promise) {
   return promise._value;
 }
+
+// --- rejection-tracking.js ---
+
+const rejectionId = Symbol('rejection id');
+let lastRejectionId = 0;
+let rejectionDisplayId = 0;
+const rejections = {};
+Promise._onHandle = (promise) => {
+  if (
+    promise._state === 2 && // IS REJECTED
+    rejections[promise[rejectionId]]
+  ) {
+    if (rejections[promise[rejectionId]].logged) {
+      console.warn(`Uncaught promise rejection (id: ${rejections[promise[rejectionId]].displayId}) handled.`);
+    } else {
+      clearTimeout(rejections[promise[rejectionId]].timeout);
+    }
+    delete rejections[promise[rejectionId]];
+  }
+};
+Promise._onReject = (promise, err) => {
+  if (promise._deferredState === 0) { // not yet handled
+    promise[rejectionId] = lastRejectionId++;
+    rejections[promise[rejectionId]] = {
+      displayId: null,
+      error: err,
+      timeout: setTimeout(() => {
+        const id = promise[rejectionId];
+        rejections[id].displayId = rejectionDisplayId++;
+        rejections[id].logged = true;
+        let error = typeof err === 'undefined' ? '' : err;
+        if (!err || !err.stack) {
+          error += '\n' + formatStack(new Error().stack);
+        }
+        console.error(`Uncaught promise rejection (id: ${rejections[id].displayId}) ${error}`);
+      }, 0),
+      logged: false
+    };
+  }
+};
