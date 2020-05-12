@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schema/texts.json",
+  "$fallbackLanguage": "en-us",
+  "emphasisFont": {
+    "en-us": "Emphasis Font",
+    "de": "Hervorgehobene Schrift"
+  },
+  "tintColor": {
+    "en-us": "Tint Color",
+    "en-gb": "Tint Colour",
+    "de": "Akzentfarbe"
+  }
+}

@@ -367,3 +367,5 @@ export type ResourceData<Resources extends ResourceBaseData<any>, RawType = any>
 export type ColorResourceData<Resources extends {[P in keyof Resources]: Color}> = Record<keyof Resources, Selectable<ColorValue>>;
 
 export type FontResourceData<Resources extends {[P in keyof Resources]: Font}> = Record<keyof Resources, Selectable<FontValue>>;
+
+export type TextResourceData<Resources extends {[P in keyof Resources]: string}> = Record<keyof Resources, Selectable<string>>;

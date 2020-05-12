@@ -214,6 +214,7 @@ describe('tabris', function() {
     expect(tabris.Layout).to.be.a('function');
     expect(tabris.RowLayout).to.be.a('function');
     expect(tabris.StackLayout).to.be.a('function');
+    expect(tabris.TextResources).to.be.a('function');
     expect(tabris.WidgetCollection).to.be.a('function');
     expect(tabris.$).to.be.a('function');
     expect(tabris.Percent).to.be.a('function');

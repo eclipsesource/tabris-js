@@ -75,6 +75,7 @@ import Switch from './widgets/Switch';
 import Tab from './widgets/Tab';
 import TabFolder from './widgets/TabFolder';
 import TextInput from './widgets/TextInput';
+import TextResources from './TextResources';
 import TextView from './widgets/TextView';
 import TimeDialog from './TimeDialog';
 import ToggleButton from './widgets/ToggleButton';
@@ -171,6 +172,7 @@ const tabrisMain = Object.assign(new Tabris(), {
   Tab,
   TabFolder,
   TextInput,
+  TextResources,
   TextView,
   TimeDialog,
   ToggleButton,

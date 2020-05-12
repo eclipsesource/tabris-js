@@ -1,0 +1,92 @@
+{
+  "type": "TextResources",
+  "category": "data",
+  "extends": {
+    "interface": "Resources",
+    "generics": [
+      "string",
+      "string"
+    ]
+  },
+  "constructor": {
+    "access": "protected",
+    "parameters": [
+      {
+        "name": "options",
+        "type": {
+          "interface": "ResourcesConstructorOptions",
+          "generics": [
+            "string",
+            "string"
+          ]
+        }
+      }
+    ]
+  },
+  "statics": {
+    "methods": {
+      "from": [
+        {
+          "generics": [
+            {
+              "name": "Base",
+              "extends": {
+                "interface": "NamedResources",
+                "generics": [
+                  "string",
+                  "keyof Base"
+                ]
+              }
+            },
+            {
+              "name": "Data",
+              "extends": {
+                "interface": "ResourceDataWithConfig",
+                "generics": [
+                  "string"
+                ]
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "name": "base",
+              "type": "Base"
+            },
+            {
+              "name": "data",
+              "type": "Data"
+            }
+          ],
+          "returns": {
+            "interface": "NamedResources",
+            "generics": ["string", "keyof (Base & Data)"]
+          }
+        },
+        {
+          "generics": [
+            {
+              "name": "Data",
+              "extends": {
+                "interface": "ResourceDataWithConfig",
+                "generics": [
+                  "string"
+                ]
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "name": "data",
+              "type": "Data"
+            }
+          ],
+          "returns": {
+            "interface": "NamedResources",
+            "generics": ["string", "keyof Data"]
+          }
+        }
+      ]
+    }
+  }
+}

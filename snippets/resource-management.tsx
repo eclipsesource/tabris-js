@@ -1,18 +1,10 @@
-import {Composite, contentView, Row, TextView, Stack, Color, Font} from 'tabris';
-import {colors, fonts} from './resources';
+import {contentView, TextView} from 'tabris';
+import {colors, fonts, texts} from './resources';
 
-contentView.append(
-  <Stack background={colors.myBackground}>
-    <ResourceInfo text='Tint Color' color={colors.tint}/>
-    <ResourceInfo text='Emphasis Font' font={fonts.emphasis}/>
-  </Stack>
+contentView.set({padding: 16, background: colors.myBackground}).append(
+  <TextView markupEnabled stretchX font={fonts.main}>
+    <span textColor={colors.tint}>{texts.tintColor}</span><br/><br/>
+    <span font={fonts.emphasis}>{texts.emphasisFont}</span>
+  </TextView>
 );
 
-function ResourceInfo(attr: {color?: Color, font?: Font, text: string}) {
-  return (
-    <Row spacing={20} padding={20}>
-      <TextView text={attr.text} font={attr.font || fonts.main}/>
-      <Composite height={50} width={50} background={attr.color}/>
-    </Row>
-  );
-}

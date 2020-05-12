@@ -62,10 +62,10 @@ function validateArguments(args) {
   if (!(options.data instanceof Object)) {
     throw new Error(`Expected option "data" to be an object, got ${typeof options.data}`);
   }
-  if (('converter' in options) && !(options.converter instanceof Function)) {
+  if (('converter' in options) && options.converter != null && !(options.converter instanceof Function)) {
     throw new Error(`Expected option "converter" to be a function, got ${typeof options.converter}`);
   }
-  if (('type' in options) && !(options.type instanceof Function && options.type.prototype)) {
+  if (('type' in options) && options.type != null && !(options.type instanceof Function && options.type.prototype)) {
     throw new Error(`Expected option "type" to be a constructor, got ${typeof options.type}`);
   }
   if (('base' in options) && options.base != null && !(options.base instanceof Object)) {
