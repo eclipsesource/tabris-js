@@ -2,7 +2,13 @@ import {expect, stub, restore, mockTabris} from '../test';
 import ClientMock from './ClientMock';
 import {addWindowTimerMethods}  from '../../src/tabris/WindowTimers';
 import {create as createApp} from '../../src/tabris/App';
-import {getStackTrace, patchError, formatError, getCurrentLine} from '../../src/tabris/util-stacktrace';
+import {
+  getStackTrace,
+  patchError,
+  formatError,
+  getCurrentLine,
+  formatPromiseRejectionReason
+} from '../../src/tabris/util-stacktrace';
 import PromisePolyfill from '../../src/tabris/Promise';
 
 describe('util-stacktrace', function() {
@@ -224,6 +230,10 @@ showActionSheet (./dist/actionsheet.js:15:25)`
           expect(getStackTrace({stack: stacks[platform].production})).to.equal(stacks.expected.simplified);
         });
 
+        it('prints stack trace with error-style formatting', function() {
+          expect(getStackTrace({stack: stacks[platform].production}, true)).to.equal(stacks.expected.simplifiedError);
+        });
+
         it('prints full stack trace in debug mode (non-minified)', function() {
           expect(getStackTrace({stack: stacks[platform].debug})).to.equal(stacks.expected.full);
         });
@@ -443,6 +453,42 @@ showActionSheet (./dist/actionsheet.js:15:25)`
           const error = new CustomError('Foo');
 
           expect(error.toString()).to.equal('CustomError: Foo\n' + stacks.expected.simplifiedError);
+        });
+
+      });
+
+      describe('formatPromiseRejectionReason', function() {
+
+        it('returns stack trace for undefined', function() {
+          const result = formatPromiseRejectionReason();
+
+          expect(result).to.match(/^\n {2}at .*util-stacktrace.js/);
+        });
+
+        it('returns stack trace and reason for null', function() {
+          const result = formatPromiseRejectionReason(null);
+
+          expect(result).to.match(/^null\n {2}at .*util-stacktrace.js/);
+        });
+
+        it('returns stack trace and reason for string', function() {
+          const result = formatPromiseRejectionReason('foo');
+
+          expect(result).to.match(/^foo\n {2}at .*util-stacktrace.js/);
+        });
+
+        it('returns stack trace and reason for stringifiables', function() {
+          const stringifiable = {toString: () => 'foo'};
+          const result = formatPromiseRejectionReason(stringifiable);
+
+          expect(result).to.match(/^foo\n {2}at .*util-stacktrace.js/);
+        });
+
+        it('does not include stack if object has one', function() {
+          const stringifiable = {toString: () => 'foo', stack: 'bar'};
+          const result = formatPromiseRejectionReason(stringifiable);
+
+          expect(result).to.match(/^foo$/);
         });
 
       });

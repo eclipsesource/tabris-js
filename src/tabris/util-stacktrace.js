@@ -7,9 +7,14 @@ const iosStackLineRegex = /^(.+)@(.*):([0-9]+):([0-9]+)/;
 const iosStackLineNoNameRegex = /(.*):([0-9]+):([0-9]+)/;
 const urlBaseRegEx = /^[a-z]+:\/\/[^/]+\//;
 
-export function getStackTrace(error) {
+/**
+ * @param {Error} error
+ * @param {boolean} errorStyleFormatting
+ * Prefix trace lines with "at", similarly to how logged errors are formatted in V8.
+ */
+export function getStackTrace(error, errorStyleFormatting = false) {
   try {
-    return getStackArray(error.stack).join('\n');
+    return getStackArray(error.stack).map(line => errorStyleFormatting ? '  at ' + line : line).join('\n');
   } catch (ex) {
     const minimalError = (ex && ex.constructor && ex.message) ? ex.constructor.name + ': ' + ex.message : '';
     warn(`Could not process stack trace (${minimalError || ex}), printing original.`);
@@ -40,12 +45,17 @@ export function formatError(error) {
   return error.constructor.name + ': ' + error.message + '\n' + stack;
 }
 
-/**
- *
- * @param {string} stack
- */
-export function formatStack(stack) {
-  return getStackArray(stack).map(line => '  at ' + line).join('\n');
+export function formatPromiseRejectionReason(reason) {
+  let result;
+  if (reason && typeof reason.toString === 'function') {
+    result = reason.toString();
+  } else {
+    result = typeof reason === 'undefined' ? '' : reason + '';
+  }
+  if (!reason || !reason.stack) {
+    result += '\n' + getStackTrace(new Error(), true);
+  }
+  return result;
 }
 
 export function getCurrentLine(error) {

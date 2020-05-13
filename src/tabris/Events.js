@@ -3,6 +3,7 @@ import EventObject from './EventObject';
 import {omit} from './util';
 import {hint, toValueString} from './Console';
 import {notify} from './symbols';
+import {formatPromiseRejectionReason} from './util-stacktrace';
 
 export default {
 
@@ -130,9 +131,11 @@ export default {
         for (const callback of this._callbacks[type]) {
           const value = callback.fn.call(callback.ctx || this, dispatchObject);
           if (value instanceof Promise) {
-            value.catch(ex => console.error(
-              `Listener for ${target.constructor.name} event "${type}" rejected:\n${ex.toString()}`
-            ));
+            value.catch(err => {
+              console.error(
+                `Listener for ${target.constructor.name} event "${type}" rejected: ${formatPromiseRejectionReason(err)}`
+              );
+            });
           }
           returnValues.push(value);
         }

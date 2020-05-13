@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-import {formatStack} from './util-stacktrace';
+import {formatPromiseRejectionReason} from './util-stacktrace';
 
 function asap(fn) {
   setTimeout(fn, 0);
@@ -366,21 +366,19 @@ Promise._onHandle = (promise) => {
     delete rejections[promise[rejectionId]];
   }
 };
-Promise._onReject = (promise, err) => {
+Promise._onReject = (promise, error) => {
   if (promise._deferredState === 0) { // not yet handled
     promise[rejectionId] = lastRejectionId++;
     rejections[promise[rejectionId]] = {
       displayId: null,
-      error: err,
+      error,
       timeout: setTimeout(() => {
         const id = promise[rejectionId];
         rejections[id].displayId = rejectionDisplayId++;
         rejections[id].logged = true;
-        let error = typeof err === 'undefined' ? '' : err;
-        if (!err || !err.stack) {
-          error += '\n' + formatStack(new Error().stack);
-        }
-        console.error(`Uncaught promise rejection (id: ${rejections[id].displayId}) ${error}`);
+        console.error(
+          `Uncaught promise rejection (id: ${rejections[id].displayId}) ${formatPromiseRejectionReason(error)}`
+        );
       }, 0),
       logged: false
     };
