@@ -224,6 +224,12 @@ tabrisMain.on('start', (options) => {
     global.console = createConsole(global.console);
   }
   patchError(Error);
+  patchError(EvalError);
+  patchError(RangeError);
+  patchError(ReferenceError);
+  patchError(SyntaxError);
+  patchError(TypeError);
+  patchError(URIError);
   tabris.$app = createApp();
   checkVersion(tabris.version, tabris.app._nativeGet('tabrisJsVersion'));
   if (!options || !options.headless) {
