@@ -62,6 +62,10 @@ module.exports = function(grunt) {
         src: 'README.md',
         dest: 'build/tabris/'
       },
+      schema: {
+        src: 'schema/*',
+        dest: 'build/tabris/'
+      },
       test_ts: {
         expand: true,
         cwd: 'test/typescript/',
@@ -223,6 +227,7 @@ module.exports = function(grunt) {
     'exec:uglify_boot',
     'copy:client_mock',
     'package',
+    'copy:schema',
     'copy:readme',
     'generate-tsd'
   ]);

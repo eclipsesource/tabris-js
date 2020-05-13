@@ -1,5 +1,5 @@
 {
-  "$schema": "../../schema/texts.json",
+  "$schema": "../node_modules/tabris/schema/texts.json",
   "$fallbackLanguage": "en-us",
   "emphasisFont": {
     "en-us": "Emphasis Font",

@@ -1,5 +1,5 @@
 {
-  "$schema": "../../schema/fonts.json",
+  "$schema": "../node_modules/tabris/schema/fonts.json",
   "main": {
     "1x": "medium 22px 'serif'",
     "2x": "medium 26px 'serif'"

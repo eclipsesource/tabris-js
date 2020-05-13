@@ -1,5 +1,5 @@
 {
-  "$schema": "../../schema/colors.json",
+  "$schema": "../node_modules/tabris/schema/colors.json",
   "myBackground": "#DFFF94",
   "myBlue": "#435FBD",
   "myRed": {
