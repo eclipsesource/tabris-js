@@ -189,7 +189,7 @@ function isLangSelector(value, fallback) {
   if (langLikeKeys.length === 0) {
     return false;
   }
-  if (!value[fallback]) {
+  if (!value[fallback.toLowerCase()] && !value[fallback.toLowerCase().split('-')[0]]) {
     throw new Error(
       `Missing entry for fallback language (currently "${fallback}") `
       + 'in selector '
@@ -271,15 +271,12 @@ function getNearbyValue(selectable, approx, strategy) {
  * @param {string} fallback
  */
 function getLocalValue(source, language, fallback) {
-  const lowerLang = language.toLowerCase();
-  let bestMatch = fallback;
-  for (const key in source) {
-    const lowerKey = key.toLowerCase();
-    if ((lowerLang.indexOf(lowerKey) === 0) && (lowerKey.length >= bestMatch.length)) {
-      return bestMatch = source[key];
-    }
-  }
-  return source[bestMatch];
+  const map = {};
+  Object.keys(source).forEach(key => map[key.toLowerCase()] = source[key]);
+  return map[language.toLowerCase()]
+    || map[language.toLowerCase().split('-')[0]]
+    || map[fallback.toLowerCase()]
+    || map[fallback.toLowerCase().split('-')[0]];
 }
 
 /**

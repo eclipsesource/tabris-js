@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/tabris/schema/texts.json",
-  "$fallbackLanguage": "en-us",
+  "$fallbackLanguage": "en-US",
   "emphasisFont": {
-    "en-us": "Emphasis Font",
+    "en": "Emphasis Font",
     "de": "Hervorgehobene Schrift"
   },
   "tintColor": {

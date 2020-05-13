@@ -249,6 +249,11 @@ describe('Resources', function() {
         expect(create({foo: {'de-DE': 1, 'de-AT': 2, 'en': 3}}).foo).to.equal(1);
       });
 
+      it('selects for more specific match', function() {
+        expect(create({foo: {'de-DE': 2, 'de': 1, 'en': 3}}).foo).to.equal(2);
+        expect(create({foo: {'de': 2, 'de-DE': 1, 'en': 3}}).foo).to.equal(1);
+      });
+
       it('falls back to default (en)', function() {
         expect(create({foo: {es: 1, aaq: 2, en: 3}}).foo).to.equal(3);
       });
@@ -256,6 +261,16 @@ describe('Resources', function() {
       it('falls back to configured default', function() {
         options.config = {fallbackLanguage: 'es'};
         expect(create({foo: {es: 1, aaq: 2, en: 3}}).foo).to.equal(1);
+      });
+
+      it('falls back to longer version of configured default', function() {
+        options.config = {fallbackLanguage: 'en-US'};
+        expect(create({foo: {'en': 1, 'en-US': 2, 'es': 3}}).foo).to.equal(2);
+      });
+
+      it('falls back to shorter version of configured default', function() {
+        options.config = {fallbackLanguage: 'en-us'};
+        expect(create({foo: {es: 1, en: 3}}).foo).to.equal(3);
       });
 
       it('selects case-insensitive', function() {
