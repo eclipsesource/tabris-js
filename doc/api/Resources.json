@@ -10,6 +10,7 @@
       "default": "ResourceType"
     }
   ],
+  "description": "This is the base class for all typed resource dictionaries. Instances can be obtained from one of its subclasses, or via the `build` method, which crates an intermediate `ResourceBuilder` object.  All members of a `Resources` (or subclass) instance must be of the same type (`ResourceType`).",
   "constructor": {
     "access": "protected",
     "parameters": [
@@ -33,6 +34,7 @@
             {
               "name": "ResourceType"           }
           ],
+          "ts_only": true,
           "parameters": [
             {
               "name": "options",
@@ -65,14 +67,23 @@
             {
               "name": "options",
               "type": {
+                "map": {
+                  "validator": {"type": "Function", "optional": true},
+                  "converter":  {"type": "Function", "optional": true},
+                  "type": {"type": "Function", "optional": true}
+                }
+              },
+              "ts_type": {
                 "interface": "ResourceBuildConvertOptions",
                 "generics": [
                   "ResourceType",
                   "RawType"
                 ]
-              }
+              },
+              "description": "The configuration of the new `ResourceBuilder`. Requires either a validator or a converter function, or both."
             }
           ],
+          "description": "Generates a `ResourceBuilder`, which is a factory for resource dictionaries. The options given here determine the type of the resource, as value as the \"raw\" type from which to create the resource values from.\n\n* The validator function receives a \"raw\" resource value (unconverted, as provided in the input data object) and must return a boolean indicating whether it is accepted. This means it either is a value that will be accepted by the converter, or if no converter is present it must be the final format of the resource value.\n* The converter if a function that receives the raw input value and returns the value as it will be present on the final resource dictionary. If no converter is given this is the same type as the resource type.\n* The \"type\" may be a constructor of the type of the final resource value as returned by the converter. For primitives this option must not be given.",
           "returns": {
             "interface": "ResourceBuilder",
             "generics": [

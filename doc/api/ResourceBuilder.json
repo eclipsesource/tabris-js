@@ -10,6 +10,7 @@
       "default": "ResourceType"
     }
   ],
+  "description": "A factory for generic resource dictionaries. Instances can be obtained from `Resource.build()` or by invoking the constructor.\n\nDo not use for resource dictionaries of the types `Color`, `Font` and `string`. Instead use the respective factories `ColorResources.from()`, `FontResources.from()` and `TextResources.from()`.",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -62,7 +63,8 @@
         "returns": {
           "interface": "NamedResources",
           "generics": ["ResourceType", "keyof (Base & Data)"]
-        }
+        },
+        "description": "Creates a resource dictionary from the given raw \"data\" object. All values from the given \"base\" dictionary are inherited unless overwritten.\n\nEntries in the \"data\" object starting with \"$\" are considered configuration options and will not become part of the final resource dictionary."
       },
       {
         "generics": [
@@ -83,6 +85,10 @@
           }
         ],
         "returns": {
+          "interface": "Resources",
+          "generics": ["ResourceType"]
+        },
+        "ts_returns": {
           "interface": "NamedResources",
           "generics": ["ResourceType", "keyof Data"]
         }

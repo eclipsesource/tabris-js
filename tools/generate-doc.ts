@@ -495,7 +495,8 @@ class DocumentRenderer {
           this.renderHtmlLink(this.def.namespace || 'tabris', {href: '../modules.md#startup'}), '\n'
         );
       }
-      const subclasses = Object.keys(this.gen.defs).filter(def => this.gen.defs[def].extends === this.def.type);
+      const subclasses = Object.keys(this.gen.defs)
+        .filter(def => plainType(this.gen.defs[def].extends) === this.def.type);
       result.push('Direct subclasses: | ');
       if (subclasses.length) {
         result.push(subclasses.map(name => code(this.renderTypeRef(name))).join(', '), '\n');

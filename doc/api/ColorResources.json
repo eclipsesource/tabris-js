@@ -8,6 +8,25 @@
       "ColorValue"
     ]
   },
+  "description": "This is the base class for all color resource dictionaries. Instances can be obtained via the `from` method, or by subclassing. All members of a `ColorResources` (or subclass) instance will be of the type `Color`.",
+  "links": [
+    {
+      "title": "Resource Management in Tabris.js",
+      "path": "../resource-management.md"
+    },
+    {
+      "title": "Defining raw color resource data in a separate JSON file.",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/${moduleversion}/snippets/resources/colors.json"
+    },
+    {
+      "title": "Converting raw color resource data to `ColorResources` instance.",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/${moduleversion}/snippets/resources/index.ts"
+    },
+    {
+      "title": "Using a ColorResources dictionary",
+      "snippet": "resource-management.tsx"
+    }
+  ],
   "constructor": {
     "access": "protected",
     "parameters": [
@@ -51,17 +70,24 @@
           "parameters": [
             {
               "name": "base",
-              "type": "Base"
+              "type": "Base",
+              "description": "A plain object or another `ColorResources` instance containing values to inherit by the new `ColorResources` dictionary."
             },
             {
               "name": "data",
-              "type": "Data"
+              "type": "Data",
+              "description": "The raw data (plain object) to create the dictionary from. The format must match the [Tabris.js colors JSON schema](https://github.com/eclipsesource/tabris-js/blob/${moduleversion}/schema/colors.json)."
             }
           ],
-          "returns": {
+          "returns": "ColorResources",
+          "ts_returns": {
             "interface": "NamedResources",
-            "generics": ["Color", "keyof (Base & Data)"]
-          }
+            "generics": [
+              "Color",
+              "keyof (Base & Data)"
+            ]
+          },
+          "description": "Creates a colors dictionary from the given raw \"data\" object. All colors from the given \"base\" dictionary are inherited unless overwritten.\n\nEntries in the \"data\" object starting with \"$\" are considered configuration options and will not become entries in the final colors dictionary."
         },
         {
           "generics": [
@@ -78,13 +104,19 @@
           "parameters": [
             {
               "name": "data",
-              "type": "Data"
+              "type": "Data",
+              "description": "The raw data (plain object) to create the dictionary from. The format must match the [Tabris.js colors JSON schema](https://github.com/eclipsesource/tabris-js/blob/${moduleversion}/schema/colors.json)."
             }
           ],
-          "returns": {
+          "returns": "ColorResources",
+          "ts_returns": {
             "interface": "NamedResources",
-            "generics": ["Color", "keyof Data"]
-          }
+            "generics": [
+              "Color",
+              "keyof Data"
+            ]
+          },
+          "description": "Creates a colors dictionary from the given raw \"data\" object. The format must match the [Tabris.js colors JSON schema](https://github.com/eclipsesource/tabris-js/blob/${moduleversion}/schema/colors.json). Entries in the \"data\" object starting with \"$\" are considered configuration options and will not become entries in the final colors dictionary."
         }
       ]
     }

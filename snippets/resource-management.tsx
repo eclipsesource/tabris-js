@@ -7,4 +7,3 @@ contentView.set({padding: 16, background: colors.myBackground}).append(
     <span font={fonts.emphasis}>{texts.emphasisFont}</span>
   </TextView>
 );
-

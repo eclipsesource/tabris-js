@@ -8,6 +8,25 @@
       "string"
     ]
   },
+  "description": "This is the base class for all text resource dictionaries. Instances can be obtained via the `from` method, or by subclassing. All members of a `TextResources` (or subclass) instance will be of the type `string`.",
+  "links": [
+    {
+      "title": "Resource Management in Tabris.js",
+      "path": "../resource-management.md"
+    },
+    {
+      "title": "Defining raw text resource data in a separate JSON file.",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/${moduleversion}/snippets/resources/texts.json"
+    },
+    {
+      "title": "Converting raw text resource data to `TextResources` instance.",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/${moduleversion}/snippets/resources/index.ts"
+    },
+    {
+      "title": "Using a TextResources dictionary",
+      "snippet": "resource-management.tsx"
+    }
+  ],
   "constructor": {
     "access": "protected",
     "parameters": [
@@ -51,17 +70,24 @@
           "parameters": [
             {
               "name": "base",
-              "type": "Base"
+              "type": "Base",
+              "description": "A plain object or another `TextResources` instance containing values to inherit by the new `TextResources` dictionary."
             },
             {
               "name": "data",
-              "type": "Data"
+              "type": "Data",
+              "description": "The raw data (plain object) to create the dictionary from. The format must match the [Tabris.js texts JSON schema](https://github.com/eclipsesource/tabris-js/blob/${moduleversion}/schema/texts.json)."
             }
           ],
-          "returns": {
+          "returns": "TextResources",
+          "ts_returns": {
             "interface": "NamedResources",
-            "generics": ["string", "keyof (Base & Data)"]
-          }
+            "generics": [
+              "string",
+              "keyof (Base & Data)"
+            ]
+          },
+          "description": "Creates a texts dictionary from the given raw \"data\" object. All texts from the given \"base\" dictionary are inherited unless overwritten.\n\nEntries in the \"data\" object starting with \"$\" are considered configuration options and will not become entries in the final texts dictionary."
         },
         {
           "generics": [
@@ -78,13 +104,19 @@
           "parameters": [
             {
               "name": "data",
-              "type": "Data"
+              "type": "Data",
+              "description": "The raw data (plain object) to create the dictionary from. The format must match the [Tabris.js texts JSON schema](https://github.com/eclipsesource/tabris-js/blob/${moduleversion}/schema/texts.json)."
             }
           ],
-          "returns": {
+          "returns": "TextResources",
+          "ts_returns": {
             "interface": "NamedResources",
-            "generics": ["string", "keyof Data"]
-          }
+            "generics": [
+              "string",
+              "keyof Data"
+            ]
+          },
+          "description": "Creates a texts dictionary from the given raw \"data\" object. The format must match the [Tabris.js texts JSON schema](https://github.com/eclipsesource/tabris-js/blob/${moduleversion}/schema/texts.json). Entries in the \"data\" object starting with \"$\" are considered configuration options and will not become entries in the final texts dictionary."
         }
       ]
     }

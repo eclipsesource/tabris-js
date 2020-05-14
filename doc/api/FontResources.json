@@ -8,6 +8,25 @@
       "FontValue"
     ]
   },
+  "description": "This is the base class for all font resource dictionaries. Instances can be obtained via the `from` method, or by subclassing. All members of a `FontResources` (or subclass) instance will be of the type `Font`.",
+  "links": [
+    {
+      "title": "Resource Management in Tabris.js",
+      "path": "../resource-management.md"
+    },
+    {
+      "title": "Defining raw font resource data in a separate JSON file.",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/${moduleversion}/snippets/resources/fonts.json"
+    },
+    {
+      "title": "Converting raw font resource data to `FontResources` instance.",
+      "path": "https://github.com/eclipsesource/tabris-js/blob/${moduleversion}/snippets/resources/index.ts"
+    },
+    {
+      "title": "Using a FontResources dictionary",
+      "snippet": "resource-management.tsx"
+    }
+  ],
   "constructor": {
     "access": "protected",
     "parameters": [
@@ -51,17 +70,24 @@
           "parameters": [
             {
               "name": "base",
-              "type": "Base"
+              "type": "Base",
+              "description": "A plain object or another `FontResources` instance containing values to inherit by the new `FontResources` dictionary."
             },
             {
               "name": "data",
-              "type": "Data"
+              "type": "Data",
+              "description": "The raw data (plain object) to create the dictionary from. The format must match the [Tabris.js fonts JSON schema](https://github.com/eclipsesource/tabris-js/blob/${moduleversion}/schema/fonts.json)."
             }
           ],
-          "returns": {
+          "returns": "FontResources",
+          "ts_returns": {
             "interface": "NamedResources",
-            "generics": ["Font", "keyof (Base & Data)"]
-          }
+            "generics": [
+              "Font",
+              "keyof (Base & Data)"
+            ]
+          },
+          "description": "Creates a fonts dictionary from the given raw \"data\" object. All fonts from the given \"base\" dictionary are inherited unless overwritten.\n\nEntries in the \"data\" object starting with \"$\" are considered configuration options and will not become entries in the final fonts dictionary."
         },
         {
           "generics": [
@@ -78,13 +104,19 @@
           "parameters": [
             {
               "name": "data",
-              "type": "Data"
+              "type": "Data",
+              "description": "The raw data (plain object) to create the dictionary from. The format must match the [Tabris.js fonts JSON schema](https://github.com/eclipsesource/tabris-js/blob/${moduleversion}/schema/fonts.json)."
             }
           ],
-          "returns": {
+          "returns": "FontResources",
+          "ts_returns": {
             "interface": "NamedResources",
-            "generics": ["Font", "keyof Data"]
-          }
+            "generics": [
+              "Font",
+              "keyof Data"
+            ]
+          },
+          "description": "Creates a fonts dictionary from the given raw \"data\" object. The format must match the [Tabris.js fonts JSON schema](https://github.com/eclipsesource/tabris-js/blob/${moduleversion}/schema/fonts.json). Entries in the \"data\" object starting with \"$\" are considered configuration options and will not become entries in the final fonts dictionary."
         }
       ]
     }
