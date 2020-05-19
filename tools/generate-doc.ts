@@ -5,7 +5,7 @@ import {
   isUnion, isTuple, isMap, isIndexedMap, isCallback, getEventTypeName, getJSXChildElementType, supportsJsx,
   getJSXContentType
 } from './common';
-import {join, parse, relative, sep} from 'path';
+import {join, parse, relative, sep, resolve} from 'path';
 
 type Link = {href?: string, title?: string};
 type TypeLinks = {[type: string]: Link};
@@ -188,6 +188,9 @@ class DocumentationGenerator {
     fs.copySync(this.sourcePath, this.targetPath, {
       filter: (path) => !/[\\/]api[\\/].+\./.test(path) || /[\\/]img[\\/].+\./.test(path)
     });
+    getFiles(this.targetPath)
+      .filter(path => /\.md$/.test(path))
+      .forEach(path => fs.writeFileSync(path, this.replaceVariables(fs.readFileSync(path).toString())));
   }
 
   private preProcessDefinitions() {
@@ -1245,4 +1248,14 @@ function isSnippet(obj: any): obj is schema.Snippet {
 
 function fileExt(path: string) {
   return path.split('.').pop();
+}
+
+// Source: https://stackoverflow.com/a/45130990
+function getFiles(dir) {
+  const dirents = fs.readdirSync(dir, {withFileTypes: true});
+  const files = dirents.map((dirent) => {
+    const res = resolve(dir, dirent.name);
+    return dirent.isDirectory() ? getFiles(res) : res;
+  });
+  return Array.prototype.concat(...files);
 }

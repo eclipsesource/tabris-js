@@ -48,16 +48,6 @@ module.exports = function(grunt) {
       target: 'build/doc/'
     },
     copy: {
-      doc: {
-        expand: true,
-        cwd: 'doc/',
-        src: ['*.md', 'api/*.md', 'api/img/**/*.*', 'img/*.*', 'toc.yml'],
-        dest: 'build/doc/',
-        options: {
-          process: content => content.replace(/\$\{moduleversion\}/g, version),
-          noProcess: '**/*.png'
-        }
-      },
       readme: {
         src: 'README.md',
         dest: 'build/tabris/'
