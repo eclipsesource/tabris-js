@@ -260,12 +260,16 @@ class DocumentationGenerator {
       try {
         if (!this.defs[title].interface) {
           const targetFile = join(this.apiTargetPath, parse(this.defs[title].file).name + '.md');
-          fs.writeFileSync(targetFile, new DocumentRenderer(this, title).render());
+          fs.writeFileSync(targetFile, this.replaceVariables(new DocumentRenderer(this, title).render()));
         }
       } catch (ex) {
         throw new Error(title + ': ' + ex.message + '\n' + ex.stack);
       }
     });
+  }
+
+  private replaceVariables(contents) {
+    return contents.replace(/\$\{moduleversion\}/g, this.version);
   }
 
   private renderIndex() {
