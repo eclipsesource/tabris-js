@@ -268,7 +268,7 @@
     },
     {
       "title": "Share various types of data with the `share()` API",
-      "snippet": "share.jsx"
+      "snippet": "app-share.jsx"
     }
   ]
 }
