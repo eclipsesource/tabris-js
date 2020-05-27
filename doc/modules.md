@@ -2,7 +2,7 @@
 ---
 # Modules
 
-Tabris.js uses the ["CommonJS"](http://www.commonjs.org/) module system, same as [Node.js](https://nodejs.org).
+Tabris.js uses the same basic module system as [Node.js](https://nodejs.org/api/modules.htm), also known as the ["CommonJS"](https://en.wikipedia.org/wiki/CommonJS) module system,
 
 This means:
 

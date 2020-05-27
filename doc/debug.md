@@ -9,7 +9,7 @@ Print the app version:
 console.log(tabris.app.version);
 ```
 
-The CLI also provides [various keyboard shortcuts](./CLI.md#keyboard-shortcuts) to interact with the connect app.
+The CLI also provides [various keyboard shortcuts](./tabris-cli.md#keyboard-shortcuts) to interact with the connect app.
 
 ## Android
 
