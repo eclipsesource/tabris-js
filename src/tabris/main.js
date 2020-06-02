@@ -57,6 +57,7 @@ import Page from './widgets/Page';
 import Percent from './Percent';
 import Picker from './widgets/Picker';
 import Pkcs5 from './Pkcs5';
+import Process, {create as createProcess} from './Process';
 import ProgressEvent from './ProgressEvent';
 import ProgressBar from './widgets/ProgressBar';
 import Popover from './Popover';
@@ -153,6 +154,7 @@ const tabrisMain = Object.assign(new Tabris(), {
   Permission,
   Picker,
   Printer,
+  Process,
   ProgressBar,
   ProgressEvent,
   RadioButton,
@@ -250,7 +252,7 @@ tabrisMain.on('start', (options) => {
   tabris.$localStorage = createStorage();
   if (tabris.device.platform === 'iOS') {
     tabris.$secureStorage = createStorage(true);
-  }else {
+  } else {
     tabris.$secureStorage = {};
   }
   tabris.$crypto = new Crypto();
@@ -258,6 +260,7 @@ tabrisMain.on('start', (options) => {
     global.console = createConsole(global.console);
   }
   tabris.$pkcs5 = new Pkcs5();
+  tabris.$process = createProcess(tabrisMain);
   // @ts-ignore
   global.localStorage = tabrisMain.localStorage;
   // @ts-ignore
@@ -266,6 +269,9 @@ tabrisMain.on('start', (options) => {
   global.crypto = tabrisMain.crypto;
   // @ts-ignore
   global.JSX = tabrisMain.JSX;
+  if (!global.process) { // Prevent damaging test environment
+    global.process = tabrisMain.process;
+  }
 });
 
 addDOMDocument(global);

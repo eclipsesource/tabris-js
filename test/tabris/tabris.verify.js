@@ -218,6 +218,7 @@ describe('tabris', function() {
     expect(tabris.WidgetCollection).to.be.a('function');
     expect(tabris.$).to.be.a('function');
     expect(tabris.Percent).to.be.a('function');
+    expect(tabris.Process).to.be.a('function');
     expect(tabris.LinearGradient).to.be.a('function');
     expect(tabris.Listeners).to.be.a('function');
     expect(tabris.ChangeListeners).to.be.a('function');
@@ -258,6 +259,7 @@ describe('tabris', function() {
       expect(tabris.device).to.be.instanceOf(tabris.Device);
       expect(tabris.fs).to.be.instanceOf(tabris.FileSystem);
       expect(tabris.devTools).to.be.instanceOf(tabris.DevTools);
+      expect(tabris.process).to.be.instanceOf(tabris.Process);
     });
 
     it('creates DOM API singletons', function() {
