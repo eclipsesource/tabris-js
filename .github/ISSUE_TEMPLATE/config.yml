@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Slack community channel
+    url: https://tabrisjs.herokuapp.com/
+    about: Get in touch with the Tabris.js community on Slack
+  - name: Tabris.js on Twitter
+    url: https://twitter.com/tabrisjs
+    about: Get the latest Tabris.js new on Twitter
+  - name: Tabris.js help on Stack Overflow
+    url: https://stackoverflow.com/questions/tagged/tabris
+    about: Ask Tabris.js related question on Stack Overflow
