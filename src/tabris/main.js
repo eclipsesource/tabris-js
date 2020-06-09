@@ -54,6 +54,7 @@ import LayoutData from './LayoutData';
 import Listeners, {ChangeListeners} from './Listeners';
 import LinearGradient from './LinearGradient';
 import Page from './widgets/Page';
+import PdfView from './widgets/PdfView';
 import Percent from './Percent';
 import Picker from './widgets/Picker';
 import Pkcs5 from './Pkcs5';
@@ -118,6 +119,7 @@ const WIDGETS = Object.freeze({
   ImageView,
   NavigationView,
   Page,
+  PdfView,
   Picker,
   ProgressBar,
   RadioButton,

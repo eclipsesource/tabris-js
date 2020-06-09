@@ -165,6 +165,8 @@ describe('tabris', function() {
     expect(tabris.NavigationView.name).to.equal('NavigationView');
     expect(tabris.Page).to.be.a('function');
     expect(tabris.Page.name).to.equal('Page');
+    expect(tabris.PdfView).to.be.a('function');
+    expect(tabris.PdfView.name).to.equal('PdfView');
     expect(tabris.Picker).to.be.a('function');
     expect(tabris.Picker.name).to.equal('Picker');
     expect(tabris.ProgressBar).to.be.a('function');

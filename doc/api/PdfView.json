@@ -1,0 +1,72 @@
+{
+  "type": "PdfView",
+  "category": "widget",
+  "description": "A widget to display PDF documents.",
+  "extends": "Widget",
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "properties",
+        "type": {
+          "interface": "Properties",
+          "generics": ["PdfView"]
+        },
+        "optional": true,
+        "description": "Sets all key-value pairs in the properties object as widget properties."
+      }
+    ]
+  },
+  "properties": {
+    "jsxAttributes": {
+      "const": true,
+      "readonly": true,
+      "ts_only": true,
+      "type": "JSXAttributes<this> & {children?: never}"
+    },
+    "src": {
+      "type": {
+        "union": ["string", "Blob", "null"]
+      },
+      "description": "The source of the document. Can be a path on the local file system or a `Blob`/`File` object."
+    },
+    "zoomEnabled": {
+      "type": "boolean",
+      "description": "Enables the pinch-to-zoom gesture. On iOS this will scale the entire document, while on Android each page is scaled individually.",
+      "default": false
+    },
+    "spacing": {
+      "type": "Dimension",
+      "description": "The vertical spacing between the individual pages. The default is specific to the device and can not be changed on iOS.",
+      "platforms": {"ios": false}
+    },
+    "pageElevation": {
+      "type": "number",
+      "default": 0,
+      "description": "Setting this property determines the intensity of the shadow page on the widget background. On iOS the shadow is either visible or not (property set to `0`), but always looks the same."
+    },
+    "pageBackground": {
+      "type": "ColorValue",
+      "default": "'initial'",
+      "description": "Determines the color visible in the transparent areas of a page.",
+      "platforms": {"ios": false}
+    },
+    "padding": {
+      "type": {"union": ["BoxDimensions", "null"]},
+      "const": true,
+      "description": "Additional space to add inside the widgets bounds.",
+      "platforms": {"ios": false}
+    }
+  },
+  "events": {
+    "load": {
+      "description": "Fired when the document loading has finished.",
+      "parameters": {
+        "error": {
+          "description": "If this is `true` the loading process failed.",
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}
