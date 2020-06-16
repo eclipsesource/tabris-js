@@ -26,20 +26,132 @@
   },
   "statics": {
     "methods": {
-      "createImageBitmap": {
-        "parameters": [
-          {
-            "name": "imageSource",
-            "description": "The data source to create an ImageBitmap instance from.",
-            "type": {"union": ["Blob", "ImageData", "ImageBitmap", "Canvas"]}
+      "createImageBitmap": [
+        {
+          "parameters": [
+            {
+              "name": "imageSource",
+              "description": "The data source to create an ImageBitmap instance from.",
+              "type": {
+                "union": [
+                  "Blob",
+                  "ImageData",
+                  "ImageBitmap",
+                  "Canvas"
+                ]
+              }
+            },
+            {
+              "name": "options",
+              "description": "Options for resizing the image.",
+              "optional": true,
+              "type": {
+                "map": {
+                  "resizeWidth": {
+                    "type": "number",
+                    "optional": true
+                  },
+                  "resizeHeight": {
+                    "type": "number",
+                    "optional": true
+                  },
+                  "resizeQuality": {
+                    "type": {
+                      "union": [
+                        "'pixelated'",
+                        "'low'",
+                        "'medium'",
+                        "'high'"
+                      ]
+                    },
+                    "optional": true,
+                    "description": "Defaults to `'low'`"
+                  }
+                }
+              }
+            }
+          ],
+          "description": "Creates a promise that resolves to a new instance of ImageBitmap. Also available in global scope.",
+          "returns": {
+            "interface": "Promise",
+            "generics": [
+              "ImageBitmap"
+            ]
           }
-        ],
-        "description": "Creates a promise that resolves to a new instance of ImageBitmap. Also available in global scope.",
-        "returns": {
-          "interface": "Promise",
-          "generics": ["ImageBitmap"]
+        },
+        {
+          "parameters": [
+            {
+              "name": "imageSource",
+              "description": "The data source to create an ImageBitmap instance from.",
+              "type": {
+                "union": [
+                  "Blob",
+                  "ImageData",
+                  "ImageBitmap",
+                  "Canvas"
+                ]
+              }
+            },
+            {
+              "name": "sx",
+              "type": "number",
+              "description": "The x coordinate of the reference point of the rectangle from which the ImageBitmap will be extracted."
+            },
+            {
+              "name": "sy",
+              "type": "number",
+              "description": "The y coordinate of the reference point of the rectangle from which the ImageBitmap will be extracted."
+            },
+            {
+              "name": "sw",
+              "type": "number",
+              "description": "The width of the rectangle from which the ImageBitmap will be extracted."
+            },
+            {
+              "name": "sh",
+              "type": "number",
+              "description": "The height of the rectangle from which the ImageBitmap will be extracted."
+            },
+            {
+              "name": "options",
+              "description": "Options for resizing the image.",
+              "optional": true,
+              "type": {
+                "map": {
+                  "resizeWidth": {
+                    "type": "number",
+                    "optional": true
+                  },
+                  "resizeHeight": {
+                    "type": "number",
+                    "optional": true
+                  },
+                  "resizeQuality": {
+                    "type": {
+                      "union": [
+                        "'pixelated'",
+                        "'low'",
+                        "'medium'",
+                        "'high'"
+                      ]
+                    },
+                    "optional": true,
+                    "description": "Defaults to `'low'`"
+                  }
+                }
+              }
+            }
+          ],
+          "description": "Creates a promise that resolves to a new instance of ImageBitmap. Also available in global scope.",
+          "returns": {
+            "interface": "Promise",
+            "generics": [
+              "ImageBitmap"
+            ]
+          }
         }
-      }
+      ]
     }
   }
 }

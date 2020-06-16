@@ -3,6 +3,7 @@ import NativeObject from './NativeObject';
 import {getBytes, setNativeObject, getNativeObject} from './util';
 import ImageData from './ImageData';
 import Canvas from './widgets/Canvas';
+import {types} from './property-types';
 
 export default class ImageBitmap {
 
@@ -10,29 +11,25 @@ export default class ImageBitmap {
    * @param {Blob|ImageData|ImageBitmap|Canvas} imageSource
    */
   static createImageBitmap(imageSource) {
-    if (arguments.length !== 1) {
-      return Promise.reject(new TypeError(
-        `${arguments.length} is not a valid argument count for any overload of createImageBitmap.`
-      ));
-    }
+    const options = getOptions(arguments);
     if (imageSource instanceof Blob) {
-      return load(_image => _image.loadEncodedImage(getBytes(imageSource)));
+      return load(options, _image => _image.loadEncodedImage(getBytes(imageSource)));
     } else if (imageSource instanceof ImageData) {
-      return load(_image => _image.loadImageData(imageSource.data, imageSource.width, imageSource.height));
+      return load(options, _image => _image.loadImageData(imageSource.data, imageSource.width, imageSource.height));
     } else if (imageSource instanceof ImageBitmap) {
       if (getNativeObject(imageSource).isDisposed()) {
         return Promise.reject(new TypeError('Can not create ImageBitmap from another closed ImageBitmap'));
       }
-      return load(_image => _image.loadImageBitmap(getNativeObject(imageSource).cid));
+      return load(options, _image => _image.loadImageBitmap(getNativeObject(imageSource).cid));
     } else if (imageSource instanceof Canvas) {
       if (imageSource.isDisposed()) {
         return Promise.reject(new TypeError('Can not create ImageBitmap from a disposed Canvas'));
       }
-      return load(_image => _image.loadCanvas(imageSource));
+      return load(options, _image => _image.loadCanvas(imageSource));
     }
-    return Promise.reject(new TypeError(
+    throw new TypeError(
       'Argument 1 of createImageBitmap could not be converted to any of: Blob, ImageData, ImageBitmap, Canvas.'
-    ));
+    );
   }
 
   /**
@@ -102,16 +99,54 @@ class _ImageBitmap extends NativeObject {
 
 }
 
-Object.defineProperty(_ImageBitmap.prototype, 'wrapper', {
-  value: /** @type {ImageBitmap} */(null)}
-);
+NativeObject.defineProperties(_ImageBitmap.prototype,  {
+  rect: {type: 'any', default: null},
+  resizeWidth: {type: 'natural', default: null},
+  resizeHeight: {type: 'natural', default: null},
+  resizeQuality: {
+    type: 'string',
+    default: 'low',
+    choice: ['pixelated', 'low', 'medium', 'high']
+  }
+});
 
 /**
+ * @param {IArguments} args
+ */
+function getOptions(args) {
+  if ([1, 2, 5, 6].indexOf(args.length) === -1) {
+    throw new TypeError(`${args.length} is not a valid argument count for any overload of createImageBitmap.`);
+  }
+  const options = {};
+  if (args.length === 2) {
+    if (!(args[1] instanceof Object)) {
+      throw new TypeError('Argument 2 of createImageBitmap is not an object.');
+    }
+    Object.assign(options, args[1]);
+  } else if (args.length >= 5) {
+    if (args.length === 6) {
+      if (!(args[5] instanceof Object)) {
+        throw new TypeError('Argument 6 of createImageBitmap is not an object.');
+      }
+    }
+    options.rect = {
+      sx: types.natural.convert(args[1]),
+      sy: types.natural.convert(args[2]),
+      sw: types.natural.convert(args[3]),
+      sh: types.natural.convert(args[4])
+    };
+    Object.assign(options, args[5] || {});
+  }
+  return options;
+}
+
+/**
+ * @param {object} options
  * @param {(nativeObject: _ImageBitmap) => Promise<any>} cb
  * @returns {Promise<ImageBitmap>}
  */
-function load(cb) {
-  const nativeObject = new _ImageBitmap();
+function load(options, cb) {
+  const nativeObject = new _ImageBitmap(options);
   return cb(nativeObject)
     .then(resolution => {
       const wrapper = new ImageBitmap(nativeObject, resolution);

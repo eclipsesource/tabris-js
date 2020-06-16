@@ -227,7 +227,7 @@ export function setNativeObject(object, nativeObject) {
 
 /**
  * @param {object} object
- * @returns {{cid: string, isDisposed: () => boolean}}
+ * @returns {{cid: string, isDisposed: () => boolean, dispose: () => void}}
  */
 export function getNativeObject(object) {
   return object instanceof Object ? object[nativeObjectSym] : null;
