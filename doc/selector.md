@@ -194,7 +194,7 @@ Such a collection is created implicitly whenever a constructor is used as a [typ
 
 ### composite.children()
 
-The method `composite.children(selector)` method returns a new widget collection containing the composite's current children that match the given selector. This includes only first generation descendants, so children of children are not part of the result.
+The method `composite.children(selector)` method returns a new widget collection containing the composite's current children that match the given selector. This includes only first generation descendants, so children of children are not part of the result. If the composite is a custom component (user defined subclass) that [encapsulates](#encapsulation) its children **the method will always return an empty `WidgetCollection`.
 
 The selector parameter defaults to `*`, so `children()` is the same as `children('*')`.
 
@@ -214,7 +214,7 @@ This will modify the first two children of the given composite since these are `
 
 ### composite.find()
 
-The method `composite.find(selector)` returns a new widget collection containing all descendants that match the given selector. This excludes the widget the method was called on, and any descendants that are [encapsulated](#encapsulation).
+The method `composite.find(selector)` returns a new widget collection containing all descendants that match the given selector. **This excludes** the widget the method was called on, **and any descendants of [encapsulated](#encapsulation) components**.
 
 The selector parameter defaults to `*`, so `find()` is the same as `find('*')`.
 
@@ -234,13 +234,17 @@ This will modify all `TextView` elements in the tree.
 
 ### $()
 
-This function is a global alias for `tabris.contentView.find()`, and it there accepts the same selector parameters.
+This function is a global alias for `tabris.contentView.find()`, and it therefore accepts the same selector parameters.
 
 ```js
 $('.foo > .bar').set({background: 'blue'});
 // same thing:
 tabris.contentView.find('.foo > .bar').set({background: 'blue'});
 ```
+
+Note that `$()` will **not** search through *all* widgets in the UI tree. It's scope does *not* include any widgets in the drawer, a popover, or an [encapsulated](#encapsulation) custom component. A component is encapsulated if it overrides the [`children()`](#children) method or uses the `@component` decorator.
+
+Due to it's scope it is mainly intended to be used in snippets, for debugging and when bootstrapping your application.
 
 ### widgetCollection.filter()
 
@@ -295,7 +299,11 @@ widget.children('.foo').children('.bar'); // same result
 
 While this method is longer, it allows using non-string selector, i.e. functions/constructors.
 
+When subclassing a `Composite` (including `Page`, `Tab` and `Canvas`), it is recommended to overwrite the `children` method to [encapsulate](#encapsulation) the component. The method will then always return an empty `WidgetCollection`, even when the composite/component contains children. The `_children()` method will still work the same way.
+
 ### composite.apply()
+
+__Note: Within [encapsulated](#encapsulation) components, use `_apply()` instead.__
 
 A shortcut for setting different sets of properties for different selections in one method call. The method takes a plain object with selectors as keys and property objects as values:
 
