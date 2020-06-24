@@ -55,6 +55,11 @@
         "only-if-cached"
       ],
       "optional": true
+    },
+    "timeout": {
+      "type": "number",
+      "optional": true,
+      "description": "The network request timeout in milliseconds"
     }
   }
 }
