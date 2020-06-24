@@ -35,6 +35,8 @@
       url: typescript.html
     - title: JSX Support
       url: JSX.html
+    - title: Resource Management
+      url: resource-management.html
     - title: Debugging
       url: debug.html
     - title: Testing
