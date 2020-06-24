@@ -1,4 +1,4 @@
-node {
+node("master") {
 
   stage('Checkout') {
     git url: 'git@github.com:eclipsesource/tabris-js.git', credentialsId: 'tabris-js_id_rsa', branch: '2.x'
