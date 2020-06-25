@@ -1,5 +1,5 @@
 import {types} from './property-types';
-import {warn, toValueString} from './Console';
+import {warn, toValueString, hint} from './Console';
 import LayoutData from './LayoutData';
 import Constraint from './Constraint';
 import Percent from './Percent';
@@ -227,12 +227,16 @@ export class LayoutQueue {
   }
 
   add(composite) {
+    if (this._inFlush) {
+      hint(this, 'WARNING: Widget layout manipulation during layout flush may cause inconsistent state');
+      return;
+    }
     this._map[composite.cid] = composite;
   }
 
   flush() {
     if (this._inFlush) {
-      throw new Error('flush in flush');
+      return;
     }
     this._inFlush = true;
     for (const cid in this._map) {

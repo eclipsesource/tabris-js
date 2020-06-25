@@ -461,4 +461,18 @@ describe('LayoutQueue', function() {
     expect(composite.layout.render).to.have.been.calledOnce;
   });
 
+  it('prints warning if layout it manipulated during flush', function() {
+    const composite = {
+      layout: {render: () => queue.add(composite)}
+    };
+    spy(console, 'warn');
+    queue.add(composite);
+
+    queue.flush();
+
+    expect(console.warn).to.have.been.calledWithMatch(
+      'LayoutQueue: WARNING: Widget layout manipulation during layout flush may cause inconsistent state'
+    );
+  });
+
 });
