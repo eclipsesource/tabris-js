@@ -109,6 +109,7 @@ const StyledText = attributes => <TextView textColor='red' {...attributes} />;
 // example usage:
 contentView.append(<StyledText>Hello World!</StyledText>);
 ```
+
 If the element has children (everything within the element's body) they are mapped to the attribute "children". Therefore `<Foo><Bar/></Foo>` is treated like `<Foo children={<Bar/>}/>`.
 
 In TypeScript (`.tsx` files) you need to give the proper type of the attributes object:
@@ -131,6 +132,70 @@ A function that was used as a SFC can also be used as a selector, as can its nam
 ```jsx
 console.log(contentView.find(StyledText).first() === contentView.find('StyledText').first());
 ```
+
+See example snippets for SFCs [here](https://playground.tabris.com/?snippet=function-jsx-components.jsx) for JavaScript and [here](https://playground.tabris.com/?snippet=function-jsx-components-typescript.tsx) for TypeScript.
+
+### Dynamic Functional Components
+
+All widgets have a general-purpose "data" property that can contain any object. Consequently it can be used to store state on what is otherwise a [stateless functional component](#statelessfunctionalcomponents). By attaching a property change listener within the component function the component (or any of its children) can be modified. Special care has to be taken to ensure the change listener is called for the initial value: If the property is set before the listener is attached it won't work.
+
+Here is an easy example using a model Class `Person` which has the properties `firstName` and `lastName`:
+
+```jsx
+function PersonView({data, ...other}) {
+  return (<TextView {...other}/>)
+    .onDataChanged(ev =>
+      ev.target.text = ev.value ? `This is now ${ev.value.firstName} ${ev.value.lastName}` : ''
+    )
+    .set({data}); // do this last!
+}
+```
+
+The usage is as you would expect:
+
+```jsx
+// initial value:
+contentView.append(
+  <PersonView data={new Person('Rogan', 'Joe')}/>
+);
+
+// change the person:
+$(PersonView).only().data = new Person('Harris', 'Sam');
+```
+
+In TypeScript we need to cast the TextView and the change event value to stay type-safe. The [`checkType`](./api/utils.md#checktypevaluetypecallback) utility function can be used to do this implicitly:
+
+```tsx
+type PersonDataAttr = Attributes<Widget> & {data: Person};
+function PersonView(attributes: PersonDataAttr) {
+  const {data, ...other} = attributes;
+  const widget: TextView = <TextView {...other}/>;
+  return widget
+    .onDataChanged(ev => {
+      const person = checkType(ev.value, Person, {nullable: true});
+      ev.target.text = person ? `This is now ${person.firstName} ${person.lastName}` : '';
+    })
+    .set({data}); // needs to be set last to trigger the first chang event
+}
+```
+
+Using JsDoc and `checkType` we also can achieve type-safety in JavaScript:
+
+```jsx
+/** @param {tabris.Attributes<tabris.Widget> & {data: Person}} attributes */
+function PersonView({data, ...other}) {
+  /** @type {TextView} */
+  const widget = <TextView {...other}/>;
+  return widget
+    .onDataChanged(ev => {
+      const person = checkType(ev.value, Person, {nullable: true});
+      ev.target.text = person ? `This is now ${person.firstName} ${person.lastName}` : '';
+    })
+    .set({data}); // needs to be set last to trigger the first chang event
+}
+```
+
+You can see variants of these examples in action [here](https://playground.tabris.com/?snippet=function-jsx-components.jsx) for JavaScript and [here](https://playground.tabris.com/?snippet=function-jsx-components-typescript.tsx) for TypeScript.
 
 ### Custom Components
 

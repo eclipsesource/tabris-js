@@ -7,6 +7,7 @@ import {types} from './property-types';
 import LayoutData, {mergeLayoutData} from './LayoutData';
 import {getFilter} from './util-widget-select';
 import {toValueString, hint} from './Console';
+import checkType from './checkType';
 
 /** @type {Array<keyof LayoutData>} */
 const layoutDataProps = ['left', 'right', 'top', 'bottom', 'width', 'height', 'centerX', 'centerY', 'baseline'];
@@ -195,14 +196,23 @@ export default class Widget extends NativeObject {
     return this._classList;
   }
 
+  set data(value) {
+    if (this._isDisposed || this.$data === value) {
+      return;
+    }
+    checkType(value, Object, {name: 'data', nullable: true});
+    Object.defineProperty(this, '$data', {
+      enumerable: false, writable: true, value
+    });
+    this._triggerChangeEvent('data', this.$data);
+  }
+
   get data() {
     if (this._isDisposed) {
       return undefined;
     }
-    if (!this.$data) {
-      Object.defineProperty(this, '$data', {
-        enumerable: false, writable: false, value: {}
-      });
+    if (!('$data' in this)) {
+      Object.defineProperty(this, '$data', {enumerable: false, writable: true, value: {}});
     }
     return this.$data;
   }
@@ -446,7 +456,8 @@ layoutDataProps.forEach(prop => {
 
 NativeObject.defineChangeEvents(Widget.prototype, [
   'layoutData',
-  'class'
+  'class',
+  'data'
 ]);
 
 NativeObject.defineEvents(Widget.prototype, {

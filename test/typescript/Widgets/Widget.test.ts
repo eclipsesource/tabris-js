@@ -100,7 +100,7 @@ widget.centerX = centerX;
 widget.centerY = centerY;
 widget.class = _class;
 widget.classList = classList;
-widget.data.foo = 42;
+widget.data = {foo: 42};
 widget.cornerRadius = cornerRadius;
 widget.elevation = elevation;
 widget.enabled = enabled;
@@ -125,6 +125,7 @@ const properties: Properties<Widget> = {
   class: _class,
   classList,
   cornerRadius,
+  data,
   elevation,
   enabled,
   excludeFromLayout,

@@ -283,12 +283,51 @@ describe('Widget', function() {
       });
     });
 
-    it('has read-only data object', function() {
-      const data = widget.data;
+    it('has initial data object', function() {
+      expect(widget.data.constructor).to.equal(Object);
+    });
+
+    it('data object can be replaced', function() {
+      const data = {};
+      widget.data = data;
+
+      expect(widget.data).to.equal(data);
+    });
+
+    it('data can only be an object', function() {
+      expect(() => widget.data = 23).to.throw(TypeError);
+    });
+
+    it('can be set to null', function() {
+      widget.data = null;
+
+      expect(widget.data).to.be.null;
+    });
+
+    it('data object can be replaced twice', function() {
+      const data = {};
       widget.data = {};
 
-      expect(widget.data.constructor).to.equal(Object);
+      widget.data = data;
+
       expect(widget.data).to.equal(data);
+    });
+
+    it('data fires change events', function() {
+      const listener = spy();
+      widget.onDataChanged(listener);
+      const data = {};
+
+      widget.data = data;
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener.args[0][0].value).to.equal(data);
+    });
+
+    it('data is undefined after dispose', function() {
+      widget.dispose();
+
+      expect(widget.data).to.be.undefined;
     });
 
     describe('toXML', function() {

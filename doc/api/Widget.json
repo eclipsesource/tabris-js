@@ -286,10 +286,8 @@
     },
     "data": {
       "type": "object",
-      "ts_type": "{[k: string]: any}",
-      "readonly": true,
-      "const": true,
-      "description": "A general-purpose object that allows the application to attach arbitrary data to the widget. Manipulations on this object have no effect on the widget itself in any way. Example: `widget.data.myData = myData;`"
+      "ts_type": "{[key: string]: any}",
+      "description": "A general-purpose property that may be set to any object. It is initialized with an empty object for historical reasons (backwards compatibility)."
     }
   },
   "events": {
