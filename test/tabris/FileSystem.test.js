@@ -1,4 +1,4 @@
-import {expect, mockTabris, spy, stub, restore, match} from '../test';
+import {expect, match, mockTabris, restore, spy, stub} from '../test';
 import ClientMock from './ClientMock';
 import FileSystem, {create as createFileSystem, createError} from '../../src/tabris/FileSystem';
 import TextEncoder from '../../src/tabris/TextEncoder';
@@ -582,6 +582,82 @@ describe('FileSystem', function() {
         stub(client, 'call').callsFake((id, method, args) => args.onError('EACCES'));
         return fs.remove('/foo').then(expectFail, err => {
           expect(err.message).to.equal('Permission denied: /foo');
+        });
+      });
+
+    });
+
+    describe('openFile', function() {
+
+      it('rejects if options are not an object', function() {
+        return fs.openFile('options').then(expectFail, err => {
+          expect(err).to.be.instanceOf(Error);
+          expect(err.message).to.equal('Options need to be an Object');
+        });
+      });
+
+      it('rejects if type is not a string', function() {
+        return fs.openFile({type: 1}).then(expectFail, err => {
+          expect(err).to.be.instanceOf(Error);
+          expect(err.message).to.equal('Invalid type: 1 is not a string');
+        });
+      });
+
+      it('rejects if quantity is not a string', function() {
+        return fs.openFile({quantity: 2}).then(expectFail, err => {
+          expect(err).to.be.instanceOf(Error);
+          expect(err.message).to.equal('Invalid quantity: 2 is not a string');
+        });
+      });
+
+      it('rejects if quantity is not a valid string', function() {
+        return fs.openFile({quantity: 'many'}).then(expectFail, err => {
+          expect(err).to.be.instanceOf(Error);
+          expect(err.message).to.equal('Quantity has to be "single" or "multiple" but is "many"');
+        });
+      });
+
+      it('calls native method', function() {
+        spy(client, 'call');
+        fs.openFile();
+        expect(client.call).to.have.been.calledWithMatch(fs.cid, 'openFile', {});
+      });
+
+      it('calls native method with options', function() {
+        spy(client, 'call');
+        fs.openFile({type: 'image/png', quantity: 'multiple'});
+        expect(client.call).to.have.been.calledWithMatch(fs.cid, 'openFile', {
+          options: {type: 'image/png', quantity: 'multiple'}
+        });
+      });
+
+      it('resolves with empty array on success when no file selected', function() {
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess());
+        return fs.openFile().then(result => {
+          expect(result).to.deep.equal([]);
+        });
+      });
+
+      it('resolves with files array on success', function() {
+        stub(client, 'call').callsFake((id, method, args) => args.onSuccess([{
+          data,
+          name: 'person.png',
+          type: 'image/png',
+          lastModified: 1234
+        }]));
+        return fs.openFile().then(result => {
+          const file = result[0];
+          expect(file.length).to.equal(data.length);
+          expect(file.name).to.equal('person.png');
+          expect(file.type).to.equal('image/png');
+          expect(file.lastModified).to.equal(1234);
+        });
+      });
+
+      it('rejects in case of error', function() {
+        stub(client, 'call').callsFake((id, method, args) => args.onError('Error message'));
+        return fs.openFile().then(expectFail, err => {
+          expect(err.message).to.equal('Error message');
         });
       });
 

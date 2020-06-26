@@ -1,10 +1,10 @@
 import NativeObject from './NativeObject';
 import TextEncoder from './TextEncoder';
 import TextDecoder from './TextDecoder';
-import {normalizePath} from './util';
+import {getBytes, normalizePath} from './util';
 import {toValueString} from './Console';
 import Blob from './Blob';
-import {getBytes} from './util';
+import File from './File';
 
 const ERRORS = {
   EACCES: 'Permission denied',
@@ -54,6 +54,45 @@ export default class FileSystem extends NativeObject {
         path: checkPath(path, 'file name'),
         onError: (err) => reject(createError(err, path)),
         onSuccess: (data) => encoding ? TextDecoder.decode(data, encoding).then(resolve, reject) : resolve(data)
+      });
+    });
+  }
+
+  openFile(options) {
+    return new Promise((resolve, reject) => {
+      let optionsObject = {};
+      if (arguments.length >= 1) {
+        if (!(options instanceof Object)) {
+          throw new Error('Options need to be an Object');
+        }
+        const type = 'type' in options ? options.type : '*/*';
+        if (typeof type !== 'string') {
+          throw new Error(`Invalid type: ${toValueString(type)} is not a string`);
+        }
+        const quantity = 'quantity' in options ? options.quantity : 'single';
+        if (typeof quantity !== 'string') {
+          throw new Error(`Invalid quantity: ${toValueString(quantity)} is not a string`);
+        }
+        if (quantity !== 'single' && quantity !== 'multiple') {
+          throw new Error(`Quantity has to be "single" or "multiple" but is ${toValueString(quantity)}`);
+        }
+        optionsObject = {type, quantity};
+      }
+      this._nativeCall('openFile', {
+        options: optionsObject,
+        onSuccess: result => {
+          if (Array.isArray(result) && result.length > 0) {
+            resolve(result.map(entry =>
+              new File([entry.data], entry.name, {
+                type: entry.type,
+                lastModified: entry.lastModified
+              })
+            ));
+          } else {
+            resolve([]);
+          }
+        },
+        onError: message => reject(new Error(message))
       });
     });
   }

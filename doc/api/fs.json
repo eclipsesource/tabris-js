@@ -240,6 +240,39 @@
       },
       "description": "Removes the given file or directory. If the directory is not empty all its contents will also be deleted. If there is no file or directory at the given path nothing will happen. Returns a promise that resolves with `true` if something was deleted, otherwise `false`. Rejects with an error object only in case of an access error."
     },
+    "openFile": {
+      "parameters": [
+        {
+          "name": "options",
+          "type": {
+            "map": {
+              "type": {
+                "type": "string",
+                "description": "A mime type to only select a certain category of files. Eg. `'image/png'` or `image/*`.",
+                "default": "*/*",
+                "optional": true
+              },
+              "quantity": {
+                "type": {"union": ["'single'", "'multiple'"]},
+                "default": "single",
+                "description": "The number of files to select.",
+                "optional": true
+              }
+            }
+          },
+          "optional": true,
+          "description": "An optional set of configuration parameters."
+        }
+      ],
+      "returns": {
+        "interface": "Promise",
+        "generics": [{
+          "interface": "Array",
+          "generics": ["File"]
+        }]
+      },
+      "description": "Allows to select a file via a native file picker ui. The supplied `options` object provides additional configuration parameters to adjust the picker behavior.\n\nOnce the picker ui is closed the returned promise resolves with an array of `File` objects or an empty array if no file has been selected."
+    },
     "isFile": {
       "parameters": [
         {
@@ -280,6 +313,10 @@
     {
       "title": "Using the file system to read and write files",
       "snippet": "fs.jsx"
+    },
+    {
+      "title": "Opening files and showing their properties",
+      "snippet": "fs-openfile-advanced.jsx"
     }
   ]
 }
