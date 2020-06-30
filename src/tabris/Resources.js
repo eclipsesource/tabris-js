@@ -1,5 +1,6 @@
 import {processResources, isInherit} from './util-resources';
 import ResourceBuilder from './ResourceBuilder';
+import checkType from './checkType';
 
 const RESOURCE_REGEX = /^[a-z][a-zA-Z][a-zA-Z0-9]+$/ ;
 
@@ -56,21 +57,15 @@ function validateArguments(args) {
     throw new Error(`Expected 1 parameter, got ${args.length}`);
   }
   const options = args[0];
-  if (!(options instanceof Object)) {
-    throw new Error(`Expected parameter 1 to be an object, got ${typeof options}`);
-  }
+  checkType(options, Object, {name: 'parameter 1'});
   if (!(options.data instanceof Object)) {
-    throw new Error(`Expected option "data" to be an object, got ${typeof options.data}`);
+    checkType(options.data, Object, {name: 'option "data"'});
   }
-  if (('converter' in options) && options.converter != null && !(options.converter instanceof Function)) {
-    throw new Error(`Expected option "converter" to be a function, got ${typeof options.converter}`);
-  }
+  checkType(options.converter, Function, {name: 'option "converter"', nullable: true});
   if (('type' in options) && options.type != null && !(options.type instanceof Function && options.type.prototype)) {
     throw new Error(`Expected option "type" to be a constructor, got ${typeof options.type}`);
   }
-  if (('base' in options) && options.base != null && !(options.base instanceof Object)) {
-    throw new Error(`Expected option "base" to be an object, got ${typeof options.base}`);
-  }
+  checkType(options.base, Object, {name: 'option "base"', nullable: true});
   Object.keys(options).forEach(key => {
     if (ALLOWED_OPTIONS.indexOf(key) === -1) {
       throw new Error(`Unknown option "${key}"`);
@@ -100,9 +95,7 @@ function validateConfig(config) {
   if (typeof config === 'undefined') {
     return;
   }
-  if (!(config instanceof Object)) {
-    throw new Error(`Expected option "config" to be an object, got ${typeof config}`);
-  }
+  checkType(config, Object, {name: 'option "config"'});
   for (const key of Object.keys(config)) {
     if (!(key in CONFIG_DEFAULTS)) {
       throw new Error(`Unknown configuration key "${key}"`);
@@ -118,11 +111,10 @@ function validateConfig(config) {
  * @param {Constructor<any>=} type
  */
 function wrap(resources, type) {
-  const typeName = type ? type.name : 'resource';
   return new Proxy(resources, {
     set(target, property, value) {
-      if (type && !(value instanceof type)) {
-        throw new Error(`Expected data of type "${typeName}", got ${typeof value}`);
+      if (type) {
+        checkType(value, type, {name: 'data', nullable: true});
       }
       target[property] = value;
       return true;

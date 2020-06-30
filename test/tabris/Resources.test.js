@@ -84,7 +84,7 @@ describe('Resources', function() {
         // @ts-ignore
         options.converter = {};
         expect(() => new Resources(options)).to.throw(
-          Error, 'Expected option "converter" to be a function, got object'
+          Error, 'Expected option "converter" to be a function, got Object'
         );
       });
 
@@ -92,7 +92,7 @@ describe('Resources', function() {
         // @ts-ignore
         options.converter = {};
         expect(() => new Resources(options)).to.throw(
-          Error, 'Expected option "converter" to be a function, got object'
+          Error, 'Expected option "converter" to be a function, got Object'
         );
       });
 
@@ -571,14 +571,14 @@ describe('Resources', function() {
 
       it('reject selected data of incorrect type', function() {
         expect(() => create({bar: 23})).to.throw(Error,
-          'Expected data of type "Date", got number'
+          'Expected data to be of type Date, got number'
         );
       });
 
       it('rejects inherited data of incorrect type', function() {
         options.base = {foo: 23};
         expect(() => create({foo: {inherit: true}})).to.throw(Error,
-          'Expected data of type "Date", got number'
+          'Expected data to be of type Date, got number'
         );
       });
 
@@ -586,7 +586,7 @@ describe('Resources', function() {
         const dates = create();
 
         expect(() => dates.bar = 23).to.throw(Error,
-          'Expected data of type "Date", got number'
+          'Expected data to be of type Date, got number'
         );
       });
 
@@ -669,7 +669,7 @@ describe('Resources', function() {
       // @ts-ignore
       expect(() => Resources.build()).to.throw(Error, 'Expected 1 parameter, got 0');
       // @ts-ignore
-      expect(() => Resources.build(12)).to.throw(Error, 'Expected object, got number');
+      expect(() => Resources.build(12)).to.throw(Error, 'Expected parameter 1 to be an object, got number');
       // @ts-ignore
       expect(() => Resources.build({})).to.throw(Error, 'At least one option required');
       expect(Resources.build({converter: Color.from})).to.be.instanceOf(ResourceBuilder);

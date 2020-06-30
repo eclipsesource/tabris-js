@@ -230,7 +230,8 @@ function createMethod(
   const result = [];
   result.push(createDoc(method));
   const paramList = createParamList(def, method.parameters);
-  const declaration = (def.type ? createMethodModifiers(method, isStatic) : 'declare function ')
+  const define = def.namespace === 'global' ? 'declare' : 'export';
+  const declaration = (def.type ? createMethodModifiers(method, isStatic) : define + ' function ')
     + `${name}${renderGenericsDef(method.generics)}`
     + `(${paramList}): ${toTypeScript(method.ts_returns || method.returns || 'void')};`;
   result.push(declaration);

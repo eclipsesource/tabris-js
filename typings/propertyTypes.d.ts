@@ -1,3 +1,5 @@
+export type BaseConstructor<T> = Function & { prototype: T };
+
 /**
  * A plain object with following properties:
  *
@@ -14,7 +16,7 @@
  *    Image scale factor, the image will be scaled down by this factor. The scale will be inferred from the image file name if it follows the pattern "@\<scale\>x", e.g. `"image@2x.jpg"`. The pattern is ignored if `scale`, `width` or `height` are set to a number or if `scale` is set to `"auto"`.
  */
 
-export type ImageLikeObject = {src: string|ImageBitmap|Blob, scale?: number|"auto", width?: number|"auto", height?: number|"auto"};
+ export type ImageLikeObject = {src: string|ImageBitmap|Blob, scale?: number|"auto", width?: number|"auto", height?: number|"auto"};
 
 /**
  * Images can be specified as strings or Image/ImageLikeObject.

@@ -1,5 +1,6 @@
 import Resources from './Resources';
 import Color from './Color';
+import checkType from './checkType';
 
 const COLOR_OPTIONS = {
   type: Color,
@@ -18,9 +19,7 @@ export default class ColorResources extends Resources {
     if (arguments.length !== 1) {
       throw new Error(`Expected 1 parameter, got ${arguments.length}`);
     }
-    if (!(options instanceof Object)) {
-      throw new Error(`Expected parameter 1 to be an object, got ${typeof options}`);
-    }
+    checkType(options, Object, {name: 'parameter 1'});
     super(Object.assign({}, COLOR_OPTIONS, options));
   }
 

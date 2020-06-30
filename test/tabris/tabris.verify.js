@@ -231,6 +231,10 @@ describe('tabris', function() {
     expect(tabris.trigger).to.be.a('function');
   });
 
+  it('contains util functions', function() {
+    expect(tabris.checkType).to.be.instanceOf(Function);
+  });
+
   describe('when started', function() {
 
     before(function() {

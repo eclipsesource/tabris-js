@@ -86,6 +86,7 @@ import WebSocket from './WebSocket';
 import Widget from './Widget';
 import WidgetCollection from './WidgetCollection';
 import Worker from './Worker';
+import checkType from './checkType';
 import XMLHttpRequest from './XMLHttpRequest';
 import $ from './$';
 
@@ -186,6 +187,7 @@ const tabrisMain = Object.assign(new Tabris(), {
   XMLHttpRequest,
   Worker,
   fetch,
+  checkType,
   format,
   Headers,
   Request,

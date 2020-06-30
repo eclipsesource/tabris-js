@@ -1,4 +1,5 @@
 import Resources from './Resources';
+import checkType from './checkType';
 
 /**
  * @template {any} ResourceType
@@ -56,9 +57,7 @@ const CONFIG_KEYS = {
  * @param {any} options
  */
 function validateOptions(options) {
-  if (!(options instanceof Object)) {
-    throw new Error(`Expected object, got ${typeof options}`);
-  }
+  checkType(options, Object, {name: 'parameter 1'});
   if (options.converter || options.type || options.validator) {
     return;
   }

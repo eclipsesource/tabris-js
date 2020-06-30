@@ -1,4 +1,6 @@
-import {contentView, EventObject, Image, ImageValue, ImageView, Properties, ScrollView, statusBar} from 'tabris';
+import {
+  contentView, EventObject, Image, ImageValue, ImageView, Properties, ScrollView, statusBar, checkType
+} from 'tabris';
 
 const IMAGES = ['cover.jpg', 'salad.jpg', 'landscape.jpg', 'ian.jpg', 'target_200.png']
   .map((image) => `resources/${image}`);
@@ -73,6 +75,6 @@ contentView.append(
 );
 
 function showImage(image: ImageValue) {
-  $(ImageView).first().image = (image as Image).src;
+  $(ImageView).first().image = checkType(image, Image).src;
   $(FilmStrip).only().resetHideTimeout();
 }

@@ -1,0 +1,331 @@
+{
+  "title": "Utils",
+  "category": "service",
+  "namespace": "tabris",
+  "description": "A collection of general-purpose utilities. These can be imported directly form the `tabris` module.",
+  "methods": {
+    "checkType": [
+      {
+        "ts_only": true,
+        "parameters": [
+          {
+            "name": "value",
+            "type": "any",
+            "description": "The value to check the type of."
+          },
+          {
+            "name": "type",
+            "type": {
+              "interface": "Constructor",
+              "generics": [
+                "String"
+              ]
+            },
+            "ts_type": "BaseConstructor<String>",
+            "description": "The constructor function (class) of the expected type. May also be a subclass. Primitive types are represented by their respective boxed type constructors `String`, `Number` and `Boolean`."
+          },
+          {
+            "name": "options",
+            "optional": true,
+            "type": {
+              "map": {
+                "name": {
+                  "type": "string",
+                  "optional": true
+                },
+                "nullable": {
+                  "type": "boolean",
+                  "optional": true,
+                  "default": "false"
+                }
+              }
+            },
+            "description": "`name` is the name of the value to be used in the error message\n.`nullable` determines whether or not `null` and `undefined` will pass the type check."
+          }
+        ],
+        "description": "Checks that the given value is of the expected type. If the check fails a `TypeError` will be thrown. The `name` option may be used to change how the error message refers to the value.\n\n If the given value is of the expected type the function will simply return the value. In TypeScript files and some JavaScript editors the IDE will recognize the return value as being of the expected type.\n\nSome values will never pass the check regardless of given type: `NaN`, `Infinity`, `-Infinity` and any boxed primitive. The values `null` and `undefined` will pass only if the `nullable` option is explicitly set to true.",
+        "returns": "string"
+      },
+      {
+        "ts_only": true,
+        "parameters": [
+          {
+            "name": "value",
+            "type": "any",
+            "description": "The value to check the type of."
+          },
+          {
+            "name": "type",
+            "type": {
+              "interface": "Constructor",
+              "generics": [
+                "Number"
+              ]
+            },
+            "ts_type": "BaseConstructor<Number>",
+            "description": "The constructor function (class) of the expected type. May also be a subclass. Primitive types are represented by their respective boxed type constructors `String`, `Number` and `Boolean`."
+          },
+          {
+            "name": "options",
+            "optional": true,
+            "type": {
+              "map": {
+                "name": {
+                  "type": "string",
+                  "optional": true
+                },
+                "nullable": {
+                  "type": "boolean",
+                  "optional": true,
+                  "default": "false"
+                }
+              }
+            }
+          }
+        ],
+        "description": "Checks that the given value is of the expected type. If the check fails a `TypeError` will be thrown. The `name` option may be used to change how the error message refers to the value.\n\n If the given value is of the expected type the function will simply return the value. In TypeScript files and some JavaScript editors the IDE will recognize the return value as being of the expected type.\n\nSome values will never pass the check regardless of given type: `NaN`, `Infinity`, `-Infinity` and any boxed primitive. The values `null` and `undefined` will pass only if the `nullable` option is explicitly set to true.",
+        "returns": "number"
+      },
+      {
+        "ts_only": true,
+        "parameters": [
+          {
+            "name": "value",
+            "type": "any",
+            "description": "The value to check the type of."
+          },
+          {
+            "name": "type",
+            "type": {
+              "interface": "Constructor",
+              "generics": [
+                "Boolean"
+              ]
+            },
+            "ts_type": "BaseConstructor<Boolean>",
+            "description": "The constructor function (class) of the expected type. May also be a subclass. Primitive types are represented by their respective boxed type constructors `String`, `Number` and `Boolean`."
+          },
+          {
+            "name": "options",
+            "optional": true,
+            "type": {
+              "map": {
+                "name": {
+                  "type": "string",
+                  "optional": true
+                },
+                "nullable": {
+                  "type": "boolean",
+                  "optional": true,
+                  "default": "false"
+                }
+              }
+            }
+          }
+        ],
+        "description": "Checks that the given value is of the expected type. If the check fails a `TypeError` will be thrown. The `name` option may be used to change how the error message refers to the value.\n\n If the given value is of the expected type the function will simply return the value. In TypeScript files and some JavaScript editors the IDE will recognize the return value as being of the expected type.\n\nSome values will never pass the check regardless of given type: `NaN`, `Infinity`, `-Infinity` and any boxed primitive. The values `null` and `undefined` will pass only if the `nullable` option is explicitly set to true.",
+        "returns": "boolean"
+      },
+      {
+        "generics": [
+          {
+            "name": "T"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "value",
+            "type": "any",
+            "description": "The value to check the type of."
+          },
+          {
+            "name": "type",
+            "type": {
+              "interface": "Constructor",
+              "generics": [
+                "T"
+              ]
+            },
+            "ts_type": "BaseConstructor<T>",
+            "description": "The constructor function (class) of the expected type. May also be a subclass. Primitive types are represented by their respective boxed type constructors `String`, `Number` and `Boolean`."
+          },
+          {
+            "name": "options",
+            "optional": true,
+            "type": {
+              "map": {
+                "name": {
+                  "type": "string",
+                  "optional": true
+                },
+                "nullable": {
+                  "type": "boolean",
+                  "optional": true,
+                  "default": "false"
+                }
+              }
+            }
+          }
+        ],
+        "description": "Checks that the given value is of the expected type. If the check fails a `TypeError` will be thrown. The `name` option may be used to change how the error message refers to the value.\n\n If the given value is of the expected type the function will simply return the value. In TypeScript files and some JavaScript editors the IDE will recognize the return value as being of the expected type.\n\nSome values will never pass the check regardless of given type: `NaN`, `Infinity`, `-Infinity` and any boxed primitive. The values `null` and `undefined` will pass only if the `nullable` option is explicitly set to true.",
+        "returns": "T"
+      },
+      {
+        "ts_only": true,
+        "parameters": [
+          {
+            "name": "value",
+            "type": "any",
+            "description": "The value to check the type of."
+          },
+          {
+            "name": "type",
+            "type": {
+              "interface": "Constructor",
+              "generics": [
+                "String"
+              ]
+            },
+            "ts_type": "BaseConstructor<String>",
+            "description": "The constructor function (class) of the expected type. May also be a subclass. Primitive types are represented by their respective boxed type constructors `String`, `Number` and `Boolean`."
+          },
+          {
+            "name": "callback",
+            "type": {
+              "callback": [
+                {
+                  "name": "value",
+                  "type": "string"
+                }
+              ],
+              "returns": {
+                "type": "any"
+              }
+            },
+            "description": "A callback called with the value if it is of the expected type."
+          }
+        ],
+        "description": "Checks that the given value is of the expected type. If the check fails a `TypeError` will be thrown. If the value is of the expected type the given callback will be called (synchronously) with the checked value as the only argument. In TypeScript files and some JavaScript editors the IDE will recognize that argument being of the expected type.\n\nSome values will never pass the check regardless of given type: `NaN`, `Infinity`, `-Infinity`, boxed primitives, `null` and `undefined`.",
+        "returns": "void"
+      },
+      {
+        "ts_only": true,
+        "parameters": [
+          {
+            "name": "value",
+            "type": "any",
+            "description": "The value to check the type of."
+          },
+          {
+            "name": "type",
+            "type": {
+              "interface": "Constructor",
+              "generics": [
+                "Number"
+              ]
+            },
+            "ts_type": "BaseConstructor<Number>",
+            "description": "The constructor function (class) of the expected type. May also be a subclass. Primitive types are represented by their respective boxed type constructors `String`, `Number` and `Boolean`."
+          },
+          {
+            "name": "callback",
+            "type": {
+              "callback": [
+                {
+                  "name": "value",
+                  "type": "number"
+                }
+              ],
+              "returns": {
+                "type": "any"
+              }
+            },
+            "description": "A callback called with the value if it is of the expected type."
+          }
+        ],
+        "description": "Checks that the given value is of the expected type. If the check fails a `TypeError` will be thrown. If the value is of the expected type the given callback will be called (synchronously) with the checked value as the only argument. In TypeScript files and some JavaScript editors the IDE will recognize that argument being of the expected type.\n\nSome values will never pass the check regardless of given type: `NaN`, `Infinity`, `-Infinity`, boxed primitives, `null` and `undefined`.",
+        "returns": "void"
+      },
+      {
+        "ts_only": true,
+        "parameters": [
+          {
+            "name": "value",
+            "type": "any",
+            "description": "The value to check the type of."
+          },
+          {
+            "name": "type",
+            "type": {
+              "interface": "Constructor",
+              "generics": [
+                "Boolean"
+              ]
+            },
+            "ts_type": "BaseConstructor<Boolean>",
+            "description": "The constructor function (class) of the expected type. May also be a subclass. Primitive types are represented by their respective boxed type constructors `String`, `Number` and `Boolean`."
+          },
+          {
+            "name": "callback",
+            "type": {
+              "callback": [
+                {
+                  "name": "value",
+                  "type": "boolean"
+                }
+              ],
+              "returns": {
+                "type": "any"
+              }
+            },
+            "description": "A callback called with the value if it is of the expected type."
+          }
+        ],
+        "description": "Checks that the given value is of the expected type. If the check fails a `TypeError` will be thrown. If the value is of the expected type the given callback will be called (synchronously) with the checked value as the only argument. In TypeScript files and some JavaScript editors the IDE will recognize that argument being of the expected type.\n\nSome values will never pass the check regardless of given type: `NaN`, `Infinity`, `-Infinity`, boxed primitives, `null` and `undefined`.",
+        "returns": "void"
+      },
+      {
+        "generics": [
+          {
+            "name": "T"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "value",
+            "type": "any",
+            "description": "The value to check the type of."
+          },
+          {
+            "name": "type",
+            "type": {
+              "interface": "Constructor",
+              "generics": [
+                "T"
+              ]
+            },
+            "ts_type": "BaseConstructor<T>",
+            "description": "The constructor function (class) of the expected type. May also be a subclass. Primitive types are represented by their respective boxed type constructors `String`, `Number` and `Boolean`."
+          },
+          {
+            "name": "callback",
+            "type": {
+              "callback": [
+                {
+                  "name": "value",
+                  "type": "T"
+                }
+              ],
+              "returns": {
+                "type": "any"
+              }
+            },
+            "description": "A callback called with the value if it is of the expected type."
+          }
+        ],
+        "description": "Checks that the given value is of the expected type. If the check fails a `TypeError` will be thrown. If the value is of the expected type the given callback will be called (synchronously) with the checked value as the only argument. In TypeScript files and some JavaScript editors the IDE will recognize that argument being of the expected type.\n\nSome values will never pass the check regardless of given type: `NaN`, `Infinity`, `-Infinity`, boxed primitives, `null` and `undefined`.",
+        "returns": "void"
+      }
+    ]
+  }
+}
