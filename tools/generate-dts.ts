@@ -2,7 +2,8 @@ import * as fs from 'fs-extra';
 import * as schema from './api-schema';
 import {
   TextBuilder, asArray, filter, ApiDefinitions, ExtendedApi, readJsonDefs, createDoc, getEventTypeName, isMap,
-  capitalizeFirstChar, Properties, hasChangeEvent, isInterfaceReference, isUnion, isTuple, isIndexedMap, isCallback
+  capitalizeFirstChar, Properties, hasChangeEvent, isInterfaceReference, isUnion, isTuple, isIndexedMap,
+  isCallback, plainType
 } from './common';
 
 type PropertyOps = {hasContext: boolean, excludeConsts: boolean};
@@ -178,8 +179,13 @@ function renderEventObjectInterfaces(text: TextBuilder, def: ExtendedApi) {
 
 function renderEventObjectInterface(text: TextBuilder, name: string, def: ExtendedApi) {
   const parameters = def.events[name].parameters || {};
+  const hasGenerics = def.generics?.some(entry => !entry.default);
+  const target = hasGenerics ? 'object' : plainType(def.type);
+  if (hasGenerics) {
+    throw new Error('Generics types without default can not have specialized events');
+  }
   text.append(
-    `export interface ${getEventTypeName(def, name, parameters)}<Target = ${def.generics ? 'object' : def.type}>`
+    `export interface ${getEventTypeName(def, name, parameters)}<Target = ${target}>`
   );
   text.append(' extends EventObject<Target>');
   text.append('{');
