@@ -9,6 +9,9 @@ import {
   checkNumber,
   proxify
 } from '../../src/tabris/util';
+import Composite from '../../src/tabris/widgets/Composite';
+import {mockTabris} from '../tabris-mock';
+import ClientMock from './ClientMock';
 
 describe('util', function() {
 
@@ -224,6 +227,13 @@ describe('util', function() {
       expect(proxy).to.deep.equal(org);
       expect(proxy).not.to.deep.equal(backup);
       expect(proxy instanceof Test).to.be.false;
+    });
+
+    it('Does not crash Object.keys', function() {
+      mockTabris(new ClientMock());
+      const original = new Composite({left: 23});
+      proxy = proxify(() => original);
+      expect(() => Object.keys(proxy)).not.to.throw(Error);
     });
 
   });

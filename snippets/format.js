@@ -19,5 +19,6 @@ log({foo: 1, bar: 2, baz: 3});
 log('Formats other stuff...');
 log('Dates: ', new Date());
 log('Functions:', () => 23);
-log('Widgets:', contentView.children().children());
+log('Widgets:', contentView);
+log('WidgetCollection:', contentView.children().children());
 log('Errors:', new TypeError('error message'));

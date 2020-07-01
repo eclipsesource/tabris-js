@@ -132,11 +132,17 @@ const traps = {
  */
 export function proxify(getTarget) {
   const handler = {};
+  const fakeTarget = {};
   Object.keys(traps).forEach(trap => handler[trap] = (_, ...args) => {
     const result = Reflect[trap](getTarget(), ...args);
+    if (trap === 'getOwnPropertyDescriptor') {
+      // The VM throws if a property is configurable or non-existing
+      // on fakeTarget, but not reported as such here
+      return Object.assign({}, result, {configurable: true});
+    }
     return traps[trap] ? true : result;
   });
-  return new Proxy({}, handler);
+  return new Proxy(fakeTarget, handler);
 }
 
 export function isReadable(value) {
