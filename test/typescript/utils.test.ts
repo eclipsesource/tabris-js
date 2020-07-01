@@ -1,4 +1,4 @@
-import {checkType} from 'tabris';
+import {checkType, format} from 'tabris';
 
 let value: unknown = {};
 
@@ -16,3 +16,7 @@ let nothing: void = checkType(value, Date, checked => date = checked);
 nothing = checkType(value, String, checked => string = checked);
 nothing = checkType(value, Number, checked => number = checked);
 nothing = checkType(value, Boolean, checked => boolean = checked);
+
+string = format('foo');
+string = format({}, new Date(), 23, null);
+string = format('baz', ['stuff']);

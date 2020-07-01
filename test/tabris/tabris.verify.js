@@ -233,6 +233,7 @@ describe('tabris', function() {
 
   it('contains util functions', function() {
     expect(tabris.checkType).to.be.instanceOf(Function);
+    expect(tabris.format).to.be.instanceOf(Function);
   });
 
   describe('when started', function() {

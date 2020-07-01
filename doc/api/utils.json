@@ -326,6 +326,34 @@
         "description": "Checks that the given value is of the expected type. If the check fails a `TypeError` will be thrown. If the value is of the expected type the given callback will be called (synchronously) with the checked value as the only argument. In TypeScript files and some JavaScript editors the IDE will recognize that argument being of the expected type.\n\nSome values will never pass the check regardless of given type: `NaN`, `Infinity`, `-Infinity`, boxed primitives, `null` and `undefined`.",
         "returns": "void"
       }
+    ],
+    "format": [
+      {
+        "parameters": [
+          {
+            "name": "...data",
+            "type": {"interface": "Array", "generics": ["any"]}
+          }
+        ],
+        "description": "Formats the given value(s) in the same manner the [console](./Console.md) does.",
+        "returns": "string"
+      },
+      {
+        "parameters": [
+          {
+            "name": "message",
+            "type": "string",
+            "description": "The main message."
+          },
+          {
+            "name": "...data",
+            "type": {"interface": "Array", "generics": ["any"]},
+            "description": "Data to be inserted in to the main message."
+          }
+        ],
+        "description": "Formats the given value(s) in the same manner the [console](./Console.md) does.\nThe any placeholders in the message are replaced by the additional data parameters. Valid placeholders are \"%d\" for decimals, \"%i\" for integers, \"%f\" for floats, \"%j\" for any number, \"%j\" for any objects (including arrays) and \"%s\" for strings. To print the percentage sign itself use \"%%\".",
+        "returns": "string"
+      }
     ]
   }
 }
