@@ -4,11 +4,11 @@ import {checkVersion} from './version';
 import Tabris from './Tabris';
 import Device, {create as createDevice, publishDeviceProperties} from './Device';
 import Printer, {create as createPrinter} from './Printer';
-import Permission , {create as createPermission} from './Permission';
+import Permission, {create as createPermission} from './Permission';
 import App, {create as createApp} from './App';
 import FileSystem, {create as createFileSystem} from './FileSystem';
 import DevTools, {create as createDevTools} from './DevTools';
-import {createConsole} from './Console';
+import Console, {createConsole} from './Console';
 import Constraint from './Constraint';
 import {addDOMDocument} from './Document';
 import Event, {addDOMEventTargetMethods} from './Event';
@@ -26,7 +26,6 @@ import CheckBox from './widgets/CheckBox';
 import CollectionView from './widgets/CollectionView';
 import Color from './Color';
 import ColorResources from './ColorResources';
-import Console from './Console';
 import {format} from './Formatter';
 import Row from './widgets/Row';
 import RowLayout from './RowLayout';
@@ -250,11 +249,7 @@ tabrisMain.on('start', (options) => {
   tabris.$fs = createFileSystem();
   publishDeviceProperties(tabris.device, global);
   tabris.$localStorage = createStorage();
-  if (tabris.device.platform === 'iOS') {
-    tabris.$secureStorage = createStorage(true);
-  } else {
-    tabris.$secureStorage = {};
-  }
+  tabris.$secureStorage = createStorage(true);
   tabris.$crypto = new Crypto();
   if ('print' in global.console) {
     global.console = createConsole(global.console);

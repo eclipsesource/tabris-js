@@ -135,7 +135,9 @@ See also:
 
 Tabris supports the global object `localStorage`, which allows storing key-value pairs in a persistent store. Both keys and values are stored as strings.
 
-Note that the "storage" event is not supported. For debugging purposes the contents of the localStorage can be inspected using `console.dirxml()`[./api/console.md#dirxml]. On iOS, there is an additional object `secureStorage` available in the global scope. This is a drop-in replacement for `localStorage` that keeps data in the encrypted iOS Keychain.
+Note that the "storage" event is not supported. For debugging purposes the contents of the localStorage can be inspected using `console.dirxml()`[./api/console.md#dirxml].
+
+In addition to the `localStorage`, Tabris.js adds support for a `secureStorage` available in the global scope. This is a drop-in replacement for `localStorage` that keeps data encrypted using the Keychain on iOS and the AndroidKeyStore on Android.
 
 > :point_right: The `localStorage` is only meant to store relatively short strings. To store larger amounts of data it is recommended to use the [`FileSystem`](./api/fs.md) api.
 

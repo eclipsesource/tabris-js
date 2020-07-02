@@ -53,7 +53,7 @@
     ],
     "dirxml": [
       {
-        "description": "XML tree representation of a given object, if available. Supported types include all widgets and `localStorage`. \n\n*The output is NOT JSX, it is a human-readable summary that displays XML-conforming string representations of some select property values.",
+        "description": "XML tree representation of a given object, if available. Supported types include all widgets `localStorage` and `secureStorage`. \n\n*The output is NOT JSX, it is a human-readable summary that displays XML-conforming string representations of some select property values.",
         "parameters": [
           {
             "description": "A JavaScript object",

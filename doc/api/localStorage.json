@@ -3,7 +3,7 @@
   "category": "service",
   "namespace": "global",
   "object": "localStorage",
-  "description": "The `localStorage` object allows storing key-value pairs in a persistent store. Both keys and values are stored as strings.\n\nOn iOS, there is an additional object `secureStorage` available in the global scope. This is a drop-in replacement for `localStorage` that keeps data in the encrypted iOS Keychain.\n\nThe `localStorage` is only meant to store relatively short strings. To store larger amounts of data it is recommended to use the [FileSystem](./fs.html) API.",
+  "description": "The `localStorage` object allows storing key-value pairs in a persistent store. Both keys and values are stored as strings.\n\nIn addition Tabris.js adds support for a `secureStorage` available in the global scope. This is a drop-in replacement for `localStorage` that keeps data encrypted using the Keychain on iOS and the AndroidKeyStore on Android 6+. Note that on Android 5 the store is encrypted but does not use hardware encryption.\n\nThe `localStorage` is only meant to store relatively short strings. To store larger amounts of data it is recommended to use the [FileSystem](./fs.html) API.",
   "constructor": {
     "access": "private"
   },

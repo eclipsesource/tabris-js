@@ -16,6 +16,7 @@
     "$": false,
     "JSX": false,
     "localStorage": false,
+    "secureStorage": false,
     "XMLHttpRequest": false,
     "fetch": false,
     "device": false,
