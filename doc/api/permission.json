@@ -81,7 +81,7 @@
           "description": "A callback to be invoked if the request failed."
         }
       ],
-      "description": "Tries to authorize access to the given permissions, either by already holding the permissions or by requesting authorization for the given permissions. When the result is `'granted' the `onAuthorized` callback will be invoked. If any other state is determined the `onUnauthorized` callback will be invoked. In case of an `Error` the `onError` callback will be invoked."
+      "description": "Tries to authorize access to the given permissions, either by already holding the permissions or by requesting authorization for the given permissions. When the result is `'granted'` the `onAuthorized` callback will be invoked. If any other state is determined the `onUnauthorized` callback will be invoked. In case of an `Error` the `onError` callback will be invoked."
     }
   },
   "links": [
