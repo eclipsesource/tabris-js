@@ -86,6 +86,21 @@
       "description": "An array of `Camera` objects ordered by priority. The first entry is considered the primary camera of the device."
     }
   },
+  "methods": {
+    "set": [
+      {
+        "ts_only": true,
+        "parameters": [
+          {
+            "name": "properties",
+            "type": "never"
+          }
+        ],
+        "description": "Sets all key-value pairs in the properties object.",
+        "returns": "this"
+      }
+    ]
+  },
   "links": [
     {
       "title": "Reading various device properties",

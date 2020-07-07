@@ -261,7 +261,20 @@
       ],
       "returns": "boolean",
       "description": "Returns `true` if there is a directory at the given path. Otherwise (no directory, or is a file) it returns `false`."
-    }
+    },
+    "set": [
+      {
+        "ts_only": true,
+        "parameters": [
+          {
+            "name": "properties",
+            "type": "never"
+          }
+        ],
+        "description": "Sets all key-value pairs in the properties object.",
+        "returns": "this"
+      }
+    ]
   },
   "links": [
     {

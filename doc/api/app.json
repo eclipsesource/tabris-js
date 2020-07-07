@@ -247,7 +247,27 @@
         }
       ],
       "description": "Allows to register a font to use throughout the app. Once a font is registered its alias can be used to apply the font where ever a font can be configured, e.g. in `TextView` or `GraphicalContext`. Tabris.js supports TrueType fonts (*.ttf) and OpenType fonts (*.otf)."
-    }
+    },
+    "set": [
+      {
+        "ts_only": true,
+        "generics": [
+          {
+            "name": "T",
+            "extends": "NativeObject",
+            "default": "this"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "properties",
+            "type": "Properties<Omit<T, 'id' | 'debugBuild' | 'versionCode' | 'version'>>"
+          }
+        ],
+        "description": "Sets all key-value pairs in the properties object.",
+        "returns": "this"
+      }
+    ]
   },
   "links": [
     {

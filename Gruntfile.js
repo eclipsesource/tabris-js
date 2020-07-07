@@ -257,7 +257,9 @@ module.exports = function(grunt) {
       for (let i = 0; i < exp.length; i++) {
         const matchIndex = remaining.indexOf(exp[i]);
         if (matchIndex === -1) {
-          grunt.fail.warn(`${file} is missing compiler output "${exp[i]}" in:\n${remaining}`);
+          grunt.fail.warn(
+            `${file} is missing compiler output "${exp[i]}" after line "${exp[i - 1]}":\n${childProcess.stdout}`
+          );
         }
         remaining = remaining.slice(matchIndex);
       }

@@ -14,23 +14,17 @@ const HEADER = `
 
 // General helper types
 interface Constructor<T> {new(...args: any[]): T; }
-type ParamType<T extends (arg: any) => any> = T extends (arg: infer P) => any ? P : any;
-type ReadOnly<T extends keyof any> = Partial<Record<T, never>>;
+type Omit<T, K extends string | symbol | number> = Pick<T, Exclude<keyof T, K>>;
+type ReadOnlyWidgetKeys<T> = T extends {readonly bounds: any}
+  ? Extract<keyof T, 'bounds' | 'absoluteBounds' | 'cid' | 'jsxAttributes'>
+  : never;
 type Diff<T, U> = T extends U ? never : T;
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 type MethodKeysOf<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
-type IfEquals<X, Y, A, B> =
-    (<T>() => T extends X ? 1 : 2) extends
-    (<T>() => T extends Y ? 1 : 2) ? A : B;
-type ReadOnlyKeysOf<T> = {
-    [P in keyof T]: IfEquals<{ [Q in P]: T[P] }, { -readonly [Q in P]: T[P] }, never, P>
-}[keyof T];
-
 // Tabris.js Helper Types
 export type Properties<
   T extends {set?: any},
   U = Omit<T, 'set'> // prevent self-reference issues
-> = Partial<Omit<U, MethodKeysOf<U> | ReadOnlyKeysOf<U>>>
+> = Partial<Omit<U, MethodKeysOf<U> | ReadOnlyWidgetKeys<U>>>
   & {cid?: never}; // prevent empty object type as possible result, would allow any object
 type ListenersKeysOf<T> = { [K in keyof T]: T[K] extends Listeners<any> ? K : never }[keyof T];
 type UnpackListeners<T> = T extends Listeners<infer U> ? Listener<U> : T;

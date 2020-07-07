@@ -68,6 +68,28 @@
       }
     }
   },
+  "methods": {
+    "set": [
+      {
+        "ts_only": true,
+        "generics": [
+          {
+            "name": "T",
+            "extends": "NativeObject",
+            "default": "this"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "properties",
+            "type": "Properties<Omit<T, 'height'>>"
+          }
+        ],
+        "description": "Sets all key-value pairs in the properties object.",
+        "returns": "this"
+      }
+    ]
+  },
   "links": [
     {
       "title": "Demonstrating various properties of the `NavigationBar`",

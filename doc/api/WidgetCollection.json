@@ -419,7 +419,7 @@
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXAttributes<this> & {children?: JSXChildren<WidgetType>}"
+      "type": "{children?: JSXChildren<WidgetType>}"
     },
     "[JSX.jsxFactory]": {
       "description": "This function is called by the framework to create JSX elements from the WidgetCollection class.",

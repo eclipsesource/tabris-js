@@ -56,6 +56,28 @@
       "description": "Background color of the status bar. Should be used in conjunction with the `theme` property to keep the status bar icons legible."
     }
   },
+  "methods": {
+    "set": [
+      {
+        "ts_only": true,
+        "generics": [
+          {
+            "name": "T",
+            "extends": "NativeObject",
+            "default": "this"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "properties",
+            "type": "Properties<Omit<T, 'height'>>"
+          }
+        ],
+        "description": "Sets all key-value pairs in the properties object.",
+        "returns": "this"
+      }
+    ]
+  },
   "events": {
     "tap": {
       "description": "Fired when status bar is tapped.",

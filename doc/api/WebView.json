@@ -12,6 +12,7 @@
           "interface": "Properties",
           "generics": ["WebView"]
         },
+        "ts_type": "Properties<Omit<WebView, 'canGoBack' | 'canGoForward'>>",
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -22,7 +23,7 @@
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXAttributes<this> & {children?: never}"
+      "type": "JSXAttributes<this> & Partial<Record<'canGoBack' | 'canGoForward' | 'children', never>>"
     },
     "url": {
       "type": "string",
@@ -126,6 +127,26 @@
       {
         "parameters": [],
         "description": "Navigate the `WebView` to the next page if possible."
+      }
+    ],
+    "set": [
+      {
+        "ts_only": true,
+        "generics": [
+          {
+            "name": "T",
+            "extends": "NativeObject",
+            "default": "this"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "properties",
+            "type": "Properties<Omit<T, 'canGoBack' | 'canGoForward'>>"
+          }
+        ],
+        "description": "Sets all key-value pairs in the properties object as widget properties.\n\n**Important TypeScript note:** When called on `this` you may need to specify your custom type like this: `this.set<MyComponent>({propA: valueA});`",
+        "returns": "this"
       }
     ]
   },

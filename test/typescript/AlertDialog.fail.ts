@@ -1,16 +1,15 @@
 import {AlertDialog, Button, TextInput, Composite} from 'tabris';
+import { ContentView } from 'tabris';
 
-const textInputs: Array<TextInput> = [new TextInput(), new TextInput()];
-const notTextInputs: Array<Button> = [new Button(), new Button()];
-let alertDialog = new AlertDialog({textInputs});
-let alertDialog2 = new AlertDialog({});
-alertDialog2.textInputs = textInputs;
-alertDialog2.textInputs = new Composite();
-alertDialog2.textInputs.append(notTextInputs);
+const textInputs: ContentView<TextInput> = [new TextInput(), new TextInput()] as any;
+const notTextInputs = new Button();
+let alertDialog:AlertDialog = new AlertDialog({textInputs});
+alertDialog.textInputs = textInputs;
+alertDialog.textInputs = new Composite();
+alertDialog.textInputs.append(notTextInputs);
 
 /*Expected
-(5,
-does not exist
+(6,
 (7,
 read-only
 (8,

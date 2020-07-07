@@ -12,6 +12,7 @@
           "interface": "Properties",
           "generics": ["Video"]
         },
+        "ts_type": "Properties<Omit<Video, 'speed' | 'position' | 'duration' | 'state'>>",
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
       }
@@ -22,7 +23,7 @@
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXAttributes<this> & {children?: never}"
+      "type": "JSXAttributes<this> & Partial<Record<'speed' | 'position' | 'duration' | 'state' | 'children', never>>"
     },
     "url": {
       "type": "string",
@@ -95,7 +96,27 @@
         }
       ],
       "description": "Starts playing the video, *[state](#state)* changes to `play`. Has no effect unless the current state is either `pause` or `ready`."
-    }
+    },
+    "set": [
+      {
+        "ts_only": true,
+        "generics": [
+          {
+            "name": "T",
+            "extends": "NativeObject",
+            "default": "this"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "properties",
+            "type": "Properties<Omit<T, 'speed' | 'position' | 'duration' | 'state'>>"
+          }
+        ],
+        "description": "Sets all key-value pairs in the properties object as widget properties.\n\n**Important TypeScript note:** When called on `this` you may need to specify your custom type like this: `this.set<MyComponent>({propA: valueA});`",
+        "returns": "this"
+      }
+    ]
   },
   "links": [
     {

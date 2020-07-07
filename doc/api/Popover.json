@@ -11,6 +11,7 @@
           "interface": "Properties",
           "generics": ["Popover"]
         },
+        "ts_type": "Properties<Omit<Popover, 'contentView'>>",
         "optional": true,
         "description": "Sets all key-value pairs in the properties object on the `Popover`."
       }
@@ -22,7 +23,7 @@
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXAttributes<this> & {children?: JSXChildren<Widget>}"
+      "type": "JSXAttributes<Omit<this, 'contentView'>> & {children?: JSXChildren<Widget>}"
     },
     "contentView": {
       "const": true,
@@ -48,6 +49,28 @@
         "android": false
       }
     }
+  },
+  "methods": {
+    "set": [
+      {
+        "ts_only": true,
+        "generics": [
+          {
+            "name": "T",
+            "extends": "NativeObject",
+            "default": "this"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "properties",
+            "type": "Properties<Omit<T, 'contentView'>>"
+          }
+        ],
+        "description": "Sets all key-value pairs in the properties object as Popover properties.",
+        "returns": "this"
+      }
+    ]
   },
   "statics": {
     "methods": {

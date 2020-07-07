@@ -101,7 +101,6 @@ const markup = <tabris.TextView markupEnabled>
 (4,
 'number' is not assignable to type 'boolean'
 (5,
-'firstVisibleIndex' does not exist
 (6,
 'onDirectionChanged' does not exist
 (7,

@@ -4,25 +4,26 @@ const id = app.id;
 const version = app.version;
 const versionCode = app.versionCode;
 
-app.set({id});
 app.id = id;
 app.onIdChanged(function() {});
 
-app.set({version});
 app.version = version;
 app.onVersionChanged(function() {});
 
-app.set({versionCode});
 app.versionCode = versionCode;
 app.onVersionCodeChanged(function() {});
 
 /*Expected
-(7,
-'id'
-
-(11,
-'version'
-
-(15,
-'versionCode'
+(7
+read-only
+(8
+does not exist
+(10
+read-only
+(11
+does not exist
+(13
+read-only
+(14
+does not exist
 */
