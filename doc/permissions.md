@@ -135,7 +135,7 @@ It is good practice to display additional information before re-requesting the p
 
 ### Status `'denied'`
 
-When a permission is in the state `'denied'`, the user hasdeclined the permission. In this state it is not possible to request a permission and subsequent API calls to do so will not show a permission dialog.
+When a permission is in the state `'denied'`, the user has declined the permission. In this state it is not possible to request a permission and subsequent API calls to do so will not show a permission dialog.
 
 However, the user is still able to grant the permission in the app settings. Toggling a permission in the settings will restart the app and subsequent requests to the permission API will return the new status.
 
