@@ -60,6 +60,8 @@ class MyCustomWidget extends tabris.Composite {
 
 class MyCustomWidgetWithCustomJsx extends tabris.Composite {
 
+  static baz: string;
+
   public jsxAttributes: tabris.JSXAttributes<this> & {
     foo?: number;
     bar: string;

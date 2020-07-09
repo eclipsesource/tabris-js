@@ -78,7 +78,7 @@ class CustomTab extends Tab {
   public foo: string;
 }
 
-const typedTabFolder: TabFolder<CustomTab> = new TabFolder();
+const typedTabFolder: TabFolder<CustomTab> = new TabFolder<CustomTab>();
 typedTabFolder.append(new CustomTab());
 type = typedTabFolder.children()[0].foo;
 type = typedTabFolder.selection.foo;

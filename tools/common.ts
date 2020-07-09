@@ -21,6 +21,7 @@ export type ExtendedApi = schema.Api & Partial<{
   file: string,
   isWidget: boolean,
   isPopup: boolean,
+  supportsFactory: boolean,
   jsxParents: string[]
 }>;
 export type ApiDefinitions = {[name: string]: ExtendedApi};
@@ -216,6 +217,9 @@ function extendTypeDefs(defs: ApiDefinitions) {
     if (ext) {
       defs[name].superAPI = defs[ext];
     }
+    defs[name].supportsFactory = defs[name].isWidget
+      && defs[name].constructor
+      && defs[name].constructor.access === 'public';
     defs[name].jsxChildren = getJsxChildren(defs, name);
     defs[name].jsxChildren
       .map(childType => defs[childType])

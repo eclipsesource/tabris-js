@@ -49,6 +49,7 @@ export default class Composite extends Widget {
     return this._apply(sheet, scope);
   }
 
+  /** @param {any=} selector */
   children(selector) {
     return this._children(selector);
   }

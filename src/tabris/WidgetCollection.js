@@ -49,6 +49,7 @@ export default class WidgetCollection {
     return this._array[this._array.length - 1];
   }
 
+  /** @param {any=} selector */
   only(selector) {
     if (selector) {
       return this.filter(selector).only();

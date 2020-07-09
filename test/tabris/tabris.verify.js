@@ -233,7 +233,13 @@ describe('tabris', function() {
 
   it('contains util functions', function() {
     expect(tabris.checkType).to.be.instanceOf(Function);
+    expect(tabris.checkType(1, Number)).to.equal(1);
+    expect(tabris.asFactory).to.be.instanceOf(Function);
+    expect(() => tabris.asFactory(
+      class extends tabris.Composite { })
+    ).to.be.instanceOf(Function);
     expect(tabris.format).to.be.instanceOf(Function);
+    expect(tabris.format(new Date()).length).be.greaterThan(1);
   });
 
   describe('when started', function() {

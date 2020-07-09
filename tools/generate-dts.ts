@@ -13,7 +13,7 @@ const HEADER = `
 /// <reference path="globals.d.ts" />
 
 // General helper types
-interface Constructor<T> {new(...args: any[]): T; }
+export interface Constructor<T> {new(...args: any[]): T; }
 type Omit<T, K extends string | symbol | number> = Pick<T, Exclude<keyof T, K>>;
 type ReadOnlyWidgetKeys<T> = T extends {readonly bounds: any}
   ? Extract<keyof T, 'bounds' | 'absoluteBounds' | 'cid' | 'jsxAttributes'>
@@ -32,12 +32,12 @@ type ListenersMap<T> = { [Key in ListenersKeysOf<T>]?: UnpackListeners<T[Key]>};
 export type JSXShorthands<T> = T extends {layoutData?: LayoutDataValue}
   ? {center?: true, stretch?: true, stretchX?: true, stretchY?: true}
   : {};
+export type JSXCandidate = {set: any; jsxAttributes: any}; // JSX.Element?
 export type JSXAttributes<
-  T extends {set?: any; jsxAttributes?: any},
+  T extends JSXCandidate,
   U = Omit<T, 'set' | 'jsxAttributes'> // prevent self-reference issues
 > = Properties<U> & ListenersMap<U> & JSXShorthands<U>;
-export type Attributes<T extends {set?: any; jsxAttributes?: any}>
-  = T['jsxAttributes'];
+export type Attributes<T extends JSXCandidate> = T['jsxAttributes'];
 type ExtendedEvent<EventData, Target = {}> = EventObject<Target> & EventData;
 type Listener<T = {}> = (ev: ExtendedEvent<T>) => any;
 type ListenersTriggerParam<T> = {[P in Diff<keyof T, keyof EventObject<object>>]: T[P]};
@@ -50,6 +50,24 @@ export interface Listeners<EventData extends {target: object}> {
 export type JSXChildren<T extends Widget> = T|WidgetCollection<T>|Array<T|WidgetCollection<T>>|undefined;
 export type SFC<T> = (attributes: object|null, children: any[]) => T;
 type Flatten<T> = T|Array<T>|undefined;
+
+export type Factory<
+  OriginalConstructor extends Constructor<JSXCandidate> & {prototype: Instance},
+  Instance extends JSXCandidate = InstanceType<OriginalConstructor>,
+  Selector extends Function = (...args: any[]) => Instance
+> = {
+  (attributes?: Attributes<Instance>, selector?: Selector): Instance
+}
+
+export type CallableConstructor<
+  OriginalConstructor extends Constructor<JSXCandidate> & {prototype: Instance},
+  Instance extends JSXCandidate = InstanceType<OriginalConstructor>,
+  Selector extends Function = (...args: any[]) => Instance
+> = {
+  new (...args: ConstructorParameters<OriginalConstructor>): Instance,
+  (attributes?: Attributes<Instance>, selector?: Selector): Instance,
+  prototype: Instance
+}
 
 export as namespace tabris;
 `.trim();
@@ -123,27 +141,48 @@ function renderSingletonVariable(text: TextBuilder, def: ExtendedApi) {
 }
 
 function renderClass(text: TextBuilder, def: ExtendedApi) {
-  text.append(createDoc(def));
-  renderClassHead(text, def);
-  text.indent++;
-  renderConstructor(text, def);
+  renderClassHeader(text, def);
+  renderClassConstructor(text, def);
   renderMethods(text, def);
   renderProperties(text, def);
   renderEventProperties(text, def);
-  text.indent--;
-  text.append('}');
+  renderClassFooter(text, def);
+  if (def.supportsFactory) {
+    renderTypeAlias(text, def);
+    renderFactory(text, def);
+  }
 }
 
-function renderClassHead(text: TextBuilder, def: ExtendedApi) {
-  let str = (def.namespace && def.namespace === 'global') ? 'declare' : ' export';
-  str += (def.interface ? ' interface ' : ' class ')  + genericType(def);
+function renderClassHeader(text: TextBuilder, def: ExtendedApi) {
+  if (def.supportsFactory) {
+    text.append('export namespace widgets {');
+    text.append('');
+    text.indent++;
+  }
+  text.append(createDoc(def));
+  let str = (def.namespace && def.namespace === 'global') ? 'declare' : 'export';
+  str += def.interface ? ' interface ' : ' class ';
+  str += genericType(def);
   if (def.extends) {
-    str += ' extends ' + toTypeScript(def.extends);
+    str += ' extends ';
+    str += toTypeScript(def.extends);
   }
   text.append(str + ' {');
+  text.indent++;
 }
 
-function renderConstructor(text: TextBuilder, def: ExtendedApi) {
+function renderClassFooter(text: TextBuilder, def: ExtendedApi) {
+  text.indent--;
+  text.append('}');
+  if (def.supportsFactory) {
+    text.indent--;
+    text.append('}');
+    text.append('');
+  }
+  text.append('');
+}
+
+function renderClassConstructor(text: TextBuilder, def: ExtendedApi) {
   const hasConstructor = typeof def.constructor === 'object';
   const constructor = hasConstructor ? def.constructor : getInheritedConstructor(def.superAPI);
   if (constructor) {
@@ -152,6 +191,28 @@ function renderConstructor(text: TextBuilder, def: ExtendedApi) {
     const paramList = createParamList(def, constructor.parameters || []);
     text.append(`${access}constructor(${paramList});`);
   }
+}
+
+function renderTypeAlias(text: TextBuilder, def: ExtendedApi) {
+  text.append(
+    `export type ${def.type}${renderGenericsDef(def.generics)} = `
+    + `widgets.${def.type}${renderGenerics(def.generics)};`
+  );
+}
+
+function renderFactory(text: TextBuilder, def: ExtendedApi) {
+  const hasConstructor = typeof def.constructor === 'object';
+  const constructorDef = hasConstructor ? def.constructor : getInheritedConstructor(def.superAPI);
+  if (!constructorDef) {
+    throw new Error('Can not render a separate constructor function without super constructor');
+  }
+  const _class = 'widgets.' + def.type;
+  const constructor = def.type + 'Constructor';
+  const factory = def.type + 'Factory';
+  text.append(`export type ${constructor} = typeof ${_class};`);
+  // The "CallableConstructor" interface is not used here since it can not support static members
+  text.append(`export interface ${factory} extends Factory<${constructor}>, ${constructor} {}`);
+  text.append(`export const ${def.type}: ${factory};`);
 }
 
 // #endregion
@@ -399,9 +460,20 @@ function renderGenericsDef(generics: schema.GenericsDef): string {
   return '<' + content + '>';
 }
 
-function renderGenerics(generics: schema.Generics): string {
+function renderGenerics(generics: schema.Generics | schema.GenericsDef): string {
   if (!generics) {
     return '';
   }
-  return '<' + generics.map(toTypeScript).join(', ') + '>';
+  const list = (generics as unknown[]).map(param => {
+    if (typeof param === 'string') {
+      return param;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const name = (param as any).name;
+    if (typeof name === 'string') {
+      return name;
+    }
+    return toTypeScript(param as schema.TypeReference);
+  });
+  return '<' + list.join(', ') + '>';
 }

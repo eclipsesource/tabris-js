@@ -4,6 +4,8 @@ import {createJsxProcessor, JSX} from '../../src/tabris/JsxProcessor';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 import $ from '../../src/tabris/$';
 import Composite from '../../src/tabris/widgets/Composite';
+import Popover from '../../src/tabris/Popover';
+import AlertDialog from '../../src/tabris/AlertDialog';
 import Button from '../../src/tabris/widgets/Button';
 import CheckBox from '../../src/tabris/widgets/CheckBox';
 import Switch from '../../src/tabris/widgets/Switch';
@@ -12,6 +14,9 @@ import TextView from '../../src/tabris/widgets/TextView';
 import LayoutData from '../../src/tabris/LayoutData';
 import Color from '../../src/tabris/Color';
 import Font from '../../src/tabris/Font';
+import {originalComponent, proxyHandler} from '../../src/tabris/symbols';
+import {format} from '../../src/tabris/Formatter';
+import NativeObject from '../../src/tabris/NativeObject';
 
 describe('JsxProcessor', function() {
 
@@ -596,6 +601,223 @@ describe('JsxProcessor', function() {
         expect(str).to.equal('foo1');
       });
 
+    });
+
+  });
+
+  describe('makeFactory()', function() {
+
+    it('throws for missing argument', function() {
+      // @ts-ignore
+      expect(() => jsx.makeFactory()).to.throw(Error);
+    });
+
+    it('throws for additional arguments', function() {
+      // @ts-ignore
+      expect(() => jsx.makeFactory(Composite, 'foo')).to.throw(Error);
+    });
+
+    it('throws for non-constructor', function() {
+      // @ts-ignore
+      expect(() => jsx.makeFactory(null)).to.throw(Error);
+    });
+
+    it('throws for non-constructor function', function() {
+      // @ts-ignore
+      expect(() => jsx.makeFactory(() => null)).to.throw(Error);
+    });
+
+    it('throws for non-jsx-supporting constructor', function() {
+      // @ts-ignore
+      expect(() => jsx.makeFactory(NativeObject)).to.throw(Error);
+    });
+
+    describe('returned value', function() {
+
+      /** @type {typeof Composite & ((...any: any[]) => Composite)} */
+      let CompositeFactory;
+
+      beforeEach(function() {
+        CompositeFactory = jsx.makeFactory(Composite);
+        spy(jsx, 'createElement');
+      });
+
+      it('is factory for given type', function() {
+        expect(CompositeFactory()).to.be.instanceOf(Composite);
+      });
+
+      it('calls createElement', function() {
+        const attr = {top: 23};
+
+        CompositeFactory(attr);
+
+        expect(jsx.createElement).to.have.been.calledOnce;
+        expect(jsx.createElement).to.have.been.calledWith(Composite, attr);
+      });
+
+      it('sets properties', function() {
+        expect(CompositeFactory({top: 23}).top.offset).to.equal(23);
+      });
+
+      it('registers listeners', function() {
+        const listener = spy();
+
+        const composite = CompositeFactory({onTopChanged: listener});
+        composite.top = 23;
+
+        expect(listener).to.have.been.calledOnce;
+      });
+
+      it('appends children', function() {
+        const child = new Composite();
+
+        const composite = CompositeFactory({children: [child]});
+
+        expect(composite.children().only()).to.equal(child);
+      });
+
+      it('is still constructable', function() {
+        expect(new CompositeFactory()).to.be.instanceOf(Composite);
+        expect(new CompositeFactory({top: 23}).top.offset).to.equal(23);
+      });
+
+      it('it still works as selector', function() {
+        const parent = new Composite().append(
+          new TextView(),
+          CompositeFactory()
+        );
+        expect(parent.children(CompositeFactory).length).to.equal(1);
+      });
+
+      it('supports functional components as selector', function() {
+        const StyledComposite = attr =>
+          CompositeFactory(Object.assign({background: 'blue'}, attr), StyledComposite);
+        const parent = new Composite().append(
+          new TextView(),
+          StyledComposite({left: 23})
+        );
+        expect(parent.children(StyledComposite).length).to.equal(1);
+        expect(parent.children('StyledComposite').length).to.equal(1);
+      });
+
+      it('still has static members', function() {
+        expect(CompositeFactory.defineChangeEvent).to.equal(Composite.defineChangeEvent);
+      });
+
+      it('can be extended', function() {
+        class MyComponent extends CompositeFactory {
+          constructor() {
+            super({top: 23});
+            this.bottom = 24;
+          }
+        }
+
+        const component = new MyComponent();
+
+        expect(component.top.offset).to.equal(23);
+        expect(component.bottom.offset).to.equal(24);
+        expect(component.children().length).to.equal(0);
+      });
+
+      it('can be formatted', function() {
+        const str = format(CompositeFactory());
+        expect(str).to.match(/^Composite\[cid=/);
+      });
+
+      it('does not double-wrap', function() {
+        const jsx2 = createJsxProcessor();
+        spy(jsx2, 'createElement');
+        const CompositeFactory2 = jsx2.makeFactory(CompositeFactory);
+        const attr = {top: 23};
+
+        const component = CompositeFactory2(attr);
+
+        expect(component).to.be.instanceOf(Composite);
+        expect(component).to.be.instanceOf(CompositeFactory2);
+        expect(component.top.offset).to.equal(23);
+        expect(jsx.createElement).not.to.have.been.called;
+        expect(jsx2.createElement).not.have.been.calledWith(CompositeFactory, attr);
+        expect(jsx2.createElement).to.have.been.calledOnce;
+        expect(jsx2.createElement).to.have.been.calledWith(Composite, attr);
+      });
+
+      it('exposes original constructor', function() {
+        expect(CompositeFactory[originalComponent]).to.equal(Composite);
+        expect(CompositeFactory[originalComponent]).not.to.equal(CompositeFactory);
+      });
+
+      it('original constructor is not visible on subclass', function() {
+        class Subclass extends CompositeFactory {}
+        expect(Subclass[originalComponent]).to.be.undefined;
+      });
+
+      it('exposes proxy handler', function() {
+        const handler = CompositeFactory[proxyHandler];
+        expect(handler.get).to.be.instanceOf(Function);
+        expect(handler.apply).to.be.instanceOf(Function);
+      });
+
+      it('can add traps', function() {
+        const handler = CompositeFactory[proxyHandler];
+
+        handler.construct = () => new Date();
+
+        expect(new CompositeFactory()).to.be.instanceOf(Date);
+        expect(CompositeFactory()).to.be.instanceOf(Composite);
+      });
+
+      it('can modify traps', function() {
+        const factoryTraps = CompositeFactory[proxyHandler];
+
+        factoryTraps.apply = () => new Date();
+
+        expect(CompositeFactory()).to.be.instanceOf(Date);
+        expect(new CompositeFactory()).to.be.instanceOf(Composite);
+      });
+
+    });
+
+  });
+
+  describe('makeFactories()', function() {
+
+    it('wraps widgets constructors on dictionary', function() {
+      const result = jsx.makeFactories({Button, Composite});
+
+      const button = result.Button({top: 23});
+      const composite = result.Composite({top: 23});
+
+      expect(composite).to.be.instanceOf(Composite);
+      expect(composite.top.offset).to.equal(23);
+      expect(button).to.be.instanceOf(Button);
+      expect(button.top.offset).to.equal(23);
+    });
+
+    it('wraps custom component constructors on dictionary', function() {
+      class MyComponent extends Composite {
+        constructor(props) {
+          super({top: 23});
+          this.set(props);
+        }
+      }
+      const result = jsx.makeFactories({MyComponent});
+
+      const component = result.MyComponent({bottom: 24});
+
+      expect(component.top.offset).to.equal(23);
+      expect(component.bottom.offset).to.equal(24);
+    });
+
+    it('wraps popup constructors on dictionary', function() {
+      const result = jsx.makeFactories({AlertDialog, Popover});
+
+      const alertDialog = result.AlertDialog({message: 'foo'});
+      const popover = result.Popover({width: 23});
+
+      expect(alertDialog).to.be.instanceOf(AlertDialog);
+      expect(alertDialog.message).to.equal('foo');
+      expect(popover).to.be.instanceOf(Popover);
+      expect(popover.width).to.equal(23);
     });
 
   });

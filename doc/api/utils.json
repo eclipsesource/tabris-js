@@ -332,7 +332,12 @@
         "parameters": [
           {
             "name": "...data",
-            "type": {"interface": "Array", "generics": ["any"]}
+            "type": {
+              "interface": "Array",
+              "generics": [
+                "any"
+              ]
+            }
           }
         ],
         "description": "Formats the given value(s) in the same manner the [console](./Console.md) does.",
@@ -347,13 +352,40 @@
           },
           {
             "name": "...data",
-            "type": {"interface": "Array", "generics": ["any"]},
+            "type": {
+              "interface": "Array",
+              "generics": [
+                "any"
+              ]
+            },
             "description": "Data to be inserted in to the main message."
           }
         ],
         "description": "Formats the given value(s) in the same manner the [console](./Console.md) does.\nThe any placeholders in the message are replaced by the additional data parameters. Valid placeholders are \"%d\" for decimals, \"%i\" for integers, \"%f\" for floats, \"%j\" for any number, \"%j\" for any objects (including arrays) and \"%s\" for strings. To print the percentage sign itself use \"%%\".",
         "returns": "string"
       }
-    ]
+    ],
+    "asFactory": {
+      "docs_only": true,
+      "generics": [
+        {
+          "name": "OriginalConstructor",
+          "extends": "Constructor"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "constructor",
+          "type": "OriginalConstructor"
+        }
+      ],
+      "returns": {
+        "interface": "CallableConstructor",
+        "generics": [
+          "OriginalConstructor"
+        ]
+      },
+      "description": "Wraps the given widget constructor so that it can also be called like a normal function (factory) without the \"new\" keyword. When used like this the first parameter may not only contain all settable properties, but also listener (e.g. `{onTap: ev => console.log(ev)}` and children (`{children: [...]}`). A second parameter may be given to the factory, which should be a functional component. It will not be invoked, but becomes usable as a selector to obtain the instance created by this factory call.\n\nAll built-in widgets are already callable like this, so this function is only useful for user-defined widget subclasses/custom components.\n\nIn TypeScript the wrapped constructor will not have any static members declared, though they are still available at runtime."
+    }
   }
 }

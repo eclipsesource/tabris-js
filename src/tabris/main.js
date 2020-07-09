@@ -3,6 +3,7 @@ import './load-polyfill';
 import {checkVersion} from './version';
 import Tabris from './Tabris';
 import Device, {create as createDevice, publishDeviceProperties} from './Device';
+import CanvasContext from './CanvasContext';
 import Printer, {create as createPrinter} from './Printer';
 import Permission, {create as createPermission} from './Permission';
 import App, {create as createApp} from './App';
@@ -94,118 +95,62 @@ import {fetch} from './fetch/fetch';
 import Headers from './fetch/Headers';
 import Request from './fetch/Request';
 import Response from './fetch/Response';
+import {omit} from './util';
 
 // @ts-ignore
 if (global.tabris && global.tabris.version) {
   throw new Error('tabris module already loaded. Ensure the module is installed only once.');
 }
 
-const tabrisMain = Object.assign(new Tabris(), {
+const WIDGETS = Object.freeze({
   Action,
-  ActionSheet,
-  ActionSheetItem,
   ActivityIndicator,
-  AlertDialog,
-  App,
   Button,
-  Blob,
   Canvas,
-  ChangeListeners,
+  ContentView,
   CheckBox,
   CollectionView,
-  Color,
-  ColorResources,
-  ConstraintLayout,
-  Camera,
   CameraView,
   Composite,
-  Constraint,
-  Console,
-  ContentView,
-  Crypto,
-  DateDialog,
-  Device,
-  DevTools,
   Drawer,
-  Event,
-  EventObject,
-  FileSystem,
-  File,
-  FormData,
-  Font,
-  FontResources,
-  Image,
-  ImageData,
-  ImageBitmap,
   ImageView,
-  InactivityTimer,
-  JsxProcessor,
-  JSX,
-  Layout,
-  LayoutData,
-  Listeners,
-  LinearGradient,
-  NativeObject,
   NavigationView,
-  NavigationBar,
-  Popover,
   Page,
-  Percent,
-  Permission,
   Picker,
-  Printer,
-  Process,
   ProgressBar,
-  ProgressEvent,
   RadioButton,
   RefreshComposite,
-  Resources,
-  RowLayout,
   Row,
   ScrollView,
   SearchAction,
-  SizeMeasurement,
   Slider,
-  Storage,
-  StackLayout,
   Stack,
-  StatusBar,
   Switch,
   Tab,
   TabFolder,
   TextInput,
-  TextResources,
   TextView,
-  TimeDialog,
   ToggleButton,
   Video,
-  WebSocket,
   WebView,
-  Widget,
-  WidgetCollection,
-  $,
-  XMLHttpRequest,
-  Worker,
-  fetch,
-  checkType,
-  format,
-  Headers,
-  Request,
-  Response
+  Widget
 });
 
-/** @typedef {typeof tabrisMain} TabrisMain */
-module.exports = tabrisMain;
-// @ts-ignore
-global.tabris = tabrisMain;
-// @ts-ignore
-global.tabris.tabris = tabrisMain;
+const POPUPS = Object.freeze({
+  ActionSheet,
+  ActionSheetItem,
+  AlertDialog,
+  DateDialog,
+  Popover,
+  TimeDialog
+});
 
-Object.assign(global, {
+const WHATWG = Object.freeze({
   Blob,
+  Crypto,
+  Event,
   File,
   FormData,
-  Crypto,
   ImageData,
   ImageBitmap,
   ProgressEvent,
@@ -217,9 +162,68 @@ Object.assign(global, {
   Request,
   Response,
   Worker,
-  $,
   createImageBitmap: ImageBitmap.createImageBitmap
 });
+
+const NATIVE_OBJECT = Object.freeze({
+  App,
+  Camera,
+  NavigationBar,
+  Device,
+  DevTools,
+  FileSystem,
+  InactivityTimer,
+  NativeObject,
+  Printer,
+  SizeMeasurement,
+  StatusBar
+});
+
+const UTILS = {
+  checkType,
+  format,
+  asFactory: arg => tabrisMain.JSX.processor.makeFactory(arg)
+};
+
+const OTHER = Object.freeze({
+  CanvasContext,
+  ChangeListeners,
+  Color,
+  ColorResources,
+  ConstraintLayout,
+  Constraint,
+  Console,
+  EventObject,
+  Font,
+  FontResources,
+  Image,
+  JsxProcessor,
+  JSX,
+  Layout,
+  LayoutData,
+  Listeners,
+  LinearGradient,
+  Percent,
+  Permission,
+  Process,
+  Resources,
+  RowLayout,
+  StackLayout,
+  TextResources,
+  WidgetCollection,
+  $
+});
+
+const tabrisMain = Object.assign(new Tabris(), WIDGETS, POPUPS, WHATWG, NATIVE_OBJECT, UTILS, OTHER);
+
+/** @typedef {typeof tabrisMain} TabrisMain */
+module.exports = tabrisMain;
+// @ts-ignore
+global.tabris = tabrisMain;
+// @ts-ignore
+global.tabris.tabris = tabrisMain;
+
+Object.assign(global, WHATWG, {$});
 
 tabrisMain.on('start', (options) => {
   // @ts-ignore
@@ -244,6 +248,8 @@ tabrisMain.on('start', (options) => {
     tabris.$printer = createPrinter();
     tabris.$permission = createPermission();
     tabris.JSX.install(createJsxProcessor());
+    tabris.widgets = omit(WIDGETS, ['Widget', 'Drawer', 'ContentView']);
+    Object.assign(tabris, tabris.JSX.processor.makeFactories(tabris.widgets));
   }
   tabris.$devTools = createDevTools();
   tabris.$sizeMeasurement = createSizeMeasurement();

@@ -4,8 +4,10 @@ import Listeners from './Listeners';
 import {toValueString} from './Console';
 import Color from './Color';
 import Font from './Font';
+import * as symbols from './symbols';
+import checkType from './checkType';
 
-const COMMON_ATTR = {
+const COMMON_ATTR = Object.freeze({
   textColor: value => Color.from(value).toString(),
   font: value => Font.from(value).toString(),
   children: value => {
@@ -14,9 +16,9 @@ const COMMON_ATTR = {
     }
     return value;
   }
-};
+});
 
-const MARKUP = {
+const MARKUP = Object.freeze({
   br: {},
   b: COMMON_ATTR,
   span: COMMON_ATTR,
@@ -34,7 +36,7 @@ const MARKUP = {
       return value;
     }
   }, COMMON_ATTR)
-};
+});
 
 export function createJsxProcessor() {
   return new JsxProcessor();
@@ -200,6 +202,79 @@ export default class JsxProcessor {
     return attribute.startsWith('on') && attribute.charCodeAt(2) <= 90;
   }
 
+  /**
+   * @template {new(...args: any[]) => any} Constructor
+   * @template {Constructor & ((...any) => any)} Factory
+   * @template {object} Constructors
+   * @param {Constructors} dic
+   * @returns {Partial<{[key in keyof Constructors]: Factory}>}
+   */
+  makeFactories(dic) {
+    const result = {};
+    Object.keys(dic).forEach(key => {
+      result[key] = this.makeFactory(dic[key]);
+    });
+    return result;
+  }
+
+  /**
+   * @template {object} Instance
+   * @template {new(...args: any[]) => Instance} Constructor
+   * @template {Constructor & ((...any) => Instance)} Factory
+   * @param {Constructor} constructor
+   * @returns {Factory}
+   */
+  makeFactory(constructor) {
+    if (arguments.length !== 1) {
+      throw new Error(`Expected exactly one argument, got ${arguments.length}`);
+    }
+    checkType(constructor, Function, 'first parameter');
+    if (!constructor.prototype || !constructor.prototype[JSX.jsxFactory]) {
+      throw new Error(`Function ${constructor.name} is not a valid constructor`);
+    }
+    if (constructor[symbols.originalComponent])  {
+      return this.makeFactory(constructor[symbols.originalComponent]);
+    }
+    return createFactoryProxy(this, constructor);
+  }
+
+}
+
+/**
+   * @template {object} Instance
+   * @template {new(...args: any[]) => Instance} Constructor
+   * @template {Constructor & ((...any) => Instance)} Factory
+   * @param {JsxProcessor} processor
+   * @param {Constructor} constructor
+   * @returns {Factory}
+   */
+function createFactoryProxy(processor, constructor) {
+  /** @type {ProxyHandler} */
+  const handler = {
+    apply(target, _thisArg, args) {
+      const [attributes, functionalComponent] = args;
+      const result = processor.createElement(target, attributes);
+      if (functionalComponent instanceof Function && result instanceof Object) {
+        functionalComponent[JSX.jsxType] = true;
+        result[JSX.jsxType] = functionalComponent;
+      }
+      return result;
+    },
+    get(target, property, receiver) {
+      if (receiver === proxy) {
+        if (property === symbols.originalComponent) {
+          return constructor;
+        }
+        if (property === symbols.proxyHandler) {
+          return handler;
+        }
+      }
+      return Reflect.get(target, property, receiver);
+    }
+  };
+  /** @type {Factory} */
+  const proxy = new Proxy(constructor, handler);
+  return proxy;
 }
 
 /**

@@ -356,6 +356,12 @@ export class JsxProcessor {
 
 }
 
+export function asFactory<
+  OriginalConstructor extends Constructor<JSXCandidate> & {prototype: Instance},
+  Instance extends JSXCandidate = InstanceType<OriginalConstructor>
+> (constructor: OriginalConstructor): CallableConstructor<OriginalConstructor>;
+
+
 export type ModuleLoader = (
   module: Module,
   exports: object,

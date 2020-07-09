@@ -69,13 +69,13 @@ class CustomAction extends Action {
   public bar: string;
 }
 
-const typedNavigationView: NavigationView<CustomPage, CustomAction> = new NavigationView();
+const typedNavigationView: NavigationView<CustomPage, CustomAction> = new NavigationView<CustomPage, CustomAction>();
 typedNavigationView.append(new CustomPage());
 typedNavigationView.append(new CustomAction());
 const child: CustomPage|CustomAction = typedNavigationView.children()[0];
 type = typedNavigationView.pages()[0].foo;
 
-const partialTypedNavigationView: NavigationView<CustomPage> = new NavigationView();
+const partialTypedNavigationView: NavigationView<CustomPage> = new NavigationView<CustomPage>();
 typedNavigationView.append(new CustomPage());
 typedNavigationView.append(new CustomAction());
 const child2: CustomPage|Action = typedNavigationView.children()[0];
