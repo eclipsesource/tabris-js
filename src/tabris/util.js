@@ -135,10 +135,11 @@ export function proxify(getTarget) {
   const fakeTarget = {};
   Object.keys(traps).forEach(trap => handler[trap] = (_, ...args) => {
     const result = Reflect[trap](getTarget(), ...args);
-    if (trap === 'getOwnPropertyDescriptor') {
+    if (trap === 'getOwnPropertyDescriptor' && result) {
       // The VM throws if a property is configurable or non-existing
       // on fakeTarget, but not reported as such here
-      return Object.assign({}, result, {configurable: true});
+      result.configurable = true;
+      return result;
     }
     return traps[trap] ? true : result;
   });

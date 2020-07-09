@@ -1,4 +1,4 @@
-import {expect} from '../test';
+import {expect, spy} from '../test';
 import {
   pick,
   omit,
@@ -12,6 +12,7 @@ import {
 import Composite from '../../src/tabris/widgets/Composite';
 import {mockTabris} from '../tabris-mock';
 import ClientMock from './ClientMock';
+import NativeObject from '../../src/tabris/NativeObject';
 
 describe('util', function() {
 
@@ -229,11 +230,27 @@ describe('util', function() {
       expect(proxy instanceof Test).to.be.false;
     });
 
-    it('Does not crash Object.keys', function() {
+    it('does not crash Object.keys', function() {
       mockTabris(new ClientMock());
       const original = new Composite({left: 23});
       proxy = proxify(() => original);
       expect(() => Object.keys(proxy)).not.to.throw(Error);
+    });
+
+    it('does support lazy initialized event API', function() {
+      mockTabris(new ClientMock());
+      const TestClass = class extends NativeObject {
+        get _nativeType() { return 'bar'; }
+      };
+      NativeObject.defineEvent(TestClass.prototype, 'foo', {});
+      const instance = new TestClass();
+      const testProxy = proxify(() => instance);
+      const listener = spy();
+
+      testProxy.onFoo(listener);
+      testProxy.onFoo.trigger();
+
+      expect(listener).to.have.been.calledOnce;
     });
 
   });
