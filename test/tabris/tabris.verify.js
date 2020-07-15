@@ -242,6 +242,19 @@ describe('tabris', function() {
     expect(tabris.format(new Date()).length).be.greaterThan(1);
   });
 
+  it('contains symbols', function() {
+    expect(typeof tabris.symbols.equals).equal('symbol');
+    expect(typeof tabris.symbols.creationAllowed).to.equal('symbol');
+    expect(typeof tabris.symbols.bytes).to.equal('symbol');
+    expect(typeof tabris.symbols.nativeObject).to.equal('symbol');
+    expect(typeof tabris.symbols.toXML).to.equal('symbol');
+    expect(typeof tabris.symbols.notify).to.equal('symbol');
+    expect(typeof tabris.symbols.data).to.equal('symbol');
+    expect(typeof tabris.symbols.listenersStore).to.equal('symbol');
+    expect(typeof tabris.symbols.originalComponent).to.equal('symbol');
+    expect(typeof tabris.symbols.proxyHandler).to.equal('symbol');
+  });
+
   describe('when started', function() {
 
     before(function() {

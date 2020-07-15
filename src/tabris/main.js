@@ -73,6 +73,7 @@ import SizeMeasurement, {create as createSizeMeasurement} from './SizeMeasuremen
 import Slider from './widgets/Slider';
 import StatusBar, {create as createStatusBar} from './widgets/StatusBar';
 import Switch from './widgets/Switch';
+import * as symbols from './symbols';
 import Tab from './widgets/Tab';
 import TabFolder from './widgets/TabFolder';
 import TextInput from './widgets/TextInput';
@@ -209,6 +210,7 @@ const OTHER = Object.freeze({
   Resources,
   RowLayout,
   StackLayout,
+  symbols,
   TextResources,
   WidgetCollection,
   $
