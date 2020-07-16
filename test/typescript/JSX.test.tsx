@@ -173,3 +173,14 @@ const markup: string =
   <span font='bold 16px monospace'>other font</span>
   <del font={{family: [tabris.Font.serif], size: 24}} textColor={[100, 200, 50, 0.5]}>combined</del>
 </$>;
+
+// Helper types
+
+const listener: tabris.Listener<tabris.TextInputInputEvent> = ev => console.log(ev.text);
+const listenerFromListeners: tabris.UnpackListeners<tabris.TextInput['onInput']> = listener;
+const ev: tabris.EventOfListeners<tabris.TextInput['onInput']> = {
+  text: '',
+  target: new tabris.TextInput(),
+  timeStamp: 12,
+  type: 'input'
+};

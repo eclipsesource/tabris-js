@@ -97,6 +97,15 @@ const markup = <tabris.TextView markupEnabled>
   <doesnotexist/>
 </tabris.TextView>;
 
+// Helper types
+
+const listener: tabris.UnpackListeners<tabris.TextInput['onInput']> = ev => console.log(ev.foo);
+const ev: tabris.EventOfListeners<tabris.TextInput['onInput']> = {
+  target: new tabris.TextInput(),
+  timeStamp: 12,
+  type: 'input'
+};
+
 /*Expected
 (4,
 'number' is not assignable to type 'boolean'
@@ -156,4 +165,6 @@ const markup = <tabris.TextView markupEnabled>
 (95,
 (96,
 (97,
+(102,
+(103,
 */

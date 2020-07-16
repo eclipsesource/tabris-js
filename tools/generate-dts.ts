@@ -27,7 +27,8 @@ export type Properties<
 > = Partial<Omit<U, MethodKeysOf<U> | ReadOnlyWidgetKeys<U>>>
   & {cid?: never}; // prevent empty object type as possible result, would allow any object
 type ListenersKeysOf<T> = { [K in keyof T]: T[K] extends Listeners<any> ? K : never }[keyof T];
-type UnpackListeners<T> = T extends Listeners<infer U> ? Listener<U> : T;
+export type UnpackListeners<T> = T extends Listeners<infer U> ? Listener<U> : T;
+export type EventOfListeners<T extends Listeners<any>> = T extends Listeners<infer U> ? U : never;
 type ListenersMap<T> = { [Key in ListenersKeysOf<T>]?: UnpackListeners<T[Key]>};
 export type JSXShorthands<T> = T extends {layoutData?: LayoutDataValue}
   ? {center?: true, stretch?: true, stretchX?: true, stretchY?: true}
@@ -39,7 +40,7 @@ export type JSXAttributes<
 > = Properties<U> & ListenersMap<U> & JSXShorthands<U>;
 export type Attributes<T extends JSXCandidate> = T['jsxAttributes'];
 type ExtendedEvent<EventData, Target = {}> = EventObject<Target> & EventData;
-type Listener<T = {}> = (ev: ExtendedEvent<T>) => any;
+export type Listener<T = {}> = (ev: ExtendedEvent<T>) => any;
 type ListenersTriggerParam<T> = {[P in Diff<keyof T, keyof EventObject<object>>]: T[P]};
 type MinimalEventObject<T extends object> = {target: T};
 type TargetType<E extends object> = E extends MinimalEventObject<infer Target> ? Target : object;
@@ -57,7 +58,7 @@ export type Factory<
   Selector extends Function = (...args: any[]) => Instance
 > = {
   (attributes?: Attributes<Instance>, selector?: Selector): Instance
-}
+};
 
 export type CallableConstructor<
   OriginalConstructor extends Constructor<JSXCandidate> & {prototype: Instance},
@@ -67,7 +68,7 @@ export type CallableConstructor<
   new (...args: ConstructorParameters<OriginalConstructor>): Instance,
   (attributes?: Attributes<Instance>, selector?: Selector): Instance,
   prototype: Instance
-}
+};
 
 export as namespace tabris;
 `.trim();
