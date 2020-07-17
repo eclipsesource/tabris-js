@@ -68,6 +68,16 @@ describe('Widget', function() {
       expect(child1_1.set).to.have.been.calledWith(props);
     });
 
+    it('applies properties to all children (options parameter)', function() {
+      const props = {prop1: 'v1', prop2: 'v2'};
+      widget.apply({mode: 'default'}, {'*': props});
+
+      expect(widget.set).to.have.been.calledWith(props);
+      expect(child1.set).to.have.been.calledWith(props);
+      expect(child2.set).to.have.been.calledWith(props);
+      expect(child1_1.set).to.have.been.calledWith(props);
+    });
+
     it('applies properties to children with specific id', function() {
       widget.apply({'#foo': {prop1: 'v1'}, '#bar': {prop2: 'v2'}});
 
@@ -331,12 +341,23 @@ describe('Widget', function() {
       it('throws if mode is not of expected value', function() {
         expect(() => widget.apply('strict', testRules)).not.to.throw(Error);
         expect(() => widget.apply('default', testRules)).not.to.throw(Error);
+        expect(() => widget.apply({mode: 'strict'}, testRules)).not.to.throw(Error);
+        expect(() => widget.apply({mode: 'default'}, testRules)).not.to.throw(Error);
         expect(() => widget.apply('foo', testRules)).to.throw(Error, 'Value "foo" is not a valid mode.');
-
+        expect(() => widget.apply({mode: 'foo'}, testRules)).to.throw(Error, 'Value "foo" is not a valid mode.');
       });
 
       it('applies properties to only match with given id', function() {
         widget.apply('strict', testRules);
+
+        expect(widget.set).not.to.have.been.called;
+        expect(child1.set).to.have.been.calledWith({prop1: 'v1'});
+        expect(child2.set).to.have.been.calledWith({prop2: 'v2'});
+        expect(child1_1.set).not.to.have.been.called;
+      });
+
+      it('applies properties to only match with given id (options parameter)', function() {
+        widget.apply({mode: 'strict'}, testRules);
 
         expect(widget.set).not.to.have.been.called;
         expect(child1.set).to.have.been.calledWith({prop1: 'v1'});

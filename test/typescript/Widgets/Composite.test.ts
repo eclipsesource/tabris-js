@@ -44,6 +44,8 @@ thisReturnValue = widget.apply({selectorString: properties});
 thisReturnValue = widget.apply({selectorString: Set(Button, {text: 'foo', onSelect: ev => console.log(ev.type)})});
 thisReturnValue = widget.apply('default', {selectorString: properties});
 thisReturnValue = widget.apply('strict', {selectorString: properties});
+thisReturnValue = widget.apply({mode: 'default'}, {selectorString: properties});
+thisReturnValue = widget.apply({mode: 'strict'}, {selectorString: properties});
 widgetCollection = widget.children();
 button = buttonsComposite.children()[0];
 button = buttonsComposite.children((candidate: Button) => candidate.text === 'foo')[0];

@@ -204,6 +204,11 @@
       {
         "parameters": [
           {
+            "name": "options",
+            "type": "{mode?: 'default'|'strict'}",
+            "description": "If mode is set to `'strict'` the function checks that all selector match at least one widget, and that id selector match exactly one widget."
+          },
+          {
             "name": "rules",
             "type": {
               "map": {
@@ -225,6 +230,27 @@
       {
         "parameters": [
           {
+            "name": "rules",
+            "type": {
+              "map": {
+                "selector": "Attributes"
+              },
+              "indexType": "SelectorString"
+            },
+            "ts_type": {
+              "map": {
+                "selector": "object"
+              },
+              "indexType": "SelectorString"
+            }
+          }
+        ],
+        "returns": "this",
+        "description": "Shorthand for `apply({mode: 'default'}, rules)`"
+      },
+      {
+        "parameters": [
+          {
             "name": "mode",
             "type": {
               "union": [
@@ -251,10 +277,37 @@
           }
         ],
         "returns": "this",
-        "description": "Applies the given attributes to all descendants that match the associated selector(s). Each attributes object may contain properties to be set and listeners to be registered. An entry will be treated as a listener if it follows the naming scheme \"onEventType\". IMPORTANT: Listeners previously registered (for the same type) via the `apply` method, a [JSX](../JSX.md) element attribute or a [widget factory](./utils.json#asfactoryconstructor) call will be de-registered. This means you can call apply repeatedly and have a deterministic outcome. Listeners registered programmatically (e.g. `widget.onTap(...)` are not affected by this.)</br></br>For better type safety set `mode` to `'strict'` and use the [`Set`](./utils.md#settargetattributes) to create attribute objects.\n\nIf you wish to always exclude specific \"internal\" children from this, overwrite the `children` method on their parent. See \"[Encapsulation](../selector.md#encapsulation)\"."
+        "description": "Shorthand for `apply({mode: mode}, rules})`"
       }
     ],
     "_apply": [
+      {
+        "protected": true,
+        "parameters": [
+          {
+            "name": "options",
+            "type": "{mode?: 'default'|'strict'}",
+            "description": "If mode is set to `'strict'` the function checks that all selector match at least one widget, and that id selector match exactly one widget."
+          },
+          {
+            "name": "rules",
+            "type": {
+              "map": {
+                "selector": "Attributes"
+              },
+              "indexType": "SelectorString"
+            },
+            "ts_type": {
+              "map": {
+                "selector": "object"
+              },
+              "indexType": "SelectorString"
+            }
+          }
+        ],
+        "returns": "this",
+        "description": "Identical to the `apply(options, rules)` method, but intended to be used by subclasses in case the `children` method was overwritten . See \"[Encapsulation](../selector.md#encapsulation)\""
+      },
       {
         "protected": true,
         "parameters": [
@@ -275,7 +328,7 @@
           }
         ],
         "returns": "this",
-        "description": "Identical to the `apply` method, but intended to be used by subclasses in case the `children` method was overwritten . See \"[Encapsulation](../selector.md#encapsulation)\""
+        "description": "Identical to the `apply(rules)` method, but intended to be used by subclasses in case the `children` method was overwritten . See \"[Encapsulation](../selector.md#encapsulation)\""
       },
       {
         "protected": true,
@@ -307,7 +360,7 @@
           }
         ],
         "returns": "this",
-        "description": "Identical to the `apply` method, but intended to be used by subclasses in case the `children` method was overwritten . See \"[Encapsulation](../selector.md#encapsulation)\""
+        "description": "Identical to the `apply(mode, rules)` method, but intended to be used by subclasses in case the `children` method was overwritten . See \"[Encapsulation](../selector.md#encapsulation)\""
       }
     ],
     "_initLayout": {
