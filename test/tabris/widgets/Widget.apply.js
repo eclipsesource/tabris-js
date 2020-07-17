@@ -3,6 +3,7 @@ import {expect, mockTabris, restore, spy} from '../../test';
 import WidgetCollection from '../../../src/tabris/WidgetCollection';
 import ClientMock from '../ClientMock';
 import Composite from '../../../src/tabris/widgets/Composite';
+import {createJsxProcessor} from '../../../src/tabris/JsxProcessor';
 
 describe('Widget', function() {
 
@@ -243,6 +244,81 @@ describe('Widget', function() {
       expect(child1.set).to.have.been.calledWith(props);
       expect(child2.set).to.have.been.calledWith(props);
       expect(child1_1.set).not.to.have.been.calledWith(props);
+    });
+
+    describe('with event listener', function() {
+
+      /** @type {sinon.SinonSpy} */
+      let listener;
+
+      beforeEach(function() {
+        listener = spy();
+      });
+
+      it('registers listener if matching naming scheme', function() {
+        widget.apply({'#foo': {onTap: listener}});
+
+        child1.trigger('tap');
+
+        expect(listener).to.have.been.calledOnce;
+        expect(child1.set).not.to.have.been.calledWithMatch({onTap: listener});
+      });
+
+      it('sets listener if not matching naming scheme', function() {
+        const attributes = {
+          ontap: listener,
+          OnTap: listener,
+          noTap: listener
+        };
+        widget.apply({'#foo': attributes});
+        child1.trigger('tap');
+
+        expect(listener).not.to.have.been.called;
+        expect(child1.set).to.have.been.calledWithMatch(attributes);
+      });
+
+      it('does not register listener multiple times', function() {
+        widget.apply({'#foo': {onTap: listener}});
+        widget.apply({'#foo': {onTap: listener}});
+        child1.trigger('tap');
+
+        expect(listener).to.have.been.calledOnce;
+      });
+
+      it('de-register previous apply-listener', function() {
+        const listener2 = spy();
+        widget.apply({'#foo': {onTap: listener}});
+        widget.apply({'#foo': {onTap: listener2}});
+        child1.trigger('tap');
+
+        expect(listener).not.to.have.been.called;
+        expect(listener2).to.have.been.calledOnce;
+      });
+
+      it('de-register JSX-applied listener', function() {
+        const jsx = createJsxProcessor();
+        const listener2 = spy();
+        /** @type {TestWidget} */
+        const child3 = jsx.createElement(TestWidget, {onTap: listener, id: 'jsx'});
+        widget.append(child3);
+
+        widget.apply({'#jsx': {onTap: listener2}});
+        child3.trigger('tap');
+
+        expect(listener).not.to.have.been.called;
+        expect(listener2).to.have.been.calledOnce;
+      });
+
+      it('does de-register explicitly registered -listener', function() {
+        const listener2 = spy();
+        child1.on({tap: listener});
+        widget.apply({'#foo': {onTap: listener2}});
+        child1.trigger('tap');
+
+        expect(listener).to.have.been.calledOnce;
+        expect(listener2).to.have.been.calledOnce;
+      });
+
     });
 
     describe('in strict mode', function() {

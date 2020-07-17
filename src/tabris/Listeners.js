@@ -1,6 +1,7 @@
 import Events from './Events';
 import {toValueString} from './Console';
 import {listenersStore as storeSym} from './symbols';
+import {omit} from './util';
 
 const DELEGATE_FIELDS = ['promise', 'addListener', 'removeListener', 'once', 'trigger', 'triggerAsync'];
 
@@ -93,6 +94,43 @@ export class ChangeListeners extends Listeners {
     super.trigger(eventData);
   }
 
+}
+
+export function attributesWithoutListener(attributes) {
+  return omit(attributes, Object.keys(attributes).filter(isListenerAttribute));
+}
+
+export function registerListenerAttributes(obj, attributes) {
+  if (!obj.jsxAttributes) {
+    obj.jsxAttributes = {};
+  }
+  const attachedListeners = obj.jsxAttributes;
+  const newListeners = getEventListeners(attributes);
+  const store = Listeners.getListenerStore(obj);
+  Object.keys(newListeners).forEach(type => {
+    if (type in attachedListeners) {
+      if (newListeners[type] === attachedListeners[type]) {
+        return;
+      }
+      store.off(type, attachedListeners[type]);
+    }
+    store.on(type, attachedListeners[type] = newListeners[type]);
+  });
+}
+
+function getEventListeners(attributes) {
+  const listeners = {};
+  for (const attribute in attributes) {
+    if (isListenerAttribute(attribute)) {
+      const event = attribute[2].toLocaleLowerCase() + attribute.slice(3);
+      listeners[event] = attributes[attribute];
+    }
+  }
+  return listeners;
+}
+
+function isListenerAttribute(attribute) {
+  return attribute.startsWith('on') && attribute.charCodeAt(2) <= 90;
 }
 
 function propertyCheck(target, property) {

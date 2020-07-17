@@ -1,6 +1,6 @@
 import {omit} from './util';
 import {getCurrentLine} from './util-stacktrace';
-import Listeners from './Listeners';
+import {attributesWithoutListener, registerListenerAttributes} from './Listeners';
 import {toValueString} from './Console';
 import Color from './Color';
 import Font from './Font';
@@ -121,8 +121,8 @@ export default class JsxProcessor {
     if (attributes && 'children' in attributes) {
       throw new Error(`JSX: ${Type.name} can not have children`);
     }
-    const result = new Type(this.withoutListeners(attributes || {}));
-    this.registerListeners(result, attributes);
+    const result = new Type(attributesWithoutListener(attributes || {}));
+    registerListenerAttributes(result, attributes);
     return result;
   }
 
@@ -135,14 +135,6 @@ export default class JsxProcessor {
 
   withoutChildren(attributes) {
     return omit(attributes, ['children']);
-  }
-
-  withoutListeners(attributes) {
-    return omit(attributes, Object.keys(attributes).filter(this.isEventAttribute));
-  }
-
-  registerListeners(obj, attributes) {
-    Listeners.getListenerStore(obj).on(this.getListeners(attributes));
   }
 
   withContentText(attributes, content, property, markupEnabled) {
@@ -185,21 +177,6 @@ export default class JsxProcessor {
       }
     });
     return attrCopy;
-  }
-
-  getListeners(attributes) {
-    const listeners = {};
-    for (const attribute in attributes) {
-      if (this.isEventAttribute(attribute)) {
-        const event = attribute[2].toLocaleLowerCase() + attribute.slice(3);
-        listeners[event] = attributes[attribute];
-      }
-    }
-    return listeners;
-  }
-
-  isEventAttribute(attribute) {
-    return attribute.startsWith('on') && attribute.charCodeAt(2) <= 90;
   }
 
   /**

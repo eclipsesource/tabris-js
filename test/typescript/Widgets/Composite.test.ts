@@ -41,7 +41,7 @@ thisReturnValue = buttonsComposite.append(button);
 thisReturnValue = buttonsComposite.append([button]);
 thisReturnValue = buttonsComposite.append(new WidgetCollection<Button>([button]));
 thisReturnValue = widget.apply({selectorString: properties});
-thisReturnValue = widget.apply({selectorString: Set(Button, {text: 'foo'})});
+thisReturnValue = widget.apply({selectorString: Set(Button, {text: 'foo', onSelect: ev => console.log(ev.type)})});
 thisReturnValue = widget.apply('default', {selectorString: properties});
 thisReturnValue = widget.apply('strict', {selectorString: properties});
 widgetCollection = widget.children();

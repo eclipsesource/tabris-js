@@ -1,4 +1,5 @@
 import Widget from '../Widget';
+import {registerListenerAttributes, attributesWithoutListener} from '../Listeners';
 import NativeObject from '../NativeObject';
 import {createSelectorArray, getSelectorSpecificity} from '../util-widget-select';
 import Layout, {ConstraintLayout} from '../Layout';
@@ -222,18 +223,31 @@ function getApplyArgs(args) {
   if (args.length === 0) {
     throw new Error('Expected 1-2 arguments, got 0');
   }
-  const withMode = typeof args[0] === 'string';
-  if (withMode && args.length === 1) {
+  const withScope = args[args.length - 1] instanceof WidgetCollection;
+  const withOptions = withScope ? args.length === 3 : args.length === 2;
+  if (typeof args[0] === 'string' && args.length === 1) {
     throw new Error('Expected 2 arguments, got 1');
   }
-  const mode = withMode ? args[0] : 'default';
+  const {mode} = normalizeApplyOptions(withOptions ? args[0] : {});
   if (mode !== 'default' && mode !== 'strict') {
     throw new Error(`Value "${mode}" is not a valid mode.`);
   }
-  const sheet = withMode ? args[1] : args[0];
+  const sheet = withOptions ? args[1] : args[0];
   checkType(sheet, Object);
-  const scope = withMode && args.length === 3 ? args[2] : args[1];
+  const scope = withOptions && args.length === 3 ? args[2] : args[1];
   return {scope, sheet, mode};
+}
+
+/**
+ * @param {string|object} value
+ */
+function normalizeApplyOptions(value) {
+  /** @type {object} */
+  const options = typeof value === 'string' ? {mode: value} : value;
+  if (!('mode' in options)) {
+    options.mode = 'default';
+  }
+  return options;
 }
 
 function asArray(value) {
@@ -261,9 +275,9 @@ function notExcluded(widget) {
  * @param {Composite} host
  */
 function applyRule(mode, scope, rule, host) {
-  const [selector, properties] = rule;
+  const [selector, attributes] = rule;
   /** @type {Function} */
-  const targetType = properties[setterTargetType];
+  const targetType = attributes[setterTargetType];
   const matches = scope.filter(selector);
   if (mode === 'strict') {
     checkApplyMatches(selector, matches, host);
@@ -274,7 +288,8 @@ function applyRule(mode, scope, rule, host) {
         `Can not set properties of ${targetType.name} on ${widget}`
       );
     }
-    widget.set(properties);
+    widget.set(attributesWithoutListener(attributes));
+    registerListenerAttributes(widget, attributes);
   });
 }
 

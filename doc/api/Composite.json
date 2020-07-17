@@ -204,8 +204,14 @@
       {
         "parameters": [
           {
-            "name": "properties",
+            "name": "rules",
             "type": {
+              "map": {
+                "selector": "Attributes"
+              },
+              "indexType": "SelectorString"
+            },
+            "ts_type": {
               "map": {
                 "selector": "object"
               },
@@ -214,7 +220,7 @@
           }
         ],
         "returns": "this",
-        "description": "Applies the given properties to all descendants that match the associated selector(s). For better type safety enable [strict mode](#applymodeproperies) and use the [`Set`](./utils.md#settargetproperties) to create properties objects.\n\nIf you wish to always exclude specific \"internal\" children from this, overwrite the `children` method on their parent. See \"[Encapsulation](../selector.md#encapsulation)\"."
+        "description": "Applies the given attributes to all descendants that match the associated selector(s). Each attributes object may contain properties to be set and listeners to be registered. An entry will be treated as a listener if it follows the naming scheme \"onEventType\". IMPORTANT: Listeners previously registered (for the same type) via the `apply` method, a [JSX](../JSX.md) element attribute or a [widget factory](./utils.json#asfactoryconstructor) call will be de-registered. This means you can call apply repeatedly and have a deterministic outcome. Listeners registered programmatically (e.g. `widget.onTap(...)` are not affected by this.)</br></br>For better type safety enable [strict mode](#applymoderules) and use the [`Set`](./utils.md#settargetattributes) to create properties objects.\n\nIf you wish to always exclude specific \"internal\" children from this, overwrite the `children` method on their parent. See \"[Encapsulation](../selector.md#encapsulation)\"."
       },
       {
         "parameters": [
@@ -229,8 +235,14 @@
             "description": "If this is set to `'strict'` the function checks that all selector match at least one widget, and that id selector match exactly one widget."
           },
           {
-            "name": "properties",
+            "name": "rules",
             "type": {
+              "map": {
+                "selector": "Attributes"
+              },
+              "indexType": "SelectorString"
+            },
+            "ts_type": {
               "map": {
                 "selector": "object"
               },
@@ -239,7 +251,7 @@
           }
         ],
         "returns": "this",
-        "description": "Applies the given properties to all descendants that match the associated selector(s). For better type safety set `mode` to `'strict'` and use the [`Set`](./utils.md#settargetproperties) to create properties objects.\n\nIf you wish to always exclude specific \"internal\" children from this, overwrite the `children` method on their parent. See \"[Encapsulation](../selector.md#encapsulation)\"."
+        "description": "Applies the given attributes to all descendants that match the associated selector(s). Each attributes object may contain properties to be set and listeners to be registered. An entry will be treated as a listener if it follows the naming scheme \"onEventType\". IMPORTANT: Listeners previously registered (for the same type) via the `apply` method, a [JSX](../JSX.md) element attribute or a [widget factory](./utils.json#asfactoryconstructor) call will be de-registered. This means you can call apply repeatedly and have a deterministic outcome. Listeners registered programmatically (e.g. `widget.onTap(...)` are not affected by this.)</br></br>For better type safety set `mode` to `'strict'` and use the [`Set`](./utils.md#settargetattributes) to create attribute objects.\n\nIf you wish to always exclude specific \"internal\" children from this, overwrite the `children` method on their parent. See \"[Encapsulation](../selector.md#encapsulation)\"."
       }
     ],
     "_apply": [
@@ -247,15 +259,16 @@
         "protected": true,
         "parameters": [
           {
-            "name": "properties",
+            "name": "rules",
             "type": {
               "map": {
-                "selector": {
-                  "interface": "Properties",
-                  "generics": [
-                    "Widget"
-                  ]
-                }
+                "selector": "Attributes"
+              },
+              "indexType": "SelectorString"
+            },
+            "ts_type": {
+              "map": {
+                "selector": "object"
               },
               "indexType": "SelectorString"
             }
@@ -278,15 +291,16 @@
             "description": "If this is set to `'strict'` the function checks that all selector match at least one widget, and that id selector match exactly one widget."
           },
           {
-            "name": "properties",
+            "name": "rules",
             "type": {
               "map": {
-                "selector": {
-                  "interface": "Properties",
-                  "generics": [
-                    "Widget"
-                  ]
-                }
+                "selector": "Attributes"
+              },
+              "indexType": "SelectorString"
+            },
+            "ts_type": {
+              "map": {
+                "selector": "object"
               },
               "indexType": "SelectorString"
             }
