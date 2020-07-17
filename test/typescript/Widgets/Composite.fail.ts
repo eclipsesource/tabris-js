@@ -32,6 +32,7 @@ new Composite().apply({mode: 'foo'}, {foo: {text: 23}});
 new Composite().apply({mode: 'foo'}, {foo: {text: 23}});
 new Composite().apply(() => 23);
 new Composite().apply(widget => widget.foo);
+new Composite().apply('foo');
 
 /*Expected
 (9,
@@ -63,4 +64,5 @@ private
 (32,
 (33,
 (34,
+(35,
 */

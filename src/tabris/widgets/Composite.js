@@ -43,7 +43,7 @@ export default class Composite extends Widget {
   }
 
   /**
-   * @param {object|'default'|'strict'} arg1
+   * @param {object|string} arg1
    * @param {object=} arg2
    */
   apply(arg1, arg2) {
@@ -103,8 +103,7 @@ export default class Composite extends Widget {
 
   /**
    * @param {object|string} arg1
-   * @param {object|WidgetCollection=} arg2
-   * @param {WidgetCollection=} arg3
+   * @param {object=} arg2
    */
   _apply(arg1, arg2, arg3) {
     return apply({host: this, args: arguments, protected: true});

@@ -100,22 +100,29 @@ export function attributesWithoutListener(attributes) {
   return omit(attributes, Object.keys(attributes).filter(isListenerAttribute));
 }
 
-export function registerListenerAttributes(obj, attributes) {
+export function registerListenerAttributes(obj, attributes, attached) {
   if (!obj.jsxAttributes) {
     obj.jsxAttributes = {};
   }
-  const attachedListeners = obj.jsxAttributes;
+  const attachedListeners = attached || obj.jsxAttributes;
   const newListeners = getEventListeners(attributes);
   const store = Listeners.getListenerStore(obj);
   Object.keys(newListeners).forEach(type => {
-    if (type in attachedListeners) {
-      if (newListeners[type] === attachedListeners[type]) {
+    const oldListener = attachedListeners[type];
+    if (oldListener) {
+      if (newListeners[type] === oldListener) {
         return;
       }
-      store.off(type, attachedListeners[type]);
+      store.off(type, oldListener);
     }
-    store.on(type, attachedListeners[type] = newListeners[type]);
+    if (newListeners[type]) {
+      store.on(type, attachedListeners[type] = newListeners[type]);
+    }
   });
+}
+
+export function isListenerAttribute(attribute) {
+  return attribute.startsWith('on') && attribute.charCodeAt(2) <= 90;
 }
 
 function getEventListeners(attributes) {
@@ -127,10 +134,6 @@ function getEventListeners(attributes) {
     }
   }
   return listeners;
-}
-
-function isListenerAttribute(attribute) {
-  return attribute.startsWith('on') && attribute.charCodeAt(2) <= 90;
 }
 
 function propertyCheck(target, property) {

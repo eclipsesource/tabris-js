@@ -485,6 +485,97 @@ describe('Widget', function() {
 
     });
 
+    describe('with trigger', function() {
+
+      const props = {prop1: 'v1'};
+      const rules = {'#foo': props};
+      /** @type {sinon.SinonSpy} */
+      let setterSpy;
+
+      beforeEach(function() {
+        setterSpy = (/** @type {any} */(child1.set));
+      });
+
+      it('re-applies on registered trigger name', function() {
+        widget.apply({trigger: 'update'}, rules);
+
+        widget.apply('update');
+
+        expect(setterSpy).to.have.been.calledTwice;
+        expect(setterSpy.args[0][0]).to.deep.equal(props);
+        expect(setterSpy.args[1][0]).to.deep.equal(props);
+      });
+
+      it('throws for non-registered trigger', function() {
+        expect(() => widget.apply('update')).to.throw(Error,
+          'No ruleset is associated with trigger "update"'
+        );
+      });
+
+      it('throws for de-registered trigger', function() {
+        widget.apply({trigger: 'update'}, rules);
+        widget.apply({trigger: 'update'}, null);
+
+        expect(() => widget.apply('update')).to.throw(Error,
+          'No ruleset is associated with trigger "update"'
+        );
+      });
+
+      it('re-applies on registered trigger symbol', function() {
+        const symbol = Symbol();
+        widget.apply({trigger: symbol}, rules);
+
+        widget.apply(symbol);
+
+        expect(setterSpy).to.have.been.calledTwice;
+        expect(setterSpy.args[0][0]).to.deep.equal(props);
+        expect(setterSpy.args[1][0]).to.deep.equal(props);
+      });
+
+      it('re-applies on event trigger', function() {
+        widget.apply({trigger: 'onTap'}, rules);
+
+        widget.trigger('tap');
+
+        expect(setterSpy).to.have.been.calledTwice;
+        expect(setterSpy.args[0][0]).to.deep.equal(props);
+        expect(setterSpy.args[1][0]).to.deep.equal(props);
+      });
+
+      it('passes widget to callback', function() {
+        widget.apply({trigger: 'onTap'}, rules);
+
+        widget.trigger('tap');
+
+        expect(setterSpy).to.have.been.calledTwice;
+        expect(setterSpy.args[0][0]).to.deep.equal(props);
+        expect(setterSpy.args[1][0]).to.deep.equal(props);
+      });
+
+      it('de-registers previous event trigger', function() {
+        widget.apply({trigger: 'onTap'}, rules);
+        widget.apply({trigger: 'onTap'}, {'#foo': {prop1: 'v2'}});
+
+        widget.trigger('tap');
+
+        const setter = (/** @type {sinon.SinonSpy} */(child1.set));
+        expect(setter).to.have.been.calledThrice;
+        expect(setter.args[0][0]).to.deep.equal(props);
+        expect(setter.args[1][0]).to.deep.equal({prop1: 'v2'});
+        expect(setter.args[2][0]).to.deep.equal({prop1: 'v2'});
+      });
+
+      it('de-registers event trigger on null', function() {
+        widget.apply({trigger: 'onTap'}, rules);
+        widget.apply({trigger: 'onTap'}, null);
+
+        widget.trigger('tap');
+
+        expect(child1.set).to.have.been.calledOnce;
+      });
+
+    });
+
   });
 
 });
