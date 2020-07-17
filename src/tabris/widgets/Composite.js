@@ -118,8 +118,10 @@ export default class Composite extends Widget {
         asArray(this._children()).concat(this), {selector: '*', origin: this, deep: true}
       );
     }
-    Object.keys(sheet)
-      .map(key => [createSelectorArray(key, this), sheet[key]])
+    const unpackedSheet = sheet instanceof Function ? sheet(this) : sheet;
+    checkType(unpackedSheet, Object, 'return value');
+    Object.keys(unpackedSheet)
+      .map(key => [createSelectorArray(key, this), unpackedSheet[key]])
       .sort((rule1, rule2) => getSelectorSpecificity(rule1[0]) - getSelectorSpecificity(rule2[0]))
       .forEach(rule => {
         applyRule(mode, widgetCollection, (/** @type {any}*/(rule)), this);

@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import {expect, mockTabris, restore, spy} from '../../test';
+import {expect, mockTabris, restore, spy, stub} from '../../test';
 import WidgetCollection from '../../../src/tabris/WidgetCollection';
 import ClientMock from '../ClientMock';
 import Composite from '../../../src/tabris/widgets/Composite';
@@ -70,12 +70,31 @@ describe('Widget', function() {
 
     it('applies properties to all children (options parameter)', function() {
       const props = {prop1: 'v1', prop2: 'v2'};
+
       widget.apply({mode: 'default'}, {'*': props});
 
       expect(widget.set).to.have.been.calledWith(props);
       expect(child1.set).to.have.been.calledWith(props);
       expect(child2.set).to.have.been.calledWith(props);
       expect(child1_1.set).to.have.been.calledWith(props);
+    });
+
+    it('applies properties given by callback', function() {
+      const props = {prop1: 'v1', prop2: 'v2'};
+      const callback = stub().returns({'*': props});
+
+      widget.apply(callback);
+
+      expect(callback).to.have.been.calledOnce;
+      expect(callback).to.have.been.calledWith(widget);
+      expect(widget.set).to.have.been.calledWith(props);
+      expect(child1.set).to.have.been.calledWith(props);
+      expect(child2.set).to.have.been.calledWith(props);
+      expect(child1_1.set).to.have.been.calledWith(props);
+    });
+
+    it('callback must return object', function() {
+      expect(() => widget.apply(() => null)).to.throw(TypeError);
     });
 
     it('applies properties to children with specific id', function() {

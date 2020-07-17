@@ -46,6 +46,10 @@ thisReturnValue = widget.apply('default', {selectorString: properties});
 thisReturnValue = widget.apply('strict', {selectorString: properties});
 thisReturnValue = widget.apply({mode: 'default'}, {selectorString: properties});
 thisReturnValue = widget.apply({mode: 'strict'}, {selectorString: properties});
+thisReturnValue = widget.apply('default', () => ({selectorString: properties}));
+thisReturnValue = widget.apply(widget => ({'*': {layout: widget.layout}}));
+thisReturnValue = widget.apply({mode: 'default'}, {selectorString: properties});
+thisReturnValue = widget.apply({mode: 'strict'}, () => ({selectorString: properties}));
 widgetCollection = widget.children();
 button = buttonsComposite.children()[0];
 button = buttonsComposite.children((candidate: Button) => candidate.text === 'foo')[0];
@@ -75,15 +79,22 @@ class CustomComponent extends Composite {
   public foo: string;
   constructor(props: Properties<CustomComponent>) {
     super(props);
-    this.set(props);
-    this.set<CustomComponent>({visible: true, foo: 'bar'});
+    let self: CustomComponent = this;
+    self = this.set(props);
+    self = this.set<CustomComponent>({visible: true, foo: 'bar'});
     this._checkDisposed();
     this._setParent(new Composite());
     this._setParent(new Composite(), 2);
-    this._apply({selectorString: properties});
-    this._apply({selectorString: Set(Button, {text: 'foo'})});
-    this._apply('default', {selectorString: properties});
-    this._apply('strict', {selectorString: properties});
+    self = this._apply({selectorString: properties});
+    self = this._apply({selectorString: Set(Button, {text: 'foo'})});
+    self = this._apply('default', {selectorString: properties});
+    self = this._apply('strict', {selectorString: properties});
+    self = this._apply({mode: 'default'}, {selectorString: properties});
+    self = this._apply({mode: 'strict'}, {selectorString: properties});
+    self = this._apply('default', () => ({selectorString: properties}));
+    self = this._apply(widget => ({'*': {layout: widget.layout}}));
+    self = this._apply({mode: 'default'}, {selectorString: properties});
+    self = this._apply({mode: 'strict'}, () => ({selectorString: properties}));
   }
 
   protected _initLayout(param: {layout?: Layout}) {

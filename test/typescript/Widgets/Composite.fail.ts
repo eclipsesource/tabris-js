@@ -29,6 +29,9 @@ new Composite().apply({foo: Set(Button, {text: 23})});
 new Composite().apply({foo: Set(Button, {onSelect: ev => console.log(ev.foo)})});
 new Composite().apply('foo', {foo: {text: 23}});
 new Composite().apply({mode: 'foo'}, {foo: {text: 23}});
+new Composite().apply({mode: 'foo'}, {foo: {text: 23}});
+new Composite().apply(() => 23);
+new Composite().apply(widget => widget.foo);
 
 /*Expected
 (9,
@@ -57,4 +60,7 @@ private
 (29,
 (30,
 (31,
+(32,
+(33,
+(34,
 */

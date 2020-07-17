@@ -211,17 +211,33 @@
           {
             "name": "rules",
             "type": {
-              "map": {
-                "selector": "Attributes"
-              },
-              "indexType": "SelectorString"
+              "union": [
+                {
+                  "map": {
+                    "selector": "Attributes"
+                  },
+                  "indexType": "SelectorString"
+                },
+                {
+                  "callback": [
+                    {
+                      "name": "widget",
+                      "type": "this"
+                    }
+                  ],
+                  "returns":  {
+                    "type": {
+                      "map": {
+                        "selector": "Attributes"
+                      },
+                      "indexType": "SelectorString"
+                    }
+                  }
+                }
+              ]
             },
-            "ts_type": {
-              "map": {
-                "selector": "object"
-              },
-              "indexType": "SelectorString"
-            }
+            "ts_type": "({[selector: string]: object})|((widget: this) => ({[selector: string]: object}))",
+            "description": "The ruleset to apply. May also be given as a callback which is passed to the widget instance and must return the actual ruleset."
           }
         ],
         "returns": "this",
@@ -232,17 +248,33 @@
           {
             "name": "rules",
             "type": {
-              "map": {
-                "selector": "Attributes"
-              },
-              "indexType": "SelectorString"
+              "union": [
+                {
+                  "map": {
+                    "selector": "Attributes"
+                  },
+                  "indexType": "SelectorString"
+                },
+                {
+                  "callback": [
+                    {
+                      "name": "widget",
+                      "type": "this"
+                    }
+                  ],
+                  "returns":  {
+                    "type": {
+                      "map": {
+                        "selector": "Attributes"
+                      },
+                      "indexType": "SelectorString"
+                    }
+                  }
+                }
+              ]
             },
-            "ts_type": {
-              "map": {
-                "selector": "object"
-              },
-              "indexType": "SelectorString"
-            }
+            "ts_type": "({[selector: string]: object})|((widget: this) => ({[selector: string]: object}))",
+            "description": "The ruleset to apply. May also be given as a callback which is passed to the widget instance and must return the actual ruleset."
           }
         ],
         "returns": "this",
@@ -263,17 +295,33 @@
           {
             "name": "rules",
             "type": {
-              "map": {
-                "selector": "Attributes"
-              },
-              "indexType": "SelectorString"
+              "union": [
+                {
+                  "map": {
+                    "selector": "Attributes"
+                  },
+                  "indexType": "SelectorString"
+                },
+                {
+                  "callback": [
+                    {
+                      "name": "widget",
+                      "type": "this"
+                    }
+                  ],
+                  "returns":  {
+                    "type": {
+                      "map": {
+                        "selector": "Attributes"
+                      },
+                      "indexType": "SelectorString"
+                    }
+                  }
+                }
+              ]
             },
-            "ts_type": {
-              "map": {
-                "selector": "object"
-              },
-              "indexType": "SelectorString"
-            }
+            "ts_type": "({[selector: string]: object})|((widget: this) => ({[selector: string]: object}))",
+            "description": "The ruleset to apply. May also be given as a callback which is passed to the widget instance and must return the actual ruleset."
           }
         ],
         "returns": "this",
@@ -292,17 +340,33 @@
           {
             "name": "rules",
             "type": {
-              "map": {
-                "selector": "Attributes"
-              },
-              "indexType": "SelectorString"
+              "union": [
+                {
+                  "map": {
+                    "selector": "Attributes"
+                  },
+                  "indexType": "SelectorString"
+                },
+                {
+                  "callback": [
+                    {
+                      "name": "widget",
+                      "type": "this"
+                    }
+                  ],
+                  "returns":  {
+                    "type": {
+                      "map": {
+                        "selector": "Attributes"
+                      },
+                      "indexType": "SelectorString"
+                    }
+                  }
+                }
+              ]
             },
-            "ts_type": {
-              "map": {
-                "selector": "object"
-              },
-              "indexType": "SelectorString"
-            }
+            "ts_type": "({[selector: string]: object})|((widget: this) => ({[selector: string]: object}))",
+            "description": "The ruleset to apply. May also be given as a callback which is passed to the widget instance and must return the actual ruleset."
           }
         ],
         "returns": "this",
@@ -314,17 +378,33 @@
           {
             "name": "rules",
             "type": {
-              "map": {
-                "selector": "Attributes"
-              },
-              "indexType": "SelectorString"
+              "union": [
+                {
+                  "map": {
+                    "selector": "Attributes"
+                  },
+                  "indexType": "SelectorString"
+                },
+                {
+                  "callback": [
+                    {
+                      "name": "widget",
+                      "type": "this"
+                    }
+                  ],
+                  "returns":  {
+                    "type": {
+                      "map": {
+                        "selector": "Attributes"
+                      },
+                      "indexType": "SelectorString"
+                    }
+                  }
+                }
+              ]
             },
-            "ts_type": {
-              "map": {
-                "selector": "object"
-              },
-              "indexType": "SelectorString"
-            }
+            "ts_type": "({[selector: string]: object})|((widget: this) => ({[selector: string]: object}))",
+            "description": "The ruleset to apply. May also be given as a callback which is passed to the widget instance and must return the actual ruleset."
           }
         ],
         "returns": "this",
@@ -346,17 +426,33 @@
           {
             "name": "rules",
             "type": {
-              "map": {
-                "selector": "Attributes"
-              },
-              "indexType": "SelectorString"
+              "union": [
+                {
+                  "map": {
+                    "selector": "Attributes"
+                  },
+                  "indexType": "SelectorString"
+                },
+                {
+                  "callback": [
+                    {
+                      "name": "widget",
+                      "type": "this"
+                    }
+                  ],
+                  "returns":  {
+                    "type": {
+                      "map": {
+                        "selector": "Attributes"
+                      },
+                      "indexType": "SelectorString"
+                    }
+                  }
+                }
+              ]
             },
-            "ts_type": {
-              "map": {
-                "selector": "object"
-              },
-              "indexType": "SelectorString"
-            }
+            "ts_type": "({[selector: string]: object})|((widget: this) => ({[selector: string]: object}))",
+            "description": "The ruleset to apply. May also be given as a callback which is passed to the widget instance and must return the actual ruleset."
           }
         ],
         "returns": "this",
