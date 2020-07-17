@@ -182,14 +182,14 @@
           "name": "properties",
           "type": {
             "map": {
-              "selector": {"interface": "Properties", "generics": ["Widget"]}
+              "selector": "object"
             },
             "indexType": "SelectorString"
           }
         }
       ],
       "returns": "this",
-      "description": "Applies the given properties to all descendants that match the associated selector(s).\n\nIf you wish to always exclude specific \"internal\" children from this, overwrite the `children` method on their parent. See \"[Encapsulation](../selector.md#encapsulation)\"."
+      "description": "Applies the given properties to all descendants that match the associated selector(s). For better type safety use the [`Set`](./utils.md#settargetproperties) to create properties objects.\n\nIf you wish to always exclude specific \"internal\" children from this, overwrite the `children` method on their parent. See \"[Encapsulation](../selector.md#encapsulation)\"."
     },
     "_apply": {
       "protected": true,

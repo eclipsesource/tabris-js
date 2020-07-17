@@ -69,6 +69,7 @@ import RefreshComposite from './widgets/RefreshComposite';
 import Resources from './Resources';
 import ScrollView from './widgets/ScrollView';
 import SearchAction from './widgets/SearchAction';
+import Set from './Set';
 import SizeMeasurement, {create as createSizeMeasurement} from './SizeMeasurement';
 import Slider from './widgets/Slider';
 import StatusBar, {create as createStatusBar} from './widgets/StatusBar';
@@ -210,6 +211,7 @@ const OTHER = Object.freeze({
   Resources,
   RowLayout,
   StackLayout,
+  Set,
   symbols,
   TextResources,
   WidgetCollection,

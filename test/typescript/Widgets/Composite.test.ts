@@ -8,7 +8,9 @@ import {
   BoxDimensions,
   Selector,
   Properties,
-  Layout} from 'tabris';
+  Layout,
+  Set
+} from 'tabris';
 
 let widget: Composite = new Composite();
 
@@ -39,6 +41,7 @@ thisReturnValue = buttonsComposite.append(button);
 thisReturnValue = buttonsComposite.append([button]);
 thisReturnValue = buttonsComposite.append(new WidgetCollection<Button>([button]));
 thisReturnValue = widget.apply({selectorString: properties});
+thisReturnValue = widget.apply({selectorString: Set(Button, {text: 'foo'})});
 widgetCollection = widget.children();
 button = buttonsComposite.children()[0];
 button = buttonsComposite.children((candidate: Button) => candidate.text === 'foo')[0];

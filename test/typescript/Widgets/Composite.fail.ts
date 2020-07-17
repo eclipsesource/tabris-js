@@ -1,4 +1,4 @@
-import { Composite, Properties, Button, TextView, WidgetCollection } from 'tabris';
+import { Composite, Properties, Button, TextView, WidgetCollection, Set } from 'tabris';
 
 class CustomComponent extends Composite {
   constructor(props: Properties<Composite> & Partial<Pick<CustomComponent, 'foo'>>) { super(props); }
@@ -24,6 +24,8 @@ customComponent.set({doesNotExist: (() => {}) as any});
 customComponent._scheduleRenderChildren();
 customComponent.$flushChildren();
 customComponent._layout;
+new Composite().apply({foo: Set(Button, {nonProp: 'foo'})})
+new Composite().apply({foo: Set(Button, {text: 23})})
 
 /*Expected
 (9,
@@ -47,4 +49,6 @@ private
 private
 (26,
 private
+(27,
+(28,
 */

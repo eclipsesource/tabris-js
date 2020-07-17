@@ -41,7 +41,7 @@ const defaultGestures = {
 export default class Widget extends NativeObject {
 
   /**
-   * @param {import('./widgets/Composite')} widget
+   * @param {import('./widgets/Composite').default} widget
    */
   appendTo(widget) {
     this._checkDisposed();
@@ -54,7 +54,7 @@ export default class Widget extends NativeObject {
   }
 
   /**
-   * @param {import('./widgets/Composite')} widget
+   * @param {import('./widgets/Composite').default} widget
    */
   insertBefore(widget) {
     this._checkDisposed();
@@ -72,7 +72,7 @@ export default class Widget extends NativeObject {
   }
 
   /**
-   * @param {import('./widgets/Composite')} widget
+   * @param {import('./widgets/Composite').default} widget
    */
   insertAfter(widget) {
     this._checkDisposed();

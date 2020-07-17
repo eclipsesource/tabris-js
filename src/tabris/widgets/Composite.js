@@ -6,6 +6,7 @@ import WidgetCollection from '../WidgetCollection';
 import {omit} from '../util';
 import {JSX} from '../JsxProcessor';
 import {toXML, toValueString, hint} from '../Console';
+import {setterTargetType} from '../symbols';
 
 export default class Composite extends Widget {
 
@@ -97,6 +98,10 @@ export default class Composite extends Widget {
     return new WidgetCollection(this._children(), {selector, origin: this, deep: true});
   }
 
+  /**
+   * @param {object} sheet
+   * @param {WidgetCollection=} scope
+   */
   _apply(sheet, scope) {
     if (arguments.length === 1) {
       scope = new WidgetCollection(
@@ -107,7 +112,7 @@ export default class Composite extends Widget {
       .map(key => [createSelectorArray(key, this), sheet[key]])
       .sort((rule1, rule2) => getSelectorSpecificity(rule1[0]) - getSelectorSpecificity(rule2[0]))
       .forEach(rule => {
-        scope.filter(rule[0]).set(rule[1]);
+        applyRule(scope, (/** @type {[string, object]} */(rule)));
       });
     return this;
   }
@@ -217,4 +222,22 @@ function toCid(widget) {
 
 function notExcluded(widget) {
   return !widget.excludeFromLayout;
+}
+
+/**
+ * @param {WidgetCollection} scope
+ * @param {[string, object]} rule
+ */
+function applyRule(scope, rule) {
+  const [selector, properties] = rule;
+  /** @type {Function} */
+  const targetType = properties[setterTargetType];
+  scope.filter(selector).forEach(widget => {
+    if (targetType && !(widget instanceof targetType)) {
+      throw new TypeError(
+        `Can not set properties of ${targetType.name} on ${widget}`
+      );
+    }
+    widget.set(properties);
+  });
 }

@@ -240,6 +240,8 @@ describe('tabris', function() {
     ).to.be.instanceOf(Function);
     expect(tabris.format).to.be.instanceOf(Function);
     expect(tabris.format(new Date()).length).be.greaterThan(1);
+    expect(tabris.Set).to.be.instanceOf(Function);
+    expect(tabris.Set(tabris.TextView, {text: 'foo'})).to.deep.equal({text: 'foo'});
   });
 
   it('contains symbols', function() {
@@ -253,6 +255,7 @@ describe('tabris', function() {
     expect(typeof tabris.symbols.listenersStore).to.equal('symbol');
     expect(typeof tabris.symbols.originalComponent).to.equal('symbol');
     expect(typeof tabris.symbols.proxyHandler).to.equal('symbol');
+    expect(typeof tabris.symbols.setterTargetType).to.equal('symbol');
   });
 
   describe('when started', function() {

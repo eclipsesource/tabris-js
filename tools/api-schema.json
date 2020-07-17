@@ -75,7 +75,7 @@
         "methods": {
           "type": "object",
           "patternProperties": {
-            "(^[_\\$]?[a-z]\\w+$)|(^\\[.*\\]$|^\\$$)": {
+            "(^[_\\$]?[A-Za-z]\\w+$)|(^\\[.*\\]$|^\\$$)": {
               "anyOf": [
                 {"$ref": "#/definitions/method"},
                 {"type": "array", "items": {"$ref": "#/definitions/method"}}

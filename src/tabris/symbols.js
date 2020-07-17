@@ -8,3 +8,4 @@ export const data = Symbol('data');
 export const listenersStore = Symbol('listenersStore');
 export const originalComponent = Symbol('originalComponent');
 export const proxyHandler = Symbol('proxyHandler');
+export const setterTargetType = Symbol('setterTargetType');
