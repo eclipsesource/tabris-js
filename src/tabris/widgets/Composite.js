@@ -7,6 +7,7 @@ import {omit} from '../util';
 import {JSX} from '../JsxProcessor';
 import {toXML, toValueString, hint} from '../Console';
 import {setterTargetType} from '../symbols';
+import checkType from '../checkType';
 
 export default class Composite extends Widget {
 
@@ -43,11 +44,16 @@ export default class Composite extends Widget {
     return new WidgetCollection(this.children(), {selector, origin: this, deep: true});
   }
 
-  apply(sheet) {
+  /**
+   * @param {object|'default'|'strict'} arg1
+   * @param {object=} arg2
+   */
+  apply(arg1, arg2) {
+    const {sheet, mode} = getApplyArgs(arguments);
     const scope = new WidgetCollection(
       asArray(this.children()).concat(this), {selector: '*', origin: this, deep: true}
     );
-    return this._apply(sheet, scope);
+    return this._apply(mode, sheet, scope);
   }
 
   /** @param {any=} selector */
@@ -99,12 +105,15 @@ export default class Composite extends Widget {
   }
 
   /**
-   * @param {object} sheet
-   * @param {WidgetCollection=} scope
+   * @param {object|'default'|'strict'} arg1
+   * @param {object|WidgetCollection=} arg2
+   * @param {WidgetCollection=} arg3
    */
-  _apply(sheet, scope) {
-    if (arguments.length === 1) {
-      scope = new WidgetCollection(
+  _apply(arg1, arg2, arg3) {
+    const {scope, sheet, mode} = getApplyArgs(arguments);
+    let widgetCollection = scope;
+    if (!widgetCollection) {
+      widgetCollection = new WidgetCollection(
         asArray(this._children()).concat(this), {selector: '*', origin: this, deep: true}
       );
     }
@@ -112,7 +121,7 @@ export default class Composite extends Widget {
       .map(key => [createSelectorArray(key, this), sheet[key]])
       .sort((rule1, rule2) => getSelectorSpecificity(rule1[0]) - getSelectorSpecificity(rule2[0]))
       .forEach(rule => {
-        applyRule(scope, (/** @type {[string, object]} */(rule)));
+        applyRule(mode, widgetCollection, (/** @type {any}*/(rule)), this);
       });
     return this;
   }
@@ -206,6 +215,27 @@ export default class Composite extends Widget {
 
 }
 
+/**
+ * @param {IArguments} args
+ */
+function getApplyArgs(args) {
+  if (args.length === 0) {
+    throw new Error('Expected 1-2 arguments, got 0');
+  }
+  const withMode = typeof args[0] === 'string';
+  if (withMode && args.length === 1) {
+    throw new Error('Expected 2 arguments, got 1');
+  }
+  const mode = withMode ? args[0] : 'default';
+  if (mode !== 'default' && mode !== 'strict') {
+    throw new Error(`Value "${mode}" is not a valid mode.`);
+  }
+  const sheet = withMode ? args[1] : args[0];
+  checkType(sheet, Object);
+  const scope = withMode && args.length === 3 ? args[2] : args[1];
+  return {scope, sheet, mode};
+}
+
 function asArray(value) {
   if (!value) {
     return [];
@@ -225,13 +255,19 @@ function notExcluded(widget) {
 }
 
 /**
+ * @param {'default'|'strict'} mode
  * @param {WidgetCollection} scope
- * @param {[string, object]} rule
+ * @param {[[string], object]} rule
+ * @param {Composite} host
  */
-function applyRule(scope, rule) {
+function applyRule(mode, scope, rule, host) {
   const [selector, properties] = rule;
   /** @type {Function} */
   const targetType = properties[setterTargetType];
+  const matches = scope.filter(selector);
+  if (mode === 'strict') {
+    checkApplyMatches(selector, matches, host);
+  }
   scope.filter(selector).forEach(widget => {
     if (targetType && !(widget instanceof targetType)) {
       throw new TypeError(
@@ -240,4 +276,26 @@ function applyRule(scope, rule) {
     }
     widget.set(properties);
   });
+}
+
+/**
+ * @param {Array<string|Widget>} selector
+ * @param {WidgetCollection} matches
+ * @param {Composite} host
+ */
+function checkApplyMatches(selector, matches, host) {
+  const selectorStr = selector.map(part => part === host ? ':host' : part).join(' > ');
+  if (matches.length === 0) {
+    throw new Error(`No widget matches the given selector "${selectorStr}"`);
+  }
+  const last = selector[selector.length - 1];
+  if (last[0] === '#' && matches.length > 1) {
+    throw new Error(`More than one widget matches the given selector "${selectorStr}"`);
+  }
+  const isHostSelector = selector.length === 1 && selector[0] === host;
+  if (!isHostSelector && matches.length === 1 && matches[0] === host) {
+    throw new Error(
+      `The only widget that matches the given selector "${selectorStr}" is the host widget`
+    );
+  }
 }

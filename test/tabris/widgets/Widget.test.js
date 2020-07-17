@@ -1695,6 +1695,130 @@ describe('Widget', function() {
         expect(child1_1.set).not.to.have.been.calledWith(props);
       });
 
+      describe('in strict mode', function() {
+
+        const testRules = {
+          '#foo': {prop1: 'v1'},
+          '#bar': {prop2: 'v2'}
+        };
+
+        it('throws if mode is not of expected value', function() {
+          expect(() => widget.apply('strict', testRules)).not.to.throw(Error);
+          expect(() => widget.apply('default', testRules)).not.to.throw(Error);
+          expect(() => widget.apply('foo', testRules)).to.throw(Error, 'Value "foo" is not a valid mode.');
+
+        });
+
+        it('applies properties to only match with given id', function() {
+          widget.apply('strict', testRules);
+
+          expect(widget.set).not.to.have.been.called;
+          expect(child1.set).to.have.been.calledWith({prop1: 'v1'});
+          expect(child2.set).to.have.been.calledWith({prop2: 'v2'});
+          expect(child1_1.set).not.to.have.been.called;
+        });
+
+        it('throws if more than one widget matches a given id', function() {
+          widget.append(new Composite({id: 'foo'}));
+          expect(() => widget.apply('strict', testRules)).to.throw(Error,
+            'More than one widget matches the given selector "#foo"'
+          );
+        });
+
+        it('throws if more than one widget matches a given child selector ending with id', function() {
+          widget.append(new Composite({id: 'foo'}));
+          expect(() => widget.apply('strict', {':host > #foo': {prop1: 'v1'}})).to.throw(Error,
+            'More than one widget matches the given selector ":host > #foo"'
+          );
+        });
+
+        it('throws if no widget matches a given id', function() {
+          child1.dispose();
+          expect(() => widget.apply('strict', testRules)).to.throw(Error,
+            'No widget matches the given selector "#foo"'
+          );
+        });
+
+        it('throws if only widget matching a given id is the host widget', function() {
+          widget.id = 'baz';
+          expect(() => widget.apply('strict', {'#baz': {prop1: 'v1'}})).to.throw(Error,
+            'The only widget that matches the given selector "#baz" is the host widget'
+          );
+        });
+
+        it('applies properties to multiple children with given class', function() {
+          child2.class = 'baz';
+          child1_1.class = 'baz';
+
+          widget.apply('strict', {'.baz': {prop2: 'v3'}});
+          expect(widget.set).not.to.have.been.called;
+          expect(child1.set).not.to.have.been.called;
+          expect(child2.set).to.have.been.calledWith({prop2: 'v3'});
+          expect(child1_1.set).to.have.been.calledWith({prop2: 'v3'});
+        });
+
+        it('throws if no widget matches given class', function() {
+          expect(() => widget.apply('strict', {'.baz': {prop2: 'v3'}})).to.throw(Error,
+            'No widget matches the given selector ".baz"'
+          );
+        });
+
+        it('throws if no widget matches given child class', function() {
+          expect(() => widget.apply('strict', {':host > .baz': {prop2: 'v3'}})).to.throw(Error,
+            'No widget matches the given selector ":host > .baz"'
+          );
+        });
+
+        it('applies properties to :host', function() {
+          widget.apply('strict', {':host': {prop1: 'v1'}});
+
+          expect(widget.set).to.have.been.calledWith({prop1: 'v1'});
+          expect(child1.set).not.to.have.been.called;
+          expect(child2.set).not.to.have.been.called;
+          expect(child1_1.set).not.to.have.been.called;
+        });
+
+        it('applies properties to *', function() {
+          widget.apply('strict', {'*': {prop1: 'v1'}});
+
+          expect(widget.set).to.have.been.calledWith({prop1: 'v1'});
+          expect(child1.set).to.have.been.calledWith({prop1: 'v1'});
+          expect(child2.set).to.have.been.calledWith({prop1: 'v1'});
+          expect(child1_1.set).to.have.been.calledWith({prop1: 'v1'});
+        });
+
+        it('throws for * if no children exist', function() {
+          widget.children().dispose();
+          expect(() => widget.apply('strict', {'*': {prop1: 'v1'}})).to.throw(Error,
+            'The only widget that matches the given selector "*" is the host widget'
+          );
+        });
+
+        it('applies properties to children with specific type', function() {
+          widget.apply('strict', {TestWidget: {prop1: 'v1'}});
+
+          expect(widget.set).to.have.been.called;
+          expect(child1.set).to.have.been.called;
+          expect(child2.set).to.have.been.called;
+          expect(child1_1.set).to.have.been.called;
+        });
+
+        it('throws if no widget matches given type selector', function() {
+          expect(() => widget.apply('strict', {Composite: {prop1: 'v1'}})).to.throw(Error,
+            'No widget matches the given selector "Composite"'
+          );
+        });
+
+        it('throws if no widgets except host match given type selector', function() {
+          widget.children().dispose();
+
+          expect(() => widget.apply('strict', {TestWidget: {prop1: 'v1'}})).to.throw(Error,
+            'The only widget that matches the given selector "TestWidget" is the host widget'
+          );
+        });
+
+      });
+
     });
 
   });

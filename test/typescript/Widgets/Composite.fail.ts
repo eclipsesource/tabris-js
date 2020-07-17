@@ -24,8 +24,9 @@ customComponent.set({doesNotExist: (() => {}) as any});
 customComponent._scheduleRenderChildren();
 customComponent.$flushChildren();
 customComponent._layout;
-new Composite().apply({foo: Set(Button, {nonProp: 'foo'})})
-new Composite().apply({foo: Set(Button, {text: 23})})
+new Composite().apply({foo: Set(Button, {nonProp: 'foo'})});
+new Composite().apply({foo: Set(Button, {text: 23})});
+new Composite().apply('foo', {foo: {text: 23}});
 
 /*Expected
 (9,
@@ -51,4 +52,5 @@ private
 private
 (27,
 (28,
+(29,
 */

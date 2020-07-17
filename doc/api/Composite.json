@@ -18,7 +18,9 @@
         "name": "properties",
         "type": {
           "interface": "Properties",
-          "generics": ["Composite"]
+          "generics": [
+            "Composite"
+          ]
         },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
@@ -33,7 +35,12 @@
       "type": "JSXAttributes<this> & {children?: JSXChildren<ChildType>}"
     },
     "layout": {
-      "type": {"union": ["Layout", "null"]},
+      "type": {
+        "union": [
+          "Layout",
+          "null"
+        ]
+      },
       "const": true,
       "default": "Layout",
       "description": "The layout manager responsible for interpreting the [`layoutData`](./Widget.md#layoutdata) of the child widgets of this Composite."
@@ -44,7 +51,12 @@
     },
     "$children": {
       "private": true,
-      "type": {"interface": "Array", "generics": ["Widget"]}
+      "type": {
+        "interface": "Array",
+        "generics": [
+          "Widget"
+        ]
+      }
     }
   },
   "methods": {
@@ -53,7 +65,12 @@
         "parameters": [
           {
             "name": "...widgets",
-            "type": {"interface": "Array", "generics": ["Widget"]},
+            "type": {
+              "interface": "Array",
+              "generics": [
+                "Widget"
+              ]
+            },
             "ts_type": "ChildType[]"
           }
         ],
@@ -64,7 +81,12 @@
         "parameters": [
           {
             "name": "widgets",
-            "type": {"interface": "Array", "generics": ["Widget"]},
+            "type": {
+              "interface": "Array",
+              "generics": [
+                "Widget"
+              ]
+            },
             "ts_type": "ChildType[]"
           }
         ],
@@ -103,7 +125,9 @@
         ],
         "returns": {
           "interface": "WidgetCollection",
-          "generics": ["ChildType"]
+          "generics": [
+            "ChildType"
+          ]
         },
         "ts_returns": "WidgetCollection<Result>",
         "description": "Returns a (possibly empty) collection of all children of this widget that match the given selector.\n\nWhen writing custom UI components it may be useful to overwrite this method to prevent access to the internal children by external code. Doing so also affects `find` and `apply`, on this widget as well as on all parents, thereby preventing accidental clashes of widget id or class values. See \"[Encapsulation](../selector.md#encapsulation)\"."
@@ -176,37 +200,102 @@
       "ts_returns": "WidgetCollection<Result>",
       "description": "Identical to the `find` method, but intended to be used only by subclasses (custom components) that encapsulate their children. This is the case if the `children` method was overwritten or the `@component` decorator is used on the subclass."
     },
-    "apply": {
-      "parameters": [
-        {
-          "name": "properties",
-          "type": {
-            "map": {
-              "selector": "object"
-            },
-            "indexType": "SelectorString"
+    "apply": [
+      {
+        "parameters": [
+          {
+            "name": "properties",
+            "type": {
+              "map": {
+                "selector": "object"
+              },
+              "indexType": "SelectorString"
+            }
           }
-        }
-      ],
-      "returns": "this",
-      "description": "Applies the given properties to all descendants that match the associated selector(s). For better type safety use the [`Set`](./utils.md#settargetproperties) to create properties objects.\n\nIf you wish to always exclude specific \"internal\" children from this, overwrite the `children` method on their parent. See \"[Encapsulation](../selector.md#encapsulation)\"."
-    },
-    "_apply": {
-      "protected": true,
-      "parameters": [
-        {
-          "name": "properties",
-          "type": {
-            "map": {
-              "selector": {"interface": "Properties", "generics": ["Widget"]}
+        ],
+        "returns": "this",
+        "description": "Applies the given properties to all descendants that match the associated selector(s). For better type safety enable [strict mode](#applymodeproperies) and use the [`Set`](./utils.md#settargetproperties) to create properties objects.\n\nIf you wish to always exclude specific \"internal\" children from this, overwrite the `children` method on their parent. See \"[Encapsulation](../selector.md#encapsulation)\"."
+      },
+      {
+        "parameters": [
+          {
+            "name": "mode",
+            "type": {
+              "union": [
+                "'default'",
+                "'strict'"
+              ]
             },
-            "indexType": "SelectorString"
+            "description": "If this is set to `'strict'` the function checks that all selector match at least one widget, and that id selector match exactly one widget."
+          },
+          {
+            "name": "properties",
+            "type": {
+              "map": {
+                "selector": "object"
+              },
+              "indexType": "SelectorString"
+            }
           }
-        }
-      ],
-      "returns": "this",
-      "description": "Identical to the `apply` method, but intended to be used by subclasses in case the `children` method was overwritten . See \"[Encapsulation](../selector.md#encapsulation)\""
-    },
+        ],
+        "returns": "this",
+        "description": "Applies the given properties to all descendants that match the associated selector(s). For better type safety set `mode` to `'strict'` and use the [`Set`](./utils.md#settargetproperties) to create properties objects.\n\nIf you wish to always exclude specific \"internal\" children from this, overwrite the `children` method on their parent. See \"[Encapsulation](../selector.md#encapsulation)\"."
+      }
+    ],
+    "_apply": [
+      {
+        "protected": true,
+        "parameters": [
+          {
+            "name": "properties",
+            "type": {
+              "map": {
+                "selector": {
+                  "interface": "Properties",
+                  "generics": [
+                    "Widget"
+                  ]
+                }
+              },
+              "indexType": "SelectorString"
+            }
+          }
+        ],
+        "returns": "this",
+        "description": "Identical to the `apply` method, but intended to be used by subclasses in case the `children` method was overwritten . See \"[Encapsulation](../selector.md#encapsulation)\""
+      },
+      {
+        "protected": true,
+        "parameters": [
+          {
+            "name": "mode",
+            "type": {
+              "union": [
+                "'default'",
+                "'strict'"
+              ]
+            },
+            "description": "If this is set to `'strict'` the function checks that all selector match at least one widget, and that id selector match exactly one widget."
+          },
+          {
+            "name": "properties",
+            "type": {
+              "map": {
+                "selector": {
+                  "interface": "Properties",
+                  "generics": [
+                    "Widget"
+                  ]
+                }
+              },
+              "indexType": "SelectorString"
+            }
+          }
+        ],
+        "returns": "this",
+        "description": "Identical to the `apply` method, but intended to be used by subclasses in case the `children` method was overwritten . See \"[Encapsulation](../selector.md#encapsulation)\""
+      }
+    ],
     "_initLayout": {
       "protected": true,
       "parameters": [
@@ -214,7 +303,10 @@
           "name": "props",
           "type": {
             "map": {
-              "layout": {"type": "Layout", "optional": true}
+              "layout": {
+                "type": "Layout",
+                "optional": true
+              }
             }
           },
           "optional": true

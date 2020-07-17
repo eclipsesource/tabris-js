@@ -42,6 +42,8 @@ thisReturnValue = buttonsComposite.append([button]);
 thisReturnValue = buttonsComposite.append(new WidgetCollection<Button>([button]));
 thisReturnValue = widget.apply({selectorString: properties});
 thisReturnValue = widget.apply({selectorString: Set(Button, {text: 'foo'})});
+thisReturnValue = widget.apply('default', {selectorString: properties});
+thisReturnValue = widget.apply('strict', {selectorString: properties});
 widgetCollection = widget.children();
 button = buttonsComposite.children()[0];
 button = buttonsComposite.children((candidate: Button) => candidate.text === 'foo')[0];
@@ -76,6 +78,10 @@ class CustomComponent extends Composite {
     this._checkDisposed();
     this._setParent(new Composite());
     this._setParent(new Composite(), 2);
+    this._apply({selectorString: properties});
+    this._apply({selectorString: Set(Button, {text: 'foo'})});
+    this._apply('default', {selectorString: properties});
+    this._apply('strict', {selectorString: properties});
   }
 
   protected _initLayout(param: {layout?: Layout}) {
