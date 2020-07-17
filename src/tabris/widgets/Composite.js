@@ -1,14 +1,11 @@
 import Widget from '../Widget';
-import {registerListenerAttributes, attributesWithoutListener} from '../Listeners';
 import NativeObject from '../NativeObject';
-import {createSelectorArray, getSelectorSpecificity} from '../util-widget-select';
 import Layout, {ConstraintLayout} from '../Layout';
 import WidgetCollection from '../WidgetCollection';
 import {omit} from '../util';
 import {JSX} from '../JsxProcessor';
 import {toXML, toValueString, hint} from '../Console';
-import {setterTargetType} from '../symbols';
-import checkType from '../checkType';
+import {apply} from './util-apply';
 
 export default class Composite extends Widget {
 
@@ -50,11 +47,7 @@ export default class Composite extends Widget {
    * @param {object=} arg2
    */
   apply(arg1, arg2) {
-    const {sheet, mode} = getApplyArgs(arguments);
-    const scope = new WidgetCollection(
-      asArray(this.children()).concat(this), {selector: '*', origin: this, deep: true}
-    );
-    return this._apply(mode, sheet, scope);
+    return apply({host: this, args: arguments, protected: false});
   }
 
   /** @param {any=} selector */
@@ -97,6 +90,9 @@ export default class Composite extends Widget {
     }
   }
 
+  /**
+   * @param {any=} selector
+   */
   _children(selector) {
     return new WidgetCollection(this.$children, {selector, origin: this});
   }
@@ -106,27 +102,12 @@ export default class Composite extends Widget {
   }
 
   /**
-   * @param {object|'default'|'strict'} arg1
+   * @param {object|string} arg1
    * @param {object|WidgetCollection=} arg2
    * @param {WidgetCollection=} arg3
    */
   _apply(arg1, arg2, arg3) {
-    const {scope, sheet, mode} = getApplyArgs(arguments);
-    let widgetCollection = scope;
-    if (!widgetCollection) {
-      widgetCollection = new WidgetCollection(
-        asArray(this._children()).concat(this), {selector: '*', origin: this, deep: true}
-      );
-    }
-    const unpackedSheet = sheet instanceof Function ? sheet(this) : sheet;
-    checkType(unpackedSheet, Object, 'return value');
-    Object.keys(unpackedSheet)
-      .map(key => [createSelectorArray(key, this), unpackedSheet[key]])
-      .sort((rule1, rule2) => getSelectorSpecificity(rule1[0]) - getSelectorSpecificity(rule2[0]))
-      .forEach(rule => {
-        applyRule(mode, widgetCollection, (/** @type {any}*/(rule)), this);
-      });
-    return this;
+    return apply({host: this, args: arguments, protected: true});
   }
 
   get _nativeType() {
@@ -218,101 +199,10 @@ export default class Composite extends Widget {
 
 }
 
-/**
- * @param {IArguments} args
- */
-function getApplyArgs(args) {
-  if (args.length === 0) {
-    throw new Error('Expected 1-2 arguments, got 0');
-  }
-  const withScope = args[args.length - 1] instanceof WidgetCollection;
-  const withOptions = withScope ? args.length === 3 : args.length === 2;
-  if (typeof args[0] === 'string' && args.length === 1) {
-    throw new Error('Expected 2 arguments, got 1');
-  }
-  const {mode} = normalizeApplyOptions(withOptions ? args[0] : {});
-  if (mode !== 'default' && mode !== 'strict') {
-    throw new Error(`Value "${mode}" is not a valid mode.`);
-  }
-  const sheet = withOptions ? args[1] : args[0];
-  checkType(sheet, Object);
-  const scope = withOptions && args.length === 3 ? args[2] : args[1];
-  return {scope, sheet, mode};
-}
-
-/**
- * @param {string|object} value
- */
-function normalizeApplyOptions(value) {
-  /** @type {object} */
-  const options = typeof value === 'string' ? {mode: value} : value;
-  if (!('mode' in options)) {
-    options.mode = 'default';
-  }
-  return options;
-}
-
-function asArray(value) {
-  if (!value) {
-    return [];
-  }
-  if (value instanceof WidgetCollection) {
-    return value.toArray();
-  }
-  return value;
-}
-
 function toCid(widget) {
   return widget.cid;
 }
 
 function notExcluded(widget) {
   return !widget.excludeFromLayout;
-}
-
-/**
- * @param {'default'|'strict'} mode
- * @param {WidgetCollection} scope
- * @param {[[string], object]} rule
- * @param {Composite} host
- */
-function applyRule(mode, scope, rule, host) {
-  const [selector, attributes] = rule;
-  /** @type {Function} */
-  const targetType = attributes[setterTargetType];
-  const matches = scope.filter(selector);
-  if (mode === 'strict') {
-    checkApplyMatches(selector, matches, host);
-  }
-  scope.filter(selector).forEach(widget => {
-    if (targetType && !(widget instanceof targetType)) {
-      throw new TypeError(
-        `Can not set properties of ${targetType.name} on ${widget}`
-      );
-    }
-    widget.set(attributesWithoutListener(attributes));
-    registerListenerAttributes(widget, attributes);
-  });
-}
-
-/**
- * @param {Array<string|Widget>} selector
- * @param {WidgetCollection} matches
- * @param {Composite} host
- */
-function checkApplyMatches(selector, matches, host) {
-  const selectorStr = selector.map(part => part === host ? ':host' : part).join(' > ');
-  if (matches.length === 0) {
-    throw new Error(`No widget matches the given selector "${selectorStr}"`);
-  }
-  const last = selector[selector.length - 1];
-  if (last[0] === '#' && matches.length > 1) {
-    throw new Error(`More than one widget matches the given selector "${selectorStr}"`);
-  }
-  const isHostSelector = selector.length === 1 && selector[0] === host;
-  if (!isHostSelector && matches.length === 1 && matches[0] === host) {
-    throw new Error(
-      `The only widget that matches the given selector "${selectorStr}" is the host widget`
-    );
-  }
 }
