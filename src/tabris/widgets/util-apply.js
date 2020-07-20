@@ -39,6 +39,27 @@ export function apply(config) {
 
 /**
  * @param {ApplyArgs} applyArgs
+ * @param {Widget} host
+ * @param {WidgetCollection} scope
+ * @param {boolean=} internal
+ */
+export function applyRules(applyArgs, host, scope, internal) {
+  const rules = applyArgs.rules instanceof Function
+    ? checkType(applyArgs.rules(host), Object, 'returned rules')
+    : applyArgs.rules;
+  if (!rules) {
+    return;
+  }
+  Object.keys(rules)
+    .map(key => [createSelectorArray(key, host), rules[key]])
+    .sort((rule1, rule2) => getSelectorSpecificity(rule1[0]) - getSelectorSpecificity(rule2[0]))
+    .forEach(rule => {
+      applyRule(applyArgs.mode, scope, (/** @type {any}*/(rule)), host, !!internal);
+    });
+}
+
+/**
+ * @param {ApplyArgs} applyArgs
  * @param {Composite} host
  * @param {WidgetCollection} scope
  */
@@ -66,26 +87,6 @@ function triggerUpdate(trigger, host) {
     throw new Error(`No ruleset is associated with trigger "${String(trigger)}"`);
   }
   attached[trigger]();
-}
-
-/**
- * @param {ApplyArgs} applyArgs
- * @param {Composite} host
- * @param {WidgetCollection} scope
- */
-function applyRules(applyArgs, host, scope) {
-  const rules = applyArgs.rules instanceof Function
-    ? checkType(applyArgs.rules(host), Object, 'returned rules')
-    : applyArgs.rules;
-  if (!rules) {
-    return;
-  }
-  Object.keys(rules)
-    .map(key => [createSelectorArray(key, host), rules[key]])
-    .sort((rule1, rule2) => getSelectorSpecificity(rule1[0]) - getSelectorSpecificity(rule2[0]))
-    .forEach(rule => {
-      applyRule(applyArgs.mode, scope, (/** @type {any}*/(rule)), host);
-    });
 }
 
 /**
@@ -123,10 +124,13 @@ function normalizeApplyOptions(value) {
  * @param {'default'|'strict'} mode
  * @param {WidgetCollection} scope
  * @param {[[string], object]} rule
+ * @param {Widget} host
+ * @param {boolean} internal
  * @param {Composite} host
  */
-function applyRule(mode, scope, rule, host) {
+function applyRule(mode, scope, rule, host, internal) {
   const [selector, attributes] = rule;
+  checkType(attributes, Object, {name: 'rule attributes'});
   /** @type {Function} */
   const targetType = attributes[setterTargetType];
   const matches = scope.filter(selector);
@@ -140,14 +144,14 @@ function applyRule(mode, scope, rule, host) {
       );
     }
     widget.set(attributesWithoutListener(attributes));
-    registerListenerAttributes(widget, attributes);
+    registerListenerAttributes(widget, attributes, internal ? {} : widget.jsxAttributes);
   });
 }
 
 /**
  * @param {Array<string|Widget>} selector
  * @param {WidgetCollection} matches
- * @param {Composite} host
+ * @param {Widget} host
  */
 function checkApplyMatches(selector, matches, host) {
   const selectorStr = selector.map(part => part === host ? ':host' : part).join(' > ');

@@ -91,6 +91,7 @@ import Widget from './Widget';
 import WidgetCollection from './WidgetCollection';
 import Worker from './Worker';
 import checkType from './checkType';
+import {applyRules} from './widgets/util-apply';
 import XMLHttpRequest from './XMLHttpRequest';
 import $ from './$';
 
@@ -186,7 +187,8 @@ const NATIVE_OBJECT = Object.freeze({
 const UTILS = {
   checkType,
   format,
-  asFactory: arg => tabrisMain.JSX.processor.makeFactory(arg)
+  asFactory: arg => tabrisMain.JSX.processor.makeFactory(arg),
+  applyRules
 };
 
 const OTHER = Object.freeze({
