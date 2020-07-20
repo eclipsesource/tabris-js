@@ -1,4 +1,4 @@
-node {
+node('master') {
 
   stage('Checkout') {
     if(env.GERRIT_REFSPEC && env.GERRIT_PATCHSET_REVISION) {
