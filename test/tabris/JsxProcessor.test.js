@@ -652,7 +652,7 @@ describe('JsxProcessor', function() {
         CompositeFactory(attr);
 
         expect(jsx.createElement).to.have.been.calledOnce;
-        expect(jsx.createElement).to.have.been.calledWith(Composite, attr);
+        expect(jsx.createElement).to.have.been.calledWith(CompositeFactory, attr);
       });
 
       it('sets properties', function() {
@@ -738,7 +738,7 @@ describe('JsxProcessor', function() {
         expect(jsx.createElement).not.to.have.been.called;
         expect(jsx2.createElement).not.have.been.calledWith(CompositeFactory, attr);
         expect(jsx2.createElement).to.have.been.calledOnce;
-        expect(jsx2.createElement).to.have.been.calledWith(Composite, attr);
+        expect(jsx2.createElement).to.have.been.calledWith(CompositeFactory2, attr);
       });
 
       it('exposes original constructor', function() {
@@ -763,7 +763,7 @@ describe('JsxProcessor', function() {
         handler.construct = () => new Date();
 
         expect(new CompositeFactory()).to.be.instanceOf(Date);
-        expect(CompositeFactory()).to.be.instanceOf(Composite);
+        expect(CompositeFactory()).to.be.instanceOf(Date);
       });
 
       it('can modify traps', function() {

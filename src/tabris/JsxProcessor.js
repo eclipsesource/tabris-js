@@ -230,7 +230,7 @@ function createFactoryProxy(processor, constructor) {
   const handler = {
     apply(target, _thisArg, args) {
       const [attributes, functionalComponent] = args;
-      const result = processor.createElement(target, attributes);
+      const result = processor.createElement(proxy, attributes);
       if (functionalComponent instanceof Function && result instanceof Object) {
         functionalComponent[JSX.jsxType] = true;
         result[JSX.jsxType] = functionalComponent;
