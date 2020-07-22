@@ -34,7 +34,7 @@
       "type": {"union": ["'top'", "'centerY'", "'stretchY'", "'bottom'", "'baseline'"]},
       "const": true,
       "default": "'top'",
-      "description": "Determines the vertical placement of the children. For the `stretchY` value to work correctly the composite needs to be given a width either by setting `width` or by setting `top` and `bottom`.",
+      "description": "Determines the vertical placement of the children.\n\n For `stretchY` to work correctly the `Row` needs to be given a height either by setting `height` or by setting `top` and `bottom`.\n\nIf `baseline` is set the first widget in the row will determine where that baseline is. By setting `top`, `bottom` or `centerY` on that widget the baseline can be shifted.",
       "readonly": true
     }
   },
