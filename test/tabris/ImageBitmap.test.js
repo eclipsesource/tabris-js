@@ -398,6 +398,13 @@ describe('ImageBitmap', function() {
       });
     });
 
+    it('ignores null', function() {
+      createImageBitmap(new Blob(), null);
+
+      const call = client.calls({type: 'tabris.ImageBitmap', op: 'create'})[0];
+      expect(call.properties).to.deep.equal({});
+    });
+
   });
 
   describe('with source rectangle', function() {
@@ -410,6 +417,15 @@ describe('ImageBitmap', function() {
 
       const call = client.calls({type: 'tabris.ImageBitmap', op: 'create'})[0];
       expect(call.properties).to.deep.equal(Object.assign({}, options, {rect}));
+    });
+
+    it('ignores null for options', function() {
+      const rect = {sx: 0, sy: 1, sw: 2, sh: 3};
+
+      createImageBitmap(new Blob(), rect.sx, rect.sy, rect.sw, rect.sh, null);
+
+      const call = client.calls({type: 'tabris.ImageBitmap', op: 'create'})[0];
+      expect(call.properties).to.deep.equal(Object.assign({}, {rect}));
     });
 
     it('normalizes rect', function() {

@@ -118,14 +118,14 @@ function getOptions(args) {
     throw new TypeError(`${args.length} is not a valid argument count for any overload of createImageBitmap.`);
   }
   const options = {};
-  if (args.length === 2) {
+  if (args.length === 2 && args[1] != null) {
     if (!(args[1] instanceof Object)) {
       throw new TypeError('Argument 2 of createImageBitmap is not an object.');
     }
     Object.assign(options, args[1]);
   } else if (args.length >= 5) {
     if (args.length === 6) {
-      if (!(args[5] instanceof Object)) {
+      if (args[5] != null && !(args[5] instanceof Object)) {
         throw new TypeError('Argument 6 of createImageBitmap is not an object.');
       }
     }
