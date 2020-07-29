@@ -108,6 +108,12 @@ _notify@[native code]`
         expect(nativeConsole.print).to.have.been.calledWithMatch(method, 'foo 23');
       });
 
+      it('works without context', function() {
+        const fn = console[method];
+        fn('foo', 23);
+        expect(nativeConsole.print).to.have.been.calledWithMatch(method, 'foo 23');
+      });
+
       it('replaces placeholders with arguments', function() {
         console[method]('foo %dk', 23);
         expect(nativeConsole.print).to.have.been.calledWithMatch(method, 'foo 23k');

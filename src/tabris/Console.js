@@ -7,6 +7,11 @@ export const toXML = toXMLSym;
 export default class Console {
 
   constructor() {
+    Reflect.ownKeys(Console.prototype).forEach(key => {
+      if (this[key] instanceof Function) {
+        this[key] = this[key].bind(this);
+      }
+    });
     this._registerPrintMethods(arguments[0]);
     Object.defineProperties(this, {
       _prefixSpaces: {enumerable: false, writable: true, value: 0},
