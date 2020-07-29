@@ -150,7 +150,7 @@ function actionSnippet(parent) {
 }
 
 function activityIndicatorSnippet(parent) {
-  dimen(parent, android(72, 52), android(72, 52));
+  dimen(parent, android(96, 52), android(96, 52));
   new ActivityIndicator({left: 16, right: 16, top: 16, bottom: 16}).appendTo(parent);
   return {captureDelay: 2100};
 }
