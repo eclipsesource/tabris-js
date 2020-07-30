@@ -78,10 +78,7 @@
     },
     "selectedTabIndicatorTintColor": {
       "type": "ColorValue",
-      "description": "The color used for the underline strip of the selected tab. Only applies on Android when the `tabBarLocation` is `top`.",
-      "platforms": {
-        "ios": false
-      }
+      "description": "The color used for the indicator of the selected tab. Only applies when the `tabBarLocation` is `top`. Available on Android and iOS 13+."
     },
     "tabBarElevation": {
       "type": "number",
