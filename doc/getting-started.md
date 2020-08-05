@@ -27,7 +27,7 @@ On your development machine, the following software needs to be installed:
 Create a new empty directory for your project, open a terminal in this directory and type `tabris init`.
 The _Tabris CLI_ will ask you a number of questions including the project's name and version and the type of project to create:
 
-A _Compiled_ Tabris.js app is written in JavaScript or [TypeScript](./typescript.md) and offers support for the latest EcmaScript features (such as `async/await`) and [JSX](./JSX.md). It is considered the default for new Tabris.js projects. The only downside of this setup is that the code needs to be transformed before execution, which is done automatically when using the Tabris CLI or build service.
+A _Compiled_ Tabris.js app is written in JavaScript or [TypeScript](./typescript.md) and offers support for the latest EcmaScript features and [JSX](./declarative-ui.md). It is recommended for more complex Tabris.js projects. The only downside of this setup is that the code needs to be transformed before execution, which is done automatically when using the Tabris CLI or build service.
 
 A _Vanilla_ Tabris.js app is written in plain JavaScript that is executed as-is in the JavaScript engine. As a result there may be [minor differences](./runtime.md) between the platforms.
 

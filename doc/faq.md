@@ -81,7 +81,7 @@ Tabris.js provides a JavaScript/TypeScript API to indirectly create and control 
 
 ### Does Tabris.js support declarative UI?
 
-Yes, [via JSX](../latest/JSX.md).
+Yes, [via JSX](../latest/declarative-ui.md).
 
 ### How to use the "nightly" Tabris.js build?
 

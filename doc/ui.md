@@ -74,7 +74,7 @@ contentView.append(widget);
 
 # Widgets
 
-Widgets can (with some exceptions) be freely [created](./widget-basics.md#hello-world), [arranged](./layout.md) and [composed](./widget-basics.md#composition) to form the main UI of your application. Every widget has needs parent to be visible (with the exception of `ContentView`, see below), but only widgets of the type `tabris.Composite` (or any of its subclasses) can have children. All widget types are (direct or indirect) subclasses of `tabris.Widget` and can be created by calling their constructor (if public), or using [JSX](./JSX.md) elements.
+Widgets can (with some exceptions) be freely [created](./widget-basics.md#hello-world), [arranged](./layout.md) and [composed](./widget-basics.md#composition) to form the main UI of your application. Every widget has needs parent to be visible (with the exception of `ContentView`, see below), but only widgets of the type `tabris.Composite` (or any of its subclasses) can have children. All widget types are (direct or indirect) subclasses of `tabris.Widget` and can be created by calling their constructor (if public), or using [JSX](./declarative-ui.md) elements.
 
 See also ["Widget Basics"](./widget-basics.md).
 
@@ -131,7 +131,7 @@ tabris.drawer.append(
 
 ## Popups
 
-Popups are floating on top of your main UI and are specialized for specific use cases. All popup types are direct subclasses of [`tabris.Popup`](./api/popup.md) and can be created by calling their constructor (if public), or using [JSX](./JSX.md) elements.
+Popups are floating on top of your main UI and are specialized for specific use cases. All popup types are direct subclasses of [`tabris.Popup`](./api/popup.md) and can be created by calling their constructor (if public), or using [JSX](./declarative-ui.md) elements.
 
 Unlike widgets they do not need a parent to be visible. Instead they are made visible by calling `open()` on the [instance](./api/popup.md#open) or the static open method provided directly on the class, e.g. `AlertDialog.open(...)`. The latter is meant to be used with inline-JSX, e.g.:
 

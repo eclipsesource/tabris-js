@@ -8,13 +8,13 @@ Tabris.js offers APIs to find and manipulate widgets anywhere in the UI tree usi
 
 ### Type Selectors
 
-The simplest method to select widgets is to refer to their type. For example, the following statement would select all instances of `CheckBox`. [This also works with JSX element names](./JSX.md#stateless-functional-components).
+The simplest method to select widgets is to refer to their type. For example, the following statement would select all instances of `CheckBox`. [This also works with JSX element names](./declarative-ui.md#stateless-functional-components).
 
 ```js
 page.find('CheckBox')
 ```
 
-You may also give the type via the constructor or [JSX Element](./JSX.md#stateless-functional-components) instead of a string:
+You may also give the type via the constructor or [JSX Element](./declarative-ui.md#stateless-functional-components) instead of a string:
 
 ```js
 page.find(CheckBox)
@@ -305,7 +305,7 @@ When subclassing a `Composite` (including `Page`, `Tab` and `Canvas`), it is rec
 
 __Note: Within [encapsulated](#encapsulation) components, use `_apply()` instead.__
 
-A shortcut for setting different sets of properties for different selections in one method call. The method takes a plain object with selectors as keys and property objects as values:
+A shortcut for setting different sets of properties for different selections in one method call. The method takes a plain object with selectors as keys and property objects as values. This object is called a "ruleset":
 
 ```js
 page.apply({
@@ -343,6 +343,27 @@ page.apply({
 ```
 
 > :point_right: The order of the properties in the object literal is meaningless. According to the EcmaScript standard the members of a JavaScript object do not have a defined order. The priority of two selectors with the same specificity is undefined.
+
+To ensure `apply` addresses the right widgets it can be executed in 'strict' mode and use the [`Set`](./utils.md#settargetattributes) helper function to create the properties object. The kind of the selector then determines how many widgets must match (exactly one for id, at least one for any other), and `Set` determines what type the widget must have. If these conditions are not met an error will be thrown.
+
+```js
+page.apply('strict', {
+  '#foo': Set(Button, {textColor: 'red'}), // must match exactly one Button
+  '.bar': Set(TextView, {background: 'green'}) // must match one ore more TextViews
+});
+```
+
+Listeners can also be registered via `apply`:
+```js
+
+page.apply('strict', {
+  '#foo': Set(Button, {onSelect: listener})
+});
+```
+
+> :point_right: Unlike listener registration via methods (e.g. `button.onSelect(listener)`), `apply` *replaces* any listener previously registered via apply for the same event type. These "attached" listeners work like properties. In the above example, if apply previously registered another listener for `onSelect` on the 'foo' button, that listener will be de-registered before the new one is registered. It will also de-register any listener for that event type that was registered via [declarative UI](./declarative-ui.md).
+
+Finally, `apply` can also take a callback instead of a ruleset object. That callback is given the host widget and must return a ruleset that may be derived from the widget state. If a "trigger" event is given the ruleset will be applied again when that event is fired. For more information see ["Functional Components"](./declarative-ui.md#functionalcomponents).
 
 ## Encapsulation
 
