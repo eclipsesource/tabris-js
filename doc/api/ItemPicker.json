@@ -9,6 +9,11 @@
     "links": [
       {
         "title": "Example with various item types",
+        "snippet": "itempicker-js",
+        "repo": "tabris-decorators"
+      },
+      {
+        "title": "Example with various item types (JSX variant)",
         "snippet": "itempicker-jsx",
         "repo": "tabris-decorators"
       },
@@ -18,7 +23,7 @@
         "repo": "tabris-decorators"
       },
       {
-        "title": "Example with various item types (TypeScript variant)",
+        "title": "Example with various item types (TypeScript/JSX variant)",
         "snippet": "itempicker",
         "repo": "tabris-decorators"
       },

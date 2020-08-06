@@ -30,6 +30,11 @@
         "title": "Data Binding Example (TypeScript variant)",
         "snippet": "bind-listview-list",
         "repo": "tabris-decorators"
+      },
+      {
+        "title": "Examples with various cell types and selection events (Plain JavaScript - some features not supported)",
+        "snippet": "listview-cells-js",
+        "repo": "tabris-decorators"
       }
     ],
     "statics": {
