@@ -681,12 +681,43 @@ describe('JsxProcessor', function() {
         expect(new CompositeFactory({top: 23}).top.offset).to.equal(23);
       });
 
-      it('it still works as selector', function() {
+      it('it still works as selector for result', function() {
         const parent = new Composite().append(
           new TextView(),
           CompositeFactory()
         );
         expect(parent.children(CompositeFactory).length).to.equal(1);
+      });
+
+      it('it still works as selector for original', function() {
+        const parent = new Composite().append(
+          new TextView(),
+          new Composite()
+        );
+        expect(parent.children(CompositeFactory).length).to.equal(1);
+      });
+
+      it('result still can be selected by class name', function() {
+        const parent = new Composite().append(
+          new TextView(),
+          CompositeFactory()
+        );
+        expect(parent.children('Composite').length).to.equal(1);
+      });
+
+      it('result still can be selected by original constructor', function() {
+        const parent = new Composite().append(
+          new TextView(),
+          CompositeFactory()
+        );
+        expect(parent.children(Composite).length).to.equal(1);
+      });
+
+      it('result still can be selected as parent by original constructor', function() {
+        const parent = CompositeFactory().append(
+          new TextView()
+        );
+        expect(parent.children(TextView).only().parent(Composite)).to.equal(parent);
       });
 
       it('supports functional components as selector', function() {
@@ -698,6 +729,8 @@ describe('JsxProcessor', function() {
         );
         expect(parent.children(StyledComposite).length).to.equal(1);
         expect(parent.children('StyledComposite').length).to.equal(1);
+        expect(parent.children('Composite').length).to.equal(1);
+        expect(parent.children('asdf').length).to.equal(0);
       });
 
       it('still has static members', function() {
