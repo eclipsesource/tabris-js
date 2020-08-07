@@ -1,5 +1,5 @@
 {
-  "title": "Utils",
+  "title": "Utility Functions",
   "category": "service",
   "namespace": "tabris",
   "description": "A collection of general-purpose utilities. These can be imported directly form the `tabris` module.",

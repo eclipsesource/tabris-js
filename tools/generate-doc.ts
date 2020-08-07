@@ -810,7 +810,7 @@ class DocumentRenderer {
       const kind = getJSXContentType(this.gen.defs, this.def, property.type);
       result.push('\nJSX Content Type: | ');
       if (kind === 'text') {
-        result.push('[Text](../JSX.md)\n');
+        result.push('[Text](../declarative-ui.md#jsx-specifics)\n');
       } else if (kind === 'element') {
         result.push(code(this.renderJSXLink(getJSXChildElementType(this.def, property.type))), '\n');
       } else {

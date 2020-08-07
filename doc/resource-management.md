@@ -70,7 +70,7 @@ The `index.js` (or `index.ts`) module will take care of converting the raw data 
 
 ## FontResources
 
-A font may be defined as a [string or object](./types.md#fontvalue). In the resource dictionary both will be converted to an instance of [Font](../api/Font.md).
+A font may be defined as a [string or object](./types.md#fontvalue). In the resource dictionary both will be converted to an instance of [Font](./api/Font.md).
 
 The following snippet shows an example _fonts.json_ file that defines two fonts aliased as "buttonLabel" and "counter". It also showcases selecting a resource based on the platform (operating system) of the device:
 

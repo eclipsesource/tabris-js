@@ -232,6 +232,70 @@ The selector parameter defaults to `*`, so `find()` is the same as `find('*')`.
 
 This will modify all `TextView` elements in the tree.
 
+### composite.apply()
+
+__Note: Within [encapsulated](#encapsulation) components, use `_apply()` instead.__
+
+A shortcut for setting different sets of properties for different selections in one method call. The method takes a plain object with selectors as keys and property objects as values. This object is called a "ruleset":
+
+```js
+page.apply({
+  '#okbutton': {text: 'OK!', background: 'yellow'},
+  '#cancelbutton': {text: 'Cancel!', textColor: 'red'}
+});
+```
+__The scope includes the widget it is called on__:
+
+```js
+page.apply({':host': {background: 'green'}}); // same as "page.background = green";
+```
+
+The order in which the property objects are applied depends on the type of selectors being used. The order is:
+
+- `'*'` > `'Type'` > `'.class'` > `'#id'`
+
+For example, the following call would make all widgets within the page blue, except for the buttons, which would be green, except for `'#mybutton'`, which would be red:
+
+```js
+page.apply({
+  '#mybutton': {background: 'red'},
+  'Button': {background: 'green'},
+  '*': {background: 'blue'}
+});
+```
+
+When using child selectors, the more specific selector wins. In this example, all buttons are green except for those directly attached to `page`, which are red.
+
+```js
+page.apply({
+  ':host > Button': {background: 'red'},
+  'Button': {background: 'green'}
+});
+```
+
+> :point_right: The order of the properties in the object literal is meaningless. According to the EcmaScript standard the members of a JavaScript object do not have a defined order. The priority of two selectors with the same specificity is undefined.
+
+To ensure `apply` addresses the right widgets it can be executed in 'strict' mode and use the [`Set`](./api/utils.md#settarget-attributes) helper function to create the properties object. The kind of the selector then determines how many widgets must match (exactly one for id, at least one for any other), and `Set` determines what type the widget must have. If these conditions are not met an error will be thrown.
+
+```js
+page.apply('strict', {
+  '#foo': Set(Button, {textColor: 'red'}), // must match exactly one Button
+  '.bar': Set(TextView, {background: 'green'}) // must match one ore more TextViews
+});
+```
+
+Listeners can also be registered via `apply`:
+```js
+
+page.apply('strict', {
+  '#foo': Set(Button, {onSelect: listener})
+});
+```
+
+> :point_right: Unlike listener registration via methods (e.g. `button.onSelect(listener)`), `apply` *replaces* any listener previously registered via apply for the same event type. These "attached" listeners work like properties. In the above example, if apply previously registered another listener for `onSelect` on the 'foo' button, that listener will be de-registered before the new one is registered. It will also de-register any listener for that event type that was registered via [declarative UI](./declarative-ui.md).
+
+Finally, `apply` can also take a callback instead of a ruleset object. That callback is given the host widget and must return a ruleset that may be derived from the widget state. If a "trigger" event is given the ruleset will be applied again when that event is fired. For more information see ["Functional Components"](./declarative-ui.md#functional-components).
+
 ### $()
 
 This function is a global alias for `tabris.contentView.find()`, and it therefore accepts the same selector parameters.
@@ -242,7 +306,7 @@ $('.foo > .bar').set({background: 'blue'});
 tabris.contentView.find('.foo > .bar').set({background: 'blue'});
 ```
 
-Note that `$()` will **not** search through *all* widgets in the UI tree. It's scope does *not* include any widgets in the drawer, a popover, or an [encapsulated](#encapsulation) custom component. A component is encapsulated if it overrides the [`children()`](#children) method or uses the `@component` decorator.
+Note that `$()` will **not** search through *all* widgets in the UI tree. It's scope does *not* include any widgets in the drawer, a popover, or an [encapsulated](#encapsulation) custom component. A component is encapsulated if it overrides the [`children()`](#compositechildren) method or uses the `@component` decorator.
 
 Due to it's scope it is mainly intended to be used in snippets, for debugging and when bootstrapping your application.
 
@@ -301,69 +365,6 @@ While this method is longer, it allows using non-string selector, i.e. functions
 
 When subclassing a `Composite` (including `Page`, `Tab` and `Canvas`), it is recommended to overwrite the `children` method to [encapsulate](#encapsulation) the component. The method will then always return an empty `WidgetCollection`, even when the composite/component contains children. The `_children()` method will still work the same way.
 
-### composite.apply()
-
-__Note: Within [encapsulated](#encapsulation) components, use `_apply()` instead.__
-
-A shortcut for setting different sets of properties for different selections in one method call. The method takes a plain object with selectors as keys and property objects as values. This object is called a "ruleset":
-
-```js
-page.apply({
-  '#okbutton': {text: 'OK!', background: 'yellow'},
-  '#cancelbutton': {text: 'Cancel!', textColor: 'red'}
-});
-```
-__The scope includes the widget it is called on__:
-
-```js
-page.apply({':host': {background: 'green'}}); // same as "page.background = green";
-```
-
-The order in which the property objects are applied depends on the type of selectors being used. The order is:
-
-- `'*'` > `'Type'` > `'.class'` > `'#id'`
-
-For example, the following call would make all widgets within the page blue, except for the buttons, which would be green, except for `'#mybutton'`, which would be red:
-
-```js
-page.apply({
-  '#mybutton': {background: 'red'},
-  'Button': {background: 'green'},
-  '*': {background: 'blue'}
-});
-```
-
-When using child selectors, the more specific selector wins. In this example, all buttons are green except for those directly attached to `page`, which are red.
-
-```js
-page.apply({
-  ':host > Button': {background: 'red'},
-  'Button': {background: 'green'}
-});
-```
-
-> :point_right: The order of the properties in the object literal is meaningless. According to the EcmaScript standard the members of a JavaScript object do not have a defined order. The priority of two selectors with the same specificity is undefined.
-
-To ensure `apply` addresses the right widgets it can be executed in 'strict' mode and use the [`Set`](./utils.md#settargetattributes) helper function to create the properties object. The kind of the selector then determines how many widgets must match (exactly one for id, at least one for any other), and `Set` determines what type the widget must have. If these conditions are not met an error will be thrown.
-
-```js
-page.apply('strict', {
-  '#foo': Set(Button, {textColor: 'red'}), // must match exactly one Button
-  '.bar': Set(TextView, {background: 'green'}) // must match one ore more TextViews
-});
-```
-
-Listeners can also be registered via `apply`:
-```js
-
-page.apply('strict', {
-  '#foo': Set(Button, {onSelect: listener})
-});
-```
-
-> :point_right: Unlike listener registration via methods (e.g. `button.onSelect(listener)`), `apply` *replaces* any listener previously registered via apply for the same event type. These "attached" listeners work like properties. In the above example, if apply previously registered another listener for `onSelect` on the 'foo' button, that listener will be de-registered before the new one is registered. It will also de-register any listener for that event type that was registered via [declarative UI](./declarative-ui.md).
-
-Finally, `apply` can also take a callback instead of a ruleset object. That callback is given the host widget and must return a ruleset that may be derived from the widget state. If a "trigger" event is given the ruleset will be applied again when that event is fired. For more information see ["Functional Components"](./declarative-ui.md#functionalcomponents).
 
 ## Encapsulation
 

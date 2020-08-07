@@ -2,7 +2,7 @@
 ---
 # Modules
 
-Tabris.js uses the same basic module system as [Node.js](https://nodejs.org/api/modules.htm), also known as the ["CommonJS"](https://en.wikipedia.org/wiki/CommonJS) module system,
+Tabris.js uses the same basic module system as [Node.js](https://nodejs.org/dist/latest-v10.x/docs/api/modules.html), also known as the ["CommonJS"](https://en.wikipedia.org/wiki/CommonJS) module system,
 
 This means:
 
@@ -41,8 +41,6 @@ The modern ES6 syntax is preferred and used throughout this documentation. ES6 M
 and [export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) statements, or
 * the [module chapter](http://www.typescriptlang.org/docs/handbook/modules.html) in the TypeScript handbook.
 
-If you use a vanilla JavaScript project without a compiler/bundler you have to use the ES5/CommonJS syntax (i.e. `require()`). You can get
-* an overview of the syntax on the [CommonJS Wiki](https://nodejs.org/dist/latest-v10.x/docs/api/modules.html), or
-* a detailed explanation in the [Node.js docs](https://nodejs.org/dist/latest-v10.x/docs/api/modules.html).
+If you use a vanilla JavaScript project without a compiler/bundler you have to use the ES5/CommonJS syntax (i.e. `require()`). You can get a detailed explanation in the [Node.js docs](https://nodejs.org/dist/latest-v10.x/docs/api/modules.html).
 
 The Node.js implementation is the standard that Tabris.js follows and aims to be compatible with.

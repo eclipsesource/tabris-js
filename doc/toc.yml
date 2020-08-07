@@ -33,8 +33,8 @@
       url: cordova.html
     - title: TypeScript Support
       url: typescript.html
-    - title: JSX Support
-      url: JSX.html
+    - title: JSX/Declarative UI
+      url: declarative-ui.html
     - title: Resource Management
       url: resource-management.html
     - title: Debugging
