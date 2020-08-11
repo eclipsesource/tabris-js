@@ -22,7 +22,10 @@ const CHANGE_EVENT_INTERFACE = 'PropertyChangedEvent';
 const quot = (...str) => HTML_QUOT + str.join('') + HTML_QUOT;
 const tag = (...str) => HTML_LT + str.join('') + HTML_GT;
 const code = (...str) => '<code style="white-space: nowrap">' + str.join('') + '</code>';
-const pipeOr = (arr: string[], br = false) => arr.join((br ? '<br/> ' : ' ') + HTML_PIPE + ' ');
+const nbsp = (count: number) => new Array(count + 1).join('&nbsp;');
+const pipeOr = (arr: string[], indent = null) => (indent !== null && arr.length > 1)
+  ? nbsp(indent) + arr.join('<br/>' + nbsp(indent) + HTML_PIPE + ' ')
+  : arr.join(' ' + HTML_PIPE + ' ');
 const mdnTitle = type => `View ${quot(type)} on MDN`;
 const MSG_PROVISIONAL = '**Note:** this API is provisional and may change in a future release.';
 const LANG_TYPE_LINKS: TypeLinks = {
@@ -1035,7 +1038,7 @@ class DocumentRenderer {
       }
       return pipeOr(
         ref.union.map(part => this.renderTypeRef(part, true, simplified)),
-        !flat && ref.union.length > 2
+        ref.union.length > 2 ? 0 : null
       );
     }
     if (isTuple(ref)) {
@@ -1062,9 +1065,19 @@ class DocumentRenderer {
       }
       const text = ['{<br/>'];
       keys.forEach((key, index) => {
-        text.push(`&nbsp;&nbsp;${key}: ${this.renderTypeRef(map[key].type)}`);
-        text.push(index !== keys.length - 1 ? ',' : '');
-        text.push(comments[index]);
+        const type = map[key].type;
+        if (isUnion(type)) {
+          text.push(`${nbsp(2)}${key}:${comments[index]}<br/>`);
+          text.push(pipeOr(
+            type.union.map(part => this.renderTypeRef(part, true, simplified)),
+            type.union.length > 2 ? 4 : null
+          ));
+          text.push(index !== keys.length - 1 ? ',' : '');
+        } else {
+          text.push(`${nbsp(2)}${key}: ${this.renderTypeRef(type)}`);
+          text.push(index !== keys.length - 1 ? ',' : '');
+          text.push(comments[index]);
+        }
         text.push('<br/>');
       });
       text.push('}');
