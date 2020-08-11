@@ -195,7 +195,7 @@ type TabrisProp<ApiType, NativeType, Context extends Record<string, any>>
   = Omit<Partial<PropertyDefinition>, 'type'> & {type?:
     TypeDef<ApiType, NativeType, Context>
     | keyof import('./property-types').PropertyTypes
-    | {prototype: import('./NativeObject').default}
+    | Constructor<any>
   };
 
 interface PropertyDefinitions<Context extends object> {

@@ -7,31 +7,39 @@ import {toXML} from '../../src/tabris/Console';
 import ImageView from '../../src/tabris/widgets/ImageView';
 import Composite from '../../src/tabris/widgets/Composite';
 import * as symbols from '../../src/tabris/symbols';
+import Listeners from '../../src/tabris/Listeners';
+
+/**
+ * NativeObject with protected methods exposed and custom properties
+ */
+type TestType = NativeObject & {
+  foo?: any,
+  bar?: any,
+  unknown?: any,
+  onFooChanged: Listeners & Function,
+  _nativeSet(name: string, value: unknown): void,
+  _nativeGet(name: string): any,
+  _nativeCall(method: string, parameters: object): any,
+  _nativeListen(event: string, state: boolean): void,
+  _trigger(name: string, eventData?: object): any,
+  _triggerChangeEvent(propertyName: string, value: any): void,
+  _listen(name: string, listening: boolean): void
+};
 
 describe('NativeObject', function() {
 
-  /** @type {ClientMock} */
-  let client;
+  let client: ClientMock;
 
-  /**
-   * @typedef {NativeObject & {
-   *   foo?: any,
-   *   bar?: any
-   * }} TestType
-   */
+  let TestType: Constructor<TestType>;
 
-  /** @type {Constructor<TestType>} */
-  let TestType;
-
-  /** @type {TestType} */
-  let object;
+  let object: TestType;
 
   beforeEach(function() {
     client = new ClientMock();
     mockTabris(client);
     TestType = class extends NativeObject {
-      get _nativeType() { return 'TestType'; }
-    };
+      protected get _nativeType() { return 'TestType'; }
+    } as unknown as Constructor<TestType>;
   });
 
   afterEach(restore);
@@ -40,7 +48,7 @@ describe('NativeObject', function() {
 
     it('prevents direct instantiation', function() {
       expect(() => {
-        new NativeObject();
+        new (NativeObject as any)();
       }).to.throw(Error, 'Can not create instance of abstract class NativeObject');
     });
 
@@ -72,9 +80,6 @@ describe('NativeObject', function() {
   describe('instance', function() {
 
     beforeEach(function() {
-      TestType = class extends NativeObject {
-        get _nativeType() { return 'TestType'; }
-      };
       object = new TestType();
       client.resetCalls();
       stub(console, 'warn');
@@ -100,7 +105,7 @@ describe('NativeObject', function() {
         const setter = spy();
         Object.defineProperty(TestType.prototype, 'foo', {set: setter});
         class SubClass extends TestType {}
-        object = new SubClass();
+        object = new SubClass() as any;
 
         object.set({foo: 23});
 
@@ -146,18 +151,19 @@ describe('NativeObject', function() {
 
       it('SET custom-equal property only once', function() {
         class CustomType {
-          constructor(num) {
+          public num: number;
+          constructor(num: number) {
             this.num = num;
           }
-          [symbols.equals](value) {
+          public [symbols.equals](value: any) {
             return (value instanceof CustomType) && value.num === this.num;
           }
         }
         NativeObject.defineProperties(TestType.prototype, {
           foo: {
             type: {
-              encode: value => value.num,
-              decode: value => new CustomType(value.num)
+              encode: (value: CustomType) => value.num,
+              decode: (value: any) => new CustomType(value.num) // ???
             },
             default: null
           }
@@ -223,15 +229,15 @@ describe('NativeObject', function() {
       });
 
       it('throws for no argument', function() {
-        expect(() => object.set()).to.throw();
+        expect(() => (object.set as Function)()).to.throw();
       });
 
       it('throws for too many arguments', function() {
-        expect(() => object.set({}, {})).to.throw();
+        expect(() => (object.set as Function)({}, {})).to.throw();
       });
 
       it('ignores falsy argument', function() {
-        expect(() => object.set(undefined)).not.to.throw();
+        expect(() => (object.set as Function)(undefined)).not.to.throw();
       });
 
     });
@@ -269,7 +275,7 @@ describe('NativeObject', function() {
       });
 
       it('returns value from native', function() {
-        stub(client, 'get').returns(23);
+        stub(client, 'get' as any).returns(23);
 
         const result = object._nativeGet('foo');
 
@@ -299,7 +305,7 @@ describe('NativeObject', function() {
       });
 
       it('returns value from native', function() {
-        stub(client, 'call').returns(23);
+        stub(client, 'call' as any).returns(23);
 
         const result = object._nativeCall('method', {});
 
@@ -344,8 +350,7 @@ describe('NativeObject', function() {
 
     describe('_trigger', function() {
 
-      /** @type {sinon.SinonSpy} */
-      let listener;
+      let listener: sinon.SinonSpy;
 
       beforeEach(function() {
         listener = spy();
@@ -395,8 +400,7 @@ describe('NativeObject', function() {
 
     describe('_triggerChangeEvent', function() {
 
-      /** @type {sinon.SinonSpy} */
-      let listener;
+      let listener: sinon.SinonSpy;
 
       beforeEach(function() {
         listener = spy();
@@ -423,8 +427,7 @@ describe('NativeObject', function() {
 
     describe('on', function() {
 
-      /** @type {sinon.SinonSpy} */
-      let listener;
+      let listener: sinon.SinonSpy;
 
       beforeEach(function() {
         listener = spy();
@@ -462,8 +465,7 @@ describe('NativeObject', function() {
 
     describe('off', function() {
 
-      /** @type {sinon.SinonSpy} */
-      let listener;
+      let listener: sinon.SinonSpy;
 
       beforeEach(function() {
         listener = spy();
@@ -546,8 +548,7 @@ describe('NativeObject', function() {
 
     describe('when disposed', function() {
 
-      /** @type {sinon.SinonSpy} */
-      let listener;
+      let listener: sinon.SinonSpy;
 
       beforeEach(function() {
         listener = spy();
@@ -581,12 +582,12 @@ describe('NativeObject', function() {
     describe('toXML', function() {
 
       it('prints xml element', function() {
-        expect(object[toXML]()).to.be.equal(`<TestType cid='${object.cid}'/>`);
+        expect((object as any)[toXML]()).to.be.equal(`<TestType cid='${object.cid}'/>`);
       });
 
       it('works with disposed element', function() {
         object.dispose();
-        expect(object[toXML]()).to.be.equal(`<TestType cid='${object.cid}' disposed='true'/>`);
+        expect((object as any)[toXML]()).to.be.equal(`<TestType cid='${object.cid}' disposed='true'/>`);
       });
 
     });
@@ -596,9 +597,6 @@ describe('NativeObject', function() {
   describe('NativeObject.defineProperty', function() {
 
     beforeEach(function() {
-      TestType = class extends NativeObject {
-        get _nativeType() { return 'TestType'; }
-      };
       object = new TestType();
       client.resetCalls();
       stub(console, 'warn');
@@ -656,7 +654,7 @@ describe('NativeObject', function() {
 
     it('type.decode decodes value', function() {
       NativeObject.defineProperty(TestType.prototype, 'foo', {
-        type: {decode: x => x + 1}, nocache: true
+        type: {decode: x => (x as number) + 1}, nocache: true
       });
       client.properties(object.cid).foo = 10;
 
@@ -770,8 +768,7 @@ describe('NativeObject', function() {
     });
 
     it('omits converter for null when nullable', function() {
-      /** @param {any} v */
-      function neverNull(v) {
+      function neverNull(v: any) {
         if (v == null) {
           throw new Error();
         }
@@ -829,8 +826,7 @@ describe('NativeObject', function() {
 
   describe('NativeObject.extend', function() {
 
-    /** @type {Constructor<NativeObject>} */
-    let CustomWidget;
+    let CustomWidget: Constructor<NativeObject>;
 
     beforeEach(function() {
       stub(console, 'warn');
@@ -857,7 +853,7 @@ describe('NativeObject', function() {
     it('has no cid change event', function() {
       const instance = new CustomWidget({foo: 42});
 
-      expect(instance.onCidChanged).to.be.undefined;
+      expect((instance as any).onCidChanged).to.be.undefined;
     });
 
     it('issues a create operation with type and properties', function() {

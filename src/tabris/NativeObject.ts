@@ -1,40 +1,26 @@
-import {types} from './property-types';
+import {types, PropertyTypes} from './property-types';
 import {hint, toXML} from './Console';
 import EventObject from './EventObject';
 import Events from './Events';
 import Listeners, {ChangeListeners} from './Listeners';
 import {allowOnlyValues, allowOnlyKeys, equals} from './util';
 
-const EventsClass = /** @type {any} */ function EventsClass() {};
+const EventsClass = class {} as Constructor<Omit<typeof Events, '_listen'>>;
 Object.assign(EventsClass.prototype, Events);
 
-/**
- * Add indexer to NativeObject since defineProperties sabotages intellisense
- * @typedef NativeObjectBase
- * @type {{new(): typeof Events & {[key: string]: any}}}
- */
-/**
- * @abstract
- */
-export default class NativeObject extends (/** @type {NativeObjectBase} */(EventsClass)) {
+export default abstract class NativeObject extends EventsClass {
 
-  /**
-   * @template {NativeObject} T
-   * @param {T} target
-   * @param {PropertyDefinitions<T>} definitions
-   */
-  static defineProperties(target, definitions) {
+  public static defineProperties<T extends NativeObject>(target: T, definitions: PropertyDefinitions<T>) {
     for (const name in definitions) {
-      NativeObject.defineProperty(target, name, definitions[name]);
+      NativeObject.defineProperty(target, name as keyof T & string, definitions[name]);
     }
   }
 
-  /**
-   * @param {object} target
-   * @param {string} name
-   * @param {Partial<PropertyDefinition>} property
-   */
-  static defineProperty(target, name, property) {
+  public static defineProperty<T extends NativeObject>(
+    target: T,
+    name: keyof T & string,
+    property: TabrisProp<any, unknown, any>
+  ) {
     const def = normalizeProperty(property);
     Object.defineProperty(target, '$prop_' + name, {
       enumerable: false,
@@ -54,29 +40,23 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     }
   }
 
-  /**
-   * @param {NativeObject} target
-   * @param {EventDefinitions} definitions
-   */
-  static defineEvents(target, definitions) {
+  public static defineEvents<T extends NativeObject>(target: T, definitions: EventDefinitions) {
     for (const name in definitions) {
-      NativeObject.defineEvent(target, name, definitions[name]);
+      NativeObject.defineEvent(target, name as any, definitions[name]);
     }
   }
 
-  /**
-   * @param {NativeObject} target
-   * @param {string} name
-   * @param {EventDefinition|true} definition
-   */
-  static defineEvent(target, name, definition) {
+  public static defineEvent<T extends NativeObject>(
+    target: T, name: string & keyof T,
+    definition: EventDefinition | true
+  ) {
     const property = 'on' + name.charAt(0).toUpperCase() + name.slice(1);
     const $property = '$' + property;
-    const $eventProperty = '$event_' + name;
+    const $eventProperty = '$event_' + name as keyof T;
     if (target[$eventProperty]) {
       throw new Error('Event already defined');
     }
-    const def = target[$eventProperty] = normalizeEvent(name, definition);
+    const def = (target as any)[$eventProperty] = normalizeEvent.call(this.prototype, name, definition);
     if (def.changes) {
       this.synthesizeChangeEvents(target, name, def);
     }
@@ -90,15 +70,11 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     });
   }
 
-  /**
-   * @param {NativeObject} target
-   * @param {string[]} properties
-   */
-  static defineChangeEvents(target, properties) {
+  public static defineChangeEvents<T extends NativeObject>(target: T, properties: Array<keyof T & string>) {
     properties.forEach(property => this.defineChangeEvent(target, property));
   }
 
-  static defineChangeEvent(target, property) {
+  public static defineChangeEvent<T>(target: T, property: keyof T & string) {
     const listenersProperty = 'on' + property.charAt(0).toUpperCase() + property.slice(1) + 'Changed';
     const $listenersProperty = '$' + property + 'Changed';
     Object.defineProperty(target, listenersProperty, {
@@ -111,55 +87,84 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     });
   }
 
-  static synthesizeChangeEvents(target, sourceEvent, sourceDef) {
-    /** @this {NativeObject} */
-    const changeListener = function(ev) {
-      this.$trigger(sourceDef.changes + 'Changed', {value: sourceDef.changeValue(ev)});
+  public static synthesizeChangeEvents<T extends NativeObject>(
+    target: T,
+    sourceEvent: string,
+    sourceDef: EventDefinition
+  ) {
+    const changeListener = function(this: NativeObject, ev: EventObject) {
+      const changeValue = sourceDef.changeValue as ((ev: EventObject) => any);
+      this.$trigger(sourceDef.changes + 'Changed', {value: changeValue(ev)});
     };
-    const $changeEventProperty = '$event_' + sourceDef.changes + 'Changed';
-    /** @type {EventDefinition} */
-    const changeEventDef = target[$changeEventProperty] = target[$changeEventProperty] || {listen: []};
-    changeEventDef.listen.push((instance, listening) => {
+    const $changeEventProperty = '$event_' + sourceDef.changes + 'Changed' as keyof T;
+    const changeEventDef: EventDefinition
+      = (target as any)[$changeEventProperty]
+      = target[$changeEventProperty] || {listen: []};
+    changeEventDef.listen?.push((instance, listening) => {
       instance._onoff(sourceEvent, listening, changeListener);
     });
   }
 
-  static extend(nativeType, superType = NativeObject) {
+  public static extend(nativeType: string, superType = NativeObject) {
     return class extends superType {
-      get _nativeType() { return nativeType; }
+      protected get _nativeType() { return nativeType; }
     };
   }
 
-  /**
-   * @param {object|boolean=} param
-   */
-  constructor(param) {
+  public readonly cid: string = '';
+  protected _isDisposed?: boolean;
+  protected _inDispose?: boolean;
+  protected _disposedToStringValue?: string;
+  private $props?: Partial<this> | null;
+
+  constructor(param?: object | boolean) {
     super();
+    // TODO: Use decorators to make non-enumerable properties
     Object.defineProperty(this, '$props', {
       enumerable: false,
       writable: true,
-      value: /** @type {{[property: string]: unknown}} */ ({})
+      value: {}
     });
     this._nativeCreate(param);
   }
 
-  set(properties = undefined) {
+  public set<T extends Partial<this>>(properties: T) {
     if (arguments.length === 0) {
       throw new Error('Not enough arguments');
     }
     if (arguments.length > 1) {
       throw new Error('Too many arguments');
     }
-    this._reorderProperties(Object.keys(properties || {})).forEach(function(name) {
-      setExistingProperty.call(this, name, properties[name]);
-    }, this);
+    this._reorderProperties(Object.keys(properties || {}) as Array<keyof this & string>)
+      .forEach(name => setExistingProperty.call(this, name, properties[name]));
     return this;
   }
 
-  /**
-   * @param {string} name
-   */
-  $getProperty(name) {
+  public dispose() {
+    this._dispose();
+  }
+
+  public isDisposed() {
+    return !!this._isDisposed;
+  }
+
+  public toString() {
+    return this.constructor.name;
+  }
+
+  // TODO: make unique symbol
+  public [toXML]() {
+    if (this._isDisposed) {
+      return `<${this._getXMLElementName()} cid='${this.cid}' disposed='true'/>`;
+    }
+    const content = this._getXMLContent();
+    if (!content.length) {
+      return this._getXMLHeader(false);
+    }
+    return `${this._getXMLHeader(true)}\n${content.join('\n')}\n${this._getXMLFooter(true)}`;
+  }
+
+  protected $getProperty(name: keyof this & string) {
     if (this._isDisposed) {
       hint(this, 'Cannot get property "' + name + '" on disposed object');
       return;
@@ -167,7 +172,7 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     const def = this._getPropertyDefinition(name);
     if (def.nocache) {
       const nativeValue = this._nativeGet(name);
-      return def.type.decode ? def.type.decode.call(null, nativeValue, this) : nativeValue;
+      return def.type?.decode ? def.type.decode.call(null, nativeValue, this) : nativeValue;
     }
     const storedValue = this._getStoredProperty(name);
     if (storedValue !== undefined) {
@@ -177,16 +182,12 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
       return def.default;
     }
     const value = this._nativeGet(name);
-    const decodedValue = def.type.decode ? def.type.decode.call(this, value) : value;
+    const decodedValue = def.type?.decode ? def.type.decode.call(this, value, this) : value;
     this._storeProperty(name, decodedValue);
     return decodedValue;
   }
 
-  /**
-   * @param {string} name
-   * @param {unknown} value
-   */
-  $setProperty(name, value) {
+  protected $setProperty<Name extends keyof this & string>(name: Name, value: unknown) {
     if (this._isDisposed) {
       hint(this, 'Cannot set property "' + name + '" on disposed object');
       return;
@@ -199,14 +200,14 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
       hint(this, `Can not set const property "${name}"`);
       return;
     }
-    let convertedValue = value;
+    let convertedValue: this[Name];
     try {
-      convertedValue = this._convertValue(def, value, convertedValue);
+      convertedValue = this._convertValue(def, value, value);
     } catch (ex) {
       this._printPropertyWarning(name, ex);
       return;
     }
-    const encodedValue = def.type.encode.call(null, convertedValue, this);
+    const encodedValue = def.type?.encode?.call(null, convertedValue, this);
     if (def.nocache) {
       this._beforePropertyChange(name, convertedValue);
       this._nativeSet(name, encodedValue);
@@ -220,41 +221,30 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     }
   }
 
-  /**
-   * @param {PropertyDefinition} def
-   * @param {any} value
-   * @param {any} convertedValue
-   */
-  _convertValue(def, value, convertedValue) {
+  protected _convertValue(def: Partial<PropertyDefinition>, value: unknown, convertedValue: any) {
     if (!def.nullable || value !== null) {
       // TODO: ensure convert has no write-access to the NativeObject instance via proxy
-      convertedValue = allowOnlyValues(def.type.convert.call(null, value, this), def.choice);
+      convertedValue = allowOnlyValues(def.type?.convert?.call(null, value, this), def.choice);
     }
     return convertedValue;
   }
 
-  /**
-   * @param {string} name
-   * @param {Error} ex
-   */
-  _printPropertyWarning(name, ex) {
+  protected _printPropertyWarning(name: string, ex: Error) {
     hint(this, 'Ignored unsupported value for property "' + name + '": ' + ex.message);
   }
 
-  /**
-   * @param {string} name
-   * @param {unknown} newValue
-   * @param {boolean=} noChangeEvent
-   * @returns {boolean}
-   */
-  _storeProperty(name, newValue, noChangeEvent = false) {
+  protected _storeProperty<Name extends keyof this & string>(
+    name: Name,
+    newValue: this[Name],
+    noChangeEvent: boolean = false
+  ) {
     if (newValue === this._getStoredProperty(name) && this._wasSet(name)) {
       return false;
     }
     if (newValue === undefined) {
       return false;
     } else {
-      this.$props[name] = newValue;
+      this.$props![name] = newValue;
     }
     if (!noChangeEvent) {
       this._triggerChangeEvent(name, newValue);
@@ -262,51 +252,36 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     return true;
   }
 
-  /**
-   * @param {string} name
-   */
-  _getStoredProperty(name) {
-    let result = this.$props ? this.$props[name] : undefined;
+  protected _getStoredProperty<Name extends keyof this & string>(name: Name) {
+    let result = (this.$props ? this.$props[name] : undefined) as this[Name];
     if (result === undefined) {
-      result = this._getPropertyDefinition(name).default;
+      result = this._getPropertyDefinition(name).default as this[Name];
     }
     return result;
   }
 
-  _wasSet(name) {
+  protected _wasSet(name: keyof this & string) {
     return name in (this.$props || {});
   }
 
-  /**
-   * @param {string} propertyName
-   * @returns {PropertyDefinition}
-   */
-  _getPropertyDefinition(propertyName) {
-    return this['$prop_' + propertyName] || {};
+  protected _getPropertyDefinition(propertyName: keyof this & string): Partial<PropertyDefinition> {
+    const defKey = '$prop_' + propertyName as keyof this;
+    return this[defKey] || {};
   }
 
-  _decodeProperty(typeDef, value) {
+  protected _decodeProperty(typeDef: TypeDef<any, any, this>, value: any) {
     return (typeDef && typeDef.decode) ? typeDef.decode.call(null, value, this) : value;
   }
 
-  $getPropertyGetter(name) {
-    const prop = this['$prop_' + name];
-    return prop ? prop.get : undefined;
-  }
-
-  _triggerChangeEvent(propertyName, value) {
+  protected _triggerChangeEvent(propertyName: keyof this & string, value: any) {
     this.$trigger(propertyName + 'Changed', {value});
   }
 
-  /**
-   * @abstract
-   * @type {string}
-   * */
-  get _nativeType() {
+  protected get _nativeType(): string {
     throw new Error('Can not create instance of abstract class ' + this.constructor.name);
   }
 
-  _nativeCreate(param) {
+  protected _nativeCreate(param: any) {
     this._register();
     tabris._nativeBridge.create(this.cid, this._nativeType);
     if (param instanceof Object) {
@@ -314,7 +289,7 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     }
   }
 
-  _register() {
+  protected _register() {
     if (typeof tabris === 'undefined' || !tabris._nativeBridge) {
       throw new Error('tabris.js not started');
     }
@@ -322,18 +297,11 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     Object.defineProperty(this, 'cid', {value: cid});
   }
 
-  /**
-   * @param {string[]} properties
-   */
-  _reorderProperties(properties) {
+  protected _reorderProperties(properties: Array<keyof this & string>) {
     return properties;
   }
 
-  dispose() {
-    this._dispose();
-  }
-
-  _dispose(skipNative) {
+  protected _dispose(skipNative?: boolean) {
     if (!this._isDisposed && !this._inDispose) {
       Object.defineProperties(this, {
         _inDispose: {enumerable: false, writable: false, value: true},
@@ -353,40 +321,34 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     }
   }
 
-  _release() {
-  }
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  protected _release() {}
 
   /**
    * Called when a property is about to be changed, past conversion and all
    * other pre-checks. May have side-effects. Exceptions will not be catched.
-   * @param {string} name
-   * @param {any} value
    */
-  // @ts-ignore
-  // eslint-disable-next-line no-unused-vars
-  _beforePropertyChange(name, value) {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+  protected _beforePropertyChange(name: string, value: any) {}
 
-  isDisposed() {
-    return !!this._isDisposed;
-  }
-
-  _listen(name, listening) {
-    const eventDef = this['$event_' + name];
+  protected _listen(name: string, listening: boolean) {
+    const defKey = '$event_' + name as keyof this;
+    const eventDef = this[defKey] as EventDefinition;
     if (eventDef) {
-      eventDef.listen.forEach(listen => listen(this, listening));
+      eventDef.listen?.forEach(listen => listen(this, listening));
     }
   }
 
-  _nativeListen(event, state) {
+  protected _nativeListen(event: string, state: boolean) {
     this._checkDisposed();
     tabris._nativeBridge.listen(this.cid, event, state);
   }
 
-  _trigger(name, eventData = {}) {
+  protected _trigger(name: string, eventData = {}) {
     return this.$trigger(name, eventData);
   }
 
-  $trigger(name, eventData = {}) {
+  protected $trigger(name: string, eventData: {[data: string]: unknown} = {}) {
     const event = new EventObject();
     for (const key in eventData) {
       if (!(key in event)) {
@@ -397,7 +359,7 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     return !!event.defaultPrevented;
   }
 
-  _onoff(name, listening, listener) {
+  protected _onoff(name: string, listening: boolean, listener: Function) {
     if (listening) {
       this.on(name, listener);
     } else {
@@ -405,88 +367,68 @@ export default class NativeObject extends (/** @type {NativeObjectBase} */(Event
     }
   }
 
-  _checkDisposed() {
+  protected _checkDisposed() {
     if (this._isDisposed) {
       throw new Error('Object is disposed');
     }
   }
 
-  _nativeSet(name, value) {
+  protected _nativeSet(name: string, value: unknown) {
     this._checkDisposed();
     tabris._nativeBridge.set(this.cid, name, value === undefined ? null : value);
   }
 
-  _nativeGet(name) {
+  protected _nativeGet(name: string) {
     this._checkDisposed();
     return tabris._nativeBridge.get(this.cid, name);
   }
 
-  _nativeCall(method, parameters) {
+  protected _nativeCall(method: string, parameters: object) {
     this._checkDisposed();
     return tabris._nativeBridge.call(this.cid, method, parameters);
   }
 
-  toString() {
-    return this.constructor.name;
-  }
-
-  [toXML]() {
-    if (this._isDisposed) {
-      return `<${this._getXMLElementName()} cid='${this.cid}' disposed='true'/>`;
-    }
-    const content = this._getXMLContent();
-    if (!content.length) {
-      return this._getXMLHeader(false);
-    }
-    return `${this._getXMLHeader(true)}\n${content.join('\n')}\n${this._getXMLFooter(true)}`;
-  }
-
-  _getXMLHeader(hasChild) {
+  protected _getXMLHeader(hasChild: boolean) {
     const attributes = this._getXMLAttributes()
       .map(entry => `${entry[0]}='${('' + entry[1]).replace(/'/g, '\\\'').replace(/\n/g, '\\n')}'`)
       .join(' ');
     return `<${this._getXMLElementName()} ${attributes}${!hasChild ? '/' : ''}>`;
   }
 
-  _getXMLFooter(hasChild) {
+  protected _getXMLFooter(hasChild: boolean) {
     return hasChild ? `</${this._getXMLElementName()}>` : '';
   }
 
-  _getXMLElementName() {
+  protected _getXMLElementName() {
     return this.constructor.name;
   }
 
-  _getXMLAttributes() {
+  protected _getXMLAttributes() {
     return [['cid', this.cid]];
   }
 
-  _getXMLContent() {
+  protected _getXMLContent() {
     return [];
   }
 
+}
+
+export default interface NativeObject {
+  onDispose: Listeners & Listeners['addListener'];
 }
 
 NativeObject.defineEvents(NativeObject.prototype, {
   dispose: true
 });
 
-/**
- * @this {NativeObject}
- * @param {string} name
- * @param {any} value
- */
-function setExistingProperty(name, value) {
+function setExistingProperty<Target extends NativeObject>(this: Target, name: string, value: any) {
   if (!(name in this)) {
     hint(this, 'There is no setter for property "' + name + '"');
   }
-  this[name] = value;
+  this[name as keyof Target] = value;
 }
 
-/**
- * @param {Partial<PropertyDefinition>}  config
- * @returns {PropertyDefinition}
- */
-function normalizeProperty(config) {
+function normalizeProperty(config: TabrisProp<any, any, any>): PropertyDefinition {
   const def = {
     type: normalizeType(config.type || {}),
     default: config.default,
@@ -515,39 +457,36 @@ function normalizeProperty(config) {
   return def;
 }
 
-/**
- * @param {string} name
- * @param {EventDefinition|true} definition
- * @returns {EventDefinition}
- */
-function normalizeEvent(name, definition) {
-  const result = {listen: []};
+function normalizeEvent(this: NativeObject, name: string, definition: EventDefinition|true): EventDefinition {
+  const result: EventDefinition = {listen: []};
   if (definition === true) {
     return result;
   }
   Object.assign(result, definition);
   if (definition.native) {
-    result.listen.push((target, listening) => {
+    result.listen?.push((target, listening) => {
       target._nativeListen(name, listening);
     });
   }
-  if(result.changes) {
+  const changes = result.changes;
+  if(changes) {
     const changeValue = result.changeValue;
     if (typeof changeValue === 'string') {
-      result.changeValue =  ev => ev[changeValue];
+      result.changeValue =  (ev: EventObject & {[key: string]: any}) => ev[changeValue];
     } else if (!changeValue) {
-      result.changeValue =  ev => ev[result.changes];
+      result.changeValue =  (ev: EventObject & {[key: string]: any}) => ev[changes];
     }
   }
   return result;
 }
 
-/**
- * @param {string|TypeDef<any, any, any>} config
- * @returns {TypeDef<any, any, any>}
- */
-function normalizeType(config) {
-  if (config instanceof Function && config.prototype instanceof NativeObject) {
+function normalizeType(
+  config: keyof PropertyTypes | TypeDef<any, any, any> | Constructor<NativeObject>
+): TypeDef<any, any, any> {
+  if (config instanceof Function) {
+    if (!(config.prototype instanceof NativeObject)) {
+      throw new Error('not a constructor of NativeObject');
+    }
     return {
       convert(value) {
         if (!(value instanceof config)) {

@@ -1,6 +1,7 @@
-import chai, {expect} from 'chai';
+import * as chai from 'chai';
+import {expect} from 'chai';
 import * as sinon from 'sinon';
-import sinonChai from 'sinon-chai';
+import * as sinonChai from 'sinon-chai';
 import {mockTabris} from './tabris-mock';
 import ImageBitmap from '../src/tabris/ImageBitmap';
 import Blob from '../src/tabris/Blob';

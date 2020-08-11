@@ -146,9 +146,11 @@ describe('Device', function() {
     });
 
     it('creates camera objects for cameraIds', function() {
-      expect(device.cameras).to.deep.equal([
-        new Camera({cameraId: 'camera1'}), new Camera({cameraId: 'camera2'})
-      ]);
+      expect(device.cameras.length).to.equal(2);
+      expect(device.cameras[0]).to.be.instanceOf(Camera);
+      expect(device.cameras[0].cameraId).to.equal('camera1');
+      expect(device.cameras[1]).to.be.instanceOf(Camera);
+      expect(device.cameras[1].cameraId).to.equal('camera2');
     });
   });
 

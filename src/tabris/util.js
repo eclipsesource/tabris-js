@@ -187,8 +187,8 @@ export function setBytes(blob, bytes) {
 
 /**
  * @template {object} T
- * @template {keyof T} U
- * @param {object} target
+ * @template {string} U
+ * @param {T} target
  * @param {U[]} keys
  * @returns {Partial<Record<U, unknown>>}
  */

@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "alwaysStrict": false,
+    "strict": false,
+    "checkJs": false,
+    "allowJs": true,
+    "noImplicitUseStrict": true,
+    "lib": ["es2017"]
+  },
+  "include": [
+    "src/**/*.js",
+    "src/**/*.ts",
+    "test/**/*.js",
+    "test/**/*.ts"
+  ],
+  "exclude": [
+    "test/typescript",
+    "test/tabris/tabris.verify.js"
+  ]
+}

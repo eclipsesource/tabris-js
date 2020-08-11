@@ -149,10 +149,16 @@
         "node_modules/mocha/bin/mocha",
         "--colors",
         "--require",
-        "babel-core/register",
+        "ts-node/register",
         "--bail",
         "${file}"
       ],
+      "options": {
+        "env": {
+          "TS_NODE_PROJECT": "./tsconfig.test.json",
+          "TS_NODE_FILES": "true"
+        }
+      },
       "group": {
         "kind": "test",
         "isDefault": true

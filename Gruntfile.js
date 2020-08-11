@@ -25,7 +25,7 @@ module.exports = function(grunt) {
           banner,
           process: src => src.replace(/\${VERSION}/g, version)
         },
-        src: ['build/tabris-transpiled.js'],
+        src: ['build/tabris-bundle.js'],
         dest: 'build/tabris/tabris.js'
       },
       boot: {
@@ -93,44 +93,34 @@ module.exports = function(grunt) {
         cwd: 'build/snippets'
       },
       test_boot: {
-        cmd: 'node node_modules/mocha/bin/mocha --colors --require babel-core/register "test/boot/**/*.test.js"'
+        cmd: 'node node_modules/mocha/bin/mocha --colors --require ts-node/register '
+          + '"test/boot/**/*.test.js" "test/boot/**/*.test.ts"',
+        options: {env: Object.assign({TS_NODE_PROJECT: './tsconfig.test.json', TS_NODE_FILES: 'true'}, process.env)}
       },
       verify_tabris: {
         cmd: 'node node_modules/mocha/bin/mocha --colors "test/**/*.verify.js"'
       },
       test_tabris: {
-        cmd: 'node node_modules/mocha/bin/mocha --colors --require babel-core/register "test/tabris/**/*.test.js"'
+        cmd: 'node node_modules/mocha/bin/mocha --colors --require ts-node/register '
+          + '"test/tabris/**/*.test.js" test/tabris/**/*.test.ts"',
+        options: {env: Object.assign({TS_NODE_PROJECT: './tsconfig.test.json', TS_NODE_FILES: 'true'}, process.env)}
       },
       test_spec: {
-        cmd: `node node_modules/mocha/bin/mocha --colors --require babel-core/register "${grunt.option('spec')}"`
+        cmd: `node node_modules/mocha/bin/mocha --colors --require ts-node/register "${grunt.option('spec')}"`,
+        options: {env: Object.assign({TS_NODE_PROJECT: './tsconfig.test.json', TS_NODE_FILES: 'true'}, process.env)}
       },
       eslint: {
         cmd: 'npx eslint --color --f visualstudio --ext .js,.jsx,.ts,.tsx .'
       },
       bundle_tabris: {
-        cmd: 'node node_modules/rollup/bin/rollup --config rollup.config.js -f cjs ' +
-          '-o build/tabris-bundle.js -- src/tabris/main.js'
+        cmd: 'node node_modules/rollup/bin/rollup --config rollup.tabris.js'
       },
       bundle_boot: {
-        cmd: 'node node_modules/rollup/bin/rollup -f cjs -o build/boot-bundle.js -- src/boot/main.js'
-      },
-      transpile_tabris: {
-        cmd: 'node node_modules/babel-cli/bin/babel.js --compact false ' +
-          '--out-file build/tabris-transpiled.js build/tabris-bundle.js',
-        options: {
-          env: Object.assign({}, process.env, {BABEL_ENV: 'build'})
-        }
+        cmd: 'node node_modules/rollup/bin/rollup --config rollup.boot.js'
       },
       uglify_tabris: {
         cmd: 'node node_modules/uglify-es/bin/uglifyjs --mangle --keep-fnames --compress ' +
           '-o build/tabris/tabris.min.js build/tabris/tabris.js'
-      },
-      transpile_boot: {
-        cmd: 'node node_modules/babel-cli/bin/babel.js --compact false ' +
-          '--out-file build/boot-transpiled.js build/boot-bundle.js',
-        options: {
-          env: Object.assign({}, process.env, {BABEL_ENV: 'build'})
-        }
       },
       uglify_boot: {
         cmd: 'node node_modules/uglify-es/bin/uglifyjs --mangle --compress ' +
@@ -208,11 +198,9 @@ module.exports = function(grunt) {
   /* concatenates and minifies code */
   grunt.registerTask('build', [
     'exec:bundle_tabris',
-    'exec:transpile_tabris',
     'concat:tabris',
     'exec:uglify_tabris',
     'exec:bundle_boot',
-    'exec:transpile_boot',
     'concat:boot',
     'exec:uglify_boot',
     'copy:client_mock',

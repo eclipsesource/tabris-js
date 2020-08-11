@@ -15,14 +15,18 @@
       "protocol": "inspector",
       "request": "launch",
       "cwd": "${workspaceRoot}",
+      "env": {
+        "TS_NODE_PROJECT": "./tsconfig.test.json",
+        "TS_NODE_FILES": "true"
+      },
       "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/mocha",
       "windows": {
         "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/mocha.cmd"
       },
       "runtimeArgs": [
         "--colors",
-        "--compilers",
-        "js:babel-core/register",
+        "--require",
+        "ts-node/register",
         "${file}"
       ],
       "internalConsoleOptions": "openOnSessionStart"
