@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "lib": ["es2017" ],
+    "jsx": "react",
+    "jsxFactory": "JSX.createElement",
+    "outDir": "dist",
+    "allowJs": true,
+    "checkJs": true,
+    "typeRoots": [],
+    "alwaysStrict": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "./api/*.js",
+    "./api/*.jsx",
+    "./api/*.ts",
+    "./api/*.tsx"
+  ]
+}

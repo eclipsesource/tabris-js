@@ -8,14 +8,11 @@
     "noImplicitUseStrict": true,
     "lib": ["es2017"]
   },
+  "ts-node": {
+    "files": true
+  },
   "include": [
-    "src/**/*.js",
-    "src/**/*.ts",
-    "test/**/*.js",
-    "test/**/*.ts"
-  ],
-  "exclude": [
-    "test/typescript",
-    "test/tabris/tabris.verify.js"
+    "./*.ts",
+    "../../src/boot/*.ts"
   ]
 }

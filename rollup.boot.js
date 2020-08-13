@@ -1,9 +1,9 @@
 import typescript from 'rollup-plugin-typescript2';
 
 export default {
-  input: './src/boot/main.js',
+  input: './src/boot/main.ts',
   output: {
-    file: 'build/boot-transpiled.js',
+    file: 'build/boot-bundled.js',
     format: 'cjs'
   },
   plugins: [

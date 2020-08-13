@@ -235,7 +235,9 @@
         "ecmaVersion": 2018,
         "sourceType": "module",
         "project": [
-          "./tsconfig.json",
+          "./test/tabris/tsconfig.json",
+          "./test/boot/tsconfig.json",
+          "./doc/tsconfig.json",
           "./snippets/tsconfig.json",
           "./tools/tsconfig.json"
         ]

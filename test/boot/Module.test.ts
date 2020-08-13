@@ -1,5 +1,14 @@
-import {expect, spy, stub, restore} from '../test';
 import Module from '../../src/boot/Module';
+import * as chai from 'chai';
+import {expect} from 'chai';
+import * as sinon from 'sinon';
+import * as sinonChai from 'sinon-chai';
+
+chai.use(sinonChai);
+const sandbox = sinon.sandbox.create();
+const restore = sandbox.restore.bind(sandbox);
+const spy = sandbox.spy.bind(sandbox);
+const stub = sandbox.stub.bind(sandbox);
 
 describe('Module', function() {
 
@@ -18,7 +27,7 @@ describe('Module', function() {
     it('without arguments sets default values', function() {
       const module = new Module();
 
-      expect(module.id).to.be.null;
+      expect(module.id).to.equal('');
       expect(module.parent).to.be.null;
       expect(module.exports).to.eql({});
     });
@@ -57,18 +66,19 @@ describe('Module', function() {
   describe('instance', function() {
 
     beforeEach(function() {
-      global.tabris = {};
+      global.tabris = {} as ProtoTabris;
       tabris._client = {
         load: () => '',
+        execute: () => ({executeResult: null}),
         loadAndExecute: () => ({
-          executeResult: (module) => {
+          executeResult: (module: Module) => {
             module.exports = module;
           }
         })
       };
     });
 
-    let instance;
+    let instance: Module;
 
     beforeEach(function() {
       instance = new Module();
@@ -77,7 +87,7 @@ describe('Module', function() {
     describe('require', function() {
 
       it('returns exports', function() {
-        stub(Module, 'createLoader').returns((mod, exports) => {
+        stub(Module, 'createLoader').returns((_module: Module, exports: any) => {
           exports.bar = 1;
         });
 
@@ -94,7 +104,7 @@ describe('Module', function() {
       });
 
       it('returns module that is currently loading', function() {
-        stub(Module, 'createLoader').returns((mod, exports) => {
+        stub(Module, 'createLoader').returns((_mod: any, exports: any) => {
           exports.foo = 1;
           instance.require('./foo').bar = 2;
         });
@@ -109,7 +119,7 @@ describe('Module', function() {
       });
 
       it('returns same exports from different modules', function() {
-        stub(Module, 'createLoader').returns((mod, exports) => {
+        stub(Module, 'createLoader').returns((_mod: any, exports: any) => {
           exports.bar = 1;
         });
         const module1 = new Module('./module1', instance);
@@ -123,19 +133,19 @@ describe('Module', function() {
       });
 
       it('requests url only once', function() {
-        stub(Module, 'createLoader').returns(mod => {
+        const stubbed = stub(Module, 'createLoader').returns((mod: Module) => {
           mod.exports = mod;
         });
 
         instance.require('./foo');
         instance.require('./foo');
 
-        expect(Module.createLoader.callCount).to.equal(1);
+        expect(stubbed.callCount).to.equal(1);
       });
 
       it('requests loader with request as path', function() {
-        stub(Module, 'createLoader').returns(mod => {
-          mod.exports = mod;
+        stub(Module, 'createLoader').returns((module: Module) => {
+          module.exports = module;
         });
 
         instance.require('./bar');
@@ -144,10 +154,11 @@ describe('Module', function() {
       });
 
       it('requests alternate file name .js', function() {
-        stub(Module, 'createLoader').callsFake((path) => {
+        stub(Module, 'createLoader').callsFake((path: string) => {
           if (path === './foo.js') {
-            return mod => mod.exports = mod;
+            return (mod: Module) => mod.exports = mod;
           }
+          return null;
         });
 
         const foo = instance.require('./foo');
@@ -158,7 +169,7 @@ describe('Module', function() {
       });
 
       it('requests alternate file name .json', function() {
-        stub(Module, 'createLoader').returns(undefined);
+        stub(Module, 'createLoader').returns(null);
         stub(Module, 'readJSON').returns({data: 'bar'});
 
         const foo = instance.require('./foo');
@@ -169,7 +180,7 @@ describe('Module', function() {
       });
 
       it('requests file specified in /package.json', function() {
-        stub(Module, 'createLoader').returns(undefined);
+        stub(Module, 'createLoader').returns(null);
         stub(Module, 'readJSON').callsFake((url) => {
           if (url === './foo/package.json') {
             return {main: 'bar'};
@@ -190,7 +201,7 @@ describe('Module', function() {
       });
 
       it('requests file specified in /package.json containing \'.\' segment', function() {
-        stub(Module, 'createLoader').returns(undefined);
+        stub(Module, 'createLoader').returns(null);
         stub(Module, 'readJSON').callsFake((url) => {
           if (url === './foo/package.json') {
             return {main: './bar'};
@@ -212,10 +223,11 @@ describe('Module', function() {
 
       it('requests alternate file name /index.js', function() {
         spy(Module, 'readJSON');
-        stub(Module, 'createLoader').callsFake((path) => {
+        stub(Module, 'createLoader').callsFake((path: string) => {
           if (path === './foo/index.js') {
-            return mod => mod.exports = mod;
+            return (mod: Module) => mod.exports = mod;
           }
+          return null;
         });
 
         const foo = instance.require('./foo');
@@ -233,10 +245,11 @@ describe('Module', function() {
             return {notMain: './bar'};
           }
         });
-        stub(Module, 'createLoader').callsFake((path) => {
+        stub(Module, 'createLoader').callsFake((path: string) => {
           if (path === './foo/index.js') {
-            return mod => mod.exports = mod;
+            return (mod: Module) => mod.exports = mod;
           }
+          return null;
         });
 
         const foo = instance.require('./foo');
@@ -245,7 +258,7 @@ describe('Module', function() {
       });
 
       it('requests alternate file name /index.json', function() {
-        stub(Module, 'createLoader').returns(undefined);
+        stub(Module, 'createLoader').returns(null);
         stub(Module, 'readJSON').callsFake((url) => {
           if (url === './foo/index.json') {
             return {data: 'bar'};
@@ -263,8 +276,8 @@ describe('Module', function() {
       });
 
       it('requests alternate file name for folders', function() {
-        stub(Module, 'createLoader').returns(undefined);
-        stub(Module, 'readJSON').returns(undefined);
+        stub(Module, 'createLoader').returns(null);
+        stub(Module, 'readJSON').returns(null);
 
         try {
           instance.require('./foo/');
@@ -282,10 +295,12 @@ describe('Module', function() {
 
       it('requests module from node_modules folder', function() {
         stub(Module, 'readJSON').returns(undefined);
-        stub(Module, 'createLoader').callsFake((path) => {
+        stub(Module, 'createLoader').callsFake((path: string) => {
           if (path === './node_modules/foo/index.js') {
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
             return () => {};
           }
+          return null;
         });
 
         instance.require('foo');
@@ -298,8 +313,8 @@ describe('Module', function() {
       });
 
       it('fails to requests module from node_modules folder with error', function() {
-        stub(Module, 'createLoader').returns(undefined);
-        stub(Module, 'readJSON').returns(undefined);
+        stub(Module, 'createLoader').returns(null);
+        stub(Module, 'readJSON').returns(null);
 
         expect(() => {
           instance.require('foo');
@@ -314,8 +329,8 @@ describe('Module', function() {
 
       it('requests modules from node_modules folder at top-level', function() {
         instance = new Module('./foo/script.js');
-        stub(Module, 'createLoader').returns(undefined);
-        stub(Module, 'readJSON').returns(undefined);
+        stub(Module, 'createLoader').returns(null);
+        stub(Module, 'readJSON').returns(null);
 
         try {
           instance.require('bar');
@@ -329,8 +344,8 @@ describe('Module', function() {
 
       it('does not requests modules node_modules/node_modules folder', function() {
         instance = new Module('./node_modules/foo/script.js');
-        stub(Module, 'createLoader').returns(undefined);
-        stub(Module, 'readJSON').returns(undefined);
+        stub(Module, 'createLoader').returns(null);
+        stub(Module, 'readJSON').returns(null);
 
         try {
           instance.require('bar');
@@ -345,10 +360,11 @@ describe('Module', function() {
 
       it('does not request module from node_modules folder at top-level', function() {
         instance = new Module('./foo/script.js');
-        stub(Module, 'createLoader').callsFake((path) => {
+        stub(Module, 'createLoader').callsFake((path: string) => {
           if (path === './foo/node_modules/bar/script2.js') {
-            return (module) => module.exports = 2;
+            return (mod: Module) => mod.exports = 2;
           }
+          return null;
         });
         stub(Module, 'readJSON').callsFake((path) => {
           if (path === './foo/node_modules/bar/package.json') {
@@ -364,8 +380,8 @@ describe('Module', function() {
       });
 
       it('fails if module cannot be found', function() {
-        stub(Module, 'createLoader').returns(undefined);
-        stub(Module, 'readJSON').returns(undefined);
+        stub(Module, 'createLoader').returns(null);
+        stub(Module, 'readJSON').returns(null);
 
         expect(() => {
           instance.require('foo');
@@ -379,16 +395,16 @@ describe('Module', function() {
       });
 
       it('requests url variants only once', function() {
-        stub(Module, 'createLoader').returns(undefined);
-        stub(Module, 'readJSON').returns({});
+        const createLoaderStub = stub(Module, 'createLoader').returns(null);
+        const readJsonStub = stub(Module, 'readJSON').returns({});
 
         instance.require('./foo');
-        Module.createLoader.reset();
-        Module.readJSON.reset();
+        createLoaderStub.reset();
+        readJsonStub.reset();
         instance.require('./foo');
 
-        expect(Module.createLoader.callCount).to.equal(0);
-        expect(Module.readJSON.callCount).to.equal(0);
+        expect(createLoaderStub.callCount).to.equal(0);
+        expect(readJsonStub.callCount).to.equal(0);
       });
 
       it('supports loading a package.json directly', function() {
@@ -404,20 +420,21 @@ describe('Module', function() {
       });
 
       it('caches node modules', function() {
-        stub(Module, 'readJSON').callsFake((url) => {
+        const readJsonStub = stub(Module, 'readJSON').callsFake((url: string) => {
           if (url === './foo/package.json') {
             return {main: 'foo.js'};
           }
         });
-        stub(Module, 'createLoader').callsFake((url) => {
+        const createLoaderStub = stub(Module, 'createLoader').callsFake((url: string) => {
           if (url === './foo/foo.js') {
-            return module => module.exports = module;
+            return (mod: Module) => mod.exports = mod;
           }
+          return null;
         });
 
         const foo1 = instance.require('./foo');
-        Module.createLoader.reset();
-        Module.readJSON.reset();
+        createLoaderStub.reset();
+        readJsonStub.reset();
         const foo2 = instance.require('./foo');
 
         expect(Module.createLoader).to.have.not.been.called;
@@ -426,7 +443,7 @@ describe('Module', function() {
       });
 
       it('supports node modules loading each other', function() {
-        stub(Module, 'readJSON').callsFake((path) => {
+        stub(Module, 'readJSON').callsFake((path: string) => {
           if (path === './node_modules/foo/package.json') {
             return {main: 'foo.js'};
           }
@@ -434,18 +451,19 @@ describe('Module', function() {
             return {main: 'bar.js'};
           }
         });
-        stub(Module, 'createLoader').callsFake((path) => {
+        stub(Module, 'createLoader').callsFake((path: string) => {
           if (path === './node_modules/foo/foo.js') {
-            return (module) => {
+            return (module: Module) => {
               module.exports.x = 1;
               module.exports.y = module.require('bar');
             };
           }
           if (path === './node_modules/bar/bar.js') {
-            return (module) => {
+            return (module: Module) => {
               module.exports = module.require('foo').x + 1;
             };
           }
+          return null;
         });
 
         const exports = instance.require('foo');
@@ -478,7 +496,7 @@ describe('Module', function() {
       describe('from nested module', function() {
 
         beforeEach(function() {
-          instance.id = './foo/bar.js';
+          (instance.id as string) = './foo/bar.js';
         });
 
         it('creates module with plain id', function() {
@@ -488,13 +506,14 @@ describe('Module', function() {
         });
 
         it('during module loading creates module with plain id', function() {
-          stub(Module, 'createLoader').callsFake((path) => {
+          stub(Module, 'createLoader').callsFake((path: string) => {
             if (path === './foo/baz.js') {
               return (module, exports, require) => module.exports = require('./foo');
             }
             if (path === './foo/foo.js') {
               return module => module.exports = module;
             }
+            return null;
           });
 
           const result = instance.require('./baz');
@@ -552,7 +571,7 @@ describe('Module', function() {
 
     it('throws for missing argument', function() {
       const msg = 'The argument \'path\' must be an absolute path string. Received undefined';
-      expect(() => Module.createRequire()).to.throw(Error, msg);
+      expect(() => (Module.createRequire as any)()).to.throw(Error, msg);
     });
 
     it('throws for invalid string', function() {

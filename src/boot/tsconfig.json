@@ -3,13 +3,13 @@
     "target": "es6",
     "alwaysStrict": true,
     "strict": true,
-    "checkJs": false,
-    "allowJs": true,
     "lib": ["es2017"],
+    "noEmit": true,
+    "noImplicitAny": true,
+    "typeRoots": [],
     "outDir": "../../build/boot-transpiled"
   },
   "include": [
-    "./**/*.js",
     "./**/*.ts"
   ]
 }

@@ -3,9 +3,10 @@
     "target": "es6",
     "alwaysStrict": true,
     "strict": true,
+    "lib": ["es2017"],
     "checkJs": false,
     "allowJs": true,
-    "lib": ["es2017"],
+    "typeRoots": [],
     "outDir": "../../build/tabris-transpiled"
   },
   "include": [

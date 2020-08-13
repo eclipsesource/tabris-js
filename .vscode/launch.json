@@ -16,8 +16,7 @@
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "env": {
-        "TS_NODE_PROJECT": "./tsconfig.test.json",
-        "TS_NODE_FILES": "true"
+        "TS_NODE_PROJECT": "./test/tabris/tsconfig.json"
       },
       "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/mocha",
       "windows": {

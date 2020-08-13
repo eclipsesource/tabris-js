@@ -33,7 +33,7 @@ module.exports = function(grunt) {
           banner,
           process: src => '(function(){\n' + src.replace(/\${VERSION}/g, version) + '}());'
         },
-        src: ['build/boot-transpiled.js'],
+        src: ['build/boot-bundled.js'],
         dest: 'build/tabris/boot.js'
       }
     },
@@ -93,9 +93,8 @@ module.exports = function(grunt) {
         cwd: 'build/snippets'
       },
       test_boot: {
-        cmd: 'node node_modules/mocha/bin/mocha --colors --require ts-node/register '
-          + '"test/boot/**/*.test.js" "test/boot/**/*.test.ts"',
-        options: {env: Object.assign({TS_NODE_PROJECT: './tsconfig.test.json', TS_NODE_FILES: 'true'}, process.env)}
+        cmd: 'node node_modules/mocha/bin/mocha --colors --require ts-node/register "test/boot/**/*.test.ts"',
+        options: {env: Object.assign({TS_NODE_PROJECT: './test/boot/tsconfig.json'}, process.env)}
       },
       verify_tabris: {
         cmd: 'node node_modules/mocha/bin/mocha --colors "test/**/*.verify.js"'
@@ -103,11 +102,11 @@ module.exports = function(grunt) {
       test_tabris: {
         cmd: 'node node_modules/mocha/bin/mocha --colors --require ts-node/register '
           + '"test/tabris/**/*.test.js" test/tabris/**/*.test.ts"',
-        options: {env: Object.assign({TS_NODE_PROJECT: './tsconfig.test.json', TS_NODE_FILES: 'true'}, process.env)}
+        options: {env: Object.assign({TS_NODE_PROJECT: './test/tabris/tsconfig.json'}, process.env)}
       },
       test_spec: {
         cmd: `node node_modules/mocha/bin/mocha --colors --require ts-node/register "${grunt.option('spec')}"`,
-        options: {env: Object.assign({TS_NODE_PROJECT: './tsconfig.test.json', TS_NODE_FILES: 'true'}, process.env)}
+        options: {env: Object.assign({TS_NODE_PROJECT: './test/tabris/tsconfig.json'}, process.env)}
       },
       eslint: {
         cmd: 'npx eslint --color --f visualstudio --ext .js,.jsx,.ts,.tsx .'

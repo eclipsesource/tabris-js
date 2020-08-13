@@ -2,7 +2,7 @@
 import Module from './Module';
 
 global.window = global.self = global;
-global.tabris = {};
+global.tabris = {} as ProtoTabris;
 
 tabris._start = function(client) {
   try {
@@ -55,15 +55,15 @@ tabris._start = function(client) {
   }
 };
 
-tabris._notify = function() {
+tabris._notify = function(...args: any[]) {
   // client may get the reference to _notify before tabris has been loaded
-  return tabris._notify.apply(this, arguments);
+  return tabris._notify.apply(this, args);
 };
 
-function printError(msg, error) {
+function printError(msg: string, error: Error) {
   if (console.print) {
     console.print('error', msg + (error.stack || error));
   } else {
-    console.error(msg, error);
+    console.error!(msg, error);
   }
 }

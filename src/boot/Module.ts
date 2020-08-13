@@ -1,17 +1,34 @@
+/* eslint-disable @typescript-eslint/member-ordering */
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 /* eslint-disable no-invalid-this */
 const FILE_POSTFIXES = ['', '.js', '.json', '/package.json', '/index.js', '/index.json'];
 const FOLDER_POSTFIXES = ['/package.json', '/index.js', '/index.json'];
 
+type ModuleLoader = (
+  module: Module,
+  exports: any,
+  require: Module['require'],
+  filename: string,
+  dirname: string
+) => any;
+
 export default class Module {
 
-  constructor(id, parent, content) {
-    this.id = id || null;
+  public static root: Module;
+
+  public readonly id: string;
+  public readonly parent: Module | null;
+  public exports: any = {};
+  protected readonly _cache: {[id: string]: Module | false} = {};
+
+  constructor(id?: string, parent?: Module | null, content?: ModuleLoader | object) {
+    this.id = id || '';
     this.parent = parent || null;
     let exports = {};
     let resolved = false;
     const require = this.require.bind(this);
     Object.defineProperty(this, '_cache', {
-      enumerable: false, writable: false, value: this.parent ? this.parent._cache : {}
+      enumerable: false, writable: false, value: this.parent ? this.parent._cache : this._cache
     });
     if (id) {
       this._cache[id] = this;
@@ -23,7 +40,7 @@ export default class Module {
       get() {
         if (!resolved) {
           resolved = true;
-          if (typeof content === 'function') {
+          if (typeof content === 'function' && id) {
             content(this, exports, require, id.slice(1), dirname(id).slice(1));
           } else if (content instanceof Object) {
             exports = content;
@@ -34,17 +51,18 @@ export default class Module {
     });
   }
 
-  require(request) {
+  public require(request: string) {
     if (request.slice(0, 1) !== '.') {
-      if (this._cache[request]) {
-        return this._cache[request].exports;
+      const cached = this._cache[request];
+      if (cached) {
+        return cached.exports;
       }
       return findNodeModule.call(this, request).exports;
     }
     return findFileModule.call(this, request).exports;
   }
 
-  static createLoader(url) {
+  static createLoader(url: string): ModuleLoader | null {
     let result;
     try {
       result = tabris._client.loadAndExecute(url, modulePrefix, modulePostfix);
@@ -57,11 +75,11 @@ export default class Module {
     return result.executeResult;
   }
 
-  static execute(code, url) {
+  static execute(code: string, url: string) {
     return tabris._client.execute(code, url).executeResult;
   }
 
-  static readJSON(url) {
+  static readJSON(url: string) {
     const src = this.load(url);
     if (src) {
       try {
@@ -76,15 +94,15 @@ export default class Module {
     return null;
   }
 
-  static load(url) {
+  static load(url: string) {
     return tabris._client.load(url);
   }
 
-  static createRequire(path) {
+  static createRequire(path: string) {
     if ((typeof path !== 'string') || path[0] !== '/') {
       throw new Error(`The argument 'path' must be an absolute path string. Received ${path}`);
     }
-    return function(request) {
+    return function(request: string) {
       return Module.root.require(normalizePath(dirname('.' + path) + '/' + request));
     };
   }
@@ -93,7 +111,7 @@ export default class Module {
 
 Module.root = new Module();
 
-function findFileModule(request) {
+function findFileModule(this: Module, request: string) {
   const path = normalizePath(dirname(this.id) + '/' + request);
   const result = findModule.call(this, path, getPostfixes(request));
   if (!result) {
@@ -102,7 +120,7 @@ function findFileModule(request) {
   return result;
 }
 
-function findNodeModule(request) {
+function findNodeModule(this: Module, request: string) {
   let currentDir = dirname(this.id);
   const postfixes = getPostfixes(request);
   const modulesPath = '/node_modules';
@@ -121,11 +139,11 @@ function findNodeModule(request) {
   return result;
 }
 
-function findModule(path, postfixes) {
+function findModule(this: Module, path: string, postfixes: string[]): Module | null {
   if (path) {
-    for (let i = 0; i < postfixes.length; i++) {
-      let module = getModule.call(this, path + postfixes[i]);
-      if (postfixes[i] === '/package.json') {
+    for (const postfix of postfixes) {
+      let module = getModule.call(this, path + postfix);
+      if (postfix === '/package.json') {
         if (getMain(module)) {
           const normalizedPath = normalizePath(path + '/' + getMain(module));
           module = findModule.call(this, normalizedPath, FILE_POSTFIXES);
@@ -138,15 +156,16 @@ function findModule(path, postfixes) {
       }
     }
   }
+  return null;
 }
 
-function getMain(module) {
+function getMain(module: Module | null): string | null {
   return module && module.exports && module.exports.main;
 }
 
-function getModule(url) {
+function getModule(this: Module, url: string): Module | null {
   if (url in this._cache) {
-    return this._cache[url];
+    return this._cache[url] || null;
   }
   if (url.slice(-5) === '.json') {
     const data = Module.readJSON(url);
@@ -160,31 +179,31 @@ function getModule(url) {
     }
   }
   this._cache[url] = false;
+  return null;
 }
 
-function getPostfixes(request) {
+function getPostfixes(request: string) {
   return request.slice(-1) === '/' ? FOLDER_POSTFIXES : FILE_POSTFIXES;
 }
 
 const modulePrefix = '(function (module, exports, require, __filename, __dirname) { ';
 const modulePostfix = '\n});';
 
-function dirname(id) {
+function dirname(id: string) {
   if (!id || id.slice(0, 1) !== '.') {
     return './';
   }
   return id.slice(0, id.lastIndexOf('/'));
 }
 
-function normalizePath(path) {
+function normalizePath(path: string) {
   const segments = [];
   const pathSegments = path.split('/');
-  for (let i = 0; i < pathSegments.length; i++) {
-    const segment = pathSegments[i];
+  for (const segment of pathSegments) {
     if (segment === '..') {
       const removed = segments.pop();
       if (!removed || removed === '.') {
-        return null;
+        return '';
       }
     } else if (segment === '.' ? segments.length === 0 : segment !== '') {
       segments.push(segment);
