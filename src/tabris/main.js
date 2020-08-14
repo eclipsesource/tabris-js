@@ -6,6 +6,7 @@ import Device, {create as createDevice, publishDeviceProperties} from './Device'
 import CanvasContext from './CanvasContext';
 import Printer, {create as createPrinter} from './Printer';
 import Permission, {create as createPermission} from './Permission';
+import Authentication , {create as createAuthentication} from './Authentication';
 import App, {create as createApp} from './App';
 import FileSystem, {create as createFileSystem} from './FileSystem';
 import DevTools, {create as createDevTools} from './DevTools';
@@ -192,6 +193,7 @@ const UTILS = {
 };
 
 const OTHER = Object.freeze({
+  Authentication,
   CanvasContext,
   ChangeListeners,
   Color,
@@ -255,6 +257,7 @@ tabrisMain.on('start', (options) => {
     tabris.$statusBar = createStatusBar();
     tabris.$printer = createPrinter();
     tabris.$permission = createPermission();
+    tabris.$authentication = createAuthentication();
     tabris.JSX.install(createJsxProcessor());
     tabris.widgets = omit(WIDGETS, ['Widget', 'Drawer', 'ContentView']);
     Object.assign(tabris, tabris.JSX.processor.makeFactories(tabris.widgets));

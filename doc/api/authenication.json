@@ -1,0 +1,122 @@
+{
+  "type": "Authentication",
+  "category": "service",
+  "object": "authentication",
+  "extends": "NativeObject",
+  "description": "Allows to request authentication from the user. The means of authentication depends on the device configuration. For example, the authentication could be performed via credentials like pin or password or via a biometric authentication like fingerprint or face.",
+  "constructor": {
+    "access": "private",
+    "parameters": []
+  },
+  "properties": {
+    "availableBiometrics": {
+      "type": {
+        "interface": "Array",
+        "generics": [
+          "string"
+        ]
+      },
+      "ts_type": {
+        "interface": "Array",
+        "generics": [
+          {
+            "union": [
+              "'fingerprint'",
+              "'face'"
+            ]
+          }
+        ]
+      },
+      "readonly": true,
+      "description": "The biometric authentication mechanisms available on the device. Currently supported values are `'fingerprint'` and `'face'`.",
+      "platforms": {
+        "android": false
+      }
+    }
+  },
+  "methods": {
+    "canAuthenticate": {
+      "returns": "boolean",
+      "description": "Checks whether the device has any authentication mechanism configured. If the device does not require any authentication `false` is returned."
+    },
+    "authenticate": {
+      "parameters": [
+        {
+          "name": "options",
+          "type": {
+            "map": {
+              "title": {
+                "type": "string",
+                "optional": true,
+                "description": "The title shown in the authentication ui.",
+                "platforms": {
+                  "ios": false
+                }
+              },
+              "subtitle": {
+                "type": "string",
+                "optional": true,
+                "description": "The subtitle shown in the authentication ui.",
+                "platforms": {
+                  "ios": false
+                }
+              },
+              "message": {
+                "type": "string",
+                "optional": true,
+                "description": "The message shown in the authentication ui."
+              },
+              "allowFallback": {
+                "type": "boolean",
+                "optional": true,
+                "default": true,
+                "description": "Configure whether to allow another authentication mechanism other than the device default. For example, when a fingerprint would be the device default, the user could choose to fallback to use a pin instead. When non-biometric credentials are used, no fallback is available. "
+              },
+              "confirmationRequired": {
+                "type": "boolean",
+                "optional": true,
+                "default": true,
+                "description": "When a fast authentication mechanism like face unlock is used, this option allows to configure whether a successful authorization has to be confirmed by the user via a button press.",
+                "platforms": {
+                  "ios": false
+                }
+              }
+            }
+          },
+          "optional": true,
+          "description": "A set of capture options to apply when taking a picture."
+        }
+      ],
+      "returns": {
+        "interface": "Promise",
+        "generics": [
+          {
+            "map": {
+              "status": {
+                "type": {"union": ["'success'", "'canceled'", "'userCanceled'", "'limitExceeded'", "'lockout'", "'biometricsNotEnrolled'", "'credentialsNotEnrolled'", "'error'"]},
+                "description": "The result of the authentication attempt. I case of `'success'` the user passed the authentication success. All other statuses are treated as an authentication failure.\n\n- `'success'` - The user authenticated successfully.\n- `'canceled'` - The authentication process was canceled by the system.\n- `'userCanceled'` - The authentication process was canceled by the user.\n- `'limitExceeded'` -  When the option `allowFallback` is false `limitExceeded` is returned when authentication failed to many times. On Android a user has to wait for 30 seconds until he can try again.\n- `'lockout'` - When the option `allowFallback` and authentication failed to many times and can not be attempted anymore `lockout` is returned.\n- `'biometricsNotEnrolled'` - When option `allowFallback` is false and no biometrics are enrolled `biometricsNotEnrolled` is returned.\n- `'credentialsNotEnrolled'` - When no device credentials are available `credentialsNotEnrolled` is returned.\n- `'error'` - An error occurred. Possibly check the `'message'` parameter for details."
+              },
+              "message": {
+                "type": "string",
+                "description": "A user facing description of the error. Only available on Android.",
+                "platforms": {
+                  "ios": false
+                }
+              }
+            }
+          }
+        ]
+      },
+      "description": "Request the user to authenticate using the device default mechanism. The resolved promise returns a result object with `'status'` and optionally `'message'`. The `'status'` Informs about the result of the authentication operation. In case of non-authentication flow errors like a incorrectly configured client, the promise is rejected."
+    },
+    "cancel": {
+      "description": "Closes a potentially open authentication ui."
+    }
+  },
+  "links": [
+    {
+      "title": "Require user to authenticate",
+      "snippet": "authentication.jsx"
+    }
+  ]
+}
