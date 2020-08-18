@@ -16,6 +16,8 @@ unknown = Module.createRequire('/foo/bar')('./baz');
 let str: string = Module.load('foo.js');
 const loader = Module.createLoader('foo.js');
 loader(m, {}, (x) => ({[x]: 'foo'}), 'foo.js', 'foo.js');
+Module.define('/foo/bar', {});
+Module.define('/foo/bar', null);
 
 // global definitions
 

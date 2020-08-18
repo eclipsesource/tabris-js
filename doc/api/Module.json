@@ -123,6 +123,21 @@
           }
         },
         "description": "Creates a \"require\" function that finds a module relative to the given path. If found the exports are returned. Throws if no matching module can be found."
+      },
+      "define": {
+        "description": "Defines a module at the given path. It will be available for import as though there was a file at that location. Can also be used to override an actual module if it was not imported yet.",
+        "parameters": [
+          {
+            "name": "path",
+            "type": "string",
+            "description": "The path of the new module. Must start with a `/`, which is the directory of the project's `package.json`. Keep in mind that the source directory may not be the same at runtime if the code is pre-processed."
+          },
+          {
+            "name": "exports",
+            "type": "any",
+            "description": "The exports of the new module. This can be any type, though typically it is an object."
+          }
+        ]
       }
     }
   },

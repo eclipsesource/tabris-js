@@ -44,3 +44,42 @@ and [export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/S
 If you use a vanilla JavaScript project without a compiler/bundler you have to use the ES5/CommonJS syntax (i.e. `require()`). You can get a detailed explanation in the [Node.js docs](https://nodejs.org/dist/latest-v10.x/docs/api/modules.html).
 
 The Node.js implementation is the standard that Tabris.js follows and aims to be compatible with.
+
+## Virtual Modules
+
+A module is usually define by a file, but it is also possible to define a module at runtime at any path. This is done using [`Module.define`](./api/Module#definepathexports):
+
+```js
+const {Module} = require('tabris');
+
+Module.define('/src/my/virtual/module', myExports);
+```
+
+It could then be imported - for example from file `/src/my/real/module.js` - like this:
+
+```js
+const myExports = require('../virtual/module');
+```
+
+Of course you can also define virtual modules in `node_modules` to make them easily importable from anywhere in your application code.
+
+If you use this feature in a TypeScript based project the virtual modules can be [declared in a separate `d.ts` file](https://www.typescriptlang.org/docs/handbook/modules.html#ambient-modules). The ES6 module system and different output folder also need to be considered:
+
+```js
+import {Module} from 'tabris';
+
+Module.define('/dist/my/virtual/module', {default: myDefaultExport});
+```
+
+Import from `/src/my/real/module.ts`:
+
+```js
+import myDefaultExport from '../virtual/module';
+```
+
+Make sure the module that defines the virtual module is always parsed first. Assuming this is done is done in `src/virtualModules.ts`, your main module may begin like this:
+
+```js
+import './virtualModules';
+import './my/real/module';
+```

@@ -1,4 +1,4 @@
-import Module from '../../src/boot/Module';
+import Module, {ModuleLoader} from '../../src/boot/Module';
 import * as chai from 'chai';
 import {expect} from 'chai';
 import * as sinon from 'sinon';
@@ -569,6 +569,10 @@ describe('Module', function() {
       });
     });
 
+    after(function() {
+      Module.root = new Module();
+    });
+
     it('throws for missing argument', function() {
       const msg = 'The argument \'path\' must be an absolute path string. Received undefined';
       expect(() => (Module.createRequire as any)()).to.throw(Error, msg);
@@ -600,6 +604,74 @@ describe('Module', function() {
 
     it('returns require for root path', function() {
       expect(Module.createRequire('/')('./foo/baz').id).to.equal('./foo/baz.js');
+    });
+
+  });
+
+  describe('Module.define', function() {
+
+    let jsonFiles: {[path: string]: object};
+    let loaders: {[path: string]: ModuleLoader};
+
+    beforeEach(function() {
+      Module.root = new Module();
+      jsonFiles = {};
+      loaders = {};
+      stub(Module, 'createLoader').callsFake(url => loaders[url]);
+      stub(Module, 'readJSON').callsFake(url => jsonFiles[url]);
+    });
+
+    after(function() {
+      Module.root = new Module();
+    });
+
+    it('throws for relative path', function() {
+      expect(() => Module.define('./subfolder2/foo.js', {})).to.throw(Error, 'Path needs to start with a "/"');
+    });
+
+    it('throws for global module', function() {
+      expect(() => Module.define('subfolder2/foo.js', {})).to.throw(Error, 'Path needs to start with a "/"');
+    });
+
+    it('throws for missing exports', function() {
+      expect(() => Module.define.call(Module, '/subfolder2/foo.js'))
+        .to.throw(Error, 'Expected exactly 2 arguments, got 1');
+    });
+
+    it('throws for invalid path type', function() {
+      expect(() => Module.define.call(Module, null, {}))
+        .to.throw(Error, 'Expected argument 1 to be of type string');
+    });
+
+    it('creates virtual module', function() {
+      const exported = {foo: {bar: 23}};
+      loaders['./subfolder1/bar.js'] = mod => mod.exports = mod.require('../subfolder2/foo').foo;
+
+      Module.define('/subfolder2/foo.js', exported);
+
+      expect(Module.root.require('./subfolder1/bar.js')).to.equal(exported.foo);
+    });
+
+    it('throws for existing module', function() {
+      Module.define('/subfolder2/foo.js', {});
+      expect(() => Module.define('/subfolder2/foo.js', {}))
+        .to.throw(Error, 'Module "/subfolder2/foo.js" is already defined');
+    });
+
+    it('throws for previously requested module', function() {
+      try {
+        Module.root.require('./subfolder1/bar.js');
+        throw new Error('Module should not exist');
+      } catch (ex) {
+        // expected
+      }
+      expect(() => Module.define('/subfolder1/bar.js', {}))
+        .to.throw(Error, 'Module "/subfolder1/bar.js" was accessed before it was defined');
+    });
+
+    it('throws for module instance', function() {
+      expect(() => Module.define('/subfolder1/bar.js', Module.root))
+        .to.throw(Error, 'Expected argument 2 to be module exports, got a module instance');
     });
 
   });

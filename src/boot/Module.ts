@@ -4,7 +4,7 @@
 const FILE_POSTFIXES = ['', '.js', '.json', '/package.json', '/index.js', '/index.json'];
 const FOLDER_POSTFIXES = ['/package.json', '/index.js', '/index.json'];
 
-type ModuleLoader = (
+export type ModuleLoader = (
   module: Module,
   exports: any,
   require: Module['require'],
@@ -105,6 +105,29 @@ export default class Module {
     return function(request: string) {
       return Module.root.require(normalizePath(dirname('.' + path) + '/' + request));
     };
+  }
+
+  static define(path: string, exports: any) {
+    if (arguments.length !== 2) {
+      throw new Error(`Expected exactly 2 arguments, got ${arguments.length}`);
+    }
+    if (typeof path !== 'string') {
+      throw new Error('Expected argument 1 to be of type string');
+    }
+    if (path.charAt(0) !== '/') {
+      throw new Error('Path needs to start with a "/"');
+    }
+    const id = '.' + path;
+    if (Module.root._cache[id]) {
+      throw new Error(`Module "${path}" is already defined'`);
+    }
+    if (Module.root._cache[id] === false) {
+      throw new Error(`Module "${path}" was accessed before it was defined'`);
+    }
+    if (exports instanceof Module) {
+      throw new Error('Expected argument 2 to be module exports, got a module instance');
+    }
+    new Module('.' + path, this.root, module => module.exports = exports);
   }
 
 }
