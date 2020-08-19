@@ -10,13 +10,17 @@
     "checkJs": true,
     "typeRoots": [],
     "alwaysStrict": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": "./",
+    "paths": {
+      "@res": ["./resources/index"]
+    }
   },
   "include": [
     "./*.js",
     "./*.jsx",
     "./*.ts",
     "./*.tsx",
-    "./resources/index.ts",
+    "./resources/index.ts"
   ]
 }

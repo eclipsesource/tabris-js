@@ -18,6 +18,9 @@ const loader = Module.createLoader('foo.js');
 loader(m, {}, (x) => ({[x]: 'foo'}), 'foo.js', 'foo.js');
 Module.define('/foo/bar', {});
 Module.define('/foo/bar', null);
+Module.addPath('foo', ['foo']);
+Module.addPath({baseUrl: 'foo', paths: {foo: ['bar']}});
+Module.addPath({paths: {foo: ['bar']}});
 
 // global definitions
 

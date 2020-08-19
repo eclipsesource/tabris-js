@@ -83,3 +83,69 @@ Make sure the module that defines the virtual module is always parsed first. Ass
 import './virtualModules';
 import './my/real/module';
 ```
+
+## Module Mapping
+
+Since modules (except npm modules) are always imported using relative paths, any project with sufficiently deeply nested directories may end up with code like this:
+
+```js
+import {texts} from '../../../resources';
+import MainPage from '../../../ui/pages/MainPage';
+```
+
+One way to deal with this problem is module mapping. Using the `Module.addPath` method any non-relative import can be mapped to any module path within the project. Create a new module `'src/moduleMapper.ts'` (or `.js`):
+
+```js
+import {Module} from 'tabris';
+
+Module.addPath('resources', ['./dist/resource']);
+Module.addPath('pages/*', ['./dist/ui/pages/*']);
+```
+
+Or for a non-compiled project:
+
+```js
+const {Module} = require('tabris');
+
+Module.addPath('resources', ['./src/resource']);
+Module.addPath('pages/*', ['./src/ui/pages/*']);
+```
+
+In your entry-point module, load this module before any other. Now your imports can always look like this:
+
+```js
+import {texts} from 'resources';
+import MainPage from 'pages/MainPage';
+```
+
+This only affects application modules, import *from* npm modules (installed in `node_modules`) are *not* affected. However, it is still possible to (accidentally or not) register a pattern that overrides a npm module for imports in application modules. It's therefore common to choose a specific prefix for these import patterns, e.g. `@pages/*`.
+
+For a TypeScript project the compiler needs to be [configured](https://www.typescriptlang.org/docs/handbook/module-resolution.html#path-mapping) to respect this mapping. The compiler option `'paths'` is supported by `addPath` directly, the configuration can be read from `tsconfig.json` at runtime. The `baseUrl` needs to be different though, since the JavaScript files are loaded from the `dist` folder at runtime. Also, no file endings (`.ts`) may be used since these also change, and the replacement paths *must* start with "`./`".
+
+Example `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "outDir": "dist",
+    "baseUrl": "./",
+    "paths": {
+      "@resources": ["./resources"],
+      "@pages/": ["./ui/pages/*"]
+    }
+    // ... other config
+  },
+  "include": [
+    "./src/*.ts",
+    "./src/*.tsx"
+  ]
+}
+```
+
+Runtime configuration:
+
+```ts
+const paths = (Module.readJSON('./tsconfig.json') as any).compilerOptions.paths;
+Module.addPath({baseUrl: '/dist', paths}); // unlike tsconfig.json baseUrl is absolute!
+```

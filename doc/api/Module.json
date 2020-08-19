@@ -5,18 +5,28 @@
   "constructor": {
     "access": "public",
     "parameters": [
-       {
-         "name": "id",
-         "type": "string"
-       },
-       {
-         "name": "parent",
-         "type": {"union": ["Module", "null"]}
-       },
-       {
-         "name": "content",
-         "type": {"union": ["ModuleLoader", "object"]}
-       }
+      {
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "name": "parent",
+        "type": {
+          "union": [
+            "Module",
+            "null"
+          ]
+        }
+      },
+      {
+        "name": "content",
+        "type": {
+          "union": [
+            "ModuleLoader",
+            "object"
+          ]
+        }
+      }
     ]
   },
   "properties": {
@@ -116,10 +126,14 @@
         ],
         "returns": {
           "callback": [
-            {"name": "request", "type": "string"}
+            {
+              "name": "request",
+              "type": "string"
+            }
           ],
           "returns": {
-            "name": "exports", "type": "object"
+            "name": "exports",
+            "type": "object"
           }
         },
         "description": "Creates a \"require\" function that finds a module relative to the given path. If found the exports are returned. Throws if no matching module can be found."
@@ -138,7 +152,59 @@
             "description": "The exports of the new module. This can be any type, though typically it is an object."
           }
         ]
-      }
+      },
+      "addPath": [
+        {
+          "description": "Maps imports matching the given patterns to the associated paths. Patterns may contain exactly one wildcard ('*') and must not start with '/' or '.'. Paths are relative to 'baseUrl', may contain one wildcard and must start with '.'. The order of the paths determines the order of the path lookup. The 'baseUrl' must start with '/', which refers to the project root directory.",
+          "parameters": [
+            {
+              "description": "Contains the paths and baseUrl. If omitted, 'baseUrl' defaults to '/'.",
+              "name": "options",
+              "type": {
+                "map": {
+                  "baseUrl": {
+                    "type": "string",
+                    "optional": true
+                  },
+                  "paths": {
+                    "type": {
+                      "indexType": "string",
+                      "map": {
+                        "pattern": {
+                          "interface": "Array",
+                          "generics": [
+                            "string"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "description": "Maps imports matching the given patterns to the associated paths. Short for `addPath({baseUrl: '/', paths: {[pattern]: paths});",
+          "parameters": [
+            {
+              "description": "That import pattern to match.",
+              "name": "pattern",
+              "type": "string"
+            },
+            {
+              "description": "The module paths to look up for the given pattern",
+              "name": "paths",
+              "type": {
+                "interface": "Array",
+                "generics": [
+                  "string"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     }
   },
   "links": [

@@ -676,4 +676,262 @@ describe('Module', function() {
 
   });
 
+  describe('Module.addPath', function() {
+
+    let jsonFiles: {[path: string]: object};
+    let loaders: {[path: string]: ModuleLoader};
+
+    beforeEach(function() {
+      Module.root = new Module();
+      jsonFiles = {};
+      loaders = {};
+      stub(Module, 'createLoader').callsFake(url => loaders[url]);
+      stub(Module, 'readJSON').callsFake(url => jsonFiles[url]);
+    });
+
+    after(function() {
+      Module.root = new Module();
+    });
+
+    it('throws for relative path', function() {
+      expect(() => Module.addPath('./subfolder2', ['./foo'])).to.throw(Error, 'Pattern may not start with "."');
+    });
+
+    it('throws for absolute path', function() {
+      expect(() => Module.addPath('/subfolder2', ['./foo'])).to.throw(Error, 'Pattern may not start with "/"');
+    });
+
+    it('throws for empty path', function() {
+      expect(() => Module.addPath('', ['./foo'])).to.throw(Error, 'Pattern not be empty string');
+    });
+
+    it('throws for spaces in path', function() {
+      expect(() => Module.addPath('foo bar', ['./foo'])).to.throw(Error, 'Pattern may not contain spaces');
+    });
+
+    it('throws for multiple "*"', function() {
+      expect(() => Module.addPath('subfolder2/**', ['./foo'])).to.throw(Error, 'Pattern may contain only one "*"');
+    });
+
+    it('throws for missing alias', function() {
+      expect(() => Module.addPath('foo', []))
+        .to.throw(Error, 'Paths array for pattern "foo" is empty');
+      expect(() => Module.addPath({paths: {foo: []}}))
+        .to.throw(Error, 'Paths array for pattern "foo" is empty');
+    });
+
+    it('throws incorrect argument types', function() {
+      expect(() => Module.addPath.call(Module, null, 'foo'))
+        .to.throw(Error, 'Expected argument 1 to be of type string');
+      expect(() => Module.addPath.call(Module, 'foo', null))
+        .to.throw(Error, 'Expected paths for pattern "foo" to be array of strings');
+      expect(() => Module.addPath.call(Module, null))
+        .to.throw(Error, 'Expected argument 1 to be of type object');
+      expect(() => Module.addPath.call(Module, {}))
+        .to.throw(Error, 'Missing option "paths"');
+      expect(() => Module.addPath.call(Module, {baseUrl: 23, paths: {}}))
+        .to.throw(Error, 'Expected option "baseUrl" to be a string');
+      expect(() => Module.addPath.call(Module, {paths: {foo: './bar'}}))
+        .to.throw(Error, 'Expected paths for pattern "foo" to be array of strings');
+      expect(() => Module.addPath.call(Module, {paths: null}))
+        .to.throw(Error, 'Expected option "paths" to be an object');
+      expect(() => Module.addPath.call(Module, {paths: {foo: [null]}}))
+        .to.throw(Error, 'Expected paths for pattern "foo" to be array of strings');
+    });
+
+    it('throws for incorrect wildcard usage in path', function() {
+      expect(() => Module.addPath('foo/*', ['./bar']))
+        .to.throw(Error, 'Expected path "./bar" for pattern "foo/*" to contain exactly one "*"');
+      expect(() => Module.addPath('foo/*', ['./bar/*/foo/*']))
+        .to.throw(Error, 'Expected path "./bar/*/foo/*" for pattern "foo/*" to contain exactly one "*"');
+    });
+
+    it('throws for invalid path', function() {
+      expect(() => Module.addPath('foo', ['.bar']))
+        .to.throw(Error, 'Expected path ".bar" for pattern "foo" to start with "./"');
+      expect(() => Module.addPath('foo', ['/bar']))
+        .to.throw(Error, 'Expected path "/bar" for pattern "foo" to start with "./"');
+      expect(() => Module.addPath('foo', ['./bar/*']))
+        .to.throw(Error, 'Expected path "./bar/*" for pattern "foo" to not contain "*"');
+    });
+
+    it('throws for invalid baseUrl', function() {
+      expect(() => Module.addPath({baseUrl: 'foo', paths: {}}))
+        .to.throw(Error, 'Expected baseUrl to start with "/"');
+    });
+
+    it('throws if pattern is already defined', function() {
+      Module.addPath('foo', ['./bar']);
+      expect(() => Module.addPath('foo', ['./bar'])).to.throw(Error, 'Pattern "foo" is already registered');
+    });
+
+    describe('requests with exact match', function() {
+
+      it('throws if matching module was already successfully resolved', function() {
+        loaders['./node_modules/foo.js'] = module => module.exports = 'foo';
+        Module.root.require('foo');
+        expect(() => Module.addPath('foo', ['./bar']))
+          .to.throw('Can not add pattern "foo" since a matching module was already imported');
+      });
+
+      it('throws if matching module already failed to resolve', function() {
+        try {
+          Module.root.require('foo');
+        } catch (ex) {
+          // expected;
+        }
+        expect(() => Module.addPath('foo', ['./bar']))
+          .to.throw('Can not add pattern "foo" since a matching module was already imported');
+      });
+
+      it('maps from local module', function() {
+        Module.addPath('foo', ['./subfolder2/foo.js']);
+        loaders['./subfolder1/bar.js'] = mod => mod.exports = mod.require('foo').foo;
+        loaders['./subfolder2/foo.js'] = mod => mod.exports = {foo: mod};
+
+        expect(Module.root.require('./subfolder1/bar.js').id).to.equal('./subfolder2/foo.js');
+      });
+
+      it('maps with baseUrl', function() {
+        Module.addPath({baseUrl: '/subfolder2', paths: {foo: ['./foo.js']}});
+        loaders['./subfolder1/bar.js'] = mod => mod.exports = mod.require('foo').foo;
+        loaders['./subfolder2/foo.js'] = mod => mod.exports = {foo: mod};
+
+        expect(Module.root.require('./subfolder1/bar.js').id).to.equal('./subfolder2/foo.js');
+      });
+
+      it('maps with postfixes', function() {
+        Module.addPath('foo', ['./subfolder2/foo']);
+        loaders['./subfolder1/bar.js'] = mod => mod.exports = mod.require('foo').foo;
+        loaders['./subfolder2/foo.js'] = mod => mod.exports = {foo: mod};
+
+        expect(Module.root.require('./subfolder1/bar.js').id).to.equal('./subfolder2/foo.js');
+      });
+
+      it('maps multiple', function() {
+        Module.addPath({baseUrl: '/subfolder', paths: {
+          foo: ['./foo.js'],
+          bar: ['./bar.js']
+        }});
+        loaders['./subfolder/bar.js'] = mod => mod.exports = {bar: mod};
+        loaders['./subfolder/foo.js'] = mod => mod.exports = {foo: mod};
+
+        expect(Module.root.require('foo').foo.id).to.equal('./subfolder/foo.js');
+        expect(Module.root.require('bar').bar.id).to.equal('./subfolder/bar.js');
+      });
+
+      it('maps to all given paths', function() {
+        Module.addPath('foo', ['./subfolder3/foo.js', './subfolder2/foo.js']);
+        loaders['./subfolder1/bar.js'] = mod => mod.exports = mod.require('foo').foo;
+        loaders['./subfolder2/foo.js'] = mod => mod.exports = {foo: mod};
+
+        expect(Module.root.require('./subfolder1/bar.js').id).to.equal('./subfolder2/foo.js');
+      });
+
+      it('throws if no path provides matching module', function() {
+        Module.addPath('foo', ['./subfolder3/foo.js', './subfolder4/foo.js']);
+        loaders['./subfolder1/bar.js'] = mod => mod.exports = mod.require('foo').foo;
+        loaders['./subfolder2/foo.js'] = mod => mod.exports = mod;
+
+        expect(() => Module.root.require('./subfolder1/bar.js'))
+          .to.throw(Error, 'Cannot find module "foo" at "./subfolder3/foo.js" or "./subfolder4/foo.js"');
+      });
+
+      it('ignores requests from within node_modules', function() {
+        Module.addPath('foo', ['./subfolder2/foo.js']);
+        loaders['./node_modules/bar/index.js'] = mod => mod.exports = mod.require('foo').foo;
+        loaders['./node_modules/foo'] = mod => mod.exports = {foo: mod};
+        loaders['./subfolder2/foo.js'] = mod => mod.exports = {foo: mod};
+
+        expect(Module.root.require('bar').id).to.equal('./node_modules/foo');
+      });
+
+    });
+
+    describe('requests with wildcard match', function() {
+
+      it('throws if matching module was already successfully resolved', function() {
+        loaders['./node_modules/foo/foo.js'] = module => module.exports = 'foo';
+        Module.root.require('foo/foo.js');
+        expect(() => Module.addPath('foo/*', ['./bar/*']))
+          .to.throw('Can not add pattern "foo/*" since a matching module was already imported');
+      });
+
+      it('throws if matching module already failed to resolve', function() {
+        try {
+          Module.root.require('foo/foo.js');
+        } catch (ex) {
+          // expected;
+        }
+        expect(() => Module.addPath('foo/*', ['./bar/*']))
+          .to.throw('Can not add pattern "foo/*" since a matching module was already imported');
+      });
+
+      it('maps from local module', function() {
+        Module.addPath('foo/*', ['./subfolder2/*']);
+        loaders['./subfolder1/bar.js'] = mod => mod.exports = mod.require('foo/baz.js').foo;
+        loaders['./subfolder2/baz.js'] = mod => mod.exports = {foo: mod};
+
+        expect(Module.root.require('./subfolder1/bar.js').id).to.equal('./subfolder2/baz.js');
+      });
+
+      it('maps for specific postfix', function() {
+        Module.addPath('foo/*.js', ['./subfolder/*']);
+        loaders['./node_modules/foo/bar.js'] = mod => mod.exports = {bar: mod};
+        loaders['./subfolder/bar.js'] = mod => mod.exports = {bar: mod};
+
+        expect(Module.root.require('foo/bar').bar.id).to.equal('./node_modules/foo/bar.js');
+        expect(Module.root.require('foo/bar.js').bar.id).to.equal('./subfolder/bar.js');
+      });
+
+      it('maps with baseUrl', function() {
+        Module.addPath({baseUrl: '/dist', paths: {'foo/*': ['./subfolder2/*']}});
+        loaders['./dist/subfolder1/bar.js'] = mod => mod.exports = mod.require('foo/foo').foo;
+        loaders['./dist/subfolder2/foo.js'] = mod => mod.exports = {foo: mod};
+
+        expect(Module.root.require('./dist/subfolder1/bar.js').id).to.equal('./dist/subfolder2/foo.js');
+      });
+
+      it('maps best match', function() {
+        Module.addPath({baseUrl: '/dist', paths: {
+          'foo/*': ['./foo/*'],
+          'foo/bar/*': ['./baz/*']
+        }});
+        loaders['./dist/foo/bar.js'] = mod => mod.exports = {bar: mod};
+        loaders['./dist/baz/foo.js'] = mod => mod.exports = {foo: mod};
+
+        expect(Module.root.require('foo/bar').bar.id).to.equal('./dist/foo/bar.js');
+        expect(Module.root.require('foo/bar/foo').foo.id).to.equal('./dist/baz/foo.js');
+      });
+
+      it('maps to all given paths', function() {
+        Module.addPath({paths: {'foo/*': ['./subfolder3/*', './subfolder2/*']}});
+        loaders['./subfolder1/bar.js'] = mod => mod.exports = mod.require('foo/foo2').foo;
+        loaders['./subfolder2/foo2.js'] = mod => mod.exports = {foo: mod};
+
+        expect(Module.root.require('./subfolder1/bar.js').id).to.equal('./subfolder2/foo2.js');
+      });
+
+      it('throws if no path provides matching module', function() {
+        Module.addPath('foo/*', ['./subfolder3/*', './subfolder4/*']);
+        loaders['./subfolder1/bar.js'] = mod => mod.exports = mod.require('foo/foo').foo;
+        loaders['./subfolder2/foo.js'] = mod => mod.exports = mod;
+
+        expect(() => Module.root.require('./subfolder1/bar.js'))
+          .to.throw(Error, 'Cannot find module "foo/foo" at "./subfolder3/foo" or "./subfolder4/foo"');
+      });
+
+      it('ignores requests from within node_modules', function() {
+        Module.addPath('foo/*', ['./subfolder2/*']);
+        loaders['./node_modules/bar/index.js'] = mod => mod.exports = mod.require('foo/foo').foo;
+        loaders['./node_modules/foo/foo'] = mod => mod.exports = {foo: mod};
+        loaders['./subfolder2/foo.js'] = mod => mod.exports = {foo: mod};
+
+        expect(Module.root.require('bar').id).to.equal('./node_modules/foo/foo');
+      });
+
+    });
+
+  });
+
 });
