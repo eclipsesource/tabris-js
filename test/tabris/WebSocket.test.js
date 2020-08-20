@@ -24,10 +24,6 @@ describe('WebSocket', function() {
       expect(WebSocket).to.be.a('function');
     });
 
-    it('declares 2 formal parameters', function() {
-      expect(WebSocket.length).to.equal(2);
-    });
-
     it('fails when url parameter is omitted', function() {
       expect(() => new WebSocket())
         .to.throw('WebSocket url undefined is not a string');
@@ -43,9 +39,8 @@ describe('WebSocket', function() {
         .to.throw('WebSocket url has to have a scheme of \'ws\' or \'wss\' but is \'http\'');
     });
 
-    it('fails when protocol is omitted', function() {
-      expect(() => new WebSocket('ws://url.com'))
-        .to.throw('WebSocket protocol has too be a string or an array of strings');
+    it('accepts missing protocol', function() {
+      expect(() => new WebSocket('ws://url.com')).not.to.throw(Error);
     });
 
     it('fails when protocol is not string', function() {

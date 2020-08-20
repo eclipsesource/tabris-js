@@ -37,7 +37,7 @@ NativeObject.defineProperties(_WebSocket.prototype, {
 
 export default class WebSocket {
 
-  constructor(url, protocol) {
+  constructor(url, protocol = '') {
     if (typeof url !== 'string') {
       throw new Error(`WebSocket url ${toValueString(url)} is not a string`);
     }
