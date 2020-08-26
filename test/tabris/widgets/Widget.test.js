@@ -68,6 +68,10 @@ describe('Widget', function() {
       expect(widget).to.be.instanceof(Widget);
     });
 
+    it('accepts set(null)', function() {
+      expect(() => widget.set(null)).not.to.throw(Error);
+    });
+
     it('translates background color to a color shader', function() {
       widget.set({background: 'rgba(1, 2, 3, 0.5)'});
 
