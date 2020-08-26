@@ -138,7 +138,7 @@
       "command": "grunt",
       "args": [
         "exec:test_spec",
-        "--spec=${file}"
+        "--spec=${relativeFile}"
       ],
       "problemMatcher": []
     },
@@ -151,7 +151,7 @@
         "--require",
         "ts-node/register",
         "--bail",
-        "${file}"
+        "${relativeFile}"
       ],
       "options": {
         "env": {
