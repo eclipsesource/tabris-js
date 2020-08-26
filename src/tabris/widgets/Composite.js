@@ -56,7 +56,7 @@ export default class Composite extends Widget {
   }
 
   set(props) {
-    if (('children' in props) && !(props.children instanceof Function)) {
+    if (props && ('children' in props) && !(props.children instanceof Function)) {
       throw new Error('You may not override children with a non-function');
     }
     return super.set(props);
