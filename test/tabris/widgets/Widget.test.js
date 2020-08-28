@@ -239,10 +239,11 @@ describe('Widget', function() {
       expect(widget.id).to.equal('foo');
     });
 
-    it('gets id property from widget.id', function() {
+    it('can set id twice', function() {
       widget.id = 'foo';
+      widget.id = 'bar';
 
-      expect(widget.id).to.equal('foo');
+      expect(widget.id).to.equal('bar');
     });
 
     it('stores class property in widget.classList', function() {
