@@ -227,7 +227,10 @@ export default class Widget extends NativeObject {
   set id(value) {
     /** @type {string} */
     const id = types.string.convert(value);
-    Object.defineProperty(this, '_id', {enumerable: false, writable: false, value: id});
+    if (id === this._id) {
+      return;
+    }
+    Object.defineProperty(this, '_id', {enumerable: false, writable: true, value: id});
   }
 
   get id() {
