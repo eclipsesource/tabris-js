@@ -161,8 +161,8 @@
       "generics": [
         {
           "name": "Result",
-          "extends": "ChildType",
-          "default": "ChildType"
+          "extends": "Widget",
+          "default": "Widget"
         }
       ],
       "parameters": [

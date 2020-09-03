@@ -5,7 +5,9 @@ import {
   Tab,
   TabFolder,
   TabFolderScrollEvent,
-  TabFolderSelectEvent
+  TabFolderSelectEvent,
+  WidgetCollection,
+  TextView
 } from 'tabris';
 
 let widget: TabFolder = new TabFolder({tabBarLocation: 'top'});
@@ -22,6 +24,8 @@ let tabBarBackground: ColorValue;
 let selectedTabIndicatorTintColor: ColorValue;
 let badgeColor: ColorValue;
 let tabBarElevation: number;
+let tabs: WidgetCollection<Tab>;
+let child: TextView;
 
 paging = widget.paging;
 selection = widget.selection;
@@ -33,6 +37,8 @@ selectedTabTintColor = widget.selectedTabTintColor;
 tabBarBackground = widget.tabBarBackground;
 selectedTabIndicatorTintColor = widget.selectedTabIndicatorTintColor;
 tabBarElevation = widget.tabBarElevation;
+tabs = widget.children();
+child = widget.find(TextView).only();
 
 widget.paging = paging;
 widget.selection = selection;
