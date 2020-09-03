@@ -454,6 +454,10 @@
           {
             "name": "eventType",
             "type": "string"
+          },
+          {
+            "name": "listen",
+            "type": "boolean"
           }
         ],
         "description": "Sends a 'listen' operation to the native client."
