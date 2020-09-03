@@ -100,6 +100,11 @@ class CustomComponent extends Composite {
     self = this._apply({mode: 'default'}, {selectorString: properties});
     self = this._apply({mode: 'strict'}, () => ({selectorString: properties}));
     self = this._apply({mode: 'strict', trigger: 'update'}, widget => ({selectorString: {foo: widget.layout}}));
+    this._nativeSet('foo', 'bar');
+    const value = this._nativeGet('foo') as number;
+    this._nativeListen('foo', true);
+    this._nativeCall('foo', {data: true});
+    this._nativeCreate({data: true});
   }
 
   protected _initLayout(param: {layout?: Layout}) {
