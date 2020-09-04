@@ -160,6 +160,7 @@ const WHATWG = Object.freeze({
   ImageData,
   ImageBitmap,
   ProgressEvent,
+  Promise,
   Storage,
   WebSocket,
   XMLHttpRequest,
@@ -227,13 +228,22 @@ const OTHER = Object.freeze({
 const tabrisMain = Object.assign(new Tabris(), WIDGETS, POPUPS, WHATWG, NATIVE_OBJECT, UTILS, OTHER);
 
 /** @typedef {typeof tabrisMain} TabrisMain */
-module.exports = tabrisMain;
-// @ts-ignore
-global.tabris = tabrisMain;
-// @ts-ignore
-global.tabris.tabris = tabrisMain;
+if (typeof module !== 'undefined') { // Allow loading in browser
+  module.exports = tabrisMain;
+}
 
-Object.assign(global, WHATWG, {$});
+if (global.document) {
+  // Running in browser
+  global.tabris = tabrisMain;
+  global.JSX = tabrisMain.JSX;
+} else {
+  global.tabris = tabrisMain;
+  global.tabris.tabris = tabrisMain;
+  Object.assign(global, WHATWG, {$});
+  addDOMDocument(global);
+  addDOMEventTargetMethods(global);
+  addWindowTimerMethods(global);
+}
 
 tabrisMain.on('start', (options) => {
   // @ts-ignore
@@ -287,7 +297,3 @@ tabrisMain.on('start', (options) => {
     global.process = tabrisMain.process;
   }
 });
-
-addDOMDocument(global);
-addDOMEventTargetMethods(global);
-addWindowTimerMethods(global);

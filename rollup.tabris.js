@@ -6,7 +6,8 @@ export default {
   input: './src/tabris/main.js',
   output: {
     file: 'build/tabris-bundle.js',
-    format: 'cjs'
+    format: 'cjs',
+    intro: 'if (typeof global === \'undefined\') { window.global = window; }' // May be running in browser
   },
   plugins: [
     typescript({
