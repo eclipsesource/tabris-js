@@ -86,7 +86,7 @@ function setStackTraceStack(value) {
 }
 
 export default function Promise(fn) {
-  const stackTraceStack = [new Error().stack].concat(getStackTraceStack());
+  const stackTraceStack = [new Error().stack].concat(getStackTraceStack().slice(0, 10));
   if (typeof this !== 'object') {
     throw new TypeError('Promises must be constructed via new');
   }

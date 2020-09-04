@@ -240,7 +240,7 @@ export function getNativeObject(object) {
  * @param {any[]=} args
  */
 export function createNativeCallback(cb, target, args) {
-  const stackTraceStack = [new Error().stack].concat(tabris._stackTraceStack);
+  const stackTraceStack = [new Error().stack].concat(tabris._stackTraceStack.slice(0, 10));
   return function() {
     const oldStack = tabris._stackTraceStack;
     tabris._stackTraceStack = stackTraceStack;
