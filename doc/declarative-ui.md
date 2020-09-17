@@ -20,26 +20,53 @@ Introduced in Tabris.js 3.6, widget factories are mainly intended to be a pure J
 
 A widget factory is technically any function that returns a widget (which would include [functional components](#functional-components)), but in the context of this article it specifically refers to a widget constructor that can be called without `new`. When used in that manner the function will allow addition creation arguments ("attributes"), just like JSX elements.
 
-Unlike JSX this option does currently feature a databinding extension, and it is not applicable to dialogs.
+Unlike JSX this option does currently not feature a databinding extension, and it is not applicable to dialogs.
 
 ## Comparison
 
 Consult the following table to get an overview of how imperative UI, JSX and widget factories differ in syntax:
 
-Action | Imperative | Factory | JSX
----|---|---|--
-Create an instance|`new TextView()`|`TextView()`|`<TextView />`
-Set a string property|`new TextView({text: 'foo'})`|`TextView({text: 'foo'})`|`<TextView text='foo' />`
-Set non-string property*|`new TextView({elevation: 3})`|`TextView({elevation: 3})`|`<TextView elevation={3} />`
-Set property to true|`new TextView({markupEnabled: true})`|`TextView({markupEnabled: true})`|`<TextView markupEnabled />`
-Register listener|`new TextView().onResize(cb)`|`TextView({onResize: cb})`|`<TextView onResize={cb} />`
-Set properties object|`new TextView(props)`|`TextView(props)`|`<TextView {...props} />`
-Mix in properties object|`new TextView({text: 'foo', ...props})`|`new TextView({text: 'foo', ...props})`|`<TextView text='foo' {...props} />`
-Add new children|`new Composite().append(new TextView())`|`Composite({children: [TextView()]})`|`<Composite><TextView /></Composite>`
-Add existing children|`new Composite().append(children)`|`Composite({children})`|`<Composite>{children}</Composite>`
+Action | Example
+-|-
+**Create an instance**|
+Imperative|`new TextView()`
+Factory|`TextView()`
+JSX|`<TextView />`
+**Set a string property**|
+Imperative|`new TextView({text: 'foo'})`
+Factory|`TextView({text: 'foo'})`
+JSX|`<TextView text='foo' />`
+**Set non-string property**|
+Imperative|`new TextView({elevation: 3})`
+Factory|`TextView({elevation: 3})`
+JSX|`<TextView elevation={3} />`
+**Set property to true**|
+Imperative|`new TextView({markupEnabled: true})`
+Factory|`TextView({markupEnabled: true})`
+JSX|`<TextView markupEnabled />`
+**Register listener**|
+Imperative|`new TextView().onResize(cb)`
+Factory|`TextView({onResize: cb})`
+JSX|`<TextView onResize={cb} />`
+**Set properties object**|
+Imperative|`new TextView(props)`
+Factory|`TextView(props)`
+JSX|`<TextView {...props} />`
+**Mix in properties object**|
+Imperative|`new TextView({text: 'foo', ...props})`
+Factory|`new TextView({text: 'foo', ...props})`
+JSX|`<TextView text='foo' {...props} />`
+**Add new children**|
+Imperative|`new Composite().append(new TextView())`
+Factory|`Composite({children: [TextView()]})`
+JSX|`<Composite><TextView /></Composite>`
+**Add existing children**|
+Imperative|`new Composite().append(children)`
+Factory|`Composite({children})`
+JSX|`<Composite>{children}</Composite>`
 
 
-> :point-right: Listeners registered via declarative UI become "attached" listeners. There can only ever be one attached listener per type on each widget. This is rarely a relevant difference, with one exception: The [`apply`](#using-apply) method also registers "attached" listeners, meaning it can de-register any listener that was registered with JSX or factory API to register a new one.
+> :point_right: Listeners registered via declarative UI become "attached" listeners. There can only ever be one attached listener per type on each widget. This is rarely a relevant difference, with one exception: The [`apply`](#using-apply) method also registers "attached" listeners, meaning it can de-register any listener that was registered with JSX or factory API to register a new one.
 
 ## JSX specifics
 
@@ -152,7 +179,7 @@ export type ExampleComponent = internal.ExampleComponent;
 
 ### Data Binding
 
-> :point-right: Data binding currently only works with **JSX**.
+> :point_right: Data binding currently only works with **JSX**.
 
 Declarative data binding via JSX is provided by the [`tabris-decorators` extension](./databinding/index.md). Once installed in your project, you can do [one-way bindings](./databinding/@component.md) between a property of your custom component and the property of a child like this:
 
@@ -176,7 +203,7 @@ The `tabris-decorators` module also provides [two-way bindings](./databinding/@b
 
 ### Dialogs
 
-> :point-right: This is a **JSX**-only feature.
+> :point_right: This is a **JSX**-only feature.
 
 Dialogs can be created via JSX-syntax as well. This should be combined with the dialogs dedicated, static "open" method:
 
@@ -192,7 +219,7 @@ AlertDialog.open(
 
 In the *rare* case that the element API needs to be modified, you can do so by declaring a special (**TypeScript**-only) property called `jsxAttributes`. The *type* of this property defines what attributes are accepted. The property may *NOT* be assigned a value.
 
-> :point-right: Despite the name `jsxAttributes` is also affecting widget factories.
+> :point_right: Despite the name `jsxAttributes` is also affecting widget factories.
 
 The following example defines a JSX component that takes a "foo" attribute even though there is no matching property:
 
@@ -256,7 +283,7 @@ const StyledText = (attributes: Attributes<TextView>) =>
   TextView({textColor: 'red', ...attributes});
 ```
 
-> :point-right: The Attributes interface needs to be imported from `'tabris'`
+> :point_right: The Attributes interface needs to be imported from `'tabris'`
 
 If your IDE understands jsDocs with TypeScript types you can also do this in **JavaScript/JSX** files:
 
@@ -273,7 +300,7 @@ const StyledText = attributes => TextView({textColor: 'red', ...attributes});
 A function that is used a JSX-based functional component can also be used as a selector, as can its name:
 
 ```jsx
-console.log(contentView.find(StyledText).first() === contentView.find('StyledText').first());
+contentView.find(StyledText).first() === contentView.find('StyledText').first();
 ```
 
 **However**, this does not work out-of-the-box when using factory API. In this case you must associate the function itself with the widget it creates. This is done by passing it as the second parameter of the factory call:
@@ -325,7 +352,9 @@ Special care has to be taken to ensure the change listener is called for the ini
 function PersonView({data, ...other}) {
   return (<TextView {...other}/>)
     .onDataChanged(ev =>
-      ev.target.text = ev.value ? `This is now ${ev.value.firstName} ${ev.value.lastName}` : ''
+      ev.target.text = ev.value
+        ? `This is now ${ev.value.firstName} ${ev.value.lastName}`
+        : ''
     )
     .set({data}); // set data last!
 }
@@ -353,7 +382,9 @@ function PersonView(attributes: PersonDataAttr) {
   return widget
     .onDataChanged(ev => {
       const person = checkType(ev.value, Person, {nullable: true});
-      ev.target.text = person ? `This is now ${person.firstName} ${person.lastName}` : '';
+      ev.target.text = person
+        ? `This is now ${person.firstName} ${person.lastName}`
+        : '';
     })
     .set({data});
 }
@@ -369,7 +400,9 @@ function PersonView({data, ...other}) {
   return widget
     .onDataChanged(ev => {
       const person = checkType(ev.value, Person, {nullable: true});
-      ev.target.text = person ? `This is now ${person.firstName} ${person.lastName}` : '';
+      ev.target.text = person
+        ? `This is now ${person.firstName} ${person.lastName}`
+        : '';
     })
     .set({data});
 }
@@ -389,7 +422,9 @@ function PersonView(attributes) {
     </Composite>
   ).apply({trigger: 'onDataChanged'}, ({data}) => ({
     '#label': {
-      text: data instanceof Person ? `This is now ${data.firstName} ${data.lastName}` : ''
+      text: data instanceof Person
+        ? `This is now ${data.firstName} ${data.lastName}`
+        : ''
     }
   }));
 }
@@ -408,7 +443,9 @@ function PersonView(attr: PersonDataAttr) {
     </Composite>
   ) as Composite).apply({mode: 'strict', trigger: 'onDataChanged'}, ({data}) => ({
     '#label': Set(TextView, {
-      text: data instanceof Person ? `This is now ${data.firstName} ${data.lastName}` : ''
+      text: data instanceof Person
+        ? `This is now ${data.firstName} ${data.lastName}`
+        : ''
     })
   }));
 }
@@ -422,7 +459,9 @@ function PersonView(attr) {
   return Composite({children, ...attr}, PersonView)
     .apply({mode: 'strict', trigger: 'onDataChanged'}, ({data}) => ({
       '#label': Set(TextView, {
-        text: data instanceof Person ? `This is now ${data.firstName} ${data.lastName}` : ''
+        text: data instanceof Person
+          ? `This is now ${data.firstName} ${data.lastName}`
+          : ''
       })
     }));
 }

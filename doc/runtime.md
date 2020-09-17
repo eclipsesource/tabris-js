@@ -31,7 +31,7 @@ Notable supported features:
 Feature|Example
 --- | ---
 [Arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)|`(a, b) => a + b`
-[async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function)*|`await fn();`|`fn().then(cb);`
+[async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function)*|`await fn();`
 [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)|`class { … }`
 [const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)|`const a = 1;`
 [Default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters)|`function(a = 1) { … }`

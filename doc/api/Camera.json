@@ -88,12 +88,12 @@
                 },
                 "optional": true,
                 "default": "off",
-                "description": "Whether to enable or disable the device flashlight. If set to `'auto'` the device will decide (based on the lighting conditions) whether to activate the flashlight."
+                "description": "Whether to enable or disable the device flashlight."
               }
             }
           },
           "optional": true,
-          "description": "A set of capture options to apply when taking a picture."
+          "description": "A set of capture options to apply when taking a picture.</br></br>If `flash` is set to `'auto'` the device will decide (based on the lighting conditions) whether to activate the flashlight."
         }
       ],
       "returns": {
