@@ -207,7 +207,7 @@ The `StackLayout` is the default layout manager of the `Stack` widget, but can a
 
 Property | Type | Default Value | Description
 ---------|------|---------------|------------
-`alignment` | `string`&nbsp;(`'left'`,&nbsp;`'centerX'`,&nbsp;`'stretchX'`&nbsp;or&nbsp;`'right'`) | `'left'` | Determines the horizontal placement of the children
+`alignment` | `'left'` \| `'centerX'` \| `'stretchX'` \| `'right'` | `'left'` | Determines the horizontal placement of the children
 `spacing` | `number` | `0` | The default vertical distance between the children in device independent pixel
 
 The order in which the children are arranged **vertically** corresponds to the order in which they are appended to the composite. The first child is placed at the very top of the composite, the second below that, etc. The last widget will be placed below all others and any remaining space of the composite (if it is higher than needed) will be left blank. The order may be changed at any time by re-inserting a child at any given position using [`insertAfter`](./api/widget.md#insertafterwidget) and [`insertBefore`](./api/widget.md#insertbeforewidget).
@@ -281,7 +281,7 @@ The `RowLayout` is the default layout manager of the `Row` widget, but can also 
 
 Property | Type | Default Value | Description
 ---------|------|---------------|------------
-`alignment` | `string`&nbsp;(`'top'`,&nbsp;`'centerY'`,&nbsp;`'stretchY'`&nbsp;or&nbsp;`'bottom'`) | `'top'` | Determines the vertical placement of the children
+`alignment` | `'top'` \| `'centerY'` \| `'stretchY'` \| `'bottom'` | `'top'` | Determines the vertical placement of the children
 `spacing` | `number` | `0` | The default horizontal distance between the children in device independent pixel
 
 The order in which the children are arranged **horizontally** corresponds to the order in which they are appended to the composite. The first child is placed at the very left of the composite, the second to right next to it, etc. The last widget will be placed to the right of all others and any remaining space of the composite (if it is wider than needed) will be left blank. The order may be changed at any time by re-inserting a child at any given position using [`insertAfter`](./api/widget.md#insertafterwidget) and [`insertBefore`](./api/widget.md#insertbeforewidget).
