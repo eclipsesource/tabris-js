@@ -103,7 +103,7 @@
           },
           "action": {
             "type": "number",
-            "description": "A general-purpose parameter passed on when the event was triggered by one of the [static `select` methods](#selectev-action). This is meant to be used by the application to differentiate between different kind of interactions. It can be safely ignored if there is only one kind of selection, such as tapping a cell.</br></br>`tabris-decorators` exports a `ItemAction` enum defining 4 pre-defined values for use with this property: `Primary`, `Secondary`, `Toggle` and `Dismiss`. These are set when using the corresponding [trigger methods](#selectprimaryev)."
+            "description": "A general-purpose parameter passed on when the event was triggered by one of the [static `select` methods](#selectev-action). This is meant to be used by the application to differentiate between different kind of interactions. It can be safely ignored if there is only one kind of selection, such as tapping a cell.<br/><br/>`tabris-decorators` exports a `ItemAction` enum defining 4 pre-defined values for use with this property: `Primary`, `Secondary`, `Toggle` and `Dismiss`. These are set when using the corresponding [trigger methods](#selectprimaryev)."
           }
         },
         "description": "An event that may be triggered by a `Cell` as the result of any kind of user interaction. By default cells do not trigger `select` events, they have to be explicitly configured to do so. This can be done via the [`selectable`](./Cell.md#selectable) property on `Cell` or the static [`select`](#selectprimaryev) trigger methods."
