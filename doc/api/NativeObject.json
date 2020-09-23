@@ -32,7 +32,8 @@
     "_nativeType": {
       "readonly": true,
       "protected": true,
-      "type": "string"
+      "type": "string",
+      "separateAccessors": true
     },
     "_isDisposed": {
       "protected": true,

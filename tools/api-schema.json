@@ -291,6 +291,10 @@
           "description": "Exclude this property from documentation",
           "type": "boolean"
         },
+        "separateAccessors": {
+          "description": "Render declaration using separate getter and setter.",
+          "type": "boolean"
+        },
         "protected": {
           "description": "Mark property as protected",
           "type": "boolean"

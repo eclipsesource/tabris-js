@@ -14,12 +14,10 @@ widget.canGoForward = canGoForward;
 
 /*Expected
 (6,
-(7,
 (8,
 canGoBack
 
 (11,
-(12,
 (13,
 canGoForward
 */

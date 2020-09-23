@@ -415,18 +415,6 @@
               }
             ]
           }
-        },
-        {
-          "files": [
-            "*.d.ts"
-          ],
-          "rules": {
-            "max-len": "off",
-            "no-redeclare": "off",
-            "no-var": "off",
-            "@typescript-eslint/no-explicit-any": "off",
-            "@typescript-eslint/explicit-member-accessibility": "off"
-          }
         }
       ]
     }

@@ -24,26 +24,18 @@ widget.state = 'empty';
 
 /*Expected
 (6,
-(7,
-speed
 (8,
 speed
 
 (11,
-(12,
-position
 (13,
 position
 
 (16,
-(17,
-duration
 (18,
 duration
 
 (21,
-(22,
-state
 (23,
 state
 */

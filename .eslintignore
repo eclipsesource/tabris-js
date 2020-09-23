@@ -1,4 +1,4 @@
-tools/*.d.ts
+*.d.ts
 test/typescript/*
 build
 node_modules

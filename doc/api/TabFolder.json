@@ -95,7 +95,7 @@
         "selection": {
           "description": "The `Tap` selected by the user.",
           "type": "Tab",
-          "ts_type": "Target extends TabFolder ? Target['selection'] : Tab"
+          "ts_type": "Target extends TabFolder<any> ? Target['selection'] : Tab"
         }
       }
     },
@@ -105,7 +105,7 @@
         "selection": {
           "description": "The current value of the `selection` property.",
           "type": "Tab",
-          "ts_type": "Target extends TabFolder ? Target['selection'] : Tab"
+          "ts_type": "Target extends TabFolder<any> ? Target['selection'] : Tab"
         },
         "offset": {
           "description": "Number of pixels the current tab has scrolled horizontally.",
