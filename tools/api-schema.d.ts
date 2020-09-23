@@ -85,7 +85,7 @@ export interface Api {
   methods?: {
     /**
      * This interface was referenced by `undefined`'s JSON-Schema definition
-     * via the `patternProperty` "(^[_\$]?[a-z]\w+$)|(^\[.*\]$|^\$$)".
+     * via the `patternProperty` "(^[_\$]?[A-Za-z]\w+$)|(^\[.*\]$|^\$$)".
      */
     [k: string]: Method | Method[];
   };
@@ -152,6 +152,10 @@ export interface Property {
    * Exclude this property from documentation
    */
   ts_only?: boolean;
+  /**
+   * Render declaration using separate getter and setter.
+   */
+  separateAccessors?: boolean;
   /**
    * Mark property as protected
    */

@@ -18,7 +18,6 @@ type Omit<T, K extends string | symbol | number> = Pick<T, Exclude<keyof T, K>>;
 type ReadOnlyWidgetKeys<T> = T extends {readonly bounds: any}
   ? Extract<keyof T, 'bounds' | 'absoluteBounds' | 'cid' | 'jsxAttributes'>
   : never;
-type Diff<T, U> = T extends U ? never : T;
 type MethodKeysOf<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
 // Tabris.js Helper Types
 export type Properties<
@@ -41,7 +40,7 @@ export type JSXAttributes<
 export type Attributes<T extends JSXCandidate> = T['jsxAttributes'];
 type ExtendedEvent<EventData, Target = {}> = EventObject<Target> & EventData;
 export type Listener<T = {}> = (ev: ExtendedEvent<T>) => any;
-type ListenersTriggerParam<T> = {[P in Diff<keyof T, keyof EventObject<object>>]: T[P]};
+type ListenersTriggerParam<T> = Omit<T, keyof EventObject<any>>;
 type MinimalEventObject<T extends object> = {target: T};
 type TargetType<E extends object> = E extends MinimalEventObject<infer Target> ? Target : object;
 export interface Listeners<EventData extends {target: object}> {
@@ -361,9 +360,22 @@ function createProperty(name: string, properties: Properties, def: ExtendedApi, 
   const _static = isStatic ? 'static ' : '';
   const optional = property.optional ? '?' : '';
   const type = decodeType(property);
-  result.push(
-    `${accessor(property)}${_static}${readonly}${name}${optional}: ${type};`
-  );
+  if (property.separateAccessors) {
+    result.push(
+      `${accessor(property)}${_static}get ${name}(): ${type};`
+    );
+    result.push('\n\n');
+    if (!property.readonly) {
+      result.push('\n\n');
+      result.push(
+        `${accessor(property)}${_static}set ${name}(value: ${type});`
+      );
+    }
+  } else {
+    result.push(
+      `${accessor(property)}${_static}${readonly}${name}${optional}: ${type};`
+    );
+  }
   return result.join('\n');
 }
 

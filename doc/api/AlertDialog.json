@@ -51,30 +51,8 @@
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXAttributes<Omit<this, 'textInputs'>> & {children?: Flatten<string|TextInput>}"
+      "type": "JSXAttributes<this> & {children?: Flatten<string|TextInput>, textInputs?: never}"
     }
-  },
-  "methods": {
-    "set": [
-      {
-        "ts_only": true,
-        "generics": [
-          {
-            "name": "T",
-            "extends": "NativeObject",
-            "default": "this"
-          }
-        ],
-        "parameters": [
-          {
-            "name": "properties",
-            "type": "Properties<Omit<T, 'textInputs'>>"
-          }
-        ],
-        "description": "Sets all key-value pairs in the properties object.",
-        "returns": "this"
-      }
-    ]
   },
   "events": {
     "close": {

@@ -14,14 +14,10 @@ widget.lastVisibleIndex = lastVisibleIndex;
 
 /*Expected
 (6,
-(7,
-firstVisibleIndex
 (8,
 firstVisibleIndex
 
 (11,
-(12,
-lastVisibleIndex
 (13,
 lastVisibleIndex
 */

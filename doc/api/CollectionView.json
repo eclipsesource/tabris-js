@@ -152,7 +152,7 @@
         "parameters": [
           {
             "name": "properties",
-            "type": "Properties<Omit<T, 'firstVisibleIndex' | 'lastVisibleIndex'>> & Partial<Pick<this, 'cellHeight' | 'cellType' | 'createCell'>>"
+            "type": "Properties<T> & Partial<Pick<this, 'cellHeight' | 'cellType' | 'createCell'>>"
           }
         ],
         "description": "Sets all key-value pairs in the properties object as widget properties.\n\n**Important TypeScript note:** When called on `this` you may need to specify your custom type like this: `this.set<MyComponent>({propA: valueA});`",
