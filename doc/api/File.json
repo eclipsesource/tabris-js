@@ -24,7 +24,7 @@
             "lastModified": {"type": "number", "optional": true}
           }
         },
-        "description": "`type` represents the MIME type of the blob content. Defaults to empty string.<br/><br/>`lastModified` is a unix timestamp of the last known modification of the file. Defaults to the current time.",
+        "description": "`type` represents the MIME type of the blob content. Defaults to empty string. <br/><br/>`lastModified` is a unix timestamp of the last known modification of the file. Defaults to the current time.",
         "optional": true
       }
     ]

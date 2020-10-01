@@ -20,7 +20,7 @@
       ]
     },
     "namespace": false,
-    "description": "This widget is expected by [`ListView`](./ListView.md) as a child (in JSX) or turn value of `createCell`. It's data-binding enabled by default. It's children can also [not be selected](../selector.md#encapsulation) from the outside, except for using `apply` directly on the instance. This allows using it as a function component as demonstrated in [this example](https://github.com/eclipsesource/tabris-decorators/tree/v${moduleversion}/examples/listview-cells-js).",
+    "description": "This widget is expected by [`ListView`](./ListView.md) as a child (in JSX) or return value of `createCell`. It supports data-binding via JSX by default. Its children can also [not be selected](../selector.md#encapsulation) from the outside, except for using `apply` directly on the instance. This allows using it as a function component as demonstrated in [this example](https://github.com/eclipsesource/tabris-decorators/tree/v${moduleversion}/examples/listview-cells-js).",
     "properties": {
       "item": {
         "type": "ItemType",

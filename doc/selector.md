@@ -275,7 +275,7 @@ page.apply({
 
 > :point_right: The order of the properties in the object literal is meaningless. According to the EcmaScript standard the members of a JavaScript object do not have a defined order. The priority of two selectors with the same specificity is undefined.
 
-To ensure `apply` addresses the right widgets it can be executed in 'strict' mode and use the [`Set`](./api/utils.md#settarget-attributes) helper function to create the properties object. The kind of the selector then determines how many widgets must match (exactly one for id, at least one for any other), and `Set` determines what type the widget must have. If these conditions are not met an error will be thrown.
+To ensure `apply` addresses the right widgets, it can be executed in 'strict' mode and the [`Set`](./api/utils.md#settarget-attributes) helper function can be used to create the properties object. The kind of the selector then determines how many widgets must match (exactly one for id, at least one for any other), and `Set` determines what type the widget must have. If these conditions are not met, an error will be thrown.
 
 ```js
 page.apply('strict', {
