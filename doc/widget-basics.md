@@ -283,9 +283,9 @@ After a widget has been disposed `isDisposed()` returns `true` while almost all 
 
 ## Custom Components
 
-Custom components are user-defined subclasses of [`Composite`](./api/composite.md) (or other [`Component`](./api/composite.md) subclasses such as [`Page`](./api/Page.md) and [`Tab`](./api/composite.md)). They are composed of built-in widgets (or other custom components) to form a discrete part of the UI which can then be used (and re-used) to form the application UI as a whole. Custom components can define new properties and events to interaction with other parts of the application.
+Custom components are user-defined subclasses of [`Composite`](./api/composite.md) (or other [`Component`](./api/composite.md) subclasses such as [`Page`](./api/Page.md) and [`Tab`](./api/composite.md)). They are composed of built-in widgets (or other custom components) to form a discrete part of the UI which can then be used (and re-used) to form the application UI as a whole. Custom components can define new properties and events for interaction with other parts of the application.
 
-Typically a custom component creates its own children in its constructor and "hides" them from the public API by [overriding the `children` method](./selector.md#encapsulation) or applying the [`@component`](./databinding/@component.md) decorator (TypeScript only). The children are then modified using the protected selector API (eg [`_find`](./api/composite.md#_findselector)) as a to reaction to property changes.
+Typically a custom component creates its own children in its constructor and "hides" them from the public API by [overriding the `children` method](./selector.md#encapsulation) or applying the [`@component`](./databinding/@component.md) decorator (TypeScript only). The children are then modified using the protected selector API (e.g. [`_find`](./api/composite.md#_findselector)) as a reaction to property changes.
 
 A custom component with a custom `text` property and custom event `myEvent` may look like this in plain JavaScript:
 
@@ -384,7 +384,7 @@ export class ExampleComponent extends Composite {
 
 ## Functional Components
 
-A functional component is the term used for functions that return a widget or `WidgetCollection`, a.k.a a widget factory. Its name typically starts with an upper case, and it should take a single `properties` or `attributes` parameter object. In the latter latter case it needs to create widgets using [declarative UI syntax](./declarative-ui.md#functional-components).
+A functional component is the term used for functions that return a widget or `WidgetCollection`, a.k.a a widget factory. Its name typically starts with an upper case, and it should take a single `properties` or `attributes` parameter object. In the latter case it needs to create widgets using [declarative UI syntax](./declarative-ui.md#functional-components).
 
 A common use case for this is to create widgets that have different default values, such as a different background or text color.
 

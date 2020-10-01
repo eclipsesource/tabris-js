@@ -193,7 +193,7 @@
               }
             }
           },
-          "description": "The data to share. The object must contain at least one of the properties: `title`, `text`, `url` or `files`. The files need to have a `name` and mime `type` set.<br/><br/>On iOS the content of the `url` is previewed in the native share dialog. On Android it is treated as regular text. When both `text` and `url` are given on Android the two strings are concatenated with a blank space as defined in the [W3C Web Share API](https://www.w3.org/TR/web-share/)."
+          "description": "The data to share. The object must contain at least one of the properties: `title`, `text`, `url` or `files`. The files need to have a `name` and mime `type` set. <br/><br/>On iOS the content of the `url` is previewed in the native share dialog. On Android it is treated as regular text. When both `text` and `url` are given on Android the two strings are concatenated with a blank space as defined in the [W3C Web Share API](https://www.w3.org/TR/web-share/)."
         }
       ],
       "returns": {
