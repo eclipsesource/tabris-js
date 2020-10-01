@@ -18,5 +18,5 @@ result.then((response) => {
 
 let request: Request = new Request('input', {body: 'foo'});
 request = new Request('input', {body: new Blob()});
-request = new Request('input', {body: new FormData()});
+request = new Request('input', {body: new FormData(), timeout: 400});
 let fetchWithRequest: Promise<Response> = fetch(request);
