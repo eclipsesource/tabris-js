@@ -130,6 +130,13 @@ describe('Crypto', function() {
       expect(buffer[2]).to.equal(0xffffffff);
     });
 
+    it('returns given array', function() {
+      const buffer = new Uint32Array(3);
+      returnValue = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1, 255, 255, 255, 255]);
+
+      expect(crypto.getRandomValues(buffer)).to.equal(buffer);
+    });
+
   });
 
 });

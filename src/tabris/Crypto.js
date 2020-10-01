@@ -20,6 +20,7 @@ export default class Crypto extends NativeObject {
       throw new Error('Not enough random bytes available');
     }
     new Uint8Array(typedArray.buffer).set(values);
+    return typedArray;
   }
 
 }
