@@ -102,11 +102,11 @@ module.exports = function(grunt) {
       test_tabris: {
         cmd: 'node node_modules/mocha/bin/mocha --colors --require ts-node/register '
           + '"test/tabris/**/*.test.js" test/tabris/**/*.test.ts"',
-        options: {env: Object.assign({TS_NODE_PROJECT: './test/tabris/tsconfig.json'}, process.env)}
+        options: {env: Object.assign({TS_NODE_PROJECT: './tsconfig.json'}, process.env)}
       },
       test_spec: {
         cmd: `node node_modules/mocha/bin/mocha --colors --require ts-node/register "${grunt.option('spec')}"`,
-        options: {env: Object.assign({TS_NODE_PROJECT: './test/tabris/tsconfig.json'}, process.env)}
+        options: {env: Object.assign({TS_NODE_PROJECT: './tsconfig.json'}, process.env)}
       },
       eslint: {
         cmd: 'npx eslint --color --f visualstudio --ext .js,.jsx,.ts,.tsx .'

@@ -235,17 +235,19 @@
         "ecmaVersion": 2018,
         "sourceType": "module",
         "project": [
-          "./test/tabris/tsconfig.json",
-          "./test/boot/tsconfig.json",
           "./doc/tsconfig.json",
           "./snippets/tsconfig.json",
-          "./tools/tsconfig.json"
+          "./tools/tsconfig.json",
+          "./src/boot/tsconfig.json",
+          "./test/boot/tsconfig.json",
+          "./tsconfig.json"
         ]
       },
       "rules": {
         "no-invalid-this": "off", // see typescript-eslint issue 491
         "no-dupe-class-members": "off", // allow overload syntax
         "semi": "off", // handled better by "@typescript-eslint/semi"
+        "no-unused-vars": "off",
         "@typescript-eslint/adjacent-overload-signatures": "error",
         "@typescript-eslint/array-type": [
           "error",

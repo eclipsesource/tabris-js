@@ -6,16 +6,17 @@
     "checkJs": false,
     "allowJs": true,
     "noImplicitUseStrict": true,
-    "lib": ["es2017"]
+    "lib": ["es2017"],
+    "moduleResolution": "node"
   },
   "ts-node": {
     "files": true
   },
   "include": [
-    "./**/*.test.ts",
-    "./**/*.test.js",
-    "../test.js",
-    "../../src/tabris/**/*.ts",
-    "../../src/tabris/**/*.js"
+    "./test/**/*.ts",
+    "./test/**/*.js",
+    "./src/tabris/*.ts",
+    "./src/tabris/*.js",
+    "./src/test.js"
   ]
 }

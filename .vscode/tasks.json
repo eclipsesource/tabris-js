@@ -155,7 +155,7 @@
       ],
       "options": {
         "env": {
-          "TS_NODE_PROJECT": "./test/tabris/tsconfig.json"
+          "TS_NODE_PROJECT": "./tsconfig.json"
         }
       },
       "group": {
