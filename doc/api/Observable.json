@@ -1,0 +1,85 @@
+{
+  "type": "Observable",
+  "category": "core",
+  "generics": [{
+    "name": "T",
+    "description": "The type of the observed value."
+  }],
+  "constructor": {
+    "access": "public",
+    "parameters": [
+      {
+        "name": "subscribe",
+        "type": {
+          "interface": "SubscriptionHandler",
+          "generics": ["T"]
+        },
+        "description": "Invoked whenever a new subscriber is registered. Passed an [object](${doc:SubscriberUrl}) through which values may be passed to the subscriber."
+      }
+    ]
+  },
+  "description": "An Observable represents a sequence of values which may be observed. API based on the proposed Ecma TC39 Observable standard. It can be converted to an RxJS Observable via its [`from`](https://rxjs.dev/api/index/function/from) function.",
+  "methods": {
+    "subscribe": [
+      {
+        "parameters": [
+          {
+            "name": "observer",
+            "type": {
+              "interface": "PartialObserver",
+              "generics": ["T"]
+            },
+            "description": "Object with some or all of the callbacks of ${doc:Subscriber}."
+          }
+        ],
+        "returns": "Subscription",
+        "description": "Subscribes to this observable."
+      },
+      {
+        "parameters": [
+          {
+            "name": "next",
+            "type": {
+              "callback": [{"name": "value", "type": "T"}],
+              "returns": {"type": "any"}
+            },
+            "ts_type": "NextCb<T> | null",
+            "description": "Callback invoked whenever the observed value changes."
+          },
+          {
+            "name": "error",
+            "type": {
+              "callback": [{"name": "error", "type": "any"}],
+              "returns": {"type": "any"}
+            },
+            "ts_type": "ErrorCb | null",
+            "optional": true,
+            "description": "Callback invoked when the subscription encounters an error."
+          },
+          {
+            "name": "complete",
+            "type": {
+              "callback": [],
+              "returns": {"type": "any"}
+            },
+            "ts_type": "CompleteCb | null",
+            "optional": true,
+            "description": "Callback invoked once when the subscription closes, either by itself or by calling `unsubscribe`. No other callbacks will be invoked from then on."
+          }
+        ],
+        "returns": "Subscription",
+        "description": "Subscribes to this observable."
+      }
+    ],
+    "[Symbol.observable]": {
+      "ts_only": true,
+      "returns": "this"
+    }
+  },
+  "relatedTypes": {
+    "SubscriptionHandler": "subscriptionhandlert",
+    "Subscriber": "subscribert",
+    "PartialObserver": "partialobservert",
+    "Subscription": "subscription"
+  }
+}

@@ -45,6 +45,7 @@ module.exports = function(grunt) {
       resourcesDataTypes: 'src/tabris/resourcesDataTypes.d.ts',
       reExports: 'typings/reExports.d.ts',
       globalTypings: 'typings/global/*.d.ts',
+      ObservableTypes: 'src/tabris/Observable.types.d.ts',
       target: 'build/doc/'
     },
     copy: {
@@ -165,11 +166,17 @@ module.exports = function(grunt) {
     const propertyTypes = grunt.file.read(grunt.config('doc').propertyTypes);
     const reExports = grunt.file.read(grunt.config('doc').reExports);
     const resourcesDataTypes = grunt.file.read(grunt.config('doc').resourcesDataTypes);
+    const observableTypes = grunt.file.read(grunt.config('doc').ObservableTypes);
     const globalTypeDefFiles = grunt.file.expand(grunt.config('doc').globalTypings);
     try {
       generateDts({
         files,
-        localTypeDefFiles: [propertyTypes, reExports, resourcesDataTypes].join('\n\n'),
+        localTypeDefFiles: [
+          propertyTypes,
+          reExports,
+          resourcesDataTypes,
+          observableTypes.split('\n\n').slice(1).join('\n\n') // remove imports
+        ].join('\n\n'),
         globalTypeDefFiles,
         version
       });

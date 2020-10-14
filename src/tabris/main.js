@@ -54,6 +54,7 @@ import Layout, {ConstraintLayout} from './Layout';
 import LayoutData from './LayoutData';
 import Listeners, {ChangeListeners} from './Listeners';
 import LinearGradient from './LinearGradient';
+import Observable from './Observable';
 import Page from './widgets/Page';
 import PdfView from './widgets/PdfView';
 import Percent from './Percent';
@@ -212,6 +213,7 @@ const OTHER = Object.freeze({
   LayoutData,
   Listeners,
   LinearGradient,
+  Observable,
   Percent,
   Permission,
   Process,

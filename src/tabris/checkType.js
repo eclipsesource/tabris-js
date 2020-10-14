@@ -76,7 +76,7 @@ export function getTypeName(type) {
  * @param {any} value
  * @returns {string}
  **/
-function getValueTypeName(value) {
+export function getValueTypeName(value) {
   if (value != null && isPrimitiveType(value.constructor)) {
     return value.constructor.name.toLowerCase();
   }
