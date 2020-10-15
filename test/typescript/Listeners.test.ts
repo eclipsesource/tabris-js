@@ -109,3 +109,4 @@ Listeners.getListenerStore({}).trigger('foo', {});
 // observable
 let observable: Observable<MyFooEvent> = myFooListeners;
 myFooListeners.subscribe(myFooListener).unsubscribe();
+let values: Observable<string> = myChangeListeners.values;

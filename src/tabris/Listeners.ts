@@ -118,22 +118,6 @@ interface Listeners {
 
 export default Listeners;
 
-export class ChangeListeners extends Listeners {
-
-  constructor(target: object, property: string) {
-    propertyCheck(target, property);
-    super(target, property + 'Changed');
-  }
-
-  public trigger(eventData?: object) {
-    if (!eventData || !('value' in eventData)) {
-      throw new Error('Can not trigger change event without "value" property in event data');
-    }
-    return super.trigger(eventData);
-  }
-
-}
-
 export function attributesWithoutListener(attributes: object) {
   return omit(attributes, Object.keys(attributes).filter(isListenerAttribute));
 }
@@ -176,10 +160,4 @@ function getEventListeners(attributes: Attributes) {
     }
   }
   return listeners;
-}
-
-function propertyCheck(target: TargetCandidate, property: string) {
-  if (!(property in target)) {
-    throw new Error(`Target has no property "${property}"`);
-  }
 }

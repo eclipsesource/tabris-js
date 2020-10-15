@@ -2,7 +2,8 @@ import {types, PropertyTypes} from './property-types';
 import {hint, toXML} from './Console';
 import EventObject from './EventObject';
 import {EventsClass} from './Events';
-import Listeners, {ChangeListeners} from './Listeners';
+import Listeners from './Listeners';
+import ChangeListeners from './ChangeListeners';
 import {allowOnlyValues, allowOnlyKeys, equals} from './util';
 
 export default abstract class NativeObject extends EventsClass {

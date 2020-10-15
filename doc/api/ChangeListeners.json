@@ -20,7 +20,7 @@
       }
     ]
   },
-  "description": "A convenience type that extends the `Listeners` type to perform some additional checks when handling change events.",
+  "description": "Represents a collection of listeners for a property change event. Differs from its superclass in the constructor signature and the additional [`values`](#values) property.",
   "constructor": {
     "access": "public",
     "parameters": [
@@ -33,6 +33,15 @@
         "type": "Property"
       }
     ]
+  },
+  "properties": {
+    "values": {
+      "readonly": true,
+      "type": "Observable",
+      "ts_type": "Observable<Target[Property]>",
+      "const": true,
+      "description": "An observable instance that directly provides the changed values instead of the event object. Also, the current value will be emitted immediately upon subscription. Completes when the target is disposed."
+    }
   },
   "relatedTypes": {
     "PropertyChangedEvent": "propertychangedeventtargettype-valuetype"

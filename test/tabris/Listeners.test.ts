@@ -1,9 +1,11 @@
 import {expect, match, restore, spy, stub} from '../test';
 import EventObject from '../../src/tabris/EventObject';
 import NativeObject from '../../src/tabris/NativeObject';
-import Listeners, {ChangeListeners} from '../../src/tabris/Listeners';
+import Listeners from '../../src/tabris/Listeners';
+import ChangeListeners from '../../src/tabris/ChangeListeners';
 import {SinonStub} from 'sinon';
 import {from} from 'rxjs';
+import Observable from '../../src/tabris/Observable';
 
 describe('Listeners', function() {
 
@@ -377,31 +379,27 @@ describe('Listeners', function() {
 
   describe('created via ChangeListeners constructor', function() {
 
-    it('sets type and target', function() {
-      target = {foo: 'bar'};
-      const changeListeners = new ChangeListeners(target, 'foo');
+    let changeListeners: ChangeListeners<{foo: string}, 'foo'>;
 
+    beforeEach(function() {
+      target = {foo: 'bar'};
+      changeListeners = new ChangeListeners(target, 'foo');
+    });
+
+    it('sets type and target', function() {
       expect(changeListeners.target).to.equal(target);
       expect(changeListeners.type).to.equal('fooChanged');
     });
 
     it('sets original with correct prototype', function() {
-      target = {foo: 'bar'};
-      const changeListeners = new ChangeListeners(target, 'foo');
-
       expect(changeListeners.original).to.be.instanceOf(ChangeListeners);
     });
 
     it('throws if property is missing', function() {
-      target = {foo: 'bar'};
       expect(() => new ChangeListeners(target, 'bar2')).to.throw('Target has no property "bar2"');
     });
 
     it('creates delegate function', function() {
-      target = {foo: 'bar'};
-      const changeListeners = new ChangeListeners(target, 'foo');
-
-      // @ts-ignore
       changeListeners(listener);
       changeListeners.trigger({value: 'x'});
 
@@ -410,14 +408,43 @@ describe('Listeners', function() {
     });
 
     it('makes trigger throw when property value is missing', function() {
-      target = {foo: 'bar'};
-      const changeListeners = new ChangeListeners(target, 'foo');
-      // @ts-ignore
       changeListeners(listener);
 
-      expect(() => changeListeners.trigger({notthevalue: 'x'})).to.throw(
+      expect(() => changeListeners.trigger({notthevalue: 'x'} as any)).to.throw(
         'Can not trigger change event without "value" property in event data'
       );
+    });
+
+    describe('values', function() {
+
+      it('is Observable instance', function() {
+        expect(changeListeners.values).to.be.instanceOf(Observable);
+        expect(changeListeners.values).to.equal(changeListeners.values);
+      });
+
+      it('provides current value', function() {
+        changeListeners.values.subscribe(listener);
+        expect(listener).to.have.been.calledOnce;
+        expect(listener).to.have.been.calledWith('bar');
+      });
+
+      it('provides future values', function() {
+        changeListeners.values.subscribe(listener);
+
+        changeListeners.trigger({value: 'baz'});
+
+        expect(listener).to.have.been.calledWith('bar');
+        expect(listener).to.have.been.calledWith('baz');
+      });
+
+      it('completes on dispose', function() {
+        changeListeners.values.subscribe(null, null, listener);
+
+        new Listeners(target, 'dispose').trigger();
+
+        expect(listener).to.have.been.calledOnce;
+      });
+
     });
 
   });
