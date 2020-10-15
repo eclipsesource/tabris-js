@@ -85,7 +85,10 @@ function setStackTraceStack(value) {
   }
 }
 
-export default function Promise(fn) {
+// Rollup may rename the Promise function ("name" property) if it (falsely)
+// detects a clash with the presumed native Promise function (which only
+// exists in node/test environment). Assigning it resolves this issue.
+const Promise = function Promise(fn) {
   const stackTraceStack = [new Error().stack].concat(getStackTraceStack().slice(0, 10));
   if (typeof this !== 'object') {
     throw new TypeError('Promises must be constructed via new');
@@ -102,7 +105,10 @@ export default function Promise(fn) {
   });
   if (fn === noop) {return;}
   doResolve(fn, this);
-}
+};
+
+export default Promise;
+
 Promise._noop = noop;
 
 Promise.prototype.then = function(onFulfilled, onRejected) {

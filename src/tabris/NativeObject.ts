@@ -1,12 +1,9 @@
 import {types, PropertyTypes} from './property-types';
 import {hint, toXML} from './Console';
 import EventObject from './EventObject';
-import Events from './Events';
+import {EventsClass} from './Events';
 import Listeners, {ChangeListeners} from './Listeners';
 import {allowOnlyValues, allowOnlyKeys, equals} from './util';
-
-const EventsClass = class {} as Constructor<Omit<typeof Events, '_listen'>>;
-Object.assign(EventsClass.prototype, Events);
 
 export default abstract class NativeObject extends EventsClass {
 
@@ -283,7 +280,7 @@ export default abstract class NativeObject extends EventsClass {
 
   protected _nativeCreate(param: any) {
     this._register();
-    tabris._nativeBridge.create(this.cid, this._nativeType);
+    tabris._nativeBridge!.create(this.cid, this._nativeType);
     if (param instanceof Object) {
       this.set(param);
     }
@@ -293,7 +290,7 @@ export default abstract class NativeObject extends EventsClass {
     if (typeof tabris === 'undefined' || !tabris._nativeBridge) {
       throw new Error('tabris.js not started');
     }
-    const cid = tabris._nativeObjectRegistry.register(this);
+    const cid = tabris._nativeObjectRegistry!.register(this);
     Object.defineProperty(this, 'cid', {value: cid});
   }
 
@@ -311,9 +308,9 @@ export default abstract class NativeObject extends EventsClass {
       this._trigger('dispose');
       this._release();
       if (!skipNative) {
-        tabris._nativeBridge.destroy(this.cid);
+        tabris._nativeBridge!.destroy(this.cid);
       }
-      tabris._nativeObjectRegistry.remove(this.cid);
+      tabris._nativeObjectRegistry!.remove(this.cid);
       this.$props = null;
       Object.defineProperty(
         this, '_isDisposed', {enumerable: false, writable: false, value: true}
@@ -341,7 +338,7 @@ export default abstract class NativeObject extends EventsClass {
 
   protected _nativeListen(event: string, state: boolean) {
     this._checkDisposed();
-    tabris._nativeBridge.listen(this.cid, event, state);
+    tabris._nativeBridge!.listen(this.cid, event, state);
   }
 
   protected _trigger(name: string, eventData = {}) {
@@ -375,17 +372,17 @@ export default abstract class NativeObject extends EventsClass {
 
   protected _nativeSet(name: string, value: unknown) {
     this._checkDisposed();
-    tabris._nativeBridge.set(this.cid, name, value === undefined ? null : value);
+    tabris._nativeBridge!.set(this.cid, name, value === undefined ? null : value);
   }
 
   protected _nativeGet(name: string) {
     this._checkDisposed();
-    return tabris._nativeBridge.get(this.cid, name);
+    return tabris._nativeBridge!.get(this.cid, name);
   }
 
   protected _nativeCall(method: string, parameters: object) {
     this._checkDisposed();
-    return tabris._nativeBridge.call(this.cid, method, parameters);
+    return tabris._nativeBridge!.call(this.cid, method, parameters);
   }
 
   protected _getXMLHeader(hasChild: boolean) {
@@ -498,7 +495,7 @@ function normalizeType(
         return value ? value.cid : null;
       },
       decode(value) {
-        return value ? tabris._nativeObjectRegistry.find(value) : null;
+        return value ? tabris._nativeObjectRegistry!.find(value) : null;
       }
     };
   }

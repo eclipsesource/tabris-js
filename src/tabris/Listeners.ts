@@ -3,23 +3,37 @@ import {toValueString} from './Console';
 import {listenersStore as storeSym} from './symbols';
 import {omit} from './util';
 
-const DELEGATE_FIELDS = ['promise', 'addListener', 'removeListener', 'once', 'trigger', 'triggerAsync'];
+const DELEGATE_FIELDS: Array<keyof Listeners> = [
+  'promise', 'addListener', 'removeListener', 'once', 'trigger', 'triggerAsync'
+];
 
-export default class Listeners {
+type Store = typeof Events;
 
-  static getListenerStore(target) {
-    // NOTE: we do not use an instanceof NativeObject check here since
-    // importing NativeObject causes circular dependency issues
+interface Attributes {
+  [attribute: string]: any;
+}
+
+interface TargetCandidate {
+  [storeSym]?: Store;
+  on?: Function;
+  jsxAttributes?: Attributes;
+}
+
+class Listeners {
+
+  public static getListenerStore(target: TargetCandidate): Store {
     if (target.on instanceof Function) {
-      return target;
+      return target as unknown as Store;
     }
     if (!target[storeSym]) {
       target[storeSym] = Object.assign({$eventTarget: target}, Events);
     }
-    return target[storeSym];
+    return target[storeSym] as Store;
   }
 
-  constructor(target, type) {
+  private readonly store: Store;
+
+  constructor(public readonly target: object, public readonly type: string) {
     if (arguments.length < 1) {
       throw new Error('Missing target instance');
     }
@@ -36,75 +50,87 @@ export default class Listeners {
       throw new Error(`Invalid event type string, did you mean "${type[2].toLowerCase() + type.slice(3)}"?`);
     }
     this.store = Listeners.getListenerStore(target);
-    const delegate = this.addListener.bind(this);
-    delegate.target = this.target = target;
-    delegate.type = this.type = type;
-    delegate.original = this.original;
+    const original = this as any;
+    const delegate: any = Object.assign(
+      this.addListener.bind(this),
+      {original, target, type}
+    );
     for (const key of DELEGATE_FIELDS) {
-      delegate[key] = this[key] = this[key].bind(this);
+      delegate[key] = original[key] = original[key].bind(this);
     }
     return delegate;
   }
 
-  get original() {
+  public get original() {
     return this;
   }
 
-  trigger(eventData) {
+  public trigger(eventData?: object) {
     this.store.trigger(this.type, eventData);
     return this.target;
   }
 
-  triggerAsync(eventData) {
+  public async triggerAsync(eventData?: object) {
     return this.store.triggerAsync(this.type, eventData).then(() => this.target);
   }
 
-  promise() {
+  public async promise() {
     return new Promise(resolve => this.once(resolve));
   }
 
-  once(listener) {
+  public once(listener: Function) {
     this.store.once(this.type, listener);
     return this.target;
   }
 
-  addListener(listener) {
+  public addListener(listener: Function) {
     this.store.on(this.type, listener);
     return this.target;
   }
 
-  removeListener(listener) {
+  public removeListener(listener: Function) {
     this.store.off(this.type, listener);
     return this.target;
   }
 
 }
 
+interface Listeners {
+  // eslint-disable-next-line @typescript-eslint/prefer-function-type
+  (listener: Function): this;
+}
+
+export default Listeners;
+
 export class ChangeListeners extends Listeners {
 
-  constructor(target, property) {
+  constructor(target: object, property: string) {
     propertyCheck(target, property);
     super(target, property + 'Changed');
   }
 
-  trigger(eventData) {
-    if (!('value' in eventData)) {
+  public trigger(eventData?: object) {
+    if (!eventData || !('value' in eventData)) {
       throw new Error('Can not trigger change event without "value" property in event data');
     }
-    super.trigger(eventData);
+    return super.trigger(eventData);
   }
 
 }
 
-export function attributesWithoutListener(attributes) {
+export function attributesWithoutListener(attributes: object) {
   return omit(attributes, Object.keys(attributes).filter(isListenerAttribute));
 }
 
-export function registerListenerAttributes(obj, attributes, attached) {
+export function registerListenerAttributes(
+  obj: TargetCandidate,
+  attributes: Attributes,
+  attached: object
+) {
   if (!obj.jsxAttributes) {
     obj.jsxAttributes = {};
   }
-  const attachedListeners = attached || obj.jsxAttributes;
+  const attachedListeners: Attributes = attached || obj.jsxAttributes;
   const newListeners = getEventListeners(attributes);
   const store = Listeners.getListenerStore(obj);
   Object.keys(newListeners).forEach(type => {
@@ -121,12 +147,12 @@ export function registerListenerAttributes(obj, attributes, attached) {
   });
 }
 
-export function isListenerAttribute(attribute) {
+export function isListenerAttribute(attribute: string) {
   return attribute.startsWith('on') && attribute.charCodeAt(2) <= 90;
 }
 
-function getEventListeners(attributes) {
-  const listeners = {};
+function getEventListeners(attributes: Attributes) {
+  const listeners: {[event: string]: Function} = {};
   for (const attribute in attributes) {
     if (isListenerAttribute(attribute)) {
       const event = attribute[2].toLocaleLowerCase() + attribute.slice(3);
@@ -136,7 +162,7 @@ function getEventListeners(attributes) {
   return listeners;
 }
 
-function propertyCheck(target, property) {
+function propertyCheck(target: TargetCandidate, property: string) {
   if (!(property in target)) {
     throw new Error(`Target has no property "${property}"`);
   }

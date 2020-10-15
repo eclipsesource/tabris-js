@@ -2,17 +2,19 @@ import {expect, match, restore, spy, stub} from '../test';
 import EventObject from '../../src/tabris/EventObject';
 import NativeObject from '../../src/tabris/NativeObject';
 import Listeners, {ChangeListeners} from '../../src/tabris/Listeners';
+import {SinonStub} from 'sinon';
 
 describe('Listeners', function() {
 
   class MyExtendedEvent extends EventObject { }
   const type = 'myEventType';
   const fooType = 'myFooEventType';
+  const UntypedListeners: any = Listeners;
   let target;
   let fooTarget;
-  let myListeners;
-  let myFooListeners;
-  let listener;
+  let myListeners: Listeners;
+  let myFooListeners: Listeners;
+  let listener: SinonStub;
 
   beforeEach(function() {
     target = {targetType: true};
@@ -27,14 +29,14 @@ describe('Listeners', function() {
   describe('constructor', function() {
 
     it('throws for wrong target', function() {
-      expect(() => new Listeners()).to.throw('Missing target instance');
-      expect(() => new Listeners(null)).to.throw('Target null is not an object');
-      expect(() => new Listeners(true)).to.throw('Target true is not an object');
+      expect(() => new UntypedListeners()).to.throw('Missing target instance');
+      expect(() => new UntypedListeners(null)).to.throw('Target null is not an object');
+      expect(() => new UntypedListeners(true)).to.throw('Target true is not an object');
     });
 
     it('throws for wrong type', function() {
-      expect(() => new Listeners({})).to.throw('Missing event type string');
-      expect(() => new Listeners({}, true)).to.throw('Event type true is not a string');
+      expect(() => new UntypedListeners({})).to.throw('Missing event type string');
+      expect(() => new UntypedListeners({}, true)).to.throw('Event type true is not a string');
       expect(() => new Listeners({}, '')).to.throw('Missing event type string');
     });
 
@@ -210,6 +212,7 @@ describe('Listeners', function() {
     });
 
     it('prints error of async listeners', done => {
+      // eslint-disable-next-line @typescript-eslint/promise-function-async
       function asyncListener() {
         return Promise.reject('someError');
       }
@@ -227,9 +230,11 @@ describe('Listeners', function() {
 
     describe('with NativeObject target', function() {
 
-      const PseudoNativeObject = function() {};
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      const PseudoNativeObject: typeof NativeObject = function(/* noop */) {} as any;
       PseudoNativeObject.prototype = NativeObject.prototype;
       class MyNativeObject extends PseudoNativeObject {
+        public onMyEvent: Listeners;
         constructor() {
           super();
           this.onMyEvent = new Listeners(this, 'myEvent');
@@ -244,7 +249,7 @@ describe('Listeners', function() {
         expect(listener).to.have.been.calledOnce;
       });
 
-      it('treggers events on NativeObjects', function() {
+      it('triggers events on NativeObjects', function() {
         const object = new MyNativeObject();
         object.onMyEvent(listener);
         object.trigger('myEvent', {foo: 'bar'});
@@ -277,11 +282,11 @@ describe('Listeners', function() {
 
   describe('triggerAsync()', function() {
 
-    it('returns Promise waiting for other Promise returned by listener', function() {
+    it('returns Promise waiting for other Promise returned by listener', async function() {
       let resolver = null;
       let result = null;
       myListeners.addListener(() => new Promise(resolve => resolver = resolve));
-      myListeners.triggerAsync('foo').then(arg => result = arg);
+      myListeners.triggerAsync().then(arg => result = arg);
       return new Promise(resolve => setTimeout(resolve, 50)).then(() => {
         expect(resolver).to.be.instanceOf(Function);
         expect(result).to.be.null;
@@ -296,30 +301,34 @@ describe('Listeners', function() {
 
   describe('promise()', function() {
 
-    it('resolves previous promises', function() {
+    it('resolves previous promises', async function() {
       const promise1 = myListeners.promise();
       const promise2 = myListeners.promise();
 
       myListeners.trigger();
 
-      return Promise.all([promise1, promise2], (ev1, ev2) => {
-        expect(ev1).to.be.instanceof(EventObject);
-        expect(ev2).to.be.instanceof(EventObject);
-      });
+      return Promise.all([promise1, promise2]).then(
+        ([ev1, ev2]) => {
+          expect(ev1).to.be.instanceof(EventObject);
+          expect(ev2).to.be.instanceof(EventObject);
+        }
+      );
     });
 
-    it('resolves previous typed promises', function() {
+    it('resolves previous typed promises', async function() {
       const promise1 = myListeners.promise();
       const promise2 = myListeners.promise();
 
       myListeners.trigger({foo: 'bar'});
 
-      return Promise.all([promise1, promise2], (ev1, ev2) => {
-        expect(ev1).to.be.instanceof(EventObject);
-        expect(ev2).to.be.instanceof(EventObject);
-        expect(ev1).contains({foo: 'bar'});
-        expect(ev2).contains({foo: 'bar'});
-      });
+      return Promise.all([promise1, promise2]).then(
+        ([ev1, ev2]) => {
+          expect(ev1).to.be.instanceof(EventObject);
+          expect(ev2).to.be.instanceof(EventObject);
+          expect(ev1).contains({foo: 'bar'});
+          expect(ev2).contains({foo: 'bar'});
+        }
+      );
     });
 
     it('does not resolve new promise', done => {

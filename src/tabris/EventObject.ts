@@ -2,6 +2,13 @@ import {format} from './Formatter';
 
 export default class EventObject {
 
+  public readonly type!: string;
+  public readonly target!: object;
+  public readonly timeStamp!: number;
+  private $type!: string;
+  private $target!: object;
+  private $defaultPrevented!: boolean;
+
   constructor() {
     Object.defineProperties(this, {
       type: {enumerable: true, get: () => this.$type},
@@ -13,15 +20,15 @@ export default class EventObject {
     });
   }
 
-  get defaultPrevented() {
+  public get defaultPrevented() {
     return !!this.$defaultPrevented;
   }
 
-  preventDefault() {
+  public preventDefault() {
     this.$defaultPrevented = true;
   }
 
-  toString() {
+  public toString() {
     const header = this.constructor.name + ' { ';
     const content = Object.keys(this)
       .map(prop =>
@@ -32,7 +39,7 @@ export default class EventObject {
     return header + content + footer;
   }
 
-  _initEvent(type, target) {
+  public _initEvent(type: string, target: object) {
     if (arguments.length < 2) {
       throw new Error('Not enough arguments to initEvent');
     }
@@ -40,8 +47,6 @@ export default class EventObject {
     this.$target = target;
   }
 
-}
+  [data: string]: unknown;
 
-Object.defineProperty(EventObject.prototype, 'type', {value: ''});
-Object.defineProperty(EventObject.prototype, 'target', {value: null});
-Object.defineProperty(EventObject.prototype, 'timeStamp', {value: 0});
+}

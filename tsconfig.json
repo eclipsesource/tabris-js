@@ -15,8 +15,8 @@
   "include": [
     "./test/**/*.ts",
     "./test/**/*.js",
-    "./src/tabris/*.ts",
-    "./src/tabris/*.js",
+    "./src/tabris/**/*.ts",
+    "./src/tabris/**/*.js",
     "./src/test.js"
   ]
 }

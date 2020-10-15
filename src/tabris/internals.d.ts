@@ -1,6 +1,6 @@
 // global value/type declarations for use in internal modules only
 
-declare var tabris: import('./main').TabrisMain;
+declare var tabris: import('./Tabris').default;
 declare var console: import('./Console').default;
 
 type Auto = 'auto';
@@ -207,7 +207,7 @@ declare namespace global {
   export var localStorage: import('./Storage').default;
   export var secureStorage: import('./Storage').default;
   export var crypto: import('./Crypto').default;
-  export var tabris: import('./main').TabrisMain;
+  export var tabris: import('./Tabris').default;
 }
 
 declare namespace JSX {

@@ -1,12 +1,13 @@
 import {expect, spy, restore} from '../test';
 import Events from '../../src/tabris/Events';
 import EventObject from '../../src/tabris/EventObject';
+import {SinonSpy} from 'sinon';
 
 describe('Events', function() {
 
   let object;
   let context, context2;
-  let listener, listener2;
+  let listener: SinonSpy, listener2: SinonSpy;
 
   beforeEach(function() {
     object = Object.assign({}, Events);
@@ -225,7 +226,7 @@ describe('Events', function() {
     it('removes listener after trigger', function() {
       object.once('foo', listener);
       object.trigger('foo');
-      listener.reset();
+      listener.resetHistory();
 
       object.trigger('foo');
 
@@ -366,7 +367,7 @@ describe('Events', function() {
       });
     });
 
-    it('returns Promise waiting for other Promise returned by listener', function() {
+    it('returns Promise waiting for other Promise returned by listener', async function() {
       let resolver = null;
       let resolved = false;
       object.on('foo', () => new Promise(resolve => resolver = resolve));
@@ -379,7 +380,7 @@ describe('Events', function() {
       }).then(() => expect(resolved).to.be.true);
     });
 
-    it('returns Promise waiting for all Promise returned by listener', function() {
+    it('returns Promise waiting for all Promise returned by listener', async function() {
       let resolver1 = null;
       let resolver2 = null;
       let resolved = false;
@@ -542,6 +543,6 @@ describe('Events', function() {
 
 });
 
-function wait() {
+async function wait() {
   return new Promise(resolve => setTimeout(resolve, 50));
 }

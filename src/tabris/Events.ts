@@ -1,28 +1,31 @@
-import {isObject} from './util';
 import EventObject from './EventObject';
 import {omit} from './util';
 import {hint, toValueString} from './Console';
 import {notify} from './symbols';
 import {formatPromiseRejectionReason} from './util-stacktrace';
 
-export default {
+type ListenersDic = {[event: string]: Callback};
+type Callback = Function & {_callback?: Function};
+type CallbacksStore = {[event: string]: Array<{fn: Callback, ctx?: object}>};
 
-  on(type, callback, context) {
-    if (isObject(type)) {
+export class EventsClass {
+
+  protected _isDisposed?: boolean;
+  protected _callbacks?: CallbacksStore;
+  protected $eventTarget?: object;
+
+  public on(listeners: ListenersDic): this;
+  public on(type: string, callback?: Callback, context?: object): this;
+  public on(type: string | ListenersDic, callback?: Callback, context?: object): this {
+    if (type instanceof Object) {
       for (const key in type) {
         this.on(key, type[key]);
       }
       return this;
     }
-    if (typeof type !== 'string') {
-      throw new Error(toValueString(type) + ' is not a string');
-    }
-    if (!(callback instanceof Function)) {
-      throw new Error(toValueString(callback) + ' is not a function');
-    }
-    if (context && !(context instanceof Object)) {
-      throw new Error(toValueString(context) + ' is not an object');
-    }
+    assertType(type);
+    assertCallback(callback);
+    assertContext(context);
     if (this._isDisposed) {
       hint(this, `Event registration warning: Can not listen for event "${type}" on disposed object`);
     }
@@ -32,22 +35,24 @@ export default {
         enumerable: false, writable: false, configurable: true, value: []
       });
     }
-    this._callbacks[type] = (this._callbacks[type] || []).concat();
-    const alreadyAdded = this._callbacks[type].some(entry => (
+    this._callbacks![type] = (this._callbacks![type] || []).concat();
+    const alreadyAdded = this._callbacks![type].some(entry => (
       (entry.fn === callback || '_callback' in callback && entry.fn._callback === callback._callback) &&
       (entry.ctx === context)
     ));
     if (!alreadyAdded) {
-      this._callbacks[type].push({fn: callback, ctx: context});
+      this._callbacks![type].push({fn: callback, ctx: context});
     }
     if (!wasListening) {
       this._listen(type, true);
     }
     return this;
-  },
+  }
 
-  off(type, callback, context) {
-    if (isObject(type)) {
+  public off(listeners: ListenersDic): this;
+  public off(type: string, callback?: Callback, context?: object): this;
+  public off(type: string | ListenersDic, callback?: Callback, context?: object): this {
+    if (type instanceof Object) {
       for (const key in type) {
         this.off(key, type[key]);
       }
@@ -79,18 +84,20 @@ export default {
       this._listen(type, false);
     }
     return this;
-  },
+  }
 
-  once(type, callback, context) {
-    if (isObject(type)) {
+  public once(listeners: ListenersDic): this;
+  public once(type: string, callback?: Callback, context?: object): this;
+  public once(type: string | ListenersDic, callback?: Callback, context?: object): this {
+    if (type instanceof Object) {
       for (const key in type) {
         this.once(key, type[key]);
       }
       return this;
     }
+    assertCallback(callback);
     const self = this;
-    /** @this {object} */
-    const wrappedCallback = function() {
+    const wrappedCallback = function(this: object) {
       if (!self._isDisposed) {
         self.off(type, wrappedCallback, context);
       }
@@ -98,23 +105,17 @@ export default {
     };
     wrappedCallback._callback = callback;
     return this.on(type, wrappedCallback, context);
-  },
+  }
 
-  trigger(type, eventData = {}) {
+  public trigger(type: string, eventData = {}) {
     return this[notify](type, eventData, false);
-  },
+  }
 
-  triggerAsync(type, eventData = {}) {
+  public async triggerAsync(type: string, eventData = {}) {
     return this[notify](type, eventData, true);
-  },
+  }
 
-  /**
-   * @param {string} type
-   * @param {object} eventData
-   * @param {boolean} async
-   * @returns {object|Promise<object>}
-   */
-  [notify](type, eventData, async) {
+  protected [notify](type: string, eventData: object, async: boolean): object | Promise<object> {
     const returnValues = [];
     if (!this._isDisposed) {
       if (this._callbacks && type in this._callbacks) {
@@ -125,8 +126,8 @@ export default {
           const copyData = omit(eventData, ['type', 'target', 'timeStamp']);
           Object.assign(dispatchObject, copyData);
         }
-        if (dispatchObject._initEvent instanceof Function) {
-          dispatchObject._initEvent(type, target);
+        if ((dispatchObject as EventObject)._initEvent instanceof Function) {
+          (dispatchObject as EventObject)._initEvent(type, target);
         }
         for (const callback of this._callbacks[type]) {
           const value = callback.fn.call(callback.ctx || this, dispatchObject);
@@ -144,17 +145,39 @@ export default {
       hint(this, `Trigger warning: Can not dispatch event "${type}" on disposed object`);
     }
     return async ? Promise.all(returnValues).then(() => this) : this;
-  },
+  }
 
-  _isListening(type) {
+  protected _isListening(type: string) {
     return !!this._callbacks && (!type || type in this._callbacks);
-  },
+  }
 
-  /**
-   * @param {string} type
-   * @param {boolean} isListening
-   */
-  // eslint-disable-next-line no-unused-vars
-  _listen(type, isListening) {}
+  // eslint-disable-next-line
+  protected _listen(type: string, isListening: boolean) { }
 
-};
+}
+
+const EventsMixin: Partial<EventsClass> = {};
+Reflect.ownKeys(EventsClass.prototype).forEach(member => {
+  if (member !== 'constructor') {
+    EventsMixin[member as keyof EventsClass] = (EventsClass.prototype as any)[member];
+  }
+});
+export default EventsMixin as typeof EventsClass.prototype;
+
+function assertCallback(callback: any): asserts callback is Callback {
+  if (!(callback instanceof Function)) {
+    throw new Error(toValueString(callback) + ' is not a function');
+  }
+}
+
+function assertType(type: any): asserts type is string {
+  if (typeof type !== 'string') {
+    throw new Error(toValueString(type) + ' is not a string');
+  }
+}
+
+function assertContext(context: any): asserts context is null | object {
+  if (context && !(context instanceof Object)) {
+    throw new Error(toValueString(context) + ' is not an object');
+  }
+}
