@@ -10,7 +10,11 @@
       "description": "A plain object containing the data to be passed to the listeners in addition to `target`, `type` and `timeStamp`."
     }
   ],
-  "description": "Objects of the type `Listeners` provide methods to manage listeners and trigger events. They encapsulate the tabris event system in a way that is more convenient to use with TypeScript and the ES2017 `async`/`await` feature.",
+  "description": "Objects of the type `Listeners` provide methods to manage listeners and trigger events. They encapsulate the tabris event system in a way that is more convenient to use with TypeScript, `async`/`await` and RxJS.",
+  "extends": {
+    "interface": "Observable",
+    "generics": ["EventData"]
+  },
   "constructor": {
     "access": "public",
     "parameters": [

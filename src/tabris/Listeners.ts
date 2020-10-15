@@ -1,13 +1,19 @@
 import Events from './Events';
 import {toValueString} from './Console';
-import {listenersStore as storeSym} from './symbols';
+import {listenersStore as storeSym, observable as observableSym} from './symbols';
 import {omit} from './util';
+import Observable from './Observable';
+import {Observer, TeardownLogic} from './Observable.types';
+import EventObject from './EventObject';
 
-const DELEGATE_FIELDS: Array<keyof Listeners> = [
-  'promise', 'addListener', 'removeListener', 'once', 'trigger', 'triggerAsync'
+const DELEGATE_FIELDS: Array<keyof Listeners | symbol> = [
+  'promise', 'addListener', 'removeListener', 'once', 'trigger', 'triggerAsync',
+  'subscribe', observableSym
 ];
 
 type Store = typeof Events;
+
+type Listener<T extends object> = (ev: EventObject & T) => any;
 
 interface Attributes {
   [attribute: string]: any;
@@ -19,7 +25,7 @@ interface TargetCandidate {
   jsxAttributes?: Attributes;
 }
 
-class Listeners {
+class Listeners<T extends object = object> extends Observable<T> {
 
   public static getListenerStore(target: TargetCandidate): Store {
     if (target.on instanceof Function) {
@@ -34,6 +40,7 @@ class Listeners {
   private readonly store: Store;
 
   constructor(public readonly target: object, public readonly type: string) {
+    super(observer => this._handleSubscription(observer));
     if (arguments.length < 1) {
       throw new Error('Missing target instance');
     }
@@ -65,12 +72,12 @@ class Listeners {
     return this;
   }
 
-  public trigger(eventData?: object) {
+  public trigger(eventData?: T) {
     this.store.trigger(this.type, eventData);
     return this.target;
   }
 
-  public async triggerAsync(eventData?: object) {
+  public async triggerAsync(eventData?: T) {
     return this.store.triggerAsync(this.type, eventData).then(() => this.target);
   }
 
@@ -78,19 +85,28 @@ class Listeners {
     return new Promise(resolve => this.once(resolve));
   }
 
-  public once(listener: Function) {
+  public once(listener: Listener<T>) {
     this.store.once(this.type, listener);
     return this.target;
   }
 
-  public addListener(listener: Function) {
+  public addListener(listener: Listener<T>) {
     this.store.on(this.type, listener);
     return this.target;
   }
 
-  public removeListener(listener: Function) {
+  public removeListener(listener: Listener<T>) {
     this.store.off(this.type, listener);
     return this.target;
+  }
+
+  private _handleSubscription(observer: Observer<T>): TeardownLogic {
+    this.addListener(observer.next);
+    this.store.on('dispose', observer.complete);
+    return () => {
+      this.removeListener(observer.next);
+      this.store.off('dispose', observer.complete);
+    };
   }
 
 }

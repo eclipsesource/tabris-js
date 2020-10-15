@@ -3,6 +3,7 @@ import EventObject from '../../src/tabris/EventObject';
 import NativeObject from '../../src/tabris/NativeObject';
 import Listeners, {ChangeListeners} from '../../src/tabris/Listeners';
 import {SinonStub} from 'sinon';
+import {from} from 'rxjs';
 
 describe('Listeners', function() {
 
@@ -340,6 +341,36 @@ describe('Listeners', function() {
       );
 
       setTimeout(done, 100);
+    });
+
+  });
+
+  describe('as observable', function() {
+
+    it('forwards events to subscriber', function() {
+      myListeners.subscribe(listener);
+
+      myListeners.trigger({foo: 'bar'});
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener.args[0][0]).to.be.instanceOf(EventObject);
+      expect(listener.args[0][0].foo).to.equal('bar');
+    });
+
+    it('completes on dispose', function() {
+      myListeners.subscribe(null, null, listener);
+
+      new Listeners(target, 'dispose').trigger();
+
+      expect(listener).to.have.been.calledOnce;
+    });
+
+    it('supports RxJS', function() {
+      from(myListeners).subscribe(null, null, listener);
+
+      new Listeners(target, 'dispose').trigger();
+
+      expect(listener).to.have.been.calledOnce;
     });
 
   });

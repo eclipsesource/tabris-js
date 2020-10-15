@@ -1,4 +1,4 @@
-import { EventObject, Listeners, ChangeListeners, PropertyChangedEvent } from 'tabris';
+import { EventObject, Listeners, ChangeListeners, PropertyChangedEvent, Observable } from 'tabris';
 
 interface FooTarget {
   targetType: string;
@@ -105,3 +105,7 @@ Listeners.getListenerStore({}).on('foo', ev => console.log(ev.type));
 Listeners.getListenerStore({}).once('foo', ev => console.log(ev.type));
 Listeners.getListenerStore({}).off('foo', ev => console.log(ev.type));
 Listeners.getListenerStore({}).trigger('foo', {});
+
+// observable
+let observable: Observable<MyFooEvent> = myFooListeners;
+myFooListeners.subscribe(myFooListener).unsubscribe();

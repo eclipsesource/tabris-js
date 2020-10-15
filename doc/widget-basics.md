@@ -215,7 +215,19 @@ contentView.append(
 );
 ```
 
-It should be made clear that `onSelect` is *NOT* an instance property that a listener can be assigned to, nor can one be passed to a constructor when called with `new`. Only JSX element and widget factories accept listeners this way, on the widget itself `onSelect` is a method.
+Only JSX element and widget factories accept listeners this way, `onSelect` is *NOT* an instance property that a listener can be assigned to:
+
+```js
+button.onSelect = ev => handleEvent(ev); // WRONG!!
+```
+
+Nor can one be passed to a constructor when called with a `new` call:
+
+```js
+new Button({
+  onSelect: ev => handleEvent(ev) // WRONG!!
+});
+```
 
 Always favor arrow functions over `function` to create listeners, it avoids issues with `this` having unexpected values. A simple wrapper can suffice:
 
@@ -230,6 +242,21 @@ The listener registration method is also an object of the type [`Listeners`](./a
 ```js
 button.onSelect.removeListener(listener);
 ```
+
+It also implements the `Observable` API:
+
+```js
+const subscription = button.onSelect.subscribe(observer);
+```
+
+RxJS recognizes it as a generic `Subscribable`:
+
+```js
+rxjs.from(button.onSelect)
+  .pipe(debounceTime(100))
+  .subscribe(ev => ...);
+```
+
 
 ### Change Events
 
