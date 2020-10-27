@@ -867,6 +867,34 @@ describe('CollectionView', function() {
         expect(calls).to.be.empty;
       });
 
+      it('CALLs \'reveal\' with default options', function() {
+        view.reveal(1);
+
+        const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
+        expect(call.parameters).to.deep.equal({index: 1, offset: null});
+      });
+
+      it('CALLs \'reveal\' with options', function() {
+        view.reveal(1, {offset: 100});
+
+        const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
+        expect(call.parameters).to.deep.equal({index: 1, offset: 100});
+      });
+
+      it('CALLs \'reveal\' with filtered options', function() {
+        view.reveal(1, {foo: 'bar'});
+
+        const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
+        expect(call.parameters).to.deep.equal({index: 1, offset: null});
+      });
+
+      it('CALLs \'reveal\' with autocompleted options', function() {
+        view.reveal(1, {});
+
+        const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
+        expect(call.parameters).to.deep.equal({index: 1, offset: null});
+      });
+
       it('fails with invalid parameter', function() {
         expect(() => {
           view.refresh(NaN);
