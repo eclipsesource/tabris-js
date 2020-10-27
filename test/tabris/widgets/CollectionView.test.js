@@ -1118,42 +1118,42 @@ describe('CollectionView', function() {
         view.reveal(1);
 
         const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
-        expect(call.parameters).to.deep.equal({index: 1, animate: true});
+        expect(call.parameters).to.deep.equal({index: 1, animate: true, offset: null});
       });
 
       it('CALLs \'reveal\' with options', function() {
-        view.reveal(1, {animate: false});
+        view.reveal(1, {animate: false, offset: 100});
 
         const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
-        expect(call.parameters).to.deep.equal({index: 1, animate: false});
+        expect(call.parameters).to.deep.equal({index: 1, animate: false, offset: 100});
       });
 
       it('CALLs \'reveal\' with normalized options', function() {
         view.reveal(1, {animate: 1});
 
         const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
-        expect(call.parameters).to.deep.equal({index: 1, animate: true});
+        expect(call.parameters).to.deep.equal({index: 1, animate: true, offset: null});
       });
 
       it('CALLs \'reveal\' with filtered options', function() {
         view.reveal(1, {foo: 'bar', animate: true});
 
         const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
-        expect(call.parameters).to.deep.equal({index: 1, animate: true});
+        expect(call.parameters).to.deep.equal({index: 1, animate: true, offset: null});
       });
 
       it('CALLs \'reveal\' with autocompleted options', function() {
         view.reveal(1, {});
 
         const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
-        expect(call.parameters).to.deep.equal({index: 1, animate: true});
+        expect(call.parameters).to.deep.equal({index: 1, animate: true, offset: null});
       });
 
       it('accepts negative index', function() {
         view.reveal(-1);
 
         const call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
-        expect(call.parameters).to.deep.equal({index: 2, animate: true});
+        expect(call.parameters).to.deep.equal({index: 2, animate: true, offset: null});
       });
 
       it('ignores out-of-bounds index', function() {

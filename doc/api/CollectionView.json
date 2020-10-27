@@ -220,9 +220,9 @@
         },
         {
           "name": "options",
-          "type": "{animate?: boolean}",
+          "type": "{animate?: boolean, offset?: number}",
           "optional": true,
-          "description": "An additional object to control the animation. Set to `{animate: false}` to scroll without an animation. The `animate` property defaults to `true` when no options object is given."
+          "description": "An additional object to control the animation.\n\n- `animate` allows to scroll to an item in an animated fashion. The `animate` property defaults to `true` when no options object is given.\n\n- `offset` shifts the targeted scroll position by a device independent pixel value. When `offset` is used the targeted reveal scroll position will start from the top of the `CollectionView`. Applying `offset` will perform the `reveal()` operation without an animation, ignoring the `animate` property."
         }
       ],
       "description": "Scrolls the item with the given index into view."

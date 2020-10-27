@@ -168,7 +168,8 @@ export default class CollectionView extends Composite {
       this.$flush();
       this._nativeCall('reveal', {
         index,
-        animate: options && 'animate' in options ? !!options.animate : true
+        animate: options && 'animate' in options ? !!options.animate : true,
+        offset: options && 'offset' in options ? options.offset : null
       });
     }
   }
