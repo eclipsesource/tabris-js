@@ -2,12 +2,7 @@ import checkType from './checkType';
 import {setterTargetType} from './symbols';
 import Widget from './Widget';
 
-/**
- * @param {Function|object} arg1
- * @param {object} arg2
- * @returns {object}
- */
-export default function Set(arg1, arg2) {
+export default function Setter(arg1: Function, arg2?: object): object {
   if (arguments.length !== 2) {
     throw new TypeError(`Expected 1-2 arguments, got ${arguments.length}`);
   }

@@ -275,12 +275,12 @@ page.apply({
 
 > :point_right: The order of the properties in the object literal is meaningless. According to the EcmaScript standard the members of a JavaScript object do not have a defined order. The priority of two selectors with the same specificity is undefined.
 
-To ensure `apply` addresses the right widgets, it can be executed in 'strict' mode and the [`Set`](./api/utils.md#settarget-attributes) helper function can be used to create the properties object. The kind of the selector then determines how many widgets must match (exactly one for id, at least one for any other), and `Set` determines what type the widget must have. If these conditions are not met, an error will be thrown.
+To ensure `apply` addresses the right widgets, it can be executed in 'strict' mode and the [`Setter`](./api/Setter.md) helper function can be used to create the properties object. The kind of the selector then determines how many widgets must match (exactly one for id, at least one for any other), and `Setter` determines what type the widget must have. If these conditions are not met, an error will be thrown.
 
 ```js
 page.apply('strict', {
-  '#foo': Set(Button, {textColor: 'red'}), // must match exactly one Button
-  '.bar': Set(TextView, {background: 'green'}) // must match one ore more TextViews
+  '#foo': Setter(Button, {textColor: 'red'}), // must match exactly one Button
+  '.bar': Setter(TextView, {background: 'green'}) // must match one ore more TextViews
 });
 ```
 
@@ -288,7 +288,7 @@ Listeners can also be registered via `apply`:
 ```js
 
 page.apply('strict', {
-  '#foo': Set(Button, {onSelect: listener})
+  '#foo': Setter(Button, {onSelect: listener})
 });
 ```
 

@@ -23,6 +23,7 @@ export {
   ResponseConstructor as Response,
   HeadersConstructor as Headers,
   fetchFunction as fetch,
-  $Function as $
+  $Function as $,
+  Setter as Set
 };
 

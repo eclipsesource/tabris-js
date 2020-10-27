@@ -243,8 +243,9 @@ describe('tabris', function() {
     ).to.be.instanceOf(Function);
     expect(tabris.format).to.be.instanceOf(Function);
     expect(tabris.format(new Date()).length).be.greaterThan(1);
-    expect(tabris.Set).to.be.instanceOf(Function);
-    expect(tabris.Set(tabris.TextView, {text: 'foo'})).to.deep.equal({text: 'foo'});
+    expect(tabris.Setter).to.be.instanceOf(Function);
+    expect(tabris.Set).to.equal(tabris.Setter);
+    expect(tabris.Setter(tabris.TextView, {text: 'foo'})).to.deep.equal({text: 'foo'});
   });
 
   it('contains symbols', function() {

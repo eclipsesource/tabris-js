@@ -1,11 +1,11 @@
 import {expect, mockTabris} from '../test';
 import ClientMock from './ClientMock';
-import Set from '../../src/tabris/Set';
+import Setter from '../../src/tabris/Setter';
 import Composite from '../../src/tabris/widgets/Composite';
 import TextView from '../../src/tabris/widgets/TextView';
 import {setterTargetType} from '../../src/tabris/symbols';
 
-describe('Set', function() {
+describe('Setter', function() {
 
   /** @type {ClientMock} */
   let client;
@@ -19,27 +19,31 @@ describe('Set', function() {
 
     it('throws for invalid parameters', function() {
       // @ts-ignore
-      expect(() => Set(Composite)).to.throw(TypeError);
-      expect(() => Set('foo', {})).to.throw(TypeError);
-      expect(() => Set({}, {})).to.throw(TypeError);
-      expect(() => Set(() => null, {})).to.throw(TypeError);
-      expect(() => Set(Composite, 'foo')).to.throw(TypeError);
-      expect(() => Set(Composite, {}, {})).to.throw(TypeError);
-      expect(() => Set(Date, {})).to.throw(TypeError);
+      expect(() => Setter(Composite)).to.throw(TypeError);
+      // @ts-ignore
+      expect(() => Setter('foo', {})).to.throw(TypeError);
+      // @ts-ignore
+      expect(() => Setter({}, {})).to.throw(TypeError);
+      expect(() => Setter(() => null, {})).to.throw(TypeError);
+      // @ts-ignore
+      expect(() => Setter(Composite, 'foo')).to.throw(TypeError);
+      // @ts-ignore
+      expect(() => Setter(Composite, {}, {})).to.throw(TypeError);
+      expect(() => Setter(Date, {})).to.throw(TypeError);
     });
 
     it('copies plain object', function() {
       const original = {foo: 'bar'};
-      expect(Set(Composite, original)).to.deep.equal(original);
-      expect(Set(Composite, original)).not.to.equal(original);
+      expect(Setter(Composite, original)).to.deep.equal(original);
+      expect(Setter(Composite, original)).not.to.equal(original);
     });
 
     it('sets target type', function() {
-      expect(Set(Composite, {foo: 'bar'})[setterTargetType]).to.equal(Composite);
+      expect(Setter(Composite, {foo: 'bar'})[setterTargetType]).to.equal(Composite);
     });
 
     it('target type entry is not enumerable', function() {
-      const props = Set(Composite, {foo: 'bar'});
+      const props = Setter(Composite, {foo: 'bar'});
       const copy = Object.assign({}, props);
 
       expect(copy[setterTargetType]).to.be.undefined;
@@ -47,19 +51,19 @@ describe('Set', function() {
     });
 
     it('accepted by target via "apply"', function() {
-      const props = Set(TextView, {text: 'foo'});
+      const props = Setter(TextView, {text: 'foo'});
       const parent = new Composite();
       const child = new TextView({id: 'bar'}).appendTo(parent);
 
       parent.apply({'#bar': props});
 
-      expect(child.text).to.equal('foo');
       // @ts-ignore
+      expect(child.text).to.equal('foo');
       expect(child[setterTargetType]).to.be.undefined;
     });
 
     it('rejected by other types via "apply"', function() {
-      const props = Set(Composite, {text: 'foo'});
+      const props = Setter(Composite, {text: 'foo'});
       const parent = new Composite();
       new TextView({id: 'bar'}).appendTo(parent);
 

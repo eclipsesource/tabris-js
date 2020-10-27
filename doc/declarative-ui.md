@@ -432,7 +432,7 @@ function PersonView(attributes) {
 
 Notice that with this pattern the `data` property can also be `null` *or* [an empty object](./api/Widget.md#data) the first `apply` sets the text property of '#label'.
 
-In **TypeScript** some casting is needed. To improve type-safety it's recommended to use apply in "strict" mode and the ["Set" helper function](./api/utils.md#settarget-attributes):
+In **TypeScript** some casting is needed. To improve type-safety it's recommended to use apply in "strict" mode and the ["Setter" helper function](./api/Setter.md):
 
 ```tsx
 type PersonDataAttr = Attributes<Widget> & {data: Person};
@@ -442,7 +442,7 @@ function PersonView(attr: PersonDataAttr) {
       <TextView id='label'/>
     </Composite>
   ) as Composite).apply({mode: 'strict', trigger: 'onDataChanged'}, ({data}) => ({
-    '#label': Set(TextView, {
+    '#label': Setter(TextView, {
       text: data instanceof Person
         ? `This is now ${data.firstName} ${data.lastName}`
         : ''
@@ -458,7 +458,7 @@ function PersonView(attr) {
   const children = [TextView({id: 'label'})];
   return Composite({children, ...attr}, PersonView)
     .apply({mode: 'strict', trigger: 'onDataChanged'}, ({data}) => ({
-      '#label': Set(TextView, {
+      '#label': Setter(TextView, {
         text: data instanceof Person
           ? `This is now ${data.firstName} ${data.lastName}`
           : ''

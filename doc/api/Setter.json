@@ -1,0 +1,79 @@
+{
+  "title": "Setter",
+  "category": "service",
+  "namespace": "tabris",
+  "description": "Defines a set attributes.\n\n> :point_right: This function was previously known as `Set`, but renamed due to the name clash with the `Set` constructor. The old name still works for backwards compatibility.",
+  "methods": {
+    "Setter": [
+      {
+        "docs_only": true,
+        "generics": [
+          {
+            "name": "WidgetConstructor",
+            "extends": {
+              "interface": "Constructor",
+              "generics": [
+                "WidgetType"
+              ]
+            }
+          }
+        ],
+        "parameters": [
+          {
+            "name": "target",
+            "type": {
+              "interface": "WidgetConstructor",
+              "generics": ["WidgetType"]
+            },
+            "description": "The type of the target widget."
+          },
+          {
+            "name": "attributes",
+            "type": {
+              "interface": "Attributes",
+              "generics": [
+                "WidgetType"
+              ]
+            },
+            "description": "A set of attributes (properties and listeners) for the given widget type."
+          }
+        ],
+        "returns": {
+          "interface": "Attributes",
+          "generics": [
+            "WidgetType"
+          ]
+        },
+        "description": "Creates a attributes object for the given widget type. This is meant to be used to creates rule sets for the [`apply`](./Composite##applyrules) method. The benefit of using this method as opposed to passing the object directly is twofold: <br/><br/>1. The IDE and/or TypeScript compiler can check that the attributes are matching the given widget type.\n2. The `apply` method will only set the attributes if the selected widget matches the type given here. If there is a mismatch an error will be thrown."
+      },
+      {
+        "ts_only": true,
+        "generics": [
+          {
+            "name": "WidgetConstructor",
+            "extends": {
+              "interface": "BaseConstructor",
+              "generics": [
+                "Widget"
+              ]
+            }
+          }
+        ],
+        "parameters": [
+          {
+            "name": "target",
+            "type": "WidgetConstructor",
+            "description": "The type of the target widget."
+          },
+          {
+            "name": "attributes",
+            "type": "Attributes<WidgetConstructor['prototype']>",
+            "description": "A set of properties for the given widget type."
+          }
+        ],
+        "returns": "Attributes<WidgetConstructor['prototype']>",
+        "description": "Creates a attributes object for the given widget type. This is meant to be used to creates rule sets for the [`apply`](./Composite##applyproperties) method. The benefit of using this method as opposed to passing the object directly is twofold: <br/><br/>1. The IDE and/or TypeScript compiler can check that the properties are matching the given widget type.\n2. The `apply` method will only set the properties if the selected widget matches the type given here. If there is a mismatch an error will be thrown."
+      }
+    ]
+  }
+}

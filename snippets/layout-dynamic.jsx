@@ -1,4 +1,4 @@
-import {Composite, contentView, Set} from 'tabris';
+import {Composite, contentView, Setter} from 'tabris';
 
 contentView.append(
   <$>
@@ -10,10 +10,10 @@ contentView.append(
 contentView.apply(
   {mode: 'strict', trigger: 'onResize'},
   ({bounds}) => (bounds.height > bounds.width) ? {
-    '#red': Set(Composite, {layoutData: {left: 16, top: 16, right: 16, height: 192}}),
-    '#green': Set(Composite, {layoutData: {left: 16, top: '#red 16', right: 16, bottom: 16}})
+    '#red': Setter(Composite, {layoutData: {left: 16, top: 16, right: 16, height: 192}}),
+    '#green': Setter(Composite, {layoutData: {left: 16, top: '#red 16', right: 16, bottom: 16}})
   } : {
-    '#red': Set(Composite, {layoutData: {left: 16, top: 16, bottom: 16, width: 192}}),
-    '#green': Set(Composite, {layoutData: {left: '#red 16', top: 16, right: 16, bottom: 16}})
+    '#red': Setter(Composite, {layoutData: {left: 16, top: 16, bottom: 16, width: 192}}),
+    '#green': Setter(Composite, {layoutData: {left: '#red 16', top: 16, right: 16, bottom: 16}})
   }
 );
