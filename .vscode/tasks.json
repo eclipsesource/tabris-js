@@ -179,6 +179,47 @@
       "type": "grunt",
       "task": "quickverify",
       "problemMatcher": []
+    },
+    {
+      "command": "npx",
+      "args": [
+        "eslint",
+        "--ext",
+        ".js,.jsx,.ts,.tsx",
+        "."
+      ],
+      "problemMatcher": [
+        "$eslint-stylish"
+      ],
+      "label": "eslint: lint whole folder"
+    },
+    {
+      "command": "npx",
+      "args": [
+        "eslint",
+        "--fix",
+        "--ext",
+        ".js,.jsx,.ts,.tsx",
+        "."
+      ],
+      "problemMatcher": [
+        "$eslint-stylish"
+      ],
+      "label": "eslint: fix whole folder"
+    },
+    {
+      "command": "npx",
+      "args": [
+        "eslint",
+        "--fix",
+        "--ext",
+        ".js,.jsx,.ts,.tsx",
+        "${relativeFile}"
+      ],
+      "problemMatcher": [
+        "$eslint-stylish"
+      ],
+      "label": "eslint: fix file"
     }
   ]
 }
