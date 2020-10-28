@@ -59,6 +59,16 @@ NativeObject.defineProperties(ScrollView.prototype, {
 });
 
 NativeObject.defineEvents(ScrollView.prototype, {
-  scrollX: {native: true, changes: 'offsetX', changeValue: 'offset'},
-  scrollY: {native: true, changes: 'offsetY', changeValue: 'offset'}
+  scrollX: {
+    native: true,
+    nativeObservable: false,
+    changes: 'offsetX',
+    changeValue: 'offset'
+  },
+  scrollY: {
+    native: true,
+    nativeObservable: false,
+    changes: 'offsetY',
+    changeValue: 'offset'
+  }
 });

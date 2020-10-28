@@ -105,5 +105,6 @@ NativeObject.defineProperties(ImageView.prototype, {
 
 NativeObject.defineEvents(ImageView.prototype, {
   load: {native: true},
-  zoom: {native: true, changes: 'zoomLevel'}
+  zoom: {native: true, changes: 'zoomLevel'},
+  nativeObservable: false
 });

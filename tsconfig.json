@@ -7,7 +7,8 @@
     "allowJs": true,
     "noImplicitUseStrict": true,
     "lib": ["es2017"],
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "outDir": "build/dummy"
   },
   "ts-node": {
     "files": true

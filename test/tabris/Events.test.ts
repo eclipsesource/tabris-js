@@ -541,6 +541,48 @@ describe('Events', function() {
 
   });
 
+  describe('*', function() {
+
+    beforeEach(function() {
+      object.on('*', listener);
+    });
+
+    it('is notified by all events', function() {
+      object.trigger('foo');
+      object.trigger('bar');
+      object.trigger('baz');
+
+      expect(listener).to.have.been.calledThrice;
+    });
+
+    it('is notified after other listeners', function() {
+      object.on('foo', listener2);
+
+      object.trigger('foo');
+
+      expect(listener).to.have.been.calledAfter(listener2);
+    });
+
+    it('is notified with type', function() {
+      object.trigger('foo');
+
+      expect(listener.args[0][0].type).to.equal('foo');
+    });
+
+    it('is notified with target', function() {
+      object.trigger('foo');
+
+      expect(listener.args[0][0].target).to.equal(object);
+    });
+
+    it('is notified with eventData', function() {
+      object.trigger('foo', {foo: 'bar'});
+
+      expect(listener.args[0][0].eventData.foo).to.equal('bar');
+    });
+
+  });
+
 });
 
 async function wait() {

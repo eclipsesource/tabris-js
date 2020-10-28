@@ -141,6 +141,11 @@ export class EventsClass {
           returnValues.push(value);
         }
       }
+      if (this._callbacks && '*' in this._callbacks) {
+        for (const callback of this._callbacks['*']) {
+          callback.fn.call(callback.ctx || this, {target: this, type, eventData});
+        }
+      }
     } else {
       hint(this, `Trigger warning: Can not dispatch event "${type}" on disposed object`);
     }

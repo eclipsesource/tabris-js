@@ -3,6 +3,9 @@ import {getValueTypeName} from './checkType';
 import {
   SubscriptionHandler, PartialObserver, Subscription, NextCb, ErrorCb, CompleteCb, Subscriber, TeardownLogic
 } from './Observable.types';
+import Listeners from './Listeners';
+import NativeObject from './NativeObject';
+import EventObject from './EventObject';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const noop = (...args: any[]) => undefined;
@@ -11,6 +14,27 @@ if (!Symbol.observable) {
   Object.defineProperty(Symbol, 'observable', {value: symbols.observable});
 }
 export default class Observable<T = unknown> {
+
+  private static deferred: Function[] = [];
+  private static inFlush = false;
+
+  public static mutations<T extends object>(object: T): Observable<T> {
+    return new Observable(observer => {
+      const store = Listeners.getListenerStore(object);
+      const native = (object as NativeObject)[symbols.nativeObservables];
+      const dummyListener = () => null;
+      const next = () => observer.next(object);
+      const handleAny = (ev: EventObject) =>
+        ev.type.endsWith('Changed') ? this.defer(next) : null;
+      store.on({'*': handleAny, 'dispose': observer.complete});
+      native?.forEach(event => store.on(event, dummyListener));
+      next();
+      return () => {
+        store.off({'*': handleAny, 'dispose': observer.complete});
+        native?.forEach(event => store.off(event, dummyListener));
+      };
+    });
+  }
 
   /**
    * Public only to achieve type compatibility with RxJS
@@ -55,6 +79,31 @@ export default class Observable<T = unknown> {
 
   public [Symbol.observable]?() {
     return this;
+  }
+
+  private static defer(fn: Function) {
+    if (this.deferred.indexOf(fn) === -1) {
+      this.deferred.push(fn);
+    }
+    if (!this.inFlush) {
+      tabris.once('tick', this.flush);
+    }
+  }
+
+  private static flush() {
+    let limit = Observable.deferred.length + 100;
+    while (Observable.deferred.length) {
+      try {
+        limit--;
+        if (limit === 0) {
+          Observable.deferred = [];
+          throw new Error('Mutations observer recursion');
+        }
+        Observable.deferred.shift()!();
+      } catch (ex) {
+        console.error(ex.message);
+      }
+    }
   }
 
 }

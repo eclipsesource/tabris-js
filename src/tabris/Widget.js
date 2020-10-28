@@ -483,6 +483,7 @@ NativeObject.defineEvents(Widget.prototype, {
   touchCancel: {native: true},
   resize: {
     native: true,
+    nativeObservable: false,
     changes: 'bounds',
     changeValue: ({left, top, width, height, bounds}) => bounds || ({left, top, width, height})
   },

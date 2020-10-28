@@ -130,6 +130,16 @@ interface EventDefinition {
   changes?: string;
 
   /**
+   * Marks this as a native event that Observable.mutations() should pick up.
+   * Defaults to true if "changes" is set.
+   * Set to false if this is a change event that fires with a high
+   * frequency and is related to layout, animation or scrolling.
+   * Do NOT set to false if related to high-level user input such
+   * as selection, text, checked or focused properties.
+   */
+  nativeObservable?: boolean;
+
+  /**
    * When creating the change event, this is the field name on the
    * event object containing the new value. Can also be
    * a function extracting the value form the event object.

@@ -31,3 +31,4 @@ subscription = observable.subscribe(arg => str = arg);
 let bool: boolean = subscription.closed;
 subscription.unsubscribe();
 observable[Symbol.observable]().subscribe(partialObserver);
+subscription = Observable.mutations(new Date()).subscribe(value => str = value.toLocaleDateString());

@@ -5,6 +5,7 @@ import {EventsClass} from './Events';
 import Listeners from './Listeners';
 import ChangeListeners from './ChangeListeners';
 import {allowOnlyValues, allowOnlyKeys, equals} from './util';
+import * as symbols from './symbols';
 
 export default abstract class NativeObject extends EventsClass {
 
@@ -90,17 +91,22 @@ export default abstract class NativeObject extends EventsClass {
     sourceEvent: string,
     sourceDef: EventDefinition
   ) {
+    const name = sourceDef.changes + 'Changed';
     const changeListener = function(this: NativeObject, ev: EventObject) {
       const changeValue = sourceDef.changeValue as ((ev: EventObject) => any);
-      this.$trigger(sourceDef.changes + 'Changed', {value: changeValue(ev)});
+      this.$trigger(name, {value: changeValue(ev)});
     };
-    const $changeEventProperty = '$event_' + sourceDef.changes + 'Changed' as keyof T;
+    const $changeEventProperty = '$event_' + name as keyof T;
     const changeEventDef: EventDefinition
       = (target as any)[$changeEventProperty]
       = target[$changeEventProperty] || {listen: []};
     changeEventDef.listen?.push((instance, listening) => {
       instance._onoff(sourceEvent, listening, changeListener);
     });
+    if (sourceDef.nativeObservable !== false) {
+      target[symbols.nativeObservables] = (target[symbols.nativeObservables] || []).concat();
+      target[symbols.nativeObservables]!.push(name);
+    }
   }
 
   public static extend(nativeType: string, superType = NativeObject) {
@@ -113,6 +119,7 @@ export default abstract class NativeObject extends EventsClass {
   protected _isDisposed?: boolean;
   protected _inDispose?: boolean;
   protected _disposedToStringValue?: string;
+  protected [symbols.nativeObservables]?: string[];
   private $props?: Partial<this> | null;
 
   constructor(param?: object | boolean) {

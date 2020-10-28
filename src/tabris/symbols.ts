@@ -10,3 +10,4 @@ export const originalComponent: unique symbol = Symbol('originalComponent');
 export const proxyHandler: unique symbol = Symbol('proxyHandler');
 export const setterTargetType: unique symbol = Symbol('setterTargetType');
 export const observable: unique symbol = Symbol('observable');
+export const nativeObservables: unique symbol = Symbol('nativeObservables');

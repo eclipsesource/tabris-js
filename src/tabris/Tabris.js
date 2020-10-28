@@ -30,6 +30,7 @@ export default class Tabris extends NativeObject {
   }
 
   flush() {
+    this.trigger('tick');
     this.trigger('flush');
     this._nativeBridge.clearCache();
     this._nativeBridge.flush();

@@ -1,11 +1,16 @@
-import {expect, spy} from '../test';
+import {expect, mockTabris, restore, spy, stub} from '../test';
 import TabrisObservable from '../../src/tabris/Observable';
 import {Observer, Subscriber, Subscription, SubscriptionHandler} from '../../src/tabris/Observable.types';
 import {Observable as RxObservable} from 'rxjs';
 import  * as rxjs from 'rxjs';
 import  * as operators from 'rxjs/operators';
 import * as symbols from '../../src/tabris/symbols';
-import {SinonSpy} from 'sinon';
+import {SinonSpy, SinonStub} from 'sinon';
+import Listeners from '../../src/tabris/Listeners';
+import ChangeListeners from '../../src/tabris/ChangeListeners';
+import ClientMock from './ClientMock';
+import {EventsClass} from '../../src/tabris/Events';
+import Picker from '../../src/tabris/widgets/Picker';
 
 type Implementations = 'Tabris' | 'RX';
 type Protocol = Array<{next: string} | {error: any} | {complete: true} | {closed: boolean}>;
@@ -13,9 +18,15 @@ const implementations: Readonly<Implementations[]> = Object.freeze(['RX', 'Tabri
 
 describe('Observable', function() {
 
+  afterEach(function() {
+    restore();
+    // @ts-ignore
+    TabrisObservable.deferred = [];
+  });
+
   implementations.forEach(impl => {
 
-    const Observable: typeof TabrisObservable = impl === 'Tabris' ? TabrisObservable : RxObservable;
+    const Observable = impl === 'Tabris' ? TabrisObservable : RxObservable as unknown as typeof TabrisObservable;
 
     describe(impl, function() {
 
@@ -443,6 +454,231 @@ describe('Observable', function() {
         expect(cb).to.have.been.calledWith(10);
         expect(cb).to.have.been.calledWith(20);
         expect(cb).to.have.been.calledWith(30);
+      });
+
+    });
+
+  });
+
+  describe('mutations', function() {
+
+    class Target {
+      _foo = 'foo';
+      bar = 0;
+      onFooChange = new ChangeListeners(this, 'foo');
+      public get foo() { return this._foo; }
+      public set foo(value: string) {
+        if (this._foo !== value) {
+          this._foo = value;
+          this.onFooChange.trigger({value});
+        }
+      }
+    }
+
+    let target: Target;
+    let store: EventsClass;
+    let cb: SinonStub;
+    let client: ClientMock;
+
+    beforeEach(function() {
+      mockTabris(client = new ClientMock());
+      cb = stub();
+      target = new Target();
+      store = Listeners.getListenerStore(target as any);
+    });
+
+    it('creates observable that emits the initial value', function() {
+      TabrisObservable.mutations(target).subscribe(cb);
+      expect(cb).to.have.been.calledOnce;
+      expect(cb).to.have.been.calledWith(target);
+    });
+
+    describe('of plain object', function() {
+
+      beforeEach(function() {
+        TabrisObservable.mutations(target).subscribe(cb);
+        cb.resetHistory();
+      });
+
+      it('does not emit changes immediately', function() {
+        target.foo = 'bar';
+        expect(cb).not.to.have.been.called;
+      });
+
+      it('emits change on flush', function() {
+        target.foo = 'bar';
+
+        tabris.flush();
+
+        expect(cb).to.have.been.calledOnce;
+        expect(cb).to.have.been.calledWith(target);
+      });
+
+      it('detects low-level events', function() {
+        store.trigger('barChanged');
+        tabris.flush();
+        expect(cb).to.have.been.calledOnce;
+        expect(cb).to.have.been.calledWith(target);
+      });
+
+      it('does nothing on flush for other events', function() {
+        store.trigger('foo');
+        tabris.flush();
+        expect(cb).not.to.have.been.called;
+      });
+
+      it('aggregates changes on same property', function() {
+        target.foo = 'bar';
+        target.foo = 'baz';
+
+        tabris.flush();
+
+        expect(cb).to.have.been.calledOnce;
+        expect(cb).to.have.been.calledWith(target);
+      });
+
+      it('emit change of same property during flush', function() {
+        cb.callsFake(() => target.foo = 'baz');
+        target.foo = 'bar';
+
+        tabris.flush();
+
+        expect(cb).to.have.been.calledTwice;
+      });
+
+      it('emit change of other object during flush', function() {
+        const target2 = new Target();
+        const cb2 = stub();
+        TabrisObservable.mutations(target2).subscribe(cb2);
+        cb2.resetHistory();
+        cb2.callsFake(() => target.foo = 'bar');
+        target2.foo = 'bar';
+
+        tabris.flush();
+
+        expect(cb).to.have.been.calledOnce;
+        expect(cb).to.have.been.calledAfter(cb2);
+      });
+
+      it('aggregate changes during flush', function() {
+        cb.callsFake(() => {
+          if (target.foo === 'bar') {
+            target.foo = 'one';
+            target.foo = 'two';
+            target.foo = 'three';
+          }
+        });
+        target.foo = 'bar';
+
+        tabris.flush();
+
+        expect(cb).to.have.been.calledTwice;
+      });
+
+      it('aborts when recursion is detected', function() {
+        spy(console, 'error');
+        cb.callsFake(() => {
+          target.foo = target.foo === 'bar' ? 'foo' : 'bar';
+        });
+        target.foo = 'bar';
+
+        tabris.flush();
+
+        expect(cb).callCount(100);
+        expect(console.error).to.have.been.calledWith('Mutations observer recursion');
+      });
+
+      it('recovers after abort', function() {
+        spy(console, 'error');
+        let recurse = true;
+        cb.callsFake(() => {
+          if (recurse) {
+            target.foo = target.foo === 'bar' ? 'foo' : 'bar';
+          }
+        });
+        target.foo = 'bar';
+        tabris.flush();
+        cb.resetHistory();
+        (console.error as SinonSpy).resetHistory();
+        recurse = false;
+
+        target.foo = 'baz';
+        tabris.flush();
+
+        expect(cb).to.have.been.calledOnce;
+        expect(console.error).not.to.have.been.called;
+      });
+
+    });
+
+    describe('of widget', function() {
+
+      let widget: Picker;
+
+      beforeEach(function() {
+        cb = stub();
+        widget = new Picker({});
+      });
+
+      it('observes non-native property change', function() {
+        const data = {};
+        TabrisObservable.mutations(widget).subscribe(cb);
+        cb.resetHistory();
+
+        widget.data = data;
+        tabris.flush();
+
+        expect(cb).to.have.been.calledOnce;
+        expect(cb).to.have.been.calledWith(widget);
+      });
+
+      it('observes native property change', function() {
+        TabrisObservable.mutations(widget).subscribe(cb);
+        cb.resetHistory();
+
+        tabris._notify(widget.cid, 'select', {selectionIndex: 23});
+
+        const listen = client.calls({op: 'listen', id: widget.cid});
+        expect(listen.length).to.equal(1);
+        expect(listen[0].event).to.equal('select');
+        expect(listen[0].listen).to.equal(true);
+        expect(cb).to.have.been.calledOnce;
+        expect(cb).to.have.been.calledWith(widget);
+      });
+
+      it('stops listening to native property change', function() {
+        TabrisObservable.mutations(widget).subscribe(cb).unsubscribe();
+
+        const listen = client.calls({op: 'listen', id: widget.cid});
+        expect(listen.length).to.equal(2);
+        expect(listen[1].event).to.equal('select');
+        expect(listen[1].listen).to.equal(false);
+      });
+
+      it('completes on dispose immediately', function() {
+        const next = spy();
+        const sub = TabrisObservable.mutations(widget).subscribe(next, null, cb);
+
+        widget.dispose();
+
+        expect(next).to.have.been.calledOnce;
+        expect(cb).to.have.been.calledOnce;
+        expect(cb).to.have.been.calledAfter(next);
+        expect(sub.closed).to.be.true;
+      });
+
+      it('emits changes before widget-internal flush', function() {
+        TabrisObservable.mutations(widget).subscribe(cb);
+        widget.set({itemCount: 40, itemText: v => String(v)});
+        tabris.flush();
+        client.resetCalls();
+
+        cb.callsFake(() => widget.selectionIndex = 23);
+        widget.data = {};
+        tabris.flush();
+
+        expect(client.calls({op: 'set', id: widget.cid})[0].properties)
+          .to.deep.equal({selectionIndex: 23});
       });
 
     });
