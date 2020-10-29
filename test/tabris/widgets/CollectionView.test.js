@@ -850,14 +850,14 @@ describe('CollectionView', function() {
         view.reveal(1);
 
         let call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
-        expect(call.parameters).to.deep.equal({index: 1});
+        expect(call.parameters).to.deep.equal({index: 1, offset: null});
       });
 
       it('accepts negative index', function() {
         view.reveal(-1);
 
         let call = client.calls({op: 'call', method: 'reveal', id: view.cid})[0];
-        expect(call.parameters).to.deep.equal({index: 2});
+        expect(call.parameters).to.deep.equal({index: 2, offset: null});
       });
 
       it('ignores out-of-bounds index', function() {
