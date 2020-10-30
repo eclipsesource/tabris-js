@@ -1,15 +1,15 @@
 import {expect, mockTabris, stub} from '../test';
 import ClientMock from './ClientMock';
-import Crypto from '../../src/tabris/Crypto';
+import Crypto, {TypedArray} from '../../src/tabris/Crypto';
 
 describe('Crypto', function() {
 
-  let client;
-  let crypto;
-  let returnValue;
+  let client: ClientMock & {call: Function};
+  let crypto: Crypto;
+  let returnValue: TypedArray;
 
   beforeEach(function() {
-    client = new ClientMock();
+    client = new ClientMock() as any;
     mockTabris(client);
     crypto = new Crypto();
     stub(client, 'call').callsFake((id, method) => method === 'getRandomValues' ? returnValue : null);
@@ -23,6 +23,7 @@ describe('Crypto', function() {
   describe('getRandomValues', function() {
 
     it('fails with missing argument', function() {
+      // @ts-ignore
       expect(() => crypto.getRandomValues())
         .to.throw('Not enough arguments to Crypto.getRandomValues');
     });
@@ -33,11 +34,13 @@ describe('Crypto', function() {
     });
 
     it('fails with plain array', function() {
+      // @ts-ignore
       expect(() => crypto.getRandomValues([0, 0, 0]))
         .to.throw('Argument [0, 0, 0] is not an accepted array type');
     });
 
     it('fails with float typed array', function() {
+      // @ts-ignore
       expect(() => crypto.getRandomValues(new Float32Array(3)))
         .to.throw('Argument Float32Array is not an accepted array type');
     });
@@ -82,7 +85,7 @@ describe('Crypto', function() {
       expect(buffer[2]).to.equal(255);
     });
 
-    it('fills a given Int16Arrray', function() {
+    it('fills a given Int16Array', function() {
       const buffer = new Int16Array(3);
       returnValue = new Uint8Array([0, 0, 0, 1, 255, 255]);
 
@@ -94,7 +97,7 @@ describe('Crypto', function() {
       expect(buffer[2]).to.equal(-1); // 0xffff
     });
 
-    it('fills a given Uint16Arrray', function() {
+    it('fills a given Uint16Array', function() {
       const buffer = new Uint16Array(3);
       returnValue = new Uint8Array([0, 0, 0, 1, 255, 255]);
 
@@ -106,7 +109,7 @@ describe('Crypto', function() {
       expect(buffer[2]).to.equal(65535); // 0xffff
     });
 
-    it('fills a given Int32Arrray', function() {
+    it('fills a given Int32Array', function() {
       const buffer = new Int32Array(3);
       returnValue = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1, 255, 255, 255, 255]);
 
@@ -118,7 +121,7 @@ describe('Crypto', function() {
       expect(buffer[2]).to.equal(-1);
     });
 
-    it('fills a given Uint32Arrray', function() {
+    it('fills a given Uint32Array', function() {
       const buffer = new Uint32Array(3);
       returnValue = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1, 255, 255, 255, 255]);
 
