@@ -162,6 +162,7 @@ See also:
 The global `crypto` object provides an implementation of the `RandomSource` interface that can be used to generate cryptographically secure random numbers.
 
 See also:
+ * [Tabris API Documentation](api/Crypto.md)
  * [MDN API Documentation](https://developer.mozilla.org/en/docs/Web/API/RandomSource/getRandomValues)
  * [W3C Standard](https://w3c.github.io/webcrypto/#crypto-interface)
  * [<span class='language jsx'>JSX</span>Example Snippet](https://playground.tabris.com/?snippet=crypto.jsx)

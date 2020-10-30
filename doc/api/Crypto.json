@@ -1,0 +1,23 @@
+{
+  "type": "Crypto",
+  "category": "service",
+  "namespace": "global",
+  "object": "crypto",
+  "description": "The global `crypto` object provides an implementation of the `RandomSource` interface that can be used to generate cryptographically secure random numbers.",
+  "constructor": {
+    "access": "private"
+  },
+  "methods": {
+    "getRandomValues": {
+      "description": "Generates random numbers.",
+      "parameters": [
+        {
+          "name": "typedArray",
+          "type": "TypedArray",
+          "description": "A typed array which will be filled with random numbers. The *same* array is also returned by this method."
+        }
+      ],
+      "returns": "TypedArray"
+    }
+  }
+}

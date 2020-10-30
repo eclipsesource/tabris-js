@@ -77,6 +77,10 @@ const LANG_TYPE_LINKS: TypeLinks = {
     href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer',
     title: mdnTitle('ArrayBuffer')
   },
+  TypedArray: {
+    href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays',
+    title: mdnTitle('typed arrays')
+  },
   Selector: {
     href: '../selector.md',
     title: 'More about selectors'

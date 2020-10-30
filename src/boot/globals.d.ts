@@ -57,4 +57,3 @@ interface PseudoHtmlDocument extends PseudoHTMLElement {
   head: PseudoHTMLElement;
   createElement(name: string): PseudoHTMLElement & {src: string};
 }
-
