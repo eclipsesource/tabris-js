@@ -2,11 +2,13 @@ import * as chai from 'chai';
 import {expect} from 'chai';
 import * as sinon from 'sinon';
 import * as sinonChai from 'sinon-chai';
+import * as chaiAsPromised from 'chai-as-promised';
 import {mockTabris} from './tabris-mock';
 import ImageBitmap from '../src/tabris/ImageBitmap';
 import Blob from '../src/tabris/Blob';
 
 chai.use(sinonChai);
+chai.use(chaiAsPromised);
 
 const sandbox = sinon.sandbox.create();
 const restore = sandbox.restore.bind(sandbox);

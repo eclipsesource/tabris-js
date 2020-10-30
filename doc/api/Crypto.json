@@ -19,5 +19,12 @@
       ],
       "returns": "TypedArray"
     }
+  },
+  "properties": {
+    "subtle": {
+      "readonly": true,
+      "const": true,
+      "type": "SubtleCrypto"
+    }
   }
 }

@@ -1,0 +1,34 @@
+{
+  "type": "SubtleCrypto",
+  "category": "service",
+  "namespace": "global",
+  "description": "Provides a subset of the [cryptographic functions](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto) in the SubtleCrypto W3C standard.",
+  "constructor": {
+    "access": "private"
+  },
+  "methods": {
+    "digest": {
+      "description": "Provides the digest value of the given data as an ArrayBuffer. Fo this the method uses the hashing algorithms provided by the operating system.",
+      "parameters": [
+        {
+          "name": "algorithm",
+          "type": {
+            "union": ["'SHA-1'", "'SHA-256'", "'SHA-384'", "'SHA-512'"]
+          },
+          "description": "A string defining the hash function to use."
+        },
+        {
+          "name": "data",
+          "type": {
+            "union": ["TypedArray", "ArrayBuffer"]
+          },
+          "description": "The data to be digested."
+        }
+      ],
+      "returns": {
+        "interface": "Promise",
+        "generics": ["ArrayBuffer"]
+      }
+    }
+  }
+}

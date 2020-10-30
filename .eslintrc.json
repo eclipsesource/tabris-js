@@ -33,7 +33,8 @@
     "createImageBitmap": false,
     "require": false,
     "FormData": false,
-    "File": false
+    "File": false,
+    "Blob": false
   },
   "rules": {
     "no-console": "off",

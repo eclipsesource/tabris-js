@@ -1,10 +1,11 @@
-import {expect, mockTabris, stub} from '../test';
+import {expect, match, mockTabris, stub} from '../test';
 import ClientMock from './ClientMock';
 import Crypto, {TypedArray} from '../../src/tabris/Crypto';
+import {SinonStub} from 'sinon';
 
 describe('Crypto', function() {
 
-  let client: ClientMock & {call: Function};
+  let client: ClientMock & {call: SinonStub};
   let crypto: Crypto;
   let returnValue: TypedArray;
 
@@ -12,7 +13,6 @@ describe('Crypto', function() {
     client = new ClientMock() as any;
     mockTabris(client);
     crypto = new Crypto();
-    stub(client, 'call').callsFake((id, method) => method === 'getRandomValues' ? returnValue : null);
   });
 
   afterEach(function() {
@@ -21,6 +21,10 @@ describe('Crypto', function() {
   });
 
   describe('getRandomValues', function() {
+
+    beforeEach(function() {
+      stub(client, 'call').callsFake((id, method) => method === 'getRandomValues' ? returnValue : null);
+    });
 
     it('fails with missing argument', function() {
       // @ts-ignore
@@ -138,6 +142,65 @@ describe('Crypto', function() {
       returnValue = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1, 255, 255, 255, 255]);
 
       expect(crypto.getRandomValues(buffer)).to.equal(buffer);
+    });
+
+  });
+
+  describe('subtle.digest()', function() {
+
+    let data: TypedArray | ArrayBuffer;
+    let result: ArrayBuffer;
+
+    beforeEach(function() {
+      data = new ArrayBuffer(10);
+      result = new ArrayBuffer(10);
+      stub(client, 'call').callsFake((id, method, args) => args.onSuccess(result));
+    });
+
+    it('rejects if argument is missing', async () =>
+      // @ts-ignore
+      expect(crypto.subtle.digest('SHA-512'))
+        .to.eventually.rejectedWith(TypeError, 'Not enough arguments to SubtleCrypto.digest')
+    );
+
+    it('rejects if algorithm is invalid type', async () =>
+      expect(crypto.subtle.digest('SHA-511', data)).to.eventually.have.been
+        .rejectedWith(TypeError, 'Algorithm: Unrecognized name SHA-511')
+    );
+
+    it('rejects if data is invalid type', async () =>
+      expect(crypto.subtle.digest('SHA-512', [] as any))
+        .to.eventually.rejectedWith(TypeError, 'Argument [] is not an accepted array type')
+    );
+
+    it('CALLs with arguments', async () => {
+      await crypto.subtle.digest('SHA-512', data);
+      expect(client.call).to.have.been.calledWithMatch(match.string, 'subtleDigest', {
+        algorithm: 'SHA-512', data, onSuccess: match.func, onError: match.func
+      });
+    });
+
+    it('unwraps typed array', async () => {
+      const arr = new Uint16Array(data);
+      await crypto.subtle.digest('SHA-512', arr);
+      expect(client.call).to.have.been
+        .calledWithMatch(match.string, 'subtleDigest', {data});
+    });
+
+    it('returns arraybuffer from call', async () => {
+      expect(await crypto.subtle.digest('SHA-256', data)).to.equal(result);
+    });
+
+    it('rejects when client rejects', async () => {
+      client.call.callsFake((id, method, args) => args.onError('foo'));
+      return expect(crypto.subtle.digest('SHA-1', data)).to.eventually.have.been
+        .rejectedWith(Error, 'foo');
+    });
+
+    it('rejects when non-arraybuffer is returned by client', async () => {
+      client.call.callsFake((id, method, args) => args.onSuccess('foo'));
+      return expect(crypto.subtle.digest('SHA-384', data)).to.eventually.have.been
+        .rejectedWith(TypeError, 'Internal Type Error: result is not valid ArrayBuffer');
     });
 
   });

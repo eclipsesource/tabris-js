@@ -6,11 +6,13 @@ export type TypedArray = Int8Array | Uint8Array | Uint8ClampedArray
 
 export default class Crypto {
 
+  readonly subtle!: SubtleCrypto;
   private readonly _nativeObject!: NativeCrypto;
 
   constructor() {
-    Object.defineProperty(this, '_nativeObject', {
-      enumerable: false, writable: false, value: NativeCrypto.getInstance()
+    Object.defineProperties(this, {
+      _nativeObject: {enumerable: false, writable: false, value: NativeCrypto.getInstance()},
+      subtle: {enumerable: false, writable: false, value: new SubtleCrypto()}
     });
   }
 
@@ -22,6 +24,35 @@ export default class Crypto {
       throw new Error(`Argument ${toValueString(typedArray)} is not an accepted array type`);
     }
     return this._nativeObject.getRandomValues(typedArray);
+  }
+
+}
+
+const validAlgorithms = new Set(['SHA-1', 'SHA-256', 'SHA-384', 'SHA-512']);
+
+class SubtleCrypto {
+
+  private readonly _nativeObject!: NativeCrypto;
+
+  constructor() {
+    Object.defineProperty(this, '_nativeObject', {
+      enumerable: false, writable: false, value: NativeCrypto.getInstance()
+    });
+  }
+
+  async digest(algorithm: string, data: ArrayBuffer | TypedArray) {
+    if (arguments.length < 2) {
+      return Promise.reject(new TypeError('Not enough arguments to SubtleCrypto.digest'));
+    }
+    if (!validAlgorithms.has(algorithm)) {
+      return Promise.reject(new TypeError(`Algorithm: Unrecognized name ${algorithm}`));
+    }
+    if (!isIntArray(data) && !(data instanceof ArrayBuffer)) {
+      return Promise.reject(new TypeError(`Argument ${toValueString(data)} is not an accepted array type`));
+    }
+    return new Promise(
+      (resolve, reject) => this._nativeObject.subtleDigest({algorithm, data, resolve, reject})
+    );
   }
 
 }
@@ -49,6 +80,25 @@ class NativeCrypto extends NativeObject {
     }
     new Uint8Array(typedArray.buffer).set(values);
     return typedArray;
+  }
+
+  subtleDigest(arg: {
+    algorithm: string,
+    data: ArrayBuffer | TypedArray,
+    resolve: (buffer: ArrayBuffer) => any,
+    reject: (ex: Error) => any
+  }) {
+    this._nativeCall('subtleDigest', {
+      algorithm: arg.algorithm,
+      data: ArrayBuffer.isView(arg.data) ? arg.data.buffer : arg.data,
+      onSuccess: (result: ArrayBuffer) => {
+        if (!(result instanceof ArrayBuffer) || result.byteLength === 0) {
+          throw new TypeError('Internal Type Error: result is not valid ArrayBuffer');
+        }
+        arg.resolve(result);
+      },
+      onError: (reason: unknown) => arg.reject(new Error(String(reason)))
+    });
   }
 
 }
