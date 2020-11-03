@@ -20,6 +20,7 @@ type ReadOnlyWidgetKeys<T> = T extends {readonly bounds: any}
   : never;
 type MethodKeysOf<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
 // Tabris.js Helper Types
+type JSXDefaultChildren = Flatten<string|{cid?: never}>;
 export type Properties<
   T extends {set?: any},
   U = Omit<T, 'set'> // prevent self-reference issues
@@ -47,7 +48,7 @@ export interface Listeners<EventData extends {target: object}> {
   // tslint:disable-next-line:callable-types
   (listener: Listener<ExtendedEvent<EventData>>): TargetType<EventData>;
 }
-export type JSXChildren<T extends Widget> = T|WidgetCollection<T>|Array<T|WidgetCollection<T>>|undefined;
+export type JSXChildren<T extends Widget> = T|WidgetCollection<T>|Array<T|WidgetCollection<T>>|{cid?: never}|undefined;
 export type SFC<T> = (attributes: object|null, children: any[]) => T;
 type Flatten<T> = T|Array<T>|undefined;
 

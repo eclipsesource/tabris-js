@@ -29,6 +29,12 @@
       "type": {"union": ["'fit'", "'fill'"]},
       "default": "'fit'",
       "description": "How to scale the camera preview image.\n\n- `fit` will scale the image proportionally to fit into the view, possible leaving some empty space at the edges. That is, the image will be displayed as large as possible while being fully contained in the view.\n- `fill` will scale the image proportionally to fill the entire view, possibly cutting off parts of the image. That is, the image will be displayed as small as possible while covering the entire view."
+    },
+    "jsxAttributes": {
+      "const": true,
+      "readonly": true,
+      "ts_only": true,
+      "type": "JSXAttributes<this> & {children?: JSXDefaultChildren}"
     }
   },
   "links": [

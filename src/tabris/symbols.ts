@@ -11,3 +11,5 @@ export const proxyHandler: unique symbol = Symbol('proxyHandler');
 export const setterTargetType: unique symbol = Symbol('setterTargetType');
 export const observable: unique symbol = Symbol('observable');
 export const nativeObservables: unique symbol = Symbol('nativeObservables');
+export const jsxFactory: unique symbol = Symbol('jsxFactory');
+export const jsxType: unique symbol = Symbol('jsxType');

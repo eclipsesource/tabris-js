@@ -90,7 +90,7 @@
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXAttributes<this> & {children?: string}"
+      "type": "JSXAttributes<this> & {children?: JSXDefaultChildren}"
     },
     "image": {
       "type": "ImageValue",

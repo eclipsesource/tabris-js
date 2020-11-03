@@ -18,9 +18,10 @@ export default function checkType(value, type, optionsOrCallback) {
   /** @type {{nullable?: boolean, name?: string}} */
   const options = (!optionsOrCallback || cb) ? {} : optionsOrCallback;
   const name = options.name || toValueString(value);
+  const typeName = options.typeName || getTypeName(type);
   if (!isType(value, type, options.nullable)) {
     throw new TypeError(
-      `Expected ${name} to be ${getTypeName(type)}, got ${getValueTypeName(value)}.`
+      `Expected ${name} to be ${typeName}, got ${getValueTypeName(value)}.`
     );
   }
   if (typeof value === 'number') {

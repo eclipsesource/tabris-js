@@ -106,6 +106,12 @@ const ev: tabris.EventOfListeners<tabris.TextInput['onInput']> = {
   type: 'input'
 };
 
+// Setter
+
+<tabris.Setter target={tabris.Slider} attribute='selection'>
+  text
+</tabris.Setter>
+
 /*Expected
 (4,
 'number' is not assignable to type 'boolean'
@@ -137,7 +143,6 @@ const ev: tabris.EventOfListeners<tabris.TextInput['onInput']> = {
 (64,
 (66,
 (67,
-(68,
 (69,
 (70,
 (71,
@@ -167,4 +172,5 @@ const ev: tabris.EventOfListeners<tabris.TextInput['onInput']> = {
 (97,
 (102,
 (103,
+(111,
 */

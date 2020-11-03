@@ -22,7 +22,7 @@
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXAttributes<this> & {children?: never}"
+      "type": "JSXAttributes<this> & {children?: JSXDefaultChildren}"
     },
     "image": {
       "type": "ImageValue",

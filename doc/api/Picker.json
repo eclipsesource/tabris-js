@@ -23,7 +23,7 @@
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXAttributes<this> & Partial<Pick<Picker, 'itemText'>>"
+      "type": "JSXAttributes<this> & Partial<Pick<Picker, 'itemText'>> & {children?: JSXDefaultChildren}"
     },
     "style": {
       "type": "string",

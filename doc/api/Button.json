@@ -22,7 +22,7 @@
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXAttributes<this> & {children?: string}"
+      "type": "JSXAttributes<this> & {children?: Flatten<string|object>}"
     },
     "style": {
       "type": "string",

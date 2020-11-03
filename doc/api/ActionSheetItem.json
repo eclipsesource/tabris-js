@@ -41,7 +41,7 @@
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "{title?: string, image?: ImageValue, style?: 'default'|'cancel'|'destructive', children?: string}"
+      "type": "{title?: string, image?: ImageValue, style?: 'default'|'cancel'|'destructive', children?: JSXDefaultChildren}"
     },
     "[JSX.jsxFactory]": {
       "ts_only": true,

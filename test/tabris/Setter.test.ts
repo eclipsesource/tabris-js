@@ -75,4 +75,29 @@ describe('Setter', function() {
 
   });
 
+  describe('as JSX Element', function() {
+
+    it('throws for invalid parameters', function() {
+      // @ts-ignore
+      expect(() => Setter({target: Composite, children: ['foo']})).to.throw(TypeError);
+      // @ts-ignore
+      expect(() => Setter({target: Composite, attribute: null, children: ['foo']})).to.throw(TypeError);
+      // @ts-ignore
+      expect(() => Setter({target: () => null, attribute: 'foo', children: ['foo']}, {})).to.throw(TypeError);
+      // @ts-ignore
+      expect(() => Setter({target: Composite, attribute: 'foo'})).to.throw(TypeError);
+      expect(() => Setter({target: Date, attribute: 'foo', children: ['foo']})).to.throw(TypeError);
+      expect(() => Setter({target: Composite, attribute: 'foo', children: ['foo', 'bar']})).to.throw(TypeError);
+      expect(() => Setter({target: Composite, attribute: 'foo', children: []})).to.throw(TypeError);
+    });
+
+    it('creates attributes object with target type', function() {
+      expect(Setter({target: Composite, attribute: 'foo', children: ['bar']})).to.deep.equal({
+        [setterTargetType]: Composite,
+        foo: 'bar'
+      });
+    });
+
+  });
+
 });

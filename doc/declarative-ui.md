@@ -86,6 +86,19 @@ Properties that support this are always marked as such in the API reference.
 
 > :warning: In TypeScript JSX expressions themselves are type-safe, but their return type is `any`! So be extra careful when you assign them to a variable to give it the proper type.
 
+By using [`Setter`](./api/Setter.md#as-jsx-element) any attribute of any element can be set via a separate child element:
+
+```jsx
+<Button text='Simple dialog'>
+  <Setter target={Button} attribute='onSelect'>
+    {() => {
+      doSomething();
+      doSomething();
+    }}
+  </Setter>
+</Button>
+```
+
 To add multiple children to an existing parent you group them using `WidgetCollection` or `$`:
 
 ```jsx

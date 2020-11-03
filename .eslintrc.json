@@ -263,11 +263,7 @@
         "@typescript-eslint/explicit-member-accessibility": [
           "error",
           {
-            "accessibility": "explicit",
-            "overrides": {
-              "constructors": "off",
-              "properties": "off"
-            }
+            "accessibility": "off"
           }
         ],
         "@typescript-eslint/no-unused-vars": "error",

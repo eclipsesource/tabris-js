@@ -51,7 +51,7 @@
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXAttributes<this> & {children?: Flatten<string|TextInput>, textInputs?: never}"
+      "type": "JSXAttributes<this> & {children?: Flatten<string|TextInput|{cid?: never}>, textInputs?: never}"
     }
   },
   "events": {

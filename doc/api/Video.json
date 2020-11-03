@@ -23,7 +23,7 @@
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXAttributes<this> & Partial<Record<'speed' | 'position' | 'duration' | 'state' | 'children', never>>"
+      "type": "JSXAttributes<this> & Partial<Record<'speed' | 'position' | 'duration' | 'state' | 'children', never>> & {children?: JSXDefaultChildren}"
     },
     "url": {
       "type": "string",

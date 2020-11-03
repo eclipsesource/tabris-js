@@ -6,6 +6,13 @@ import {proxify} from './util';
 
 export default class Tabris extends NativeObject {
 
+  _client: any;
+  _stackTraceStack!: any[];
+  _nativeObjectRegistry!: NativeObjectRegistry | null;
+  _entryPoint!: string | null;
+  _started!: boolean;
+  _nativeBridge!: NativeBridge | null;
+
   constructor() {
     super();
     Object.defineProperties(this, {
@@ -32,8 +39,8 @@ export default class Tabris extends NativeObject {
   flush() {
     this.trigger('tick');
     this.trigger('flush');
-    this._nativeBridge.clearCache();
-    this._nativeBridge.flush();
+    this._nativeBridge!.clearCache();
+    this._nativeBridge!.flush();
   }
 
   get _nativeType() {
@@ -41,6 +48,7 @@ export default class Tabris extends NativeObject {
   }
 
   /** @override */
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   _nativeCreate() {}
 
   _register() {
@@ -49,7 +57,7 @@ export default class Tabris extends NativeObject {
     Object.defineProperty(this, 'cid', {value: cid});
   }
 
-  _init(client, options) {
+  _init(client: any, options: object) {
     this._client = client;
     this._nativeBridge = new NativeBridge(client);
     this._register();
@@ -58,19 +66,19 @@ export default class Tabris extends NativeObject {
     this._started = true;
   }
 
-  _setEntryPoint(entryPoint) {
+  _setEntryPoint(entryPoint: string) {
     this._entryPoint = entryPoint;
   }
 
-  _notify(cid, event, param) {
+  _notify(cid: string, event: string, param: object) {
     let returnValue;
     try {
-      const nativeObject = this._nativeObjectRegistry.find(cid);
+      const nativeObject = this._nativeObjectRegistry!.find(cid);
       if (nativeObject) {
         try {
           const eventDef = nativeObject['$event_' + event];
           if (eventDef && eventDef.changes) {
-            this._nativeBridge.cacheValue(cid, eventDef.changes, eventDef.changeValue(param));
+            this._nativeBridge!.cacheValue(cid, eventDef.changes, eventDef.changeValue(param));
           }
           returnValue = nativeObject._trigger(event, param);
         } catch (err) {
@@ -89,7 +97,7 @@ export default class Tabris extends NativeObject {
       'contentView', 'drawer', 'navigationBar', 'statusBar', 'permission', 'printer', 'device', 'app', 'localStorage',
       'secureStorage', 'crypto', 'fs', 'pkcs5', 'sizeMeasurement', 'devTools', 'process', 'authentication'
     ].forEach(name => {
-      const value = proxify(() => this['$' + name]);
+      const value = proxify(() => (this as any)['$' + name]);
       Object.defineProperty(this, name, {value});
     });
   }

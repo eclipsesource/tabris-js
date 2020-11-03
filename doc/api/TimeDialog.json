@@ -26,7 +26,7 @@
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXAttributes<this>"
+      "type": "JSXAttributes<this> & {children?: JSXDefaultChildren}"
     }
   },
   "events": {

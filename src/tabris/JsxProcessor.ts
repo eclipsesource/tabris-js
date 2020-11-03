@@ -7,10 +7,19 @@ import Font from './Font';
 import * as symbols from './symbols';
 import checkType from './checkType';
 
-const COMMON_ATTR = Object.freeze({
-  textColor: value => Color.from(value).toString(),
-  font: value => Font.from(value).toString(),
-  children: value => {
+type AttrConverters = {[attr: string]: (value: any) => any};
+
+interface ElementFn {
+  new(...args: any[]): any;
+  (...args: any[]): any;
+  [symbols.originalComponent]?: ElementFn;
+  [symbols.jsxType]?: boolean;
+}
+
+const COMMON_ATTR: AttrConverters = Object.freeze({
+  textColor: (value: any) => Color.from(value).toString(),
+  font: (value: any) => Font.from(value).toString(),
+  children: (value: any) => {
     if (!(value instanceof Array)) {
       throw new Error('Not an array: ' + toValueString(value));
     }
@@ -18,7 +27,7 @@ const COMMON_ATTR = Object.freeze({
   }
 });
 
-const MARKUP = Object.freeze({
+const MARKUP: {[el: string]: AttrConverters} = Object.freeze({
   br: {},
   b: COMMON_ATTR,
   span: COMMON_ATTR,
@@ -29,7 +38,7 @@ const MARKUP = Object.freeze({
   ins: COMMON_ATTR,
   del: COMMON_ATTR,
   a: Object.assign({
-    href: value => {
+    href: (value: any) => {
       if (typeof value !== 'string') {
         throw new Error('Not a string: ' + toValueString(value));
       }
@@ -44,22 +53,22 @@ export function createJsxProcessor() {
 
 export default class JsxProcessor {
 
-  createElement(Type, attributes, ...children) {
+  createElement(Type: ElementFn | string, attributes? : any, ...children: any[]) {
     if (!(Type instanceof Function) && typeof Type !== 'string') {
       throw new Error(`JSX: Unsupported type ${toValueString(Type)}`);
     }
-    if (attributes && attributes.children && children && children.length) {
-      throw new Error(`JSX: Children for type ${Type.name} given twice.`);
+    const typeName = Type instanceof Function ? Type.name : Type;
+    if (attributes?.children && children && children.length) {
+      throw new Error(`JSX: Children for type ${typeName} given twice.`);
     }
     // Children may be part of attributes or given as varargs or both.
     // For JSX factories/functional components they should always be part of attributes
-    const finalChildren = (children && children.length ? children : null)
-      || ((attributes && attributes.children && attributes.children.length) ? attributes.children : null);
-    const finalAttributes = Object.assign({}, attributes || {});
-    if (finalChildren && finalChildren.length) {
+    const rawChildren = children.length ? children : attributes?.children || [];
+    const {finalChildren, additionalAttributes} = parseChildren(rawChildren, Type);
+    const finalAttributes = {...attributes};
+    joinAttributes(finalAttributes, additionalAttributes, Type);
+    if (finalChildren) {
       finalAttributes.children = finalChildren;
-    } else {
-      delete finalAttributes.children;
     }
     if (typeof Type === 'string') {
       return this.createIntrinsicElement(Type, finalAttributes);
@@ -70,16 +79,16 @@ export default class JsxProcessor {
     }
   }
 
-  createCustomComponent(Type, attributes) {
+  createCustomComponent(Type: ElementFn, attributes: any) {
     return Type.prototype[JSX.jsxFactory].call(this, Type, attributes);
   }
 
-  createFunctionalComponent(Type, attributes) {
+  createFunctionalComponent(Type: ElementFn, attributes: any) {
     try {
       const result = Type.call(this, attributes);
-      Type[JSX.jsxType] = true;
+      Type[symbols.jsxType] = true;
       if (result instanceof Object) {
-        result[JSX.jsxType] = Type;
+        result[symbols.jsxType] = Type;
       }
       return result;
     } catch (ex) {
@@ -87,9 +96,9 @@ export default class JsxProcessor {
     }
   }
 
-  createIntrinsicElement(el, attributes) {
+  createIntrinsicElement(el: string, attributes: any) {
     if (el in MARKUP) {
-      const encoded = {};
+      const encoded: any = {};
       Object.keys(attributes || {}).forEach(attribute => {
         const encoder = MARKUP[el][attribute];
         if (!encoder) {
@@ -117,7 +126,7 @@ export default class JsxProcessor {
     throw new Error(`JSX: Unsupported type ${el}`);
   }
 
-  createNativeObject(Type, attributes) {
+  createNativeObject(Type: any, attributes: any) {
     if (attributes && 'children' in attributes) {
       throw new Error(`JSX: ${Type.name} can not have children`);
     }
@@ -126,18 +135,18 @@ export default class JsxProcessor {
     return result;
   }
 
-  getChildren(attributes) {
+  getChildren(attributes: any) {
     if (!attributes || !('children' in attributes)) {
       return null;
     }
     return flattenChildren(attributes.children);
   }
 
-  withoutChildren(attributes) {
+  withoutChildren(attributes: any) {
     return omit(attributes, ['children']);
   }
 
-  withContentText(attributes, content, property, markupEnabled) {
+  withContentText(attributes: any, content: any[], property: string, markupEnabled: boolean) {
     if (attributes && attributes[property] && content && content.length) {
       throw new Error(`JSX: ${property} given twice`);
     }
@@ -147,7 +156,7 @@ export default class JsxProcessor {
     return Object.assign(attributes || {}, text ? {[property]: text} : {});
   }
 
-  withContentChildren(attributes, content, property) {
+  withContentChildren(attributes: any, content: any[], property: string) {
     if (attributes && attributes[property] && content && content.length) {
       throw new Error(`JSX: ${property} given twice`);
     }
@@ -155,19 +164,17 @@ export default class JsxProcessor {
     return Object.assign(attributes || {}, children ? {[property]: children} : {});
   }
 
-  /**
-   * @param {object} attributes
-   * @param {{[attr: string]: string}} shorthandsMapping
-   * @param {((value1: any, value2: string) => any)} merge
-   * @returns {object}
-   */
-  withShorthands(attributes, shorthandsMapping, merge) {
+  withShorthands(
+    attributes: object,
+    shorthandsMapping: {[attr: string]: string},
+    merge: ((value1: any, value2: string) => any)
+  ): object {
     const shorthandsKeys = Object.keys(shorthandsMapping);
     const shorthands = shorthandsKeys.filter(value => value in attributes);
     if (!shorthands.length) {
       return attributes;
     }
-    const attrCopy = omit(attributes, shorthandsKeys);
+    const attrCopy: any = omit(attributes, shorthandsKeys);
     shorthands.forEach(shorthand => {
       const prop = shorthandsMapping[shorthand];
       if (prop in attrCopy) {
@@ -179,29 +186,15 @@ export default class JsxProcessor {
     return attrCopy;
   }
 
-  /**
-   * @template {new(...args: any[]) => any} Constructor
-   * @template {Constructor & ((...any) => any)} Factory
-   * @template {object} Constructors
-   * @param {Constructors} dic
-   * @returns {Partial<{[key in keyof Constructors]: Factory}>}
-   */
-  makeFactories(dic) {
-    const result = {};
+  makeFactories(dic: {[key: string]: ElementFn}) {
+    const result: {[key: string]: ElementFn} = {};
     Object.keys(dic).forEach(key => {
-      result[key] = this.makeFactory(dic[key]);
+      result[key] = this.makeFactory(dic[key]) as ElementFn;
     });
     return result;
   }
 
-  /**
-   * @template {object} Instance
-   * @template {new(...args: any[]) => Instance} Constructor
-   * @template {Constructor & ((...any) => Instance)} Factory
-   * @param {Constructor} constructor
-   * @returns {Factory}
-   */
-  makeFactory(constructor) {
+  makeFactory(constructor: ElementFn): ElementFn {
     if (arguments.length !== 1) {
       throw new Error(`Expected exactly one argument, got ${arguments.length}`);
     }
@@ -210,24 +203,15 @@ export default class JsxProcessor {
       throw new Error(`Function ${constructor.name} is not a valid constructor`);
     }
     if (constructor[symbols.originalComponent])  {
-      return this.makeFactory(constructor[symbols.originalComponent]);
+      return this.makeFactory(constructor[symbols.originalComponent] as ElementFn);
     }
     return createFactoryProxy(this, constructor);
   }
 
 }
 
-/**
-   * @template {object} Instance
-   * @template {new(...args: any[]) => Instance} Constructor
-   * @template {Constructor & ((...any) => Instance)} Factory
-   * @param {JsxProcessor} processor
-   * @param {Constructor} constructor
-   * @returns {Factory}
-   */
-function createFactoryProxy(processor, constructor) {
-  /** @type {ProxyHandler} */
-  const handler = {
+function createFactoryProxy(processor: JsxProcessor, constructor: ElementFn): ElementFn {
+  const handler: ProxyHandler<ElementFn> = {
     apply(target, _thisArg, args) {
       const [attributes, functionalComponent] = args;
       const result = processor.createElement(proxy, attributes);
@@ -257,9 +241,9 @@ function createFactoryProxy(processor, constructor) {
 /**
  * Converts any value to a flat array.
  */
-export function flattenChildren(children) {
+export function flattenChildren(children: unknown) {
   if (children instanceof Array) {
-    let result = [];
+    let result: any[] = [];
     for (const child of children) {
       if (child && child.toArray) {
         result = result.concat(flattenChildren(child.toArray()));
@@ -274,11 +258,7 @@ export function flattenChildren(children) {
   return [children];
 }
 
-/**
- * @param {string[]} textArray
- * @param {boolean} markupEnabled
- */
-export function joinTextContent(textArray, markupEnabled) {
+export function joinTextContent(textArray: string[], markupEnabled: boolean) {
   if (!textArray) {
     return null;
   }
@@ -294,19 +274,56 @@ export function joinTextContent(textArray, markupEnabled) {
 
 export const JSX = {
 
-  /** @type {unique Symbol} */
-  jsxFactory: Symbol('jsxFactory'),
+  processor: null as JsxProcessor | null,
 
-  /** @type {unique Symbol} */
-  jsxType: Symbol('jsxType'),
+  jsxFactory: symbols.jsxFactory,
 
-  /** @param {JsxProcessor} jsxProcessor */
-  install(jsxProcessor) {
+  jsxType: symbols.jsxType,
+
+  install(jsxProcessor: JsxProcessor) {
     this.processor = jsxProcessor;
   },
 
   createElement() {
-    return this.processor.createElement.apply(this.processor, arguments);
+    return this.processor!.createElement.apply(this.processor, arguments as any);
   }
 
 };
+
+function parseChildren(rawChildren: any[], type: ElementFn | string) {
+  const children = rawChildren?.filter(value => !isAttributesObject(value));
+  const attributes = rawChildren
+    ?.filter(isAttributesObject)
+    .reduce((prev, current) => joinAttributes(prev, current, type), {});
+  return {
+    finalChildren: children.length ? children : null,
+    additionalAttributes: omit(attributes, [symbols.jsxType, symbols.setterTargetType])
+  };
+}
+
+function isAttributesObject(value: any): value is {[symbols.setterTargetType]: Function} {
+  return value instanceof Object && value[symbols.setterTargetType] instanceof Function;
+}
+
+function joinAttributes(target: any, source: any, actualTargetType: ElementFn | string): any {
+  const expectedTargetType = source[symbols.setterTargetType];
+  const actualTargetTypeFn = typeof actualTargetType === 'string' ? String : actualTargetType;
+  if (expectedTargetType
+    && (actualTargetTypeFn !== expectedTargetType)
+    && !(actualTargetTypeFn.prototype instanceof expectedTargetType)
+  ) {
+    const firstKey = Object.keys(source)[0];
+    const typeName = actualTargetType instanceof Function
+      ? actualTargetType.name
+      : actualTargetType;
+    throw new TypeError(
+      `Attribute "${firstKey}" is targeting ${expectedTargetType.name}, but is set on ${typeName}`
+    );
+  }
+  Object.keys(source).forEach(key => {
+    if (key in target) {
+      throw new Error(`Attribute "${key}" is set multiple times`);
+    }
+  });
+  return Object.assign(target, source);
+}

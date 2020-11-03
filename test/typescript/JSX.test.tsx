@@ -50,6 +50,21 @@ const scrollViewWidthChildren: tabris.ScrollView = <tabris.ScrollView>{new tabri
 const tabWidthChildren: tabris.Tab = <tabris.Tab>{new tabris.Button()}</tabris.Tab>;
 const tabFolderWidthChildren: tabris.TabFolder = <tabris.TabFolder>{new tabris.Tab()}</tabris.TabFolder>;
 
+// Attr
+
+const textAndSetter: tabris.TextInput = <tabris.TextInput>
+  <tabris.Setter attribute='onAccept' target={tabris.TextInput}>
+    {ev => console.log(ev.text)}
+  </tabris.Setter>
+  foo
+</tabris.TextInput>;
+const childrenAndSetter: tabris.Page = <tabris.Page>
+  <tabris.Setter target={tabris.Page} attribute='title'>
+    Test
+  </tabris.Setter>
+  <tabris.TextView>Content</tabris.TextView>
+</tabris.Page>;
+
 // Custom Components
 class MyCustomWidget extends tabris.Composite {
 

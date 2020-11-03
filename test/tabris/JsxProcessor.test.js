@@ -4,6 +4,7 @@ import {createJsxProcessor, JSX} from '../../src/tabris/JsxProcessor';
 import WidgetCollection from '../../src/tabris/WidgetCollection';
 import $ from '../../src/tabris/$';
 import Composite from '../../src/tabris/widgets/Composite';
+import Widget from '../../src/tabris/Widget';
 import Popover from '../../src/tabris/Popover';
 import AlertDialog from '../../src/tabris/AlertDialog';
 import Button from '../../src/tabris/widgets/Button';
@@ -17,6 +18,7 @@ import Font from '../../src/tabris/Font';
 import {originalComponent, proxyHandler} from '../../src/tabris/symbols';
 import {format} from '../../src/tabris/Formatter';
 import NativeObject from '../../src/tabris/NativeObject';
+import Setter from '../../src/tabris/Setter';
 
 describe('JsxProcessor', function() {
 
@@ -43,6 +45,51 @@ describe('JsxProcessor', function() {
 
     it('sets properties', function() {
       expect(jsx.createElement(CheckBox, {text: 'foo'}).text).to.equal('foo');
+    });
+
+    it('sets properties via Attr children', function() {
+      const data = {};
+      const attrText = jsx.createElement(Setter, {target: CheckBox, attribute: 'text', children: ['foo']});
+      const attrData = jsx.createElement(Setter, {target: CheckBox, attribute: 'data', children: [data]});
+
+      const widget = jsx.createElement(CheckBox, {}, attrText, attrData);
+
+      expect(widget.text).to.equal('foo');
+      expect(widget.data).to.equal(data);
+    });
+
+    it('throws for Attr children with incorrect target', function() {
+      const attrData = jsx.createElement(Setter, {target: TextView, attribute: 'data', children: [{}]});
+
+      expect(() => jsx.createElement(CheckBox, {}, attrData)).to.throw(
+        TypeError,
+        'Attribute "data" is targeting TextView, but is set on CheckBox'
+      );
+    });
+
+    it('accepts Attr children with subclass target', function() {
+      const attrData = jsx.createElement(Setter, {target: Widget, attribute: 'data', children: [{}]});
+
+      expect(() => jsx.createElement(CheckBox, {}, attrData)).not.to.throw;
+    });
+
+    it('throws for conflicting Attr children', function() {
+      const attrData1 = jsx.createElement(Setter, {target: CheckBox, attribute: 'data', children: [{}]});
+      const attrData2 = jsx.createElement(Setter, {target: CheckBox, attribute: 'data', children: [{}]});
+
+      expect(() => jsx.createElement(CheckBox, {}, attrData1, attrData2)).to.throw(
+        Error,
+        'Attribute "data" is set multiple times'
+      );
+    });
+
+    it('throws for Attr conflicting with attribute', function() {
+      const attrData = jsx.createElement(Setter, {target: CheckBox, attribute: 'data', children: [{}]});
+
+      expect(() => jsx.createElement(CheckBox, {data: {}}, attrData)).to.throw(
+        Error,
+        'Attribute "data" is set multiple times'
+      );
     });
 
     it('allows shorthands for layoutData pre-sets', function() {
@@ -110,6 +157,16 @@ describe('JsxProcessor', function() {
       expect(selectSpy).not.to.have.been.called;
       expect(fooSpyA).not.to.have.been.called;
       expect(fooSpyZ).not.to.have.been.called;
+    });
+
+    it('attaches Attr listeners', function() {
+      const selectSpy = spy();
+
+      const attr = jsx.createElement(Setter, {target: CheckBox, attribute: 'onSelect', children: [selectSpy]});
+      const widget = jsx.createElement(CheckBox, {}, attr);
+      widget.trigger('select', {});
+
+      expect(selectSpy).to.have.been.calledOnce;
     });
 
     it('appends children', function() {

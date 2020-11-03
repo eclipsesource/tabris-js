@@ -1,4 +1,4 @@
-import {CollectionView, Composite, ImageView, TextView, contentView, AlertDialog} from 'tabris';
+import {CollectionView, Composite, ImageView, TextView, contentView, AlertDialog, Setter} from 'tabris';
 
 const people = [
   {firstName: 'Holger', lastName: 'Staudacher'},
@@ -12,23 +12,15 @@ const people = [
 ];
 
 contentView.append(
-  <CollectionView
-      stretch
-      itemCount={people.length}
-      cellHeight={256}
-      createCell={createCell}
-      updateCell={updateCell}/>
+  <CollectionView stretch itemCount={people.length} cellHeight={256} updateCell={updateCell}>
+    <Setter target={CollectionView} attribute='createCell'>{() =>
+      <Composite onTap={handleTap}>
+        <ImageView top={16} centerX={0} width={200} height={200}/>
+        <TextView left={30} top='prev() 16' right={30} alignment='centerX'/>
+      </Composite>}
+    </Setter>
+  </CollectionView>
 );
-
-/** @returns {Composite} */
-function createCell() {
-  return (
-    <Composite onTap={handleTap}>
-      <ImageView top={16} centerX={0} width={200} height={200}/>
-      <TextView left={30} top='prev() 16' right={30} alignment='centerX'/>
-    </Composite>
-  );
-}
 
 /**
  * @param {Composite} cell

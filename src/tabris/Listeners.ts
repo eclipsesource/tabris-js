@@ -125,7 +125,7 @@ export function attributesWithoutListener(attributes: object) {
 export function registerListenerAttributes(
   obj: TargetCandidate,
   attributes: Attributes,
-  attached: object
+  attached?: object
 ) {
   if (!obj.jsxAttributes) {
     obj.jsxAttributes = {};
