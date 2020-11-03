@@ -3,7 +3,8 @@ import {expect, mockTabris, restore, spy, stub} from '../../test';
 import WidgetCollection from '../../../src/tabris/WidgetCollection';
 import ClientMock from '../ClientMock';
 import Composite from '../../../src/tabris/widgets/Composite';
-import {createJsxProcessor} from '../../../src/tabris/JsxProcessor';
+// eslint-disable-next-line no-unused-vars
+import JsxProcessor, {createJsxProcessor} from '../../../src/tabris/JsxProcessor';
 
 describe('Widget', function() {
 
@@ -33,7 +34,7 @@ describe('Widget', function() {
 
   afterEach(restore);
 
-  describe('apply', function() {
+  describe('apply function', function() {
 
     /** @type {TestWidget} */
     let child1;
@@ -574,6 +575,58 @@ describe('Widget', function() {
         expect(child1.set).to.have.been.calledOnce;
       });
 
+    });
+
+  });
+
+  describe('apply attribute', function() {
+
+    /** @type {JsxProcessor} */
+    let jsx;
+
+    /** @type {Composite} */
+    let child;
+
+    /** @type {sinon.SinonSpy} */
+    let setSpy;
+
+    /** @type {object} */
+    const props = Object.freeze({prop1: 'v1', prop2: 'v2'});
+
+    beforeEach(function() {
+      jsx = createJsxProcessor();
+      child = jsx.createElement(TestWidget, {id: 'foo'});
+      setSpy = spy(child, 'set');
+    });
+
+    it('runs after children have been appended', function() {
+      jsx.createElement(TestWidget, {apply: {'#foo': props}}, child);
+
+      expect(setSpy).to.have.been.calledWith(props);
+    });
+
+    it('runs in strict mode', function() {
+      expect(
+        () => jsx.createElement(TestWidget, {apply: {'#foo': props}})
+      ).to.throw(Error,
+        'No widget matches the given selector "#foo"'
+      );
+    });
+
+    it('runs public variant', function() {
+      class TestComponent extends Composite {
+        constructor() {
+          super({});
+          this.append(child);
+          this.children = () => new WidgetCollection();
+        }
+      }
+
+      expect(
+        () => jsx.createElement(TestComponent, {apply: {'#foo': props}})
+      ).to.throw(Error,
+        'No widget matches the given selector "#foo"'
+      );
     });
 
   });

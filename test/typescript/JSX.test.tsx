@@ -65,6 +65,11 @@ const childrenAndSetter: tabris.Page = <tabris.Page>
   <tabris.TextView>Content</tabris.TextView>
 </tabris.Page>;
 
+// apply
+
+const compositeWithApply = <tabris.Composite apply={{'*': {background: 'blue'}}}/>;
+const pageWithApply = <tabris.Page apply={v => ({'*': {background: v.title}})}/>;
+
 // Custom Components
 class MyCustomWidget extends tabris.Composite {
 

@@ -188,10 +188,13 @@ export default class Composite extends Widget {
   /** @this {import("../JsxProcessor").default} */
   [JSX.jsxFactory](Type, attributes) {
     const children = this.getChildren(attributes);
-    const normalAttributes = this.withoutChildren(attributes);
+    const {apply: rules, ...normalAttributes} = this.withoutChildren(attributes);
     const result = super[JSX.jsxFactory](Type, normalAttributes);
     if (children && children.length) {
       result.append(children);
+    }
+    if (rules) {
+      result.apply({mode: 'strict'}, rules);
     }
     return result;
   }

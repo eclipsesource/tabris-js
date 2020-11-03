@@ -34,7 +34,7 @@
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXAttributes<this> & {children?: any} & Partial<Record<'firstVisibleIndex' | 'lastVisibleIndex', never>> & Partial<Pick<this, 'cellHeight' | 'cellType' | 'createCell' | 'updateCell'>> "
+      "type": "JSXCompositeAttributes<this, any> & Partial<Record<'firstVisibleIndex' | 'lastVisibleIndex', never>> & Partial<Pick<this, 'cellHeight' | 'cellType' | 'createCell' | 'updateCell'>> "
     },
     "scrollbarVisible": {
       "type": "boolean",

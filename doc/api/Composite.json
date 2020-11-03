@@ -32,7 +32,7 @@
       "const": true,
       "readonly": true,
       "ts_only": true,
-      "type": "JSXAttributes<this> & {children?: JSXChildren<ChildType>}"
+      "type": "JSXCompositeAttributes<this, ChildType>"
     },
     "layout": {
       "type": {
@@ -217,20 +217,20 @@
           },
           {
             "name": "rules",
-            "type": "{[selector]: Attributes} <br/>&#124; (widget) => {[selector]: Attributes}",
-            "ts_type": "({[selector: string]: object})|((widget: this) => ({[selector: string]: object}))|null",
+            "type": "RuleSet",
+            "ts_type": "RuleSet<this>",
             "description": "The ruleset to apply. May also be given as a callback which is passed to the widget instance and must return the actual ruleset. This parameter can also be `null` if the `trigger` option is set. This will stop re-applying the ruleset previously associated with that trigger."
           }
         ],
         "returns": "this",
-        "description": "Applies the given attributes to all descendants that match the associated selector(s). Each attributes object may contain properties to be set and listeners to be registered. An entry will be treated as a listener if it follows the naming scheme \"onEventType\". IMPORTANT: Listeners previously registered (for the same type) via the `apply` method, a [JSX](../declarative-ui.md) element attribute or a [widget factory](./utils.md#asfactoryconstructor) call will be de-registered. This means you can call apply repeatedly and have a deterministic outcome. Listeners registered programmatically (e.g. `widget.onTap(...)` are not affected by this.) <br/><br/>For better type safety enable [strict mode](#applymode-rules) and use [`Setter`](./Setter.md) to create properties objects.\n\nIf you wish to always exclude specific \"internal\" children from this, overwrite the `children` method on their parent. See \"[Encapsulation](../selector.md#encapsulation)\"."
+        "description": "See also the article [\"Selector API\"](../selector.md#compositeapply).<br/><br/>Applies the given attributes to all descendants that match the associated selector(s). Each attributes object may contain properties to be set and listeners to be registered. An entry will be treated as a listener if it follows the naming scheme \"onEventType\". IMPORTANT: Listeners previously registered (for the same type) via the `apply` method, a [JSX](../declarative-ui.md) element attribute or a [widget factory](./utils.md#asfactoryconstructor) call will be de-registered. This means you can call apply repeatedly and have a deterministic outcome. Listeners registered programmatically (e.g. `widget.onTap(...)` are not affected by this.) <br/><br/>For better type safety enable [strict mode](#applymode-rules) and use [`Setter`](./Setter.md) to create properties objects.\n\nIf you wish to always exclude specific \"internal\" children from this, overwrite the `children` method on their parent. See \"[Encapsulation](../selector.md#encapsulation)\".<br/><br/>When using [declarative UI](../declarative-ui.md) syntax \"apply\" is a special attribute that calls this function."
       },
       {
         "parameters": [
           {
             "name": "rules",
-            "type": "{[selector]: Attributes} <br/>&#124; (widget) => {[selector]: Attributes}",
-            "ts_type": "({[selector: string]: object})|((widget: this) => ({[selector: string]: object}))",
+            "type": "RuleSet",
+            "ts_type": "RuleSet<this>",
             "description": "The ruleset to apply. May also be given as a callback which is passed to the widget instance and must return the actual ruleset."
           }
         ],
@@ -251,8 +251,8 @@
           },
           {
             "name": "rules",
-            "type": "{[selector]: Attributes} <br/>&#124; (widget) => {[selector]: Attributes}",
-            "ts_type": "({[selector: string]: object})|((widget: this) => ({[selector: string]: object}))",
+            "type": "RuleSet",
+            "ts_type": "RuleSet<this>",
             "description": "The ruleset to apply. May also be given as a callback which is passed to the widget instance and must return the actual ruleset."
           }
         ],
@@ -289,8 +289,8 @@
           },
           {
             "name": "rules",
-            "type": "{[selector]: Attributes} <br/>&#124; (widget) => {[selector]: Attributes}",
-            "ts_type": "({[selector: string]: object})|((widget: this) => ({[selector: string]: object}))|null",
+            "type": "RuleSet",
+            "ts_type": "RuleSet<this>",
             "description": "The ruleset to apply. May also be given as a callback which is passed to the widget instance and must return the actual ruleset."
           }
         ],
@@ -302,8 +302,8 @@
         "parameters": [
           {
             "name": "rules",
-            "type": "{[selector]: Attributes} <br/>&#124; (widget) => {[selector]: Attributes}",
-            "ts_type": "({[selector: string]: object})|((widget: this) => ({[selector: string]: object}))",
+            "type": "RuleSet",
+            "ts_type": "RuleSet<this>",
             "description": "The ruleset to apply. May also be given as a callback which is passed to the widget instance and must return the actual ruleset."
           }
         ],
@@ -325,8 +325,8 @@
           },
           {
             "name": "rules",
-            "type": "{[selector]: Attributes} <br/>&#124; (widget) => {[selector]: Attributes}",
-            "ts_type": "({[selector: string]: object})|((widget: this) => ({[selector: string]: object}))",
+            "type": "RuleSet",
+            "ts_type": "RuleSet<this>",
             "description": "The ruleset to apply. May also be given as a callback which is passed to the widget instance and must return the actual ruleset."
           }
         ],

@@ -39,6 +39,8 @@ export type JSXAttributes<
   U = Omit<T, 'set' | 'jsxAttributes'> // prevent self-reference issues
 > = Properties<U> & ListenersMap<U> & JSXShorthands<U>;
 export type Attributes<T extends JSXCandidate> = T['jsxAttributes'];
+export type JSXCompositeAttributes<T extends Composite, U extends Widget>
+  = JSXAttributes<T> & {apply?: RuleSet<T>, children?: JSXChildren<U>};
 type ExtendedEvent<EventData, Target = {}> = EventObject<Target> & EventData;
 export type Listener<T = {}> = (ev: ExtendedEvent<T>) => any;
 type ListenersTriggerParam<T> = Omit<T, keyof EventObject<any>>;

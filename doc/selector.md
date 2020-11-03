@@ -236,7 +236,7 @@ This will modify all `TextView` elements in the tree.
 
 __Note: Within [encapsulated](#encapsulation) components, use `_apply()` instead.__
 
-A shortcut for setting different sets of properties for different selections in one method call. The method takes a plain object with selectors as keys and property objects as values. This object is called a "ruleset":
+A shortcut for setting different sets of attributes for different selections in one method call. The method takes a plain object with selectors as keys and attributes objects as values. This object is called a "ruleset":
 
 ```js
 page.apply({
@@ -250,7 +250,18 @@ __The scope includes the widget it is called on__:
 page.apply({':host': {background: 'green'}}); // same as "page.background = green";
 ```
 
-The order in which the property objects are applied depends on the type of selectors being used. The order is:
+When using [declarative UI](./declarative-ui.md#apply) syntax \"apply\" is a special attribute that calls this function.
+
+```js
+Composite({
+  apply: {'#foo': {background: 'blue'}},
+  children: [
+    TextView({id: 'foo', text: 'Has blue background'})
+  ]
+})
+```
+
+The order in which the attributes objects are applied depends on the type of selectors being used. The order is:
 
 - `'*'` > `'Type'` > `'.class'` > `'#id'`
 
@@ -273,9 +284,9 @@ page.apply({
 });
 ```
 
-> :point_right: The order of the properties in the object literal is meaningless. According to the EcmaScript standard the members of a JavaScript object do not have a defined order. The priority of two selectors with the same specificity is undefined.
+> :point_right: The order of the attributes objects in the object literal is meaningless. According to the EcmaScript standard the members of a JavaScript object do not have a defined order. The priority of two selectors with the same specificity is undefined.
 
-To ensure `apply` addresses the right widgets, it can be executed in 'strict' mode and the [`Setter`](./api/Setter.md) helper function can be used to create the properties object. The kind of the selector then determines how many widgets must match (exactly one for id, at least one for any other), and `Setter` determines what type the widget must have. If these conditions are not met, an error will be thrown.
+To ensure `apply` addresses the right widgets, it can be executed in 'strict' mode and the [`Setter`](./api/Setter.md) helper function can be used to create the attributes object. The kind of the selector then determines how many widgets must match (exactly one for id, at least one for any other), and `Setter` determines what type the widget must have. If these conditions are not met, an error will be thrown.
 
 ```js
 page.apply('strict', {
@@ -283,6 +294,8 @@ page.apply('strict', {
   '.bar': Setter(TextView, {background: 'green'}) // must match one ore more TextViews
 });
 ```
+
+> :point_right: The `apply` attribute always uses strict mode.
 
 Listeners can also be registered via `apply`:
 ```js

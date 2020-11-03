@@ -388,3 +388,7 @@ export type ColorResourceData<Resources extends {[P in keyof Resources]: Color}>
 export type FontResourceData<Resources extends {[P in keyof Resources]: Font}> = Record<keyof Resources, Selectable<FontValue>>;
 
 export type TextResourceData<Resources extends {[P in keyof Resources]: string}> = Record<keyof Resources, Selectable<string>>;
+
+export type RuleSetObject = ({[selector: string]: object});
+
+export type RuleSet<Target> = RuleSetObject | ((widget: Target) => RuleSetObject) | null;

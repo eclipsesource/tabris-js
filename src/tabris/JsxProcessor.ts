@@ -309,7 +309,7 @@ function joinAttributes(target: any, source: any, actualTargetType: ElementFn | 
   const expectedTargetType = source[symbols.setterTargetType];
   const actualTargetTypeFn = typeof actualTargetType === 'string' ? String : actualTargetType;
   if (expectedTargetType
-    && (actualTargetTypeFn !== expectedTargetType)
+    && (actualTargetTypeFn.prototype !== expectedTargetType.prototype)
     && !(actualTargetTypeFn.prototype instanceof expectedTargetType)
   ) {
     const firstKey = Object.keys(source)[0];
