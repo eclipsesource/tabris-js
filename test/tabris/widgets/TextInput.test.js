@@ -1,4 +1,4 @@
-import {expect, mockTabris, restore, spy, stub} from '../../test';
+import {expect, mockTabris, restore, spy, stub, match} from '../../test';
 import ClientMock from '../ClientMock';
 import TextInput from '../../../src/tabris/widgets/TextInput';
 import {createJsxProcessor} from '../../../src/tabris/JsxProcessor';
@@ -106,6 +106,19 @@ describe('TextInput', function() {
     expect(listener).to.have.been.calledOnce;
     expect(listener).to.have.been.calledWithMatch({target: widget, text: 'foo'});
     checkListen('input');
+  });
+
+  it('beforeTextChange event', function() {
+    widget = new TextInput().onBeforeTextChange(listener);
+    const preventDefault = () => undefined;
+
+    tabris._notify(widget.cid, 'beforeTextChange', {oldValue: 'foo', newValue: 'bar', preventDefault});
+
+    expect(listener).to.have.been.calledOnce;
+    expect(listener).to.have.been.calledWithMatch(
+      {target: widget, oldValue: 'foo', newValue: 'bar', preventDefault: match.func}
+    );
+    checkListen('beforeTextChange');
   });
 
   it('accept event', function() {

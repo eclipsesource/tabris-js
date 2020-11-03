@@ -140,5 +140,6 @@ NativeObject.defineEvents(TextInput.prototype, {
   blur: {native: true, changes: 'focused', changeValue: () => false},
   accept: {native: true},
   input: {native: true, changes: 'text'},
+  beforeTextChange: {native: true},
   select: {native: true, changes: 'selection'}
 });

@@ -1,6 +1,6 @@
 import {
   ColorValue, EventObject, PropertyChangedEvent, TextInput, TextInputAcceptEvent, TextInputInputEvent,
-  TextInputSelectEvent, Properties, FontValue
+  TextInputSelectEvent, Properties, FontValue, TextInputBeforeTextChangeEvent
 } from 'tabris';
 
 let widget: TextInput = new TextInput({type: 'password'});
@@ -98,6 +98,8 @@ widget.set(properties);
 let target: TextInput = widget;
 let timeStamp: number = 0;
 let type: string = 'foo';
+let newValue: string = 'foo';
+let oldValue: string = 'foo';
 let textValue: string = 'bar';
 let selectionValue: number[] = [1, 2];
 
@@ -108,6 +110,7 @@ let inputEvent: TextInputInputEvent = {target, timeStamp, type, text};
 let textChangedEvent: PropertyChangedEvent<TextInput, string> = {target, timeStamp, type, value: textValue};
 let selectEvent: TextInputSelectEvent = {target, timeStamp, type, selection};
 let selectionChangedEvent: PropertyChangedEvent<TextInput, number[]> = {target, timeStamp, type, value: selectionValue};
+let beforeTextChangeEvent: TextInputBeforeTextChangeEvent<TextInput> = {target, timeStamp, type, newValue, oldValue, preventDefault() {}};
 
 widget
   .onAccept((event: TextInputAcceptEvent) => {})
@@ -116,6 +119,7 @@ widget
   .onInput((event: TextInputInputEvent) => {})
   .onSelect((event: TextInputSelectEvent) => {})
   .onTextChanged((event: PropertyChangedEvent<TextInput, string>) => {})
+  .onBeforeTextChange((event: TextInputBeforeTextChangeEvent<TextInput>) => {})
   .onSelectionChanged((event: PropertyChangedEvent<TextInput, number[]>) => {});
 
 class CustomComponent extends TextInput {
