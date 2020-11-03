@@ -110,6 +110,17 @@
         "returns": "ResultType",
         "description": "Creates a attributes object for the given widget type. This is meant to be used to creates rule sets for the [`apply`](./Composite.md#applyproperties) method. The benefit of using this method as opposed to passing the object directly is twofold: <br/><br/1. The IDE and/or TypeScript compiler can check that the properties are matching the given widget type.\n2. The `apply` method will only set the properties if the selected widget matches the type given here. If there is a mismatch an error will be thrown."
       }
-    ]
+    ],
+    "Apply": {
+      "description": "A setter for the `\"apply\"` attribute.",
+      "ts_only": true,
+      "parameters": [
+        {
+          "name": "attr",
+          "type": "{children: RuleSet<Composite>}"
+        }
+      ],
+      "returns": "{apply: object}"
+    }
   }
 }

@@ -1,6 +1,7 @@
 import checkType from './checkType';
 import NativeObject from './NativeObject';
 import {setterTargetType} from './symbols';
+import Composite from './widgets/Composite';
 
 interface SetterAttributes {
   target: Function;
@@ -40,3 +41,6 @@ function Setter(arg1: Function | SetterAttributes, arg2?: object): object {
 }
 
 export default Setter;
+
+export const Apply = (attr: {children: object[]}) =>
+  Setter({target: Composite, attribute: 'apply', ...attr});

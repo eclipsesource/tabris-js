@@ -73,7 +73,7 @@ import RefreshComposite from './widgets/RefreshComposite';
 import Resources from './Resources';
 import ScrollView from './widgets/ScrollView';
 import SearchAction from './widgets/SearchAction';
-import Setter from './Setter';
+import Setter, {Apply} from './Setter';
 import SizeMeasurement, {create as createSizeMeasurement} from './SizeMeasurement';
 import Slider from './widgets/Slider';
 import StatusBar, {create as createStatusBar} from './widgets/StatusBar';
@@ -196,7 +196,7 @@ const UTILS = {
 };
 
 const OTHER = Object.freeze({
-  Setter,
+  Apply,
   Authentication,
   CanvasContext,
   ChangeListeners,
@@ -222,6 +222,7 @@ const OTHER = Object.freeze({
   Resources,
   RowLayout,
   StackLayout,
+  Setter,
   Set: Setter, // legacy support
   symbols,
   TextResources,

@@ -69,6 +69,20 @@ const childrenAndSetter: tabris.Page = <tabris.Page>
 
 const compositeWithApply = <tabris.Composite apply={{'*': {background: 'blue'}}}/>;
 const pageWithApply = <tabris.Page apply={v => ({'*': {background: v.title}})}/>;
+const svWithApplyChild = (
+  <tabris.ScrollView>
+    <tabris.Apply>
+      {{'*': {background: 'red'}}}
+    </tabris.Apply>
+  </tabris.ScrollView>
+);
+const tabWithApplyChild = (
+  <tabris.Tab>
+    <tabris.Apply>
+      {(tab: tabris.Tab) => ({'*': {background: tab.title}})}
+    </tabris.Apply>
+  </tabris.Tab>
+);
 
 // Custom Components
 class MyCustomWidget extends tabris.Composite {

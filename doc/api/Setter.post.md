@@ -46,3 +46,15 @@ async function showSimpleDialog() {
 Which is better is a matter of taste.
 
 If an attribute is set both directly and via `Setter` an error will be thrown. Similarly, you can not specify multiple setter for the same attribute in the same parent element.
+
+### Apply
+
+The `Apply` element is `Setter` for the `apply` attribute. It can be used to invoke `apply` on a `<Composite>` element (or any of its subclasses):
+
+```jsx
+<Stack>
+  <Apply>{{TextView: {font: '24px'}}}</Apply>
+  <TextView>Hello</TextView>
+  <TextView>World</TextView>
+</Stack>
+```

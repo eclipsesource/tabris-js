@@ -246,6 +246,7 @@ describe('tabris', function() {
     expect(tabris.Setter).to.be.instanceOf(Function);
     expect(tabris.Set).to.equal(tabris.Setter);
     expect(tabris.Setter(tabris.TextView, {text: 'foo'})).to.deep.equal({text: 'foo'});
+    expect(tabris.Apply).to.be.instanceOf(Function);
   });
 
   it('contains symbols', function() {

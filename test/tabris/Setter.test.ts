@@ -1,6 +1,6 @@
 import {expect, mockTabris} from '../test';
 import ClientMock from './ClientMock';
-import Setter from '../../src/tabris/Setter';
+import Setter, {Apply} from '../../src/tabris/Setter';
 import Composite from '../../src/tabris/widgets/Composite';
 import TextView from '../../src/tabris/widgets/TextView';
 import {setterTargetType} from '../../src/tabris/symbols';
@@ -95,6 +95,17 @@ describe('Setter', function() {
       expect(Setter({target: Composite, attribute: 'foo', children: ['bar']})).to.deep.equal({
         [setterTargetType]: Composite,
         foo: 'bar'
+      });
+    });
+
+  });
+
+  describe('alias "Apply"', function() {
+
+    it('creates apply attribute', function() {
+      expect(Apply({children: [{'*': {background: 'blue'}}]})).to.deep.equal({
+        [setterTargetType]: Composite,
+        apply: {'*': {background: 'blue'}}
       });
     });
 
