@@ -1,4 +1,4 @@
-import {TextView, Attributes, contentView, Stack, Widget, CheckBox, CheckBoxSelectEvent, checkType} from 'tabris';
+import {TextView, Attributes, contentView, Stack, Widget, CheckBox, checkType, Setter, Apply} from 'tabris';
 
 class Person {
   constructor(
@@ -20,8 +20,15 @@ contentView.append(
     </StyledComponent>
     <StaticComponent person={joe}/>
     <DynamicComponent data={joe}/>
-    <CheckBox onSelect={buttonClick}>
+    <ComposedComponent data={joe}/>
+    <CheckBox>
       Tap to change dynamic component data
+      <Setter attribute='onSelect' target={CheckBox}>
+        {ev => {
+          $(DynamicComponent).only().data = ev.checked ? sam : joe;
+          $(ComposedComponent).only().data = ev.checked ? sam : joe;
+        }}
+      </Setter>
     </CheckBox>
   </Stack>
 );
@@ -54,6 +61,17 @@ function DynamicComponent(attributes: PersonDataAttr) {
     .set({data}); // needs to be set last to trigger the first change event
 }
 
-function buttonClick(ev: CheckBoxSelectEvent) {
-  $(DynamicComponent).only().data = ev.checked ? sam : null;
+function ComposedComponent(attr: PersonDataAttr) {
+  return (
+    <Stack {...attr}>
+      <TextView id='firstname' background='#ee9999'/>
+      <TextView id='lastname' background='#9999ee'/>
+      <Apply>
+        {({data}: {data: Partial<Person>}) => ({
+          '#firstname': Setter(TextView, {text: data?.firstName || ''}),
+          '#lastname': Setter(TextView, {text: data?.lastName || ''})
+        })}
+      </Apply>
+    </Stack>
+  );
 }

@@ -194,7 +194,10 @@ export default class Composite extends Widget {
       result.append(children);
     }
     if (rules) {
-      result.apply({mode: 'strict'}, rules);
+      result.apply({
+        mode: 'strict',
+        trigger: rules instanceof Function ? '*' : 'rules'
+      }, rules);
     }
     return result;
   }

@@ -1,6 +1,10 @@
 import NativeObject from './NativeObject';
 import WidgetCollection from './WidgetCollection';
 import {JSX} from './JsxProcessor';
+import {toValueString} from './Console';
+
+const MSG_FILTER_ERR  = 'This may be a functional component that was not configured correctly.'
+ + ' Please consult documentation on declarative UI.';
 
 export function select(array, selector, deep, widgetCollection) {
   if (!array || array.length === 0) {
@@ -69,7 +73,22 @@ export function getFilter(selector, widgetCollection) {
     if (matches[widget.cid]) {
       return false;
     }
-    if (filter(widget, index, widgetCollection)) {
+    let isMatch = false;
+    try {
+      isMatch = filter(widget, index, widgetCollection);
+    } catch (ex) {
+      let msg = `Selector function ${filter.name} caused exception "${ex.message}".\n`;
+      if (/^[A-Z]/.test(filter.name)) {
+        msg += MSG_FILTER_ERR;
+      }
+      throw new Error(msg);
+    }
+    if (isMatch instanceof NativeObject) {
+      throw new Error(
+        `Selector function ${filter.name} returned ${toValueString(isMatch)}.\n${MSG_FILTER_ERR}`
+      );
+    }
+    if (isMatch) {
       matches[widget.cid] = true;
       return true;
     }

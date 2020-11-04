@@ -544,13 +544,17 @@ describe('Widget', function() {
       });
 
       it('passes widget to callback', function() {
-        widget.apply({trigger: 'onTap'}, rules);
+        const cb = stub().returns(rules);
+        widget.apply({trigger: 'onTap'}, cb);
 
         widget.trigger('tap');
 
         expect(setterSpy).to.have.been.calledTwice;
         expect(setterSpy.args[0][0]).to.deep.equal(props);
         expect(setterSpy.args[1][0]).to.deep.equal(props);
+        expect(cb).to.deep.calledTwice;
+        expect(cb.args[0][0]).to.equal(widget);
+        expect(cb.args[1][0]).to.equal(widget);
       });
 
       it('de-registers previous event trigger', function() {
@@ -573,6 +577,55 @@ describe('Widget', function() {
         widget.trigger('tap');
 
         expect(child1.set).to.have.been.calledOnce;
+      });
+
+      describe('*', function() {
+
+        it('re-applies for any property change', function() {
+          const calls = [];
+          widget.apply({trigger: '*'}, rules);
+
+          calls.push(setterSpy.args.length);
+          widget.width = 100;
+          widget.height = 100;
+          widget.data = {};
+          tabris.flush();
+          calls.push(setterSpy.args.length);
+          widget.data = {};
+          tabris.flush();
+          calls.push(setterSpy.args.length);
+
+          expect(calls).to.deep.equal([1, 2, 3]);
+          expect(setterSpy.args[0][0]).to.deep.equal(props);
+          expect(setterSpy.args[1][0]).to.deep.equal(props);
+          expect(setterSpy.args[2][0]).to.deep.equal(props);
+        });
+
+        it('passes widget to callback', function() {
+          const cb = stub().returns(rules);
+          widget.apply({trigger: '*'}, cb);
+
+          widget.width = 100;
+          tabris.flush();
+
+          expect(setterSpy).to.have.been.calledTwice;
+          expect(setterSpy.args[0][0]).to.deep.equal(props);
+          expect(setterSpy.args[1][0]).to.deep.equal(props);
+          expect(cb).to.deep.calledTwice;
+          expect(cb.args[0][0]).to.equal(widget);
+          expect(cb.args[1][0]).to.equal(widget);
+        });
+
+        it('de-registers trigger on null', function() {
+          widget.apply({trigger: '*'}, rules);
+          widget.apply({trigger: '*'}, null);
+
+          widget.width = 100;
+          tabris.flush();
+
+          expect(child1.set).to.have.been.calledOnce;
+        });
+
       });
 
     });
@@ -627,6 +680,21 @@ describe('Widget', function() {
       ).to.throw(Error,
         'No widget matches the given selector "#foo"'
       );
+    });
+
+    it('registers trigger "*" if given a function', function() {
+      const apply = stub().returns({'#foo': props});
+
+      widget = jsx.createElement(TestWidget, {apply}, child);
+      widget.data = {};
+      tabris.flush();
+      widget.data = {};
+      tabris.flush();
+
+      expect(apply).to.have.been.calledThrice;
+      expect(apply).to.have.been.calledWith(widget);
+      expect(setSpy).to.have.been.calledThrice;
+      expect(setSpy).to.have.been.calledWith(props);
     });
 
   });

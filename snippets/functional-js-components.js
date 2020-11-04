@@ -20,10 +20,12 @@ contentView.append(
     StyledComponent({background: 'gray', text: 'Defaults can be overwritten'}),
     StaticComponent({person: joe}),
     DynamicComponent({data: joe}),
+    ComposedComponent({data: joe}),
     CheckBox({
-      onSelect: (ev => {
-        $(DynamicComponent).only(TextView).data = ev.checked ? sam : joe;
-      }),
+      onSelect: ev => {
+        $(DynamicComponent).only().data = ev.checked ? sam : joe;
+        $(ComposedComponent).only().data = ev.checked ? sam : joe;
+      },
       text: 'Tap to change dynamic component data'
     })
   ]})
@@ -49,4 +51,19 @@ function DynamicComponent({data, ...attr}) {
       ev.target.text = person ? `This is now ${person.firstName} ${person.lastName}` : '';
     })
     .set({data}); // needs to be set last to trigger the first change event
+}
+
+/** @param {tabris.Attributes<tabris.Widget> & {data: Person}} attr */
+function ComposedComponent(attr) {
+  return Stack({
+    children: [
+      TextView({id: 'firstname', background: '#ee9999'}),
+      TextView({id: 'lastname', background: '#9999ee'})
+    ],
+    apply: widget => ({
+      '#firstname': {text: widget.data.firstName || ''},
+      '#lastname': {text: widget.data.lastName || ''}
+    }),
+    ...attr
+  }, ComposedComponent);
 }

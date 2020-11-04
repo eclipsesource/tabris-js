@@ -3,23 +3,29 @@ import {createSelectorArray, getSelectorSpecificity} from '../util-widget-select
 import WidgetCollection from '../WidgetCollection';
 import {setterTargetType} from '../symbols';
 import checkType from '../checkType';
+import Observable from '../Observable';
+import Composite from './Composite';
+import Widget from '../Widget';
 
-/**
- * @typedef {import('./Composite').default} Composite
- * @typedef {import('../Widget').default} Widget
- * @typedef {'default'|'strict'} Mode
- * @typedef {symbol|string} Trigger
- * @typedef {{rules: object, mode: Mode, trigger: Trigger}} ApplyArgs
- */
+type Mode =  'default' | 'strict';
+type Trigger = symbol | string;
+type RuleSet = {
+  [selector: string]: {[attribute: string]: any}
+};
 
-/**
- * @param {object} config
- * @param {Composite} config.host
- * @param {boolean} config.protected
- * @param {IArguments} config.args
- * @returns {Composite}
- */
-export function apply(config) {
+interface ApplyArgs {
+ rules: RuleSet | Function;
+ mode: Mode;
+ trigger: Trigger;
+}
+
+interface ApplyConfig {
+  host: Composite;
+  protected: boolean;
+  args: IArguments;
+}
+
+export function apply(config: ApplyConfig): Composite {
   const host = config.host;
   if (config.args.length === 1
     && (typeof config.args[0] === 'string' || typeof config.args[0] === 'symbol')
@@ -30,58 +36,58 @@ export function apply(config) {
   const applyArgs = parseApplyArgs(config.args);
   const children = config.protected ? host._children() : host.children();
   const scope = new WidgetCollection(
+    // @ts-ignore TODO: migrate Widget and Composite to TypeScript to fix these
     asArray(children).concat(host), {selector: '*', origin: host, deep: true}
   );
-  applyRules(applyArgs, host, scope);
+  if (applyArgs.trigger !== '*') {
+    // @ts-ignore
+    applyRules(applyArgs, host, scope);
+  }
   setupTrigger(applyArgs, host, scope);
   return host;
 }
 
-/**
- * @param {ApplyArgs} applyArgs
- * @param {Widget} host
- * @param {WidgetCollection} scope
- * @param {boolean=} internal
- */
-export function applyRules(applyArgs, host, scope, internal) {
-  const rules = applyArgs.rules instanceof Function
+export function applyRules(
+  applyArgs: ApplyArgs,
+  host: Widget,
+  scope: WidgetCollection,
+  internal?: boolean
+) {
+  const rules: RuleSet = applyArgs.rules instanceof Function
     ? checkType(applyArgs.rules(host), Object, 'returned rules')
     : applyArgs.rules;
   if (!rules) {
     return;
   }
   Object.keys(rules)
-    .map(key => [createSelectorArray(key, host), rules[key]])
+    .map(key => [createSelectorArray(key, host), rules[key]] as any[])
     .sort((rule1, rule2) => getSelectorSpecificity(rule1[0]) - getSelectorSpecificity(rule2[0]))
     .forEach(rule => {
-      applyRule(applyArgs.mode, scope, (/** @type {any}*/(rule)), host, !!internal);
+      applyRule(applyArgs.mode, scope, rule, host, !!internal);
     });
 }
 
-/**
- * @param {ApplyArgs} applyArgs
- * @param {Composite} host
- * @param {WidgetCollection} scope
- */
-function setupTrigger(applyArgs, host, scope) {
+function setupTrigger(applyArgs: ApplyArgs, host: Composite, scope: WidgetCollection) {
   const trigger = applyArgs.trigger;
   if (trigger === 'rules') {
     return;
   }
   const attached = getApplyAttributeObject(host);
+  // @ts-ignore
   const updater = applyArgs.rules ? () => applyRules(applyArgs, host, scope) : null;
   if (typeof trigger === 'string' && isListenerAttribute(trigger)) {
     registerListenerAttributes(host, {[trigger]: updater}, attached);
+  } else if (trigger === '*') {
+    attached[trigger]?.unsubscribe();
+    if (updater) {
+      attached[trigger] = Observable.mutations(host).subscribe(updater);
+    }
   } else {
     attached[trigger] = updater;
   }
 }
 
-/**
- * @param {Trigger} trigger
- * @param {Composite} host
- */
-function triggerUpdate(trigger, host) {
+function triggerUpdate(trigger: Trigger, host: Composite) {
   const attached = getApplyAttributeObject(host);
   if (!attached[trigger]) {
     throw new Error(`No ruleset is associated with trigger "${String(trigger)}"`);
@@ -89,11 +95,7 @@ function triggerUpdate(trigger, host) {
   attached[trigger]();
 }
 
-/**
- * @param {IArguments} args
- * @returns {ApplyArgs}
- */
-function parseApplyArgs(args) {
+function parseApplyArgs(args: IArguments): ApplyArgs {
   if (args.length === 0 || args.length > 2) {
     throw new Error(`Expected 1-2 arguments, got ${args.length}`);
   }
@@ -110,59 +112,53 @@ function parseApplyArgs(args) {
   return {rules, mode, trigger};
 }
 
-/**
- * @param {string|object} value
- */
-function normalizeApplyOptions(value) {
+function normalizeApplyOptions(value: any) {
   const mode = typeof value === 'string' ? value : value.mode || 'default';
   const options = value instanceof Object ? value : {};
   const trigger = options.trigger || 'rules';
   return {mode, trigger};
 }
 
-/**
- * @param {'default'|'strict'} mode
- * @param {WidgetCollection} scope
- * @param {[[string], object]} rule
- * @param {Widget} host
- * @param {boolean} internal
- * @param {Composite} host
- */
-function applyRule(mode, scope, rule, host, internal) {
+function applyRule(
+  mode: Mode,
+  scope: WidgetCollection,
+  rule: any[],
+  host: Widget,
+  internal: boolean
+) {
   const [selector, attributes] = rule;
   checkType(attributes, Object, {name: 'rule attributes'});
-  /** @type {Function} */
-  const targetType = attributes[setterTargetType];
+  const targetType: Constructor<any> = attributes[setterTargetType];
   const matches = scope.filter(selector);
   if (mode === 'strict') {
     checkApplyMatches(selector, matches, host);
   }
-  scope.filter(selector).forEach(widget => {
+  scope.filter(selector).forEach((widget: Widget) => {
     if (targetType && !(widget instanceof targetType)) {
       throw new TypeError(
         `Can not set properties of ${targetType.name} on ${widget}`
       );
     }
     widget.set(attributesWithoutListener(attributes));
-    registerListenerAttributes(widget, attributes, internal ? {} : widget.jsxAttributes);
+    registerListenerAttributes(widget, attributes, internal ? {} : (widget as any).jsxAttributes);
   });
 }
 
-/**
- * @param {Array<string|Widget>} selector
- * @param {WidgetCollection} matches
- * @param {Widget} host
- */
-function checkApplyMatches(selector, matches, host) {
+function checkApplyMatches(
+  selector: Array<string|Widget>,
+  matches: WidgetCollection,
+  host: Widget
+) {
   const selectorStr = selector.map(part => part === host ? ':host' : part).join(' > ');
   if (matches.length === 0) {
     throw new Error(`No widget matches the given selector "${selectorStr}"`);
   }
   const last = selector[selector.length - 1];
-  if (last[0] === '#' && matches.length > 1) {
+  if (typeof last === 'string' && last[0] === '#' && matches.length > 1) {
     throw new Error(`More than one widget matches the given selector "${selectorStr}"`);
   }
   const isHostSelector = selector.length === 1 && selector[0] === host;
+  // @ts-ignore TODO: migrate WidgetCollection to fix this
   if (!isHostSelector && matches.length === 1 && matches[0] === host) {
     throw new Error(
       `The only widget that matches the given selector "${selectorStr}" is the host widget`
@@ -170,11 +166,7 @@ function checkApplyMatches(selector, matches, host) {
   }
 }
 
-/**
- * @param {Composite} host
- * @returns {object}
- */
-function getApplyAttributeObject(host) {
+function getApplyAttributeObject(host: any): any {
   if (!host.jsxAttributes) {
     host.jsxAttributes = {};
   }
@@ -184,7 +176,7 @@ function getApplyAttributeObject(host) {
   return host.jsxAttributes.apply;
 }
 
-function asArray(value) {
+function asArray(value: WidgetCollection | Widget[]): Widget[] {
   if (!value) {
     return [];
   }

@@ -53,6 +53,7 @@ thisReturnValue = widget.apply(widget => ({'*': {layout: widget.layout}}));
 thisReturnValue = widget.apply({mode: 'default'}, {selectorString: properties});
 thisReturnValue = widget.apply({mode: 'strict'}, () => ({selectorString: properties}));
 thisReturnValue = widget.apply({trigger: 'update'}, () => ({selectorString: properties}));
+thisReturnValue = widget.apply({trigger: '*'}, () => ({selectorString: properties}));
 thisReturnValue = widget.apply({trigger: 'onTap'}, ({selectorString: properties}));
 thisReturnValue = widget.apply('update');
 thisReturnValue = widget.apply('onTap');
@@ -102,6 +103,7 @@ class CustomComponent extends Composite {
     self = this._apply({mode: 'default'}, {selectorString: properties});
     self = this._apply({mode: 'strict'}, () => ({selectorString: properties}));
     self = this._apply({mode: 'strict', trigger: 'update'}, widget => ({selectorString: {foo: widget.layout}}));
+    self = this._apply({mode: 'strict', trigger: '*'}, widget => ({selectorString: {foo: widget.layout}}));
     this._nativeSet('foo', 'bar');
     const value = this._nativeGet('foo') as number;
     this._nativeListen('foo', true);

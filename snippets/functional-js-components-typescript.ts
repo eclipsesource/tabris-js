@@ -1,4 +1,4 @@
-import {TextView, Attributes, contentView, Stack, Widget, CheckBox, checkType} from 'tabris';
+import {TextView, Attributes, contentView, Stack, Widget, CheckBox, checkType, Setter} from 'tabris';
 
 class Person {
   constructor(
@@ -16,8 +16,12 @@ contentView.append(
     StyledComponent({background: 'gray', text: 'Defaults can be overwritten'}),
     StaticComponent({person: joe}),
     DynamicComponent({data: joe}),
+    ComposedComponent({data: joe}),
     CheckBox({
-      onSelect: (ev => $(DynamicComponent).only().data = ev.checked ? sam : joe),
+      onSelect: ev => {
+        $(DynamicComponent).only().data = ev.checked ? sam : joe;
+        $(ComposedComponent).only().data = ev.checked ? sam : joe;
+      },
       text: 'Tap to change dynamic component data'
     })
   ]})
@@ -35,6 +39,7 @@ function StaticComponent({person, ...attr}: PersonAttr) {
 }
 
 type PersonDataAttr = Attributes<Widget> & {data: Person};
+
 function DynamicComponent({data, ...attr}: PersonDataAttr) {
   return TextView(attr, DynamicComponent)
     .onDataChanged(ev => {
@@ -42,4 +47,18 @@ function DynamicComponent({data, ...attr}: PersonDataAttr) {
       ev.target.text = person ? `This is now ${person.firstName} ${person.lastName}` : '';
     })
     .set({data}); // needs to be set last to trigger the first change event
+}
+
+function ComposedComponent(attr: PersonDataAttr) {
+  return Stack({
+    children: [
+      TextView({id: 'firstname', background: '#ee9999'}),
+      TextView({id: 'lastname', background: '#9999ee'})
+    ],
+    apply: ({data}: {data: Partial<Person>}) => ({
+      '#firstname': Setter(TextView, {text: data?.firstName || ''}),
+      '#lastname': Setter(TextView, {text: data?.lastName || ''})
+    }),
+    ...attr
+  }, ComposedComponent);
 }

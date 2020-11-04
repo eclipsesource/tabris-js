@@ -175,7 +175,7 @@ describe('WidgetCollection', function() {
     });
 
     it('calls callback with index and WidgetCollection', function() {
-      const callback = spy();
+      const callback = stub();
 
       collection.filter(callback);
 

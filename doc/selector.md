@@ -8,13 +8,12 @@ Tabris.js offers APIs to find and manipulate widgets anywhere in the UI tree usi
 
 ### Type Selectors
 
-The simplest method to select widgets is to refer to their type. For example, the following statement would select all instances of `CheckBox`. [This also works with JSX element names](./declarative-ui.md#stateless-functional-components).
-
+The simplest method to select widgets is to refer to their type. For example, the following statement would select all instances of `CheckBox`.
 ```js
 page.find('CheckBox')
 ```
 
-You may also give the type via the constructor or [JSX Element](./declarative-ui.md#stateless-functional-components) instead of a string:
+You may also give the type via the constructor itself:
 
 ```js
 page.find(CheckBox)
@@ -27,6 +26,14 @@ page.find(Composite)
 ```
 
 This would find all instances of `Composite` or one of it's subclasses, like `TabFolder` or `Canvas`.
+
+Finally, a [functional component](./declarative-ui.md#functional-components) can also work:
+
+```js
+page.find(StyledText)
+```
+
+**However**, this does not always work out-of-the-box. Read more about this [here](./declarative-ui.md#as-selector) can also work:
 
 ### ID Selectors
 
@@ -286,6 +293,8 @@ page.apply({
 
 > :point_right: The order of the attributes objects in the object literal is meaningless. According to the EcmaScript standard the members of a JavaScript object do not have a defined order. The priority of two selectors with the same specificity is undefined.
 
+#### Strict mode
+
 To ensure `apply` addresses the right widgets, it can be executed in 'strict' mode and the [`Setter`](./api/Setter.md) helper function can be used to create the attributes object. The kind of the selector then determines how many widgets must match (exactly one for id, at least one for any other), and `Setter` determines what type the widget must have. If these conditions are not met, an error will be thrown.
 
 ```js
@@ -295,11 +304,11 @@ page.apply('strict', {
 });
 ```
 
-> :point_right: The `apply` attribute always uses strict mode.
+> :point_right: The `apply` **attribute** always uses strict mode. The `apply()` function does not use it by default for historic reasons.
 
 Listeners can also be registered via `apply`:
-```js
 
+```js
 page.apply('strict', {
   '#foo': Setter(Button, {onSelect: listener})
 });
@@ -307,7 +316,13 @@ page.apply('strict', {
 
 > :point_right: Unlike listener registration via methods (e.g. `button.onSelect(listener)`), `apply` *replaces* any listener previously registered via apply for the same event type. These "attached" listeners work like properties. In the above example, if apply previously registered another listener for `onSelect` on the 'foo' button, that listener will be de-registered before the new one is registered. It will also de-register any listener for that event type that was registered via [declarative UI](./declarative-ui.md).
 
-Finally, `apply` can also take a callback instead of a ruleset object. That callback is given the host widget and must return a ruleset that may be derived from the widget state. If a "trigger" event is given the ruleset will be applied again when that event is fired. For more information see ["Functional Components"](./declarative-ui.md#functional-components).
+#### Reactive apply()
+
+The, `apply` method/attribute can also take a callback instead of a ruleset object. That callback is given the host widget and must return a ruleset that may be derived from the widget state.
+
+If a "trigger" is set up for this ruleset it will be applied as needed. A trigger is either a event name (including 'on', e.g. 'onTap'), the string `'*'` to react to any property change (as described[here](./Observable.md#mutations)), or `'update'` for manual updates only.
+
+For more information see ["Functional Components"](./declarative-ui.md#using-apply).
 
 ### $()
 

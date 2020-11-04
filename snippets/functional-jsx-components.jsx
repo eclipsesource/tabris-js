@@ -1,4 +1,4 @@
-import {TextView, contentView, Stack, CheckBox, checkType} from 'tabris';
+import {TextView, contentView, Stack, CheckBox, checkType, Setter, Apply} from 'tabris';
 
 class Person {
   /**
@@ -24,8 +24,15 @@ contentView.append(
     </StyledComponent>
     <StaticComponent person={joe}/>
     <DynamicComponent data={joe}/>
-    <CheckBox onSelect={buttonClick}>
+    <ComposedComponent data={joe}/>
+    <CheckBox>
       Tap to change dynamic component data
+      <Setter attribute='onSelect' target={CheckBox}>
+        {ev => {
+          $(DynamicComponent).only().data = ev.checked ? sam : joe;
+          $(ComposedComponent).only().data = ev.checked ? sam : joe;
+        }}
+      </Setter>
     </CheckBox>
   </Stack>
 );
@@ -58,8 +65,18 @@ function DynamicComponent({data, ...other}) {
     .set({data}); // needs to be set last to trigger the first change event
 }
 
-/** @param {tabris.CheckBoxSelectEvent} ev */
-function buttonClick(ev) {
-  $(DynamicComponent).only().data = ev.checked ? sam : joe;
+/** @param {tabris.Attributes<tabris.Widget> & {data: Person}} attr */
+function ComposedComponent(attr) {
+  return (
+    <Stack {...attr}>
+      <TextView id='firstname' background='#ee9999'/>
+      <TextView id='lastname' background='#9999ee'/>
+      <Apply>
+        {widget => ({
+          '#firstname': {text: widget.data?.firstName || ''},
+          '#lastname': {text: widget.data?.lastName || ''}
+        })}
+      </Apply>
+    </Stack>
+  );
 }
-
