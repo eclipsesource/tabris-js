@@ -6,8 +6,8 @@ As a element `Setter` itself requires the following attributes:
 
 Attribute | type | Description
 -|-|-
-`target`| Constructor | The type of the parent element.
-`attribute`| string | The attribute to set.
+`target`| `Constructor` | The type of the parent element.
+`attribute`| `string` | The attribute to set.
 
 The value to be set is then contained within the `Setter` element's body. Example:
 
@@ -57,4 +57,31 @@ The `Apply` element is `Setter` for the `apply` attribute. It can be used to inv
   <TextView>Hello</TextView>
   <TextView>World</TextView>
 </Stack>
+```
+
+Alternatively it can be used with attributes to create a single rule. A single composite can contain multiple `<Apply>` elements, so this syntax still allows multiple rules.
+
+All attributes are optional.
+
+Attribute | type | Description
+-|-|-
+`target`| `Constructor` | The type of the target widget(s).
+`selector`| ${doc:SelectorString} | The selector matching the target widget(s). If omitted the `target` is also the selector.
+`attr`| `Attributes` | The attributes to apply to the target widget(s). Alternatively the attributes may be put in to the elements body.
+
+Example:
+
+```js
+<Composite padding={8}>
+  <Apply target={TextView} selector='#foo' attr={{textColor: 'white'}}/>
+  <Apply target={TextView} selector='#bar' attr={{font: '24px'}}/>
+  <Apply target={TextView}>
+    {{
+      top: 'prev() 10',
+      background: '#66E'
+    }}
+  </Apply>
+  <TextView id='foo'>Hello</TextView>
+  <TextView id='bar'>World</TextView>
+</Composite>
 ```

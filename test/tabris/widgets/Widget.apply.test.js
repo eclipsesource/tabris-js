@@ -693,14 +693,14 @@ describe('Widget', function() {
     });
 
     it('runs after children have been appended', function() {
-      jsx.createElement(TestWidget, {apply: {'#foo': props}}, child);
+      jsx.createElement(TestWidget, {apply: [{'#foo': props}]}, child);
 
       expect(setSpy).to.have.been.calledWith(props);
     });
 
     it('runs in strict mode', function() {
       expect(
-        () => jsx.createElement(TestWidget, {apply: {'#foo': props}})
+        () => jsx.createElement(TestWidget, {apply:[{'#foo': props}]})
       ).to.throw(Error,
         'No widget matches the given selector "#foo"'
       );
@@ -716,7 +716,7 @@ describe('Widget', function() {
       }
 
       expect(
-        () => jsx.createElement(TestComponent, {apply: {'#foo': props}})
+        () => jsx.createElement(TestComponent, {apply: [{'#foo': props}]})
       ).to.throw(Error,
         'No widget matches the given selector "#foo"'
       );
@@ -725,7 +725,7 @@ describe('Widget', function() {
     it('registers trigger "*" if given a function', function() {
       const apply = stub().returns({'#foo': props});
 
-      widget = jsx.createElement(TestWidget, {apply}, child);
+      widget = jsx.createElement(TestWidget, {apply: [apply]}, child);
       widget.data = {};
       tabris.flush();
       widget.data = {};

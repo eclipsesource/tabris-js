@@ -323,8 +323,14 @@ function joinAttributes(target: any, source: any, actualTargetType: ElementFn | 
   }
   Object.keys(source).forEach(key => {
     if (key in target) {
-      throw new Error(`Attribute "${key}" is set multiple times`);
+      if (Array.isArray(target[key]) && Array.isArray(source[key])) {
+        target[key] = target[key].concat(source[key]);
+      } else {
+        throw new Error(`Attribute "${key}" is set multiple times`);
+      }
+    } else {
+      target[key] = source[key];
     }
   });
-  return Object.assign(target, source);
+  return target;
 }

@@ -396,3 +396,23 @@ export type RuleSetStatic = RuleSetObject | Array<RuleSetObject>;
 export type RuleSetCallback<Target> = ((widget: Target) => RuleSetStatic) | null;
 
 export type RuleSet<Target = Widget> = RuleSetStatic | RuleSetCallback<Target> | null;
+
+export type ApplyAttributes<WidgetConstructor extends BaseConstructor<Widget>> = ApplyAttributesTypedSetter<WidgetConstructor> | ApplyAttributesUntypedSetter | ApplyAttributesRuleSet;
+
+export type ApplyAttributesTypedSetter<WidgetConstructor extends BaseConstructor<Widget>> = {
+  target: WidgetConstructor,
+  selector?: string,
+  children?: Attributes<WidgetConstructor['prototype']>,
+  attr?: Attributes<WidgetConstructor['prototype']>
+};
+
+export type ApplyAttributesUntypedSetter = {
+  target?: never,
+  selector?: string,
+  children?: Attributes<Widget>,
+  attr?: Attributes<Widget>
+};
+
+export type ApplyAttributesRuleSet = {
+  children?: RuleSet
+};

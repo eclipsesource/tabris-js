@@ -99,6 +99,15 @@ describe('JsxProcessor', function() {
       );
     });
 
+    it('Attr children can concatenate arrays of same property', function() {
+      const attrData1 = jsx.createElement(Setter, {target: CheckBox, attribute: 'data', children: [[1]]});
+      const attrData2 = jsx.createElement(Setter, {target: CheckBox, attribute: 'data', children: [[2]]});
+
+      const widget = jsx.createElement(CheckBox, {}, attrData1, attrData2);
+
+      expect(widget.data).to.deep.equal([1, 2]);
+    });
+
     it('allows shorthands for layoutData pre-sets', function() {
       expect(jsx.createElement(CheckBox, {stretch: true}).layoutData).to.equal(LayoutData.stretch);
       expect(jsx.createElement(CheckBox, {center: true}).layoutData).to.equal(LayoutData.center);

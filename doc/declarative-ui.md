@@ -388,7 +388,7 @@ contentView.append(
 $(PersonView).only().data = new Person('Harris', 'Sam');
 ```
 
-In TypeScript we need to do some casting to stay type-safe. You can do this with an `instanceof` check or using the [`checkType`](./api/utils.md#checktypevalue-type-callback) utility function:
+In **TypeScript** we need to do some casting to stay type-safe. You can do this with an `instanceof` check or using the [`checkType`](./api/utils.md#checktypevalue-type-callback) utility function:
 
 ```tsx
 type PersonDataAttr = Attributes<Widget> & {data: Person};
@@ -426,59 +426,60 @@ function PersonView({data, ...other}) {
 
 #### Using "apply"
 
-The [`apply` method](./selector.md#compositeapply) can set properties of several widgets simultaneously in response to a property change. This makes is ideal for functional components that consist of a composite with children.
+The [`apply` method/attribute](./selector.md#compositeapply) can set computed attributes of several widgets simultaneously in response to a property change. This makes is ideal for functional components that consist of a composite with children.
 
-By default `apply` just sets properties once for each given child selector. To make it re-apply them every time `data` changes we must define the `dataChanged` event as a "trigger". This is done in a options object preceding a callback that returns the selector/properties object ("ruleset"):
+To do this it must be given a callback that return a ruleset that may be derived from the widget's state. When using the `apply` attribute or `<Apply>` element the callback will be invoked whenver the a property changes (as described[here](./Observable.md#mutations)).
+
+Example in **JavaScript** using the `apply` attribute:
 
 ```jsx
-function PersonView(attributes) {
-  return (
-    <Composite {...attributes}>
-      <TextView id='label'/>
-    </Composite>
-  ).apply({trigger: 'onDataChanged'}, ({data}) => ({
-    '#label': {
-      text: data instanceof Person
-        ? `This is now ${data.firstName} ${data.lastName}`
-        : ''
-    }
-  }));
+function ComposedComponent(attr) {
+  return Stack({
+    children: [
+      TextView({id: 'firstname', background: '#ee9999'}),
+      TextView({id: 'lastname', background: '#9999ee'})
+    ],
+    apply: widget => ({
+      '#firstname': {text: widget.data.firstName || ''},
+      '#lastname': {text: widget.data.lastName || ''}
+    }),
+    ...attr
+  }, ComposedComponent);
 }
 ```
 
-Notice that with this pattern the `data` property can also be `null` *or* [an empty object](./api/Widget.md#data) the first `apply` sets the text property of '#label'.
-
-In **TypeScript** some casting is needed. To improve type-safety it's recommended to use apply in "strict" mode and the ["Setter" helper function](./api/Setter.md):
+And in **TypeScript/JSX** using the `<Apply>` element:
 
 ```tsx
-type PersonDataAttr = Attributes<Widget> & {data: Person};
-function PersonView(attr: PersonDataAttr) {
-  ((
-    <Composite {...attr}>
-      <TextView id='label'/>
-    </Composite>
-  ) as Composite).apply({mode: 'strict', trigger: 'onDataChanged'}, ({data}) => ({
-    '#label': Setter(TextView, {
-      text: data instanceof Person
-        ? `This is now ${data.firstName} ${data.lastName}`
-        : ''
-    })
-  }));
+function ComposedComponent(attr: PersonDataAttr) {
+  return (
+    <Stack {...attr}>
+      <TextView id='firstname' background='#ee9999'/>
+      <TextView id='lastname' background='#9999ee'/>
+      <Apply>
+        {({data}: {data: Partial<Person>}) => [
+          Setter(TextView, '#firstname', {text: data.firstName || ''}),
+          Setter(TextView, '#lastname', {text: data.lastName || ''})
+        ]}
+      </Apply>
+    </Stack>
+  );
 }
 ```
 
-And the same in pure **JavaScript**:
+When using `apply` as a function a "trigger" event needs to be given explicitly which signals when to invoke the callback. This may be any change event (e.g.   `'onDataChanged'`), or `'*'` for any change event as described above.
+
+This is also the only way to make `apply` react to the few change events types that are not included by `'*'`, specifically `'onBoundsChanged'` or any scrolling related property:
+
 ```js
-/** @param {tabris.Attributes<tabris.Widget> & {data: Person}} attr */
-function PersonView(attr) {
-  const children = [TextView({id: 'label'})];
-  return Composite({children, ...attr}, PersonView)
-    .apply({mode: 'strict', trigger: 'onDataChanged'}, ({data}) => ({
-      '#label': Setter(TextView, {
-        text: data instanceof Person
-          ? `This is now ${data.firstName} ${data.lastName}`
-          : ''
-      })
-    }));
-}
+contentView.apply(
+  {mode: 'strict', trigger: 'onBoundsChanged'},
+  ({bounds}) => (bounds.height > bounds.width) ? {
+    '#foo': {layoutData: fooVertical},
+    '#bar': {layoutData: barVertical}
+  } : {
+    '#foo': {layoutData: fooHorizontal},
+    '#bar': {layoutData: barHorizontal}
+  }
+);
 ```

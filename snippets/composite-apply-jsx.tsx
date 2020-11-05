@@ -1,15 +1,13 @@
-import {Composite, TextView, contentView, Setter, Apply} from 'tabris';
+import {Composite, TextView, contentView, Apply} from 'tabris';
 
 contentView.append(
   <Composite padding={8}>
-    <Apply>
+    <Apply target={TextView}>
       {{
-        TextView: Setter(TextView, {
-          top: 'prev() 10',
-          background: '#66E',
-          textColor: 'white',
-          font: '24px'
-        })
+        top: 'prev() 10',
+        background: '#66E',
+        textColor: 'white',
+        font: '24px'
       }}
     </Apply>
     <TextView>Hello</TextView>

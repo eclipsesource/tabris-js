@@ -67,21 +67,36 @@ const childrenAndSetter: tabris.Page = <tabris.Page>
 
 // apply
 
-const compositeWithApply = <tabris.Composite apply={{'*': {background: 'blue'}}}/>;
-const pageWithApply = <tabris.Page apply={v => ({'*': {background: v.title}})}/>;
-const svWithApplyChild = (
+let applied = <tabris.Composite apply={{'*': {background: 'blue'}}}/>;
+applied = <tabris.Page apply={v => ({'*': {background: v.title}})}/>;
+applied =  (
   <tabris.ScrollView>
     <tabris.Apply>
       {{'*': {background: 'red'}}}
     </tabris.Apply>
   </tabris.ScrollView>
 );
-const tabWithApplyChild = (
+applied = (
   <tabris.Tab>
     <tabris.Apply>
       {(tab: tabris.Tab) => ({'*': {background: tab.title}})}
     </tabris.Apply>
   </tabris.Tab>
+);
+applied = (
+  <tabris.Composite>
+    <tabris.Apply target={tabris.TextView}>
+      {{text: 'text'}}
+    </tabris.Apply>
+    <tabris.Apply target={tabris.TextView} selector='#foo'>
+      {{text: 'text'}}
+    </tabris.Apply>
+    <tabris.Apply selector='#foo'>
+      {{unknownProperty: tab.title}}
+    </tabris.Apply>
+    <tabris.Apply selector='#foo' attr={{background: tab.title}}/>
+    <tabris.Apply target={tabris.TextView} selector='#foo' attr={{text: 'text'}}/>
+  </tabris.Composite>
 );
 
 // Custom Components

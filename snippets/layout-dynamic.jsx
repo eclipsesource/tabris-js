@@ -8,7 +8,7 @@ contentView.append(
 );
 
 contentView.apply(
-  {mode: 'strict', trigger: 'onResize'},
+  {mode: 'strict', trigger: 'onBoundsChanged'},
   ({bounds}) => (bounds.height > bounds.width) ? {
     '#red': Setter(Composite, {layoutData: {left: 16, top: 16, right: 16, height: 192}}),
     '#green': Setter(Composite, {layoutData: {left: 16, top: '#red 16', right: 16, bottom: 16}})

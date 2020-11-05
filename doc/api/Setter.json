@@ -188,10 +188,21 @@
     "Apply": {
       "description": "A setter for the `\"apply\"` attribute.",
       "ts_only": true,
+      "generics": [
+        {
+          "name": "WidgetConstructor",
+          "extends": {
+            "interface": "BaseConstructor",
+            "generics": [
+              "Widget"
+            ]
+          }
+        }
+      ],
       "parameters": [
         {
           "name": "attr",
-          "type": "{children: RuleSet<Composite>}"
+          "type": "ApplyAttributes<WidgetConstructor>"
         }
       ],
       "returns": "{apply: object}"

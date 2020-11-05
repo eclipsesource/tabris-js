@@ -6,6 +6,7 @@ import {omit} from '../util';
 import {JSX} from '../JsxProcessor';
 import {toXML, toValueString, hint} from '../Console';
 import {apply} from './util-apply';
+import checkType from '../checkType';
 
 export default class Composite extends Widget {
 
@@ -188,16 +189,19 @@ export default class Composite extends Widget {
   /** @this {import("../JsxProcessor").default} */
   [JSX.jsxFactory](Type, attributes) {
     const children = this.getChildren(attributes);
-    const {apply: rules, ...normalAttributes} = this.withoutChildren(attributes);
+    const {apply: ruleSets, ...normalAttributes} = this.withoutChildren(attributes);
     const result = super[JSX.jsxFactory](Type, normalAttributes);
     if (children && children.length) {
       result.append(children);
     }
-    if (rules) {
-      result.apply({
-        mode: 'strict',
-        trigger: rules instanceof Function ? '*' : 'rules'
-      }, rules);
+    if (ruleSets) {
+      checkType(ruleSets, Array, {name: 'apply'});
+      ruleSets.forEach(rules =>
+        result.apply({
+          mode: 'strict',
+          trigger: rules instanceof Function ? '*' : 'rules'
+        }, rules)
+      );
     }
     return result;
   }
