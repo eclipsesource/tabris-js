@@ -2,12 +2,26 @@
 
 ### RuleSet
 
-JavaScript type: `Object`, `Function`
-TypeScript type: `RuleSetObject | ((widget: this) => RuleSetObject`
+JavaScript type: `Object` or `Array` or `Function`
+TypeScript type: `RuleSetStatic | RuleSetCallback`;
 
-Either a [ruleset object](#rulesetobject) or callback that returns ruleset object. The callback is given the instance of the widget it is called for.
+A set of static rules (multiple via array) or a callback that returns of of the former.
 
 See also the article ["Selector API"](../selector.md#compositeapply).
+
+### RuleSetStatic
+
+JavaScript type: `Object` or `Array`
+TypeScript type: `RuleSetObject | Attributes | Array<RuleSetObject|Attributes>`;
+
+One or more `RuleSetObject` or `Attributes` objects. Both can be created by [`Setter`](./Setter.md), but an `Attributes` object **must** be created by that function so the constructor can be used as the selector.
+
+```js
+widget.apply([
+  Setter(TextView, {background: 'blue'}), // matches all TextView widgets
+  Setter(TextView, '#foo', {text: 'foo'}) // matches widget with id "foo", must be a TextView
+]);
+```
 
 ### RuleSetObject
 
@@ -33,3 +47,10 @@ The order in which the attribute objects are applied depends on the type of sele
 When using child selectors, the more specific selector is applied first.
 
 See also the article ["Selector API"](../selector.md#compositeapply).
+
+### RuleSetCallback
+
+JavaScript type: `Function`
+TypeScript type: `(target: Widget) => RuleSetStatic;`
+
+A function that is given of the target widget and must return a [`RuleSetStatic`](#rulesetstatic) or array of them.

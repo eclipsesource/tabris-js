@@ -10,11 +10,11 @@ import Widget from '../Widget';
 type Mode =  'default' | 'strict';
 type Trigger = symbol | string;
 type RuleSet = {
-  [selector: string]: {[attribute: string]: any}
+  [selector: string]: any
 };
 
 interface ApplyArgs {
- rules: RuleSet | Function;
+ rules: RuleSet | RuleSet[] | Function;
  mode: Mode;
  trigger: Trigger;
 }
@@ -53,18 +53,29 @@ export function applyRules(
   scope: WidgetCollection,
   internal?: boolean
 ) {
-  const rules: RuleSet = applyArgs.rules instanceof Function
+  const rulesSets: RuleSet | RuleSet[] = applyArgs.rules instanceof Function
     ? checkType(applyArgs.rules(host), Object, 'returned rules')
     : applyArgs.rules;
-  if (!rules) {
+  if (!rulesSets) {
     return;
   }
-  Object.keys(rules)
-    .map(key => [createSelectorArray(key, host), rules[key]] as any[])
-    .sort((rule1, rule2) => getSelectorSpecificity(rule1[0]) - getSelectorSpecificity(rule2[0]))
-    .forEach(rule => {
-      applyRule(applyArgs.mode, scope, rule, host, !!internal);
-    });
+  (rulesSets instanceof Array ? rulesSets : [rulesSets]).forEach(rules => {
+    if (rules[setterTargetType]) {
+      return applyRule(
+        applyArgs.mode,
+        scope,
+        [[rules[setterTargetType]], rules],
+        host,
+        !!internal
+      );
+    }
+    Object.keys(rules)
+      .map(key => [createSelectorArray(key, host), rules[key]] as any[])
+      .sort((rule1, rule2) => getSelectorSpecificity(rule1[0]) - getSelectorSpecificity(rule2[0]))
+      .forEach(rule => {
+        applyRule(applyArgs.mode, scope, rule, host, !!internal);
+      });
+  });
 }
 
 function setupTrigger(applyArgs: ApplyArgs, host: Composite, scope: WidgetCollection) {

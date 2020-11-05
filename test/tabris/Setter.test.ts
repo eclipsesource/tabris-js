@@ -30,6 +30,8 @@ describe('Setter', function() {
       // @ts-ignore
       expect(() => Setter(Composite, {}, {})).to.throw(TypeError);
       expect(() => Setter(Date, {})).to.throw(TypeError);
+      expect(() => Setter(Composite, null, {})).to.throw(TypeError);
+      expect(() => Setter(Composite, 'foo', null)).to.throw(TypeError);
     });
 
     it('copies plain object', function() {
@@ -71,6 +73,15 @@ describe('Setter', function() {
         TypeError,
         /Can not set properties of Composite on TextView.*#bar/
       );
+    });
+
+    it('creates ruleset if selector is given', function() {
+      expect(Setter(Composite, '#foo', {test: 'bar'})).to.deep.equal({
+        '#foo': {
+          [setterTargetType]: Composite,
+          test: 'bar'
+        }
+      });
     });
 
   });

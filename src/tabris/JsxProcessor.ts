@@ -309,6 +309,7 @@ function joinAttributes(target: any, source: any, actualTargetType: ElementFn | 
   const expectedTargetType = source[symbols.setterTargetType];
   const actualTargetTypeFn = typeof actualTargetType === 'string' ? String : actualTargetType;
   if (expectedTargetType
+    && actualTargetTypeFn.prototype[JSX.jsxFactory] // for SFC we can't know the future instance type
     && (actualTargetTypeFn.prototype !== expectedTargetType.prototype)
     && !(actualTargetTypeFn.prototype instanceof expectedTargetType)
   ) {

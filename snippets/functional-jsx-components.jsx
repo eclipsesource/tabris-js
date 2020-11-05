@@ -72,10 +72,10 @@ function ComposedComponent(attr) {
       <TextView id='firstname' background='#ee9999'/>
       <TextView id='lastname' background='#9999ee'/>
       <Apply>
-        {widget => ({
-          '#firstname': {text: widget.data?.firstName || ''},
-          '#lastname': {text: widget.data?.lastName || ''}
-        })}
+        {widget => [
+          Setter(TextView, '#firstname', {text: widget.data?.firstName || ''}),
+          Setter(TextView, '#lastname', {text: widget.data?.lastName || ''})
+        ]}
       </Apply>
     </Stack>
   );

@@ -445,6 +445,11 @@
       }
     }
   },
+  "relatedTypes": {
+    "RuleSet": "ruleset",
+    "RuleSetObject": "rulesetobject",
+    "RuleSetCallback": "rulesetcallback"
+  },
   "links": [
     {
       "title": "Creating a simple `Composite`",

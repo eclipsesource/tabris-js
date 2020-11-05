@@ -389,6 +389,10 @@ export type FontResourceData<Resources extends {[P in keyof Resources]: Font}> =
 
 export type TextResourceData<Resources extends {[P in keyof Resources]: string}> = Record<keyof Resources, Selectable<string>>;
 
-export type RuleSetObject = ({[selector: string]: object});
+export type RuleSetObject = ({[selectorOrAttribute: string]: any}) & {prototype?: never};
 
-export type RuleSet<Target> = RuleSetObject | ((widget: Target) => RuleSetObject) | null;
+export type RuleSetStatic = RuleSetObject | Array<RuleSetObject>;
+
+export type RuleSetCallback<Target> = ((widget: Target) => RuleSetStatic) | null;
+
+export type RuleSet<Target = Widget> = RuleSetStatic | RuleSetCallback<Target> | null;

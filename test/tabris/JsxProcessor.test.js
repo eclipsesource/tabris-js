@@ -73,6 +73,13 @@ describe('JsxProcessor', function() {
       expect(() => jsx.createElement(CheckBox, {}, attrData)).not.to.throw;
     });
 
+    it('accepts Attr children on functional element', function() {
+      const attrData = jsx.createElement(Setter, {target: Widget, attribute: 'data', children: [{}]});
+      const MyCheckBox = attr => jsx.createElement(CheckBox, attr);
+
+      expect(() => jsx.createElement(MyCheckBox, {}, attrData)).not.to.throw;
+    });
+
     it('throws for conflicting Attr children', function() {
       const attrData1 = jsx.createElement(Setter, {target: CheckBox, attribute: 'data', children: [{}]});
       const attrData2 = jsx.createElement(Setter, {target: CheckBox, attribute: 'data', children: [{}]});

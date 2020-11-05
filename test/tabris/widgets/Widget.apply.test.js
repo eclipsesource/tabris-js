@@ -3,6 +3,7 @@ import {expect, mockTabris, restore, spy, stub} from '../../test';
 import WidgetCollection from '../../../src/tabris/WidgetCollection';
 import ClientMock from '../ClientMock';
 import Composite from '../../../src/tabris/widgets/Composite';
+import Setter from '../../../src/tabris/Setter';
 // eslint-disable-next-line no-unused-vars
 import JsxProcessor, {createJsxProcessor} from '../../../src/tabris/JsxProcessor';
 
@@ -160,6 +161,36 @@ describe('Widget', function() {
 
       expect(child1.set.args.map(args => args[0].prop1)).to.eql(['v1', 'v2', 'v3', 'v4']);
       expect(widget.set.args.map(args => args[0].prop1)).to.eql(['v1', 'v2', 'v3']);
+    });
+
+    it('applies properties in order of result rulset array', function() {
+      widget.apply([
+        {
+          '#foo': {prop1: 'v1'},
+          '#bar': {prop1: 'v2'}
+        },
+        {
+          '.myclass': {prop1: 'v3'}
+        }
+      ]);
+
+      expect(child1.set.args.map(args => args[0].prop1)).to.eql(['v1', 'v3']);
+      expect(child2.set.args.map(args => args[0].prop1)).to.eql(['v2']);
+    });
+
+    it('applies properties from Setter using Constructor as selector', function() {
+      widget.apply([
+        Setter(TestWidget, {prop1: 'v2'}),
+        {
+          '#foo': {prop1: 'v4'},
+          '.myclass': {prop1: 'v3'},
+          ':host': {prop1: 'v3'},
+          '*': {prop1: 'v1'}
+        }
+      ]);
+
+      expect(child1.set.args.map(args => args[0].prop1)).to.eql(['v2', 'v1', 'v3', 'v4']);
+      expect(widget.set.args.map(args => args[0].prop1)).to.eql(['v2', 'v1', 'v3']);
     });
 
     it('applies properties in order of combined weight', function() {
@@ -463,6 +494,15 @@ describe('Widget', function() {
 
       it('applies properties to children with specific type', function() {
         widget.apply('strict', {TestWidget: {prop1: 'v1'}});
+
+        expect(widget.set).to.have.been.called;
+        expect(child1.set).to.have.been.called;
+        expect(child2.set).to.have.been.called;
+        expect(child1_1.set).to.have.been.called;
+      });
+
+      it('applies properties to children with specific type (via Setter)', function() {
+        widget.apply('strict', Setter(TestWidget, {prop1: 'v1'}));
 
         expect(widget.set).to.have.been.called;
         expect(child1.set).to.have.been.called;

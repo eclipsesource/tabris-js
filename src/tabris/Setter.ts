@@ -10,9 +10,10 @@ interface SetterAttributes {
 }
 
 function Setter(target: Function, attr: object): object;
+function Setter(target: Function, selector: string, attr: object): object;
 function Setter(attr: SetterAttributes): object;
-function Setter(arg1: Function | SetterAttributes, arg2?: object): object {
-  if (arguments.length !== 1 && arguments.length !== 2) {
+function Setter(arg1: Function | SetterAttributes, arg2?: unknown, arg3?: unknown): object {
+  if (arguments.length < 1 || arguments.length > 3) {
     throw new TypeError(`Expected 1-2 arguments, got ${arguments.length}`);
   }
   if (arguments.length === 1) {
@@ -27,17 +28,27 @@ function Setter(arg1: Function | SetterAttributes, arg2?: object): object {
       throw new TypeError('too many child elements');
     }
     return Setter(setterAttr.target, {[setterAttr.attribute]: setterAttr.children[0]});
+  } else if (arguments.length === 2) {
+    const target = arg1 as Function;
+    const attr = arg2 as object;
+    checkType(target, Function, {name: 'target', typeName: 'a constructor'});
+    checkType(attr, Object, {name: 'parameter 2'});
+    checkType(target.prototype, NativeObject, {name: 'target', typeName: 'a widget or dialog constructor'});
+    const result = Object.assign({}, arg2);
+    Object.defineProperty(result, setterTargetType, {
+      enumerable: false, value: arg1
+    });
+    return result;
+  } else {
+    const target = arg1 as Function;
+    const selector = arg2 as string;
+    const attr = arg3 as object;
+    checkType(selector, String, {name: 'parameter 2'});
+    checkType(attr, Object, {name: 'parameter 3'});
+    return {
+      [selector]: Setter(target, attr)
+    };
   }
-  const target = arg1 as Function;
-  const attr = arg2 as object;
-  checkType(target, Function, {name: 'target', typeName: 'a constructor'});
-  checkType(attr, Object, {name: 'parameter 2'});
-  checkType(target.prototype, NativeObject, {name: 'target', typeName: 'a widget or dialog constructor'});
-  const result = Object.assign({}, arg2);
-  Object.defineProperty(result, setterTargetType, {
-    enumerable: false, value: arg1
-  });
-  return result;
 }
 
 export default Setter;

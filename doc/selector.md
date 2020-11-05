@@ -293,28 +293,39 @@ page.apply({
 
 > :point_right: The order of the attributes objects in the object literal is meaningless. According to the EcmaScript standard the members of a JavaScript object do not have a defined order. The priority of two selectors with the same specificity is undefined.
 
+Listeners can also be registered via `apply`:
+
+```js
+page.apply({
+  '#foo': {onTap: listener}
+});
+```
+
+> :point_right: Unlike listener registration via methods (e.g. `button.onSelect(listener)`), `apply` *replaces* any listener previously registered via apply for the same event type. These "attached" listeners work like properties. In the above example, if apply previously registered another listener for `onSelect` on the 'foo' button, that listener will be de-registered before the new one is registered. It will also de-register any listener for that event type that was registered via [declarative UI](./declarative-ui.md).
+
 #### Strict mode
 
-To ensure `apply` addresses the right widgets, it can be executed in 'strict' mode and the [`Setter`](./api/Setter.md) helper function can be used to create the attributes object. The kind of the selector then determines how many widgets must match (exactly one for id, at least one for any other), and `Setter` determines what type the widget must have. If these conditions are not met, an error will be thrown.
+To ensure `apply` addresses the right widgets with the right attributes, it can be executed in 'strict' mode and the [`Setter`](./api/Setter.md) helper function can be used to create the attributes object. The kind of the selector then determines how many widgets must match (exactly one for id, at least one for any other), and `Setter` determines what type the widget must have. If these conditions are not met, an error will be thrown.
 
 ```js
 page.apply('strict', {
   '#foo': Setter(Button, {textColor: 'red'}), // must match exactly one Button
-  '.bar': Setter(TextView, {background: 'green'}) // must match one ore more TextViews
+  '.bar': Setter(TextView, {background: 'green'}) // must match one or more
+  'Composite': Setter(Composite, {background: 'blue'}) // must match one or more
 });
 ```
 
 > :point_right: The `apply` **attribute** always uses strict mode. The `apply()` function does not use it by default for historic reasons.
 
-Listeners can also be registered via `apply`:
+Alternative syntax for using `Setter`:
 
 ```js
-page.apply('strict', {
-  '#foo': Setter(Button, {onSelect: listener})
-});
+page.apply('strict', [
+  Setter(Button, '#foo', {textColor: 'red'}),
+  Setter(TextView, '.bar', {background: 'green'})
+  Setter(Composite, {background: 'green'}) // now also matches Composite subclasses
+]);
 ```
-
-> :point_right: Unlike listener registration via methods (e.g. `button.onSelect(listener)`), `apply` *replaces* any listener previously registered via apply for the same event type. These "attached" listeners work like properties. In the above example, if apply previously registered another listener for `onSelect` on the 'foo' button, that listener will be de-registered before the new one is registered. It will also de-register any listener for that event type that was registered via [declarative UI](./declarative-ui.md).
 
 #### Reactive apply()
 

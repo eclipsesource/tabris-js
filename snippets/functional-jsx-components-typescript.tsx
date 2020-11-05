@@ -67,10 +67,10 @@ function ComposedComponent(attr: PersonDataAttr) {
       <TextView id='firstname' background='#ee9999'/>
       <TextView id='lastname' background='#9999ee'/>
       <Apply>
-        {({data}: {data: Partial<Person>}) => ({
-          '#firstname': Setter(TextView, {text: data?.firstName || ''}),
-          '#lastname': Setter(TextView, {text: data?.lastName || ''})
-        })}
+        {({data}: {data: Partial<Person>}) => [
+          Setter(TextView, '#firstname', {text: data.firstName || ''}),
+          Setter(TextView, '#lastname', {text: data.lastName || ''})
+        ]}
       </Apply>
     </Stack>
   );

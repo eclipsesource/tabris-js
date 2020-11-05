@@ -42,6 +42,9 @@ export function getSelectorSpecificity(selectorArray) {
 }
 
 function isTypeSelector(selector) {
+  if (selector instanceof Function) {
+    return true;
+  }
   return selector !== '*' && !isIdSelector(selector) && !isClassSelector(selector);
 }
 
