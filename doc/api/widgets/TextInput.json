@@ -204,6 +204,23 @@
           "description": "The new value of *[text](#text)*."
         }
       }
+    },
+    "beforeTextChange": {
+      "description": "Fired when the text value is about to change due to a user action.",
+      "parameters": {
+        "preventDefault": {
+          "description": "Call to intercept the change. ",
+          "type": "Function"
+        },
+        "oldValue": {
+          "description": "The text before the change, i.e. the current `text` value.",
+          "type": "string"
+        },
+        "newValue": {
+          "description": "The text after the change, i.e. the future `text` value if `preventDefault` is not called.",
+          "type": "string"
+        }
+      }
     }
   },
   "links": [

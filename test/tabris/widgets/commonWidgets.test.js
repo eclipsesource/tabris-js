@@ -1,4 +1,4 @@
-import {expect, mockTabris, restore, spy} from '../../test';
+import {expect, match, mockTabris, restore, spy} from '../../test';
 import ClientStub from '../ClientStub';
 import Composite from '../../../src/tabris/widgets/Composite';
 import Button from '../../../src/tabris/widgets/Button';
@@ -278,6 +278,18 @@ describe('Common Widgets', function() {
       checkListen('input');
     });
 
+    it('beforeTextChange event', function() {
+      widget = new TextInput().on('beforeTextChange', listener);
+      const preventDefault = () => undefined;
+
+      tabris._notify(widget.cid, 'beforeTextChange', {oldValue: 'foo', newValue: 'bar', preventDefault});
+
+      expect(listener).to.have.been.calledOnce;
+      expect(listener).to.have.been.calledWithMatch(
+        {target: widget, oldValue: 'foo', newValue: 'bar', preventDefault: match.func}
+      );
+      checkListen('beforeTextChange');
+    });
   });
 
   it('WebView', function() {

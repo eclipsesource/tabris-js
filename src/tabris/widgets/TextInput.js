@@ -1,7 +1,7 @@
 import NativeObject from '../NativeObject';
 import Widget from '../Widget';
 
-const EVENT_TYPES = ['focus', 'blur', 'accept', 'input', 'select'];
+const EVENT_TYPES = ['focus', 'blur', 'accept', 'input', 'select', 'beforeTextChange'];
 
 export default class TextInput extends Widget {
 

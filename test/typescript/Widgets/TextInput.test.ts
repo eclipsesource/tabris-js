@@ -6,7 +6,8 @@ import {
   TextInputAcceptEvent,
   TextInputInputEvent,
   TextInputProperties,
-  TextInputSelectEvent
+  TextInputSelectEvent,
+  TextInputBeforeTextChangeEvent
 } from 'tabris';
 
 let widget: TextInput = new TextInput();
@@ -94,6 +95,8 @@ let timeStamp: number = 0;
 let type: string = 'foo';
 let textValue: string = 'bar';
 let selectionValue: number[] = [1, 2];
+let newValue: string = 'foo';
+let oldValue: string = 'foo';
 
 let acceptEvent: TextInputAcceptEvent = {target, timeStamp, type, text};
 let blurEvent: EventObject<TextInput> = {target, timeStamp, type};
@@ -102,6 +105,7 @@ let inputEvent: TextInputInputEvent = {target, timeStamp, type, text};
 let textChangedEvent: PropertyChangedEvent<TextInput, string> = {target, timeStamp, type, value: textValue};
 let selectEvent: TextInputSelectEvent = {target, timeStamp, type, selection};
 let selectionChangedEvent: PropertyChangedEvent<TextInput, number[]> = {target, timeStamp, type, value: selectionValue};
+let beforeTextChangeEvent: TextInputBeforeTextChangeEvent = {target, timeStamp, type, newValue, oldValue, preventDefault() {}};
 
 widget.on({
   accept: (event: TextInputAcceptEvent) => {},
@@ -110,5 +114,6 @@ widget.on({
   input: (event: TextInputInputEvent) => {},
   select: (event: TextInputSelectEvent) => {},
   textChanged: (event: PropertyChangedEvent<TextInput, string>) => {},
-  selectionChanged: (event: PropertyChangedEvent<TextInput, number[]>) => {}
+  selectionChanged: (event: PropertyChangedEvent<TextInput, number[]>) => {},
+  beforeTextChange: (event: TextInputBeforeTextChangeEvent) => {}
 });
