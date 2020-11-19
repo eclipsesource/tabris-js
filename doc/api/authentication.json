@@ -84,7 +84,7 @@
             }
           },
           "optional": true,
-          "description": "A set of capture options to apply when taking a picture."
+          "description": "A set of options to apply when authenticating."
         }
       ],
       "returns": {
