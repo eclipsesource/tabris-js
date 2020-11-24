@@ -1,8 +1,8 @@
 {
   "name": "tabris-js-snippets",
-  "version": "3.6.0",
+  "version": "3.7.0",
   "dependencies": {
-    "tabris": "^3.6.0"
+    "tabris": "^3.7.0"
   },
   "devDependencies": {
     "typescript": "4.0.x"
