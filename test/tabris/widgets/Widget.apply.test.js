@@ -693,9 +693,25 @@ describe('Widget', function() {
     });
 
     it('runs after children have been appended', function() {
+      jsx.createElement(TestWidget, {apply: {'#foo': props}}, child);
+
+      expect(setSpy).to.have.been.calledWith(props);
+    });
+
+    it('accepts array of rulesets', function() {
       jsx.createElement(TestWidget, {apply: [{'#foo': props}]}, child);
 
       expect(setSpy).to.have.been.calledWith(props);
+    });
+
+    it('applies rulesets in order', function() {
+      jsx.createElement(TestWidget, {apply: [
+        {'#foo': props},
+        {'#foo': {prop1: 'v3'}}
+      ]}, child);
+
+      expect(child.prop1).to.equal('v3');
+      expect(child.prop2).to.equal('v2');
     });
 
     it('runs in strict mode', function() {

@@ -2,11 +2,10 @@ import Widget from '../Widget';
 import NativeObject from '../NativeObject';
 import Layout, {ConstraintLayout} from '../Layout';
 import WidgetCollection from '../WidgetCollection';
-import {omit} from '../util';
+import {asArray, omit} from '../util';
 import {JSX} from '../JsxProcessor';
 import {toXML, toValueString, hint} from '../Console';
 import {apply} from './util-apply';
-import checkType from '../checkType';
 
 export default class Composite extends Widget {
 
@@ -195,8 +194,7 @@ export default class Composite extends Widget {
       result.append(children);
     }
     if (ruleSets) {
-      checkType(ruleSets, Array, {name: 'apply'});
-      ruleSets.forEach(rules =>
+      asArray(ruleSets).forEach(rules =>
         result.apply({
           mode: 'strict',
           trigger: rules instanceof Function ? '*' : 'rules'

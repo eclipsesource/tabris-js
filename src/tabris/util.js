@@ -108,6 +108,23 @@ export function checkNumber(value, range = [-Infinity, Infinity], errorPrefix = 
 }
 
 /**
+ * @param {*} value
+ * @returns {Array}
+ */
+export function asArray(value) {
+  if (Array.isArray(value)) {
+    return value;
+  }
+  if (!value) {
+    return [];
+  }
+  if (value.constructor !== Object && value.toArray instanceof Function) {
+    return value.toArray();
+  }
+  return [value];
+}
+
+/**
  * Boolean values indicates whether the trap must return true to avoid
  * exceptions if code is executed in strict mode. (Which is never desired.)
  */

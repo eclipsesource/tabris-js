@@ -6,6 +6,7 @@ import checkType from '../checkType';
 import Observable from '../Observable';
 import Composite from './Composite';
 import Widget from '../Widget';
+import {asArray} from '../util';
 
 type Mode =  'default' | 'strict';
 type Trigger = symbol | string;
@@ -59,7 +60,7 @@ export function applyRules(
   if (!rulesSets) {
     return;
   }
-  (rulesSets instanceof Array ? rulesSets : [rulesSets]).forEach(rules => {
+  asArray(rulesSets).forEach(rules => {
     if (rules[setterTargetType]) {
       return applyRule(
         applyArgs.mode,
@@ -185,14 +186,4 @@ function getApplyAttributeObject(host: any): any {
     host.jsxAttributes.apply = {};
   }
   return host.jsxAttributes.apply;
-}
-
-function asArray(value: WidgetCollection | Widget[]): Widget[] {
-  if (!value) {
-    return [];
-  }
-  if (value instanceof WidgetCollection) {
-    return value.toArray();
-  }
-  return value;
 }
