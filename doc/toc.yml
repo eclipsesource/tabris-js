@@ -8,6 +8,8 @@
       url: developer-app.html
     - title: Tabris 2.x to 3.x Migration Guide
       url: migration-guide.html
+    - title: Examples
+      url: examples.html
 
 - title: Developer Guide
   pages:
