@@ -53,5 +53,36 @@ function Setter(arg1: Function | SetterAttributes, arg2?: unknown, arg3?: unknow
 
 export default Setter;
 
-export const Apply = (attr: {children: object[]}) =>
-  Setter({target: Composite, attribute: 'apply', ...attr});
+type ApplyAttributes = {
+  target?: Function,
+  selector?: string,
+  children?: object[],
+  attr?: object
+};
+
+export const Apply = (attr: ApplyAttributes) => {
+  const setterAttr = {target: Composite, attribute: 'apply', children: null as any};
+  if (attr.attr instanceof Object
+    && attr.children
+    && attr.children[0] instanceof Object) {
+    throw new Error('RuleSet given twice');
+  }
+  const ruleSet = attr.attr || attr.children![0];
+  if (!(ruleSet instanceof Object)) {
+    throw new TypeError('No RuleSet found');
+  }
+  if (attr.target && attr.selector) {
+    setterAttr.children = [{[attr.selector]: Setter(attr.target, ruleSet)}];
+  } else if (attr.target) {
+    setterAttr.children = [Setter(attr.target, ruleSet)];
+  } else if (attr.selector) {
+    setterAttr.children = [{[attr.selector]: ruleSet}];
+  } else {
+    setterAttr.children = [ruleSet];
+  }
+  const applySetter: {apply?: any} = Setter(setterAttr);
+  if (!Array.isArray(applySetter.apply)) {
+    applySetter.apply = [applySetter.apply];
+  }
+  return applySetter;
+};

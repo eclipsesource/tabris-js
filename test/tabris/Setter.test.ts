@@ -113,11 +113,91 @@ describe('Setter', function() {
 
   describe('alias "Apply"', function() {
 
-    it('creates apply attribute', function() {
+    it('creates apply array from object', function() {
       expect(Apply({children: [{'*': {background: 'blue'}}]})).to.deep.equal({
         [setterTargetType]: Composite,
-        apply: {'*': {background: 'blue'}}
+        apply: [{'*': {background: 'blue'}}]
       });
+    });
+
+    it('creates apply array from apply array', function() {
+      expect(Apply({children: [[{'*': {background: 'blue'}}]]})).to.deep.equal({
+        [setterTargetType]: Composite,
+        apply: [{'*': {background: 'blue'}}]
+      });
+    });
+
+    it('creates apply array with target attribute', function() {
+      expect(Apply({target: TextView, children: [{text: 'bar'}]})).to.deep.equal({
+        [setterTargetType]: Composite,
+        apply: [{
+          [setterTargetType]: TextView,
+          text: 'bar'
+        }]
+      });
+    });
+
+    it('creates apply array with target and selector attributes', function() {
+      expect(
+        Apply({
+          target: TextView,
+          selector: '#foo',
+          children: [{text: 'bar'}]
+        })
+      ).to.deep.equal({
+        [setterTargetType]: Composite,
+        apply: [{
+          '#foo': {
+            [setterTargetType]: TextView,
+            text: 'bar'
+          }
+        }]
+      });
+    });
+
+    it('creates apply array with selector attribute', function() {
+      expect(
+        Apply({
+          target: TextView,
+          selector: '#foo',
+          children: [{text: 'bar'}]
+        })
+      ).to.deep.equal({
+        [setterTargetType]: Composite,
+        apply: [{
+          '#foo': {
+            text: 'bar'
+          }
+        }]
+      });
+    });
+
+    it('creates apply array with selector and attr attributes', function() {
+      expect(
+        Apply({
+          target: TextView,
+          selector: '#foo',
+          attr: {text: 'bar'}
+        })
+      ).to.deep.equal({
+        [setterTargetType]: Composite,
+        apply: [{
+          '#foo': {
+            text: 'bar'
+          }
+        }]
+      });
+    });
+
+    it('throw for missing rules', function() {
+      expect(() => Apply({})).to.throw(TypeError);
+      expect(() => Apply({attr: null})).to.throw(TypeError);
+      expect(() => Apply({children: []})).to.throw(TypeError);
+      expect(() => Apply({children: [null]})).to.throw(TypeError);
+    });
+
+    it('throw for rules given twice', function() {
+      expect(() => Apply({attr: {}, children: [{}]})).to.throw(Error);
     });
 
   });
