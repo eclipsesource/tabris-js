@@ -428,7 +428,7 @@ function PersonView({data, ...other}) {
 
 The [`apply` method/attribute](./selector.md#compositeapply) can set computed attributes of several widgets simultaneously in response to a property change. This makes is ideal for functional components that consist of a composite with children.
 
-To do this it must be given a callback that return a ruleset that may be derived from the widget's state. When using the `apply` attribute or `<Apply>` element the callback will be invoked whenver the a property changes (as described[here](./Observable.md#mutations)).
+To do this it must be given a callback that return a ruleset that may be derived from the widget's state. When using the `apply` attribute or `<Apply>` element the callback will be invoked whenver the a property changes (as described[here](./api/Observable.md#mutationssource)).
 
 Example in **JavaScript** using the `apply` attribute:
 

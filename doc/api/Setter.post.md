@@ -1,6 +1,6 @@
 ## As JSX Element
 
-This function can also be used as a [JSX element](./declarative-ui.md#jsx-specifics) inside another element to set on of its attributes. This is equivalent to setting the attribute directly in the parent element, but allows neatly inlining a multi-line expression such as an object literal or function. (Technically a JSX attribute can be multi-line as well, but this would look rather confusing.)
+This function can also be used as a [JSX element](../declarative-ui.md#jsx-specifics) inside another element to set on of its attributes. This is equivalent to setting the attribute directly in the parent element, but allows neatly inlining a multi-line expression such as an object literal or function. (Technically a JSX attribute can be multi-line as well, but this would look rather confusing.)
 
 As a element `Setter` itself requires the following attributes:
 
@@ -53,7 +53,7 @@ The `Apply` element is `Setter` for the `apply` attribute. It can be used to inv
 
 ```jsx
 <Stack>
-  <Apply>{{TextView: {font: '24px'}}}</Apply>
+  <Apply>{ {TextView: {font: '24px'}} }</Apply>
   <TextView>Hello</TextView>
   <TextView>World</TextView>
 </Stack>
@@ -73,13 +73,13 @@ Example:
 
 ```js
 <Composite padding={8}>
-  <Apply target={TextView} selector='#foo' attr={{textColor: 'white'}}/>
-  <Apply target={TextView} selector='#bar' attr={{font: '24px'}}/>
+  <Apply target={TextView} selector='#foo' attr={ {textColor: 'white' } }/>
+  <Apply target={TextView} selector='#bar' attr={ {font: '24px'} }/>
   <Apply target={TextView}>
-    {{
+    { {
       top: 'prev() 10',
       background: '#66E'
-    }}
+    } }
   </Apply>
   <TextView id='foo'>Hello</TextView>
   <TextView id='bar'>World</TextView>

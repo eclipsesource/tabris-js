@@ -100,9 +100,9 @@
     }
   },
   "relatedTypes": {
-    "SubscriptionHandler": "subscriptionhandlert",
-    "Subscriber": "subscribert",
-    "PartialObserver": "partialobservert",
+    "SubscriptionHandler": "subscriptionhandler",
+    "Subscriber": "subscriber",
+    "PartialObserver": "partialobserver",
     "Subscription": "subscription"
   }
 }

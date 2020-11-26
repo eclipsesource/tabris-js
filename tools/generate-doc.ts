@@ -995,7 +995,7 @@ class DocumentRenderer {
     if (!links || !links.length) {
       return '';
     }
-    return ['See also:\n'].concat(links.map(link => {
+    return ['\nSee also:\n'].concat(links.map(link => {
       if (isSnippet(link)) {
         const title = `${(link.title || link.snippet)}`;
         const preRelease = this.gen.version.indexOf('-') !== -1;

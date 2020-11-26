@@ -4,7 +4,7 @@
 
 ## Snippets
 
-The `tabris-js` [repository](https://github.com/eclipsesource/tabris-js) contains dozens of [self-running snippets](https://github.com/eclipsesource/tabris-js/tree/v${doc:moduleversion}/snippets) demonstrating all **features of the Tabris.js core module**. These can be run directly from the [Tabris.js Playground](playground.tabris.com/) via the [Tabris.js Developer App](./developer-app.md). The API documentation example links point to the snippets in the playground.
+The `tabris-js` [repository](https://github.com/eclipsesource/tabris-js) contains dozens of [self-running snippets](https://github.com/eclipsesource/tabris-js/tree/v${doc:moduleversion}/snippets) demonstrating all **features of the Tabris.js core module**. These can be run directly from the [Tabris.js Playground](https://playground.tabris.com/) via the [Tabris.js Developer App](./developer-app.md). The API documentation example links point to the snippets in the playground.
 
 You can also run a selection of UI-related snippets directly in the app without the playground.
 

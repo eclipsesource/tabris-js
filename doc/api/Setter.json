@@ -1,8 +1,8 @@
 {
   "title": "Setter",
-  "category": "service",
+  "category": "data",
   "namespace": "tabris",
-  "description": "Defines a set attributes to use with [`apply`](./Composite.md#applyrules) or as a [JSX element](./declarative-ui.md#jsx-specifics).\n\n> :point_right: This function was previously known as `Set`, but renamed due to the name clash with the `Set` constructor. The old name still works for backwards compatibility.",
+  "description": "Defines a set attributes to use with [`apply`](./Composite.md#applyrules) or as a [JSX element](../declarative-ui.md#jsx-specifics).\n\n> :point_right: This function was previously known as `Set`, but renamed due to the name clash with the `Set` constructor. The old name still works for backwards compatibility.",
   "links": [
     {
       "snippet": "layout-dynamic.jsx",
@@ -82,7 +82,7 @@
           }
         ],
         "returns": "Attributes<WidgetConstructor['prototype']>",
-        "description": "Creates a attributes object for the given widget type. This is meant to be used to creates rule sets for the [`apply`](./Composite.md#applyproperties) method. The benefit of using this method as opposed to passing the object directly is twofold: <br/><br/>1. The IDE and/or TypeScript compiler can check that the properties are matching the given widget type.\n2. The `apply` method will only set the properties if the selected widget matches the type given here. If there is a mismatch an error will be thrown."
+        "description": "Creates a attributes object for the given widget type. This is meant to be used to creates rule sets for the [`apply`](./Composite.md#applyoptions-rules) method. The benefit of using this method as opposed to passing the object directly is twofold: <br/><br/>1. The IDE and/or TypeScript compiler can check that the properties are matching the given widget type.\n2. The `apply` method will only set the properties if the selected widget matches the type given here. If there is a mismatch an error will be thrown."
       },
       {
         "docs_only": true,
@@ -123,7 +123,7 @@
           }
         ],
         "returns": "RuleSet",
-        "description": "Creates a type-safe ${doc:RuleSet} targeting widgets given the selector. Can be passed to the [`apply`](./Composite.md#applyproperties) function or attribute directly or as in an array of rules sets."
+        "description": "Creates a type-safe ${doc:RuleSet} targeting widgets given the selector. Can be passed to the [`apply`](./Composite.md#applyoptions-rules) function or attribute directly or as in an array of rules sets."
       },
       {
         "ts_only": true,
@@ -156,7 +156,7 @@
           }
         ],
         "returns": "RuleSet",
-        "description": "Creates a type-safe ${doc:RuleSet} targeting widgets given the selector. Can be passed to the [`apply`](./Composite.md#applyproperties) function or attribute directly or as in an array of rules sets."
+        "description": "Creates a type-safe ${doc:RuleSet} targeting widgets given the selector. Can be passed to the [`apply`](./Composite.md#applyoptions-rules) function or attribute directly or as in an array of rules sets."
       },
       {
         "ts_only": true,
@@ -182,7 +182,7 @@
           }
         ],
         "returns": "ResultType",
-        "description": "Creates a attributes object for the given widget type. This is meant to be used to creates rule sets for the [`apply`](./Composite.md#applyproperties) method. The benefit of using this method as opposed to passing the object directly is twofold: <br/><br/1. The IDE and/or TypeScript compiler can check that the properties are matching the given widget type.\n2. The `apply` method will only set the properties if the selected widget matches the type given here. If there is a mismatch an error will be thrown."
+        "description": "Creates a attributes object for the given widget type. This is meant to be used to creates rule sets for the [`apply`](./Composite.md#applyoptions-rules) method. The benefit of using this method as opposed to passing the object directly is twofold: <br/><br/1. The IDE and/or TypeScript compiler can check that the properties are matching the given widget type.\n2. The `apply` method will only set the properties if the selected widget matches the type given here. If there is a mismatch an error will be thrown."
       }
     ],
     "Apply": {

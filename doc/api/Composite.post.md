@@ -2,8 +2,8 @@
 
 ### RuleSet
 
-JavaScript type: `Object` or `Array` or `Function`
-TypeScript type: `RuleSetStatic | RuleSetCallback`;
+* JavaScript type: `Object` or `Array` or `Function`
+* TypeScript type: `RuleSetStatic | RuleSetCallback`;
 
 A set of static rules (multiple via array) or a callback that returns of of the former.
 

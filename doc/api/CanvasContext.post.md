@@ -15,7 +15,7 @@ declare class ImageData {
 }
 ```
 
-Represents the underlying pixel data of an area of a `Canvas` widget. It is created using the creator methods on the [CanvasContext](api/CanvasContext.md): `createImageData()` and `getImageData()`. It can also be used to set a part of the canvas by using `putImageData()`.
+Represents the underlying pixel data of an area of a `Canvas` widget. It is created using the methods `createImageData()` and `getImageData()`. It can also be used to set a part of the canvas by using `putImageData()`.
 
 
 Explanation:

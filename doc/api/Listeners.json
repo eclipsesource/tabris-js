@@ -33,7 +33,7 @@
     "type": {
       "type": "string",
       "readonly": true,
-      "description": "The event type. This value will be set in the `type` field of the event object given to the listener. It is the same value used by the [on](NativeObject#ontype-listener-context) and [trigger](http://docs.tabris.com/latest/api/NativeObject.html#triggertype) methods."
+      "description": "The event type. This value will be set in the `type` field of the event object given to the listener. It is the same value used by the [on](${doc:NativeObjectUrl}#ontype-listener-context) and [trigger](${doc:NativeObjectUrl}#triggertype) methods."
     },
     "target": {
       "type": "object",

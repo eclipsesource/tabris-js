@@ -9,7 +9,7 @@
 type SubscriptionHandler<T> = (subscriber: Subscriber<T>) => TeardownLogic;
 ```
 
-This function is passed to a [`Observable` constructor](#constructor) to control the behavior of the observable. It is executed every time the [`subscribe`](#subscribeobserver) method is called. It is given a [`Subscriber`](#subscribert) object to send "next", "error" and "complete" messages to the respective callbacks. It may also return a [teardown function](#teardownloagic).
+This function is passed to a [`Observable` constructor](#constructor) to control the behavior of the observable. It is executed every time the [`subscribe`](#subscribeobserver) method is called. It is given a [`Subscriber`](#subscriber) object to send "next", "error" and "complete" messages to the respective callbacks. It may also return a [teardown function](#teardownlogic).
 
 Example:
 
@@ -31,7 +31,7 @@ new Observable(subscriber => {
 type TeardownLogic = Function | {unsubscribe: Function} | void;
 ```
 
-A function or object with an `unsubscribe` method. It is called once the subscription [is closed](#subscription). This can be used to free up resources that were allocated by the [subscription handler](#subscriptionhandlert). For example, it may cancel a timer or de-register a listener.
+A function or object with an `unsubscribe` method. It is called once the subscription [is closed](#subscription). This can be used to free up resources that were allocated by the [subscription handler](#subscriptionhandler). For example, it may cancel a timer or de-register a listener.
 
 ### Subscriber<T>
 
@@ -47,7 +47,7 @@ interface Subscriber<T> {
 }
 ```
 
-When calling the methods of this object the respective `next`, `error` and `complete` callbacks given to [`subscribe()`](#subscribeobserver) will be invoked. This may happen synchronously (while the [subscription handler](#subscriptionhandlert) executes) or later (i.e. asynchronously), for example in a timer.
+When calling the methods of this object the respective `next`, `error` and `complete` callbacks given to [`subscribe()`](#subscribeobserver) will be invoked. This may happen synchronously (while the [subscription handler](#subscriptionhandler) executes) or later (i.e. asynchronously), for example in a timer.
 
 ### PartialObserver<T>
 

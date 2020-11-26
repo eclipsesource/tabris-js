@@ -30,7 +30,7 @@ interface LayoutDataLikeObject {
 
 A plain object implementing the same properties as [`LayoutData`](#class-layoutdata).
 
-An instance of [`LayoutData`](#class-layoutdata) is a valid `LayoutDataLikeObject`, but in `LayoutDataLikeObject` all properties are optional and less strict. For example `left`, `top`, `right` and `bottom` accept ${doc:ConstraintValue} (e.g. a `number`) in place of a [`Constraint`](./api/Constraint.md) instance.
+An instance of [`LayoutData`](#class-layoutdata) is a valid `LayoutDataLikeObject`, but in `LayoutDataLikeObject` all properties are optional and less strict. For example `left`, `top`, `right` and `bottom` accept ${doc:ConstraintValue} (e.g. a `number`) in place of a [`Constraint`](./Constraint.md) instance.
 
 A value of `true` is also accepted for all fields except `width` and `height`. For `left`, `right`, `top`, `bottom`, `centerX` and `centerY` it means `0`. For `baseline` it means `'prev()'`.
 

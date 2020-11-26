@@ -33,7 +33,7 @@ Finally, a [functional component](./declarative-ui.md#functional-components) can
 page.find(StyledText)
 ```
 
-**However**, this does not always work out-of-the-box. Read more about this [here](./declarative-ui.md#as-selector) can also work:
+**However**, this does not always work out-of-the-box. Read more about this [here](./declarative-ui.md#functional-components).
 
 ### ID Selectors
 
@@ -257,7 +257,7 @@ __The scope includes the widget it is called on__:
 page.apply({':host': {background: 'green'}}); // same as "page.background = green";
 ```
 
-When using [declarative UI](./declarative-ui.md#apply) syntax \"apply\" is a special attribute that calls this function.
+When using [declarative UI](./declarative-ui.md#using-apply) syntax \"apply\" is a special attribute that calls this function.
 
 ```js
 Composite({
@@ -331,7 +331,7 @@ page.apply('strict', [
 
 The, `apply` method/attribute can also take a callback instead of a ruleset object. That callback is given the host widget and must return a ruleset that may be derived from the widget state.
 
-If a "trigger" is set up for this ruleset it will be applied as needed. A trigger is either a event name (including 'on', e.g. 'onTap'), the string `'*'` to react to any property change (as described[here](./Observable.md#mutations)), or `'update'` for manual updates only.
+If a "trigger" is set up for this ruleset it will be applied as needed. A trigger is either a event name (including 'on', e.g. 'onTap'), the string `'*'` to react to any property change (as described[here](./api/Observable.md#mutationssource)), or `'update'` for manual updates only.
 
 For more information see ["Functional Components"](./declarative-ui.md#using-apply).
 
