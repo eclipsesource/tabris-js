@@ -37,7 +37,24 @@
   "methods": {
     "canAuthenticate": {
       "returns": "boolean",
-      "description": "Checks whether the device has any authentication mechanism configured. If the device does not require any authentication `false` is returned."
+      "description": "Checks whether the device has any authentication mechanism configured. If the device does not require any authentication `false` is returned.",
+      "parameters": [
+        {
+          "name": "options",
+          "type": {
+            "map": {
+              "allowCredentials": {
+                "type": "boolean",
+                "optional": true,
+                "default": true,
+                "description": "Configure whether to check another authentication mechanism other than biometric authentication. For example, when a fingerprint would be the device default, the user could choose to fallback to use a pin instead. When non-biometric credentials are used, no fallback is available. "
+              }
+            }
+          },
+          "optional": true,
+          "description": "A set of options to apply when authenticating."
+        }
+      ]
     },
     "authenticate": {
       "parameters": [
@@ -66,11 +83,11 @@
                 "optional": true,
                 "description": "The message shown in the authentication ui."
               },
-              "allowFallback": {
+              "allowCredentials": {
                 "type": "boolean",
                 "optional": true,
                 "default": true,
-                "description": "Configure whether to allow another authentication mechanism other than the device default. For example, when a fingerprint would be the device default, the user could choose to fallback to use a pin instead. When non-biometric credentials are used, no fallback is available. "
+                "description": "Configure whether to allow another authentication mechanism other than biometric authentication. For example, when a fingerprint would be the device default, the user could choose to fallback to use a pin instead. When non-biometric credentials are used, no fallback is available. "
               },
               "confirmationRequired": {
                 "type": "boolean",
@@ -93,8 +110,19 @@
           {
             "map": {
               "status": {
-                "type": {"union": ["'success'", "'canceled'", "'userCanceled'", "'limitExceeded'", "'lockout'", "'biometricsNotEnrolled'", "'credentialsNotEnrolled'", "'error'"]},
-                "description": "The result of the authentication attempt. I case of `'success'` the user passed the authentication success. All other statuses are treated as an authentication failure.\n\n- `'success'` - The user authenticated successfully.\n- `'canceled'` - The authentication process was canceled by the system.\n- `'userCanceled'` - The authentication process was canceled by the user.\n- `'limitExceeded'` -  When the option `allowFallback` is false `limitExceeded` is returned when authentication failed to many times. On Android a user has to wait for 30 seconds until he can try again.\n- `'lockout'` - When the option `allowFallback` and authentication failed to many times and can not be attempted anymore `lockout` is returned.\n- `'biometricsNotEnrolled'` - When option `allowFallback` is false and no biometrics are enrolled `biometricsNotEnrolled` is returned.\n- `'credentialsNotEnrolled'` - When no device credentials are available `credentialsNotEnrolled` is returned.\n- `'error'` - An error occurred. Possibly check the `'message'` parameter for details."
+                "type": {
+                  "union": [
+                    "'success'",
+                    "'canceled'",
+                    "'userCanceled'",
+                    "'limitExceeded'",
+                    "'lockout'",
+                    "'biometricsNotEnrolled'",
+                    "'credentialsNotEnrolled'",
+                    "'error'"
+                  ]
+                },
+                "description": "The result of the authentication attempt. I case of `'success'` the user passed the authentication success. All other statuses are treated as an authentication failure.\n\n- `'success'` - The user authenticated successfully.\n- `'canceled'` - The authentication process was canceled by the system.\n- `'userCanceled'` - The authentication process was canceled by the user.\n- `'limitExceeded'` -  When the option `allowCredentials` is false `limitExceeded` is returned when authentication failed to many times. On Android a user has to wait for 30 seconds until he can try again.\n- `'lockout'` - When the option `allowCredentials` and authentication failed to many times and can not be attempted anymore `lockout` is returned.\n- `'biometricsNotEnrolled'` - When option `allowCredentials` is false and no biometrics are enrolled `biometricsNotEnrolled` is returned.\n- `'credentialsNotEnrolled'` - When no device credentials are available `credentialsNotEnrolled` is returned.\n- `'error'` - An error occurred. Possibly check the `'message'` parameter for details."
               },
               "message": {
                 "type": "string",

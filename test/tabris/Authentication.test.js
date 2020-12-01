@@ -54,6 +54,10 @@ describe('Authentication', () => {
       expect(authentication.canAuthenticate()).to.equal(true);
     });
 
+    it('rejects if allowCredentials is invalid type', () => {
+      expect(() => authentication.canAuthenticate({allowCredentials: 123})).to.throw;
+    });
+
   });
 
   describe('authenticate', () => {
@@ -70,9 +74,10 @@ describe('Authentication', () => {
       expect(() => authentication.authenticate({message: 123})).to.throw;
     });
 
-    it('rejects if allowFallback is invalid type', () => {
-      expect(() => authentication.authenticate({allowFallback: 123})).to.throw;
+    it('rejects if allowCredentials is invalid type', () => {
+      expect(() => authentication.authenticate({allowCredentials: 123})).to.throw;
     });
+
     it('rejects if confirmationRequired is invalid type', () => {
       expect(() => authentication.authenticate({confirmationRequired: 123})).to.throw;
     });

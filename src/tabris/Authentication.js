@@ -15,8 +15,9 @@ export default class Authentication extends NativeObject {
     return 'tabris.Authentication';
   }
 
-  canAuthenticate() {
-    return this._nativeCall('canAuthenticate');
+  canAuthenticate(options = {}) {
+    checkType(options.allowCredentials, Boolean, {name: 'allowCredentials', nullable: true});
+    return this._nativeCall('canAuthenticate', options);
   }
 
   authenticate(options = {}) {
@@ -24,7 +25,7 @@ export default class Authentication extends NativeObject {
       checkType(options.title, String, {name: 'title', nullable: true});
       checkType(options.subtitle, String, {name: 'subtitle', nullable: true});
       checkType(options.message, String, {name: 'message', nullable: true});
-      checkType(options.allowFallback, Boolean, {name: 'allowFallback', nullable: true});
+      checkType(options.allowCredentials, Boolean, {name: 'allowCredentials', nullable: true});
       checkType(options.confirmationRequired, Boolean, {name: 'confirmationRequired', nullable: true});
       this._nativeCall('authenticate', {
         options,
