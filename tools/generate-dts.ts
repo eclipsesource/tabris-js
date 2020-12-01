@@ -20,7 +20,7 @@ type ReadOnlyWidgetKeys<T> = T extends {readonly bounds: any}
   : never;
 type MethodKeysOf<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
 // Tabris.js Helper Types
-type JSXDefaultChildren = Flatten<string|{cid?: never}>;
+type JSXDefaultChildren = Flatten<string|{cid?: never} & object>;
 export type Properties<
   T extends {set?: any},
   U = Omit<T, 'set'> // prevent self-reference issues
