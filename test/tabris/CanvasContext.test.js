@@ -92,13 +92,28 @@ describe('CanvasContext', function() {
       expect(createCalls[0].properties.parent).to.equal(canvas.cid);
     });
 
+    it('disposes native GC when parent disposes', function() {
+      canvas.getContext('2d', 100, 200);
+      const id = client.calls({op: 'create', type: 'tabris.GC'})[0].id;
+      tabris.flush();
+
+      canvas.dispose();
+
+      console.log(client.calls());
+
+      const disposeCalls = client.calls({op: 'destroy'});
+      expect(disposeCalls.length).to.equal(2);
+      expect(disposeCalls[0].id).to.equal(id);
+      expect(disposeCalls[1].id).to.equal(canvas.cid);
+    });
+
     it('creates and returns graphics context', function() {
       ctx = canvas.getContext('2d', 100, 200);
 
       expect(ctx).to.be.an.instanceof(CanvasContext);
     });
 
-    it('returns same instance everytime', function() {
+    it('returns same instance every time', function() {
       const ctx1 = canvas.getContext('2d', 100, 200);
 
       const ctx2 = canvas.getContext('2d', 100, 200);
