@@ -474,10 +474,17 @@ describe('Widget', function() {
         expect(client.calls({op: 'destroy', id: parent.cid}).length).to.equal(1);
       });
 
-      it('does not DESTROY native children', function() {
+      it('does not DESTROY native children in layout', function() {
         parent.dispose();
 
         expect(client.calls({op: 'destroy', id: child.cid}).length).to.equal(0);
+      });
+
+      it('does DESTROY native children excluded from layout', function() {
+        child.excludeFromLayout = true;
+        parent.dispose();
+
+        expect(client.calls({op: 'destroy', id: child.cid}).length).to.equal(1);
       });
 
       it('notifies parent\'s `removeChild` listener', function() {

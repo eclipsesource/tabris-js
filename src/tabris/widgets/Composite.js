@@ -157,7 +157,8 @@ export default class Composite extends Widget {
     if (this.$children) {
       const children = this.$children.concat();
       for (let i = 0; i < children.length; i++) {
-        children[i]._dispose(true);
+        const skipNative = !children[i].excludeFromLayout;
+        children[i]._dispose(skipNative);
       }
       this.$children = undefined;
     }
