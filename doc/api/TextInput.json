@@ -165,10 +165,7 @@
     },
     "cursorColor": {
       "type": "ColorValue",
-      "description": "The color of the cursor in the `TextInput`.",
-      "platforms": {
-        "android": false
-      }
+      "description": "The color of the cursor in the `TextInput`."
     },
     "selection": {
       "type": {
