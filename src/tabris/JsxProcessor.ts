@@ -214,8 +214,16 @@ function createFactoryProxy(processor: JsxProcessor, constructor: ElementFn): El
   const handler: ProxyHandler<ElementFn> = {
     apply(target, _thisArg, args) {
       const [attributes, functionalComponent] = args;
+      if (args.length > 1) {
+        if (!(functionalComponent instanceof Function)) {
+          throw new TypeError('Second parameter must be a function');
+        }
+        if (functionalComponent.prototype && functionalComponent.prototype[JSX.jsxFactory]) {
+          throw new TypeError('Second parameter must be a factory');
+        }
+      }
       const result = processor.createElement(proxy, attributes);
-      if (functionalComponent instanceof Function && result instanceof Object) {
+      if (args.length > 1 && result instanceof Object) {
         functionalComponent[JSX.jsxType] = true;
         result[JSX.jsxType] = functionalComponent;
       }
