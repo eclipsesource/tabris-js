@@ -7,17 +7,30 @@
     "allowJs": true,
     "noImplicitUseStrict": true,
     "lib": ["es2017"],
+    "skipLibCheck": true,
     "moduleResolution": "node",
-    "outDir": "build/dummy"
+    "outDir": "build/dummy",
+    "typeRoots": [],
+    "types": [
+      "./node_modules/@types/chai",
+      "./node_modules/@types/chai-as-promised",
+      "./node_modules/@types/sinon",
+      "./node_modules/@types/sinon-chai",
+      "./node_modules/@types/mocha"
+    ]
   },
   "ts-node": {
     "files": true
   },
+  "exclude": [
+    "./test/typescript/**",
+    "./test/boot/**",
+    "./test/**/*.verify.js"
+  ],
   "include": [
     "./test/**/*.ts",
     "./test/**/*.js",
     "./src/tabris/**/*.ts",
-    "./src/tabris/**/*.js",
-    "./src/test.js"
+    "./src/tabris/**/*.js"
   ]
 }
