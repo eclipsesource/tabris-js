@@ -806,6 +806,10 @@ describe('JsxProcessor', function() {
         expect(parent.children('asdf').length).to.equal(0);
       });
 
+      it('throws for widget class as selector', function() {
+        expect(() => CompositeFactory({}, Composite)).to.throw(TypeError);
+      });
+
       it('still has static members', function() {
         expect(CompositeFactory.defineChangeEvent).to.equal(Composite.defineChangeEvent);
       });
