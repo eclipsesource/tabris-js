@@ -104,6 +104,16 @@ describe('Popover', () => {
       expect(contentView.isDisposed()).to.equal(true);
     });
 
+    it('fires close event', () => {
+      const close = spy();
+      popover.onClose(close);
+
+      popover.close();
+
+      expect(close).to.have.been.calledOnce;
+      expect(close).to.have.been.calledWithMatch({target: popover});
+    });
+
   });
 
   describe('close event', () => {
@@ -118,14 +128,11 @@ describe('Popover', () => {
     });
 
     it('fires close event', () => {
-      const closeOk = spy();
       const close = spy();
-      popover.on('closeOk', closeOk);
       popover.onClose(close);
 
       tabris._notify(popover.cid, 'close', {});
 
-      expect(closeOk).not.to.have.been.called;
       expect(close).to.have.been.calledOnce;
       expect(close).to.have.been.calledWithMatch({target: popover});
     });

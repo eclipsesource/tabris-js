@@ -23,7 +23,6 @@ export default class AlertDialog extends Popup {
   constructor(properties) {
     super(properties);
     this._nativeListen('close', true);
-    this._autoDispose = true;
   }
 
   get _nativeType() {
@@ -56,21 +55,16 @@ export default class AlertDialog extends Popup {
     return super.open();
   }
 
-  _trigger(name, event) {
-    if (name === 'close') {
-      event.button = event.button || null;
-      event.texts = [];
-      if (this._contentView) {
-        event.texts = this._contentView.children().toArray().map(textInput => textInput.text);
-      }
-      if (event.button) {
-        super._trigger('close' + capitalizeFirstChar(event.button), event);
-      }
-      super._trigger('close', event);
-      this.dispose();
-    } else {
-      return super._trigger(name, event);
+  _handleClose(event) {
+    event.button = event.button || null;
+    event.texts = [];
+    if (this._contentView) {
+      event.texts = this._contentView.children().toArray().map(textInput => textInput.text);
     }
+    if (event.button) {
+      this._trigger('close' + capitalizeFirstChar(event.button), event);
+    }
+    return super._handleClose(event);
   }
 
   _dispose() {
