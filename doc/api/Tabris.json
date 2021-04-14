@@ -13,6 +13,7 @@
       "type": "boolean",
       "default": "false",
       "readonly": true,
+      "const": true,
       "description": "Indicates that the framework has been fully initialized. This happens before the main application module is parsed and executed, so it is only relevant for framework and plug-in developers."
     },
     "version": {
@@ -22,7 +23,8 @@
       "description": "The version of the tabris module."
     },
     "symbols": {
-      "type": {"indexType": "string", "map": {"symbol": "Symbol"}}
+      "type": {"indexType": "string", "map": {"symbol": "Symbol"}},
+      "const": true
     }
   },
   "methods": {
