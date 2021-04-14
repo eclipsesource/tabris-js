@@ -134,6 +134,16 @@ describe('ActionSheet', () => {
       expect(actionSheet.isDisposed()).to.equal(true);
     });
 
+    it('fires close event with no selection', () => {
+      const close = spy();
+      actionSheet.onClose(close);
+
+      actionSheet.close();
+
+      expect(close).to.have.been.calledOnce;
+      expect(close).to.have.been.calledWithMatch({target: actionSheet, index: null, action: null});
+    });
+
   });
 
   describe('close event', () => {
@@ -150,14 +160,11 @@ describe('ActionSheet', () => {
     });
 
     it('fires close event with no selection', () => {
-      const closeOk = spy();
       const close = spy();
-      actionSheet.on('closeOk', closeOk);
       actionSheet.onClose(close);
 
       tabris._notify(actionSheet.cid, 'close', {});
 
-      expect(closeOk).not.to.have.been.called;
       expect(close).to.have.been.calledOnce;
       expect(close).to.have.been.calledWithMatch({target: actionSheet, index: null, action: null});
     });

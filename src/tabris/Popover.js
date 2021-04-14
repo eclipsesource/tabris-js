@@ -23,21 +23,11 @@ export default class Popover extends Popup {
     super(properties);
     Object.defineProperty(this, 'contentView', {value: createContentView()});
     this._nativeListen('close', true);
-    this._autoDispose = true;
     this._nativeSet('contentView', this.contentView.cid);
   }
 
   get _nativeType() {
     return 'tabris.Popover';
-  }
-
-  _trigger(name, event) {
-    if (name === 'close') {
-      super._trigger('close', event);
-      this.dispose();
-    } else {
-      return super._trigger(name, event);
-    }
   }
 
   _dispose() {

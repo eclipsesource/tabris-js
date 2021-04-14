@@ -223,6 +223,16 @@ describe('AlertDialog', function() {
       expect(dialog.isDisposed()).to.equal(true);
     });
 
+    it('fires close event', function() {
+      const close = spy();
+      dialog.onClose(close);
+
+      dialog.close();
+
+      expect(close).to.have.been.calledOnce;
+      expect(close).to.have.been.calledWithMatch({target: dialog, button: null, texts: []});
+    });
+
   });
 
   describe('close event', function() {

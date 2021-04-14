@@ -23,7 +23,6 @@ export default class ActionSheet extends Popup {
       _index: {enumerable: false, writable: true, value: null},
       _action: {enumerable: false, writable: true, value: null}
     });
-    this._autoDispose = true;
     this._nativeListen('select', true);
   }
 
@@ -36,12 +35,14 @@ export default class ActionSheet extends Popup {
       this._index = event.index;
       this._action = this.actions[this._index];
       super._trigger('select', Object.assign(event, {action: this._action}));
-    } else if (name === 'close') {
-      super._trigger('close', Object.assign(event, {index: this._index, action: this._action}));
-      this.dispose();
     } else {
       return super._trigger(name, event);
     }
+  }
+
+  _handleClose(event) {
+    Object.assign(event, {index: this._index, action: this._action});
+    return super._handleClose(event);
   }
 
   /** @this {import("../JsxProcessor").default} */

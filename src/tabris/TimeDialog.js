@@ -23,7 +23,6 @@ export default class TimeDialog extends Popup {
     super(properties);
     this._nativeListen('close', true);
     this._nativeListen('select', true);
-    this._autoDispose = true;
   }
 
   get _nativeType() {
@@ -31,20 +30,13 @@ export default class TimeDialog extends Popup {
   }
 
   _trigger(name, event) {
-    if (name === 'close') {
-      this._handleCloseEvent(event);
-    } else if (name === 'select') {
+    if (name === 'select') {
       event.date = new Date(event.date);
       super._trigger('select', event);
-      this._handleCloseEvent(event);
+      return this._handleClose(event);
     } else {
       return super._trigger(name, event);
     }
-  }
-
-  _handleCloseEvent(event) {
-    super._trigger('close', event);
-    this.dispose();
   }
 
 }
