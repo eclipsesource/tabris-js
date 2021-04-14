@@ -113,10 +113,6 @@ const TOC_INCLUDE: {[cat: string]: TocEntry[]} = {
     {
       title: 'Worker',
       url: 'w3c-api.html#worker'
-    },
-    {
-      title: 'crypto',
-      url: 'w3c-api.html#random-source-crypto'
     }
   ],
   widget: [
