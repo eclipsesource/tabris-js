@@ -120,6 +120,8 @@ interface Transformation {
 }
 ```
 
+On iOS `translationZ` is not supported and will be ignored.
+
 Each property has a default value if omitted:
 
 Property       | Default | Description
