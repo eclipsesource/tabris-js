@@ -42,23 +42,23 @@ const LANG_TYPE_LINKS: TypeLinks = {
     title: mdnTitle('Object')
   },
   string: {
-    href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type',
+    href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#string_type',
     title: mdnTitle('string')
   },
   boolean: {
-    href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type',
+    href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#boolean_type',
     title: mdnTitle('boolean')
   },
   number: {
-    href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type',
+    href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#number_type',
     title: mdnTitle('number')
   },
   null: {
-    href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Null_type',
+    href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#null_type',
     title: mdnTitle('null')
   },
   undefined: {
-    href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Undefined_type',
+    href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#undefined_type',
     title: mdnTitle('undefined')
   },
   Promise: {
@@ -66,7 +66,7 @@ const LANG_TYPE_LINKS: TypeLinks = {
     title: mdnTitle('Promise')
   },
   IterableIterator: {
-    href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#The_iterator_protocol',
+    href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#the_iterator_protocol',
     title: mdnTitle('IterableIterator')
   },
   Array: {
@@ -98,6 +98,7 @@ const LANG_TYPE_LINKS: TypeLinks = {
   }
 };
 const PLAYGROUND = 'https://playground.tabris.com/';
+const GITHUB_TREE = 'https://github.com/eclipsesource/tabris-js/tree/';
 const DECORATORS_TREE = 'https://github.com/eclipsesource/tabris-decorators/tree/';
 const FILE_TYPES = {
   js: 'JavaScript',
@@ -1013,11 +1014,23 @@ class DocumentRenderer {
               : '<span class=\'language tsx\'>TSX</span>';
           return `[${language} ${title}](${gitHubUrl})`;
         } else {
-          const snippetPath =
+          const playgroundUrl =
             `${PLAYGROUND}?gitref=v${encodeURIComponent(this.gen.version)}&snippet=${encodeURIComponent(link.snippet)}`;
+          const gitHubUrl = [
+            GITHUB_TREE,
+            preRelease ? 'master' : 'v' + this.gen.version,
+            '/snippets/',
+            link.snippet
+          ].join('');
           const snippetType = link.snippet.split('.').pop().toLowerCase();
           const language = `<span class='language ${snippetType}'>${snippetType.toUpperCase()}</span>`;
-          return `[${language} ${title}](${snippetPath})`;
+          const playgroundHtml = [
+            '<span style="font-size: 75%;">',
+            `[<a href="${playgroundUrl}" style="color: cadetblue;">`,
+            '► Run in Playground</a>]',
+            '</span>'
+          ].join('');
+          return `[${language} ${title}](${gitHubUrl}) ${playgroundHtml}`;
         }
       }
       return `[${link.title}](${link.path})`;
