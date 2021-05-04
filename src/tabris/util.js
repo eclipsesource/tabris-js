@@ -91,7 +91,7 @@ export function isReadable(value) {
  */
 export function read(value) {
   if (value instanceof ArrayBuffer) {
-    return value.slice(0);
+    return value.byteLength === 0 ? new ArrayBuffer() : value.slice(0);
   }
   if (ArrayBuffer.isView(value)) {
     return value.buffer.slice(0);
