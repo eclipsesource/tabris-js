@@ -5,7 +5,6 @@ export const nativeObject: unique symbol = Symbol('nativeObject');
 export const toXML: unique symbol = Symbol('toXML');
 export const notify: unique symbol = Symbol('notify');
 export const data: unique symbol = Symbol('data');
-export const listenersStore: unique symbol = Symbol('listenersStore');
 export const originalComponent: unique symbol = Symbol('originalComponent');
 export const proxyHandler: unique symbol = Symbol('proxyHandler');
 export const setterTargetType: unique symbol = Symbol('setterTargetType');

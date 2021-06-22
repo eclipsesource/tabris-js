@@ -1,18 +1,12 @@
 import Events from './Events';
 import {toValueString} from './Console';
-import {listenersStore as storeSym, observable as observableSym} from './symbols';
+import {observable as observableSym} from './symbols';
 import {omit} from './util';
 import Observable from './Observable';
 import {Observer, TeardownLogic} from './Observable.types';
 import EventObject from './EventObject';
 
-const DELEGATE_FIELDS: Array<keyof Listeners | symbol> = [
-  'promise', 'addListener', 'removeListener', 'once', 'trigger', 'triggerAsync',
-  'subscribe', observableSym
-];
-
 type Store = typeof Events;
-
 type Listener<T extends object> = (ev: EventObject & T) => any;
 
 interface Attributes {
@@ -20,10 +14,15 @@ interface Attributes {
 }
 
 interface TargetCandidate {
-  [storeSym]?: Store;
   on?: Function;
   jsxAttributes?: Attributes;
 }
+
+const eventStoreMap = new WeakMap<TargetCandidate, Store>();
+const DELEGATE_FIELDS: Array<keyof Listeners | symbol> = [
+  'promise', 'addListener', 'removeListener', 'once', 'trigger', 'triggerAsync',
+  'subscribe', observableSym
+];
 
 class Listeners<T extends object = object> extends Observable<T> {
 
@@ -31,10 +30,10 @@ class Listeners<T extends object = object> extends Observable<T> {
     if (target.on instanceof Function) {
       return target as unknown as Store;
     }
-    if (!target[storeSym]) {
-      target[storeSym] = Object.assign({$eventTarget: target}, Events);
+    if (!eventStoreMap.has(target)) {
+      eventStoreMap.set(target, Object.assign({$eventTarget: target}, Events));
     }
-    return target[storeSym] as Store;
+    return eventStoreMap.get(target) as Store;
   }
 
   private readonly store: Store;

@@ -257,7 +257,6 @@ describe('tabris', function() {
     expect(typeof tabris.symbols.toXML).to.equal('symbol');
     expect(typeof tabris.symbols.notify).to.equal('symbol');
     expect(typeof tabris.symbols.data).to.equal('symbol');
-    expect(typeof tabris.symbols.listenersStore).to.equal('symbol');
     expect(typeof tabris.symbols.originalComponent).to.equal('symbol');
     expect(typeof tabris.symbols.proxyHandler).to.equal('symbol');
     expect(typeof tabris.symbols.setterTargetType).to.equal('symbol');
