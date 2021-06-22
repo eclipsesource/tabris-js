@@ -2,15 +2,17 @@ import NativeObject from './NativeObject';
 import WidgetCollection from './WidgetCollection';
 import GestureRecognizer from './GestureRecognizer';
 import {animate} from './Animation';
-import {JSX} from './JsxProcessor';
+import JsxProcessor from './JsxProcessor';
 import {types} from './property-types';
 import LayoutData, {mergeLayoutData} from './LayoutData';
 import {getFilter} from './util-widget-select';
 import {toValueString, hint} from './Console';
 import checkType from './checkType';
+import {jsxFactory} from './symbols';
+import Composite from './widgets/Composite';
 
-/** @type {Array<keyof LayoutData>} */
-const layoutDataProps = ['left', 'right', 'top', 'bottom', 'width', 'height', 'centerX', 'centerY', 'baseline'];
+const layoutDataProps: Array<keyof LayoutDataLikeObject>
+  = ['left', 'right', 'top', 'bottom', 'width', 'height', 'centerX', 'centerY', 'baseline'];
 
 const jsxShorthands = {
   center: 'layoutData',
@@ -35,15 +37,38 @@ const defaultGestures = {
   swipeDown: {type: 'swipe', direction: 'down'}
 };
 
+type Gesture = keyof typeof defaultGestures;
+
 /**
  * @abstract
  */
-export default class Widget extends NativeObject {
+class Widget extends NativeObject {
 
-  /**
-   * @param {import('./widgets/Composite').default} widget
-   */
-  appendTo(widget) {
+  enabled!: boolean;
+  visible!: boolean;
+  elevation!: number;
+  bounds!: Bounds;
+  background: unknown;
+  opacity!: number;
+  transform!: Transformation;
+  highlightOnTouch!: boolean;
+  cornerRadius!: number;
+  padding!: BoxDimensionsObject;
+
+  animate!: typeof animate;
+
+  _parent?: Composite | null;
+  _layoutData?: LayoutDataLikeObject & LayoutData;
+  _classList?: string[];
+  _id?: string;
+  _gestures?: typeof defaultGestures;
+  _excludeFromLayout?: boolean;
+  _recognizers?: Record<Gesture, GestureRecognizer>;
+  [jsxFactory]!: (type: Constructor<Widget>, attributes: object) => Widget;
+
+  private $data?: Record<string, unknown>;
+
+  appendTo(widget: Composite) {
     this._checkDisposed();
     widget = widget instanceof WidgetCollection ? widget.first() : widget;
     if (!(widget instanceof NativeObject)) {
@@ -53,10 +78,7 @@ export default class Widget extends NativeObject {
     return this;
   }
 
-  /**
-   * @param {import('./widgets/Composite').default} widget
-   */
-  insertBefore(widget) {
+  insertBefore(widget: Composite) {
     this._checkDisposed();
     widget = widget instanceof WidgetCollection ? widget.first() : widget;
     if (!(widget instanceof NativeObject)) {
@@ -71,10 +93,7 @@ export default class Widget extends NativeObject {
     return this;
   }
 
-  /**
-   * @param {import('./widgets/Composite').default} widget
-   */
-  insertAfter(widget) {
+  insertAfter(widget: Composite) {
     this._checkDisposed();
     widget = widget instanceof WidgetCollection ? widget.first() : widget;
     if (!(widget instanceof NativeObject)) {
@@ -96,14 +115,11 @@ export default class Widget extends NativeObject {
     return this;
   }
 
-  /**
-   * @param {Selector} selector
-   */
-  parent(selector) {
+  parent(selector?: Selector): Composite | null {
     if (!selector || !this._parent) {
       return this._parent || null;
     }
-    let candidate = this._parent;
+    let candidate: Composite | null = this._parent;
     const filter = getFilter(selector);
     while (candidate && !filter(candidate)) {
       candidate = candidate.parent();
@@ -111,21 +127,14 @@ export default class Widget extends NativeObject {
     return candidate;
   }
 
-  /**
-   * @param {Selector} selector
-   * @returns {WidgetCollection}
-   */
-  siblings(selector) {
+  siblings(selector: Selector): WidgetCollection {
     if (!this._parent) {
       return new WidgetCollection([]);
     }
-    return this._parent._children(widget => widget !== this).filter(selector);
+    return this._parent._children((widget: Widget) => widget !== this).filter(selector);
   }
 
-  /**
-   * @param {string} value
-   */
-  set class(value) {
+  set class(value: string | undefined) {
     if (this._isDisposed) {
       hint(this, 'Cannot set property "class" on disposed object');
       return;
@@ -133,16 +142,16 @@ export default class Widget extends NativeObject {
     Object.defineProperty(this, '_classList', {
       enumerable: true,
       writable: true,
-      value: types.string.convert(value).trim().split(/\s+/)
+      value: types.string.convert!(value).trim().split(/\s+/)
     });
     this._triggerChangeEvent('class', this.class);
   }
 
-  get class() {
+  get class(): string | undefined {
     if (this._isDisposed) {
       return undefined;
     }
-    return this.classList.join(' ');
+    return this.classList!.join(' ');
   }
 
   set layoutData(value) {
@@ -162,8 +171,8 @@ export default class Widget extends NativeObject {
     this._triggerChangeEvent('layoutData', this._layoutData);
     layoutDataProps.forEach(prop => {
       const oldValue = oldLayoutData ? oldLayoutData[prop] : 'auto';
-      if (oldValue !== this._layoutData[prop]) {
-        this._triggerChangeEvent(prop, this._layoutData[prop]);
+      if (oldValue !== this._layoutData![prop]) {
+        this._triggerChangeEvent(prop, this._layoutData![prop]);
       }
     });
   }
@@ -221,12 +230,12 @@ export default class Widget extends NativeObject {
     if (this._isDisposed) {
       return undefined;
     }
-    return types.Bounds.decode(this._nativeGet('absoluteBounds'));
+    return types.Bounds.decode!(this._nativeGet('absoluteBounds'));
   }
 
   set id(value) {
     /** @type {string} */
-    const id = types.string.convert(value);
+    const id = types.string.convert!(value);
     if (id === this._id) {
       return;
     }
@@ -240,19 +249,17 @@ export default class Widget extends NativeObject {
     return this._id || '';
   }
 
-  set gestures(gestures) {
-    /** @type {typeof defaultGestures} */
+  set gestures(gestures: typeof defaultGestures) {
     const value = Object.assign({}, defaultGestures, gestures);
     Object.defineProperty(this, '_gestures', {enumerable: false, writable: true, value});
   }
 
-  get gestures() {
+  get gestures(): typeof defaultGestures {
     if (!this._gestures) {
-      /** @type {typeof defaultGestures} */
       const value = Object.assign({}, defaultGestures);
       Object.defineProperty(this, '_gestures', {enumerable: false, writable: true, value});
     }
-    return this._gestures;
+    return this._gestures!;
   }
 
   set excludeFromLayout(value) {
@@ -277,7 +284,7 @@ export default class Widget extends NativeObject {
     const type = this.constructor.name;
     const cidAttr = `[cid="${this.cid}"]`;
     const id = this.id ? '#' + this.id : '';
-    const classes = this.classList.length ? '.' + this.classList.join('.') : '';
+    const classes = this.classList!.length ? '.' + this.classList!.join('.') : '';
     return type + cidAttr + id + classes;
   }
 
@@ -308,11 +315,7 @@ export default class Widget extends NativeObject {
     return result;
   }
 
-  /**
-   * @param {import('./widgets/Composite').default} parent
-   * @param {number} index
-   */
-  _setParent(parent, index) {
+  _setParent(parent: Composite | null, index?: number) {
     if (this._parent) {
       this._parent._removeChild(this);
     }
@@ -322,18 +325,15 @@ export default class Widget extends NativeObject {
     }
   }
 
-  /**
-   * @param {string} name
-   * @param {boolean} listening
-   */
-  _listen(name, listening) {
+  _listen(name: string, listening: boolean) {
     if (this._isDisposed) {
       return;
     }
-    if (this.gestures[name]) {
+    if (this.gestures[name as Gesture]) {
+      const gesture = name as Gesture;
       if (listening) {
-        const properties = Object.assign({target: this}, this.gestures[name]);
-        const recognizer = new GestureRecognizer(properties).on('gesture', event => {
+        const properties = Object.assign({target: this}, this.gestures[gesture]);
+        const recognizer = new GestureRecognizer(properties).on('gesture', (event: any) => {
           if (event.translation) {
             event.translationX = event.translation.x;
             event.translationY = event.translation.y;
@@ -351,24 +351,20 @@ export default class Widget extends NativeObject {
             {enumerable: false, writable: false, value: {}}
           );
         }
-        this._recognizers[name] = recognizer;
+        this._recognizers![gesture] = recognizer;
         this.on('dispose', recognizer.dispose, recognizer);
       } else if (this._recognizers && name in this._recognizers) {
-        this._recognizers[name].dispose();
-        delete this._recognizers[name];
+        this._recognizers![gesture].dispose();
+        delete this._recognizers![gesture];
       }
     } else {
       super._listen(name, listening);
     }
   }
 
-  /**
-   * @param {string} name
-   * @param {object} event
-   */
-  _trigger(name, event) {
+  _trigger(name: string, event: {bounds?: any}) {
     if (name === 'resize') {
-      return super._trigger(name, types.Bounds.decode(event.bounds));
+      return super._trigger(name, types.Bounds.decode!(event.bounds));
     }
     return super._trigger(name, event);
   }
@@ -380,10 +376,7 @@ export default class Widget extends NativeObject {
     }
   }
 
-  /**
-   * @param {string[]} properties
-   */
-  _reorderProperties(properties) {
+  _reorderProperties(properties: string[]): string[] {
     const layoutDataIndex = properties.indexOf('layoutData');
     if (layoutDataIndex !== -1) {
       const removed = properties.splice(layoutDataIndex, 1);
@@ -393,6 +386,11 @@ export default class Widget extends NativeObject {
   }
 
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface, no-redeclare
+interface Widget extends LayoutDataLikeObject {}
+
+export default Widget;
 
 NativeObject.defineProperties(Widget.prototype, {
   enabled: {
@@ -485,7 +483,7 @@ NativeObject.defineEvents(Widget.prototype, {
     native: true,
     nativeObservable: false,
     changes: 'bounds',
-    changeValue: ({left, top, width, height, bounds}) => bounds || ({left, top, width, height})
+    changeValue: ({left, top, width, height, bounds}: any) => bounds || ({left, top, width, height})
   },
   addChild: true,
   removeChild: true
@@ -493,10 +491,9 @@ NativeObject.defineEvents(Widget.prototype, {
 
 Widget.prototype.animate = animate;
 
-Widget.prototype[JSX.jsxFactory] = createElement;
+Widget.prototype[jsxFactory] = createElement;
 
-/** @this {import("./JsxProcessor").default} */
-function createElement(Type, attributes) {
+function createElement(this: JsxProcessor, Type: Constructor<Widget>, attributes: object) {
   const finalAttributes = this.withShorthands(
     attributes,
     jsxShorthands,

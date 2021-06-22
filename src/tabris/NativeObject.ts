@@ -46,7 +46,8 @@ export default abstract class NativeObject extends EventsClass {
   }
 
   public static defineEvent<T extends NativeObject>(
-    target: T, name: string & keyof T,
+    target: T,
+    name: string,
     definition: EventDefinition | true
   ) {
     const property = 'on' + name.charAt(0).toUpperCase() + name.slice(1);
@@ -93,7 +94,7 @@ export default abstract class NativeObject extends EventsClass {
   ) {
     const name = sourceDef.changes + 'Changed';
     const changeListener = function(this: NativeObject, ev: EventObject) {
-      const changeValue = sourceDef.changeValue as ((ev: EventObject) => any);
+      const changeValue = sourceDef.changeValue as ((arg: EventObject) => any);
       this.$trigger(name, {value: changeValue(ev)});
     };
     const $changeEventProperty = '$event_' + name as keyof T;
@@ -140,8 +141,8 @@ export default abstract class NativeObject extends EventsClass {
     if (arguments.length > 1) {
       throw new Error('Too many arguments');
     }
-    this._reorderProperties(Object.keys(properties || {}) as Array<keyof this & string>)
-      .forEach(name => setExistingProperty.call(this, name, properties[name]));
+    this._reorderProperties(Object.keys(properties || {}))
+      .forEach(name => setExistingProperty.call(this, name, properties[name as keyof typeof properties]));
     return this;
   }
 
@@ -302,7 +303,7 @@ export default abstract class NativeObject extends EventsClass {
     Object.defineProperty(this, 'cid', {value: cid});
   }
 
-  protected _reorderProperties(properties: Array<keyof this & string>) {
+  protected _reorderProperties(properties: string[]): string[] {
     return properties;
   }
 

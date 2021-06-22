@@ -39,6 +39,7 @@
   "rules": {
     "no-console": "off",
     "no-control-regex": "off",
+    "no-undef": "off",
     "no-multiple-empty-lines": [
       "error",
       {
@@ -405,7 +406,6 @@
           ],
           "rules": {
             "no-unused-vars": "off",
-            "no-undef": "off",
             "@typescript-eslint/no-unused-vars": "off",
             "@typescript-eslint/explicit-member-accessibility": [
               "error",
