@@ -60,6 +60,7 @@ export default class Module {
         return exports;
       }
     });
+    checkBrowserField(this);
   }
 
   public require(request: string) {
@@ -269,6 +270,17 @@ function findModule(this: Module, path: string, postfixes: string[]): Module | n
     }
   }
   return null;
+}
+
+function checkBrowserField(module: Module | null) {
+  if (module?.id.endsWith('package.json') && module.exports && 'browser' in module.exports) {
+    const msg = module.id + ' has a "browser" field.\nThis module may function better with a file bundler';
+    if (console.print) {
+      console.print('warn', msg);
+    } else {
+      (console as any).warn(msg);
+    }
+  }
 }
 
 function getMain(module: Module | null): string | null {
