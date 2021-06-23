@@ -41,10 +41,7 @@ const defaultGestures = {
 
 type Gesture = keyof typeof defaultGestures;
 
-/**
- * @abstract
- */
-class Widget<TData extends object = any> extends NativeObject {
+abstract class Widget<TData extends object = any> extends NativeObject {
 
   enabled!: boolean;
   visible!: boolean;
@@ -55,11 +52,11 @@ class Widget<TData extends object = any> extends NativeObject {
   transform!: Transformation;
   highlightOnTouch!: boolean;
   cornerRadius!: number;
-  padding!: BoxDimensionsObject;
+  padding!: BoxDimensionsObject & number;
 
   onResize!: Listeners<{bounds: Bounds}>;
   onBoundsChanged!: Listeners<{bounds: Bounds}>;
-  onDataChanged!: ChangeListeners<this, 'data'>;
+  onDataChanged!: ChangeListeners<Widget, 'data'>;
 
   animate!: typeof animate;
 
@@ -94,7 +91,7 @@ class Widget<TData extends object = any> extends NativeObject {
     if (!parent) {
       throw new Error(`Cannot insert before orphan ${toValueString(widget)}`);
     }
-    const index = parent.$children.indexOf(widget);
+    const index = parent.$children!.indexOf(widget);
     this._setParent(parent, index);
     return this;
   }
@@ -110,7 +107,7 @@ class Widget<TData extends object = any> extends NativeObject {
       throw new Error(`Cannot insert after orphan ${toValueString(widget)}`);
     }
     this.detach();
-    const index = parent.$children.indexOf(widget);
+    const index = parent.$children!.indexOf(widget);
     this._setParent(parent, index + 1);
     return this;
   }
@@ -172,7 +169,7 @@ class Widget<TData extends object = any> extends NativeObject {
     Object.defineProperty(this, '_layoutData', {
       enumerable: false,
       writable: true,
-      value: (/** @type {LayoutData} */(value ? LayoutData.from(value) : new LayoutData({})))
+      value: value ? LayoutData.from(value) : new LayoutData({})
     });
     this._triggerChangeEvent('layoutData', this._layoutData);
     layoutDataProps.forEach(prop => {
@@ -368,7 +365,7 @@ class Widget<TData extends object = any> extends NativeObject {
     }
   }
 
-  _trigger(name: string, event: {bounds?: any}) {
+  _trigger(name: string, event: any) {
     if (name === 'resize') {
       return super._trigger(name, types.Bounds.decode!(event.bounds));
     }

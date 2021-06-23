@@ -37,6 +37,10 @@ interface LayoutDataLikeObject {
     height?: Auto|number;
 }
 
+// Simplified variant of the public "Properties" interface
+type Props<T extends {set?: any}, U = Omit<T, 'set'>> = Partial<U> & {cid?: never};
+type PropName<T extends {set?: any}> = keyof T & string;
+
 type ImageLikeObject = {
   src: string | import('./Blob').default | import('./ImageBitmap').default,
   scale?: number|Auto,
@@ -177,7 +181,7 @@ type TypeDef<ApiType, NativeType, Context extends object> = {
   decode?: (v: NativeType, context: Context) => ApiType
  };
 
-interface PropertyDefinition<ApiType = unknown, NativeType = any, Context extends object = object> {
+interface PropertyDefinition<ApiType = any, NativeType = any, Context extends object = object> {
   /** Entry from property-types indicating the public API type */
   type: TypeDef<ApiType, NativeType, Context>;
   /** Default public API value */
