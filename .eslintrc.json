@@ -186,40 +186,6 @@
     },
     {
       "files": [
-        "test/**/*.js"
-      ],
-      "env": {
-        "node": true,
-        "mocha": true
-      },
-      "globals": {
-        "after": false,
-        "afterEach": false,
-        "before": false,
-        "beforeEach": false,
-        "context": false,
-        "describe": false,
-        "it": false,
-        "mocha": false,
-        "run": false,
-        "setup": false,
-        "specify": false,
-        "suite": false,
-        "suiteSetup": false,
-        "suiteTeardown": false,
-        "teardown": false,
-        "test": false,
-        "xcontext": false,
-        "xdescribe": false,
-        "xit": false,
-        "xspecify": false
-      },
-      "rules": {
-        "no-unused-expressions": "off"
-      }
-    },
-    {
-      "files": [
         "*.ts",
         "*.jsx",
         "*.tsx"
@@ -421,6 +387,42 @@
           }
         }
       ]
+    },
+    {
+      "files": [
+        "test/**/*.js",
+        "test/**/*.ts"
+      ],
+      "env": {
+        "node": true,
+        "mocha": true
+      },
+      "globals": {
+        "after": false,
+        "afterEach": false,
+        "before": false,
+        "beforeEach": false,
+        "context": false,
+        "describe": false,
+        "it": false,
+        "mocha": false,
+        "run": false,
+        "setup": false,
+        "specify": false,
+        "suite": false,
+        "suiteSetup": false,
+        "suiteTeardown": false,
+        "teardown": false,
+        "test": false,
+        "xcontext": false,
+        "xdescribe": false,
+        "xit": false,
+        "xspecify": false
+      },
+      "rules": {
+        "no-unused-expressions": "off",
+        "@typescript-eslint/no-empty-function": "off"
+      }
     }
   ]
 }

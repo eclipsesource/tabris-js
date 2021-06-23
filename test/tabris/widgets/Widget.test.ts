@@ -15,12 +15,13 @@ import LayoutData from '../../../src/tabris/LayoutData';
 import Constraint from '../../../src/tabris/Constraint';
 import {toXML} from '../../../src/tabris/Console';
 import Font from '../../../src/tabris/Font';
+import NativeBridge from '../../../src/tabris/NativeBridge';
 
 describe('Widget', function() {
 
   class TestWidget extends Composite {
 
-    constructor(props) {
+    constructor(props?) {
       super(Object.assign({layout: null}, props));
     }
 
@@ -29,11 +30,10 @@ describe('Widget', function() {
     }
   }
 
-  /** @type {ClientMock} */
-  let client;
+  let client: ClientMock & NativeBridge;
 
   beforeEach(function() {
-    client = new ClientMock();
+    client = new ClientMock() as ClientMock & NativeBridge;
     mockTabris(client);
   });
 
@@ -57,7 +57,7 @@ describe('Widget', function() {
 
   describe('instance', function() {
 
-    let widget;
+    let widget: TestWidget;
 
     beforeEach(function() {
       widget = new TestWidget();
@@ -121,20 +121,22 @@ describe('Widget', function() {
 
       describe(type.name + ' font', function() {
 
+        let withFont: Widget & {font: Partial<FontLikeObject> & string};
+
         beforeEach(function() {
-          widget = new type();
+          withFont = new type() as any;
           client.resetCalls();
         });
 
         it('converts font string to Font instance', function() {
-          widget.set({font: '12px Arial'});
+          withFont.set({font: '12px Arial'});
 
-          expect(widget.font).to.be.instanceOf(Font);
-          expect(widget.font.size).to.equal(12);
+          expect(withFont.font).to.be.instanceOf(Font);
+          expect(withFont.font.size).to.equal(12);
         });
 
         it('encodes font string', function() {
-          widget.set({font: '12px Arial'});
+          withFont.set({font: '12px Arial'});
 
           const call = client.calls({op: 'set'})[0];
           expect(call.properties.font)
@@ -142,9 +144,9 @@ describe('Widget', function() {
         });
 
         it('support setting initial \'initial\'', function() {
-          widget.set({font: '23px Arial'});
+          withFont.set({font: '23px Arial'});
           client.resetCalls();
-          widget.set({font: 'initial'});
+          withFont.set({font: 'initial'});
 
           const call = client.calls({op: 'set'})[0];
           expect(call.properties.font).to.be.null;
@@ -153,14 +155,14 @@ describe('Widget', function() {
         it('returns \'initial\' when no font value is cached', function() {
           spy(client, 'get');
 
-          expect(widget.font).to.eql('initial');
+          expect(withFont.font).to.eql('initial');
           expect(client.get).not.to.have.been.called;
         });
 
         it('SETs equal font only once', function() {
-          widget.set({font: '12px Arial'});
+          withFont.set({font: '12px Arial'});
           tabris.flush();
-          widget.set({font: '12px Arial'});
+          withFont.set({font: '12px Arial'});
 
           expect(client.calls({op: 'set'}).length).to.equal(1);
         });
@@ -288,51 +290,55 @@ describe('Widget', function() {
       });
     });
 
-    it('has initial data object', function() {
-      expect(widget.data.constructor).to.equal(Object);
-    });
+    describe('data', function() {
 
-    it('data object can be replaced', function() {
-      const data = {};
-      widget.data = data;
+      it('has initial object', function() {
+        expect(widget.data.constructor).to.equal(Object);
+      });
 
-      expect(widget.data).to.equal(data);
-    });
+      it('can be replaced', function() {
+        const data = {};
+        widget.data = data;
 
-    it('data can only be an object', function() {
-      expect(() => widget.data = 23).to.throw(TypeError);
-    });
+        expect(widget.data).to.equal(data);
+      });
 
-    it('can be set to null', function() {
-      widget.data = null;
+      it('can only be an object', function() {
+        expect(() => (widget as any).data = 23).to.throw(TypeError);
+      });
 
-      expect(widget.data).to.be.null;
-    });
+      it('can be set to null', function() {
+        widget.data = null;
 
-    it('data object can be replaced twice', function() {
-      const data = {};
-      widget.data = {};
+        expect(widget.data).to.be.null;
+      });
 
-      widget.data = data;
+      it('can be replaced twice', function() {
+        const data = {};
+        widget.data = {};
 
-      expect(widget.data).to.equal(data);
-    });
+        widget.data = data;
 
-    it('data fires change events', function() {
-      const listener = spy();
-      widget.onDataChanged(listener);
-      const data = {};
+        expect(widget.data).to.equal(data);
+      });
 
-      widget.data = data;
+      it('set fires change events', function() {
+        const listener = spy();
+        widget.onDataChanged(listener);
+        const data = {};
 
-      expect(listener).to.have.been.calledOnce;
-      expect(listener.args[0][0].value).to.equal(data);
-    });
+        widget.data = data;
 
-    it('data is undefined after dispose', function() {
-      widget.dispose();
+        expect(listener).to.have.been.calledOnce;
+        expect(listener.args[0][0].value).to.equal(data);
+      });
 
-      expect(widget.data).to.be.undefined;
+      it('is undefined after dispose', function() {
+        widget.dispose();
+
+        expect(widget.data).to.be.undefined;
+      });
+
     });
 
     describe('toXML', function() {
@@ -593,18 +599,21 @@ describe('Widget', function() {
 
       it('appendTo() fails', function() {
         expect(() => {
+          // @ts-ignore
           widget.appendTo();
         }).to.throw(Error, 'Object is disposed');
       });
 
       it('insertBefore() fails', function() {
         expect(() => {
+          // @ts-ignore
           widget.insertBefore();
         }).to.throw(Error, 'Object is disposed');
       });
 
       it('insertAfter() fails', function() {
         expect(() => {
+          // @ts-ignore
           widget.insertAfter();
         }).to.throw(Error, 'Object is disposed');
       });
@@ -668,7 +677,7 @@ describe('Widget', function() {
 
         it('children() returns a safe copy', function() {
           parent.children()[0] = null;
-          expect(parent.children().toArray()).to.deep.contain(child1);
+          expect(parent.children().toArray()).to.deep.include(child1);
         });
 
         it('_children() contains appended child when children() is overwritten', function() {
@@ -803,11 +812,8 @@ describe('Widget', function() {
 
     describe('excludeFromLayout', function() {
 
-      /** @type {TestWidget} */
-      let parent;
-
-      /** @type {TestWidget[]} */
-      let children;
+      let parent: TestWidget;
+      let children: TestWidget[];
 
       beforeEach(function() {
         parent = new TestWidget();
@@ -965,6 +971,7 @@ describe('Widget', function() {
 
         it('throws an error', function() {
           expect(() => {
+            // @ts-ignore
             widget.appendTo({});
           }).to.throw(Error, 'Cannot append to non-widget');
         });
@@ -985,12 +992,14 @@ describe('Widget', function() {
 
       it('throws when disposed', function() {
         expect(() => {
+          // @ts-ignore
           widget.insertBefore({});
         }).to.throw(Error, 'Cannot insert before non-widget');
       });
 
       it('throws when called with a non-widget', function() {
         expect(() => {
+          // @ts-ignore
           widget.insertBefore({});
         }).to.throw(Error, 'Cannot insert before non-widget');
       });
@@ -1136,12 +1145,14 @@ describe('Widget', function() {
         widget.dispose();
 
         expect(() => {
+          // @ts-ignore
           widget.insertAfter({});
         }).to.throw(Error, 'Object is disposed');
       });
 
       it('throws when called with a non-widget', function() {
         expect(() => {
+          // @ts-ignore
           widget.insertAfter({});
         }).to.throw(Error, 'Cannot insert after non-widget');
       });
@@ -1320,12 +1331,9 @@ describe('Widget', function() {
 
     describe('parent', function() {
 
-      /** @type {TestWidget} */
-      let parent;
-      /** @type {Composite} */
-      let grandParent;
-      /** @type {Composite} */
-      let lastParent;
+      let parent: TestWidget;
+      let grandParent: Composite;
+      let lastParent: Composite;
 
       beforeEach(function() {
         parent = new TestWidget();
@@ -1458,8 +1466,8 @@ describe('Widget', function() {
         expect(widget.find('*').toArray()).to.eql([]);
       });
 
-      it('returns no descendants when children() is overwritten to return empty array', function() {
-        widget.children = () => [];
+      it('returns no descendants when children() is overwritten to return empty WidgetCollection', function() {
+        widget.children = () => new WidgetCollection([]);
         expect(widget.find('*').toArray()).to.eql([]);
       });
 

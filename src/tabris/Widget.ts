@@ -10,6 +10,8 @@ import {toValueString, hint} from './Console';
 import checkType from './checkType';
 import {jsxFactory} from './symbols';
 import Composite from './widgets/Composite';
+import Listeners from './Listeners';
+import ChangeListeners from './ChangeListeners';
 
 const layoutDataProps: Array<keyof LayoutDataLikeObject>
   = ['left', 'right', 'top', 'bottom', 'width', 'height', 'centerX', 'centerY', 'baseline'];
@@ -42,7 +44,7 @@ type Gesture = keyof typeof defaultGestures;
 /**
  * @abstract
  */
-class Widget extends NativeObject {
+class Widget<TData extends object = any> extends NativeObject {
 
   enabled!: boolean;
   visible!: boolean;
@@ -55,6 +57,10 @@ class Widget extends NativeObject {
   cornerRadius!: number;
   padding!: BoxDimensionsObject;
 
+  onResize!: Listeners<{bounds: Bounds}>;
+  onBoundsChanged!: Listeners<{bounds: Bounds}>;
+  onDataChanged!: ChangeListeners<this, 'data'>;
+
   animate!: typeof animate;
 
   _parent?: Composite | null;
@@ -66,9 +72,9 @@ class Widget extends NativeObject {
   _recognizers?: Record<Gesture, GestureRecognizer>;
   [jsxFactory]!: (type: Constructor<Widget>, attributes: object) => Widget;
 
-  private $data?: Record<string, unknown>;
+  private $data?: TData;
 
-  appendTo(widget: Composite) {
+  appendTo(widget: Composite | WidgetCollection) {
     this._checkDisposed();
     widget = widget instanceof WidgetCollection ? widget.first() : widget;
     if (!(widget instanceof NativeObject)) {
@@ -78,7 +84,7 @@ class Widget extends NativeObject {
     return this;
   }
 
-  insertBefore(widget: Composite) {
+  insertBefore(widget: Composite | WidgetCollection) {
     this._checkDisposed();
     widget = widget instanceof WidgetCollection ? widget.first() : widget;
     if (!(widget instanceof NativeObject)) {
@@ -93,7 +99,7 @@ class Widget extends NativeObject {
     return this;
   }
 
-  insertAfter(widget: Composite) {
+  insertAfter(widget: Composite | WidgetCollection) {
     this._checkDisposed();
     widget = widget instanceof WidgetCollection ? widget.first() : widget;
     if (!(widget instanceof NativeObject)) {
@@ -127,7 +133,7 @@ class Widget extends NativeObject {
     return candidate;
   }
 
-  siblings(selector: Selector): WidgetCollection {
+  siblings(selector?: Selector): WidgetCollection {
     if (!this._parent) {
       return new WidgetCollection([]);
     }
