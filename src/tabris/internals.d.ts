@@ -160,6 +160,7 @@ interface EventDefinitions {
 
 interface PropertyChangedEvent<T,U> extends EventObjectBase {
   readonly value: U;
+  readonly originalEvent: PropertyChangedEvent<unknown, unknown>;
 }
 
 type TypeDef<ApiType, NativeType, Context extends object> = {

@@ -1,5 +1,4 @@
 import EventObject from './EventObject';
-import {omit} from './util';
 import {hint, toValueString} from './Console';
 import {notify} from './symbols';
 import {formatPromiseRejectionReason} from './util-stacktrace';
@@ -118,23 +117,16 @@ export class EventsClass {
   protected [notify](type: string, eventData: object, async: boolean): object | Promise<object> {
     const returnValues = [];
     if (!this._isDisposed) {
+      let dispatchObject: EventObject | null = null;
       if (this._callbacks && type in this._callbacks) {
-        const uninitialized = (eventData instanceof EventObject) && !eventData.type;
-        const dispatchObject = uninitialized ? eventData : new EventObject();
-        const target = this.$eventTarget || this;
-        if (eventData && (eventData !== dispatchObject)) {
-          const copyData = omit(eventData, ['type', 'target', 'timeStamp']);
-          Object.assign(dispatchObject, copyData);
-        }
-        if ((dispatchObject as EventObject)._initEvent instanceof Function) {
-          (dispatchObject as EventObject)._initEvent(type, target);
-        }
+        dispatchObject = EventObject.create(this, type, eventData);
         for (const callback of this._callbacks[type]) {
           const value = callback.fn.call(callback.ctx || this, dispatchObject);
           if (value instanceof Promise) {
             value.catch(err => {
               console.error(
-                `Listener for ${target.constructor.name} event "${type}" rejected: ${formatPromiseRejectionReason(err)}`
+                `Listener for ${dispatchObject!.target.constructor.name} event `
+                + `"${type}" rejected: ${formatPromiseRejectionReason(err)}`
               );
             });
           }
@@ -143,7 +135,7 @@ export class EventsClass {
       }
       if (this._callbacks && '*' in this._callbacks) {
         for (const callback of this._callbacks['*']) {
-          callback.fn.call(callback.ctx || this, {target: this, type, eventData});
+          callback.fn.call(callback.ctx || this, {target: this, type, eventData, dispatchObject});
         }
       }
     } else {

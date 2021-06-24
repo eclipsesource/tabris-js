@@ -16,10 +16,30 @@ import Constraint from '../../../src/tabris/Constraint';
 import {toXML} from '../../../src/tabris/Console';
 import Font from '../../../src/tabris/Font';
 import NativeBridge from '../../../src/tabris/NativeBridge';
+import ChangeListeners from '../../../src/tabris/ChangeListeners';
+import {SinonSpy} from 'sinon';
 
 describe('Widget', function() {
 
-  class TestWidget extends Composite {
+  class MyData {
+
+    onFooChanged = new ChangeListeners(this, 'foo');
+
+    private _foo: string = '';
+
+    set foo(value: string) {
+      if (value !== this._foo) {
+        this._foo = value;
+        this.onFooChanged.trigger({value});
+      }
+    }
+
+    get foo() {
+      return this._foo;
+    }
+
+  }
+  class TestWidget extends Composite<Widget, MyData> {
 
     constructor(props?) {
       super(Object.assign({layout: null}, props));
@@ -292,12 +312,19 @@ describe('Widget', function() {
 
     describe('data', function() {
 
+      let data: MyData;
+      let listener: SinonSpy;
+
+      beforeEach(function() {
+        listener = spy();
+        data = new MyData();
+      });
+
       it('has initial object', function() {
         expect(widget.data.constructor).to.equal(Object);
       });
 
       it('can be replaced', function() {
-        const data = {};
         widget.data = data;
 
         expect(widget.data).to.equal(data);
@@ -314,29 +341,74 @@ describe('Widget', function() {
       });
 
       it('can be replaced twice', function() {
-        const data = {};
-        widget.data = {};
+        widget.data = new MyData();
 
         widget.data = data;
 
         expect(widget.data).to.equal(data);
       });
 
-      it('set fires change events', function() {
-        const listener = spy();
-        widget.onDataChanged(listener);
-        const data = {};
-
-        widget.data = data;
-
-        expect(listener).to.have.been.calledOnce;
-        expect(listener.args[0][0].value).to.equal(data);
-      });
-
       it('is undefined after dispose', function() {
         widget.dispose();
 
         expect(widget.data).to.be.undefined;
+      });
+
+      describe('change event', function() {
+
+        it('fires when set', function() {
+          widget.onDataChanged(listener);
+
+          widget.data = data;
+
+          expect(listener).to.have.been.calledOnce;
+          expect(listener.args[0][0].value).to.equal(data);
+        });
+
+        it('fires when data object mutates', function() {
+          widget.data = data;
+          widget.onDataChanged(listener);
+
+          data.foo = 'bar';
+
+          expect(listener).to.have.been.calledOnce;
+        });
+
+        it('does not fire when data object mutates after removal', function() {
+          widget.data = data;
+          widget.data = new MyData();
+          widget.onDataChanged(listener);
+
+          data.foo = 'bar';
+
+          expect(listener).not.to.have.been.called;
+        });
+
+        it('provides data change event', function() {
+          widget.data = data;
+          widget.onDataChanged(listener);
+
+          data.foo = 'bar';
+
+          const widgetChange = listener.args[0][0] as PropertyChangedEvent<TestWidget, 'data'>;
+          expect(widgetChange.originalEvent.type).to.equal('fooChanged');
+          expect(widgetChange.originalEvent.target).to.equal(data);
+          expect(widgetChange.originalEvent.value).to.equal('bar');
+        });
+
+        it('provides same change event from data object', function() {
+          widget.data = data;
+          const dataListener = spy();
+          data.onFooChanged(dataListener);
+          widget.onDataChanged(listener);
+
+          data.foo = 'bar';
+
+          const widgetChange = listener.args[0][0] as PropertyChangedEvent<TestWidget, 'data'>;
+          const original = dataListener.args[0][0] as PropertyChangedEvent<MyData, 'foo'>;
+          expect(widgetChange.originalEvent).to.equal(original);
+        });
+
       });
 
     });

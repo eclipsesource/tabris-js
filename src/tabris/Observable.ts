@@ -13,6 +13,8 @@ const noop = (...args: any[]) => undefined;
 if (!Symbol.observable) {
   Object.defineProperty(Symbol, 'observable', {value: symbols.observable});
 }
+
+type RawEvent = {target: object, type: string, eventData: object, dispatchObject: EventObject | null};
 export default class Observable<T = unknown> {
 
   private static deferred: Function[] = [];
@@ -20,15 +22,25 @@ export default class Observable<T = unknown> {
 
   public static mutations<T extends object>(object: T): Observable<T> {
     return new Observable(observer => {
+      const next = () => observer.next(object);
+      next();
+      return this.changeEvents(object).subscribe(() => this.defer(next));
+    });
+  }
+
+  public static changeEvents<T extends object>(object: T): Observable<RawEvent> {
+    return new Observable(observer => {
       const store = Listeners.getListenerStore(object);
       const native = (object as NativeObject)[symbols.nativeObservables];
       const dummyListener = () => null;
-      const next = () => observer.next(object);
-      const handleAny = (ev: EventObject) =>
-        ev.type.endsWith('Changed') ? this.defer(next) : null;
+      const handleAny = (ev: RawEvent) => {
+        if (!ev.type.endsWith('Changed')) {
+          return;
+        }
+        observer.next(ev);
+      };
       store.on({'*': handleAny, 'dispose': observer.complete});
       native?.forEach(event => store.on(event, dummyListener));
-      next();
       return () => {
         store.off({'*': handleAny, 'dispose': observer.complete});
         native?.forEach(event => store.off(event, dummyListener));

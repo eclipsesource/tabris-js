@@ -1,4 +1,4 @@
-import { ColorValue, Picker, PickerSelectEvent, Properties, PropertyChangedEvent, FontValue } from 'tabris';
+import {ColorValue, Picker, PickerSelectEvent, Properties, PropertyChangedEvent, FontValue} from 'tabris';
 
 let widget: Picker = new Picker();
 

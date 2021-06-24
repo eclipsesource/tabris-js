@@ -348,6 +348,7 @@ export type BoxDimensions = number | string | [number, number?, number?, number?
 
 export interface PropertyChangedEvent<T, U> extends EventObject<T>{
   readonly value: U
+  originalEvent?: PropertyChangedEvent<object, unknown> | null;
 }
 
 export class JsxProcessor {

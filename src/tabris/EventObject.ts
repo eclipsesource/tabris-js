@@ -1,4 +1,5 @@
 import {format} from './Formatter';
+import {omit} from './util';
 
 export default class EventObject {
 
@@ -8,6 +9,20 @@ export default class EventObject {
   private $type!: string;
   private $target!: object;
   private $defaultPrevented!: boolean;
+
+  static create(target: object, type: string, eventData: object) {
+    const uninitialized = (eventData instanceof EventObject) && !eventData.type;
+    const dispatchObject = uninitialized ? eventData as EventObject : new EventObject();
+    const eventTarget = (target as {$eventTarget: object}).$eventTarget || target;
+    if (eventData && (eventData !== dispatchObject)) {
+      const copyData = omit(eventData, ['type', 'target', 'timeStamp']);
+      Object.assign(dispatchObject, copyData);
+    }
+    if ((dispatchObject as EventObject)._initEvent instanceof Function) {
+      (dispatchObject as EventObject)._initEvent(type, eventTarget);
+    }
+    return dispatchObject;
+  }
 
   constructor() {
     Object.defineProperties(this, {

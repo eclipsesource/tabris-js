@@ -12,6 +12,9 @@ import {jsxFactory} from './symbols';
 import Composite from './widgets/Composite';
 import Listeners from './Listeners';
 import ChangeListeners from './ChangeListeners';
+import Observable from './Observable';
+import {Subscription} from './Observable.types';
+import EventObject from './EventObject';
 
 const layoutDataProps: Array<keyof LayoutDataLikeObject>
   = ['left', 'right', 'top', 'bottom', 'width', 'height', 'centerX', 'centerY', 'baseline'];
@@ -70,6 +73,7 @@ abstract class Widget<TData extends object = any> extends NativeObject {
   [jsxFactory]!: (type: Constructor<Widget>, attributes: object) => Widget;
 
   private $data?: TData;
+  private $dataSubscription?: Subscription;
 
   appendTo(widget: Composite | WidgetCollection) {
     this._checkDisposed();
@@ -208,25 +212,40 @@ abstract class Widget<TData extends object = any> extends NativeObject {
     return this._classList;
   }
 
-  set data(value) {
+  set data(value: TData) {
     if (this._isDisposed || this.$data === value) {
       return;
     }
     checkType(value, Object, {name: 'data', nullable: true});
-    Object.defineProperty(this, '$data', {
-      enumerable: false, writable: true, value
-    });
+    if (this.$dataSubscription) {
+      this.$dataSubscription.unsubscribe();
+    }
+    Object.defineProperty(this, '$data', {enumerable: false, writable: true, value});
+    if (value) {
+      const subscription = Observable.changeEvents(value).subscribe(
+        rawEvent => {
+          const originalEvent = rawEvent.dispatchObject
+            ?? EventObject.create(rawEvent.target, rawEvent.type, rawEvent.eventData);
+          this.$trigger('dataChanged', {value: this.$data, originalEvent});
+        }
+      );
+      Object.defineProperty(
+        this,
+        '$dataSubscription',
+        {enumerable: false, writable: true, value: subscription}
+      );
+    }
     this._triggerChangeEvent('data', this.$data);
   }
 
   get data() {
     if (this._isDisposed) {
-      return undefined;
+      return undefined as any;
     }
     if (!('$data' in this)) {
       Object.defineProperty(this, '$data', {enumerable: false, writable: true, value: {}});
     }
-    return this.$data;
+    return this.$data as TData;
   }
 
   get absoluteBounds() {
