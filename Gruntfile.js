@@ -60,7 +60,7 @@ module.exports = function(grunt) {
       test_ts: {
         expand: true,
         cwd: 'test/typescript/',
-        src: ['**/*.test.ts*', '**/*.fail.ts*', 'package.json', 'tsconfig.json', 'tsconfig.fail.json'],
+        src: ['**/*.test.ts*', 'package.json', 'tsconfig.json'],
         dest: 'build/typescript/'
       },
       snippets: {
@@ -221,53 +221,13 @@ module.exports = function(grunt) {
     'exec:test_tabris'
   ]);
 
-  grunt.registerTask('verify_typings_fail', () => {
-    grunt.file.expand('build/typescript/**/*.fail.ts*').forEach(file => {
-      const childProcess = require('child_process').spawnSync(
-        'node',
-        [
-          'node_modules/typescript/bin/tsc',
-          '--noImplicitAny',
-          '--jsx', 'react',
-          '--jsxFactory', 'JSX.createElement',
-          '--target', 'es6',
-          '--module', 'commonjs',
-          '--lib', 'es6,es2015.promise',
-          `./${file}`
-        ],
-        {encoding: 'utf-8'}
-      );
-      if (childProcess.error || childProcess.status !== 2) {
-        grunt.fail.warn('Unexpected tsc status ' + (childProcess.error || childProcess.status) + 'in ' + file);
-      }
-      const matches = grunt.file.read(file).match(/\/\*Expected\n([\w\W]+)\*\//);
-      if (!matches || matches.length !== 2) {
-        grunt.fail.warn(
-          `No expectations found in ${file}. Suggestion:\n--\n/*Expected\n${childProcess.stdout}*/\n--\n`
-        );
-      }
-      const exp = matches[1].trim().split('\n').filter(match => match.trim().length > 0);
-      let remaining = childProcess.stdout;
-      for (let i = 0; i < exp.length; i++) {
-        const matchIndex = remaining.indexOf(exp[i]);
-        if (matchIndex === -1) {
-          grunt.fail.warn(
-            `${file} is missing compiler output "${exp[i]}" after line "${exp[i - 1]}":\n${childProcess.stdout}`
-          );
-        }
-        remaining = remaining.slice(matchIndex);
-      }
-    });
-  });
-
   /* runs tests against the build output */
   grunt.registerTask('verify', [
     'exec:verify_tabris',
     'copy:test_ts',
     'exec:verify_typings',
     'copy:snippets',
-    'exec:transpile_snippets',
-    'verify_typings_fail'
+    'exec:transpile_snippets'
   ]);
 
   grunt.registerTask('default', [
@@ -285,7 +245,6 @@ module.exports = function(grunt) {
     'exec:verify_tabris',
     'copy:test_ts',
     'exec:verify_typings',
-    'verify_typings_fail',
     'copy:snippets',
     'exec:transpile_snippets'
   ]);
