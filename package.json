@@ -20,8 +20,8 @@
     "@types/mocha": "^5.2.6",
     "@types/sinon": "^7.0.11",
     "@types/sinon-chai": "^3.2.2",
-    "@typescript-eslint/eslint-plugin": "^2.18.0",
-    "@typescript-eslint/parser": "^2.18.0",
+    "@typescript-eslint/eslint-plugin": "^4.28.0",
+    "@typescript-eslint/parser": "^4.28.0",
     "chai": "^4.1.0",
     "chai-as-promised": "^7.1.1",
     "eslint": "^6.x.x",
@@ -49,6 +49,5 @@
   },
   "scripts": {
     "test": "grunt test"
-  },
-  "dependencies": {}
+  }
 }

@@ -51,6 +51,7 @@ describe('Observable', function() {
         teardownObject = {unsubscribe: spy()};
         subHandler = () => teardownObject;
         subHandlerSpy = spy(function() {
+          // eslint-disable-next-line @typescript-eslint/no-invalid-this
           return subHandler.apply(this, arguments);
         });
         observable = new Observable(subHandlerSpy);

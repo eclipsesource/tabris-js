@@ -247,9 +247,20 @@
       },
       "rules": {
         "no-invalid-this": "off", // see typescript-eslint issue 491
-        "no-dupe-class-members": "off", // allow overload syntax
-        "semi": "off", // handled better by "@typescript-eslint/semi"
+        "@typescript-eslint/no-invalid-this": "error",
+        "no-dupe-class-members": "off",
+        "@typescript-eslint/no-dupe-class-members": "error",
+        "semi": "off",
+        "@typescript-eslint/semi": [
+          "error",
+          "always"
+        ],
         "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": "error",
+        "no-redeclare": "off",
+        "@typescript-eslint/no-redeclare": "error",
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": "error",
         "@typescript-eslint/adjacent-overload-signatures": "error",
         "@typescript-eslint/array-type": [
           "error",
@@ -258,8 +269,7 @@
           }
         ],
         "@typescript-eslint/await-thenable": "error",
-        "@typescript-eslint/ban-types": "error",
-        "@typescript-eslint/class-name-casing": "error",
+        "@typescript-eslint/ban-types": "off",
         "@typescript-eslint/consistent-type-assertions": "error",
         "@typescript-eslint/consistent-type-definitions": "off",
         "@typescript-eslint/explicit-member-accessibility": [
@@ -268,7 +278,6 @@
             "accessibility": "off"
           }
         ],
-        "@typescript-eslint/no-unused-vars": "error",
         "@typescript-eslint/interface-name-prefix": "off",
         "@typescript-eslint/member-delimiter-style": [
           "error",
@@ -337,10 +346,6 @@
         "@typescript-eslint/quotes": [
           "error",
           "single"
-        ],
-        "@typescript-eslint/semi": [
-          "error",
-          "always"
         ],
         "@typescript-eslint/triple-slash-reference": "error",
         "@typescript-eslint/type-annotation-spacing": "error",

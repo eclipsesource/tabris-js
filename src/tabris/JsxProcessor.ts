@@ -53,7 +53,7 @@ export function createJsxProcessor() {
 
 export default class JsxProcessor {
 
-  createElement(Type: ElementFn | string, attributes? : any, ...children: any[]) {
+  createElement(Type: ElementFn | string, attributes?: any, ...children: any[]) {
     if (!(Type instanceof Function) && typeof Type !== 'string') {
       throw new Error(`JSX: Unsupported type ${toValueString(Type)}`);
     }

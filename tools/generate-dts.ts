@@ -6,8 +6,6 @@ import {
   isCallback, plainType
 } from './common';
 
-type PropertyOps = {hasContext: boolean, excludeConsts: boolean};
-
 const HEADER = `
 // Type definitions for Tabris.js \${VERSION}
 /// <reference path="globals.d.ts" />

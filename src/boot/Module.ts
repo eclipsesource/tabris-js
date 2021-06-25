@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/explicit-member-accessibility */
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-invalid-this */
 const FILE_POSTFIXES = ['', '.js', '.json', '/package.json', '/index.js', '/index.json'];
 const FOLDER_POSTFIXES = ['/package.json', '/index.js', '/index.json'];
