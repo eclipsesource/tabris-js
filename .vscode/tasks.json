@@ -155,7 +155,8 @@
       ],
       "options": {
         "env": {
-          "TS_NODE_PROJECT": "./tsconfig.json"
+          "TS_NODE_PROJECT": "./tsconfig.json",
+          "TS_NODE_TRANSPILE_ONLY": "true"
         }
       },
       "group": {

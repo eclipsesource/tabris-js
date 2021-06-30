@@ -74,7 +74,9 @@ class NativeCrypto extends NativeObject {
 
   getRandomValues(typedArray: TypedArray) {
     const byteLength = typedArray.byteLength;
-    const values = new Uint8Array(this._nativeCall('getRandomValues', {byteLength}));
+    const values = new Uint8Array(
+      this._nativeCall('getRandomValues', {byteLength}) as ArrayBuffer
+    );
     if (values.byteLength !== byteLength) {
       throw new Error('Not enough random bytes available');
     }
