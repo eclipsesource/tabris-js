@@ -16,30 +16,13 @@ import Constraint from '../../../src/tabris/Constraint';
 import {toXML} from '../../../src/tabris/Console';
 import Font from '../../../src/tabris/Font';
 import NativeBridge from '../../../src/tabris/NativeBridge';
-import ChangeListeners from '../../../src/tabris/ChangeListeners';
 import {SinonSpy} from 'sinon';
+import ObservableData from '../../../src/tabris/ObservableData';
+import Listeners from '../../../src/tabris/Listeners';
 
 describe('Widget', function() {
 
-  class MyData {
-
-    onFooChanged = new ChangeListeners(this, 'foo');
-
-    private _foo: string = '';
-
-    set foo(value: string) {
-      if (value !== this._foo) {
-        this._foo = value;
-        this.onFooChanged.trigger({value});
-      }
-    }
-
-    get foo() {
-      return this._foo;
-    }
-
-  }
-  class TestWidget extends Composite<Widget, MyData> {
+  class TestWidget extends Composite<Widget, {foo: string}> {
 
     constructor(props?) {
       super(Object.assign({layout: null}, props));
@@ -312,22 +295,23 @@ describe('Widget', function() {
 
     describe('data', function() {
 
-      let data: MyData;
       let listener: SinonSpy;
+      let data: {foo: string};
 
       beforeEach(function() {
         listener = spy();
-        data = new MyData();
+        data = widget.data;
       });
 
-      it('has initial object', function() {
-        expect(widget.data.constructor).to.equal(Object);
+      it('has initial ObservableData', function() {
+        expect(data.constructor).to.equal(ObservableData);
       });
 
       it('can be replaced', function() {
-        widget.data = data;
+        const newData = {foo: 'bar2'};
+        widget.data = newData;
 
-        expect(widget.data).to.equal(data);
+        expect(widget.data).to.equal(newData);
       });
 
       it('can only be an object', function() {
@@ -341,11 +325,11 @@ describe('Widget', function() {
       });
 
       it('can be replaced twice', function() {
-        widget.data = new MyData();
+        widget.data = {foo: 'bar2'};
 
-        widget.data = data;
+        widget.data = {foo: 'bar3'};
 
-        expect(widget.data).to.equal(data);
+        expect(widget.data).to.deep.equal({foo: 'bar3'});
       });
 
       it('is undefined after dispose', function() {
@@ -357,16 +341,16 @@ describe('Widget', function() {
       describe('change event', function() {
 
         it('fires when set', function() {
+          const newData = {foo: 'bar2'};
           widget.onDataChanged(listener);
 
-          widget.data = data;
+          widget.data = newData;
 
           expect(listener).to.have.been.calledOnce;
-          expect(listener.args[0][0].value).to.equal(data);
+          expect(listener.args[0][0].value).to.equal(newData);
         });
 
         it('fires when data object mutates', function() {
-          widget.data = data;
           widget.onDataChanged(listener);
 
           data.foo = 'bar';
@@ -375,8 +359,7 @@ describe('Widget', function() {
         });
 
         it('does not fire when data object mutates after removal', function() {
-          widget.data = data;
-          widget.data = new MyData();
+          widget.data = null;
           widget.onDataChanged(listener);
 
           data.foo = 'bar';
@@ -385,7 +368,6 @@ describe('Widget', function() {
         });
 
         it('provides data change event', function() {
-          widget.data = data;
           widget.onDataChanged(listener);
 
           data.foo = 'bar';
@@ -397,15 +379,14 @@ describe('Widget', function() {
         });
 
         it('provides same change event from data object', function() {
-          widget.data = data;
           const dataListener = spy();
-          data.onFooChanged(dataListener);
+          Listeners.getListenerStore(data as any).on('fooChanged', dataListener);
           widget.onDataChanged(listener);
 
           data.foo = 'bar';
 
           const widgetChange = listener.args[0][0] as PropertyChangedEvent<TestWidget, 'data'>;
-          const original = dataListener.args[0][0] as PropertyChangedEvent<MyData, 'foo'>;
+          const original = dataListener.args[0][0] as PropertyChangedEvent<typeof data, 'foo'>;
           expect(widgetChange.originalEvent).to.equal(original);
         });
 

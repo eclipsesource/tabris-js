@@ -1,5 +1,6 @@
 import Listeners from './Listeners';
 import Observable from './Observable';
+import ObservableData from './ObservableData';
 
 export default class ChangeListeners<
   Target extends object = any,
@@ -43,7 +44,7 @@ export default class ChangeListeners<
 }
 
 function propertyCheck(target: object, property: string) {
-  if (!(property in target)) {
+  if (!(property in target) && !(target instanceof ObservableData)) {
     throw new Error(`Target has no property "${property}"`);
   }
 }

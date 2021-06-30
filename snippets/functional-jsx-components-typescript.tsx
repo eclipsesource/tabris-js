@@ -85,7 +85,7 @@ examples.append(
 
 setTimeout(() => {
 
-  $(PersonDataView).only().data = {firstName: 'Joe', lastName: 'Harris'};
-  $(PersonView).only().data = {firstName: 'Sam', lastName: 'Rogan'};
+  $(PersonDataView).only().data.firstName = 'John';
+  $(PersonView).only().data = {firstName: 'Samuel', lastName: 'Rogan'};
 
 }, 1000);

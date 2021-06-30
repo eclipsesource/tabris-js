@@ -1,11 +1,11 @@
-import * as symbols from './symbols';
 import {getValueTypeName} from './checkType';
-import {
-  SubscriptionHandler, PartialObserver, Subscription, NextCb, ErrorCb, CompleteCb, Subscriber, TeardownLogic
-} from './Observable.types';
+import EventObject from './EventObject';
 import Listeners from './Listeners';
 import NativeObject from './NativeObject';
-import EventObject from './EventObject';
+import {
+  CompleteCb, ErrorCb, NextCb, PartialObserver, Subscriber, Subscription, SubscriptionHandler, TeardownLogic
+} from './Observable.types';
+import * as symbols from './symbols';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const noop = (...args: any[]) => undefined;
@@ -14,7 +14,6 @@ if (!Symbol.observable) {
   Object.defineProperty(Symbol, 'observable', {value: symbols.observable});
 }
 
-type RawEvent = {target: object, type: string, eventData: object, dispatchObject: EventObject | null};
 export default class Observable<T = unknown> {
 
   private static deferred: Function[] = [];
@@ -24,11 +23,17 @@ export default class Observable<T = unknown> {
     return new Observable(observer => {
       const next = () => observer.next(object);
       next();
-      return this.changeEvents(object).subscribe(() => this.defer(next));
+      return this.changeEvents(object, true).subscribe({
+        next: () => this.defer(next),
+        complete: observer.complete,
+        error: observer.error
+      });
     });
   }
 
-  public static changeEvents<T extends object>(object: T): Observable<RawEvent> {
+  public static changeEvents<T extends object>(object: T, raw: true): Observable<RawEvent>;
+  public static changeEvents<T extends object>(object: T, raw?: false): Observable<PropertyChangedEvent<T, any>>;
+  public static changeEvents<T extends object>(object: T, raw?: boolean): Observable<any> {
     return new Observable(observer => {
       const store = Listeners.getListenerStore(object);
       const native = (object as NativeObject)[symbols.nativeObservables];
@@ -37,7 +42,11 @@ export default class Observable<T = unknown> {
         if (!ev.type.endsWith('Changed')) {
           return;
         }
-        observer.next(ev);
+        if (raw === true) {
+          observer.next(ev);
+        } else {
+          observer.next(ev.dispatchObject ?? EventObject.create(ev.target, ev.type, ev));
+        }
       };
       store.on({'*': handleAny, 'dispose': observer.complete});
       native?.forEach(event => store.on(event, dummyListener));

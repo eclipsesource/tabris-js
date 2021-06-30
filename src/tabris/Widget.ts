@@ -1,20 +1,19 @@
-import NativeObject from './NativeObject';
-import WidgetCollection from './WidgetCollection';
-import GestureRecognizer from './GestureRecognizer';
 import {animate} from './Animation';
-import JsxProcessor from './JsxProcessor';
-import {types} from './property-types';
-import LayoutData, {mergeLayoutData} from './LayoutData';
-import {getFilter} from './util-widget-select';
-import {toValueString, hint} from './Console';
-import checkType from './checkType';
-import {jsxFactory} from './symbols';
-import Composite from './widgets/Composite';
-import Listeners from './Listeners';
 import ChangeListeners from './ChangeListeners';
-import Observable from './Observable';
+import checkType from './checkType';
+import {hint, toValueString} from './Console';
+import GestureRecognizer from './GestureRecognizer';
+import JsxProcessor from './JsxProcessor';
+import LayoutData, {mergeLayoutData} from './LayoutData';
+import Listeners from './Listeners';
+import NativeObject from './NativeObject';
 import {Subscription} from './Observable.types';
-import EventObject from './EventObject';
+import ObservableData from './ObservableData';
+import {types} from './property-types';
+import {jsxFactory} from './symbols';
+import {getFilter} from './util-widget-select';
+import WidgetCollection from './WidgetCollection';
+import Composite from './widgets/Composite';
 
 const layoutDataProps: Array<keyof LayoutDataLikeObject>
   = ['left', 'right', 'top', 'bottom', 'width', 'height', 'centerX', 'centerY', 'baseline'];
@@ -72,8 +71,8 @@ abstract class Widget<TData extends object = any> extends NativeObject {
   _recognizers?: Record<Gesture, GestureRecognizer>;
   [jsxFactory]!: (type: Constructor<Widget>, attributes: object) => Widget;
 
-  private $data?: TData;
-  private $dataSubscription?: Subscription;
+  private $data?: TData | null;
+  private $dataSubscription?: Subscription | null;
 
   appendTo(widget: Composite | WidgetCollection) {
     this._checkDisposed();
@@ -217,25 +216,8 @@ abstract class Widget<TData extends object = any> extends NativeObject {
       return;
     }
     checkType(value, Object, {name: 'data', nullable: true});
-    if (this.$dataSubscription) {
-      this.$dataSubscription.unsubscribe();
-    }
     Object.defineProperty(this, '$data', {enumerable: false, writable: true, value});
-    if (value) {
-      const subscription = Observable.changeEvents(value).subscribe(
-        rawEvent => {
-          const originalEvent = rawEvent.dispatchObject
-            ?? EventObject.create(rawEvent.target, rawEvent.type, rawEvent);
-          this.$trigger('dataChanged', {value: this.$data, originalEvent});
-        }
-      );
-      Object.defineProperty(
-        this,
-        '$dataSubscription',
-        {enumerable: false, writable: true, value: subscription}
-      );
-    }
-    this._triggerChangeEvent('data', this.$data);
+    ObservableData.generateChangeEvents({target: this, property: 'data'});
   }
 
   get data() {
@@ -243,7 +225,9 @@ abstract class Widget<TData extends object = any> extends NativeObject {
       return undefined as any;
     }
     if (!('$data' in this)) {
-      Object.defineProperty(this, '$data', {enumerable: false, writable: true, value: {}});
+      const value = new ObservableData();
+      Object.defineProperty(this, '$data', {enumerable: false, writable: true, value});
+      ObservableData.generateChangeEvents({target: this, property: 'data', init: true});
     }
     return this.$data as TData;
   }

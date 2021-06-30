@@ -165,6 +165,13 @@ interface PropertyChangedEvent<T,U> extends EventObjectBase {
   readonly originalEvent: PropertyChangedEvent<unknown, unknown>;
 }
 
+type RawEvent = {
+  target: object,
+  type: string,
+  dispatchObject?: import('./EventObject').default| null,
+  value?: unknown
+};
+
 type TypeDef<ApiType, NativeType, Context extends object> = {
   /**
    * Function to convert any given value to one that matches the desired type.

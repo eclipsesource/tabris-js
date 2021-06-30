@@ -3,12 +3,13 @@ import {omit} from './util';
 
 export default class EventObject {
 
-  public readonly type!: string;
-  public readonly target!: object;
-  public readonly timeStamp!: number;
-  private $type!: string;
-  private $target!: object;
-  private $defaultPrevented!: boolean;
+  readonly type!: string;
+  readonly target!: object;
+  readonly timeStamp!: number;
+  $type!: string;
+  $target!: object;
+  $defaultPrevented!: boolean;
+  $originalEvent?: EventObject | RawEvent;
 
   static create(target: object, type: string, eventData: object) {
     const uninitialized = (eventData instanceof EventObject) && !eventData.type;
@@ -35,15 +36,29 @@ export default class EventObject {
     });
   }
 
-  public get defaultPrevented() {
+  get defaultPrevented() {
     return !!this.$defaultPrevented;
   }
 
-  public preventDefault() {
+  preventDefault() {
     this.$defaultPrevented = true;
   }
 
-  public toString() {
+  get originalEvent(): EventObject | null {
+    const original = this.$originalEvent;
+    if (!original) {
+      return null;
+    }
+    if (original instanceof EventObject) {
+      return original;
+    }
+    if (original.dispatchObject instanceof EventObject) {
+      return original.dispatchObject;
+    }
+    return this.$originalEvent = EventObject.create(original.target, original.type, original);
+  }
+
+  toString() {
     const header = this.constructor.name + ' { ';
     const content = Object.keys(this)
       .map(prop =>
@@ -54,7 +69,7 @@ export default class EventObject {
     return header + content + footer;
   }
 
-  public _initEvent(type: string, target: object) {
+  _initEvent(type: string, target: object) {
     if (arguments.length < 2) {
       throw new Error('Not enough arguments to initEvent');
     }

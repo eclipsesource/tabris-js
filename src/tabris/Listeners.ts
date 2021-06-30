@@ -1,10 +1,10 @@
-import Events from './Events';
 import {toValueString} from './Console';
-import {observable as observableSym} from './symbols';
-import {omit} from './util';
+import EventObject from './EventObject';
+import Events from './Events';
 import Observable from './Observable';
 import {Observer, TeardownLogic} from './Observable.types';
-import EventObject from './EventObject';
+import {observable as observableSym} from './symbols';
+import {omit} from './util';
 
 type Store = typeof Events;
 type Listener<T extends object> = (ev: EventObject & T) => any;
@@ -34,6 +34,11 @@ class Listeners<T extends object = object> extends Observable<T> {
       eventStoreMap.set(target, Object.assign({$eventTarget: target}, Events));
     }
     return eventStoreMap.get(target) as Store;
+  }
+
+  public static trigger(target: TargetCandidate, type: string, eventData: object) {
+    const eventStore = target.on instanceof Function ? target as Store : eventStoreMap.get(target);
+    eventStore?.trigger(type, eventData);
   }
 
   private readonly store: Store;

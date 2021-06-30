@@ -19,6 +19,7 @@ import {originalComponent, proxyHandler} from '../../src/tabris/symbols';
 import {format} from '../../src/tabris/Formatter';
 import NativeObject from '../../src/tabris/NativeObject';
 import Setter from '../../src/tabris/Setter';
+import ObservableData from '../../src/tabris/ObservableData';
 
 describe('JsxProcessor', function() {
 
@@ -48,7 +49,7 @@ describe('JsxProcessor', function() {
     });
 
     it('sets properties via Attr children', function() {
-      const data = {};
+      const data = new Date();
       const attrText = jsx.createElement(Setter, {target: CheckBox, attribute: 'text', children: ['foo']});
       const attrData = jsx.createElement(Setter, {target: CheckBox, attribute: 'data', children: [data]});
 
@@ -64,6 +65,16 @@ describe('JsxProcessor', function() {
         onDataChanged: ev => ev.target.text = ev.value.foo
       });
       expect(widget.text).to.equal('bar');
+    });
+
+    it('copies "data" is it is a plain object', function() {
+      const data = {foo: 'bar'};
+
+      const widget = jsx.createElement(CheckBox, {data});
+
+      expect(widget.data).not.to.equal(data);
+      expect(widget.data).to.be.instanceOf(ObservableData);
+      expect(widget.data.foo).to.equal('bar');
     });
 
     it('throws for Attr children with incorrect target', function() {
