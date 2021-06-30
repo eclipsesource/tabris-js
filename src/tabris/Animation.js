@@ -48,7 +48,7 @@ class Animation extends NativeObject {
 
   _trigger(name, event) {
     if (name === 'completed') {
-      this.target.off('dispose', this.abort, this);
+      this.target.off('_dispose', this.abort, this);
       if (this._resolve) {
         this._resolve();
       }
@@ -59,7 +59,7 @@ class Animation extends NativeObject {
   }
 
   start(resolve, reject) {
-    this.target.on('dispose', this.abort, this);
+    this.target.on('_dispose', this.abort, this);
     Object.defineProperties(this, {
       _resolve: {enumerable: false, writable: false, value: resolve},
       _reject: {enumerable: false, writable: false, value: reject}

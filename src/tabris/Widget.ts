@@ -225,7 +225,7 @@ abstract class Widget<TData extends object = any> extends NativeObject {
       const subscription = Observable.changeEvents(value).subscribe(
         rawEvent => {
           const originalEvent = rawEvent.dispatchObject
-            ?? EventObject.create(rawEvent.target, rawEvent.type, rawEvent.eventData);
+            ?? EventObject.create(rawEvent.target, rawEvent.type, rawEvent);
           this.$trigger('dataChanged', {value: this.$data, originalEvent});
         }
       );
@@ -355,7 +355,7 @@ abstract class Widget<TData extends object = any> extends NativeObject {
       const gesture = name as Gesture;
       if (listening) {
         const properties = Object.assign({target: this}, this.gestures[gesture]);
-        const recognizer = new GestureRecognizer(properties).on('gesture', (event: any) => {
+        const recognizer = new GestureRecognizer(properties).on('_gesture', (event: any) => {
           if (event.translation) {
             event.translationX = event.translation.x;
             event.translationY = event.translation.y;

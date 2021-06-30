@@ -101,7 +101,7 @@ class Listeners<T extends object = object> extends Observable<T> {
 
   private _handleSubscription(observer: Observer<T>): TeardownLogic {
     this.addListener(observer.next);
-    this.store.on('dispose', observer.complete);
+    this.store.on('_dispose', observer.complete);
     return () => {
       this.removeListener(observer.next);
       this.store.off('dispose', observer.complete);

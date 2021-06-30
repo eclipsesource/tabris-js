@@ -48,8 +48,8 @@ export default class GC extends NativeObject {
       _ints: {enumerable: false, writable: true, value: []}
     });
     const listener = () => this.flush();
-    tabris.on('flush', listener);
-    this.on('dispose', () => tabris.off('flush', listener));
+    tabris.on('_flush', listener);
+    this.on('_dispose', () => tabris.off('_flush', listener));
   }
 
   init(properties) {

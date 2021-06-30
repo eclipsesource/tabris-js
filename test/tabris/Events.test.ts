@@ -1,11 +1,11 @@
-import {expect, spy, restore} from '../test';
-import Events from '../../src/tabris/Events';
-import EventObject from '../../src/tabris/EventObject';
 import {SinonSpy} from 'sinon';
+import EventObject from '../../src/tabris/EventObject';
+import Events, {EventsClass} from '../../src/tabris/Events';
+import {expect, restore, spy} from '../test';
 
 describe('Events', function() {
 
-  let object;
+  let object: EventsClass;
   let context, context2;
   let listener: SinonSpy, listener2: SinonSpy;
 
@@ -23,6 +23,14 @@ describe('Events', function() {
 
     it('registers listener', function() {
       object.on('foo', listener);
+
+      object.trigger('foo');
+
+      expect(listener).to.have.been.called;
+    });
+
+    it('registers internal listener', function() {
+      object.on('_foo', listener);
 
       object.trigger('foo');
 
@@ -72,6 +80,15 @@ describe('Events', function() {
     it('removes listener', function() {
       object.on('foo', listener);
       object.off('foo', listener);
+
+      object.trigger('foo');
+
+      expect(listener).not.to.have.been.called;
+    });
+
+    it('removes internal listener', function() {
+      object.on('_foo', listener);
+      object.off('_foo', listener);
 
       object.trigger('foo');
 
@@ -250,7 +267,7 @@ describe('Events', function() {
 
   describe('trigger', function() {
 
-    it('triggers listener once', function() {
+    it('notifies listener once', function() {
       object.on('foo', listener);
 
       object.trigger('foo');
@@ -258,15 +275,25 @@ describe('Events', function() {
       expect(listener).to.have.been.calledOnce;
     });
 
-    it('triggers listener with default empty event object', function() {
+    it('notifies listener with default EventObject instance', function() {
       object.on('foo', listener);
 
       object.trigger('foo');
 
       expect(listener).to.have.been.calledWithMatch({target: object, type: 'foo'});
+      expect(listener.args[0][0]).to.be.instanceOf(EventObject);
     });
 
-    it('triggers listener with extended event object', function() {
+    it('notifies internal listener with plain object', function() {
+      object.on('_foo', listener);
+
+      object.trigger('foo');
+
+      expect(listener).to.have.been.calledWithMatch({target: object, type: 'foo'});
+      expect(listener.args[0][0]).to.not.be.instanceOf(EventObject);
+    });
+
+    it('notifies listener with extended event object', function() {
       object.on('foo', listener);
       const event = {bar: 'bar'};
 
@@ -285,7 +312,7 @@ describe('Events', function() {
       expect(event.type).to.equal('foo');
     });
 
-    it('triggers listener with default context', function() {
+    it('notifies listener with default context', function() {
       object.on('foo', listener);
 
       object.trigger('foo');
@@ -293,7 +320,7 @@ describe('Events', function() {
       expect(listener.firstCall).to.have.been.calledOn(object);
     });
 
-    it('triggers listener with parameters and given context', function() {
+    it('notifies listener with parameters and given context', function() {
       object.on('foo', listener, context);
 
       object.trigger('foo');
@@ -346,7 +373,7 @@ describe('Events', function() {
       expect(listener).to.have.been.calledWithMatch({target: object, type: 'foo', bar: 'bar'});
     });
 
-    it('without listeners returns resolved Promise containing reference', function() {
+    it('without listeners returns resolved Promise containing reference', async function() {
       const promise = object.triggerAsync('foo');
 
       expect(promise).to.be.instanceOf(Promise);
@@ -355,7 +382,7 @@ describe('Events', function() {
       });
     });
 
-    it('with synchronous listeners returns resolved Promise containing reference', function() {
+    it('with synchronous listeners returns resolved Promise containing reference', async function() {
       object.on('foo', () => listener());
       object.on('foo', () => listener());
       const promise = object.triggerAsync('foo');
@@ -409,7 +436,7 @@ describe('Events', function() {
       });
     });
 
-    it('forwards rejected Promise', function() {
+    it('forwards rejected Promise', async function() {
       object.on('foo', () => listener());
       object.on('foo', () => Promise.resolve());
       object.on('foo', () => listener());
@@ -427,7 +454,7 @@ describe('Events', function() {
     describe('when no listeners are attached', function() {
 
       it('returns false without event type', function() {
-        expect(object._isListening()).to.equal(false);
+        expect(object._isListening(null)).to.equal(false);
       });
 
       it('returns false for all event types', function() {
@@ -442,8 +469,8 @@ describe('Events', function() {
         object.on('foo', listener);
       });
 
-      it('returns true without event type', function() {
-        expect(object._isListening()).to.equal(true);
+      it('returns false without event type', function() {
+        expect(object._isListening(null)).to.equal(false);
       });
 
       it('returns true for the particular event type', function() {
@@ -456,6 +483,18 @@ describe('Events', function() {
 
     });
 
+    describe('when an internal listener is attached', function() {
+
+      beforeEach(function() {
+        object.on('_foo', listener);
+      });
+
+      it('returns true for the particular event type', function() {
+        expect(object._isListening('foo')).to.equal(true);
+      });
+
+    });
+
     describe('when a listener is attached and removed', function() {
 
       beforeEach(function() {
@@ -464,7 +503,7 @@ describe('Events', function() {
       });
 
       it('returns false without event type', function() {
-        expect(object._isListening()).to.equal(false);
+        expect(object._isListening(null)).to.equal(false);
       });
 
       it('returns false for this event type', function() {
@@ -578,7 +617,7 @@ describe('Events', function() {
     it('is notified with eventData', function() {
       object.trigger('foo', {foo: 'bar'});
 
-      expect(listener.args[0][0].eventData.foo).to.equal('bar');
+      expect(listener.args[0][0].foo).to.equal('bar');
     });
 
   });

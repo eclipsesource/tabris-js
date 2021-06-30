@@ -63,8 +63,8 @@ export default class Layout {
       throw new Error(`Invalid layout target ${toValueString(composite)}. Do not call layout.add directly.`);
     }
     composite.on({
-      addChild: this._handleAddChildEvent,
-      removeChild: this._handleRemoveChildEvent
+      _addChild: this._handleAddChildEvent,
+      _removeChild: this._handleRemoveChildEvent
     });
     if (composite.$children) {
       composite.$children.forEach(this._addChild);
@@ -74,8 +74,8 @@ export default class Layout {
 
   remove(composite) {
     composite.off({
-      addChild: this._handleAddChildEvent,
-      removeChild: this._handleRemoveChildEvent
+      _addChild: this._handleAddChildEvent,
+      _removeChild: this._handleRemoveChildEvent
     });
     if (composite.$children) {
       composite.$children.forEach(this._removeChild);
@@ -103,8 +103,8 @@ export default class Layout {
 
   _addChild(child) {
     child.on({
-      layoutDataChanged: this._handleChildPropertyChangedEvent,
-      excludeFromLayoutChanged: this._handleChildPropertyChangedEvent
+      _layoutDataChanged: this._handleChildPropertyChangedEvent,
+      _excludeFromLayoutChanged: this._handleChildPropertyChangedEvent
     });
   }
 
@@ -214,7 +214,7 @@ export class LayoutQueue {
         configurable: true,
         value: new LayoutQueue()
       });
-      tabris.on('layout', () => this._instance.flush());
+      tabris.on('_layout', () => this._instance.flush());
     }
     return this._instance;
   }

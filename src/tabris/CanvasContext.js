@@ -198,7 +198,7 @@ defineMethod('drawImage', 3, /** @this {CanvasContext} */ function(image, x1, y1
 CanvasContext.getContext = function(canvas, width, height) {
   if (!canvas._gc) {
     const gc = new GC({parent: canvas});
-    canvas.on('dispose', () => gc.dispose());
+    canvas.on('_dispose', () => gc.dispose());
     Object.defineProperty(canvas, '_gc', {
       enumerable: false,
       writable: false,

@@ -57,8 +57,8 @@ export default class CollectionView extends Composite {
     this._nativeListen('requestInfo', true);
     this._nativeListen('createCell', true);
     this._nativeListen('updateCell', true);
-    tabris.on('flush', this.$flush, this);
-    this.on('dispose', () => tabris.off('flush', this.$flush, this));
+    tabris.on('_flush', this.$flush, this);
+    this.on('_dispose', () => tabris.off('_flush', this.$flush, this));
   }
 
   get _nativeType() {
@@ -285,9 +285,9 @@ export default class CollectionView extends Composite {
 
   _listen(name, listening) {
     if (name === 'firstVisibleIndexChanged') {
-      this._onoff('scroll', listening, triggerChangeFirstVisibleIndex);
+      this._onoff('_scroll', listening, triggerChangeFirstVisibleIndex);
     } else if (name === 'lastVisibleIndexChanged') {
-      this._onoff('scroll', listening, triggerChangeLastVisibleIndex);
+      this._onoff('_scroll', listening, triggerChangeLastVisibleIndex);
     } else {
       super._listen(name, listening);
     }
