@@ -16,7 +16,7 @@ export default class Popup extends NativeObject {
     return this;
   }
 
-  protected _trigger(name: string, event: {}): boolean {
+  _trigger(name: string, event: {}): boolean {
     if (name === 'close') {
       return this._handleClose(event);
     } else {
