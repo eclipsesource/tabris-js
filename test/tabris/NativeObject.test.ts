@@ -38,7 +38,7 @@ describe('NativeObject', function() {
     client = new ClientMock();
     mockTabris(client);
     TestType = class extends NativeObject {
-      protected get _nativeType() { return 'TestType'; }
+      get _nativeType() { return 'TestType'; }
     } as unknown as Constructor<TestType>;
   });
 

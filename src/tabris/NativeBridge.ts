@@ -21,7 +21,7 @@ export default class NativeBridge {
 
   $bridge!: NativeClient;
   $operations!: Operation[];
-  $currentOperation!: {id: string, properties: NativeProps} | {id: null};
+  $currentOperation!: {id?: string, properties?: NativeProps};
   $propertyCache!: Record<string, NativeProps>;
 
   constructor(bridge: NativeClient) {
@@ -40,7 +40,7 @@ export default class NativeBridge {
   }
 
   set(id: string, name: string, value: unknown): void {
-    if (this.$currentOperation.id === id) {
+    if (this.$currentOperation.id === id && this.$currentOperation.properties) {
       this.$currentOperation.properties[name] = value;
     } else {
       const properties: NativeProps = {};
@@ -53,12 +53,12 @@ export default class NativeBridge {
 
   listen(id: string, event: string, listen: boolean): void {
     this.$operations.push(['listen', id, event, listen]);
-    this.$currentOperation = {id: null};
+    this.$currentOperation = {id: undefined};
   }
 
   destroy(id: string): void {
     this.$operations.push(['destroy', id]);
-    this.$currentOperation = {id: null};
+    this.$currentOperation = {id: undefined};
   }
 
   get(id: string, name: string): unknown {
@@ -80,7 +80,7 @@ export default class NativeBridge {
     tabris.trigger('layout');
     const operations = this.$operations;
     this.$operations = [];
-    this.$currentOperation = {id: null};
+    this.$currentOperation = {id: undefined};
     const length = operations.length;
     if (!length) {
       return;
