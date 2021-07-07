@@ -130,8 +130,12 @@ export default class JsxProcessor {
     if (attributes && 'children' in attributes) {
       throw new Error(`JSX: ${Type.name} can not have children`);
     }
-    const result = new Type(attributesWithoutListener(attributes || {}));
+    const {data, ...properties} = attributesWithoutListener(attributes || {});
+    const result = new Type(properties);
     registerListenerAttributes(result, attributes);
+    if (data) {
+      result.data = data;
+    }
     return result;
   }
 

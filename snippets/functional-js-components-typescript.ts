@@ -1,64 +1,78 @@
-import {TextView, Attributes, contentView, Stack, Widget, CheckBox, checkType, Setter} from 'tabris';
+import {TextView, Attributes, contentView, Stack, Widget, Setter} from 'tabris';
 
-class Person {
-  constructor(
-    public lastName: string,
-    public firstName: string
-  ) {}
-}
+const examples = new Stack({padding: 8, spacing: 8}).appendTo(contentView);
 
-const joe = new Person('Rogan', 'Joe');
-const sam = new Person('Harris', 'Sam');
+// Styled Component:
 
-contentView.append(
-  Stack({padding: 8, spacing: 8, children: [
-    StyledComponent({text: 'This TextView is red on yellow by default'}),
-    StyledComponent({background: 'gray', text: 'Defaults can be overwritten'}),
-    StaticComponent({person: joe}),
-    DynamicComponent({data: joe}),
-    ComposedComponent({data: joe}),
-    CheckBox({
-      onSelect: ev => {
-        $(DynamicComponent).only().data = ev.checked ? sam : joe;
-        $(ComposedComponent).only().data = ev.checked ? sam : joe;
-      },
-      text: 'Tap to change dynamic component data'
-    })
-  ]})
+const ColorfulText = (attr: Attributes<TextView>) =>
+  TextView({textColor: 'red', background: 'yellow', ...attr});
+
+examples.append(
+  ColorfulText({
+    text: 'This text is red and yellow'
+  }),
+  ColorfulText({
+    background: 'gray',
+    text: 'But this one has a gray background'
+  })
 );
 
-function StyledComponent(attributes: Attributes<TextView>) {
-  return TextView({textColor: 'red', background: 'yellow', ...attributes});
-}
+// Component displaying immutable data in a TextView:
 
-type PersonAttr = Attributes<Widget> & {person: Person};
-function StaticComponent({person, ...attr}: PersonAttr) {
-  return TextView({
-    text: `This is always ${person.firstName} ${person.lastName}`, ...attr
-  });
-}
+type Person = {firstName?: string, lastName?: string};
 
-type PersonDataAttr = Attributes<Widget> & {data: Person};
+const PersonText = (
+  {person, ...attr}: {person: Person} & Attributes<TextView>
+) => TextView({
+  ...attr,
+  text: `Hello ${person.firstName} ${person.lastName}`
+}, PersonDataView);
 
-function DynamicComponent({data, ...attr}: PersonDataAttr) {
-  return TextView(attr, DynamicComponent)
-    .onDataChanged(ev => {
-      const person = checkType(ev.value, Person, {nullable: true});
-      ev.target.text = person ? `This is now ${person.firstName} ${person.lastName}` : '';
-    })
-    .set({data}); // needs to be set last to trigger the first change event
-}
+examples.append(
+  PersonText({person: {firstName: 'Jane', lastName: 'Doe'}})
+);
 
-function ComposedComponent(attr: PersonDataAttr) {
-  return Stack({
-    children: [
-      TextView({id: 'firstname', background: '#ee9999'}),
-      TextView({id: 'lastname', background: '#9999ee'})
-    ],
+// Dynamic component displaying data in a TextView:
+
+type PersonAttr = Attributes<Widget> & {data: Person};
+
+const PersonDataView = (attr: PersonAttr): TextView & {data: Person} =>
+  TextView({
+    ...attr,
+    onDataChanged: ev => {
+      const person = ev.value as Person;
+      ev.target.text = `Hello ${person.firstName} ${person.lastName}`;
+    }
+  }, PersonDataView);
+
+examples.append(
+  PersonDataView({data: {firstName: 'Sam', lastName: 'Rogan'}})
+);
+
+// Component displaying data dynamically in a composed UI:
+
+const PersonView = (attr: PersonAttr): Stack & {data: Person} =>
+  Stack({
+    ...attr,
     apply: ({data}: {data: Partial<Person>}) => ({
       '#firstname': Setter(TextView, {text: data?.firstName || ''}),
       '#lastname': Setter(TextView, {text: data?.lastName || ''})
     }),
-    ...attr
-  }, ComposedComponent);
-}
+    children: [
+      TextView({id: 'firstname', background: '#ee9999'}),
+      TextView({id: 'lastname', background: '#9999ee'})
+    ]
+  }, PersonView);
+
+examples.append(
+  PersonView({data: {firstName: 'Joe', lastName: 'Harris'}})
+);
+
+// Example how data can be manipulated after creation (type-safe):
+
+setTimeout(() => {
+
+  $(PersonDataView).only().data = {firstName: 'Joe', lastName: 'Harris'};
+  $(PersonView).only().data = {firstName: 'Sam', lastName: 'Rogan'};
+
+}, 1000);

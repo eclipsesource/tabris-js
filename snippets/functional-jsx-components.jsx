@@ -1,82 +1,104 @@
-import {TextView, contentView, Stack, CheckBox, checkType, Setter, Apply} from 'tabris';
+import {TextView, contentView, Stack, Setter, Apply} from 'tabris';
 
-class Person {
-  /**
-   * @param {string} lastName
-   * @param {string} firstName
-   */
-  constructor(lastName, firstName) {
-    this.lastName = lastName;
-    this.firstName = firstName;
-  }
-}
+const examples = new Stack({padding: 8, spacing: 8}).appendTo(contentView);
 
-const joe = new Person('Rogan', 'Joe');
-const sam = new Person('Harris', 'Sam');
+// Styled Component:
 
-contentView.append(
-  <Stack padding={8} spacing={8}>
-    <StyledComponent>
-      This TextView is red on yellow by default
-    </StyledComponent>
-    <StyledComponent background='gray'>
-      Defaults can be overwritten
-    </StyledComponent>
-    <StaticComponent person={joe}/>
-    <DynamicComponent data={joe}/>
-    <ComposedComponent data={joe}/>
-    <CheckBox>
-      Tap to change dynamic component data
-      <Setter attribute='onSelect' target={CheckBox}>
-        {ev => {
-          $(DynamicComponent).only().data = ev.checked ? sam : joe;
-          $(ComposedComponent).only().data = ev.checked ? sam : joe;
-        }}
-      </Setter>
-    </CheckBox>
-  </Stack>
+/**
+ * @param {tabris.Attributes<TextView>} attr
+ * @returns {TextView}
+ **/
+const ColorfulText = attr => (
+  <TextView textColor='red' background='yellow' {...attr}/>
 );
 
-/** @param {tabris.Attributes<TextView>} attributes */
-function StyledComponent(attributes) {
-  return (
-    <TextView textColor='red' background='yellow' {...attributes}/>
-  );
-}
+examples.append(
+  <$>
+    <ColorfulText>
+      This text is red and yellow
+    </ColorfulText>
+    <ColorfulText background='gray'>
+      But this one has a gray background
+    </ColorfulText>
+  </$>
+);
 
-/** @param {tabris.Attributes<tabris.Widget> & {person: Person}} attributes */
-function StaticComponent({person, ...other}) {
-  return (
-    <TextView {...other}>
-      This is always {person.firstName} {person.lastName}
-    </TextView>
-  );
-}
+// Component displaying immutable data in a TextView:
 
-/** @param {tabris.Attributes<tabris.Widget> & {data: Person}} attributes */
-function DynamicComponent({data, ...other}) {
-  /** @type {TextView} */
-  const widget = <TextView {...other}/>;
-  return widget
-    .onDataChanged(ev => {
-      const person = checkType(ev.value, Person, {nullable: true});
-      ev.target.text = person ? `This is now ${person.firstName} ${person.lastName}` : '';
-    })
-    .set({data}); // needs to be set last to trigger the first change event
-}
+/** @typedef {{firstName: string, lastName: string}} Person */
 
-/** @param {tabris.Attributes<tabris.Widget> & {data: Person}} attr */
-function ComposedComponent(attr) {
-  return (
-    <Stack {...attr}>
-      <TextView id='firstname' background='#ee9999'/>
-      <TextView id='lastname' background='#9999ee'/>
-      <Apply>
-        {widget => [
-          Setter(TextView, '#firstname', {text: widget.data?.firstName || ''}),
-          Setter(TextView, '#lastname', {text: widget.data?.lastName || ''})
-        ]}
-      </Apply>
-    </Stack>
-  );
-}
+/**
+ * @param {{person: Person} & tabris.Attributes<TextView>} attr
+ * @returns {TextView}
+ **/
+const PersonText = ({person, ...attr}) => (
+
+  <TextView {...attr}>
+    Hello {person.firstName} {person.lastName}
+  </TextView>
+
+);
+
+examples.append(
+  <PersonText person={{firstName: 'Jane', lastName: 'Doe'}}/>
+);
+
+// Dynamic component displaying data in a TextView:
+
+/**
+ * @typedef {tabris.Widget & {data: Person}} PersonWidget
+ * @typedef {tabris.Attributes<tabris.Widget> & {data: Person}} PersonAttr
+ */
+
+/**
+ * @param {PersonAttr} attr
+ * @returns {PersonWidget}
+ **/
+const PersonDataView = attr => (
+
+  <TextView {...attr}>
+    <Setter target={TextView} attribute='onDataChanged'>
+      {ev => ev.target.text = `Hello ${ev.value.firstName} ${ev.value.lastName}`}
+    </Setter>
+  </TextView>
+
+);
+
+examples.append(
+  <PersonDataView data={{firstName: 'Sam', lastName: 'Rogan'}}/>
+);
+
+// Component displaying data in a composed UI:
+
+/**
+ * @param {PersonAttr} attr
+ * @returns {PersonWidget}
+ **/
+const PersonView = attr => (
+
+  <Stack {...attr}>
+    <Apply>
+      {widget => ({
+        '#firstname': {text: widget.data.firstName},
+        '#lastname': {text: widget.data.lastName}
+      })}
+    </Apply>
+    <TextView>Hello</TextView>
+    <TextView id='firstname' background='#ee9999'/>
+    <TextView id='lastname' background='#9999ee'/>
+  </Stack>
+
+);
+
+examples.append(
+  <PersonView data={{firstName: 'Joe', lastName: 'Harris'}}/>
+);
+
+// Example how data can be manipulated after creation (type-safe):
+
+setTimeout(() => {
+
+  $(PersonDataView).only().data = {firstName: 'Joe', lastName: 'Harris'};
+  $(PersonView).only().data = {firstName: 'Sam', lastName: 'Rogan'};
+
+}, 1000);

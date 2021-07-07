@@ -117,7 +117,7 @@ interface Listeners {
 
 export default Listeners;
 
-export function attributesWithoutListener(attributes: object) {
+export function attributesWithoutListener(attributes: object): Record<string, any> {
   return omit(attributes, Object.keys(attributes).filter(isListenerAttribute));
 }
 

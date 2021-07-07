@@ -58,6 +58,14 @@ describe('JsxProcessor', function() {
       expect(widget.data).to.equal(data);
     });
 
+    it('sets "data" after "onDataChanged"', function() {
+      const widget = jsx.createElement(CheckBox, {
+        data: {foo: 'bar'},
+        onDataChanged: ev => ev.target.text = ev.value.foo
+      });
+      expect(widget.text).to.equal('bar');
+    });
+
     it('throws for Attr children with incorrect target', function() {
       const attrData = jsx.createElement(Setter, {target: TextView, attribute: 'data', children: [{}]});
 
