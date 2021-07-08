@@ -16,7 +16,8 @@
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "env": {
-        "TS_NODE_PROJECT": "${workspaceRoot}/tsconfig.json"
+        "TS_NODE_PROJECT": "${workspaceRoot}/tsconfig.json",
+        "TS_NODE_TRANSPILE_ONLY": "true"
       },
       "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/mocha",
       "windows": {
