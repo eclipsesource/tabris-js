@@ -216,7 +216,11 @@ abstract class Widget<TData extends object = any> extends NativeObject {
       return;
     }
     checkType(value, Object, {name: 'data', nullable: true});
-    Object.defineProperty(this, '$data', {enumerable: false, writable: true, value});
+    let data = value;
+    if (value?.constructor === Object) {
+      data = ObservableData(data);
+    }
+    Object.defineProperty(this, '$data', {enumerable: false, writable: true, value: data});
     ObservableData.generateChangeEvents({target: this, property: 'data'});
   }
 
@@ -225,7 +229,7 @@ abstract class Widget<TData extends object = any> extends NativeObject {
       return undefined as any;
     }
     if (!('$data' in this)) {
-      const value = new ObservableData();
+      const value = ObservableData();
       Object.defineProperty(this, '$data', {enumerable: false, writable: true, value});
       ObservableData.generateChangeEvents({target: this, property: 'data', init: true});
     }

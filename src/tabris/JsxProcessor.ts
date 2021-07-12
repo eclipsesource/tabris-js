@@ -133,9 +133,7 @@ export default class JsxProcessor {
     const {data, ...properties} = attributesWithoutListener(attributes || {});
     const result = new Type(properties);
     registerListenerAttributes(result, attributes);
-    if (data?.constructor === Object && result.data instanceof Object) {
-      Object.assign(result.data, data);
-    } else if (data) {
+    if (data) {
       result.data = data;
     }
     return result;

@@ -12,12 +12,20 @@ describe('ObservableData', function() {
 
   describe('constructor', function() {
 
+    it('has correct name', function() {
+      expect(ObservableData.name).to.equal('ObservableData');
+    });
+
     it('creates instance', function() {
       expect(new ObservableData()).to.be.instanceOf(ObservableData);
     });
 
     it('assigns given data', function() {
       expect(new ObservableData({foo: 'bar'})).to.deep.equal({foo: 'bar'});
+    });
+
+    it('may be called without new', function() {
+      expect(ObservableData({foo: 'bar'})).to.deep.equal({foo: 'bar'});
     });
 
   });
@@ -43,6 +51,11 @@ describe('ObservableData', function() {
       data = new ObservableData();
       listener = spy();
       store = Listeners.getListenerStore(data as any);
+    });
+
+    it('has correct constructor', function() {
+      expect(data).be.instanceOf(ObservableData);
+      expect(data.constructor).to.equal(ObservableData);
     });
 
     it('fires change events when property is set', function() {

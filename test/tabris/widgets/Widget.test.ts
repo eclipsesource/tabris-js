@@ -308,10 +308,22 @@ describe('Widget', function() {
       });
 
       it('can be replaced', function() {
-        const newData = {foo: 'bar2'};
+        class MyData {foo: 'bar';}
+        const newData = new MyData();
         widget.data = newData;
 
         expect(widget.data).to.equal(newData);
+      });
+
+      it('copies "data" if it is a plain object', function() {
+        const newData = {foo: 'bar2'};
+
+        widget.data = newData;
+
+        expect(widget.data).not.to.equal(data);
+        expect(widget.data).not.to.equal(newData);
+        expect(widget.data).to.deep.equal(newData);
+        expect(widget.data).to.be.instanceOf(ObservableData);
       });
 
       it('can only be an object', function() {
@@ -347,7 +359,7 @@ describe('Widget', function() {
           widget.data = newData;
 
           expect(listener).to.have.been.calledOnce;
-          expect(listener.args[0][0].value).to.equal(newData);
+          expect(listener.args[0][0].value).to.deep.equal(newData);
         });
 
         it('fires when data object mutates', function() {

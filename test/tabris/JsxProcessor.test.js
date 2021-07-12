@@ -67,7 +67,7 @@ describe('JsxProcessor', function() {
       expect(widget.text).to.equal('bar');
     });
 
-    it('copies "data" is it is a plain object', function() {
+    it('copies "data" if it is a plain object', function() {
       const data = {foo: 'bar'};
 
       const widget = jsx.createElement(CheckBox, {data});
