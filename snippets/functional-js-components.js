@@ -23,8 +23,7 @@ examples.append(
 /** @typedef {{firstName?: string, lastName?: string}} Person */
 
 /**
- * @param {{person: Person} & tabris.Attributes<TextView>} attr
- * @returns {TextView}
+ * @param {tabris.Attributes<TextView> & {person: Person}} attr
  **/
 const PersonText = ({person, ...attr}) => TextView({
   ...attr,
@@ -38,13 +37,8 @@ examples.append(
 // Dynamic component displaying data in a TextView:
 
 /**
- * @typedef {tabris.Widget & {data: Person}} PersonWidget
- * @typedef {tabris.Attributes<tabris.Widget> & {data: Person}} PersonAttr
- */
-
-/**
- * @param {PersonAttr} attr
- * @returns {TextView & {data: Person}}
+ * @param {tabris.Attributes<tabris.Widget, Person>} attr
+ * @returns {tabris.Widget<Person>}
  **/
 const PersonDataView = attr => TextView({
   ...attr,
@@ -59,14 +53,15 @@ examples.append(
 // Component displaying data dynamically in a composed UI:
 
 /**
- * @param {PersonAttr} attr
- * @returns {Stack & {data: Person}}
+ * @param {tabris.Attributes<tabris.Widget, Person>} attr
+ * @returns {tabris.Widget<Person>}
  **/
 const PersonView = attr => Stack({
   ...attr,
-  apply: widget => ({
-    '#firstname': {text: widget.data.firstName},
-    '#lastname': {text: widget.data.lastName}
+  /** @param {tabris.Widget<Person>} widget */
+  apply: ({data}) => ({
+    '#firstname': {text: data.firstName},
+    '#lastname': {text: data.lastName}
   }),
   children: [
     TextView({id: 'firstname', background: '#ee9999'}),

@@ -116,16 +116,20 @@ export function getTitle(def: ExtendedApi): string {
   return def.title || def.object || def.type;
 }
 
-export function createDoc(documentable: ExtendedApi | schema.Property | schema.Method | schema.Event | schema.Event) {
+export function createDoc(
+  documentable: ExtendedApi | schema.Property | schema.Method | schema.Event | schema.Event,
+  note?: string
+) {
   const def = documentable as Partial<ExtendedApi & schema.Property & schema.Method & schema.Event & schema.Event>;
   if (!def.description && !def.const && !def.provisional) {
     return;
   }
   const result: string[] = [];
   if (def.description) {
-    splitIntoLines(def.description, 100).forEach(line => {
-      result.push(line);
-    });
+    result.push(...splitIntoLines(def.description, 100));
+  }
+  if (note) {
+    result.push('', ...splitIntoLines(note, 100));
   }
   if (def.parameters) {
     createParamAnnotations(def.parameters).forEach(line => {

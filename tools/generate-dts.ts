@@ -6,6 +6,27 @@ import {
   isCallback, plainType
 } from './common';
 
+const NEWLESS = `
+This constructor can be called as a factory, without "new". Doing so allows \
+passing an attributes object which may include (in addition to the properties) \
+children, event listeners and layout shorthands.
+`.trim();
+
+const FACTORY_DOC = `
+/**
+ * Creates an instance of this type.
+ *
+ * The given attributes object may include properties,
+ * event listener and children, if supported.
+ *
+ * The second parameter should be given if this is the
+ * return value of a functional component. In this case the
+ * component itself (factory function) must be given to make it
+ * a valid selector for the widget selector API such as
+ * "$()" or the composite "find()" method.
+ */
+`;
+
 const HEADER = `
 // Type definitions for Tabris.js \${VERSION}
 /// <reference path="globals.d.ts" />
@@ -23,7 +44,7 @@ export type Properties<
   T extends {set?: any},
   U = Omit<T, 'set'> // prevent self-reference issues
 > = Partial<Omit<U, MethodKeysOf<U> | ReadOnlyWidgetKeys<U>>>
-  & {cid?: never}; // prevent empty object type as possible result, would allow any object
+  & {cid?: never, data?: any}; // prevent empty object type as possible result, would allow any object
 type ListenersKeysOf<T> = { [K in keyof T]: T[K] extends Listeners<any> ? K : never }[keyof T];
 export type UnpackListeners<T> = T extends Listeners<infer U> ? Listener<U> : T;
 export type EventOfListeners<T extends Listeners<any>> = T extends Listeners<infer U> ? U : never;
@@ -36,7 +57,16 @@ export type JSXAttributes<
   T extends JSXCandidate,
   U = Omit<T, 'set' | 'jsxAttributes'> // prevent self-reference issues
 > = Properties<U> & ListenersMap<U> & JSXShorthands<U>;
-export type Attributes<T extends JSXCandidate> = T['jsxAttributes'];
+
+/**
+ * The attributes object for the given widget type, includes all properties,
+ * events, children and shorthands. To be passed to a JSX element or new-less
+ * widget constructor call.
+ *
+ * The optional second parameter is the type of the "data" property.
+ */
+export type Attributes<T extends JSXCandidate, TData = any> = T['jsxAttributes'] & {data?: TData};
+
 export type JSXCompositeAttributes<T extends Composite, U extends Widget>
   = JSXAttributes<T> & {apply?: RuleSet<T>, children?: JSXChildren<U>};
 type ExtendedEvent<EventData, Target = {}> = EventObject<Target> & EventData;
@@ -55,17 +85,20 @@ type Flatten<T> = T|Array<T>|undefined;
 export type Factory<
   OriginalConstructor extends Constructor<JSXCandidate> & {prototype: Instance},
   Instance extends JSXCandidate = InstanceType<OriginalConstructor>,
-  Selector extends Function = (...args: any[]) => Instance
+  Selector extends Function = (...args: any[]) => Widget
 > = {
+  ${FACTORY_DOC}
   (attributes?: Attributes<Instance>, selector?: Selector): Instance
 };
 
 export type CallableConstructor<
   OriginalConstructor extends Constructor<JSXCandidate> & {prototype: Instance},
   Instance extends JSXCandidate = InstanceType<OriginalConstructor>,
-  Selector extends Function = (...args: any[]) => Instance
+  Selector extends Function = (...args: any[]) => Widget
 > = {
+  /** ${NEWLESS} */
   new (...args: ConstructorParameters<OriginalConstructor>): Instance,
+  ${FACTORY_DOC}
   (attributes?: Attributes<Instance>, selector?: Selector): Instance,
   prototype: Instance
 };
@@ -190,6 +223,7 @@ function renderClassConstructor(text: TextBuilder, def: ExtendedApi) {
     text.append('');
     const access = constructor.access ? constructor.access + ' ' : '';
     const paramList = createParamList(def, constructor.parameters || []);
+    text.append(createDoc(def, def.isWidget || def.isPopup ? NEWLESS : ''));
     text.append(`${access}constructor(${paramList});`);
   }
 }

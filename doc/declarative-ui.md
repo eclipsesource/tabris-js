@@ -356,25 +356,24 @@ function StaticComponent({person, ...other}) {
 
 ### Dynamic Functional Components
 
-All widgets have a general-purpose "data" property that can contain any object. Consequently it can be used to store state on would otherwise be considered a stateless or static component. Using a change listener or the `apply` method the component can then update itself whenever `data` changes.
+All widgets have a general-purpose [`data`](./api/Widget.md#data) property that can contain any object. Consequently it can be used with a change listener or the `apply` method for the component to update itself whenever it is changed.
 
 #### Using a change listener
 
 By attaching a property change listener within the component function the component can be modified. Use this if the returned widget has no children.
 
-Special care has to be taken to ensure the change listener is called for the initial value: If the property is set before the listener is attached it won't work.
-
 ```jsx
-function PersonView({data, ...other}) {
-  return (<TextView {...other}/>)
+function PersonDataView(attr) {
+  return (<TextView {...attr}/>)
     .onDataChanged(ev =>
       ev.target.text = ev.value
         ? `This is now ${ev.value.firstName} ${ev.value.lastName}`
         : ''
-    )
-    .set({data}); // set data last!
+    );
 }
 ```
+
+> You can also use the `<Setter>` element to define the change listener as seen [here for JavaScript/JSX](https://playground.tabris.com/?snippet=functional-jsx-components.jsx) and [here for TypeScript/JSX](https://playground.tabris.com/?snippet=functional-jsx-components-typescript.tsx).
 
 The usage is as you would expect:
 
@@ -388,39 +387,34 @@ contentView.append(
 $(PersonView).only().data = new Person('Harris', 'Sam');
 ```
 
-In **TypeScript** we need to do some casting to stay type-safe. You can do this with an `instanceof` check or using the [`checkType`](./api/utils.md#checktypevalue-type-callback) utility function:
+In **TypeScript** we need to do an extra step to keep the type of `data` inside the change event, as it defaults to `any`. You can do this with a runtime check (e.g. `instanceof` or [`checkType`](./api/utils.md#checktypevalue-type-callback)), or by simply declaring the event object type. The runtime check is more verbose, but provides a useful error message in case the type does not match at runtime. The TypeScript compiler alone can not entirely prevent this from happening.
+
+Runtime check:
 
 ```tsx
-type PersonDataAttr = Attributes<Widget> & {data: Person};
-function PersonView(attributes: PersonDataAttr) {
-  const {data, ...other} = attributes;
-  const widget: TextView = <TextView {...other}/>;
+function PersonDataView(attributes: Attributes<Widget, Person>) {
+  const widget: TextView = <TextView {...attributes}/>;
   return widget
     .onDataChanged(ev => {
-      const person = checkType(ev.value, Person, {nullable: true});
+      const person = checkType(ev.value, Person);
       ev.target.text = person
         ? `This is now ${person.firstName} ${person.lastName}`
         : '';
-    })
-    .set({data});
+    });
 }
 ```
 
-In Visual Studio Code JsDoc can do the same for **JavaScript**:
+Declare event object:
 
-```jsx
-/** @param {tabris.Attributes<tabris.Widget> & {data: Person}} attributes */
-function PersonView({data, ...other}) {
-  /** @type {TextView} */
-  const widget = <TextView {...other}/>;
+```tsx
+function PersonDataView(attributes: Attributes<Widget, Person>) {
+  const widget: TextView = <TextView {...attributes}/>;
   return widget
-    .onDataChanged(ev => {
-      const person = checkType(ev.value, Person, {nullable: true});
+    .onDataChanged((ev: PropertyChangedEvent<TextView, Person>) =>
       ev.target.text = person
-        ? `This is now ${person.firstName} ${person.lastName}`
+        ? `This is now ${ev.value.firstName} ${ev.value.lastName}`
         : '';
-    })
-    .set({data});
+    );
 }
 ```
 
@@ -451,13 +445,13 @@ function ComposedComponent(attr) {
 And in **TypeScript/JSX** using the `<Apply>` element:
 
 ```tsx
-function ComposedComponent(attr: PersonDataAttr) {
+function ComposedComponent(attr: Attributes<Widget, Person>) {
   return (
     <Stack {...attr}>
       <TextView id='firstname' background='#ee9999'/>
       <TextView id='lastname' background='#9999ee'/>
       <Apply>
-        {({data}: {data: Partial<Person>}) => [
+        {({data}: Widget<Person>) => [
           Setter(TextView, '#firstname', {text: data.firstName || ''}),
           Setter(TextView, '#lastname', {text: data.lastName || ''})
         ]}
@@ -467,7 +461,7 @@ function ComposedComponent(attr: PersonDataAttr) {
 }
 ```
 
-When using `apply` as a function a "trigger" event needs to be given explicitly which signals when to invoke the callback. This may be any change event (e.g.   `'onDataChanged'`), or `'*'` for any change event as described above.
+When calling `apply` on the instance a "trigger" event needs to be given explicitly which signals when to invoke the callback. This may be any change event (e.g.   `'onDataChanged'`), or `'*'` for any change event as described above.
 
 This is also the only way to make `apply` react to the few change events types that are not included by `'*'`, specifically `'onBoundsChanged'` or any scrolling related property:
 

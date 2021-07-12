@@ -39,10 +39,7 @@ examples.append(
 
 // Dynamic component displaying data in a TextView:
 
-type PersonWidget = Widget & {data: Person};
-type PersonAttr = Attributes<Widget> & {data: Person};
-
-const PersonDataView = (attr: PersonAttr): PersonWidget => (
+const PersonDataView = (attr: Attributes<Widget, Person>): Widget<Person> => (
 
   <TextView {...attr}>
     <Setter target={TextView} attribute='onDataChanged'>
@@ -61,13 +58,13 @@ examples.append(
 
 // Component displaying data dynamically in a composed UI:
 
-const PersonView = (attr: PersonAttr): PersonWidget => (
+const PersonView = (attr: Attributes<Widget, Person>): Widget<Person> => (
 
   <Stack {...attr}>
     <Apply>
-      {(widget: PersonWidget) => ({
-        '#firstname': Setter(TextView, {text: widget.data.firstName}),
-        '#lastname': Setter(TextView, {text: widget.data.lastName})
+      {({data}: Widget<Person>) => ({
+        '#firstname': Setter(TextView, {text: data.firstName}),
+        '#lastname': Setter(TextView, {text: data.lastName})
       })}
     </Apply>
     <TextView>Hello</TextView>

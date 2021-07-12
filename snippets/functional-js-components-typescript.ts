@@ -1,4 +1,4 @@
-import {TextView, Attributes, contentView, Stack, Widget, Setter} from 'tabris';
+import {TextView, Attributes, contentView, Stack, Widget, Setter, PropertyChangedEvent} from 'tabris';
 
 const examples = new Stack({padding: 8, spacing: 8}).appendTo(contentView);
 
@@ -22,11 +22,11 @@ examples.append(
 type Person = {firstName?: string, lastName?: string};
 
 const PersonText = (
-  {person, ...attr}: {person: Person} & Attributes<TextView>
+  {person, ...attr}: Attributes<TextView> & {person: Person}
 ) => TextView({
   ...attr,
   text: `Hello ${person.firstName} ${person.lastName}`
-}, PersonDataView);
+}, PersonText);
 
 examples.append(
   PersonText({person: {firstName: 'Jane', lastName: 'Doe'}})
@@ -34,15 +34,11 @@ examples.append(
 
 // Dynamic component displaying data in a TextView:
 
-type PersonAttr = Attributes<Widget> & {data: Person};
-
-const PersonDataView = (attr: PersonAttr): TextView & {data: Person} =>
+const PersonDataView = (attr: Attributes<Widget, Person>): Widget<Person> =>
   TextView({
     ...attr,
-    onDataChanged: ev => {
-      const person = ev.value as Person;
-      ev.target.text = `Hello ${person.firstName} ${person.lastName}`;
-    }
+    onDataChanged: ({target, value}: PropertyChangedEvent<TextView, Person>) =>
+      target.text = `Hello ${value.firstName} ${value.lastName}`
   }, PersonDataView);
 
 examples.append(
@@ -51,10 +47,10 @@ examples.append(
 
 // Component displaying data dynamically in a composed UI:
 
-const PersonView = (attr: PersonAttr): Stack & {data: Person} =>
+const PersonView = (attr: Attributes<Widget, Person>): Widget<Person> =>
   Stack({
     ...attr,
-    apply: ({data}: {data: Partial<Person>}) => ({
+    apply: ({data}: Widget<Person>) => ({
       '#firstname': Setter(TextView, {text: data?.firstName || ''}),
       '#lastname': Setter(TextView, {text: data?.lastName || ''})
     }),
