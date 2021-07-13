@@ -23,7 +23,7 @@ Here you'll find a collection of example scripts that you can modify and try on 
 
 To load the playground script in your Developer App, go to the "URL" tab on the home screen and scan the QR code on the playground page. When you edit the code in the playground you only need to reload via the developer console or scan the QR code again.
 
-You can also add your own scripts to the list by pressing "save". Note that these are stored only on your machine and will be lost if you clear your browser user data. The snippets [are also available in the tabris git repository](https://github.com/eclipsesource/tabris-js/tree/master/snippets).
+You can also add your own scripts to the list by pressing "save". Note that these are stored only on your machine and will be lost if you clear your browser user data. The snippets [are also available in the tabris git repository](${doc:snippetsUrl}).
 
 ## Code Sideloading
 

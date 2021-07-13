@@ -328,10 +328,10 @@ const StyledText = attributes => TextView({textColor: 'red', ...attributes}, Sty
 
 You can find further example snippets for functional components here:
 
-* [JavaScript/JSX](https://playground.tabris.com/?snippet=functional-jsx-components.jsx)
-* [Pure JavaScript](https://playground.tabris.com/?snippet=functional-js-components.js)
-* [TypeScript/JSX](https://playground.tabris.com/?snippet=functional-jsx-components-typescript.tsx)
-* [Pure TypeScript](https://playground.tabris.com/?snippet=functional-js-components-typescript.tsx)
+* [JavaScript/JSX](${doc:functional-jsx-components.jsx})
+* [Pure JavaScript](${doc:functional-js-components.js})
+* [TypeScript/JSX](${doc:functional-jsx-components-typescript.jsx})
+* [Pure TypeScript](${doc:functional-js-components-typescript.js})
 
 There are two categories of functional components, stateless and dynamic:
 
@@ -373,7 +373,7 @@ function PersonDataView(attr) {
 }
 ```
 
-> You can also use the `<Setter>` element to define the change listener as seen [here for JavaScript/JSX](https://playground.tabris.com/?snippet=functional-jsx-components.jsx) and [here for TypeScript/JSX](https://playground.tabris.com/?snippet=functional-jsx-components-typescript.tsx).
+> You can also use the `<Setter>` element to define the change listener as seen [here for JavaScript/JSX](${doc:functional-jsx-components.jsx}) and [here for TypeScript/JSX](${doc:functional-jsx-components-typescript.tsx}).
 
 The usage is as you would expect:
 

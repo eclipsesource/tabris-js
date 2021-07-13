@@ -26,7 +26,7 @@ See also:
  * [Tabris API Documentation](api/console.md)
  * [MDN API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/console)
  * [WHATWG Standard](https://console.spec.whatwg.org/)
- * [<span class='language jsx'>JSX</span>Example Snippet](https://playground.tabris.com/?snippet=console.jsx)
+ * [<span class='language jsx'>JSX</span>Example Snippet](${doc:console.jsx})
 
 ## Timer
 
@@ -37,7 +37,7 @@ See also:
  * [`setTimeout` on MDN](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout)
  * [`setInterval` on MDN](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval)
  * [WHATWG Standard](https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timers)
- * [<span class='language jsx'>JSX</span>Example Snippet](https://playground.tabris.com/?snippet=timer.jsx)
+ * [<span class='language jsx'>JSX</span>Example Snippet](${doc:timer.jsx})
 
 ## Fetch
 
@@ -47,7 +47,7 @@ See also:
  * [Tabris API Documentation](api/fetch.md)
  * [MDN API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
  * [WHATWG Standard](https://fetch.spec.whatwg.org/)
- * [<span class='language jsx'>JSX</span>Example Snippet](https://playground.tabris.com/?snippet=fetch.jsx)
+ * [<span class='language jsx'>JSX</span>Example Snippet](${doc:fetch.jsx})
 
 ## Blob
 
@@ -57,7 +57,7 @@ See also:
  * [Tabris API Documentation](api/Blob.md)
  * [MDN API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Blob)
  * [W3C Standard](https://w3c.github.io/FileAPI/#blob-section)
- * [<span class='language jsx'>JSX</span>Example Snippet](https://playground.tabris.com/?snippet=imageview-blob.jsx)
+ * [<span class='language jsx'>JSX</span>Example Snippet](${doc:imageview-blob.jsx)
 
 ## File
 
@@ -76,7 +76,7 @@ See also:
  * [Tabris API Documentation](api/FormData.md)
  * [MDN API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/FormData)
  * [WHATWG Standard](https://xhr.spec.whatwg.org/#interface-formdata)
- * [<span class='language jsx'>JSX</span>Example Snippet](https://playground.tabris.com/?snippet=formData.jsx)
+ * [<span class='language jsx'>JSX</span>Example Snippet](${doc:formData.jsx)
 
 ## XMLHttpRequest
 
@@ -85,7 +85,7 @@ Tabris also supports `XMLHttpRequest`, though `fetch()` is recommended for conve
 See also:
  * [MDN API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
  * [WHATWG Standard](https://xhr.spec.whatwg.org/)
- * [<span class='language js'>JS</span>Example Snippet](https://playground.tabris.com/?snippet=xmlhttprequest.js)
+ * [<span class='language js'>JS</span>Example Snippet](${doc:xmlhttprequest.js)
 
 ## WebSocket
 
@@ -129,7 +129,7 @@ Widget APIs are unavailable. Calling any unsupported APIs has no effect.
 See also:
  * [MDN API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Worker)
  * [WHATWG Standard](https://html.spec.whatwg.org/multipage/workers.html#worker)
- * [<span class='language js'>JS</span>Example Snippet](https://playground.tabris.com/?snippet=worker.js)
+ * [<span class='language js'>JS</span>Example Snippet](${doc:worker.js)
 
 ## Persistent Storage
 
@@ -145,7 +145,7 @@ See also:
  * [Tabris API Documentation](api/localStorage.md)
  * [MDN API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Storage)
  * [WHATWG Standard](https://html.spec.whatwg.org/multipage/webstorage.html#the-storage-interface)
- * [<span class='language jsx'>JSX</span>Example Snippet](https://playground.tabris.com/?snippet=local-storage.jsx)
+ * [<span class='language jsx'>JSX</span>Example Snippet](${doc:local-storage.jsx)
 
 ## Canvas Context
 
@@ -155,7 +155,7 @@ See also:
  * [Tabris API Documentation](api/CanvasContext.md)
  * [MDN API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
  * [WHATWG Standard](https://html.spec.whatwg.org/multipage/canvas.html#2dcontext)
- * [<span class='language jsx'>JSX</span>Example Snippet](https://playground.tabris.com/?snippet=canvas-shapes.jsx)
+ * [<span class='language jsx'>JSX</span>Example Snippet](${doc:canvas-shapes.jsx)
 
 ## Random Source (Crypto)
 
@@ -165,4 +165,4 @@ See also:
  * [Tabris API Documentation](api/Crypto.md)
  * [MDN API Documentation](https://developer.mozilla.org/en/docs/Web/API/RandomSource/getRandomValues)
  * [W3C Standard](https://w3c.github.io/webcrypto/#crypto-interface)
- * [<span class='language jsx'>JSX</span>Example Snippet](https://playground.tabris.com/?snippet=crypto.jsx)
+ * [<span class='language jsx'>JSX</span>Example Snippet](${doc:crypto.jsx)

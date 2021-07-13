@@ -45,7 +45,7 @@ In the project directory, type `npm start`. This will start the development serv
 
 Swipe from the right edge of the screen to open the developer console, which lets you restart the script or go back to the Developer App.
 
-Now you can start developing. You may want to have a look at the rest of the documentation and [the Tabris.js snippets](https://github.com/eclipsesource/tabris-js/tree/master/snippets).
+Now you can start developing. You may want to have a look at the rest of the documentation and [the Tabris.js snippets](${doc:snippetsUrl}).
 
 ## Publishing your app
 

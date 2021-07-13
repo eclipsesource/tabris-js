@@ -179,6 +179,25 @@ class DocumentationGenerator {
     this.renderIndex();
   }
 
+  public renderGithubUrl(link: schema.Snippet) {
+    const preRelease = this.version.indexOf('-') !== -1;
+    if (link.repo === 'tabris-decorators') {
+      return [
+        DECORATORS_TREE,
+        preRelease ? 'master' : 'v' + this.version,
+        '/examples/',
+        link.snippet
+      ].join('');
+    } else {
+      return [
+        GITHUB_TREE,
+        preRelease ? 'master' : 'v' + this.version,
+        link.snippet.endsWith('json') ? '/schema/' : '/snippets/',
+        link.snippet
+      ].join('');
+    }
+  }
+
   private copyResources() {
     fs.copySync(this.sourcePath, this.targetPath, {
       filter: (path) => !/[\\/]api[\\/].+\./.test(path) || /[\\/]img[\\/].+\./.test(path)
@@ -268,19 +287,31 @@ class DocumentationGenerator {
 
   private replaceVariables(contents: string, cwd: '.' | './api'): string {
     const apiDir = cwd === '.' ? './api/' : './';
-    return contents.replace(/\$\{doc:[A-Za-z]+\}/g, subString => {
+    return contents.replace(/\$\{doc:[a-zA-Z.-]+\}/g, subString => {
       const varName = subString.slice(6, -1);
       if (varName === 'moduleversion') {
         return this.version;
+      }
+      if (varName === 'snippetsUrl') {
+        return this.renderGithubUrl({repo: 'tabris', snippet: ''}).slice(0, -1);
+      }
+      if (varName === 'examplesUrl') {
+        return this.renderGithubUrl({repo: 'tabris-decorators', snippet: ''}).slice(0, -1);
       }
       if (this.typeLinks[varName]) {
         const href = this.typeLinks[varName].href;
         const link = href.startsWith('http') ? href : apiDir + href;
         return '[`' + varName + '`](' + link + ')';
       }
-      if (varName.endsWith('Url')) {
+      if (varName.endsWith('Url') && this.typeLinks[varName.slice(0, -3)]) {
         const href = this.typeLinks[varName.slice(0, -3)].href;
         return href.startsWith('http') ? href : apiDir + href;
+      }
+      if (/^[a-z-]+.[jt]sx?$/.test(varName) || /^[a-z]+.json?$/.test(varName)) {
+        return this.renderGithubUrl({repo: 'tabris', snippet: varName});
+      }
+      if (/^[a-z-]+$/.test(varName)) {
+        return this.renderGithubUrl({repo: 'tabris-decorators', snippet: varName});
       }
       throw new Error('No replacement for ' + subString);
     });
@@ -995,29 +1026,16 @@ class DocumentRenderer {
     return ['\nSee also:\n'].concat(links.map(link => {
       if (isSnippet(link)) {
         const title = `${(link.title || link.snippet)}`;
-        const preRelease = this.gen.version.indexOf('-') !== -1;
         if (link.repo === 'tabris-decorators') {
-          const gitHubUrl = [
-            DECORATORS_TREE,
-            preRelease ? 'master' : 'v' + this.gen.version,
-            '/examples/',
-            link.snippet
-          ].join('');
           const language = link.snippet.endsWith('jsx')
             ? '<span class=\'language jsx\'>JSX</span>'
             : link.snippet.endsWith('js')
               ? '<span class=\'language js\'>JS</span>'
               : '<span class=\'language tsx\'>TSX</span>';
-          return `[${language} ${title}](${gitHubUrl})`;
+          return `[${language} ${title}](${this.gen.renderGithubUrl(link)})`;
         } else {
-          const playgroundUrl =
-            `${PLAYGROUND}?gitref=v${encodeURIComponent(this.gen.version)}&snippet=${encodeURIComponent(link.snippet)}`;
-          const gitHubUrl = [
-            GITHUB_TREE,
-            preRelease ? 'master' : 'v' + this.gen.version,
-            '/snippets/',
-            link.snippet
-          ].join('');
+          const playgroundUrl = this.renderPlaygroundUrl(link);
+          const gitHubUrl = this.gen.renderGithubUrl(link);
           const snippetType = link.snippet.split('.').pop().toLowerCase();
           const language = `<span class='language ${snippetType}'>${snippetType.toUpperCase()}</span>`;
           const playgroundHtml = [
@@ -1031,6 +1049,12 @@ class DocumentRenderer {
       }
       return `[${link.title}](${link.path})`;
     })).join('  \n') + '\n';
+  }
+
+  private renderPlaygroundUrl(link: schema.Snippet) {
+    const preRelease = this.gen.version.indexOf('-') !== -1;
+    const ref = preRelease ? 'master' : 'v' + this.gen.version;
+    return `${PLAYGROUND}?gitref=${encodeURIComponent(ref)}&snippet=${encodeURIComponent(link.snippet)}`;
   }
 
   private renderTypeRef(ref: schema.TypeReference, flat: boolean = true, simplified: boolean = false): string {

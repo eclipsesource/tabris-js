@@ -64,7 +64,7 @@ Create a separate directory dedicated to your resource dictionaries. The example
 
 If your project has a `tsconfig.json` or `jsconfig.json` make sure it contains the compiler option `"resolveJsonModule": true`. This makes it possible to consume the _.json_ files as modules without loosing type safety.
 
-The `index.js` (or `index.ts`) module will take care of converting the raw data to resources dictionaries and exporting them from the `resources` directory. (Hint: A file named "index.js" allows [treating an entire directory as a single module](https://nodejs.org/api/modules.html#modules_folders_as_modules).) An example for this can be found [here](https://github.com/eclipsesource/tabris-js/blob/v${doc:moduleversion}/snippets/resources/index.ts).
+The `index.js` (or `index.ts`) module will take care of converting the raw data to resources dictionaries and exporting them from the `resources` directory. (Hint: A file named "index.js" allows [treating an entire directory as a single module](https://nodejs.org/api/modules.html#modules_folders_as_modules).) An example for this can be found [here](${doc:snippets}/resources/index.ts).
 
 > Note: You don't need to follow this exact layout of course, but it is the assumed configuration used in all examples below.
 

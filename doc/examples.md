@@ -4,7 +4,7 @@
 
 ## Snippets
 
-The `tabris-js` [repository](https://github.com/eclipsesource/tabris-js) contains dozens of [self-running snippets](https://github.com/eclipsesource/tabris-js/tree/v${doc:moduleversion}/snippets) demonstrating all **features of the Tabris.js core module**. These can be run directly from the [Tabris.js Playground](https://playground.tabris.com/) via the [Tabris.js Developer App](./developer-app.md). The API documentation example links point to the snippets in the playground.
+The `tabris-js` [repository](https://github.com/eclipsesource/tabris-js) contains dozens of [self-running snippets](${doc:snippetsUrl}) demonstrating all **features of the Tabris.js core module**. These can be run directly from the [Tabris.js Playground](https://playground.tabris.com/) via the [Tabris.js Developer App](./developer-app.md). The API documentation example links point to the snippets in the playground.
 
 You can also run a selection of UI-related snippets directly in the app without the playground.
 
@@ -13,7 +13,7 @@ All snippets use declarative UI and ES6 Module Syntax. Most also use JSX, and so
 ## Databinding Examples
 
 The `tabris-decorators` [repository](https://github.com/eclipsesource/tabris-decorators) contains minimalistic
-[**databinding** and **redux** examples](https://github.com/eclipsesource/tabris-decorators/tree/v${doc:moduleversion}/examples) as complete tabris projects. The **ListView** and **ItemPicker** widgets (high-level extensions of `CollectionView` and `Picker`) are also demonstrated only here. They are also linked in the databinding documentation.
+[**databinding** and **redux** examples](${doc:examplesUrl}) as complete tabris projects. The **ListView** and **ItemPicker** widgets (high-level extensions of `CollectionView` and `Picker`) are also demonstrated only here. They are also linked in the databinding documentation.
 
 The examples can be easily run without local setup via the GitPod links provided in the README.md files. A GitHub account is required. The READMEs also contain comprehensive descriptions for each example.
 

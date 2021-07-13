@@ -203,7 +203,7 @@ async function requestPermissions(...permissions) {
 
 The following snippets demonstrate how to use the `tabris.permission` API.
 
-* [permission.jsx](https://playground.tabris.com/?gitref=v3.1.0&snippet=permission.jsx)
-* [permission-advanced.tsx](https://playground.tabris.com/?gitref=v3.1.0&snippet=permission-advanced.tsx)
+* [permission.jsx](${doc:permission.jsx})
+* [permission-advanced.tsx](${doc:permission-advanced.tsx})
 
 Also see the [Android](https://developer.android.com/guide/topics/permissions/overview) and [iOS](https://developer.apple.com/design/human-interface-guidelines/ios/app-architecture/requesting-permission/) documentation on permission.

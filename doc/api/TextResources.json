@@ -16,11 +16,11 @@
     },
     {
       "title": "Defining raw text resource data in a separate JSON file.",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/v${doc:moduleversion}/snippets/resources/texts.json"
+      "path": "${doc:texts.json}"
     },
     {
       "title": "Converting raw text resource data to `TextResources` instance.",
-      "path": "https://github.com/eclipsesource/tabris-js/blob/v${doc:moduleversion}/snippets/resources/index.ts"
+      "path": "${doc:snippetsUrl}/resources/index.ts"
     },
     {
       "title": "Using a TextResources dictionary",
@@ -76,7 +76,7 @@
             {
               "name": "data",
               "type": "Data",
-              "description": "The raw data (plain object) to create the dictionary from. The format must match the [Tabris.js texts JSON schema](https://github.com/eclipsesource/tabris-js/blob/v${doc:moduleversion}/schema/texts.json)."
+              "description": "The raw data (plain object) to create the dictionary from. The format must match the [Tabris.js texts JSON schema](${doc:texts.json})."
             }
           ],
           "returns": "TextResources",
@@ -105,7 +105,7 @@
             {
               "name": "data",
               "type": "Data",
-              "description": "The raw data (plain object) to create the dictionary from. The format must match the [Tabris.js texts JSON schema](https://github.com/eclipsesource/tabris-js/blob/v${doc:moduleversion}/schema/texts.json)."
+              "description": "The raw data (plain object) to create the dictionary from. The format must match the [Tabris.js texts JSON schema](${doc:texts.json})."
             }
           ],
           "returns": "TextResources",
@@ -116,7 +116,7 @@
               "keyof Data"
             ]
           },
-          "description": "Creates a texts dictionary from the given raw \"data\" object. The format must match the [Tabris.js texts JSON schema](https://github.com/eclipsesource/tabris-js/blob/v${doc:moduleversion}/schema/texts.json). Entries in the \"data\" object starting with \"$\" are considered configuration options and will not become entries in the final texts dictionary."
+          "description": "Creates a texts dictionary from the given raw \"data\" object. The format must match the [Tabris.js texts JSON schema](${doc:texts.json}). Entries in the \"data\" object starting with \"$\" are considered configuration options and will not become entries in the final texts dictionary."
         }
       ]
     }
