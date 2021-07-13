@@ -122,7 +122,7 @@ When used in TypeScript the tabris module exports the following additional inter
  * ${doc:BoxDimensions}
  * ${doc:ImageData}
  * ${doc:AnimationOptions}
- * [`PropertyChangedEvent<TargetType, ValueType>`](${doc:PropertyChangedEventUrl}), same as `EventObject<TargetType> & { readonly value: U }`
+ * [`PropertyChangedEvent<TargetType, ValueType>`](${doc:PropertyChangedEventUrl})
  * Various `{TargetType}{EventName}Event` interfaces, e.g. `PickerSelectEvent`. Only for events with additional parameters.
  * [`Properties<Widget>`](${doc:PropertiesUrl}), which is the interface of the properties parameter used by the constructor and `set` method of the given widget.
 

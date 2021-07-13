@@ -411,7 +411,7 @@ export class ExampleComponent extends Composite {
 
 ## Functional Components
 
-A functional component is the term used for functions that return a widget or `WidgetCollection`, a.k.a a widget factory. Its name typically starts with an upper case, and it should take a single `properties` or `attributes` parameter object. In the latter case it needs to create widgets using [declarative UI syntax](./declarative-ui.md#functional-components).
+A functional component is the term used for functions that return a widget or `WidgetCollection`, a.k.a a widget factory. Its name typically starts with an upper case, and it should take a single `properties` or `attributes` parameter object. In the latter case it needs to create widgets using [declarative UI syntax](./functional-components.md).
 
 A common use case for this is to create widgets that have different default values, such as a different background or text color.
 
@@ -430,4 +430,4 @@ Functional components can also work as selectors:
 $(StyledComponent).only().text = 'Hello WOrld';
 ```
 
-For more advanced examples, read [this section](./declarative-ui.md#functional-components) in the ["Declarative UI" article](./declarative-ui.md).
+For more advanced examples, read [this section](./functional-components.md) in the ["Declarative UI" article](./declarative-ui.md).

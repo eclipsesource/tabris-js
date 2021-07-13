@@ -417,3 +417,17 @@ export type ApplyAttributesUntypedSetter = {
 export type ApplyAttributesRuleSet = {
   children?: RuleSet
 };
+
+export namespace widgets {
+  export class ObservableData {
+    constructor(properties?: Record<string, any>);
+    [Symbol.observable](): Observable<PropertyChangedEvent<this, unknown>>;
+  }
+}
+
+export type ObservableData = widgets.ObservableData;
+export type ObservableDataConstructor = typeof widgets.ObservableData;
+export interface ObservableDataFactory extends ObservableDataConstructor {
+  <T extends object>(properties?: T): ObservableData & T;
+}
+export const ObservableData: ObservableDataFactory;

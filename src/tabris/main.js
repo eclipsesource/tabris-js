@@ -56,6 +56,7 @@ import Listeners from './Listeners';
 import ChangeListeners from './ChangeListeners';
 import LinearGradient from './LinearGradient';
 import Observable from './Observable';
+import ObservableData from './ObservableData';
 import Page from './widgets/Page';
 import PdfView from './widgets/PdfView';
 import Percent from './Percent';
@@ -216,6 +217,7 @@ const OTHER = Object.freeze({
   Listeners,
   LinearGradient,
   Observable,
+  ObservableData,
   Percent,
   Permission,
   Process,

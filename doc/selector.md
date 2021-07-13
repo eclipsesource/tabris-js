@@ -27,13 +27,13 @@ page.find(Composite)
 
 This would find all instances of `Composite` or one of it's subclasses, like `TabFolder` or `Canvas`.
 
-Finally, a [functional component](./declarative-ui.md#functional-components) can also work:
+Finally, a [functional component](./functional-components.md) can also work:
 
 ```js
 page.find(StyledText)
 ```
 
-**However**, this does not always work out-of-the-box. Read more about this [here](./declarative-ui.md#functional-components).
+**However**, this does not always work out-of-the-box. Read more about this [here](./functional-components.md).
 
 ### ID Selectors
 
@@ -329,12 +329,24 @@ page.apply('strict', [
 
 #### Reactive apply()
 
-The, `apply` method/attribute can also take a callback instead of a ruleset object. That callback is given the host widget and must return a ruleset that may be derived from the widget state.
+The, `apply` method/attribute can also take a callback instead of a ruleset object. That callback is given the host widget and must return a ruleset that may be derived from the widget state. A "trigger" is set up for to signal when the callback is to be invoked. The trigger can either be an event name (including 'on', e.g. 'onTap'), the string `'*'` to react to any property change (as described[here](./api/Observable.md#mutationssource)), or `'update'` for manual updates only.
 
-If a "trigger" is set up for this ruleset it will be applied as needed. A trigger is either a event name (including 'on', e.g. 'onTap'), the string `'*'` to react to any property change (as described[here](./api/Observable.md#mutationssource)), or `'update'` for manual updates only.
+> :point_right: The `apply` **attribute** always uses the `'*'` trigger.
 
-For more information see ["Functional Components"](./declarative-ui.md#using-apply).
+Using an event-specific trigger is the only way to make `apply` react to the few change event types that are not included by `'*'`, specifically `'onBoundsChanged'` or any scrolling related property:
 
+```js
+contentView.apply(
+  {mode: 'strict', trigger: 'onBoundsChanged'},
+  ({bounds}) => (bounds.height > bounds.width) ? {
+    '#foo': {layoutData: fooVertical},
+    '#bar': {layoutData: barVertical}
+  } : {
+    '#foo': {layoutData: fooHorizontal},
+    '#bar': {layoutData: barHorizontal}
+  }
+);
+```
 ### $()
 
 This function is a global alias for `tabris.contentView.find()`, and it therefore accepts the same selector parameters.

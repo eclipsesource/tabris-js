@@ -23,6 +23,10 @@
       url: ui.html
     - title: Using Selectors
       url: selector.html
+    - title: JSX/Declarative UI
+      url: declarative-ui.html
+    - title: Functional Components
+      url: functional-components.html
     - title: Layouts
       url: layout.html
     - title: Touch Events
@@ -35,8 +39,6 @@
       url: cordova.html
     - title: TypeScript Support
       url: typescript.html
-    - title: JSX/Declarative UI
-      url: declarative-ui.html
     - title: Resource Management
       url: resource-management.html
     - title: Debugging

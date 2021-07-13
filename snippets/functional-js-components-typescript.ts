@@ -1,4 +1,4 @@
-import {TextView, Attributes, contentView, Stack, Widget, Setter, PropertyChangedEvent} from 'tabris';
+import {TextView, Attributes, contentView, Stack, Widget, Setter, PropertyChangedEvent, ObservableData} from 'tabris';
 
 const examples = new Stack({padding: 8, spacing: 8}).appendTo(contentView);
 
@@ -68,7 +68,12 @@ examples.append(
 
 setTimeout(() => {
 
+  // direct manipulation
   $(PersonDataView).only().data.firstName = 'John';
-  $(PersonView).only().data = {firstName: 'Samuel', lastName: 'Rogan'};
+
+  // indirect using ObservableData
+  const newPerson = ObservableData({firstName: 'Samuel', lastName: 'Rogan'});
+  $(PersonView).only().data = newPerson;
+  setTimeout(() => newPerson.firstName = 'Sammy', 1000);
 
 }, 1000);

@@ -225,6 +225,7 @@ describe('tabris', function() {
     expect(tabris.Listeners).to.be.a('function');
     expect(tabris.ChangeListeners).to.be.a('function');
     expect(tabris.Observable).to.be.a('function');
+    expect(tabris.ObservableData).to.be.a('function');
   });
 
   it('contains event methods', function() {
