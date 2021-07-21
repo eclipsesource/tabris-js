@@ -4,7 +4,7 @@ import {Subscription} from './Observable.types';
 
 export type Subscriptions = {[$propertySubscription: string]: Subscription | null};
 
-const PUBLIC_PROP = /^[a-z][a-zA-Z]/;
+const PUBLIC_PROP = /^[a-z]/;
 
 type PropertyChange<T extends object> = {
   target: T,

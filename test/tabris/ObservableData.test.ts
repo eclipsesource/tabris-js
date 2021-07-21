@@ -36,7 +36,7 @@ describe('ObservableData', function() {
 
     let data: ObservableData & {
       foo?: string,
-      bar?: string,
+      a?: string,
       _foo?: string,
       $foo?: string,
       Foo?: string,
@@ -48,7 +48,7 @@ describe('ObservableData', function() {
     let store: EventsClass;
 
     beforeEach(function() {
-      data = new ObservableData();
+      data = new ObservableData() as any;
       listener = spy();
       store = Listeners.getListenerStore(data as any);
     });
@@ -62,11 +62,11 @@ describe('ObservableData', function() {
       store.on('fooChanged', listener);
 
       data.foo = 'baz1';
-      data.bar = 'baz2';
+      data.a = 'baz2';
       const event = listener.args[0][0];
 
       expect(data.foo).to.equal('baz1');
-      expect(data.bar).to.equal('baz2');
+      expect(data.a).to.equal('baz2');
       expect(listener.args.length).to.equal(1);
       expect(event.type).to.equal('fooChanged');
       expect(event.target).to.equal(data);
@@ -90,12 +90,12 @@ describe('ObservableData', function() {
 
       Object.defineProperties(data, {
         foo: {value: 'baz1'},
-        bar: {value: 'baz2'}
+        a: {value: 'baz2'}
       });
       const event = listener.args[0][0];
 
       expect(data.foo).to.equal('baz1');
-      expect(data.bar).to.equal('baz2');
+      expect(data.a).to.equal('baz2');
       expect(listener.args.length).to.equal(1);
       expect(event.type).to.equal('fooChanged');
       expect(event.target).to.equal(data);
@@ -136,7 +136,7 @@ describe('ObservableData', function() {
       data.foo = 'baz1';
       store.on('fooChanged', listener);
 
-      data.bar = 'baz1';
+      data.a = 'baz1';
 
       expect(listener).not.to.have.been.called;
     });
@@ -152,13 +152,13 @@ describe('ObservableData', function() {
     it('is observable', function() {
       data[Symbol.observable]().subscribe(listener);
 
-      data.bar = 'baz1';
+      data.a = 'baz1';
 
       expect(listener).to.have.been.calledOnce;
       expect(listener.args[0][0]).to.be.instanceOf(EventObject);
       expect(listener.args[0][0]).to.include({
         target: data,
-        type: 'barChanged',
+        type: 'aChanged',
         value: 'baz1'
       });
     });
@@ -179,7 +179,7 @@ describe('ObservableData', function() {
 
       it('fires events when nested property changes', function() {
         data.foo = 'foo';
-        data.bar = 'foo';
+        data.a = 'foo';
         parent.child = null;
 
         expect(listener).to.have.been.calledThrice;
