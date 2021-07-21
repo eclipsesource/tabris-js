@@ -6,6 +6,7 @@ let cellType: string|((index: number) => string);
 let columnCount: number;
 let createCell: (cellType: string) => Widget;
 let updateCell: (cell: Widget, index: number) => void;
+let fastScroll: boolean;
 let firstVisibleIndex: number;
 let lastVisibleIndex: number;
 let refreshEnabled: boolean;
@@ -23,6 +24,7 @@ nullValue = widget.cellType as null;
 columnCount = widget.columnCount;
 createCell = widget.createCell;
 updateCell = widget.updateCell;
+fastScroll = widget.fastScroll;
 firstVisibleIndex = widget.firstVisibleIndex;
 lastVisibleIndex = widget.lastVisibleIndex;
 refreshEnabled = widget.refreshEnabled;
@@ -36,12 +38,13 @@ widget.cellType = nullValue;
 widget.columnCount = columnCount;
 widget.createCell = createCell;
 widget.updateCell = updateCell;
+widget.fastScroll = fastScroll;
 widget.refreshEnabled = refreshEnabled;
 widget.refreshIndicator = refreshIndicator;
 widget.refreshMessage = refreshMessage;
 
 const properties = {
-  cellHeight, cellType, columnCount, createCell, updateCell, refreshEnabled, refreshIndicator, refreshMessage
+  cellHeight, cellType, columnCount, createCell, updateCell, fastScroll, refreshEnabled, refreshIndicator, refreshMessage
 };
 widget = new CollectionView(properties);
 widget.set(properties);

@@ -372,6 +372,10 @@ NativeObject.defineProperties(CollectionView.prototype, {
     type: types.string,
     default: ''
   },
+  fastScroll: {
+    type: types.boolean,
+    default: false
+  },
   firstVisibleIndex: {
     type: types.number,
     readonly: true,

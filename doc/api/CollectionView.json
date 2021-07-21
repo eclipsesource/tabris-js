@@ -86,6 +86,14 @@
       },
       "description": "The name of the cell type to use for the item at the given index. This name will be passed to the `createCell` and `cellHeight` callbacks. Cells will be reused only for those items that map to the same cell type. If set to a function, this function will be called for every item, providing the item index as a parameter, and must return a unique name for the cell type to use for the given item."
     },
+    "fastScroll": {
+      "type": "boolean",
+      "description": "Enables the fast scroll thumb that can be dragged to quickly scroll through the list of items. The feature is enabled by default in iOS devices starting from version 13 and cannot be disabled anymore.",
+      "default": false,
+      "platforms": {
+        "ios": false
+      }
+    },
     "refreshEnabled": {
       "type": "boolean",
       "default": "false",

@@ -76,6 +76,7 @@ describe('CollectionView', function() {
       expect(view.cellHeight).to.equal('auto');
       expect(view.createCell).to.be.a('function');
       expect(view.updateCell).to.be.a('function');
+      expect(view.fastScroll).to.be.false;
       expect(view.refreshEnabled).to.be.false;
       expect(view.refreshMessage).to.equal('');
       expect(view.scrollbarVisible).to.be.true;
