@@ -16,8 +16,15 @@ export default class EventObject {
     const dispatchObject = uninitialized ? eventData as EventObject : new EventObject();
     const eventTarget = (target as {$eventTarget: object}).$eventTarget || target;
     if (eventData && (eventData !== dispatchObject)) {
-      const copyData = omit(eventData, ['type', 'target', 'timeStamp']);
-      Object.assign(dispatchObject, copyData);
+      const copyData = omit(eventData, ['type', 'target', 'timeStamp']) as Record<string, unknown>;
+      for (const key in copyData) {
+        const isPublic = /^[a-z]/.test(key);
+        Object.defineProperty(dispatchObject, key, {
+          value: copyData[key],
+          writable: !isPublic,
+          enumerable: isPublic
+        });
+      }
     }
     if ((dispatchObject as EventObject)._initEvent instanceof Function) {
       (dispatchObject as EventObject)._initEvent(type, eventTarget);
