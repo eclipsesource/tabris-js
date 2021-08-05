@@ -51,6 +51,15 @@ export default class EventObject {
     this.$defaultPrevented = true;
   }
 
+  set originalEvent(value: EventObject | null) {
+    if (this.$originalEvent) {
+      throw new Error('originalEvent already set');
+    }
+    if (value) {
+      this.$originalEvent = value;
+    }
+  }
+
   get originalEvent(): EventObject | null {
     const original = this.$originalEvent;
     if (!original) {
