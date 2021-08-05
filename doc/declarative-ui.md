@@ -197,8 +197,6 @@ export type ExampleComponent = internal.ExampleComponent;
 
 ### Data Binding
 
-> :point_right: Data binding currently only works with **JSX**.
-
 Declarative data binding via JSX is provided by the [`tabris-decorators` extension](./databinding/index.md). Once installed in your project, you can do [one-way bindings](./databinding/@component.md) between a property of your custom component and the property of a child like this:
 
 ```tsx
@@ -217,7 +215,7 @@ class CustomComponent extends Composite {
 }
 ```
 
-The `tabris-decorators` module also provides [two-way bindings](./databinding/@bind.md).
+The `tabris-decorators` module also provides [one-way and two-way](./databinding/@bind.md) via decorators. These do not require JSX, but still TypeScript.
 
 ### Dialogs
 

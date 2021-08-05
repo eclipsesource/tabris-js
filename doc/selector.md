@@ -329,11 +329,11 @@ page.apply('strict', [
 
 #### Reactive apply()
 
-The, `apply` method/attribute can also take a callback instead of a ruleset object. That callback is given the host widget and must return a ruleset that may be derived from the widget state. A "trigger" is set up for to signal when the callback is to be invoked. The trigger can either be an event name (including 'on', e.g. 'onTap'), the string `'*'` to react to any property change (as described[here](./api/Observable.md#mutationssource)), or `'update'` for manual updates only.
+The, `apply` method/attribute can also take a callback instead of a ruleset object. That callback is given the host widget and must return a ruleset that may be derived from the widget state. The callback will be invoked when a property of the widget changes.
 
-> :point_right: The `apply` **attribute** always uses the `'*'` trigger.
+Updates via apply callbacks are scheduled by specific triggers. When setting the callback via `apply` attribute (e.g. [`<Composite apply={...}>` or `Composite({apply: ...}))`](./declarative-ui.md)) or element ([`<Apply>...</Apply>`](./api/Setter.md#apply)), this is any change event on the widget or its `data` property. If called programmatically, the trigger event has to be given explicitly. It can either be an event name (including 'on', e.g. 'onTap'), the string `'*'` to react to any property change (as described above), or `'update'` for manual updates only.
 
-Using an event-specific trigger is the only way to make `apply` react to the few change event types that are not included by `'*'`, specifically `'onBoundsChanged'` or any scrolling related property:
+Using an specific event is the only way to make `apply` react to the few change event types that are not included by `'*'`, specifically `'onBoundsChanged'` or any scrolling related property:
 
 ```js
 contentView.apply(

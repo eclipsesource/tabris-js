@@ -35,7 +35,7 @@ To prepare your project for the build, you have to create a subdirectory named `
 
 ### The package.json file
 
-See [package.json | npm documentation](https://docs.npmjs.com/files/package.json) for information about the package.json format.
+See [npm documentation](https://docs.npmjs.com/files/package.json) for information about the package.json format.
 
 `package.json` contains, among other configurations, references to the app's main script and npm module dependencies:
 

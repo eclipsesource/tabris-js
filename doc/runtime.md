@@ -31,7 +31,6 @@ Notable supported features:
 Feature|Example
 --- | ---
 [Arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)|`(a, b) => a + b`
-[async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function)*|`await fn();`
 [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)|`class { … }`
 [const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)|`const a = 1;`
 [Default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters)|`function(a = 1) { … }`
@@ -57,15 +56,16 @@ Feature|Example
 [WeakMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap)|`new WeakMap(iterable)`
 [WeakSet](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet)|`new WeakSet(iterable)`
 
-*) Since Tabris.js 3.3
-
 Notable feature NOT supported:
 
 Feature|Example|Alternative
 --- | --- | ---
-[import/](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)[export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export)|`import * as foo from 'foo';`|`const foo = require('foo');`
-[JSX](./declarative-ui.md)|`<TextView />`|`new TextView()`
-[Types/Interfaces](./typescript.md)|`const foo: string;`|`const foo;`
+[import/](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)[export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export)|`import {foo} from 'foo';`|`const {foo} = require('foo');`
+[JSX](./declarative-ui.md)|`<TextView text='foo'/>`|`TextView({text: 'foo'})`
+[Types/Interfaces](./typescript.md)|`const foo: string;`|`/** @type {string} */ const foo;`
+[async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function)*|`await fn();`|`fn().then(...);`
+
+* "async" functions are parsed, but can not update the UI. This can currently not be fixed. It's recommended to either use promises directly or a compiler that transforms async functions to promises.
 
 ### Compiled JavaScript Projects
 

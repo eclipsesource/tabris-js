@@ -47,6 +47,8 @@ To connect the Chrome DevTools to a Tabris.js app on the default port `9090`, th
 
 [`devtools://devtools/bundled/inspector.html?experiments=true&v8only=true&ws=<device-ip>:9090`](devtools://devtools/bundled/inspector.html?experiments=true&v8only=true&ws=<device-ip>:9090)
 
+> If the URL can not be found, try to open "devtools://devtools/bundled/inspector.html" without the parameters first, then the full URL.
+
 Exchange `<device-ip>` with the IP of your Android device.
 
 #### Visual Studio Code
