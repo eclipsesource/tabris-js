@@ -2,6 +2,7 @@
 
 declare var tabris: import('./Tabris').default;
 declare var console: import('./Console').default;
+declare var setTimeout: (fn: Function, time: number) => any;
 
 type Auto = 'auto';
 type ImageValue = ImageLikeObject|import('./Image').default|string|null;
@@ -165,12 +166,24 @@ interface PropertyChangedEvent<T,U> extends EventObjectBase {
   readonly originalEvent: PropertyChangedEvent<unknown, unknown>;
 }
 
+declare class Module {
+  static root: Module;
+  id: string;
+}
+
 type RawEvent = {
   target: object,
   type: string,
   dispatchObject?: import('./EventObject').default| null,
   value?: unknown
 };
+
+type LogEventData = {
+  level: string,
+  message: string,
+  logTime: number,
+  worker?: string
+}
 
 type TypeDef<ApiType, NativeType, Context extends object> = {
   /**
@@ -226,12 +239,22 @@ interface PropertyDefinitions<Context extends object> {
   [property: string]: TabrisProp<any, unknown, Context>;
 }
 
-declare namespace global {
-  export var console: import('./Console').default;
-  export var localStorage: import('./Storage').default;
-  export var secureStorage: import('./Storage').default;
-  export var crypto: import('./Crypto').default;
-  export var tabris: import('./Tabris').default;
+interface DomEventTarget {
+  addEventListener(type: string, listener: Function, useCapture?: any): void;
+  removeEventListener(type: string, listener: Function, useCapture?: any): void;
+  dispatchEvent(event: any): void;
+}
+
+declare var global: DomEventTarget & {
+  console: import('./Console').default;
+  localStorage: import('./Storage').default;
+  secureStorage: import('./Storage').default;
+  crypto: import('./Crypto').default;
+  tabris: import('./Tabris').default;
+  postMessage: (message?: any, transferList?: any[]) => void;
+  close: () => void;
+  onmessage: (message?: any) => void;
+  onmessageerror: (message?: any) => void;
 }
 
 declare namespace JSX {

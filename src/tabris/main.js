@@ -14,7 +14,7 @@ import DevTools, {create as createDevTools} from './DevTools';
 import Console, {createConsole} from './Console';
 import Constraint from './Constraint';
 import {addDOMDocument} from './Document';
-import Event, {addDOMEventTargetMethods} from './Event';
+import Event, {addDOMEventTargetMethods, defineEventHandlerProperties} from './Event';
 import {addWindowTimerMethods} from './WindowTimers';
 import Storage, {create as createStorage} from './Storage';
 import JsxProcessor, {createJsxProcessor, JSX} from './JsxProcessor';
@@ -251,6 +251,7 @@ if (global.document) {
   Object.assign(global, WHATWG, {$});
   addDOMDocument(global);
   addDOMEventTargetMethods(global);
+  defineEventHandlerProperties(global, ['message', 'messageerror', 'error']);
   addWindowTimerMethods(global);
 }
 

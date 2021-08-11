@@ -383,9 +383,9 @@ export default abstract class NativeObject extends EventsClass {
     return tabris._nativeBridge!.get(this.cid, name);
   }
 
-  _nativeCall(method: string, parameters: NativeProps) {
+  _nativeCall(method: string, parameters?: NativeProps) {
     this._checkDisposed();
-    return tabris._nativeBridge!.call(this.cid, method, parameters);
+    return tabris._nativeBridge!.call(this.cid, method, parameters as any);
   }
 
   _getXMLHeader(hasChild: boolean) {

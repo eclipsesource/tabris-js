@@ -142,6 +142,9 @@ export function defineEventHandlerProperties(target, types) {
 
 function defineEventHandlerProperty(target, type) {
   const handler = 'on' + type;
+  if (handler in target) {
+    return;
+  }
   let listener = null;
   Object.defineProperty(target, handler, {
     get() {

@@ -4,6 +4,7 @@ import {createConsole, toXML} from '../../src/tabris/Console';
 import * as defaultConsole from '../../src/tabris/Console';
 import {create as createApp} from '../../src/tabris/App';
 import NativeObject from '../../src/tabris/NativeObject';
+import {match} from 'sinon';
 
 const methods = ['debug', 'log', 'info', 'warn', 'error'];
 const realConsole = console;
@@ -297,19 +298,31 @@ _notify@[native code]`
       it(`fire event on ${method} without arguments`, function() {
         console[method]();
         expect(listener).to.have.been.calledOnce;
-        expect(listener).to.have.been.calledWithMatch({level: method, message: ''});
+        expect(listener).to.have.been.calledWithMatch({
+          level: method,
+          message: '',
+          logTime: match.number
+        });
       });
 
       it(`fire event on ${method} with multiple arguments`, function() {
         console[method]('foo', 'bar', 0, 1);
         expect(listener).to.have.been.calledOnce;
-        expect(listener).to.have.been.calledWithMatch({level :method, message: 'foo bar 0 1'});
+        expect(listener).to.have.been.calledWithMatch({
+          level :method,
+          message: 'foo bar 0 1',
+          logTime: match.number
+        });
       });
 
       it(`fire event on ${method} when replacing placeholders with arguments`, function() {
         console[method]('%s %s %d %d', 'foo', 'bar', 0, 1);
         expect(listener).to.have.been.calledOnce;
-        expect(listener).to.have.been.calledWithMatch({level :method, message: 'foo bar 0 1'});
+        expect(listener).to.have.been.calledWithMatch({
+          level: method,
+          message: 'foo bar 0 1',
+          logTime: match.number
+        });
       });
 
     }));

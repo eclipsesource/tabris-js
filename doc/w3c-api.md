@@ -124,12 +124,13 @@ Only the following Tabris.js APIs can be used in a worker:
 * WebSocket
 * Worker
 
-Widget APIs are unavailable. Calling any unsupported APIs has no effect.
+Widget APIs are unavailable. Calling any unsupported APIs has no effect. When sideloading via the [Tabris CLI](./tabris-cli.md), set the [`logPushInterval`](${TabrisUrl}#logPushInterval) property to see the output on the developer machine.
 
 See also:
  * [MDN API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Worker)
  * [WHATWG Standard](https://html.spec.whatwg.org/multipage/workers.html#worker)
  * [<span class='language js'>JS</span>Example Snippet](${doc:worker.js)
+ * [Logging in a worker](${TabrisUrl}#logPushInterval)
 
 ## Persistent Storage
 

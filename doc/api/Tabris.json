@@ -25,6 +25,13 @@
     "symbols": {
       "type": {"indexType": "string", "map": {"symbol": "Symbol"}},
       "const": true
+    },
+    "logPushInterval": {
+      "type": "number",
+      "separateAccessors": true,
+      "noChangeEvent": true,
+      "default": "-1",
+      "description": "Set this property to a positive number to see the log output from the current worker on a connected [CLI](../tabris-cli.md). Has no effect in the main UI thread.\n\nDefines the maximum delay (in milliseconds) between the call of a ${doc:Console} function (e.g. `console.log()`) <em>from inside a ${doc:Worker}</em> and the matching [log event](#log) in the parent thread. Since this interrupts the UI thread smaller values could impact UI responsiveness.\n\nThe feature is disabled by default (value `-1`), except for debug builds, where the default is `2000`.\n\n<b>Note:</b> You do <em>not</em> need to set this property to see the console output on the built-in developer console, this is only for the CLI, or in cases where you record the log events in the UI thread. It also has <em>no</em> effect on the log output of the main thread."
     }
   },
   "methods": {

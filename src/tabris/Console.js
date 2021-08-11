@@ -89,7 +89,7 @@ export default class Console {
     for (const level of ['debug', 'info', 'log', 'warn', 'error']) {
       this._console[level] = (...args) => {
         const message = this._prepareOutput(...args);
-        tabris.trigger('log', {level, message});
+        tabris.trigger('log', {level, message, logTime: Date.now()});
         nativeConsole.print(level, message);
       };
     }
