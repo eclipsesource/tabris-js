@@ -1,0 +1,125 @@
+{
+  "type": "Input",
+  "category": "service",
+  "object": "input",
+  "extends": "NativeObject",
+  "description": "The `input` object is supposed to fire global touch events with coordinates relative to the app window.",
+  "constructor": {
+    "access": "private"
+  },
+  "events": {
+    "pointerDown": {
+      "eventObject": "PointerEvent",
+      "description": "Fired when the app window is touched.",
+      "parameters": {
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the app window.",
+          "type": {
+            "tuple": [
+              {
+                "map": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "pointerMove": {
+      "eventObject": "PointerEvent",
+      "description": "Fired repeatedly while swiping across the app window.",
+      "parameters": {
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the app window.",
+          "type": {
+            "tuple": [
+              {
+                "map": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "pointerUp": {
+      "eventObject": "PointerEvent",
+      "description": "Fired when a touch ends on the app window than it started on.",
+      "parameters": {
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the app window.",
+          "type": {
+            "tuple": [
+              {
+                "map": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "pointerCancel": {
+      "eventObject": "PointerEvent",
+      "description": "Fired instead of 'pointerUp' when the touch ends on another app window than it started on.",
+      "parameters": {
+        "touches": {
+          "description": "Touch coordinates relative to the origin coordinates of the app window.",
+          "type": {
+            "tuple": [
+              {
+                "map": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "resize": {
+      "description": "Fired when the app window size has changed.",
+      "parameters": {
+        "left": {
+          "description": "The horizontal offset from the left edge of the app window in dip.",
+          "type": "number"
+        },
+        "top": {
+          "description": "The vertical offset from the top edge of the app window in dip.",
+          "type": "number"
+        },
+        "width": {
+          "description": "The width of the app window in dip.",
+          "type": "number"
+        },
+        "height": {
+          "description": "The height of the app window in dip.",
+          "type": "number"
+        }
+      }
+    }
+  }
+}

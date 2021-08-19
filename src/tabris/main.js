@@ -9,6 +9,7 @@ import Permission, {create as createPermission} from './Permission';
 import Authentication , {create as createAuthentication} from './Authentication';
 import App, {create as createApp} from './App';
 import FileSystem, {create as createFileSystem} from './FileSystem';
+import Input, {create as createInput} from './Input';
 import DevTools, {create as createDevTools} from './DevTools';
 import Console, {createConsole} from './Console';
 import Constraint from './Constraint';
@@ -182,6 +183,7 @@ const NATIVE_OBJECT = Object.freeze({
   Device,
   DevTools,
   FileSystem,
+  Input,
   InactivityTimer,
   NativeObject,
   Printer,
@@ -284,6 +286,7 @@ tabrisMain.on('start', (options) => {
   tabris.$device = createDevice();
   tabris.$fs = createFileSystem();
   publishDeviceProperties(tabris.device, global);
+  tabris.$input = createInput();
   tabris.$localStorage = createStorage();
   tabris.$secureStorage = createStorage(true);
   tabris.$crypto = new Crypto();

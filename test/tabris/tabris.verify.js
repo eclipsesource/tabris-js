@@ -290,6 +290,7 @@ describe('tabris', function() {
       expect(tabris.app).to.be.instanceOf(tabris.App);
       expect(tabris.device).to.be.instanceOf(tabris.Device);
       expect(tabris.fs).to.be.instanceOf(tabris.FileSystem);
+      expect(tabris.input).to.be.instanceOf(tabris.Input);
       expect(tabris.devTools).to.be.instanceOf(tabris.DevTools);
       expect(tabris.process).to.be.instanceOf(tabris.Process);
     });
