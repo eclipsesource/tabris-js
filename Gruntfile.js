@@ -102,7 +102,7 @@ module.exports = function(grunt) {
       },
       test_tabris: {
         cmd: 'node node_modules/mocha/bin/mocha --colors --require ts-node/register '
-          + '"test/tabris/**/*.test.js" test/tabris/**/*.test.ts"',
+          + '"test/tabris/**/*.test.js" "test/tabris/**/*.test.ts"',
         options: {env: Object.assign({
           TS_NODE_PROJECT: './tsconfig.json',
           // This needs to stay true as long as the tsconfig.json of src/tabris (used for bundle_tabris)
