@@ -21,14 +21,19 @@ contentView.append(
 );
 
 /** @param {tabris.WidgetResizeEvent<Canvas>} ev */
-async function handleDrawing({target: canvas, width}) {
-  canvas.height = canvas.bounds.width;
-  const scale = device.scaleFactor;
-  const size = width * scale;
-  const ctx = canvas.getContext('2d', size, size);
-  ctx.scale(scale, scale);
-  drawCanvas(size, ctx);
-  await extractImages(canvas, ctx);
+async function handleDrawing({target: canvas, width, height}) {
+  // canvas has 0 height initially
+  // it should be square based on the width of the parent
+  if (width === height) {
+    const scale = device.scaleFactor;
+    const size = width * scale;
+    const ctx = canvas.getContext('2d', size, size);
+    ctx.scale(scale, scale);
+    drawCanvas(size, ctx);
+    await extractImages(canvas, ctx);
+  } else {
+    canvas.height = width;
+  }
 }
 
 function drawCanvas(size, ctx) {
