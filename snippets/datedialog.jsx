@@ -18,7 +18,7 @@ async function showSimpleDialog() {
 }
 
 async function showSpecificDate() {
-  const {date} = await DateDialog.open(new Date(2012, 12, 12)).onClose.promise();
+  const {date} = await DateDialog.open(new Date(2022, 0, 25)).onClose.promise();
   textView.text = date ? `Picked ${date.toDateString()}` : 'Canceled';
 }
 
