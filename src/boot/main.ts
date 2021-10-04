@@ -27,7 +27,9 @@ tabris._start = function(client) {
     const cordovaScript = document.createElement('script');
     cordovaScript.src = './cordova.js';
     document.head.appendChild(cordovaScript);
-    const isWorker = global.workerScriptPath !== undefined;
+    const workerScriptPath = global.workerScriptPath;
+    delete global.workerScriptPath;
+    const isWorker = workerScriptPath !== undefined;
     if (tabris._init) {
       tabris._init(client, {headless: isWorker});
     }
@@ -36,7 +38,7 @@ tabris._start = function(client) {
         if (global.debugClient && !isWorker) {
           global.debugClient.start(rootModule);
         }
-        rootModule.require('./' + (isWorker ? global.workerScriptPath : ''));
+        rootModule.require('./' + (isWorker ? workerScriptPath : ''));
         tabris.flush();
       } catch (error) {
         printError('Could not load ' + (isWorker ? 'worker' : 'main module') + ':', error);
@@ -48,7 +50,6 @@ tabris._start = function(client) {
     } else {
       loadModule();
     }
-    delete global.workerScriptPath;
     tabris.flush();
   } catch (error) {
     printError('Could not start tabris:', error);
