@@ -1,8 +1,5 @@
 import {Button, TextInput, TextView, contentView} from 'tabris';
 
-// Makes the log output from the Worker appear on the CLI:
-tabris.logPushInterval = 100;
-
 contentView.append(
   <$>
     <TextInput centerX={-65} top={24} width={64} alignment='centerX' text='2'/>

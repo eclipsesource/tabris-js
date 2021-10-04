@@ -1,3 +1,6 @@
+// Makes the log output from the Worker appear on the CLI:
+tabris.logPushInterval = 100;
+
 console.log('Worker running...');
 
 tabris.onMessage(e => {
