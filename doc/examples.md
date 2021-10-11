@@ -23,7 +23,7 @@ These examples all require the `tabris-decorators` module.
 
 ## Reddit Viewer
 
-This example mimics a real-world [app to browse reddit pictures](https://github.com/eclipsesource/tabris-js-reddit-viewer/tree/${doc:moduleversion}). It utilizes a **Mode-View-ViewModel** pattern with TypeScript, **databinding** and **dependency injection**. You can also run it from GitPod.
+This example mimics a real-world [app to browse reddit pictures](https://github.com/eclipsesource/tabris-js-reddit-viewer/). It utilizes a **Mode-View-ViewModel** pattern with TypeScript, **databinding** and **dependency injection**. You can also run it from GitPod.
 
 ## Todo App
 

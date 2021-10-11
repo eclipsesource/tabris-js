@@ -27,7 +27,7 @@ import ClientMock from 'tabris/ClientMock';
 tabris._init(new ClientMock()); // do this before using tabris module
 ```
 
-> :point_right: The first import statement technically only imports (and shadows) the already global `tabris` object, but is needed in TypeScript to access to the "internal" [`_init`](./api/tabris.html#_initclient-options) method.
+> :point_right: The first import statement technically only imports (and shadows) the already global `tabris` object, but is needed in TypeScript to access to the "internal" [`_init`](./api/Tabris.html#_initclient-options) method.
 
 After the call to `_init` the tabris module can be used. <b>Depending on your application this needs to be done before the code under test is imported.</b> This is the case if your application calls Tabris.js API at the root of a module. (Extending Tabris.js classes is fine, just not creating instances or calling methods.)
 

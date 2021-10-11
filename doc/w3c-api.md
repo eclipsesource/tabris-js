@@ -23,7 +23,7 @@ Calling `console.error` will also cause a message to pop up (even if the develop
 
 
 See also:
- * [Tabris API Documentation](api/console.md)
+ * [Tabris API Documentation](api/Console.md)
  * [MDN API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/console)
  * [WHATWG Standard](https://console.spec.whatwg.org/)
  * [<span class='language jsx'>JSX</span>Example Snippet](${doc:console.jsx})
@@ -57,7 +57,7 @@ See also:
  * [Tabris API Documentation](api/Blob.md)
  * [MDN API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Blob)
  * [W3C Standard](https://w3c.github.io/FileAPI/#blob-section)
- * [<span class='language jsx'>JSX</span>Example Snippet](${doc:imageview-blob.jsx)
+ * [<span class='language jsx'>JSX</span>Example Snippet](${doc:imageview-blob.jsx})
 
 ## File
 
@@ -76,7 +76,7 @@ See also:
  * [Tabris API Documentation](api/FormData.md)
  * [MDN API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/FormData)
  * [WHATWG Standard](https://xhr.spec.whatwg.org/#interface-formdata)
- * [<span class='language jsx'>JSX</span>Example Snippet](${doc:formData.jsx)
+ * [<span class='language jsx'>JSX</span>Example Snippet](${doc:formdata.jsx})
 
 ## XMLHttpRequest
 
@@ -85,7 +85,7 @@ Tabris also supports `XMLHttpRequest`, though `fetch()` is recommended for conve
 See also:
  * [MDN API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
  * [WHATWG Standard](https://xhr.spec.whatwg.org/)
- * [<span class='language js'>JS</span>Example Snippet](${doc:xmlhttprequest.js)
+ * [<span class='language js'>JS</span>Example Snippet](${doc:xmlhttprequest.js})
 
 ## WebSocket
 
@@ -124,13 +124,13 @@ Only the following Tabris.js APIs can be used in a worker:
 * WebSocket
 * Worker
 
-Widget APIs are unavailable. Calling any unsupported APIs has no effect. When sideloading via the [Tabris CLI](./tabris-cli.md), set the [`logPushInterval`](${TabrisUrl}#logPushInterval) property to see the output on the developer machine.
+Widget APIs are unavailable. Calling any unsupported APIs has no effect. When sideloading via the [Tabris CLI](./tabris-cli.md), set the [`logPushInterval`](${doc:TabrisUrl}#logpushinterval) property to see the output on the developer machine.
 
 See also:
  * [MDN API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Worker)
  * [WHATWG Standard](https://html.spec.whatwg.org/multipage/workers.html#worker)
- * [<span class='language js'>JS</span>Example Snippet](${doc:worker.js)
- * [Logging in a worker](${TabrisUrl}#logPushInterval)
+ * [<span class='language js'>JS</span>Example Snippet](${doc:worker.jsx})
+ * [Logging in a worker](${doc:TabrisUrl}#logpushinterval)
 
 ## Persistent Storage
 
@@ -146,7 +146,7 @@ See also:
  * [Tabris API Documentation](api/localStorage.md)
  * [MDN API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Storage)
  * [WHATWG Standard](https://html.spec.whatwg.org/multipage/webstorage.html#the-storage-interface)
- * [<span class='language jsx'>JSX</span>Example Snippet](${doc:local-storage.jsx)
+ * [<span class='language jsx'>JSX</span>Example Snippet](${doc:local-storage.jsx})
 
 ## Canvas Context
 
@@ -156,7 +156,7 @@ See also:
  * [Tabris API Documentation](api/CanvasContext.md)
  * [MDN API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
  * [WHATWG Standard](https://html.spec.whatwg.org/multipage/canvas.html#2dcontext)
- * [<span class='language jsx'>JSX</span>Example Snippet](${doc:canvas-shapes.jsx)
+ * [<span class='language jsx'>JSX</span>Example Snippet](${doc:canvas-shapes.jsx})
 
 ## Random Source (Crypto)
 
@@ -166,4 +166,3 @@ See also:
  * [Tabris API Documentation](api/Crypto.md)
  * [MDN API Documentation](https://developer.mozilla.org/en/docs/Web/API/RandomSource/getRandomValues)
  * [W3C Standard](https://w3c.github.io/webcrypto/#crypto-interface)
- * [<span class='language jsx'>JSX</span>Example Snippet](${doc:crypto.jsx)

@@ -2,7 +2,7 @@
 ---
 # Debugging Tabris.js
 
-Tabris.js provides a global [`console`](./api/console.md) object with various useful logging functions including `console.trace()`. The [developer console](./developer-app.md#the-developer-tools) also allows entering javascript commands at runtime, as does the CLI using the `-i` switch, e.g. `tabris serve -i`. Since the tabris module exports are available as a global object the application state can be inspected. For example:
+Tabris.js provides a global [`console`](./api/Console.md) object with various useful logging functions including `console.trace()`. The [developer console](./developer-app.md#the-developer-tools) also allows entering javascript commands at runtime, as does the CLI using the `-i` switch, e.g. `tabris serve -i`. Since the tabris module exports are available as a global object the application state can be inspected. For example:
 
 Print the app version:
 ```

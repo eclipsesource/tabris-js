@@ -64,7 +64,7 @@ Create a separate directory dedicated to your resource dictionaries. The example
 
 If your project has a `tsconfig.json` or `jsconfig.json` make sure it contains the compiler option `"resolveJsonModule": true`. This makes it possible to consume the _.json_ files as modules without loosing type safety.
 
-The `index.js` (or `index.ts`) module will take care of converting the raw data to resources dictionaries and exporting them from the `resources` directory. (Hint: A file named "index.js" allows [treating an entire directory as a single module](https://nodejs.org/api/modules.html#modules_folders_as_modules).) An example for this can be found [here](${doc:snippets}/resources/index.ts).
+The `index.js` (or `index.ts`) module will take care of converting the raw data to resources dictionaries and exporting them from the `resources` directory. (Hint: A file named "index.js" allows [treating an entire directory as a single module](https://nodejs.org/api/modules.html#modules_folders_as_modules).) An example for this can be found [here](${doc:snippetsUrl}/resources/index.ts).
 
 > Note: You don't need to follow this exact layout of course, but it is the assumed configuration used in all examples below.
 
@@ -258,7 +258,7 @@ An object with exactly two entries "android" and "ios". Example:
 
 ### Language Selector
 
-An object with two or more keys that are [RFC 4646](http://tools.ietf.org/html/rfc4646) compliant language tags. Region subtags such as "en-us" are supported but optional. The entry that best matches the current value of `device.language` will be selected, so an entry of `'en'` matches both `'en-us'` and `'en-gb'`, while `'en-us'` only matches itself.
+An object with two or more keys that are [RFC 4646](https://www.ietf.org/rfc/rfc4646.txt) compliant language tags. Region subtags such as "en-us" are supported but optional. The entry that best matches the current value of `device.language` will be selected, so an entry of `'en'` matches both `'en-us'` and `'en-gb'`, while `'en-us'` only matches itself.
 
 Every language selector requires requires at least one entry that matches the current designated "fallback language", which is defined in the root of the data object by the entry "$fallbackLanguage". If no such fallback is defined it defaults to "en".
 

@@ -257,7 +257,7 @@ __The scope includes the widget it is called on__:
 page.apply({':host': {background: 'green'}}); // same as "page.background = green";
 ```
 
-When using [declarative UI](./declarative-ui.md#using-apply) syntax \"apply\" is a special attribute that calls this function.
+When using [declarative UI](./functional-components.md#using-apply) syntax \"apply\" is a special attribute that calls this function.
 
 ```js
 Composite({

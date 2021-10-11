@@ -131,9 +131,9 @@ tabris.drawer.append(
 
 ## Popups
 
-Popups are floating on top of your main UI and are specialized for specific use cases. All popup types are direct subclasses of [`tabris.Popup`](./api/popup.md) and can be created by calling their constructor (if public), or using [JSX](./declarative-ui.md) elements.
+Popups are floating on top of your main UI and are specialized for specific use cases. All popup types are direct subclasses of [`tabris.Popup`](./api/Popup.md) and can be created by calling their constructor (if public), or using [JSX](./declarative-ui.md) elements.
 
-Unlike widgets they do not need a parent to be visible. Instead they are made visible by calling `open()` on the [instance](./api/popup.md#open) or the static open method provided directly on the class, e.g. `AlertDialog.open(...)`. The latter is meant to be used with inline-JSX, e.g.:
+Unlike widgets they do not need a parent to be visible. Instead they are made visible by calling `open()` on the [instance](./api/Popup.md#open) or the static open method provided directly on the class, e.g. `AlertDialog.open(...)`. The latter is meant to be used with inline-JSX, e.g.:
 
 ```jsx
 const dialog = AlertDialog.open(

@@ -2,7 +2,7 @@
 ---
 # Functional Components
 
-A functional component is a function that can be used [as a JSX element or plain widget factory](./declarative-ui-md). Such a function needs to fulfill the following requirements:
+A functional component is a function that can be used [as a JSX element or plain widget factory](./declarative-ui.md). Such a function needs to fulfill the following requirements:
 
 * Name starts with an upper case.
 * Takes an "attributes" object as the first parameter.
@@ -13,7 +13,7 @@ Self-running example snippets can for different setups be found here:
 * [Pure JavaScript](${doc:functional-js-components.js})
 * [Pure TypeScript](${doc:functional-js-components-typescript.ts})
 * [JavaScript/JSX](${doc:functional-jsx-components.jsx})
-* [TypeScript/JSX](${doc:functional-jsx-components-typescript.jsx})
+* [TypeScript/JSX](${doc:functional-jsx-components-typescript.tsx})
 
 ## Basics
 
@@ -152,7 +152,7 @@ function PersonDataView(attributes: Attributes<Widget, Person>) {
 
 The [`apply`](./selector.md#compositeapply) method/attribute can set computed attributes of several widgets simultaneously in response to a property change. This makes is ideal for functional components that consist of a composite with children.
 
-To do this it must be given a callback that returns a ${doc:RuleSet} that may be derived from the widget's state. When using the [`apply`](./selector.md#compositeapply) attribute or [`<Apply>`]({doc:ApplyUrl}) element the callback will be invoked whenever the a widget property emits one ore more change events as described [here](./api/Observable.md#mutationssource).
+To do this it must be given a callback that returns a ${doc:RuleSet} that may be derived from the widget's state. When using the [`apply`](./selector.md#compositeapply) attribute or [`<Apply>`](./api/Setter.md#apply) element the callback will be invoked whenever the a widget property emits one ore more change events as described [here](./api/Observable.md#mutationssource).
 
 Example in **JavaScript** using the `apply` attribute:
 
@@ -191,7 +191,7 @@ function ComposedComponent(attr: Attributes<Widget, Person>) {
 }
 ```
 
-When calling `apply` on the instance it's default behavior is different compared to the `apply` attribute. If you want to use it to create a dynamic component please read the detailed documentation [here](./selector.md#composite-apply)
+When calling `apply` on the instance it's default behavior is different compared to the `apply` attribute. If you want to use it to create a dynamic component please read the detailed documentation [here](./selector.md#compositeapply)
 
 ### Usage
 

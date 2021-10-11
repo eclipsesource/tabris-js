@@ -310,9 +310,9 @@ After a widget has been disposed `isDisposed()` returns `true` while almost all 
 
 ## Custom Components
 
-Custom components are user-defined subclasses of [`Composite`](./api/composite.md) (or other [`Component`](./api/composite.md) subclasses such as [`Page`](./api/Page.md) and [`Tab`](./api/composite.md)). They are composed of built-in widgets (or other custom components) to form a discrete part of the UI which can then be used (and re-used) to form the application UI as a whole. Custom components can define new properties and events for interaction with other parts of the application.
+Custom components are user-defined subclasses of [`Composite`](./api/Composite.md) (or other [`Component`](./api/Composite.md) subclasses such as [`Page`](./api/Page.md) and [`Tab`](./api/Composite.md)). They are composed of built-in widgets (or other custom components) to form a discrete part of the UI which can then be used (and re-used) to form the application UI as a whole. Custom components can define new properties and events for interaction with other parts of the application.
 
-Typically a custom component creates its own children in its constructor and "hides" them from the public API by [overriding the `children` method](./selector.md#encapsulation) or applying the [`@component`](./databinding/@component.md) decorator (TypeScript only). The children are then modified using the protected selector API (e.g. [`_find`](./api/composite.md#_findselector)) as a reaction to property changes.
+Typically a custom component creates its own children in its constructor and "hides" them from the public API by [overriding the `children` method](./selector.md#encapsulation) or applying the [`@component`](./databinding/@component.md) decorator (TypeScript only). The children are then modified using the protected selector API (e.g. [`_find`](./api/Composite.md#_findselector)) as a reaction to property changes.
 
 A custom component with a custom `text` property and custom event `myEvent` may look like this in plain JavaScript:
 

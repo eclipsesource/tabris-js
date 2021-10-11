@@ -311,7 +311,7 @@ class DocumentationGenerator {
         const href = this.typeLinks[varName.slice(0, -3)].href;
         return href.startsWith('http') ? href : apiDir + href;
       }
-      if (/^[a-z-]+.[jt]sx?$/.test(varName) || /^[a-z]+.json?$/.test(varName)) {
+      if (/^[a-z-]+\.[jt]sx?$/.test(varName) || /^[a-z]+\.json?$/.test(varName)) {
         return this.renderGithubUrl({repo: 'tabris', snippet: varName});
       }
       if (/^[a-z-]+$/.test(varName)) {
@@ -337,7 +337,9 @@ class DocumentationGenerator {
         .map(render)
         .join('\n');
     });
+    console.log('render TOC:');
     const text = fs.readFileSync(tocFile, 'utf-8').replace(/<%=\s*(\S+)\s*%>/g, (_, word) => content[word]);
+    console.log(text);
     fs.writeFileSync(tocFile, text);
   }
 

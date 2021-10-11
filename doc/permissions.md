@@ -39,7 +39,7 @@ When defining an Android permission make sure to make the `'android'` xml-namesp
 
 To request a permission you can either use a cross-platform supported _permission category_ or a _concrete permission_ on Android. The list of supported categories can be found below.
 
-Since the native Android platform does not support to request a broad set of permissions by category, Tabris.js maps the category to a set of concrete permissions. The applied mapping matches the Android [permission group documentation](https://developer.android.com/guide/topics/permissions/overview#perm-groups). Note that requesting a [dangerous permission](https://developer.android.com/guide/topics/permissions/overview#dangerous_permissions) in an Android permission group implicitly grants you access to other permissions in the same group.
+Since the native Android platform does not support to request a broad set of permissions by category, Tabris.js maps the category to a set of concrete permissions. The applied mapping matches the Android [permission group documentation](https://developer.android.com/guide/topics/manifest/permission-group-element). Note that requesting a [dangerous permission](https://developer.android.com/guide/topics/permissions/overview#dangerous_permissions) in an Android permission group implicitly grants you access to other permissions in the same group.
 
 The concrete Android permissions are string based, which allows to request any permission by its name, even when they are not listed below.
 

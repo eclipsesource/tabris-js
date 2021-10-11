@@ -71,7 +71,7 @@ Imperative|`new Composite().apply(rules)`
 Factory|`Composite({apply: rules})`
 JSX|`<Composite><Apply>{rules}</Composite></Apply>`
 
-> :point_right: Listeners registered via declarative UI become "attached" listeners. There can only ever be one attached listener per type on each widget. This is rarely a relevant difference, with one exception: The [`apply`](#using-apply) method also registers "attached" listeners, meaning it can de-register any listener that was registered with JSX or factory API to register a new one.
+> :point_right: Listeners registered via declarative UI become "attached" listeners. There can only ever be one attached listener per type on each widget. This is rarely a relevant difference, with one exception: The [`apply`](./selector.md#compositeapply) method also registers "attached" listeners, meaning it can de-register any listener that was registered with JSX or factory API to register a new one.
 
 ## JSX specifics
 
