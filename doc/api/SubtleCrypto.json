@@ -13,21 +13,277 @@
         {
           "name": "algorithm",
           "type": {
-            "union": ["'SHA-1'", "'SHA-256'", "'SHA-384'", "'SHA-512'"]
+            "union": [
+              "'SHA-1'",
+              "'SHA-256'",
+              "'SHA-384'",
+              "'SHA-512'"
+            ]
           },
           "description": "A string defining the hash function to use."
         },
         {
           "name": "data",
           "type": {
-            "union": ["TypedArray", "ArrayBuffer"]
+            "union": [
+              "TypedArray",
+              "ArrayBuffer"
+            ]
           },
           "description": "The data to be digested."
         }
       ],
       "returns": {
         "interface": "Promise",
-        "generics": ["ArrayBuffer"]
+        "generics": [
+          "ArrayBuffer"
+        ]
+      }
+    },
+    "deriveKey": {
+      "description": "Takes a master key and derives a secret key from it using the given algorithm. Currently only supports the Elliptic Curve Diffie-Hellman (ECDH) algorithm.",
+      "parameters": [
+        {
+          "name": "algorithm",
+          "type": {
+            "map": {
+              "name": {
+                "type": "'ECDH'"
+              },
+              "namedCurve": {
+                "type": "'P-256'"
+              },
+              "public": {
+                "type": "CryptoKey"
+              }
+            }
+          }
+        },
+        {
+          "name": "baseKey",
+          "type": "CryptoKey"
+        },
+        {
+          "name": "derivedKeyAlgorithm",
+          "type": {
+            "map": {
+              "name": {
+                "type": "'AES-GCM'"
+              },
+              "length": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        {
+          "name": "extractable",
+          "type": "boolean"
+        },
+        {
+          "name": "keyUsages",
+          "type": "string[]"
+        }
+      ],
+      "returns": {
+        "interface": "Promise",
+        "generics": [
+          "CryptoKey"
+        ]
+      }
+    },
+    "importKey": {
+      "description": "Takes an external key in a portable format and returns a CryptoKey object that can be used with the SubtleCrypto API. Currently only supports the Elliptic Curve Diffie-Hellman (ECDH) algorithm. Keys may be in spki or pkcs8 format.",
+      "parameters": [
+        {
+          "name": "format",
+          "type": {
+            "union": ["'spki'", "'pkcs8'"]
+          }
+        },
+        {
+          "name": "keyData",
+          "type": {
+            "union": ["ArrayBuffer", "TypedArray"]
+          }
+        },
+        {
+          "name": "algorithm",
+          "type": {
+            "map": {
+              "name": {
+                "type": "'ECDH'"
+              },
+              "namedCurve": {
+                "type": "'P-256'"
+              }
+            }
+          }
+        },
+        {
+          "name": "extractable",
+          "type": "boolean"
+        },
+        {
+          "name": "keyUsages",
+          "type": "string[]"
+        }
+      ],
+      "returns": {
+        "interface": "Promise",
+        "generics": [
+          "CryptoKey"
+        ]
+      }
+    },
+    "generateKey": {
+      "description": "Generates new keys. Currently only supports the Elliptic Curve Diffie-Hellman (ECDH) algorithm to generate key pairs.",
+      "parameters": [
+        {
+          "name": "algorithm",
+          "type": {
+            "map": {
+              "name": {
+                "type": "'ECDH'"
+              },
+              "namedCurve": {
+                "type": "'P-256'"
+              }
+            }
+          }
+        },
+        {
+          "name": "extractable",
+          "type": "boolean"
+        },
+        {
+          "name": "keyUsages",
+          "type": "string[]"
+        }
+      ],
+      "returns": {
+        "interface": "Promise",
+        "generics": [
+          {
+            "map": {
+              "privateKey": {"type": "CryptoKey"},
+              "publicKey": {"type": "CryptoKey"}
+            }
+          }
+        ]
+      }
+    },
+    "decrypt": {
+      "description": "Decrypts the given raw data. Currently only supports the AES-GCM algorithm.",
+      "parameters": [
+        {
+          "name": "algorithm",
+          "type": {
+            "map": {
+              "name": {
+                "type": "'AES-GCM'"
+              },
+              "iv": {
+                "type": {
+                  "union": [
+                    "ArrayBuffer",
+                    "TypedArray"
+                  ]
+                }
+              },
+              "tagLength": {
+                "type": "number",
+                "optional": true
+              }
+            }
+          }
+        },
+        {
+          "name": "key",
+          "type": "CryptoKey"
+        },
+        {
+          "name": "data",
+          "type": {
+            "union": [
+              "ArrayBuffer",
+              "TypedArray"
+            ]
+          }
+        }
+      ],
+      "returns": {
+        "interface": "Promise",
+        "generics": [
+          "ArrayBuffer"
+        ]
+      }
+    },
+    "encrypt": {
+      "description": "Encrypts the given raw data. Currently only supports the AES-GCM algorithm.",
+      "parameters": [
+        {
+          "name": "algorithm",
+          "type": {
+            "map": {
+              "name": {
+                "type": "'AES-GCM'"
+              },
+              "iv": {
+                "type": {
+                  "union": [
+                    "ArrayBuffer",
+                    "TypedArray"
+                  ]
+                }
+              },
+              "tagLength": {
+                "type": "number",
+                "optional": true
+              }
+            }
+          }
+        },
+        {
+          "name": "key",
+          "type": "CryptoKey"
+        },
+        {
+          "name": "data",
+          "type": {
+            "union": [
+              "ArrayBuffer",
+              "TypedArray"
+            ]
+          }
+        }
+      ],
+      "returns": {
+        "interface": "Promise",
+        "generics": [
+          "ArrayBuffer"
+        ]
+      }
+    },
+    "exportKey": {
+      "description": "Converts a CryptoKey instances into a portable format. To export a key, the key must have extractable set to true. Supports the spki format or raw bytes.",
+      "parameters": [
+        {
+          "name": "format",
+          "type": {
+            "union": ["'raw'", "'spki'"]
+          }
+        },
+        {
+          "name": "key",
+          "type": "CryptoKey"
+        }
+      ],
+      "returns": {
+        "interface": "Promise",
+        "generics": [
+          "ArrayBuffer"
+        ]
       }
     }
   }

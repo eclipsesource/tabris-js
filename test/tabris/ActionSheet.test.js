@@ -70,7 +70,7 @@ describe('ActionSheet', () => {
       actionSheet.actions = [{style: 'foo'}];
 
       expect(console.warn).to.have.been.calledWithMatch(
-        /style must be "default", "cancel" or "destructive"", got "foo"/
+        /style must be "default", "cancel" or "destructive", got "foo"/
       );
       expect(actionSheet.actions).to.deep.equal([]);
     });

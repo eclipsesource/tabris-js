@@ -211,11 +211,11 @@ export function setBytes(blob, bytes) {
  */
 export function allowOnlyKeys(target, keys) {
   if (typeof target !== 'object') {
-    throw new Error(toValueString(target) + ' is not an object');
+    throw new TypeError(toValueString(target) + ' is not an object');
   }
   for (const key in target) {
     if (keys.indexOf(/** @type {U} */(key)) === -1) {
-      throw new Error(`${toValueString(target)} contains unexpected entry "${key}"`);
+      throw new TypeError(`${toValueString(target)} contains unexpected entry "${key}"`);
     }
   }
   return target;
@@ -229,8 +229,10 @@ export function allowOnlyKeys(target, keys) {
  */
 export function allowOnlyValues(value, allowed, valueName = 'Value') {
   if (allowed && allowed.indexOf(value) === -1) {
-    const expected = `"${allowed.slice(0, -1).join('", "')}" or "${allowed.slice(-1)}"`;
-    throw new Error(`${valueName} must be ${expected}", got ${toValueString(value)}`);
+    const expected = allowed.length === 1
+      ? `"${allowed}"`
+      : `"${allowed.slice(0, -1).join('", "')}" or "${allowed.slice(-1)}"`;
+    throw new TypeError(`${valueName} must be ${expected}, got ${toValueString(value)}`);
   }
   return value;
 }
@@ -249,6 +251,24 @@ export function setNativeObject(object, nativeObject) {
  */
 export function getNativeObject(object) {
   return object instanceof Object ? object[nativeObjectSym] : null;
+}
+
+/**
+ * @param {object} object
+ * @returns {string}
+ */
+export function getCid(object) {
+  return getNativeObject(object).cid;
+}
+
+/**
+ * @param {ArrayBuffer | ArrayLike<number>} data
+ * @returns {ArrayBuffer}
+ */
+export function getBuffer(object) {
+  return object instanceof ArrayBuffer
+    ? object
+    : ArrayBuffer.isView(object) ? object.buffer : null;
 }
 
 /**

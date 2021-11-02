@@ -1,5 +1,8 @@
 import NativeObject from './NativeObject';
 import {toValueString} from './Console';
+import CryptoKey, {_CryptoKey} from './CryptoKey';
+import {allowOnlyKeys, allowOnlyValues, getBuffer, getCid, getNativeObject} from './util';
+import checkType from './checkType';
 
 export type TypedArray = Int8Array | Uint8Array | Uint8ClampedArray
   | Int16Array | Uint16Array | Int32Array | Uint32Array;
@@ -20,7 +23,11 @@ export default class Crypto {
     if (arguments.length === 0) {
       throw new Error('Not enough arguments to Crypto.getRandomValues');
     }
-    if (!isIntArray(typedArray)) {
+    if (
+      !ArrayBuffer.isView(typedArray)
+      || typedArray instanceof Float32Array
+      || typedArray instanceof Float64Array
+    ) {
       throw new Error(`Argument ${toValueString(typedArray)} is not an accepted array type`);
     }
     return this._nativeObject.getRandomValues(typedArray);
@@ -47,12 +54,151 @@ class SubtleCrypto {
     if (!validAlgorithms.has(algorithm)) {
       return Promise.reject(new TypeError(`Algorithm: Unrecognized name ${algorithm}`));
     }
-    if (!isIntArray(data) && !(data instanceof ArrayBuffer)) {
+    if (!getBuffer(data)) {
       return Promise.reject(new TypeError(`Argument ${toValueString(data)} is not an accepted array type`));
     }
     return new Promise(
       (resolve, reject) => this._nativeObject.subtleDigest({algorithm, data, resolve, reject})
     );
+  }
+
+  async importKey(
+    format: string,
+    keyData: ArrayBuffer | TypedArray,
+    algorithm: {name: string, namedCurve: string},
+    extractable: boolean,
+    keyUsages: string[]
+  ): Promise<CryptoKey> {
+    if (arguments.length !== 5) {
+      throw new TypeError(`Expected 5 arguments, got ${arguments.length}`);
+    }
+    allowOnlyValues(format, ['spki', 'pkcs8'], 'format');
+    checkType(getBuffer(keyData), ArrayBuffer, {name: 'keyData'});
+    allowOnlyKeys(algorithm, ['name', 'namedCurve']);
+    allowOnlyValues(algorithm.name, ['ECDH'], 'algorithm.name');
+    allowOnlyValues(algorithm.namedCurve, ['P-256'], 'algorithm.namedCurve');
+    checkType(extractable, Boolean, {name: 'extractable'});
+    checkType(keyUsages, Array, {name: 'keyUsages'});
+    const nativeObject = new _CryptoKey();
+    await nativeObject.import(format, keyData, algorithm, extractable, keyUsages);
+    return new CryptoKey(nativeObject, {
+      algorithm,
+      extractable,
+      usages: Object.freeze(keyUsages.concat())
+    });
+  }
+
+  async deriveKey(
+    algorithm: {name: string, namedCurve: string, public: CryptoKey},
+    baseKey: CryptoKey,
+    derivedKeyAlgorithm: {name: string, length: number},
+    extractable: boolean,
+    keyUsages: string[]
+  ): Promise<CryptoKey> {
+    if (arguments.length !== 5) {
+      throw new TypeError(`Expected 5 arguments, got ${arguments.length}`);
+    }
+    allowOnlyKeys(algorithm, ['name', 'namedCurve', 'public']);
+    allowOnlyValues(algorithm.name, ['ECDH'], 'algorithm.name');
+    allowOnlyValues(algorithm.namedCurve, ['P-256'], 'algorithm.namedCurve');
+    checkType(algorithm.public, CryptoKey, {name: 'algorithm.public'});
+    allowOnlyKeys(derivedKeyAlgorithm, ['name', 'length']);
+    allowOnlyValues(derivedKeyAlgorithm.name, ['AES-GCM'], 'derivedKeyAlgorithm.name');
+    checkType(derivedKeyAlgorithm.length, Number, {name: 'derivedKeyAlgorithm.length'});
+    checkType(baseKey, CryptoKey, {name: 'baseKey'});
+    checkType(extractable, Boolean, {name: 'extractable'});
+    checkType(keyUsages, Array, {name: 'keyUsages'});
+    const nativeObject = new _CryptoKey();
+    await nativeObject.derive(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages);
+    return new CryptoKey(nativeObject, {
+      algorithm,
+      extractable,
+      type: 'secret',
+      usages: Object.freeze(keyUsages.concat())
+    });
+  }
+
+  async decrypt(
+    algorithm: {
+      name: string,
+      iv: ArrayBuffer | TypedArray,
+      tagLength?: number
+    },
+    key: CryptoKey,
+    data: ArrayBuffer | TypedArray
+  ): Promise<ArrayBuffer> {
+    if (arguments.length !== 3) {
+      throw new TypeError(`Expected 3 arguments, got ${arguments.length}`);
+    }
+    allowOnlyKeys(algorithm, ['name', 'iv', 'tagLength']);
+    allowOnlyValues(algorithm.name, ['AES-GCM'], 'algorithm.name');
+    checkType(algorithm.tagLength, Number, {name: 'algorithm.tagLength', nullable: true});
+    checkType(getBuffer(algorithm.iv), ArrayBuffer, {name: 'algorithm.iv'});
+    checkType(key, CryptoKey, {name: 'key'});
+    checkType(getBuffer(data), ArrayBuffer, {name: 'data'});
+    return new Promise((onSuccess, onReject) =>
+      this._nativeObject.subtleDecrypt(algorithm, key, data, onSuccess, onReject)
+    );
+  }
+
+  async encrypt(
+    algorithm: {
+      name: string,
+      iv: ArrayBuffer | TypedArray,
+      tagLength?: number
+    },
+    key: CryptoKey,
+    data: ArrayBuffer | TypedArray
+  ): Promise<ArrayBuffer> {
+    if (arguments.length !== 3) {
+      throw new TypeError(`Expected 3 arguments, got ${arguments.length}`);
+    }
+    allowOnlyKeys(algorithm, ['name', 'iv', 'tagLength']);
+    allowOnlyValues(algorithm.name, ['AES-GCM'], 'algorithm.name');
+    checkType(algorithm.tagLength, Number, {name: 'algorithm.tagLength', nullable: true});
+    checkType(getBuffer(algorithm.iv), ArrayBuffer, {name: 'algorithm.iv'});
+    checkType(key, CryptoKey, {name: 'key'});
+    checkType(getBuffer(data), ArrayBuffer, {name: 'data'});
+    return new Promise((onSuccess, onReject) =>
+      this._nativeObject.subtleEncrypt(algorithm, key, data, onSuccess, onReject)
+    );
+  }
+
+  async exportKey(
+    format: 'raw' | 'spki',
+    key: CryptoKey
+  ): Promise<ArrayBuffer> {
+    if (arguments.length !== 2) {
+      throw new TypeError(`Expected 2 arguments, got ${arguments.length}`);
+    }
+    allowOnlyValues(format, ['raw', 'spki'], 'format');
+    checkType(key, CryptoKey, {name: 'key'});
+    return new Promise((onSuccess, onReject) =>
+      this._nativeObject.subtleExportKey(format, key, onSuccess, onReject)
+    );
+  }
+
+  async generateKey(
+    algorithm: {name: 'ECDH', namedCurve: 'P-256'},
+    extractable: boolean,
+    keyUsages: string[]
+  ): Promise<{privateKey: CryptoKey, publicKey: CryptoKey}> {
+    if (arguments.length !== 3) {
+      throw new TypeError(`Expected 3 arguments, got ${arguments.length}`);
+    }
+    allowOnlyKeys(algorithm, ['name', 'namedCurve']);
+    allowOnlyValues(algorithm.name, ['ECDH'], 'algorithm.name');
+    allowOnlyValues(algorithm.namedCurve, ['P-256'], 'algorithm.namedCurve');
+    checkType(extractable, Boolean, {name: 'extractable'});
+    checkType(keyUsages, Array, {name: 'keyUsages'});
+    const nativeObject = new _CryptoKey();
+    await nativeObject.generate(algorithm, extractable, keyUsages);
+    const nativePrivate = new _CryptoKey(nativeObject, 'private');
+    const nativePublic = new _CryptoKey(nativeObject, 'public');
+    return {
+      privateKey: new CryptoKey(nativePrivate, {algorithm, extractable}),
+      publicKey: new CryptoKey(nativePublic, {algorithm, extractable})
+    };
   }
 
 }
@@ -72,7 +218,7 @@ class NativeCrypto extends NativeObject {
     return 'tabris.Crypto';
   }
 
-  getRandomValues(typedArray: TypedArray) {
+  getRandomValues(typedArray: ArrayBufferView) {
     const byteLength = typedArray.byteLength;
     const values = new Uint8Array(
       this._nativeCall('getRandomValues', {byteLength}) as ArrayBuffer
@@ -103,14 +249,68 @@ class NativeCrypto extends NativeObject {
     });
   }
 
-}
+  subtleDecrypt(
+    algorithm: {
+      name: string,
+      iv: ArrayBuffer | TypedArray,
+      tagLength?: number
+    },
+    key: CryptoKey,
+    data: ArrayBuffer | TypedArray,
+    onSuccess: (buffer: ArrayBuffer) => any,
+    onError: (ex: Error) => any
+  ): void {
+    const {name, iv, tagLength} = algorithm;
+    this._nativeCall('subtleDecrypt', {
+      algorithm: {
+        name,
+        iv: getBuffer(iv),
+        tagLength: isNaN(tagLength as number) ? 128 : tagLength
+      },
+      key: getNativeObject(key).cid,
+      data: ArrayBuffer.isView(data) ? data.buffer : data,
+      onSuccess,
+      onError: (reason: unknown) => onError(new Error(String(reason)))
+    });
+  }
 
-function isIntArray(value: unknown): value is TypedArray {
-  return (value instanceof Int8Array) ||
-         (value instanceof Uint8Array) ||
-         (value instanceof Uint8ClampedArray) ||
-         (value instanceof Int16Array) ||
-         (value instanceof Uint16Array) ||
-         (value instanceof Int32Array) ||
-         (value instanceof Uint32Array);
+  subtleExportKey(
+    format: string,
+    key: CryptoKey,
+    onSuccess: (value: ArrayBuffer) => void,
+    onError: (ex: any) => void
+  ): void {
+    this._nativeCall('subtleExportKey', {
+      format,
+      key: getCid(key),
+      onSuccess,
+      onError: (reason: unknown) => onError(new Error(String(reason)))
+    });
+  }
+
+  subtleEncrypt(
+    algorithm: {
+      name: string,
+      iv: ArrayBuffer | TypedArray,
+      tagLength?: number
+    },
+    key: CryptoKey,
+    data: ArrayBuffer | TypedArray,
+    onSuccess: (value: ArrayBuffer) => void,
+    onError: (ex: any) => void
+  ): void {
+    const {name, iv, tagLength} = algorithm;
+    this._nativeCall('subtleEncrypt', {
+      algorithm: {
+        name,
+        iv: getBuffer(iv),
+        tagLength: isNaN(tagLength as number) ? 128 : tagLength
+      },
+      key: getCid(key),
+      data: getBuffer(data),
+      onSuccess,
+      onError: (reason: unknown) => onError(new Error(String(reason)))
+    });
+  }
+
 }

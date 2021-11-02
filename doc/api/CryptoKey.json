@@ -1,0 +1,40 @@
+{
+  "category": "service",
+  "namespace": "global",
+  "type": "CryptoKey",
+  "constructor": {
+    "access": "private"
+  },
+  "description": "Represents an in-memory cryptographic key to be used with the ${doc:SubtleCrypto} API.",
+  "properties": {
+    "type": {
+      "readonly": true,
+      "const": true,
+      "type": {
+        "union": ["'secret'", "'private'", "'public'"]
+      }
+    },
+    "extractable": {
+      "type": "boolean"
+    },
+    "algorithm": {
+      "readonly": true,
+      "const": true,
+      "type": {
+        "map": {
+          "name": {
+            "type": "'ECDH'"
+          },
+          "namedCurve": {
+            "type": "'P-256'"
+          }
+        }
+      }
+    },
+    "usages": {
+      "readonly": true,
+      "const": true,
+      "type": "string[]"
+    }
+  }
+}

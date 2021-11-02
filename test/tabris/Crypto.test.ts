@@ -2,6 +2,8 @@ import {expect, match, mockTabris, stub} from '../test';
 import ClientMock from './ClientMock';
 import Crypto, {TypedArray} from '../../src/tabris/Crypto';
 import {SinonStub} from 'sinon';
+import CryptoKey, {_CryptoKey} from '../../src/tabris/CryptoKey';
+import {getCid} from '../../src/tabris/util';
 
 describe('Crypto', function() {
 
@@ -201,6 +203,702 @@ describe('Crypto', function() {
       client.call.callsFake((id, method, args) => args.onSuccess('foo'));
       return expect(crypto.subtle.digest('SHA-384', data)).to.eventually.have.been
         .rejectedWith(TypeError, 'Internal Type Error: result is not valid ArrayBuffer');
+    });
+
+  });
+
+  describe('subtle.deriveKey()', function() {
+
+    let publicKey: CryptoKey;
+    let baseKey: CryptoKey;
+    let params: Parameters<typeof crypto.subtle.deriveKey>;
+
+    async function deriveKey(cb?: (nativeParams: any) => void) {
+      const promise = crypto.subtle.deriveKey.apply(crypto.subtle, params);
+      cb?.call(null, client.calls({op: 'call', method: 'derive'})[0].parameters);
+      return promise as Promise<CryptoKey>;
+    }
+
+    beforeEach(function() {
+      publicKey = new CryptoKey(new _CryptoKey(), {});
+      baseKey = new CryptoKey(new _CryptoKey(), {});
+      client.resetCalls();
+      params = [
+        {
+          name: 'ECDH',
+          namedCurve: 'P-256',
+          public: publicKey
+        },
+        baseKey,
+        {
+          name: 'AES-GCM',
+          length: 123
+        },
+        true,
+        ['foo', 'bar']
+      ];
+    });
+
+    it('CREATEs native CryptoKey', async function() {
+      await deriveKey(param => param.onSuccess());
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(1);
+    });
+
+    it('CALLs derive', async function() {
+      await deriveKey(param => param.onSuccess());
+
+      const id = client.calls({op: 'create', type: 'tabris.CryptoKey'})[0].id;
+      const deriveCall = client.calls({op: 'call', method: 'derive', id})[0];
+      expect(deriveCall.parameters).to.deep.include({
+        algorithm: {
+          name: 'ECDH',
+          namedCurve: 'P-256',
+          public: getCid(publicKey)
+        },
+        baseKey: getCid(baseKey),
+        derivedKeyAlgorithm: {
+          name: 'AES-GCM',
+          length: 123
+        },
+        extractable: true,
+        keyUsages: ['foo', 'bar']
+      });
+    });
+
+    it('returns CryptoKey', async function() {
+      const key = await deriveKey(param => param.onSuccess());
+      const id = client.calls({op: 'create', type: 'tabris.CryptoKey'})[0].id;
+      expect(key).to.be.instanceOf(CryptoKey);
+      expect(getCid(key)).to.equal(id);
+      expect(key.algorithm).to.deep.equal({
+        name: 'ECDH',
+        namedCurve: 'P-256',
+        public: publicKey
+      });
+      expect(key.extractable).to.be.true;
+      expect(key.type).to.equal('secret');
+      expect(key.usages).to.deep.equal(['foo', 'bar']);
+    });
+
+    it('propagates rejection and disposes CryptoKey', async function() {
+      await expect(deriveKey(param => param.onError('fooerror')))
+        .rejectedWith(Error, 'fooerror');
+      const {id} = client.calls({op: 'create', type: 'tabris.CryptoKey'})[0];
+      expect(client.calls({op: 'destroy', id}));
+    });
+
+    it('checks parameter length', async function() {
+      params.pop();
+      await expect(deriveKey())
+        .rejectedWith(TypeError, 'Expected 5 arguments, got 4');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks algorithm keys', async function() {
+      (params[2] as any).foo = 'bar';
+      await expect(deriveKey())
+        .rejectedWith(TypeError, /contains unexpected entry "foo"/);
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks derivedKeyAlgorithm keys', async function() {
+      (params[0] as any).foo = 'bar';
+      await expect(deriveKey())
+        .rejectedWith(TypeError, /contains unexpected entry "foo"/);
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks baseKey', async function() {
+      params[1] = null;
+      await expect(deriveKey())
+        .rejectedWith(TypeError, 'Expected baseKey to be of type CryptoKey, got null');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks usages', async function() {
+      params[4] = null;
+      await expect(deriveKey())
+        .rejectedWith(TypeError, 'Expected keyUsages to be an array, got null');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks extractable', async function() {
+      params[3] = null;
+      await expect(deriveKey())
+        .rejectedWith(TypeError, 'Expected extractable to be a boolean, got null');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks algorithm.name', async function() {
+      params[0].name = 'foo';
+      await expect(deriveKey())
+        .rejectedWith(TypeError, 'algorithm.name must be "ECDH", got "foo"');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks algorithm.namedCurve', async function() {
+      params[0].namedCurve = 'foo';
+      await expect(deriveKey())
+        .rejectedWith(TypeError, 'algorithm.namedCurve must be "P-256", got "foo"');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks algorithm.public', async function() {
+      params[0].public = null;
+      await expect(deriveKey())
+        .rejectedWith(TypeError, 'Expected algorithm.public to be of type CryptoKey, got null');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks derivedKeyAlgorithm.name', async function() {
+      params[2].name = 'foo';
+      await expect(deriveKey())
+        .rejectedWith(TypeError, 'derivedKeyAlgorithm.name must be "AES-GCM", got "foo"');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks derivedKeyAlgorithm.length', async function() {
+      (params[2] as any).length = 'foo';
+      await expect(deriveKey())
+        .rejectedWith(TypeError, 'Expected derivedKeyAlgorithm.length to be a number, got string.');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+  });
+
+  describe('subtle.importKey()', function() {
+
+    let keyData: ArrayBuffer;
+    let params: Parameters<typeof crypto.subtle.importKey>;
+
+    async function importKey(cb?: (nativeParams: any) => void) {
+      const promise = crypto.subtle.importKey.apply(crypto.subtle, params);
+      cb?.call(null, client.calls({op: 'call', method: 'import'})[0].parameters);
+      return promise;
+    }
+
+    beforeEach(function() {
+      keyData = new ArrayBuffer(10);
+      client.resetCalls();
+      params = [
+        'spki',
+        keyData,
+        {
+          name: 'ECDH',
+          namedCurve: 'P-256'
+        },
+        true,
+        ['foo', 'bar']
+      ];
+    });
+
+    it('CREATEs native CryptoKey', async function() {
+      await importKey(param => param.onSuccess());
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(1);
+    });
+
+    it('CALLs import', async function() {
+      await importKey(param => param.onSuccess());
+
+      const id = client.calls({op: 'create', type: 'tabris.CryptoKey'})[0].id;
+      const importCall = client.calls({op: 'call', method: 'import', id})[0];
+      expect(importCall.parameters).to.deep.include({
+        format: 'spki',
+        keyData,
+        algorithm: {
+          name: 'ECDH',
+          namedCurve: 'P-256'
+        },
+        extractable: true,
+        keyUsages: ['foo', 'bar']
+      });
+    });
+
+    it('unwraps array buffer', async function() {
+      params[1] = new Uint8Array(keyData);
+      await importKey(param => param.onSuccess());
+
+      const id = client.calls({op: 'create', type: 'tabris.CryptoKey'})[0].id;
+      const importCall = client.calls({op: 'call', method: 'import', id})[0];
+      expect(importCall.parameters.keyData).to.equal(keyData);
+    });
+
+    it('returns CryptoKey', async function() {
+      const key = await importKey(param => param.onSuccess());
+      const id = client.calls({op: 'create', type: 'tabris.CryptoKey'})[0].id;
+      expect(key).to.be.instanceOf(CryptoKey);
+      expect(getCid(key)).to.equal(id);
+      expect(key.algorithm).to.deep.equal({
+        name: 'ECDH',
+        namedCurve: 'P-256'
+      });
+      expect(key.extractable).to.be.true;
+      expect(key.usages).to.deep.equal(['foo', 'bar']);
+    });
+
+    it('propagates rejection and disposes CryptoKey', async function() {
+      await expect(importKey(param => param.onError('fooerror')))
+        .rejectedWith(Error, 'fooerror');
+      const {id} = client.calls({op: 'create', type: 'tabris.CryptoKey'})[0];
+      expect(client.calls({op: 'destroy', id}));
+    });
+
+    it('checks parameter length', async function() {
+      params.pop();
+      await expect(importKey())
+        .rejectedWith(TypeError, 'Expected 5 arguments, got 4');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks format values', async function() {
+      params[0] = 'foo';
+      await expect(importKey())
+        .rejectedWith(TypeError, 'format must be "spki" or "pkcs8", got "foo"');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks keyData', async function() {
+      params[1] = null;
+      await expect(importKey())
+        .rejectedWith(TypeError, 'Expected keyData to be of type ArrayBuffer, got null');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks algorithm.name', async function() {
+      params[2].name = 'foo';
+      await expect(importKey())
+        .rejectedWith(TypeError, 'algorithm.name must be "ECDH", got "foo"');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks algorithm.namedCurve', async function() {
+      params[2].namedCurve = 'foo';
+      await expect(importKey())
+        .rejectedWith(TypeError, 'algorithm.namedCurve must be "P-256", got "foo"');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks extractable', async function() {
+      params[3] = null;
+      await expect(importKey())
+        .rejectedWith(TypeError, 'Expected extractable to be a boolean, got null');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks key usages', async function() {
+      params[4] = null;
+      await expect(importKey())
+        .rejectedWith(TypeError, 'Expected keyUsages to be an array, got null');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+  });
+
+  describe('subtle.exportKey()', function() {
+
+    let params: Parameters<typeof crypto.subtle.exportKey>;
+    let key: _CryptoKey;
+
+    async function exportKey(cb?: (nativeParams: any) => void) {
+      const promise = crypto.subtle.exportKey.apply(crypto.subtle, params);
+      const exportCall = client.calls({op: 'call', method: 'subtleExportKey'})[0];
+      cb?.call(null, exportCall?.parameters);
+      return promise;
+    }
+
+    beforeEach(function() {
+      client.resetCalls();
+      key = new _CryptoKey();
+      params = [
+        'spki',
+        new CryptoKey(key, {})
+      ];
+    });
+
+    it('CALLs exportKey', async function() {
+      await exportKey(param => param.onSuccess());
+
+      const exportCalls = client.calls({op: 'call', method: 'subtleExportKey'});
+      expect(exportCalls.length).to.equal(1);
+      expect(exportCalls[0].parameters).to.deep.include({
+        format: 'spki',
+        key: key.cid
+      });
+    });
+
+    it('returns data', async function() {
+      const data = new ArrayBuffer(3);
+      expect(await exportKey(param => param.onSuccess(data)))
+        .to.equal(data);
+    });
+
+    it('propagates rejection', async function() {
+      await expect(exportKey(param => param.onError('fooerror')))
+        .rejectedWith(Error, 'fooerror');
+    });
+
+    it('checks parameter length', async function() {
+      params.pop();
+      await expect(exportKey())
+        .rejectedWith(TypeError, 'Expected 2 arguments, got 1');
+      expect(client.calls({op: 'call', method: 'subtleExportKey'}).length).to.equal(0);
+    });
+
+    it('checks format values', async function() {
+      // @ts-ignore
+      params[0] = 'foo';
+      await expect(exportKey())
+        .rejectedWith(TypeError, 'format must be "raw" or "spki", got "foo"');
+      expect(client.calls({op: 'call', method: 'subtleExportKey'}).length).to.equal(0);
+    });
+
+    it('checks key', async function() {
+      params[1] = null;
+      await expect(exportKey())
+        .rejectedWith(TypeError, 'Expected key to be of type CryptoKey, got null');
+      expect(client.calls({op: 'call', method: 'subtleExportKey'}).length).to.equal(0);
+    });
+
+  });
+
+  describe('subtle.encrypt()', function() {
+
+    let params: Parameters<typeof crypto.subtle.encrypt>;
+    let iv: ArrayBuffer;
+    let data: ArrayBuffer;
+    let key: _CryptoKey;
+
+    async function encrypt(cb?: (nativeParams: any) => void) {
+      const promise = crypto.subtle.encrypt.apply(crypto.subtle, params);
+      cb?.call(null, client.calls({op: 'call', method: 'subtleEncrypt'})[0].parameters);
+      return promise;
+    }
+
+    beforeEach(function() {
+      iv = new ArrayBuffer(1);
+      data = new ArrayBuffer(10);
+      key = new _CryptoKey();
+      client.resetCalls();
+      params = [
+        {
+          name: 'AES-GCM',
+          iv,
+          tagLength: 23
+        },
+        new CryptoKey(key, {}),
+        data
+      ];
+    });
+
+    it('CALLs subtleEncrypt', async function() {
+      await encrypt(param => param.onSuccess());
+
+      const encryptCalls = client.calls({op: 'call', method: 'subtleEncrypt'});
+      expect(encryptCalls.length).to.equal(1);
+      expect(encryptCalls[0].parameters).to.deep.include({
+        algorithm: {
+          name: 'AES-GCM',
+          iv,
+          tagLength: 23
+        },
+        key: key.cid,
+        data
+      });
+    });
+
+    it('Unwraps array buffer', async function() {
+      params[0].iv = new Uint8Array(params[0].iv);
+      params[2] = new Uint8Array(params[2]);
+      await encrypt(param => param.onSuccess());
+
+      const encryptCalls = client.calls({op: 'call', method: 'subtleEncrypt'});
+      expect(encryptCalls.length).to.equal(1);
+      expect(encryptCalls[0].parameters).to.deep.include({
+        algorithm: {
+          name: 'AES-GCM',
+          iv,
+          tagLength: 23
+        },
+        data
+      });
+    });
+
+    it('returns encrypted data', async function() {
+      const encrypted = new ArrayBuffer(2);
+      expect(await encrypt(param => param.onSuccess(encrypted)))
+        .to.equal(encrypted);
+    });
+
+    it('propagates rejection', async function() {
+      await expect(encrypt(param => param.onError('fooerror')))
+        .rejectedWith(Error, 'fooerror');
+    });
+
+    it('checks parameter length', async function() {
+      params.pop();
+      await expect(encrypt())
+        .rejectedWith(TypeError, 'Expected 3 arguments, got 2');
+      expect(client.calls({op: 'call', method: 'subtleEncrypt'}).length).to.equal(0);
+    });
+
+    it('checks algorithm.name', async function() {
+      params[0].name = 'foo';
+      await expect(encrypt())
+        .rejectedWith(TypeError, 'algorithm.name must be "AES-GCM", got "foo"');
+      expect(client.calls({op: 'call', method: 'subtleEncrypt'}).length).to.equal(0);
+    });
+
+    it('checks algorithm.iv', async function() {
+      params[0].iv = null;
+      await expect(encrypt())
+        .rejectedWith(TypeError, 'Expected algorithm.iv to be of type ArrayBuffer, got null');
+      expect(client.calls({op: 'call', method: 'subtleEncrypt'}).length).to.equal(0);
+    });
+
+    it('checks algorithm.tagLength', async function() {
+      params[0].tagLength = 'foo' as any;
+      await expect(encrypt())
+        .rejectedWith(TypeError, 'Expected algorithm.tagLength to be a number, got string.');
+      expect(client.calls({op: 'call', method: 'subtleEncrypt'}).length).to.equal(0);
+    });
+
+    it('allows algorithm.tagLength undefined', async function() {
+      delete params[0].tagLength;
+      await encrypt(param => param.onSuccess());
+      expect(client.calls({op: 'call', method: 'subtleEncrypt'})[0].parameters).to.deep.include({
+        algorithm: {
+          name: 'AES-GCM',
+          iv,
+          tagLength: 128
+        }
+      });
+    });
+
+    it('checks key', async function() {
+      params[1] = null;
+      await expect(encrypt())
+        .rejectedWith(TypeError, 'Expected key to be of type CryptoKey, got null');
+      expect(client.calls({op: 'call', method: 'subtleEncrypt'}).length).to.equal(0);
+    });
+
+    it('checks data', async function() {
+      params[2] = null;
+      await expect(encrypt())
+        .rejectedWith(TypeError, 'Expected data to be of type ArrayBuffer, got null');
+      expect(client.calls({op: 'call', method: 'subtleEncrypt'}).length).to.equal(0);
+    });
+
+  });
+
+  describe('subtle.decrypt()', function() {
+
+    let params: Parameters<typeof crypto.subtle.decrypt>;
+    let iv: ArrayBuffer;
+    let data: ArrayBuffer;
+    let key: _CryptoKey;
+
+    async function decrypt(cb?: (nativeParams: any) => void) {
+      const promise = crypto.subtle.decrypt.apply(crypto.subtle, params);
+      cb?.call(null, client.calls({op: 'call', method: 'subtleDecrypt'})[0].parameters);
+      return promise;
+    }
+
+    beforeEach(function() {
+      client.resetCalls();
+      iv = new ArrayBuffer(1);
+      data = new ArrayBuffer(10);
+      key = new _CryptoKey();
+      params = [
+        {
+          name: 'AES-GCM',
+          iv,
+          tagLength: 23
+        },
+        new CryptoKey(key, {}),
+        data
+      ];
+    });
+
+    it('CALLs subtleDecrypt', async function() {
+      await decrypt(param => param.onSuccess());
+      const decryptCalls = client.calls({op: 'call', method: 'subtleDecrypt'});
+      expect(decryptCalls.length).to.equal(1);
+      expect(decryptCalls[0].parameters).to.deep.include({
+        algorithm: {
+          name: 'AES-GCM',
+          iv,
+          tagLength: 23
+        },
+        key: key.cid,
+        data
+      });
+    });
+
+    it('unwraps array buffer', async function() {
+      params[0].iv = new Uint8Array(params[0].iv);
+      params[2] = new Uint8Array(params[2]);
+
+      await decrypt(param => param.onSuccess());
+
+      const decryptCalls = client.calls({op: 'call', method: 'subtleDecrypt'});
+      expect(decryptCalls[0].parameters).to.deep.include({
+        algorithm: {
+          name: 'AES-GCM',
+          iv,
+          tagLength: 23
+        },
+        data
+      });
+
+    });
+
+    it('returns decrypted data', async function() {
+      const decrypted = new ArrayBuffer(2);
+      expect(await decrypt(param => param.onSuccess(decrypted)))
+        .to.equal(decrypted);
+    });
+
+    it('propagates rejection', async function() {
+      await expect(decrypt(param => param.onError('fooerror')))
+        .rejectedWith(Error, 'fooerror');
+    });
+
+    it('checks parameter length', async function() {
+      params.pop();
+      await expect(decrypt())
+        .rejectedWith(TypeError, 'Expected 3 arguments, got 2');
+      expect(client.calls({op: 'call', method: 'subtleDecrypt'}).length).to.equal(0);
+    });
+
+    it('checks algorithm.name', async function() {
+      params[0].name = 'foo';
+      await expect(decrypt())
+        .rejectedWith(TypeError, 'algorithm.name must be "AES-GCM", got "foo"');
+      expect(client.calls({op: 'call', method: 'subtleDecrypt'}).length).to.equal(0);
+    });
+
+    it('checks algorithm.iv', async function() {
+      params[0].iv = null;
+      await expect(decrypt())
+        .rejectedWith(TypeError, 'Expected algorithm.iv to be of type ArrayBuffer, got null.');
+      expect(client.calls({op: 'call', method: 'subtleDecrypt'}).length).to.equal(0);
+    });
+
+    it('checks algorithm.tagLength', async function() {
+      params[0].tagLength = 'foo' as any;
+      await expect(decrypt())
+        .rejectedWith(TypeError, 'Expected algorithm.tagLength to be a number, got string.');
+      expect(client.calls({op: 'call', method: 'subtleDecrypt'}).length).to.equal(0);
+    });
+
+    it('allows algorithm.tagLength undefined', async function() {
+      delete params[0].tagLength;
+      await decrypt(param => param.onSuccess());
+      expect(client.calls({op: 'call', method: 'subtleDecrypt'})[0].parameters).to.deep.include({
+        algorithm: {
+          name: 'AES-GCM',
+          iv,
+          tagLength: 128
+        }
+      });
+    });
+
+    it('checks key', async function() {
+      params[1] = null;
+      await expect(decrypt())
+        .rejectedWith(TypeError, 'Expected key to be of type CryptoKey, got null');
+      expect(client.calls({op: 'call', method: 'subtleDecrypt'}).length).to.equal(0);
+    });
+
+    it('checks data', async function() {
+      params[2] = null;
+      await expect(decrypt())
+        .rejectedWith(TypeError, 'Expected data to be of type ArrayBuffer, got null');
+      expect(client.calls({op: 'call', method: 'subtleDecrypt'}).length).to.equal(0);
+    });
+
+  });
+
+  describe('subtle.generateKey()', function() {
+
+    let params: Parameters<typeof crypto.subtle.generateKey>;
+
+    async function generateKey(cb?: (nativeParams: any) => void) {
+      const promise = crypto.subtle.generateKey.apply(crypto.subtle, params);
+      cb?.call(null, client.calls({op: 'call', method: 'generate'})[0].parameters);
+      return promise;
+    }
+
+    beforeEach(function() {
+      client.resetCalls();
+      params = [
+        {
+          name: 'ECDH',
+          namedCurve: 'P-256'
+        },
+        true,
+        ['foo', 'bar']
+      ];
+    });
+
+    it('CREATEs CryptKey and CALLs generate', async function() {
+      await generateKey(param => param.onSuccess());
+      const id = client.calls({op: 'create', type: 'tabris.CryptoKey'})[0].id;
+      expect(client.calls({op: 'call', id, method: 'generate'}).length).to.equal(1);
+    });
+
+    it('CREATEs public and private CryptKey', async function() {
+      await generateKey(param => param.onSuccess());
+
+      const create = client.calls({op: 'create', type: 'tabris.CryptoKey'});
+      expect(create[1].properties.parent).to.equal(create[0].id);
+      expect(create[1].properties.type).to.equal('private');
+      expect(create[2].properties.parent).to.equal(create[0].id);
+      expect(create[2].properties.type).to.equal('public');
+    });
+
+    it('propagates rejection and disposes CryptoKey', async function() {
+      await expect(generateKey(param => param.onError('fooerror')))
+        .rejectedWith(Error, 'fooerror');
+      const {id} = client.calls({op: 'create', type: 'tabris.CryptoKey'})[0];
+      expect(client.calls({op: 'destroy', id}));
+    });
+
+    it('checks parameter length', async function() {
+      params.pop();
+      await expect(generateKey())
+        .rejectedWith(TypeError, 'Expected 3 arguments, got 2');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks algorithm.name', async function() {
+      // @ts-ignore
+      params[0].name = 'foo';
+      await expect(generateKey())
+        .rejectedWith(TypeError, 'algorithm.name must be "ECDH", got "foo"');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks algorithm.namedCurve', async function() {
+      // @ts-ignore
+      params[0].namedCurve = 'foo';
+      await expect(generateKey())
+        .rejectedWith(TypeError, 'algorithm.namedCurve must be "P-256", got "foo"');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks extractable', async function() {
+      params[1] = null;
+      await expect(generateKey())
+        .rejectedWith(TypeError, 'Expected extractable to be a boolean, got null');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks key usages', async function() {
+      params[2] = null;
+      await expect(generateKey())
+        .rejectedWith(TypeError, 'Expected keyUsages to be an array, got null');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
     });
 
   });

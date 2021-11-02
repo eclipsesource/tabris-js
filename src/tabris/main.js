@@ -39,6 +39,7 @@ import ContentView, {create as createContentView} from './widgets/ContentView';
 import Camera from './Camera';
 import CameraView from './widgets/CameraView';
 import Crypto from './Crypto';
+import CryptoKey from './CryptoKey';
 import Drawer, {create as createDrawer} from './widgets/Drawer';
 import DateDialog from './DateDialog';
 import EventObject from './EventObject';
@@ -158,6 +159,7 @@ const POPUPS = Object.freeze({
 const WHATWG = Object.freeze({
   Blob,
   Crypto,
+  CryptoKey,
   Event,
   File,
   FormData,
