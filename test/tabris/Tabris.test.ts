@@ -17,7 +17,10 @@ describe('ClientInterface', function() {
     client = new ClientMock();
   });
 
-  afterEach(restore);
+  afterEach(() => {
+    tabris.close();
+    restore();
+  });
 
   describe('_init', function() {
 
