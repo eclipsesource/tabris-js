@@ -1,6 +1,6 @@
 import NativeObject from './NativeObject';
 import {toValueString} from './Console';
-import CryptoKey, {_CryptoKey} from './CryptoKey';
+import CryptoKey, {Algorithm, AlgorithmECDH, _CryptoKey} from './CryptoKey';
 import {allowOnlyKeys, allowOnlyValues, getBuffer, getCid, getNativeObject} from './util';
 import checkType from './checkType';
 
@@ -65,7 +65,7 @@ class SubtleCrypto {
   async importKey(
     format: string,
     keyData: ArrayBuffer | TypedArray,
-    algorithm: {name: string, namedCurve: string},
+    algorithm: AlgorithmECDH,
     extractable: boolean,
     keyUsages: string[]
   ): Promise<CryptoKey> {
@@ -89,7 +89,7 @@ class SubtleCrypto {
   }
 
   async deriveKey(
-    algorithm: {name: string, namedCurve: string, public: CryptoKey},
+    algorithm: Algorithm,
     baseKey: CryptoKey,
     derivedKeyAlgorithm: {name: string, length: number},
     extractable: boolean,
@@ -98,10 +98,15 @@ class SubtleCrypto {
     if (arguments.length !== 5) {
       throw new TypeError(`Expected 5 arguments, got ${arguments.length}`);
     }
-    allowOnlyKeys(algorithm, ['name', 'namedCurve', 'public']);
-    allowOnlyValues(algorithm.name, ['ECDH'], 'algorithm.name');
-    allowOnlyValues(algorithm.namedCurve, ['P-256'], 'algorithm.namedCurve');
-    checkType(algorithm.public, CryptoKey, {name: 'algorithm.public'});
+    allowOnlyKeys(algorithm, ['name', 'namedCurve', 'public', 'info', 'salt']);
+    allowOnlyValues(algorithm.name, ['ECDH', 'HKDF'], 'algorithm.name');
+    if (algorithm.name === 'ECDH') {
+      allowOnlyValues(algorithm.namedCurve, ['P-256'], 'algorithm.namedCurve');
+      checkType(algorithm.public, CryptoKey, {name: 'algorithm.public'});
+    } else if (algorithm.name === 'HKDF') {
+      checkType(getBuffer(algorithm.salt), ArrayBuffer, {name: 'algorithm.salt'});
+      checkType(getBuffer(algorithm.info), ArrayBuffer, {name: 'algorithm.info'});
+    }
     allowOnlyKeys(derivedKeyAlgorithm, ['name', 'length']);
     allowOnlyValues(derivedKeyAlgorithm.name, ['AES-GCM'], 'derivedKeyAlgorithm.name');
     checkType(derivedKeyAlgorithm.length, Number, {name: 'derivedKeyAlgorithm.length'});
@@ -179,7 +184,7 @@ class SubtleCrypto {
   }
 
   async generateKey(
-    algorithm: {name: 'ECDH', namedCurve: 'P-256'},
+    algorithm: AlgorithmECDH,
     extractable: boolean,
     keyUsages: string[]
   ): Promise<{privateKey: CryptoKey, publicKey: CryptoKey}> {

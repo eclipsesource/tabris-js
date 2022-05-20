@@ -244,7 +244,7 @@ describe('Crypto', function() {
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(1);
     });
 
-    it('CALLs derive', async function() {
+    it('CALLs derive with ECDH algorithm', async function() {
       await deriveKey(param => param.onSuccess());
 
       const id = client.calls({op: 'create', type: 'tabris.CryptoKey'})[0].id;
@@ -254,6 +254,33 @@ describe('Crypto', function() {
           name: 'ECDH',
           namedCurve: 'P-256',
           public: getCid(publicKey)
+        },
+        baseKey: getCid(baseKey),
+        derivedKeyAlgorithm: {
+          name: 'AES-GCM',
+          length: 123
+        },
+        extractable: true,
+        keyUsages: ['foo', 'bar']
+      });
+    });
+
+    it('CALLs derive with HKDF algorithm', async function() {
+      params[0] = {
+        name: 'HKDF',
+        info: new ArrayBuffer(10),
+        salt: new ArrayBuffer(11)
+      };
+
+      await deriveKey(param => param.onSuccess());
+
+      const id = client.calls({op: 'create', type: 'tabris.CryptoKey'})[0].id;
+      const deriveCall = client.calls({op: 'call', method: 'derive', id})[0];
+      expect(deriveCall.parameters).to.deep.include({
+        algorithm: {
+          name: 'HKDF',
+          info: params[0].info,
+          salt: params[0].salt
         },
         baseKey: getCid(baseKey),
         derivedKeyAlgorithm: {
@@ -332,7 +359,7 @@ describe('Crypto', function() {
     it('checks algorithm.name', async function() {
       params[0].name = 'foo';
       await expect(deriveKey())
-        .rejectedWith(TypeError, 'algorithm.name must be "ECDH", got "foo"');
+        .rejectedWith(TypeError, 'algorithm.name must be "ECDH" or "HKDF", got "foo"');
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
     });
 

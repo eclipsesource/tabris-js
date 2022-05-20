@@ -48,17 +48,18 @@ async function decryptWithAESGCM(
   publicKey: CryptoKey,
   privateKey: CryptoKey
 ) {
-  const deriveKeyResult = await deriveKeyAESGCM(publicKey,  privateKey);
+  const deriveSharedSecretResult = await deriveSharedSecret(publicKey,  privateKey);
+  const deriveAESKeyResult = await deriveAESKey(deriveSharedSecretResult);
   return {
     decrypted: await crypto.subtle.decrypt(
       {
         name: 'AES-GCM',
         iv: new Uint8Array(12)
       },
-      deriveKeyResult,
+      deriveAESKeyResult,
       encrypted
     ),
-    sharedKey: deriveKeyResult
+    sharedKey: deriveAESKeyResult
   };
 }
 
@@ -67,13 +68,14 @@ async function encryptWithAESGCM(
   publicKey: CryptoKey,
   privateKey: CryptoKey
 ) {
-  const deriveKeyResult = await deriveKeyAESGCM(publicKey,  privateKey);
+  const deriveSharedSecretResult = await deriveSharedSecret(publicKey,  privateKey);
+  const deriveAESKeyResult = await deriveAESKey(deriveSharedSecretResult);
   return await crypto.subtle.encrypt(
     {
       name: 'AES-GCM',
       iv: new Uint8Array(12)
     },
-    deriveKeyResult,
+    deriveAESKeyResult,
     data
   );
 }
@@ -89,7 +91,25 @@ async function generateECDHKeyPair() {
   );
 }
 
-async function deriveKeyAESGCM(publicKey: CryptoKey,  privateKey: CryptoKey) {
+async function deriveAESKey(sharedSecret: CryptoKey) {
+  return await crypto.subtle.deriveKey(
+    {
+      name: 'HKDF',
+      hash: 'SHA-256',
+      salt: new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]),
+      info: new Uint8Array([9, 0, 1, 2, 3, 4, 5, 6])
+    },
+    sharedSecret,
+    {
+      name: 'AES-GCM',
+      length: 256
+    },
+    true,
+    ['encrypt',  'decrypt']
+  );
+}
+
+async function deriveSharedSecret(publicKey: CryptoKey,  privateKey: CryptoKey) {
   return await crypto.subtle.deriveKey(
     {
       name: 'ECDH',
@@ -101,8 +121,8 @@ async function deriveKeyAESGCM(publicKey: CryptoKey,  privateKey: CryptoKey) {
       name: 'AES-GCM',
       length: 256
     },
-    true,
-    ['encrypt',  'decrypt']
+    false,
+    ['deriveKey', 'deriveBits']
   );
 }
 
@@ -128,7 +148,7 @@ function privateKeyData() {
 
 function encryptedData() {
   return new Uint8Array([
-    229, 16, 199, 101, 230, 39, 87, 95, 175, 193, 83, 125, 213, 79, 29, 39, 29, 73, 175, 118, 157, 83, 232, 55, 90,
-    87, 27, 206, 105, 238, 44, 251
+    239, 245, 62, 37, 247, 8, 172, 72, 100, 113, 222, 127, 83, 60, 235, 132, 181, 165, 147, 254, 160, 143, 240, 107,
+    16, 37, 248, 132, 14, 197, 54, 1
   ]).buffer;
 }

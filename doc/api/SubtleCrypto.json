@@ -40,71 +40,151 @@
         ]
       }
     },
-    "deriveKey": {
-      "description": "Takes a master key and derives a secret key from it using the given algorithm. Currently only supports the Elliptic Curve Diffie-Hellman (ECDH) algorithm.",
-      "parameters": [
-        {
-          "name": "algorithm",
-          "type": {
-            "map": {
-              "name": {
-                "type": "'ECDH'"
-              },
-              "namedCurve": {
-                "type": "'P-256'"
-              },
-              "public": {
-                "type": "CryptoKey"
+    "deriveKey": [
+      {
+        "description": "Takes a master key and derives a secret key from it using the Elliptic Curve Diffie-Hellman (ECDH) algorithm.",
+        "parameters": [
+          {
+            "name": "algorithm",
+            "type": {
+              "map": {
+                "name": {
+                  "type": "'ECDH'"
+                },
+                "namedCurve": {
+                  "type": "'P-256'"
+                },
+                "public": {
+                  "type": "CryptoKey"
+                }
               }
             }
-          }
-        },
-        {
-          "name": "baseKey",
-          "type": "CryptoKey"
-        },
-        {
-          "name": "derivedKeyAlgorithm",
-          "type": {
-            "map": {
-              "name": {
-                "type": "'AES-GCM'"
-              },
-              "length": {
-                "type": "number"
+          },
+          {
+            "name": "baseKey",
+            "type": "CryptoKey"
+          },
+          {
+            "name": "derivedKeyAlgorithm",
+            "type": {
+              "map": {
+                "name": {
+                  "type": "'AES-GCM'"
+                },
+                "length": {
+                  "type": "number"
+                }
               }
             }
+          },
+          {
+            "name": "extractable",
+            "type": "boolean"
+          },
+          {
+            "name": "keyUsages",
+            "type": "string[]"
           }
-        },
-        {
-          "name": "extractable",
-          "type": "boolean"
-        },
-        {
-          "name": "keyUsages",
-          "type": "string[]"
+        ],
+        "returns": {
+          "interface": "Promise",
+          "generics": [
+            "CryptoKey"
+          ]
         }
-      ],
-      "returns": {
-        "interface": "Promise",
-        "generics": [
-          "CryptoKey"
-        ]
+      },
+      {
+        "description": "Takes a master key and derives a secret key from it using the HKDF algorithm.",
+        "parameters": [
+          {
+            "name": "algorithm",
+            "type": {
+              "map": {
+                "name": {
+                  "type": "'HKDF'"
+                },
+                "hash": {
+                  "type": {
+                    "union": [
+                      "'SHA-1'",
+                      "'SHA-256'",
+                      "'SHA-384'",
+                      "'SHA-512'"
+                    ]
+                  }
+                },
+                "salt": {
+                  "type": {
+                    "union": [
+                      "ArrayBuffer",
+                      "TypedArray"
+                    ]
+                  }
+                },
+                "info": {
+                  "type": {
+                    "union": [
+                      "ArrayBuffer",
+                      "TypedArray"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "baseKey",
+            "type": "CryptoKey"
+          },
+          {
+            "name": "derivedKeyAlgorithm",
+            "type": {
+              "map": {
+                "name": {
+                  "type": "'AES-GCM'"
+                },
+                "length": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          {
+            "name": "extractable",
+            "type": "boolean"
+          },
+          {
+            "name": "keyUsages",
+            "type": "string[]"
+          }
+        ],
+        "returns": {
+          "interface": "Promise",
+          "generics": [
+            "CryptoKey"
+          ]
+        }
       }
-    },
+    ],
     "importKey": {
       "description": "Takes an external key in a portable format and returns a CryptoKey object that can be used with the SubtleCrypto API. Currently only supports the Elliptic Curve Diffie-Hellman (ECDH) algorithm. Keys may be in spki or pkcs8 format.",
       "parameters": [
         {
           "name": "format",
           "type": {
-            "union": ["'spki'", "'pkcs8'"]
+            "union": [
+              "'spki'",
+              "'pkcs8'"
+            ]
           }
         },
         {
           "name": "keyData",
           "type": {
-            "union": ["ArrayBuffer", "TypedArray"]
+            "union": [
+              "ArrayBuffer",
+              "TypedArray"
+            ]
           }
         },
         {
@@ -166,8 +246,12 @@
         "generics": [
           {
             "map": {
-              "privateKey": {"type": "CryptoKey"},
-              "publicKey": {"type": "CryptoKey"}
+              "privateKey": {
+                "type": "CryptoKey"
+              },
+              "publicKey": {
+                "type": "CryptoKey"
+              }
             }
           }
         ]
@@ -271,7 +355,10 @@
         {
           "name": "format",
           "type": {
-            "union": ["'raw'", "'spki'"]
+            "union": [
+              "'raw'",
+              "'spki'"
+            ]
           }
         },
         {

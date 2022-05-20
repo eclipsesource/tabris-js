@@ -2,6 +2,21 @@ import {TypedArray} from './Crypto';
 import NativeObject from './NativeObject';
 import {getBuffer, getCid, setNativeObject} from './util';
 
+export type Algorithm = AlgorithmHKDF | AlgorithmECDH;
+
+export type AlgorithmHKDF = {
+  name: 'HKDF',
+  hash: string,
+  salt: ArrayBuffer | TypedArray,
+  info: ArrayBuffer | TypedArray
+};
+
+export type AlgorithmECDH = {
+  name: 'ECDH',
+  namedCurve: 'P-256',
+  public: CryptoKey
+};
+
 export default class CryptoKey {
 
   constructor(nativeObject: _CryptoKey, data: CryptoKey) {
@@ -13,7 +28,7 @@ export default class CryptoKey {
     Object.freeze(this);
   }
 
-  algorithm?: {name: string, namedCurve: string};
+  algorithm?: Algorithm;
 
   extractable?: boolean;
 
@@ -35,7 +50,7 @@ export class _CryptoKey extends NativeObject {
   async import(
     format: string,
     keyData: ArrayBuffer | TypedArray,
-    algorithm: {name: string, namedCurve: string},
+    algorithm: AlgorithmECDH,
     extractable: boolean,
     keyUsages: string[]
   ): Promise<CryptoKey> {
@@ -53,27 +68,40 @@ export class _CryptoKey extends NativeObject {
   }
 
   async derive(
-    algorithm: {name: string, namedCurve: string, public: CryptoKey},
+    algorithm: Algorithm,
     baseKey: CryptoKey,
     derivedKeyAlgorithm: {name: string, length: number},
     extractable: boolean,
     keyUsages: string[]
   ): Promise<void> {
-    return new Promise((onSuccess, onError) =>
-      this._nativeCall('derive', {
-        algorithm: {...algorithm, public: getCid(algorithm.public)},
-        baseKey: getCid(baseKey),
-        derivedKeyAlgorithm,
-        extractable,
-        keyUsages,
-        onSuccess,
-        onError: wrapErrorCb(onError)
-      })
+    return new Promise((onSuccess, onError) => {
+      if(algorithm.name === 'ECDH') {
+        return this._nativeCall('derive', {
+          algorithm: {...algorithm, public: getCid(algorithm.public)},
+          baseKey: getCid(baseKey),
+          derivedKeyAlgorithm,
+          extractable,
+          keyUsages,
+          onSuccess,
+          onError: wrapErrorCb(onError)
+        });
+      } else {
+        return this._nativeCall('derive', {
+          algorithm,
+          baseKey: getCid(baseKey),
+          derivedKeyAlgorithm,
+          extractable,
+          keyUsages,
+          onSuccess,
+          onError: wrapErrorCb(onError)
+        });
+      }
+    }
     );
   }
 
   async generate(
-    algorithm: {name: string, namedCurve: string},
+    algorithm: AlgorithmECDH,
     extractable: boolean,
     keyUsages: string[]
   ): Promise<void> {
