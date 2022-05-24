@@ -98,12 +98,13 @@ class SubtleCrypto {
     if (arguments.length !== 5) {
       throw new TypeError(`Expected 5 arguments, got ${arguments.length}`);
     }
-    allowOnlyKeys(algorithm, ['name', 'namedCurve', 'public', 'info', 'salt']);
+    allowOnlyKeys(algorithm, ['name', 'namedCurve', 'public', 'hash', 'salt', 'info']);
     allowOnlyValues(algorithm.name, ['ECDH', 'HKDF'], 'algorithm.name');
     if (algorithm.name === 'ECDH') {
       allowOnlyValues(algorithm.namedCurve, ['P-256'], 'algorithm.namedCurve');
       checkType(algorithm.public, CryptoKey, {name: 'algorithm.public'});
     } else if (algorithm.name === 'HKDF') {
+      checkType(algorithm.hash, String, {name: 'algorithm.hash'});
       checkType(getBuffer(algorithm.salt), ArrayBuffer, {name: 'algorithm.salt'});
       checkType(getBuffer(algorithm.info), ArrayBuffer, {name: 'algorithm.info'});
     }

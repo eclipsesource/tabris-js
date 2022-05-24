@@ -3,7 +3,7 @@ import ClientMock from './ClientMock';
 import Crypto, {TypedArray} from '../../src/tabris/Crypto';
 import {SinonStub} from 'sinon';
 import CryptoKey, {_CryptoKey} from '../../src/tabris/CryptoKey';
-import {getCid} from '../../src/tabris/util';
+import {getBuffer, getCid} from '../../src/tabris/util';
 
 describe('Crypto', function() {
 
@@ -268,7 +268,8 @@ describe('Crypto', function() {
     it('CALLs derive with HKDF algorithm', async function() {
       params[0] = {
         name: 'HKDF',
-        info: new ArrayBuffer(10),
+        hash: 'SHA-256',
+        info: new Uint8Array([1, 2, 3]),
         salt: new ArrayBuffer(11)
       };
 
@@ -279,7 +280,8 @@ describe('Crypto', function() {
       expect(deriveCall.parameters).to.deep.include({
         algorithm: {
           name: 'HKDF',
-          info: params[0].info,
+          hash: 'SHA-256',
+          info: getBuffer(params[0].info),
           salt: params[0].salt
         },
         baseKey: getCid(baseKey),

@@ -87,7 +87,7 @@ export class _CryptoKey extends NativeObject {
         });
       } else {
         return this._nativeCall('derive', {
-          algorithm,
+          algorithm: {...algorithm, salt: getBuffer(algorithm.salt), info: getBuffer(algorithm.info)},
           baseKey: getCid(baseKey),
           derivedKeyAlgorithm,
           extractable,
