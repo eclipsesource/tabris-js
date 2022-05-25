@@ -25,7 +25,7 @@ export function fetch(input, init) {
           hr.dispose();
           break;
         case 'error':
-          reject(new TypeError('Network request failed'));
+          reject(new TypeError(event.message || 'Network request failed'));
           hr.dispose();
           break;
         case 'timeout':
