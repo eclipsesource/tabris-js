@@ -250,7 +250,16 @@ export function setNativeObject(object, nativeObject) {
  * @returns {{cid: string, isDisposed: () => boolean, dispose: () => void}}
  */
 export function getNativeObject(object) {
-  return object instanceof Object ? object[nativeObjectSym] : null;
+  if (!(object instanceof Object)) {
+    return null;
+  }
+  if (object[nativeObjectSym]) {
+    return object[nativeObjectSym];
+  }
+  if (typeof object.cid === 'string' && object.isDisposed instanceof Function) {
+    return object;
+  }
+  return null;
 }
 
 /**
@@ -283,7 +292,7 @@ export function createNativeCallback(cb, target, args) {
     tabris._stackTraceStack = stackTraceStack;
     try {
       cb.apply(target ? target : global, args ? args : arguments);
-    } catch(e) {
+    } catch (e) {
       console.error('Uncaught ' + e);
     }
     tabris.flush();

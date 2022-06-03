@@ -42,7 +42,7 @@
     },
     "deriveKey": [
       {
-        "description": "Takes a master key and derives a secret key from it using the Elliptic Curve Diffie-Hellman (ECDH) algorithm.",
+        "description": "Takes a base key and derives a secret key from it using the Elliptic Curve Diffie-Hellman (ECDH) algorithm.",
         "parameters": [
           {
             "name": "algorithm",
@@ -94,7 +94,7 @@
         }
       },
       {
-        "description": "Takes a master key and derives a secret key from it using the HKDF algorithm.",
+        "description": "Takes a base key and derives a secret key from it using the HKDF algorithm.",
         "parameters": [
           {
             "name": "algorithm",
@@ -162,6 +162,98 @@
           "interface": "Promise",
           "generics": [
             "CryptoKey"
+          ]
+        }
+      }
+    ],
+    "deriveBits": [
+      {
+        "description": "Takes a base key and derives an array of bits from it using the Elliptic Curve Diffie-Hellman (ECDH) algorithm.",
+        "parameters": [
+          {
+            "name": "algorithm",
+            "type": {
+              "map": {
+                "name": {
+                  "type": "'ECDH'"
+                },
+                "namedCurve": {
+                  "type": "'P-256'"
+                },
+                "public": {
+                  "type": "CryptoKey"
+                }
+              }
+            }
+          },
+          {
+            "name": "baseKey",
+            "type": "CryptoKey"
+          },
+          {
+            "name": "length",
+            "type": "number"
+          }
+        ],
+        "returns": {
+          "interface": "Promise",
+          "generics": [
+            "ArrayBuffer"
+          ]
+        }
+      },
+      {
+        "description": "Takes a base key and derives an array of bits from it using the HKDF algorithm.",
+        "parameters": [
+          {
+            "name": "algorithm",
+            "type": {
+              "map": {
+                "name": {
+                  "type": "'HKDF'"
+                },
+                "hash": {
+                  "type": {
+                    "union": [
+                      "'SHA-1'",
+                      "'SHA-256'",
+                      "'SHA-384'",
+                      "'SHA-512'"
+                    ]
+                  }
+                },
+                "salt": {
+                  "type": {
+                    "union": [
+                      "ArrayBuffer",
+                      "TypedArray"
+                    ]
+                  }
+                },
+                "info": {
+                  "type": {
+                    "union": [
+                      "ArrayBuffer",
+                      "TypedArray"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "baseKey",
+            "type": "CryptoKey"
+          },
+          {
+            "name": "length",
+            "type": "number"
+          }
+        ],
+        "returns": {
+          "interface": "Promise",
+          "generics": [
+            "ArrayBuffer"
           ]
         }
       }

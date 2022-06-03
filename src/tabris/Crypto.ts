@@ -88,6 +88,28 @@ class SubtleCrypto {
     });
   }
 
+  async deriveBits(
+    algorithm: Algorithm,
+    baseKey: CryptoKey,
+    length: number
+  ): Promise<ArrayBuffer> {
+    if (arguments.length !== 3) {
+      throw new TypeError(`Expected 3 arguments, got ${arguments.length}`);
+    }
+    checkDeriveAlgorithm(algorithm);
+    checkType(baseKey, CryptoKey, {name: 'baseKey'});
+    checkType(length, Number, {name: 'length'});
+    const nativeObject = new _CryptoKey();
+    try {
+      await nativeObject.derive(algorithm, baseKey, {length, name: 'AES-GCM'}, true, []);
+      return new Promise((onSuccess, onReject) =>
+        this._nativeObject.subtleExportKey('raw', nativeObject, onSuccess, onReject)
+      );
+    } finally {
+      nativeObject.dispose();
+    }
+  }
+
   async deriveKey(
     algorithm: Algorithm,
     baseKey: CryptoKey,
@@ -98,16 +120,7 @@ class SubtleCrypto {
     if (arguments.length !== 5) {
       throw new TypeError(`Expected 5 arguments, got ${arguments.length}`);
     }
-    allowOnlyKeys(algorithm, ['name', 'namedCurve', 'public', 'hash', 'salt', 'info']);
-    allowOnlyValues(algorithm.name, ['ECDH', 'HKDF'], 'algorithm.name');
-    if (algorithm.name === 'ECDH') {
-      allowOnlyValues(algorithm.namedCurve, ['P-256'], 'algorithm.namedCurve');
-      checkType(algorithm.public, CryptoKey, {name: 'algorithm.public'});
-    } else if (algorithm.name === 'HKDF') {
-      checkType(algorithm.hash, String, {name: 'algorithm.hash'});
-      checkType(getBuffer(algorithm.salt), ArrayBuffer, {name: 'algorithm.salt'});
-      checkType(getBuffer(algorithm.info), ArrayBuffer, {name: 'algorithm.info'});
-    }
+    checkDeriveAlgorithm(algorithm);
     allowOnlyKeys(derivedKeyAlgorithm, ['name', 'length']);
     allowOnlyValues(derivedKeyAlgorithm.name, ['AES-GCM'], 'derivedKeyAlgorithm.name');
     checkType(derivedKeyAlgorithm.length, Number, {name: 'derivedKeyAlgorithm.length'});
@@ -282,7 +295,7 @@ class NativeCrypto extends NativeObject {
 
   subtleExportKey(
     format: string,
-    key: CryptoKey,
+    key: CryptoKey | _CryptoKey,
     onSuccess: (value: ArrayBuffer) => void,
     onError: (ex: any) => void
   ): void {
@@ -319,4 +332,17 @@ class NativeCrypto extends NativeObject {
     });
   }
 
+}
+
+function checkDeriveAlgorithm(algorithm: Algorithm) {
+  allowOnlyKeys(algorithm, ['name', 'namedCurve', 'public', 'hash', 'salt', 'info']);
+  allowOnlyValues(algorithm.name, ['ECDH', 'HKDF'], 'algorithm.name');
+  if (algorithm.name === 'ECDH') {
+    allowOnlyValues(algorithm.namedCurve, ['P-256'], 'algorithm.namedCurve');
+    checkType(algorithm.public, CryptoKey, {name: 'algorithm.public'});
+  } else if (algorithm.name === 'HKDF') {
+    checkType(algorithm.hash, String, {name: 'algorithm.hash'});
+    checkType(getBuffer(algorithm.salt), ArrayBuffer, {name: 'algorithm.salt'});
+    checkType(getBuffer(algorithm.info), ArrayBuffer, {name: 'algorithm.info'});
+  }
 }

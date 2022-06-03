@@ -395,6 +395,139 @@ describe('Crypto', function() {
 
   });
 
+  describe('subtle.deriveBits()', function() {
+
+    let publicKey: CryptoKey;
+    let baseKey: CryptoKey;
+    let params: Parameters<typeof crypto.subtle.deriveBits>;
+    let result: ArrayBuffer;
+    let native: (id: string, method: string, args: any) => void;
+
+    async function deriveBits() {
+      return crypto.subtle.deriveBits.apply(crypto.subtle, params);
+    }
+
+    beforeEach(function() {
+      publicKey = new CryptoKey(new _CryptoKey(), {});
+      baseKey = new CryptoKey(new _CryptoKey(), {});
+      client.resetCalls();
+      const orgCall = client.call;
+      stub(client, 'call').callsFake(function() {
+        native.apply(null, arguments);
+        orgCall.apply(client, arguments);
+      });
+      native = (_id, method, args) => {
+        if (method === 'derive') {
+          args.onSuccess();
+        } else if (method === 'subtleExportKey') {
+          args.onSuccess(result);
+        }
+      };
+      result = new ArrayBuffer(10);
+      params = [
+        {
+          name: 'ECDH',
+          namedCurve: 'P-256',
+          public: publicKey
+        },
+        baseKey,
+        123
+      ];
+    });
+
+    it('CREATEs native CryptoKey', async function() {
+      await deriveBits();
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(1);
+    });
+
+    it('CALLs derive with ECDH algorithm', async function() {
+      await deriveBits();
+
+      const id = client.calls({op: 'create', type: 'tabris.CryptoKey'})[0].id;
+      const deriveCall = client.calls({op: 'call', method: 'derive', id})[0];
+      expect(deriveCall.parameters).to.deep.include({
+        algorithm: {
+          name: 'ECDH',
+          namedCurve: 'P-256',
+          public: getCid(publicKey)
+        },
+        baseKey: getCid(baseKey),
+        derivedKeyAlgorithm: {
+          name: 'AES-GCM',
+          length: 123
+        },
+        extractable: true,
+        keyUsages: []
+      });
+    });
+
+    it('CALLs subtleExportKey with raw format', async function() {
+      await deriveBits();
+
+      const id = client.calls({op: 'create', type: 'tabris.CryptoKey'})[0].id;
+      const exportCall = client.calls({op: 'call', method: 'subtleExportKey'})[0];
+      expect(exportCall.parameters).to.deep.include({
+        format: 'raw',
+        key: id
+      });
+    });
+
+    it('returns ArrayBuffer', async function() {
+      expect(await deriveBits()).to.equal(result);
+    });
+
+    it('propagates derive rejection and disposes CryptoKey', async function() {
+      native = (_id, method, args) => {
+        if (method === 'derive') {
+          args.onError('fooerror');
+        }
+      };
+      await expect(deriveBits()).rejectedWith(Error, 'fooerror');
+      const {id} = client.calls({op: 'create', type: 'tabris.CryptoKey'})[0];
+      expect(client.calls({op: 'destroy', id}));
+    });
+
+    it('propagates subtleExportKey rejection and disposes CryptoKey', async function() {
+      native = (_id, method, args) => {
+        if (method === 'derive') {
+          args.onSuccess();
+        } else if (method === 'subtleExportKey') {
+          args.onError('fooerror');
+        }
+      };
+      await expect(deriveBits()).rejectedWith(Error, 'fooerror');
+      const {id} = client.calls({op: 'create', type: 'tabris.CryptoKey'})[0];
+      expect(client.calls({op: 'destroy', id}));
+    });
+
+    it('checks parameter length', async function() {
+      params.pop();
+      await expect(deriveBits()).rejectedWith(TypeError, 'Expected 3 arguments, got 2');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks length parameter', async function() {
+      params[2] = NaN;
+      await expect(deriveBits()).rejectedWith(TypeError, 'Expected length to be a valid number, got NaN');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks algorithm keys', async function() {
+      (params[0] as any).foo = 'bar';
+      await expect(deriveBits())
+        .rejectedWith(TypeError, /contains unexpected entry "foo"/);
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks baseKey', async function() {
+      params[1] = null;
+      await expect(deriveBits())
+        .rejectedWith(TypeError, 'Expected baseKey to be of type CryptoKey, got null.');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+  });
+
   describe('subtle.importKey()', function() {
 
     let keyData: ArrayBuffer;
