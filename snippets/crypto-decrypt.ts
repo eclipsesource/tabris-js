@@ -1,4 +1,4 @@
-import {contentView,  crypto,  Stack,  tabris,  TextView} from 'tabris';
+import {contentView, crypto, Stack, tabris, TextView} from 'tabris';
 
 const stack = Stack({stretch: true,  spacing: 8,  padding: 16,  alignment: 'stretchX'})
   .appendTo(contentView);

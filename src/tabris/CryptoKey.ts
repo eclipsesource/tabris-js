@@ -2,7 +2,9 @@ import {TypedArray} from './Crypto';
 import NativeObject from './NativeObject';
 import {getBuffer, getCid, setNativeObject} from './util';
 
-export type Algorithm = AlgorithmHKDF | AlgorithmECDH;
+export type AlgorithmInternal = AlgorithmHKDF | AlgorithmECDH | 'HKDF' | 'AES-GCM';
+
+export type Algorithm = AlgorithmInternal | {name: 'AES-GCM'};
 
 export type AlgorithmHKDF = {
   name: 'HKDF',
@@ -14,7 +16,7 @@ export type AlgorithmHKDF = {
 export type AlgorithmECDH = {
   name: 'ECDH',
   namedCurve: 'P-256',
-  public: CryptoKey
+  public?: CryptoKey
 };
 
 export default class CryptoKey {
@@ -28,7 +30,7 @@ export default class CryptoKey {
     Object.freeze(this);
   }
 
-  algorithm?: Algorithm;
+  algorithm?: AlgorithmInternal;
 
   extractable?: boolean;
 
@@ -50,7 +52,7 @@ export class _CryptoKey extends NativeObject {
   async import(
     format: string,
     keyData: ArrayBuffer | TypedArray,
-    algorithm: AlgorithmECDH,
+    algorithm: AlgorithmInternal,
     extractable: boolean,
     keyUsages: string[]
   ): Promise<CryptoKey> {
@@ -75,9 +77,12 @@ export class _CryptoKey extends NativeObject {
     keyUsages: string[]
   ): Promise<void> {
     return new Promise((onSuccess, onError) => {
+      if (typeof algorithm === 'string') {
+        throw new TypeError(algorithm + ' not supported');
+      }
       if(algorithm.name === 'ECDH') {
         return this._nativeCall('derive', {
-          algorithm: {...algorithm, public: getCid(algorithm.public)},
+          algorithm: {...algorithm, public: getCid(algorithm.public!)},
           baseKey: getCid(baseKey),
           derivedKeyAlgorithm,
           extractable,
@@ -85,7 +90,7 @@ export class _CryptoKey extends NativeObject {
           onSuccess,
           onError: wrapErrorCb(onError)
         });
-      } else {
+      } else if(algorithm.name === 'HKDF') {
         return this._nativeCall('derive', {
           algorithm: {...algorithm, salt: getBuffer(algorithm.salt), info: getBuffer(algorithm.info)},
           baseKey: getCid(baseKey),
@@ -95,9 +100,10 @@ export class _CryptoKey extends NativeObject {
           onSuccess,
           onError: wrapErrorCb(onError)
         });
+      } else {
+        throw new TypeError('Algorithm not supported');
       }
-    }
-    );
+    });
   }
 
   async generate(

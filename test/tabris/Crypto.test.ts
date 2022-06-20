@@ -359,21 +359,21 @@ describe('Crypto', function() {
     });
 
     it('checks algorithm.name', async function() {
-      params[0].name = 'foo';
+      (params[0] as any).name = 'foo';
       await expect(deriveKey())
         .rejectedWith(TypeError, 'algorithm.name must be "ECDH" or "HKDF", got "foo"');
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
     });
 
     it('checks algorithm.namedCurve', async function() {
-      params[0].namedCurve = 'foo';
+      (params[0] as any).namedCurve = 'foo';
       await expect(deriveKey())
         .rejectedWith(TypeError, 'algorithm.namedCurve must be "P-256", got "foo"');
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
     });
 
     it('checks algorithm.public', async function() {
-      params[0].public = null;
+      (params[0] as any).public = null;
       await expect(deriveKey())
         .rejectedWith(TypeError, 'Expected algorithm.public to be of type CryptoKey, got null');
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
@@ -585,6 +585,24 @@ describe('Crypto', function() {
       expect(importCall.parameters.keyData).to.equal(keyData);
     });
 
+    it('turns AES-GCM object in to string', async function() {
+      params[2] = {name: 'AES-GCM'};
+      await importKey(param => param.onSuccess());
+
+      const id = client.calls({op: 'create', type: 'tabris.CryptoKey'})[0].id;
+      const importCall = client.calls({op: 'call', method: 'import', id})[0];
+      expect(importCall.parameters.algorithm).to.equal('AES-GCM');
+    });
+
+    it('passes through AES-GCM string', async function() {
+      params[2] = 'AES-GCM';
+      await importKey(param => param.onSuccess());
+
+      const id = client.calls({op: 'create', type: 'tabris.CryptoKey'})[0].id;
+      const importCall = client.calls({op: 'call', method: 'import', id})[0];
+      expect(importCall.parameters.algorithm).to.equal('AES-GCM');
+    });
+
     it('returns CryptoKey', async function() {
       const key = await importKey(param => param.onSuccess());
       const id = client.calls({op: 'create', type: 'tabris.CryptoKey'})[0].id;
@@ -615,7 +633,7 @@ describe('Crypto', function() {
     it('checks format values', async function() {
       params[0] = 'foo';
       await expect(importKey())
-        .rejectedWith(TypeError, 'format must be "spki" or "pkcs8", got "foo"');
+        .rejectedWith(TypeError, 'format must be "spki", "pkcs8" or "raw", got "foo"');
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
     });
 
@@ -627,16 +645,30 @@ describe('Crypto', function() {
     });
 
     it('checks algorithm.name', async function() {
-      params[2].name = 'foo';
+      (params[2] as any).name = 'foo';
       await expect(importKey())
-        .rejectedWith(TypeError, 'algorithm.name must be "ECDH", got "foo"');
+        .rejectedWith(TypeError, 'algorithm.name must be "ECDH" or "AES-GCM", got "foo"');
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
     });
 
     it('checks algorithm.namedCurve', async function() {
-      params[2].namedCurve = 'foo';
+      (params[2] as any).namedCurve = 'foo';
       await expect(importKey())
         .rejectedWith(TypeError, 'algorithm.namedCurve must be "P-256", got "foo"');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks algorithm keys for ECDH', async function() {
+      (params[2] as any).foo = 'foo';
+      await expect(importKey())
+        .rejectedWith(TypeError, 'Object contains unexpected entry "foo"');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks algorithm keys for AES-GCM', async function() {
+      (params[2] as any) = {name: 'AES-GCM', namedCurve: 'P-256'};
+      await expect(importKey())
+        .rejectedWith(TypeError, /contains unexpected entry "namedCurve"/);
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
     });
 

@@ -1,6 +1,6 @@
 import NativeObject from './NativeObject';
 import {toValueString} from './Console';
-import CryptoKey, {Algorithm, AlgorithmECDH, _CryptoKey} from './CryptoKey';
+import CryptoKey, {Algorithm, AlgorithmECDH, AlgorithmHKDF, AlgorithmInternal, _CryptoKey} from './CryptoKey';
 import {allowOnlyKeys, allowOnlyValues, getBuffer, getCid, getNativeObject} from './util';
 import checkType from './checkType';
 
@@ -65,24 +65,36 @@ class SubtleCrypto {
   async importKey(
     format: string,
     keyData: ArrayBuffer | TypedArray,
-    algorithm: AlgorithmECDH,
+    algorithm: Algorithm,
     extractable: boolean,
     keyUsages: string[]
   ): Promise<CryptoKey> {
     if (arguments.length !== 5) {
       throw new TypeError(`Expected 5 arguments, got ${arguments.length}`);
     }
-    allowOnlyValues(format, ['spki', 'pkcs8'], 'format');
+    allowOnlyValues(format, ['spki', 'pkcs8', 'raw'], 'format');
     checkType(getBuffer(keyData), ArrayBuffer, {name: 'keyData'});
-    allowOnlyKeys(algorithm, ['name', 'namedCurve']);
-    allowOnlyValues(algorithm.name, ['ECDH'], 'algorithm.name');
-    allowOnlyValues(algorithm.namedCurve, ['P-256'], 'algorithm.namedCurve');
+    if (typeof algorithm === 'string') {
+      allowOnlyValues(algorithm, ['ECDH', 'AES-GCM', 'HKDF'], 'algorithm');
+    } else {
+      checkType(algorithm, Object, {name: 'algorithm'});
+      allowOnlyValues(algorithm.name, ['ECDH', 'AES-GCM'], 'algorithm.name');
+      if (algorithm.name === 'ECDH') {
+        allowOnlyKeys(algorithm, ['name', 'namedCurve']);
+        allowOnlyValues(algorithm.namedCurve, ['P-256'], 'algorithm.namedCurve');
+      } else {
+        allowOnlyKeys(algorithm, ['name']);
+      }
+    }
     checkType(extractable, Boolean, {name: 'extractable'});
     checkType(keyUsages, Array, {name: 'keyUsages'});
     const nativeObject = new _CryptoKey();
-    await nativeObject.import(format, keyData, algorithm, extractable, keyUsages);
+    const algorithmKeys = Object.keys(algorithm);
+    const algorithmInternal = algorithmKeys.length === 1 && algorithmKeys[0] === 'name'
+      ? (algorithm as {name: string}).name as AlgorithmInternal : algorithm as AlgorithmInternal;
+    await nativeObject.import(format, keyData, algorithmInternal, extractable, keyUsages);
     return new CryptoKey(nativeObject, {
-      algorithm,
+      algorithm: algorithmInternal,
       extractable,
       usages: Object.freeze(keyUsages.concat())
     });
@@ -334,7 +346,15 @@ class NativeCrypto extends NativeObject {
 
 }
 
-function checkDeriveAlgorithm(algorithm: Algorithm) {
+function checkDeriveAlgorithm(algorithm: Algorithm):
+  asserts algorithm is (AlgorithmHKDF | AlgorithmECDH | 'HKDF')
+{
+  if (algorithm === 'HKDF') {
+    return;
+  }
+  if (algorithm === 'AES-GCM') {
+    throw new TypeError('AES-GCM not supported for this function');
+  }
   allowOnlyKeys(algorithm, ['name', 'namedCurve', 'public', 'hash', 'salt', 'info']);
   allowOnlyValues(algorithm.name, ['ECDH', 'HKDF'], 'algorithm.name');
   if (algorithm.name === 'ECDH') {

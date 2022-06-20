@@ -259,14 +259,15 @@
       }
     ],
     "importKey": {
-      "description": "Takes an external key in a portable format and returns a CryptoKey object that can be used with the SubtleCrypto API. Currently only supports the Elliptic Curve Diffie-Hellman (ECDH) algorithm. Keys may be in spki or pkcs8 format.",
+      "description": "Takes an external key in a portable format and returns a CryptoKey object that can be used with the SubtleCrypto API. Keys may be in spki or pkcs8 format.",
       "parameters": [
         {
           "name": "format",
           "type": {
             "union": [
               "'spki'",
-              "'pkcs8'"
+              "'pkcs8'",
+              "'raw'"
             ]
           }
         },
@@ -282,14 +283,27 @@
         {
           "name": "algorithm",
           "type": {
-            "map": {
-              "name": {
-                "type": "'ECDH'"
+            "union": [
+              {
+                "map": {
+                  "name": {
+                    "type": "'ECDH'"
+                  },
+                  "namedCurve": {
+                    "type": "'P-256'"
+                  }
+                }
               },
-              "namedCurve": {
-                "type": "'P-256'"
-              }
-            }
+              {
+                "map": {
+                  "name": {
+                    "type": "'AES-GCM'"
+                  }
+                }
+              },
+              "'HKDF'",
+              "'AES-GCM'"
+            ]
           }
         },
         {
