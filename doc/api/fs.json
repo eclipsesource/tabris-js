@@ -21,7 +21,12 @@
       "description": "An external path of a directory that the app may use to store cached files. External storage may be any type like permanent internal disc storage, sd-card or a usb stick. The OS may delete files in this directory when the device runs low on storage. Only use this location for data that can easily be re-created."
     },
     "externalFileDirs": {
-      "type": {"interface": "Array", "generics": ["string"]},
+      "type": {
+        "interface": "Array",
+        "generics": [
+          "string"
+        ]
+      },
       "readonly": true,
       "const": true,
       "platforms": {
@@ -30,7 +35,12 @@
       "description": "A list of external paths that the app may use to store persistent files. External storage may be any storage type like permanent internal disc storage, sd-card or a usb stick. In case no type of external storage is available the list will be empty.\n\nThis is *not* the directory that contains the files bundled with the project, e.g. images, js files, `package.json`. You can access these files using the `fetch` or `XMLHttpRequest` APIs."
     },
     "externalCacheDirs": {
-      "type": {"interface": "Array", "generics": ["string"]},
+      "type": {
+        "interface": "Array",
+        "generics": [
+          "string"
+        ]
+      },
       "readonly": true,
       "const": true,
       "platforms": {
@@ -51,7 +61,9 @@
         ],
         "returns": {
           "interface": "Promise",
-          "generics": ["ArrayBuffer"]
+          "generics": [
+            "ArrayBuffer"
+          ]
         },
         "description": "Reads the given file and returns a promise that resolves to the contents of the file on success and rejects with an error object if no file exists at that path. The file contents are returned as an ArrayBuffer."
       },
@@ -70,7 +82,9 @@
         ],
         "returns": {
           "interface": "Promise",
-          "generics": ["string"]
+          "generics": [
+            "string"
+          ]
         },
         "description": "Reads the given text file and returns a promise that resolves to the contents of the file on success and rejects with an Error if no file exists at that path. The file contents are returned as a string."
       }
@@ -85,10 +99,14 @@
       ],
       "returns": {
         "interface": "Promise",
-        "generics": [{
-          "interface": "Array",
-          "generics": ["string"]
-        }]
+        "generics": [
+          {
+            "interface": "Array",
+            "generics": [
+              "string"
+            ]
+          }
+        ]
       },
       "description": "Reads the contents of a given directory. Returns a promise that resolves on success to an array of the names of the files in the directory excluding '.' and '..'. If no directory exists at that path the Promise rejects with an error object."
     },
@@ -102,13 +120,20 @@
           },
           {
             "name": "data",
-            "type": {"union": ["ArrayBuffer", "Blob"]},
+            "type": {
+              "union": [
+                "ArrayBuffer",
+                "Blob"
+              ]
+            },
             "description": "The contents to write to the file."
           }
         ],
         "returns": {
           "interface": "Promise",
-          "generics": ["void"]
+          "generics": [
+            "void"
+          ]
         },
         "description": "Writes the given binary contents to the given file. If the file exists, it is overwritten, otherwise it is created. Returns a promise that resolves on success and rejects with an Error in case of a failure."
       },
@@ -133,7 +158,9 @@
         ],
         "returns": {
           "interface": "Promise",
-          "generics": ["void"]
+          "generics": [
+            "void"
+          ]
         },
         "description": "Writes the given text to the given file using the given encoding or `utf-8` if no encoding is specified. If the file exists, it is overwritten, otherwise it is created. Returns a promise that resolves on success and rejects with an Error in case of a failure."
       }
@@ -148,13 +175,20 @@
           },
           {
             "name": "data",
-            "type": {"union": ["ArrayBuffer", "Blob"]},
+            "type": {
+              "union": [
+                "ArrayBuffer",
+                "Blob"
+              ]
+            },
             "description": "The content to append to the file."
           }
         ],
         "returns": {
           "interface": "Promise",
-          "generics": ["boolean"]
+          "generics": [
+            "boolean"
+          ]
         },
         "description": "Writes the given binary content to the given file. If the file exists, it is appended, otherwise it is created. Returns a promise that resolves with `true` if a new file was created, or with `false` if the file already existed. It rejects with an Error if the path points to a directory."
       },
@@ -179,7 +213,9 @@
         ],
         "returns": {
           "interface": "Promise",
-          "generics": ["boolean"]
+          "generics": [
+            "boolean"
+          ]
         },
         "description": "Writes the given text to the given file using the given encoding or `utf-8` if no encoding is specified. If the file exists, it is appended, otherwise it is created. Returns a promise that resolves with `true` if a new file was created, or with `false` if the file already existed. It rejects with an Error if the path points to a directory."
       }
@@ -194,9 +230,11 @@
       ],
       "returns": {
         "interface": "Promise",
-        "generics": ["void"]
+        "generics": [
+          "void"
+        ]
       },
-      "description": "Removes the given file if it exists. Returns a promise that resolves with `true` on success or with `false` if no directory exists at that path. If the path points to a directory the promise rejects."
+      "description": "Removes the given file if it exists. Returns a promise that resolves on success or rejects if no file exists at that path. If the path points to a directory the promise also rejects."
     },
     "createDir": {
       "parameters": [
@@ -208,7 +246,9 @@
       ],
       "returns": {
         "interface": "Promise",
-        "generics": ["boolean"]
+        "generics": [
+          "boolean"
+        ]
       },
       "description": "Creates a directory on the given path, including intermediate directories. Returns a promise that resolves with `true` if the directory was created, or with `false` if it  already existed. If the path points to a file the promise rejects."
     },
@@ -222,7 +262,9 @@
       ],
       "returns": {
         "interface": "Promise",
-        "generics": ["void"]
+        "generics": [
+          "void"
+        ]
       },
       "description": "Removes the given directory if it exists. If the directory is not empty all its contents will also be deleted. Returns a promise that resolves if the directory was deleted or none existed at that path. If the path points to a file the promise rejects."
     },
@@ -236,7 +278,9 @@
       ],
       "returns": {
         "interface": "Promise",
-        "generics": ["boolean"]
+        "generics": [
+          "boolean"
+        ]
       },
       "description": "Removes the given file or directory. If the directory is not empty all its contents will also be deleted. If there is no file or directory at the given path nothing will happen. Returns a promise that resolves with `true` if something was deleted, otherwise `false`. Rejects with an error object only in case of an access error."
     },
@@ -253,7 +297,12 @@
                 "optional": true
               },
               "quantity": {
-                "type": {"union": ["'single'", "'multiple'"]},
+                "type": {
+                  "union": [
+                    "'single'",
+                    "'multiple'"
+                  ]
+                },
                 "default": "single",
                 "description": "The number of files to select.",
                 "optional": true
@@ -266,10 +315,14 @@
       ],
       "returns": {
         "interface": "Promise",
-        "generics": [{
-          "interface": "Array",
-          "generics": ["File"]
-        }]
+        "generics": [
+          {
+            "interface": "Array",
+            "generics": [
+              "File"
+            ]
+          }
+        ]
       },
       "description": "Allows to select a file via a native file picker ui. The supplied `options` object provides additional configuration parameters to adjust the picker behavior.\n\nOnce the picker ui is closed the returned promise resolves with an array of `File` objects or an empty array if no file has been selected."
     },
