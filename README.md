@@ -53,7 +53,7 @@ Tabris.js also adds support for many key web technologies including:
 
 ## Online build
 
-To package your source into a installable app, Tabris.js features an online [build service](https://tabrisjs.com/documentation/latest/build). There is no need to download a huge SDK or use specific hardware for development (e.g. a Mac machine to build for iOS). A [local build](https://tabrisjs.com/documentation/latest/local-build) is also available as an option if more customization is needed.
+To package your source into an installable app, Tabris.js features an online [build service](https://tabrisjs.com/documentation/latest/build). There is no need to download a huge SDK or use specific hardware for development (e.g. a Mac machine to build for iOS). A [local build](https://tabrisjs.com/documentation/latest/local-build) is also available as an option if more customization is needed.
 
 
 ## Build tabris npm module
