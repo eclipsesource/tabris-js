@@ -40,6 +40,7 @@ class Animation extends NativeObject {
   constructor(properties) {
     super(properties);
     this._nativeListen('completed', true);
+    this._nativeListen('rejected', true);
   }
 
   get _nativeType() {
@@ -53,12 +54,19 @@ class Animation extends NativeObject {
         this._resolve();
       }
       this.dispose();
+    } else if (name === 'rejected') {
+      this.target.off('_dispose', this.abort, this);
+      this.abort();
     } else {
       super._trigger(name, event);
     }
   }
 
   start(resolve, reject) {
+    if (this.target.isDisposed()) {
+      this.abort();
+      return;
+    }
     this.target.on('_dispose', this.abort, this);
     Object.defineProperties(this, {
       _resolve: {enumerable: false, writable: false, value: resolve},

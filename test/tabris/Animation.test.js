@@ -80,6 +80,17 @@ describe('Animation', function() {
       expect(animation.dispose).not.to.have.been.called;
     });
 
+    it('does not keep references to Animation object after rejection', function() {
+      widget.animate({}, {});
+      const animation = findNativeObject(animationId());
+      animation._trigger('rejected', {});
+      spy(animation, 'dispose');
+
+      widget.dispose();
+
+      expect(animation.dispose).not.to.have.been.called;
+    });
+
     it('sets animated properties on animation', function() {
       widget.animate({opacity: 0.4, transform: {rotation: 0.5}}, {});
       const expected = {
@@ -200,6 +211,16 @@ describe('Animation', function() {
       }).length).to.equal(1);
     });
 
+    it('issues listen call for rejected', function() {
+      widget.animate({}, {});
+      expect(client.calls({
+        op: 'listen',
+        id: animationId(),
+        event: 'rejected',
+        listen: true
+      }).length).to.equal(1);
+    });
+
     it('starts animation', function() {
       widget.animate({}, {});
       expect(client.calls({op: 'call', id: animationId(), method: 'start'}).length).to.equal(1);
@@ -210,6 +231,14 @@ describe('Animation', function() {
       expect(client.calls({op: 'destroy', id: animationId()}).length).to.equal(0);
 
       findNativeObject(animationId())._trigger('completed', {});
+      expect(client.calls({op: 'destroy', id: animationId()}).length).to.equal(1);
+    });
+
+    it('disposes animation on rejection', function() {
+      widget.animate({}, {});
+      expect(client.calls({op: 'destroy', id: animationId()}).length).to.equal(0);
+
+      findNativeObject(animationId())._trigger('rejected', {});
       expect(client.calls({op: 'destroy', id: animationId()}).length).to.equal(1);
     });
 
@@ -232,6 +261,18 @@ describe('Animation', function() {
 
       setTimeout(function() {
         expect(thenCallback).to.have.been.called;
+        done();
+      }, 100);
+    });
+
+    it('returns Promise that rejects on rejection', function(done) {
+      const catchCallback = spy();
+      widget.animate({}, {}).catch(catchCallback);
+
+      findNativeObject(animationId())._trigger('rejected', {});
+
+      setTimeout(function() {
+        expect(catchCallback).to.have.been.called;
         done();
       }, 100);
     });
