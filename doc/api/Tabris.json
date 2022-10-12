@@ -23,7 +23,21 @@
       "description": "The version of the tabris module."
     },
     "symbols": {
-      "type": {"indexType": "string", "map": {"symbol": "Symbol"}},
+      "type": {
+        "indexType": "string",
+        "map": {
+          "symbol": "Symbol"
+        }
+      },
+      "const": true
+    },
+    "propertyTypes": {
+      "type": {
+        "indexType": "string",
+        "map": {
+          "type": "PropertyType<unknown>"
+        }
+      },
       "const": true
     },
     "logPushInterval": {
@@ -48,7 +62,14 @@
         {
           "name": "options",
           "optional": true,
-          "type": {"map": {"headless": {"type": "boolean", "optional": true}}}
+          "type": {
+            "map": {
+              "headless": {
+                "type": "boolean",
+                "optional": true
+              }
+            }
+          }
         }
       ],
       "description": "Initializes the framework and triggers the 'start' event."
@@ -109,7 +130,15 @@
           "type": "string"
         },
         "level": {
-          "type": {"union": ["'debug'", "'info'", "'log'", "'warn'", "'error'"]}
+          "type": {
+            "union": [
+              "'debug'",
+              "'info'",
+              "'log'",
+              "'warn'",
+              "'error'"
+            ]
+          }
         }
       }
     },

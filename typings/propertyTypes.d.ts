@@ -19,7 +19,7 @@ export type BaseConstructor<T> = Function & { prototype: T };
 
 export type ImageSource = string | ImageBitmap | Blob;
 
- export type ImageLikeObject = {src: ImageSource, scale?: number | "auto", width?: number | "auto", height?: number | "auto"};
+export type ImageLikeObject = {src: ImageSource, scale?: number | "auto", width?: number | "auto", height?: number | "auto"};
 
 /**
  * Images can be specified as strings or Image/ImageLikeObject.
@@ -431,3 +431,9 @@ export interface ObservableDataFactory extends ObservableDataConstructor {
   <T extends object>(properties?: T): ObservableData & T;
 }
 export const ObservableData: ObservableDataFactory;
+
+export type PropertyType<T> = {
+  convert?: (value: unknown, context?: NativeObject) => T,
+  encode?: (value: T, context?: NativeObject) => any,
+  decode?: (value: any, context?: NativeObject) => T
+}

@@ -100,6 +100,7 @@ import checkType from './checkType';
 import {applyRules} from './widgets/util-apply';
 import XMLHttpRequest from './XMLHttpRequest';
 import $ from './$';
+import {types as propertyTypes} from './property-types';
 
 import {fetch} from './fetch/fetch';
 import Headers from './fetch/Headers';
@@ -231,6 +232,7 @@ const OTHER = Object.freeze({
   Setter,
   Set: Setter, // legacy support
   symbols,
+  propertyTypes,
   TextResources,
   WidgetCollection,
   $

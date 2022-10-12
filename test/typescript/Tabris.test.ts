@@ -1,4 +1,4 @@
-import { tabris, NativeObject } from 'tabris';
+import { tabris, NativeObject, PropertyType } from 'tabris';
 
 const nativeObject: NativeObject = tabris;
 const bool: boolean = tabris.started;
@@ -18,3 +18,4 @@ tabris.onLog(({message, level}) => {
 });
 
 const symbol: Symbol = tabris.symbols.equals;
+const types: {[type: string]: PropertyType<unknown>} = tabris.propertyTypes;

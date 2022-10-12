@@ -263,6 +263,12 @@ describe('tabris', function() {
     expect(typeof tabris.symbols.setterTargetType).to.equal('symbol');
   });
 
+  it('contains propertyTypes', function() {
+    expect(tabris.propertyTypes.ColorValue.convert).to.be.instanceOf(Function);
+    expect(tabris.propertyTypes.ColorValue.encode).to.be.instanceOf(Function);
+    expect(tabris.propertyTypes.ColorValue.decode).to.be.instanceOf(Function);
+  });
+
   describe('when started', function() {
 
     before(function() {
