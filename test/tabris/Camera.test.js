@@ -6,7 +6,11 @@ import NativeObject from '../../src/tabris/NativeObject';
 
 describe('Camera', () => {
 
-  let camera, client;
+  /** @type {Camera} */
+  let camera;
+
+  /** @type {ClientMock} */
+  let client;
 
   beforeEach(() => {
     client = new ClientMock();
@@ -56,7 +60,11 @@ describe('Camera', () => {
 
       camera.captureImage({flash: 'off'});
 
-      expect(client.call).to.have.been.calledWithMatch(camera.cid, 'captureImage', {options: {flash: 'off'}});
+      expect(client.call).to.have.been.calledWithMatch(
+        camera.cid,
+        'captureImage',
+        {options: {flash: 'off'}}
+      );
       const args = client.call.lastCall.args[2];
       expect(args.onResult).to.be.a('function');
       expect(args.onError).to.be.a('function');
@@ -108,6 +116,19 @@ describe('Camera', () => {
         {width: 320, height: 240},
         {width: 1024, height: 768}
       ]);
+    });
+
+  });
+
+  describe('captureResolution', () => {
+
+    it('defaults to balanced', () => {
+      expect(camera.priority).to.equal('balanced');
+    });
+
+    it('sets valid value', () => {
+      camera.priority = 'performance';
+      expect(client.properties(camera.cid).priority).to.equal('performance');
     });
 
   });

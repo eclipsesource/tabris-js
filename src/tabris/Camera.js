@@ -64,5 +64,9 @@ NativeObject.defineProperties(Camera.prototype, {
     },
     const: true,
     readonly: true
+  },
+  priority: {
+    choice: ['balanced', 'performance', 'quality'],
+    default: 'balanced'
   }
 });

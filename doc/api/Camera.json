@@ -69,6 +69,26 @@
         ]
       },
       "description": "An object determining the pixel dimensions of the captured image. Has to be an object containing `width` and `height` properties of type `number`. The list of natively available resolutions can be obtained from the `availableCaptureResolutions` property.\n\nIf the given `captureResolution` is not in the list of `availableCaptureResolutions`, a closely matching resolution larger than the given resolution is used. When no `captureResolution` is given (value is `null`), the best possible match for the device is chosen automatically. The physical dimensions of the captured image should be checked on the resolved result object of the `captureImage()` method.\n\nWhen setting the `captureResolution` on the iOS platform, a small grace period should pass before capturing an image. Otherwise the image might turn out incorrectly exposed."
+    },
+    "priority": {
+      "type": {
+        "union": [
+          "'balanced'",
+          "'performance'",
+          "'quality'"
+        ]
+      },
+      "default": "balanced",
+      "platforms": {
+        "ios": true
+      },
+      "description": "Whether to prioritize performance or quality when taking a picture.",
+      "links": [
+        {
+          "title": "Apple documentation",
+          "path": "https://developer.apple.com/documentation/avfoundation/avcapturephotooutput/3182995-maxphotoqualityprioritization"
+        }
+      ]
     }
   },
   "methods": {

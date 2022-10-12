@@ -4,10 +4,10 @@ app.idleTimeoutEnabled = false;
 const camera = device.cameras[0];
 
 permission.withAuthorization('camera',
-  () => camera.active = true,
+  () => camera.set({active: true, priority: 'performance'}),
   () => console.log('"camera" permission is required.'),
-  (e) => console.error(e));
-
+  (e) => console.error(e)
+);
 contentView.append(
   <Stack stretch alignment='stretchX' padding={16} spacing={16}>
     <CameraView top bottom={16} background='#dddddd' camera={camera}/>
