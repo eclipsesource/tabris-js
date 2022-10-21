@@ -3,8 +3,8 @@ import {warn} from './Console';
 
 const androidStackLineRegex = /^ +at +(.+) +\((.*):([0-9]+):([0-9]+)\)/;
 const androidStackLineNoNameRegex = /^ +at +(.*):([0-9]+):([0-9]+)/;
-const iosStackLineRegex = /^(.+)@(.*):([0-9]+):([0-9]+)/;
-const iosStackLineNoNameRegex = /(.*):([0-9]+):([0-9]+)/;
+const iosStackLineRegex = /^(.*)@(.*):([0-9]+):([0-9]+)/;
+const iosStackLineNoNameRegex = /@(.*):([0-9]+):([0-9]+)/;
 const urlBaseRegEx = /^[a-z]+:\/\/[^/]+\//;
 
 /**

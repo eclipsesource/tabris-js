@@ -84,7 +84,7 @@ describe('util-stacktrace', function() {
 `doSomethingElse@http://192.168.6.77:8080/dist/console.js:23:2
 doSomething@http://192.168.6.77:8080/dist/console.js:20:5
 start@http://192.168.6.77:8080/dist/console.js:17:17
-http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:27243
+@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:27243
 trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:27407
 $trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:48355
 _notify@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:74931
@@ -93,7 +93,7 @@ _notify@[native code]`,
 `doSomethingElse@/absolute/path/dist/console.js:23:2
 doSomething@/absolute/path/dist/console.js:20:5
 start@/absolute/path/dist/console.js:17:17
-http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:27243
+@http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:27243
 trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:27407
 $trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:48355
 _notify@http://192.168.6.77:8080/node_modules/tabris/tabris.js:1:74931
@@ -102,7 +102,7 @@ _notify@[native code]`,
 `doSomethingElse@C:\\absolute\\path\\dist\\console.js:23:2
 doSomething@C:\\absolute\\path\\dist\\console.js:20:5
 start@C:\\absolute\\path\\dist\\console.js:17:17
-http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:27243
+@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:27243
 trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:27407
 $trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:48355
 _notify@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:74931
@@ -115,7 +115,7 @@ callback@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:94847`,
       timer1:
 `createTimer@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:94722
 start@http://192.168.6.77:8080/dist/timer.js:10:9
-http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:29555
+@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:29555
 trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:29715
 $trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:50671
 _notify@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:77738`,
@@ -124,14 +124,14 @@ _notify@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:77738`,
 promise@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:31129
 promise@[native code]
 showActionSheet@./dist/actionsheet.js:15:25
-http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:30069
+@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:30069
 trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:30229
 $trigger@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:51185
 _notify@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:78274
 _notify@[native code]`,
       trace2:
-`./dist/actionsheet.js:17:21
-./dist/actionsheet.js:16:1
+`@./dist/actionsheet.js:17:21
+@./dist/actionsheet.js:16:1
 tryCallOne@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:1589
 http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:3011
 callback@http://192.168.6.77:8080/node_modules/tabris/tabris.min.js:1:95462`
@@ -457,41 +457,49 @@ showActionSheet (./dist/actionsheet.js:15:25)`
 
       });
 
-      describe('formatPromiseRejectionReason', function() {
+      if (platform === 'Android') {
 
-        it('returns stack trace for undefined', function() {
-          const result = formatPromiseRejectionReason();
+        // These test use real stack traces
+        // Android uses V8, like node, so stack traces are formatted the same way
+        // But they won't work when iOS stack traces are expected
 
-          expect(result).to.match(/^\n {2}at .*util-stacktrace.js/);
+        describe('formatPromiseRejectionReason', function() {
+
+          it('returns stack trace for undefined', function() {
+            const result = formatPromiseRejectionReason();
+
+            expect(result).to.match(/^\n {2}at .*util-stacktrace.js/);
+          });
+
+          it('returns stack trace and reason for null', function() {
+            const result = formatPromiseRejectionReason(null);
+
+            expect(result).to.match(/^null\n {2}at .*util-stacktrace.js/);
+          });
+
+          it('returns stack trace and reason for string', function() {
+            const result = formatPromiseRejectionReason('foo');
+
+            expect(result).to.match(/^foo\n {2}at .*util-stacktrace.js/);
+          });
+
+          it('returns stack trace and reason for stringifiables', function() {
+            const stringifiable = {toString: () => 'foo'};
+            const result = formatPromiseRejectionReason(stringifiable);
+
+            expect(result).to.match(/^foo\n {2}at .*util-stacktrace.js/);
+          });
+
+          it('does not include stack if object has one', function() {
+            const stringifiable = {toString: () => 'foo', stack: 'bar'};
+            const result = formatPromiseRejectionReason(stringifiable);
+
+            expect(result).to.match(/^foo$/);
+          });
+
         });
 
-        it('returns stack trace and reason for null', function() {
-          const result = formatPromiseRejectionReason(null);
-
-          expect(result).to.match(/^null\n {2}at .*util-stacktrace.js/);
-        });
-
-        it('returns stack trace and reason for string', function() {
-          const result = formatPromiseRejectionReason('foo');
-
-          expect(result).to.match(/^foo\n {2}at .*util-stacktrace.js/);
-        });
-
-        it('returns stack trace and reason for stringifiables', function() {
-          const stringifiable = {toString: () => 'foo'};
-          const result = formatPromiseRejectionReason(stringifiable);
-
-          expect(result).to.match(/^foo\n {2}at .*util-stacktrace.js/);
-        });
-
-        it('does not include stack if object has one', function() {
-          const stringifiable = {toString: () => 'foo', stack: 'bar'};
-          const result = formatPromiseRejectionReason(stringifiable);
-
-          expect(result).to.match(/^foo$/);
-        });
-
-      });
+      }
 
     });
 

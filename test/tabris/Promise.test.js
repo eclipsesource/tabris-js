@@ -99,6 +99,7 @@ describe('Promise', function() {
     beforeEach(() => {
       stub(console, 'error');
       stub(console, 'warn');
+      tabris.device.platform = 'Android';
     });
     afterEach(restore);
 
