@@ -1,5 +1,6 @@
 *.d.ts
 test/typescript/*
+doc
 build
 node_modules
 *.json
