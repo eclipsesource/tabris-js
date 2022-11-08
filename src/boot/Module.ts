@@ -103,7 +103,7 @@ export default class Module {
       try {
         return JSON.parse(src);
       } catch (ex) {
-        throw new Error('Could not parse ' + url + ': ' + ex.message);
+        throw new Error('Could not parse ' + url + ': ' + (ex as Error)?.message);
       }
     }
   }
@@ -319,7 +319,7 @@ function dirname(id: string) {
 }
 
 function normalizePath(path: string) {
-  const segments = [];
+  const segments: string[] = [];
   const pathSegments = path.split('/');
   for (const segment of pathSegments) {
     if (segment === '..') {

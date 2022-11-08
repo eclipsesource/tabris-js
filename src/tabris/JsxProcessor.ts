@@ -92,7 +92,7 @@ export default class JsxProcessor {
       }
       return result;
     } catch (ex) {
-      throw new Error(`JSX: "${ex.message}" ${getCurrentLine(ex)}`);
+      throw new Error(`JSX: "${(ex as Error)?.message}" ${getCurrentLine(ex)}`);
     }
   }
 
@@ -111,7 +111,7 @@ export default class JsxProcessor {
         try {
           encoded[attribute] = encoder(attributes[attribute]);
         } catch(ex) {
-          throw new Error(`Element "${el}" attribute "${attribute}" can not bet set: ${ex.message}`);
+          throw new Error(`Element "${el}" attribute "${attribute}" can not bet set: ${(ex as Error)?.message}`);
         }
       });
       const text = joinTextContent(encoded.children, true);

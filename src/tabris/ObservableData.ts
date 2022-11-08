@@ -20,9 +20,9 @@ namespace internal {
     static generateChangeEvents<T extends object>(change: PropertyChange<T>) {
       const target = change.target;
       const value = change.target[change.property] as unknown;
-      const subscriptionKey = `$${change.property}Subscription`;
+      const subscriptionKey = `$${String(change.property)}Subscription`;
       const subscriptions = change.subscriptions || target as Subscriptions;
-      const eventName = change.property + 'Changed';
+      const eventName = String(change.property) + 'Changed';
       let subscription: null | Subscription = null;
       subscriptions[subscriptionKey]?.unsubscribe();
       if (!change.init) {
@@ -96,7 +96,7 @@ ObservableData.prototype.constructor = ObservableData;
 export default ObservableData;
 
 function hasSetter(target: object, property: string | number | symbol): boolean {
-  return property in Reflect.getPrototypeOf(target)
+  return property in (Reflect.getPrototypeOf(target) || {})
    || !!Reflect.getOwnPropertyDescriptor(target, property)?.set;
 }
 

@@ -17,7 +17,7 @@ tabris._start = function(client) {
       rootModule.require('tabris');
       tabris._client = client; // required by head.append
     } catch (error) {
-      printError('Could not load tabris module:', error);
+      printError('Could not load tabris module:', error as Error);
       return;
     }
     tabris.Module = Module;
@@ -41,7 +41,7 @@ tabris._start = function(client) {
         rootModule.require('./' + (isWorker ? workerScriptPath : ''));
         tabris.flush();
       } catch (error) {
-        printError('Could not load ' + (isWorker ? 'worker' : 'main module') + ':', error);
+        printError('Could not load ' + (isWorker ? 'worker' : 'main module') + ':', error as Error);
       }
     };
     if (tabris._entryPoint) {
@@ -52,7 +52,7 @@ tabris._start = function(client) {
     }
     tabris.flush();
   } catch (error) {
-    printError('Could not start tabris:', error);
+    printError('Could not start tabris:', error as Error);
   }
 };
 

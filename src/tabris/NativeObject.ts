@@ -230,7 +230,7 @@ export default abstract class NativeObject extends EventsClass {
     try {
       convertedValue = this._convertValue(def, value, value);
     } catch (ex) {
-      this._printPropertyWarning(name, ex);
+      this._printPropertyWarning(name, ex as Error);
       return;
     }
     const encodedValue = def.type?.encode?.call(null, convertedValue, this);
@@ -256,7 +256,7 @@ export default abstract class NativeObject extends EventsClass {
   }
 
   _printPropertyWarning(name: string, ex: Error) {
-    hint(this, 'Ignored unsupported value for property "' + name + '": ' + ex.message);
+    hint(this, 'Ignored unsupported value for property "' + name + '": ' + (ex as Error)?.message);
   }
 
   _storeProperty<Name extends PropName<this>>(
@@ -332,7 +332,7 @@ export default abstract class NativeObject extends EventsClass {
 
   /**
    * Called when a property is about to be changed, past conversion and all
-   * other pre-checks. May have side-effects. Exceptions will not be catched.
+   * other pre-checks. May have side-effects. Exceptions will not be caught.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   _beforePropertyChange(name: string, value: any) {}

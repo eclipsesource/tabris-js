@@ -122,7 +122,7 @@ export default class Observable<T = unknown> {
         }
         Observable.deferred.shift()!();
       } catch (ex) {
-        console.error(ex.message);
+        console.error((ex as Error)?.message);
       }
     }
   }
