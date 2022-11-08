@@ -53,10 +53,21 @@ export type JSXShorthands<T> = T extends {layoutData?: LayoutDataValue}
   ? {center?: true, stretch?: true, stretchX?: true, stretchY?: true}
   : {};
 export type JSXCandidate = {set: any; jsxAttributes: any}; // JSX.Element?
+export type AnyWidget = {
+  cid: string;
+  id: string;
+  data: any;
+  parent: Function;
+  appendTo: Function;
+  set: Function;
+  jsxAttributes: any;
+  dispose: Function;
+  isDisposed(): boolean
+};
 export type JSXAttributes<
   T extends JSXCandidate,
   U = Omit<T, 'set' | 'jsxAttributes'> // prevent self-reference issues
-> = Properties<U> & ListenersMap<U> & JSXShorthands<U>;
+> = Properties<U & {set: any}> & ListenersMap<U> & JSXShorthands<U>;
 
 /**
  * The attributes object for the given widget type, includes all properties,
@@ -67,8 +78,8 @@ export type JSXAttributes<
  */
 export type Attributes<T extends JSXCandidate, TData = any> = T['jsxAttributes'] & {data?: TData};
 
-export type JSXCompositeAttributes<T extends Composite, U extends Widget>
-  = JSXAttributes<T> & {apply?: RuleSet<T>, children?: JSXChildren<U>};
+export type JSXCompositeAttributes<ThisType extends JSXCandidate, ChildType extends AnyWidget>
+  = JSXAttributes<ThisType> & {apply?: RuleSet<ThisType>, children?: JSXChildren<ChildType>};
 type ExtendedEvent<EventData, Target = {}> = EventObject<Target> & EventData;
 export type Listener<T = {}> = (ev: ExtendedEvent<T>) => any;
 type ListenersTriggerParam<T> = Omit<T, keyof EventObject<any>>;
@@ -78,7 +89,8 @@ export interface Listeners<EventData extends {target: object}> {
   // tslint:disable-next-line:callable-types
   (listener: Listener<ExtendedEvent<EventData>>): TargetType<EventData>;
 }
-export type JSXChildren<T extends Widget> = T|WidgetCollection<T>|Array<T|WidgetCollection<T>>|{cid?: never}|undefined;
+export type JSXChildren<T extends AnyWidget>
+  = T|WidgetCollection<T>|Array<T|WidgetCollection<T>>|{cid?: never}|undefined;
 export type SFC<T> = (attributes: object|null, children: any[]) => T;
 type Flatten<T> = T|Array<T>|undefined;
 
@@ -246,7 +258,7 @@ function renderFactory(text: TextBuilder, def: ExtendedApi) {
   const factory = def.type + 'Factory';
   text.append(`export type ${constructor} = typeof ${_class};`);
   // The "CallableConstructor" interface is not used here since it can not support static members
-  text.append(`export interface ${factory} extends Factory<${constructor}>, ${constructor} {}`);
+  text.append(`export interface ${factory} extends Factory<${constructor}, ${_class}>, ${constructor} {}`);
   text.append(`export const ${def.type}: ${factory};`);
 }
 

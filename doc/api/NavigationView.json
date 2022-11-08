@@ -18,7 +18,14 @@
   "description": "A widget that displays a stack of [pages](Page) with a toolbar that allows to navigate back. The toolbar also displays the current page's title and the highest priority [actions](Action) that are added to the NavigationView. Only children of type `Page`, `Action` and `SearchAction` are supported. Since the NavigationView does not compute its own size, the width and height must be defined by the respective layout properties (e.g. either `width` or `left` and `right` must be specified).",
   "extends": {
     "interface": "Composite",
-    "generics": [{"union": ["PageType", "ActionType"]}]
+    "generics": [
+      {
+        "union": [
+          "PageType",
+          "ActionType"
+        ]
+      }
+    ]
   },
   "constructor": {
     "access": "public",
@@ -27,7 +34,9 @@
         "name": "properties",
         "type": {
           "interface": "Properties",
-          "generics": ["NavigationView"]
+          "generics": [
+            "NavigationView"
+          ]
         },
         "optional": true,
         "description": "Sets all key-value pairs in the properties object as widget properties."
@@ -53,7 +62,6 @@
       "type": "number",
       "description": "The height of the toolbar. Is 0 if not visible.",
       "changeEventDescription": "Fired when the height of the toolbar changes, e.g. if it changes visibility."
-
     },
     "titleTextColor": {
       "type": "ColorValue",
@@ -72,7 +80,10 @@
     },
     "pageAnimation": {
       "type": "string",
-      "values": ["default", "none"],
+      "values": [
+        "default",
+        "none"
+      ],
       "default": "default",
       "description": "Controls what animation to use when animating a page transition."
     }

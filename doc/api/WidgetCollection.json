@@ -1,19 +1,26 @@
 {
   "type": "WidgetCollection",
   "category": "widget",
-  "generics": [{
-    "name": "WidgetType",
-    "extends": "Widget",
-    "default": "Widget",
-    "description": "The common type of all widgets in this collection."
-  }],
+  "generics": [
+    {
+      "name": "WidgetType",
+      "extends": "AnyWidget",
+      "default": "Widget",
+      "description": "The common type of all widgets in this collection."
+    }
+  ],
   "description": "A `WidgetCollection` is an array-like object representing a set of widgets, as returned by the widget methods `children` and `find`. It combines a subset of the JavaScript Array API with a subset of the Tabris.js Widget API. Like an array, the widgets within the collection may be accessed directly using the `[index]` syntax. The number of widgets is stored in the `length` field. Instances of *WidgetCollection* are immutable.\n\nCalls to `set` or `animate` change the given properties for all widgets in the collection. Similarly, the `on`, `off` and `once` methods will add/remove the given listener to/from all widgets. When `get` is used, the value of the first widget in the collection is returned.\n\nWidgetCollection can also in JSX as a means of creating a group of widgets to append to the same parent. To shorten this common use case the `WidgetCollection` is also available as the alias [\"$\"](./$.md). This alias still needs to be imported from the tabris module though.",
   "constructor": {
     "access": "public",
     "parameters": [
       {
         "name": "widgets",
-        "type": {"interface": "Array", "generics": ["Widget"]},
+        "type": {
+          "interface": "Array",
+          "generics": [
+            "Widget"
+          ]
+        },
         "optional": true,
         "description": "Array of widgets to include in the WidgetCollection"
       }
@@ -103,7 +110,9 @@
             "name": "properties",
             "type": {
               "interface": "Properties",
-              "generics": ["WidgetType"]
+              "generics": [
+                "WidgetType"
+              ]
             }
           }
         ],
@@ -113,11 +122,13 @@
     ],
     "children": [
       {
-        "generics": [{
-          "name": "Result",
-          "extends": "Widget",
-          "default": "Widget"
-        }],
+        "generics": [
+          {
+            "name": "Result",
+            "extends": "Widget",
+            "default": "Widget"
+          }
+        ],
         "parameters": [
           {
             "name": "selector",
@@ -153,10 +164,18 @@
       "parameters": [
         {
           "name": "properties",
-          "type": {"map": {
-            "transform": {"type": "Transformation", "optional": true},
-            "opacity": {"type": "number", "optional": true}
-          }},
+          "type": {
+            "map": {
+              "transform": {
+                "type": "Transformation",
+                "optional": true
+              },
+              "opacity": {
+                "type": "number",
+                "optional": true
+              }
+            }
+          },
           "description": "The properties and target values to animate."
         },
         {
@@ -177,11 +196,13 @@
     },
     "first": [
       {
-        "generics": [{
-          "name": "Result",
-          "extends": "WidgetType",
-          "default": "WidgetType"
-        }],
+        "generics": [
+          {
+            "name": "Result",
+            "extends": "WidgetType",
+            "default": "WidgetType"
+          }
+        ],
         "parameters": [
           {
             "name": "selector",
@@ -198,11 +219,13 @@
     ],
     "only": [
       {
-        "generics": [{
-          "name": "Result",
-          "extends": "WidgetType",
-          "default": "WidgetType"
-        }],
+        "generics": [
+          {
+            "name": "Result",
+            "extends": "WidgetType",
+            "default": "WidgetType"
+          }
+        ],
         "parameters": [
           {
             "name": "selector",
@@ -219,11 +242,13 @@
     ],
     "last": [
       {
-        "generics": [{
-          "name": "Result",
-          "extends": "WidgetType",
-          "default": "WidgetType"
-        }],
+        "generics": [
+          {
+            "name": "Result",
+            "extends": "WidgetType",
+            "default": "WidgetType"
+          }
+        ],
         "parameters": [
           {
             "name": "selector",
@@ -239,10 +264,12 @@
       },
       {
         "ts_only": true,
-        "generics": [{
-          "name": "U",
-          "extends": "Widget"
-        }],
+        "generics": [
+          {
+            "name": "U",
+            "extends": "Widget"
+          }
+        ],
         "parameters": [
           {
             "name": "constructor",
@@ -256,7 +283,12 @@
     ],
     "toArray": {
       "parameters": [],
-      "returns": {"interface": "Array", "generics": ["WidgetType"]},
+      "returns": {
+        "interface": "Array",
+        "generics": [
+          "WidgetType"
+        ]
+      },
       "description": "Returns an Array containing all widgets in the collection."
     },
     "forEach": {
@@ -265,11 +297,27 @@
           "name": "callback",
           "type": {
             "callback": [
-              {"name": "widget", "type": "WidgetType"},
-              {"name": "index", "type": "number"},
-              {"name": "collection", "type": {"interface": "WidgetCollection", "generics": ["WidgetType"]}}
+              {
+                "name": "widget",
+                "type": "WidgetType"
+              },
+              {
+                "name": "index",
+                "type": "number"
+              },
+              {
+                "name": "collection",
+                "type": {
+                  "interface": "WidgetCollection",
+                  "generics": [
+                    "WidgetType"
+                  ]
+                }
+              }
             ],
-            "returns": {"type": "void"}
+            "returns": {
+              "type": "void"
+            }
           },
           "description": "The function to call."
         }
@@ -283,23 +331,46 @@
             "name": "callback",
             "type": {
               "callback": [
-                {"name": "widget", "type": "WidgetType"},
-                {"name": "index", "type": "number"},
-                {"name": "collection", "type": {"interface": "WidgetCollection", "generics": ["WidgetType"]}}
+                {
+                  "name": "widget",
+                  "type": "WidgetType"
+                },
+                {
+                  "name": "index",
+                  "type": "number"
+                },
+                {
+                  "name": "collection",
+                  "type": {
+                    "interface": "WidgetCollection",
+                    "generics": [
+                      "WidgetType"
+                    ]
+                  }
+                }
               ],
-              "returns": {"type": "any"}
+              "returns": {
+                "type": "any"
+              }
             },
             "description": "The function to call for each widget."
           }
         ],
-        "returns": {"interface": "Array", "generics": ["any"]},
+        "returns": {
+          "interface": "Array",
+          "generics": [
+            "any"
+          ]
+        },
         "description": "Calls the given callback function once for each widget in the collection and returns an array with the return values of each call."
       },
       {
         "ts_only": true,
-        "generics": [{
-          "name": "U"
-        }],
+        "generics": [
+          {
+            "name": "U"
+          }
+        ],
         "parameters": [
           {
             "name": "callback",
@@ -307,28 +378,42 @@
             "description": "The function to call for each widget. The arguments are: *widget*, *index*, *collection*"
           }
         ],
-        "returns": {"interface": "Array", "generics": ["U"]},
+        "returns": {
+          "interface": "Array",
+          "generics": [
+            "U"
+          ]
+        },
         "description": "Calls the given callback function once for each widget in the collection and returns an array with the return values of each call."
       }
     ],
     "filter": [
       {
-        "generics": [{
-          "name": "Result",
-          "extends": "WidgetType",
-          "default": "WidgetType"
-        }],
+        "generics": [
+          {
+            "name": "Result",
+            "extends": "WidgetType",
+            "default": "WidgetType"
+          }
+        ],
         "parameters": [
           {
             "name": "selector",
             "type": {
               "interface": "Selector",
-              "generics": ["WidgetType, Result"]
+              "generics": [
+                "WidgetType, Result"
+              ]
             },
             "description": "A selector expression or a predicate function to filter the results."
           }
         ],
-        "returns": {"interface": "WidgetCollection", "generics": ["WidgetType"]},
+        "returns": {
+          "interface": "WidgetCollection",
+          "generics": [
+            "WidgetType"
+          ]
+        },
         "ts_returns": "WidgetCollection<Result>",
         "description": "Returns a new *WidgetCollection* containing all widgets in this collection that match the given selector."
       }
@@ -359,7 +444,12 @@
     },
     "concat": [
       {
-        "returns": {"interface": "WidgetCollection", "generics": ["WidgetType"]},
+        "returns": {
+          "interface": "WidgetCollection",
+          "generics": [
+            "WidgetType"
+          ]
+        },
         "description": "Returns a clone of this *WidgetCollection* containing all widgets in this collection."
       },
       {
@@ -380,7 +470,12 @@
                 {
                   "union": [
                     "Widget",
-                    {"interface": "Array", "generics": ["Widget"]},
+                    {
+                      "interface": "Array",
+                      "generics": [
+                        "Widget"
+                      ]
+                    },
                     "WidgetCollection"
                   ]
                 }
@@ -388,7 +483,12 @@
             }
           }
         ],
-        "returns": {"interface": "WidgetCollection", "generics": ["Widget"]},
+        "returns": {
+          "interface": "WidgetCollection",
+          "generics": [
+            "Widget"
+          ]
+        },
         "ts_returns": "WidgetCollection<AddedType | WidgetType>",
         "description": "Returns a new *WidgetCollection* containing all widgets in this collection and those given as arguments."
       }
@@ -409,7 +509,12 @@
             "description": "The end of the specified portion of the collection."
           }
         ],
-        "returns": {"interface": "WidgetCollection", "generics": ["WidgetType"]},
+        "returns": {
+          "interface": "WidgetCollection",
+          "generics": [
+            "WidgetType"
+          ]
+        },
         "description": "Returns a new *WidgetCollection* containing a section of this collection."
       }
     ]

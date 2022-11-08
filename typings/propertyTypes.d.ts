@@ -226,11 +226,20 @@ export type SiblingSelectorString = string;
  * An expression or a predicate function to select a set of widgets.
  */
 export type Selector<
-  Candidate extends Widget = Widget,
+  Candidate extends AnyWidget = Widget,
   Result extends Candidate = Candidate
 > = SelectorString | SelectorFunction<Candidate> | Constructor<Result> | SFC<Result>;
 
-export type SelectorFunction<Candidate extends Widget> = (widget: Candidate, index: number, collection: WidgetCollection<Candidate>) => boolean;
+/**
+ * An expression or a predicate function to select a parent widget.
+ */
+ export type ParentSelector<
+ Candidate extends Composite = Composite,
+ Result extends Candidate = Candidate
+> = SelectorString | SelectorFunction<Candidate> | Constructor<Result> | SFC<Result>;
+
+
+export type SelectorFunction<Candidate extends AnyWidget> = (widget: Candidate, index: number, collection: WidgetCollection<Candidate>) => boolean;
 
 /**
  * A positive float, or 0, representing device independent pixels.

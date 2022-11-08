@@ -5,7 +5,7 @@
   "generics": [
     {
       "name": "ChildType",
-      "extends": "Widget",
+      "extends": "AnyWidget",
       "default": "Widget",
       "description": "The common widget class of the children this composite can contain."
     }
