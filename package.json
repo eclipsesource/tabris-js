@@ -35,7 +35,7 @@
     "grunt-exec": "^2.0.0",
     "json-schema-to-typescript": "^5.5.0",
     "jsonschema": "^1.2.4",
-    "mocha": "^4.0.1",
+    "mocha": "^10.1.0",
     "rollup": "^0.68.2",
     "rollup-plugin-inject": "2.0.0",
     "rollup-plugin-typescript2": "^0.27.2",
