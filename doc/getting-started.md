@@ -18,7 +18,7 @@ Start the app and (optionally) log in with your GitHub account.
 
 On your development machine, the following software needs to be installed:
 
-- [Node.js](https://nodejs.org/) ([installation guide](https://docs.npmjs.com/getting-started/installing-node)). You need a version >= 6.0 (type `node -v` to check your node version).
+- [Node.js](https://nodejs.org/) ([installation guide](https://docs.npmjs.com/getting-started/installing-node)). You need a version >= 16.0 (type `node -v` to check your node version).
 - [Tabris CLI](https://www.npmjs.com/package/tabris-cli) (type `npm install -g tabris-cli`).
 - A text editor or JavaScript IDE of your choice.
 

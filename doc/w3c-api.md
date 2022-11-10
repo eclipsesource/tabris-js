@@ -93,7 +93,7 @@ WebSockets are an advanced technology that makes it possible to open an interact
 
 See also:
  * [MDN API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket)
- * [WHATWG Standard](https://html.spec.whatwg.org/multipage/web-sockets.html#the-websocket-interface)
+ * [WHATWG Standard](https://websockets.spec.whatwg.org/#the-websocket-interface)
 
 ## Worker
 

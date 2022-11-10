@@ -41,7 +41,7 @@ Feature|Example
 [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let)|`let a = 1;`
 [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)|`new Map(iterable)`
 [Methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions)|`{ a() { … } }`
-[Object property shorthands](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer#new_notations_in_ecmascript_2015)|`{a, b}`
+[Object property shorthands](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer#property_definitions)|`{a, b}`
 [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)|`new Promise(cb)`
 [Reflect](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect)|`Reflect.setPrototypeOf(a, proto)`
 [Rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters)|`function(...args) { … }`
