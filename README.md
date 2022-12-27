@@ -36,7 +36,7 @@ The code of the application is loaded dynamically - nothing is precompiled. Java
 
 ## Getting started
 
-To start developing Tabris.js applications, visit [tabrisjs.com](http://tabrisjs.com) and check out the "[Getting Started](https://tabrisjs.com/documentation/latest/getting-started)" guide in the documentation. Be sure to also consult the code [snippets](https://github.com/eclipsesource/tabris-js/tree/master/snippets) in the Tabris.js Developer App (download from the app store for [Android](https://play.google.com/store/apps/details?id=com.eclipsesource.tabrisjs2) and [iOS](https://itunes.apple.com/us/app/tabris.js-2/id1166468326?mt=8)).
+To start developing Tabris.js applications, visit [tabris.com](https://tabris.com/) and check out the "[Getting Started](https://tabris.com/get-started/)" guide in the documentation. Be sure to also consult the code [snippets](https://github.com/eclipsesource/tabris-js/tree/master/snippets) in the Tabris.js Developer App (download from the app store for [Android](https://play.google.com/store/apps/details?id=com.eclipsesource.tabrisjs) and [iOS](https://apps.apple.com/us/app/tabris-js/id939600018)).
 
 ## Extensible
 
@@ -53,7 +53,7 @@ Tabris.js also adds support for many key web technologies including:
 
 ## Online build
 
-To package your source into a installable app, Tabris.js features an online [build service](https://tabrisjs.com/documentation/latest/build). There is no need to download a huge SDK or use specific hardware for development (e.g. a Mac machine to build for iOS). A [local build](https://tabrisjs.com/documentation/latest/local-build) is also available as an option if more customization is needed.
+To package your source into a installable app, Tabris.js features an online [build service](https://tabrisjs.com/documentation/latest/build). There is no need to download a huge SDK or use specific hardware for development (e.g. a Mac machine to build for iOS). A [local build](https://docs.tabris.com/latest/build#local-build) is also available as an option if more customization is needed.
 
 
 ## Build tabris npm module
