@@ -2,21 +2,7 @@
 ---
 # Building a Tabris.js App
 
-Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and package apps. Apps can be built without any local setup [using the free online build service](#build-service) on tabrisjs.com. To [build an app on your local machine](#local-build), you need to setup developer tools like Xcode, Visual Studio or the Android SDK. The following features are supported by the two different build types.
-
-|                           | Build Service | Local Build
-|---------------------------|---------------|------------
-| Building iOS Apps |✓|✓
-| Building Android Apps|✓|✓
-| npm "build" Script|✓|✓|
-| [Integrate Cordova Plugins](cordova.md)|✓|✓
-| [Cordova Build Hooks](http://cordova.apache.org/docs/en/edge/guide_appdev_hooks_index.md.html)|✓|✓
-| Custom Project Structure|✓|✓|
-| Using own build hardware||✓|
-| Other SCMs than Git||✓|
-| Custom Build Environment||✓|
-
-> :point_right: The online build service is free for unlimited public GitHub repositories and 1 private repository. To build from unlimited private repositories, you need a [Pro account](https://tabrisjs.com/pricing/). [Local builds](#local-build) are free for everyone.
+Tabris.js utilizes [Apache Cordova](http://cordova.apache.org) to build and package apps. To [build an app on your local machine](#local-build), you need to setup developer tools like Xcode, Visual Studio or the Android SDK. You can also build on a [build service](#build-service) like GitHub Actions.
 
 ## Project Layout
 
@@ -196,16 +182,6 @@ The following folders are excluded by default and don't have to be listed in the
 * `build/`
 * The file `.tabrisignore` itself
 
-## Build Service
-
-[Tabrisjs.com](https://tabrisjs.com) offers a free online build service for Tabris.js apps. After signing in you can create an app in the "My Apps" section by clicking "Create App". Now you can select your GitHub repository in the list of repositories (if it’s not visible you may need to press the "synchronize" button). Users on the [Pro plan](https://tabrisjs.com/pricing/) can also use self hosted Git repositories.
-![Create an App](img/build-create-app.png)
-After you have selected your repository it’s going to be validated. The validation checks if the selected repository contains a valid Tabris.js [project layout](build.md#project-layout). If you have a valid project structure and `config.xml`, your app should become valid shortly. If it’s invalid, the site will tell you what went wrong. In this case please follow the instructions displayed.
-![Valid App](img/build-valid-app.png)
-After your app has become valid, you are ready to execute the first build. Just select the newly created app and click the "Start Android Build" button. A few minutes later you will get an Android .apk file which is ready to be installed on your device. But what about iOS, production builds and signing? All these things can be configured using the "Settings".
-
-> :point_right: The build service installs the dependencies specified in your package.json from npm (except devDependencies). As a result, you don't have to put the `node_modules` folder under version control.
-
 ### Settings
 
 ![App Settings](img/build-app-settings.png)
@@ -237,12 +213,7 @@ The Tabris CLI must be installed globally on your system:
 npm install -g tabris-cli
 ```
 
-You also need an account on [tabrisjs.com](https://tabrisjs.com). A free account is sufficient.
-
 ### Building an App
-
-On the first start, the Tabris CLI will ask for a build key.
-You can find this key on your [profile page](https://tabrisjs.com/settings/account).
 
 To build your app, run
 
@@ -251,3 +222,10 @@ tabris build [android|ios]
 ```
 
 For more command-line options, please refer to the [CLI documentation](https://www.npmjs.com/package/tabris-cli).
+
+> :point-right: If the Tabris CLI asks for a build key or fails to download the Tabris.js platform with an HTTP 400 error, make sure you have at least version 3.9.1 of the CLI installed.
+
+
+## Build Service
+
+The Tabris.js build service has been discontinued. We now recommend building with GitHub actions. You can find a migration guide and example app [here](https://github.com/eclipsesource/tabris-connect-migration-guide).
