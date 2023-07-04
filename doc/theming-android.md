@@ -8,51 +8,51 @@ Changing the global appearance of an app is a common scenario to provide a brand
 
 ## Android native theme
 
-When the Tabris.js API is not sufficient to style all aspects of a `Widget` it is possible to provide a native [theme on Android](https://developer.android.com/guide/topics/ui/look-and-feel/themes). The main use-case is to set the  primary and accent colors which are used throughout the apps widgets. These colors are also applied on the `StatusBar` and in the Android task switcher.
+When the Tabris.js API is not sufficient to style all aspects of a `Widget` it is possible to provide a native [theme on Android](https://developer.android.com/develop/ui/views/theming/themes). The main use-case is to set the primary and secondary colors which are used throughout the app's widgets. These colors are also applied on the `StatusBar` and in the Android task switcher.
 
 ### Declaring a theme
 
-The following theme file _res/android/values/myapp_theme.xml_ depicts how to define your custom color palette. The paths folder structure has to start next to the apps `config.xml` in the `cordova/` folder.
+The following theme file _resources/android/values/myapp_theme.xml_ depicts how to define your custom color palette. The paths folder structure has to start next to the app's `config.xml` in the `cordova/` folder.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="Theme.MyApp" parent="@style/Theme.Tabris.Light.DarkAppBar">
-        <item name="colorPrimary">#00d2c1</item>
-        <item name="colorPrimaryDark">#00b2a4</item>
-        <item name="colorAccent">#00b2a4</item>
-    </style>
+  <style name="Theme.MyApp" parent="@style/Theme.Tabris.Light.DarkAppBar">
+    <item name="colorPrimary">#039be5</item>
+    <item name="colorPrimaryVariant">#0288d1</item>
+    <item name="colorSecondary">#ffab00</item>
+    <item name="android:statusBarColor">#0288d1</item>
+  </style>
 
 </resources>
 ```
 
-The xml file configures the `colorPrimary`, `colorPrimaryDark` and `colorAccent`. It also inherits from the base theme `@style/Theme.Tabris.Light.DarkAppBar` which is provided by the Tabris.js Android platform. To apply the styling correctly a custom theme has to inherit from one of the three Tabris.js base themes:
+The xml file configures the `colorPrimary`, `colorPrimaryVariant` and `colorSecondary`. It also inherits from the base theme `@style/Theme.Tabris.Light.DarkAppBar` which is provided by the Tabris.js Android platform. To apply the styling correctly a custom theme has to inherit from one of the three Tabris.js base themes:
 
 * `@style/Theme.Tabris` (dark theme)
 * `@style/Theme.Tabris.Light` (light theme)
-* `@style/Theme.Tabris.Light.DarkAppBar` (light theme with dark `NavigationView`` toolbar; default)
+* `@style/Theme.Tabris.Light.DarkAppBar` (light theme with dark `NavigationView` toolbar; default)
 
 ### Applying a theme
 
-With the theme file created, we have to apply in our Tabris.js app. First we declare where to find our theme file and than register it with our Android app.
+With the theme file created, we have to apply it in our Tabris.js app. First we declare where to find our theme file and then register it with our Android app.
 
-These configuration steps are straight forward with the elements available in the apps `config.xml`. The following excerpt shows how to copy the created _myapp_theme.xml_ via the `<resource-file>` element into the app and to apply it via the `<preference>` element.
+The following excerpt shows how to copy the created _myapp_theme.xml_ via the `<resource-file>` element into the app and to apply it via the `<preference>` element.
 
 ```xml
 <platform name="android">
 
-    <resource-file src="res/android/values/myapp_theme.xml"
+    <resource-file src="resources/android/values/myapp_theme.xml"
                    target="app/src/main/res/values/myapp_theme.xml" />
 
-    <preference name="Theme" value="@style/Theme.MyApp" />
+    <preference name="AndroidPostSplashScreenTheme" value="@style/Theme.MyApp" />
 
 </platform>
 ```
 
-The `target` attribute of the `<resource-file>` has to point to the exact path as shown above, while the file name _myapp_theme.xml_ can vary. The `<preference>` `value` attribute has to reference the declared theme in the Android typical notation of `@style/Theme.MyApp`.
+The `target` attribute of the `<resource-file>` has to point to the exact path as shown above, while the file name _myapp_theme.xml_ can vary. The `<preference>` element uses the `AndroidPostSplashScreenTheme` key from the standard [cordova splashscreen API](https://cordova.apache.org/docs/en/11.x/core/features/splashscreen/). Its `value` attribute has to reference the theme style in the Android typical notation of `@style/Theme.MyApp` as declared above.
 
 ### Further resources
 
 * See the [build documentation](./build.md#preferences) for more information on the available preferences.
-* See the [`tabris-plugin-lottie`](https://github.com/eclipsesource/tabris-plugin-lottie) for an example of custom Android theme applied in a Tabris.js app.
