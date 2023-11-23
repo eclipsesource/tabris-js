@@ -482,6 +482,89 @@
           "ArrayBuffer"
         ]
       }
+    },
+    "sign": {
+      "description": "Signs the given data. Currently only supports creating ECDSA signatures in DER format.",
+      "parameters": [
+        {
+          "name": "algorithm",
+          "type": {
+            "map": {
+              "name": {
+                "type": "'ECDSAinDERFormat'"
+              },
+              "hash": {
+                "type": "'SHA-256'"
+              }
+            }
+          }
+        },
+        {
+          "name": "key",
+          "type": "CryptoKey"
+        },
+        {
+          "name": "data",
+          "type": {
+            "union": [
+              "ArrayBuffer",
+              "TypedArray"
+            ]
+          }
+        }
+      ],
+      "returns": {
+        "interface": "Promise",
+        "generics": [
+          "ArrayBuffer"
+        ]
+      }
+    },
+    "verify": {
+      "description": "Verifies the given signature against the data. Currently only supports verifying ECDSA signatures in DER format.",
+      "parameters": [
+        {
+          "name": "algorithm",
+          "type": {
+            "map": {
+              "name": {
+                "type": "'ECDSAinDERFormat'"
+              },
+              "hash": {
+                "type": "'SHA-256'"
+              }
+            }
+          }
+        },
+        {
+          "name": "key",
+          "type": "CryptoKey"
+        },
+        {
+          "name": "signature",
+          "type": {
+            "union": [
+              "ArrayBuffer",
+              "TypedArray"
+            ]
+          }
+        },
+        {
+          "name": "data",
+          "type": {
+            "union": [
+              "ArrayBuffer",
+              "TypedArray"
+            ]
+          }
+        }
+      ],
+      "returns": {
+        "interface": "Promise",
+        "generics": [
+          "boolean"
+        ]
+      }
     }
   }
 }
