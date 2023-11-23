@@ -23,7 +23,7 @@
       "type": {
         "map": {
           "name": {
-            "type": "'ECDH'"
+            "type": { "union": ["'ECDH'", "'ECDSA'"] }
           },
           "namedCurve": {
             "type": "'P-256'"

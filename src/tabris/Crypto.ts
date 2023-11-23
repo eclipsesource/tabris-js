@@ -1,6 +1,13 @@
 import NativeObject from './NativeObject';
 import {toValueString} from './Console';
-import CryptoKey, {Algorithm, AlgorithmECDH, AlgorithmHKDF, AlgorithmInternal, _CryptoKey} from './CryptoKey';
+import CryptoKey, {
+  Algorithm,
+  AlgorithmECDH,
+  AlgorithmECDSA,
+  AlgorithmHKDF,
+  AlgorithmInternal,
+  _CryptoKey
+} from './CryptoKey';
 import {allowOnlyKeys, allowOnlyValues, getBuffer, getCid, getNativeObject} from './util';
 import checkType from './checkType';
 
@@ -75,11 +82,11 @@ class SubtleCrypto {
     allowOnlyValues(format, ['spki', 'pkcs8', 'raw'], 'format');
     checkType(getBuffer(keyData), ArrayBuffer, {name: 'keyData'});
     if (typeof algorithm === 'string') {
-      allowOnlyValues(algorithm, ['ECDH', 'AES-GCM', 'HKDF'], 'algorithm');
+      allowOnlyValues(algorithm, ['AES-GCM', 'HKDF'], 'algorithm');
     } else {
       checkType(algorithm, Object, {name: 'algorithm'});
-      allowOnlyValues(algorithm.name, ['ECDH', 'AES-GCM'], 'algorithm.name');
-      if (algorithm.name === 'ECDH') {
+      allowOnlyValues(algorithm.name, ['ECDH', 'ECDSA', 'AES-GCM'], 'algorithm.name');
+      if (algorithm.name === 'ECDH' || algorithm.name === 'ECDSA') {
         allowOnlyKeys(algorithm, ['name', 'namedCurve']);
         allowOnlyValues(algorithm.namedCurve, ['P-256'], 'algorithm.namedCurve');
       } else {
@@ -210,7 +217,7 @@ class SubtleCrypto {
   }
 
   async generateKey(
-    algorithm: AlgorithmECDH,
+    algorithm: AlgorithmECDH | AlgorithmECDSA,
     extractable: boolean,
     keyUsages: string[]
   ): Promise<{privateKey: CryptoKey, publicKey: CryptoKey}> {
@@ -218,7 +225,7 @@ class SubtleCrypto {
       throw new TypeError(`Expected 3 arguments, got ${arguments.length}`);
     }
     allowOnlyKeys(algorithm, ['name', 'namedCurve']);
-    allowOnlyValues(algorithm.name, ['ECDH'], 'algorithm.name');
+    allowOnlyValues(algorithm.name, ['ECDH', 'ECDSA'], 'algorithm.name');
     allowOnlyValues(algorithm.namedCurve, ['P-256'], 'algorithm.namedCurve');
     checkType(extractable, Boolean, {name: 'extractable'});
     checkType(keyUsages, Array, {name: 'keyUsages'});

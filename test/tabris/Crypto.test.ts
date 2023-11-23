@@ -647,7 +647,7 @@ describe('Crypto', function() {
     it('checks algorithm.name', async function() {
       (params[2] as any).name = 'foo';
       await expect(importKey())
-        .rejectedWith(TypeError, 'algorithm.name must be "ECDH" or "AES-GCM", got "foo"');
+        .rejectedWith(TypeError, 'algorithm.name must be "ECDH", "ECDSA" or "AES-GCM", got "foo"');
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
     });
 
@@ -659,6 +659,14 @@ describe('Crypto', function() {
     });
 
     it('checks algorithm keys for ECDH', async function() {
+      (params[2] as any).foo = 'foo';
+      await expect(importKey())
+        .rejectedWith(TypeError, 'Object contains unexpected entry "foo"');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks algorithm keys for ECDSA', async function() {
+      (params[2] as any).name = 'ECDSA';
       (params[2] as any).foo = 'foo';
       await expect(importKey())
         .rejectedWith(TypeError, 'Object contains unexpected entry "foo"');
@@ -1069,7 +1077,7 @@ describe('Crypto', function() {
       // @ts-ignore
       params[0].name = 'foo';
       await expect(generateKey())
-        .rejectedWith(TypeError, 'algorithm.name must be "ECDH", got "foo"');
+        .rejectedWith(TypeError, 'algorithm.name must be "ECDH" or "ECDSA", got "foo"');
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
     });
 

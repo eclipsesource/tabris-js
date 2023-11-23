@@ -2,7 +2,7 @@ import {TypedArray} from './Crypto';
 import NativeObject from './NativeObject';
 import {getBuffer, getCid, setNativeObject} from './util';
 
-export type AlgorithmInternal = AlgorithmHKDF | AlgorithmECDH | 'HKDF' | 'AES-GCM';
+export type AlgorithmInternal = AlgorithmHKDF | AlgorithmECDH | AlgorithmECDSA | 'HKDF' | 'AES-GCM';
 
 export type Algorithm = AlgorithmInternal | {name: 'AES-GCM'};
 
@@ -17,6 +17,11 @@ export type AlgorithmECDH = {
   name: 'ECDH',
   namedCurve: 'P-256',
   public?: CryptoKey
+};
+
+export type AlgorithmECDSA = {
+  name: 'ECDSA',
+  namedCurve: 'P-256'
 };
 
 export default class CryptoKey {
@@ -107,7 +112,7 @@ export class _CryptoKey extends NativeObject {
   }
 
   async generate(
-    algorithm: AlgorithmECDH,
+    algorithm: AlgorithmECDH | AlgorithmECDSA,
     extractable: boolean,
     keyUsages: string[]
   ): Promise<void> {

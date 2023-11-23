@@ -287,7 +287,9 @@
               {
                 "map": {
                   "name": {
-                    "type": "'ECDH'"
+                    "type": {
+                      "union": ["'ECDH'", "'ECDSA'"]
+                    }
                   },
                   "namedCurve": {
                     "type": "'P-256'"
@@ -330,7 +332,9 @@
           "type": {
             "map": {
               "name": {
-                "type": "'ECDH'"
+                "type": {
+                  "union": ["'ECDH'", "'ECDSA'"]
+                }
               },
               "namedCurve": {
                 "type": "'P-256'"
