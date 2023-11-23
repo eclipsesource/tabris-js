@@ -1105,4 +1105,173 @@ describe('Crypto', function() {
 
   });
 
+  describe('subtle.sign()', function() {
+    let params: Parameters<typeof crypto.subtle.sign>;
+    let data: ArrayBuffer;
+    let key: _CryptoKey;
+
+    async function sign(cb?: (nativeParams: any) => void) {
+      const promise = crypto.subtle.sign.apply(crypto.subtle, params);
+      cb?.call(null, client.calls({op: 'call', method: 'subtleSign'})[0].parameters);
+      return promise;
+    }
+
+    beforeEach(function() {
+      client.resetCalls();
+      data = new ArrayBuffer(10);
+      key = new _CryptoKey();
+      params = [
+        {name: 'ECDSAinDERFormat', hash: 'SHA-256'},
+        new CryptoKey(key, {}),
+        data
+      ];
+    });
+
+    it('CALLs subtleSign', async function() {
+      await sign(param => param.onSuccess());
+      const signCalls = client.calls({op: 'call', method: 'subtleSign'});
+      expect(signCalls.length).to.equal(1);
+      expect(signCalls[0].parameters).to.deep.include({
+        algorithm: {name: 'ECDSAinDERFormat', hash: 'SHA-256'},
+        key: key.cid,
+        data
+      });
+    });
+
+    it('returns signed data', async function() {
+      const signed = new ArrayBuffer(2);
+      expect(await sign(param => param.onSuccess(signed)))
+        .to.equal(signed);
+    });
+
+    it('propagates rejection', async function() {
+      await expect(sign(param => param.onError('signerror')))
+        .rejectedWith(Error, 'signerror');
+    });
+
+    it('checks parameter length', async function() {
+      params.pop();
+      await expect(sign())
+        .rejectedWith(TypeError, 'Expected 3 arguments, got 2');
+      expect(client.calls({op: 'call', method: 'subtleSign'}).length).to.equal(0);
+    });
+
+    it('checks algorithm.name', async function() {
+      (params[0].name as any) = 'foo';
+      await expect(sign())
+        .rejectedWith(TypeError, 'algorithm.name must be "ECDSAinDERFormat", got "foo"');
+      expect(client.calls({op: 'call', method: 'subtleSign'}).length).to.equal(0);
+    });
+
+    it('checks algorithm.hash', async function() {
+      (params[0].hash as any) = 'foo';
+      await expect(sign())
+        .rejectedWith(TypeError, 'algorithm.hash must be "SHA-256", got "foo"');
+      expect(client.calls({op: 'call', method: 'subtleSign'}).length).to.equal(0);
+    });
+
+    it('checks key', async function() {
+      params[1] = null;
+      await expect(sign())
+        .rejectedWith(TypeError, 'Expected key to be of type CryptoKey, got null');
+      expect(client.calls({op: 'call', method: 'subtleSign'}).length).to.equal(0);
+    });
+
+    it('checks data', async function() {
+      params[2] = null;
+      await expect(sign())
+        .rejectedWith(TypeError, 'Expected data to be of type ArrayBuffer, got null');
+      expect(client.calls({op: 'call', method: 'subtleSign'}).length).to.equal(0);
+    });
+  });
+
+  describe('subtle.verify()', function() {
+    let params: Parameters<typeof crypto.subtle.verify>;
+    let signature: ArrayBuffer;
+    let data: ArrayBuffer;
+    let key: _CryptoKey;
+
+    async function verify(cb?: (nativeParams: any) => void) {
+      const promise = crypto.subtle.verify.apply(crypto.subtle, params);
+      cb?.call(null, client.calls({op: 'call', method: 'subtleVerify'})[0].parameters);
+      return promise;
+    }
+
+    beforeEach(function() {
+      client.resetCalls();
+      signature = new ArrayBuffer(2);
+      data = new ArrayBuffer(10);
+      key = new _CryptoKey();
+      params = [
+        {name: 'ECDSAinDERFormat', hash: 'SHA-256'},
+        new CryptoKey(key, {}),
+        signature,
+        data
+      ];
+    });
+
+    it('CALLs subtleVerify', async function() {
+      await verify(param => param.onSuccess(true));
+      const verifyCalls = client.calls({op: 'call', method: 'subtleVerify'});
+      expect(verifyCalls.length).to.equal(1);
+      expect(verifyCalls[0].parameters).to.deep.include({
+        algorithm: {name: 'ECDSAinDERFormat', hash: 'SHA-256'},
+        key: key.cid,
+        signature,
+        data
+      });
+    });
+
+    it('returns verification result', async function() {
+      expect(await verify(param => param.onSuccess(true))).to.be.true;
+    });
+
+    it('propagates rejection', async function() {
+      await expect(verify(param => param.onError('verifyerror')))
+        .rejectedWith(Error, 'verifyerror');
+    });
+
+    it('checks parameter length', async function() {
+      params.pop();
+      await expect(verify())
+        .rejectedWith(TypeError, 'Expected 4 arguments, got 3');
+      expect(client.calls({op: 'call', method: 'subtleVerify'}).length).to.equal(0);
+    });
+
+    it('checks algorithm.name', async function() {
+      (params[0].name as any) = 'foo';
+      await expect(verify())
+        .rejectedWith(TypeError, 'algorithm.name must be "ECDSAinDERFormat", got "foo"');
+      expect(client.calls({op: 'call', method: 'subtleVerify'}).length).to.equal(0);
+    });
+
+    it('checks algorithm.hash', async function() {
+      (params[0].hash as any) = 'foo';
+      await expect(verify())
+        .rejectedWith(TypeError, 'algorithm.hash must be "SHA-256", got "foo"');
+      expect(client.calls({op: 'call', method: 'subtleVerify'}).length).to.equal(0);
+    });
+
+    it('checks key', async function() {
+      params[1] = null;
+      await expect(verify())
+        .rejectedWith(TypeError, 'Expected key to be of type CryptoKey, got null');
+      expect(client.calls({op: 'call', method: 'subtleVerify'}).length).to.equal(0);
+    });
+
+    it('checks signature', async function() {
+      params[2] = null;
+      await expect(verify())
+        .rejectedWith(TypeError, 'Expected signature to be of type ArrayBuffer, got null');
+      expect(client.calls({op: 'call', method: 'subtleVerify'}).length).to.equal(0);
+    });
+
+    it('checks data', async function() {
+      params[3] = null;
+      await expect(verify())
+        .rejectedWith(TypeError, 'Expected data to be of type ArrayBuffer, got null');
+      expect(client.calls({op: 'call', method: 'subtleVerify'}).length).to.equal(0);
+    });
+  });
+
 });

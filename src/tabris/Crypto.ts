@@ -14,6 +14,8 @@ import checkType from './checkType';
 export type TypedArray = Int8Array | Uint8Array | Uint8ClampedArray
   | Int16Array | Uint16Array | Int32Array | Uint32Array;
 
+type SignatureAlgorithm = { name: 'ECDSAinDERFormat', hash: 'SHA-256' };
+
 export default class Crypto {
 
   readonly subtle!: SubtleCrypto;
@@ -239,6 +241,46 @@ class SubtleCrypto {
     };
   }
 
+  async sign(
+    algorithm: SignatureAlgorithm,
+    key: CryptoKey,
+    data: ArrayBuffer | TypedArray
+  ): Promise<ArrayBuffer> {
+    if (arguments.length !== 3) {
+      throw new TypeError(`Expected 3 arguments, got ${arguments.length}`);
+    }
+    allowOnlyKeys(algorithm, ['name', 'hash']);
+    allowOnlyValues(algorithm.name, ['ECDSAinDERFormat'], 'algorithm.name');
+    allowOnlyValues(algorithm.hash, ['SHA-256'], 'algorithm.hash');
+    checkType(key, CryptoKey, {name: 'key'});
+    checkType(algorithm.name, String, {name: 'algorithm.name'});
+    checkType(algorithm.hash, String, {name: 'algorithm.hash'});
+    checkType(getBuffer(data), ArrayBuffer, {name: 'data'});
+    return new Promise((onSuccess, onError) =>
+      this._nativeObject.subtleSign(algorithm, key, data, onSuccess, onError)
+    );
+  }
+
+  async verify(
+    algorithm: SignatureAlgorithm,
+    key: CryptoKey,
+    signature: ArrayBuffer | TypedArray,
+    data: ArrayBuffer | TypedArray
+  ): Promise<boolean> {
+    if (arguments.length !== 4) {
+      throw new TypeError(`Expected 4 arguments, got ${arguments.length}`);
+    }
+    allowOnlyKeys(algorithm, ['name', 'hash']);
+    allowOnlyValues(algorithm.name, ['ECDSAinDERFormat'], 'algorithm.name');
+    allowOnlyValues(algorithm.hash, ['SHA-256'], 'algorithm.hash');
+    checkType(key, CryptoKey, {name: 'key'});
+    checkType(getBuffer(signature), ArrayBuffer, {name: 'signature'});
+    checkType(getBuffer(data), ArrayBuffer, {name: 'data'});
+    return new Promise((onSuccess, onReject) =>
+      this._nativeObject.subtleVerify(algorithm, key, signature, data, onSuccess, onReject)
+    );
+  }
+
 }
 
 class NativeCrypto extends NativeObject {
@@ -345,6 +387,40 @@ class NativeCrypto extends NativeObject {
         tagLength: isNaN(tagLength as number) ? 128 : tagLength
       },
       key: getCid(key),
+      data: getBuffer(data),
+      onSuccess,
+      onError: (reason: unknown) => onError(new Error(String(reason)))
+    });
+  }
+
+  subtleSign(
+    algorithm: SignatureAlgorithm,
+    key: CryptoKey,
+    data: ArrayBuffer | TypedArray,
+    onSuccess: (buffer: ArrayBuffer) => any,
+    onError: (ex: Error) => any
+  ): void {
+    this._nativeCall('subtleSign', {
+      algorithm,
+      key: getCid(key),
+      data: getBuffer(data),
+      onSuccess,
+      onError: (reason: unknown) => onError(new Error(String(reason)))
+    });
+  }
+
+  subtleVerify(
+    algorithm: SignatureAlgorithm,
+    key: CryptoKey,
+    signature: ArrayBuffer | TypedArray,
+    data: ArrayBuffer | TypedArray,
+    onSuccess: (isValid: boolean) => any,
+    onError: (ex: Error) => any
+  ): void {
+    this._nativeCall('subtleVerify', {
+      algorithm,
+      key: getCid(key),
+      signature: getBuffer(signature),
       data: getBuffer(data),
       onSuccess,
       onError: (reason: unknown) => onError(new Error(String(reason)))
