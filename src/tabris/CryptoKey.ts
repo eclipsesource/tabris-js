@@ -24,6 +24,8 @@ export type AlgorithmECDSA = {
   namedCurve: 'P-256'
 };
 
+export type GenerateKeyOptions = { inTee?: boolean, usageRequiresAuth?: boolean };
+
 export default class CryptoKey {
 
   constructor(nativeObject: _CryptoKey, data: CryptoKey) {
@@ -114,13 +116,17 @@ export class _CryptoKey extends NativeObject {
   async generate(
     algorithm: AlgorithmECDH | AlgorithmECDSA,
     extractable: boolean,
-    keyUsages: string[]
+    keyUsages: string[],
+    inTee?: boolean,
+    usageRequiresAuth?: boolean
   ): Promise<void> {
     return new Promise((onSuccess, onError) =>
       this._nativeCall('generate', {
         algorithm,
         extractable,
         keyUsages,
+        inTee,
+        usageRequiresAuth,
         onSuccess,
         onError: wrapErrorCb(onError)
       })

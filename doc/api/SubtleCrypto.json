@@ -267,7 +267,8 @@
             "union": [
               "'spki'",
               "'pkcs8'",
-              "'raw'"
+              "'raw'",
+              "'teeKeyHandle'"
             ]
           }
         },
@@ -349,6 +350,16 @@
         {
           "name": "keyUsages",
           "type": "string[]"
+        },
+        {
+          "name": "options",
+          "optional": true,
+          "type": {
+            "map": {
+              "inTee": { "type": "boolean", "optional": true },
+              "usageRequiresAuth": { "type": "boolean", "optional": true }
+            }
+          }
         }
       ],
       "returns": {
@@ -467,7 +478,8 @@
           "type": {
             "union": [
               "'raw'",
-              "'spki'"
+              "'spki'",
+              "'teeKeyHandle'"
             ]
           }
         },
