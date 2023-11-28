@@ -6,6 +6,7 @@ import CryptoKey, {
   AlgorithmECDSA,
   AlgorithmHKDF,
   AlgorithmInternal,
+  GenerateKeyOptions,
   _CryptoKey
 } from './CryptoKey';
 import {allowOnlyKeys, allowOnlyValues, getBuffer, getCid, getNativeObject} from './util';
@@ -81,7 +82,7 @@ class SubtleCrypto {
     if (arguments.length !== 5) {
       throw new TypeError(`Expected 5 arguments, got ${arguments.length}`);
     }
-    allowOnlyValues(format, ['spki', 'pkcs8', 'raw'], 'format');
+    allowOnlyValues(format, ['spki', 'pkcs8', 'raw', 'teeKeyHandle'], 'format');
     checkType(getBuffer(keyData), ArrayBuffer, {name: 'keyData'});
     if (typeof algorithm === 'string') {
       allowOnlyValues(algorithm, ['AES-GCM', 'HKDF'], 'algorithm');
@@ -205,13 +206,13 @@ class SubtleCrypto {
   }
 
   async exportKey(
-    format: 'raw' | 'spki',
+    format: 'raw' | 'spki' | 'teeKeyHandle',
     key: CryptoKey
   ): Promise<ArrayBuffer> {
     if (arguments.length !== 2) {
       throw new TypeError(`Expected 2 arguments, got ${arguments.length}`);
     }
-    allowOnlyValues(format, ['raw', 'spki'], 'format');
+    allowOnlyValues(format, ['raw', 'spki', 'teeKeyHandle'], 'format');
     checkType(key, CryptoKey, {name: 'key'});
     return new Promise((onSuccess, onReject) =>
       this._nativeObject.subtleExportKey(format, key, onSuccess, onReject)
@@ -221,18 +222,39 @@ class SubtleCrypto {
   async generateKey(
     algorithm: AlgorithmECDH | AlgorithmECDSA,
     extractable: boolean,
-    keyUsages: string[]
+    keyUsages: string[],
+    options?: GenerateKeyOptions
   ): Promise<{privateKey: CryptoKey, publicKey: CryptoKey}> {
-    if (arguments.length !== 3) {
-      throw new TypeError(`Expected 3 arguments, got ${arguments.length}`);
+    if (arguments.length < 3) {
+      throw new TypeError(`Expected at least 3 arguments, got ${arguments.length}`);
     }
     allowOnlyKeys(algorithm, ['name', 'namedCurve']);
     allowOnlyValues(algorithm.name, ['ECDH', 'ECDSA'], 'algorithm.name');
     allowOnlyValues(algorithm.namedCurve, ['P-256'], 'algorithm.namedCurve');
     checkType(extractable, Boolean, {name: 'extractable'});
     checkType(keyUsages, Array, {name: 'keyUsages'});
+    if (options != null) {
+      allowOnlyKeys(options, ['inTee', 'usageRequiresAuth']);
+      if('inTee' in options) {
+        checkType(options.inTee, Boolean, {name: 'options.inTee'});
+      }
+      if ('usageRequiresAuth' in options) {
+        checkType(options.usageRequiresAuth, Boolean, {name: 'options.usageRequiresAuth'});
+      }
+      if (options.inTee && algorithm.name !== 'ECDSA') {
+        throw new TypeError('options.inTee is only supported for ECDSA keys');
+      }
+      if (options.usageRequiresAuth && algorithm.name !== 'ECDSA') {
+        throw new TypeError('options.usageRequiresAuth is only supported for ECDSA keys');
+      }
+      if (options.usageRequiresAuth && !options.inTee) {
+        throw new TypeError('options.usageRequiresAuth is only supported for keys in TEE');
+      }
+    }
+    const inTee = options?.inTee;
+    const usageRequiresAuth = options?.usageRequiresAuth;
     const nativeObject = new _CryptoKey();
-    await nativeObject.generate(algorithm, extractable, keyUsages);
+    await nativeObject.generate(algorithm, extractable, keyUsages, inTee, usageRequiresAuth);
     const nativePrivate = new _CryptoKey(nativeObject, 'private');
     const nativePublic = new _CryptoKey(nativeObject, 'public');
     return {

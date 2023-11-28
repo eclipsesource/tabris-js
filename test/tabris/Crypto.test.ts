@@ -633,7 +633,7 @@ describe('Crypto', function() {
     it('checks format values', async function() {
       params[0] = 'foo';
       await expect(importKey())
-        .rejectedWith(TypeError, 'format must be "spki", "pkcs8" or "raw", got "foo"');
+        .rejectedWith(TypeError, 'format must be "spki", "pkcs8", "raw" or "teeKeyHandle", got "foo"');
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
     });
 
@@ -750,7 +750,7 @@ describe('Crypto', function() {
       // @ts-ignore
       params[0] = 'foo';
       await expect(exportKey())
-        .rejectedWith(TypeError, 'format must be "raw" or "spki", got "foo"');
+        .rejectedWith(TypeError, 'format must be "raw", "spki" or "teeKeyHandle", got "foo"');
       expect(client.calls({op: 'call', method: 'subtleExportKey'}).length).to.equal(0);
     });
 
@@ -1034,19 +1034,25 @@ describe('Crypto', function() {
     beforeEach(function() {
       client.resetCalls();
       params = [
-        {
-          name: 'ECDH',
-          namedCurve: 'P-256'
-        },
+        {name: 'ECDSA', namedCurve: 'P-256'},
         true,
-        ['foo', 'bar']
+        ['foo', 'bar'],
+        {inTee: true, usageRequiresAuth: true}
       ];
     });
 
     it('CREATEs CryptKey and CALLs generate', async function() {
       await generateKey(param => param.onSuccess());
       const id = client.calls({op: 'create', type: 'tabris.CryptoKey'})[0].id;
-      expect(client.calls({op: 'call', id, method: 'generate'}).length).to.equal(1);
+      const calls = client.calls({op: 'call', id, method: 'generate'});
+      expect(calls.length).to.equal(1);
+      expect(calls[0].parameters).to.deep.include({
+        algorithm: {name: 'ECDSA', namedCurve: 'P-256'},
+        extractable: true,
+        keyUsages: ['foo', 'bar'],
+        inTee: true,
+        usageRequiresAuth: true
+      });
     });
 
     it('CREATEs public and private CryptKey', async function() {
@@ -1067,9 +1073,10 @@ describe('Crypto', function() {
     });
 
     it('checks parameter length', async function() {
-      params.pop();
+      params.pop(); // removes optional parameter `options`
+      params.pop(); // removes required parameter `usages`
       await expect(generateKey())
-        .rejectedWith(TypeError, 'Expected 3 arguments, got 2');
+        .rejectedWith(TypeError, 'Expected at least 3 arguments, got 2');
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
     });
 
@@ -1100,6 +1107,43 @@ describe('Crypto', function() {
       params[2] = null;
       await expect(generateKey())
         .rejectedWith(TypeError, 'Expected keyUsages to be an array, got null');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks options.inTee type', async function() {
+      params[3] = {inTee: null, usageRequiresAuth: true};
+      await expect(generateKey())
+        .rejectedWith(TypeError, 'Expected options.inTee to be a boolean, got null');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks options.usageRequiresAuth type', async function() {
+      params[3] = {inTee: true, usageRequiresAuth: null};
+      await expect(generateKey())
+        .rejectedWith(TypeError, 'Expected options.usageRequiresAuth to be a boolean, got null');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('rejects options.inTee when algorithm name is not ECDSA', async function() {
+      params[0] = {name: 'ECDH', namedCurve: 'P-256'};
+      params[3] = {inTee: true};
+      await expect(generateKey())
+        .rejectedWith(TypeError, 'options.inTee is only supported for ECDSA keys');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('rejects options.usageRequiresAuth when algorithm name is not ECDSA', async function() {
+      params[0] = {name: 'ECDH', namedCurve: 'P-256'};
+      params[3] = {usageRequiresAuth: true};
+      await expect(generateKey())
+        .rejectedWith(TypeError, 'options.usageRequiresAuth is only supported for ECDSA keys');
+      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('rejects options.usageRequiresAuth when options.inTee is not set', async function() {
+      params[3] = {usageRequiresAuth: true};
+      await expect(generateKey())
+        .rejectedWith(TypeError, 'options.usageRequiresAuth is only supported for keys in TEE');
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
     });
 
