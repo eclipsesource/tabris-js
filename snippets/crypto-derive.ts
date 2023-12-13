@@ -6,7 +6,12 @@ const stack = Stack({stretch: true,  spacing: 8,  padding: 16,  alignment: 'stre
 tabris.onLog(({message}) => stack.append(TextView({text: message})));
 
 (async () => {
+  await importAndDerive();
+  await generateDeriveEncryptAndDecrypt();
+  await generateDeriveEncryptAndDecrypt({inTee: true, usageRequiresAuth: true});
+})().catch(console.error);
 
+async function importAndDerive() {
   const publicKeyBuffer = Uint8Array.of(
     48, 89, 48, 19, 6, 7, 42, 134, 72, 206, 61, 2,
     1, 6, 8, 42, 134, 72, 206, 61, 3, 1, 7, 3,
@@ -96,9 +101,44 @@ tabris.onLog(({message}) => stack.append(TextView({text: message})));
       size * 8
     );
   }
+}
 
-  function test(name, actual, expected) {
-    console.log(name, expected === actual ? 'OK' : `expected: ${expected}, actual: ${actual}`);
+async function generateDeriveEncryptAndDecrypt({inTee, usageRequiresAuth} = {inTee: false, usageRequiresAuth: false}) {
+  const ecdhP256 = {name: 'ECDH' as const, namedCurve: 'P-256' as const};
+  const aesGcm = {name: 'AES-GCM' as const};
+
+  // Generate Alice's ECDH key pair
+  const alicesKeyPair = await crypto.subtle.generateKey(ecdhP256, true, ['deriveBits']);
+
+  // Generate Bob's ECDH key pair
+  const bobsKeyPair = await crypto.subtle.generateKey(ecdhP256, true, ['deriveBits'], {inTee, usageRequiresAuth});
+
+  // Derive Alice's AES key
+  const alicesAesKey = await deriveAesKey(bobsKeyPair.publicKey, alicesKeyPair.privateKey, 'encrypt');
+
+  // Derive Bob's AES key
+  const bobsAesKey = await deriveAesKey(alicesKeyPair.publicKey, bobsKeyPair.privateKey, 'decrypt');
+
+  // Encrypt a message with Alice's AES key
+  const message = await new Blob(['Message']).arrayBuffer();
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ciphertext = await crypto.subtle.encrypt({...aesGcm, iv}, alicesAesKey, message);
+
+  // Decrypt Alice's ciphertext with Bob's AES key
+  const plaintext = await crypto.subtle.decrypt({...aesGcm, iv}, bobsAesKey, ciphertext);
+
+  test('decrypted plaintext', byteArrayToString(plaintext), 'Message');
+
+  async function deriveAesKey(publicKey: CryptoKey, privateKey: CryptoKey, usage: 'encrypt' | 'decrypt') {
+    const derivedBits = await crypto.subtle.deriveBits({public: publicKey, ...ecdhP256}, privateKey, 256);
+    return await crypto.subtle.importKey('raw', derivedBits, aesGcm, true, [usage]);
   }
+}
 
-})().catch(console.error);
+function byteArrayToString(ab: ArrayBuffer) {
+  return String.fromCharCode.apply(null, new Uint8Array(ab));
+}
+
+function test(name, actual, expected) {
+  console.log(name, expected === actual ? 'OK' : `expected: ${expected}, actual: ${actual}`);
+}

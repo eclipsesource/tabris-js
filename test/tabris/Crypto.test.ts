@@ -1124,22 +1124,6 @@ describe('Crypto', function() {
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
     });
 
-    it('rejects options.inTee when algorithm name is not ECDSA', async function() {
-      params[0] = {name: 'ECDH', namedCurve: 'P-256'};
-      params[3] = {inTee: true};
-      await expect(generateKey())
-        .rejectedWith(TypeError, 'options.inTee is only supported for ECDSA keys');
-      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
-    });
-
-    it('rejects options.usageRequiresAuth when algorithm name is not ECDSA', async function() {
-      params[0] = {name: 'ECDH', namedCurve: 'P-256'};
-      params[3] = {usageRequiresAuth: true};
-      await expect(generateKey())
-        .rejectedWith(TypeError, 'options.usageRequiresAuth is only supported for ECDSA keys');
-      expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
-    });
-
     it('rejects options.usageRequiresAuth when options.inTee is not set', async function() {
       params[3] = {usageRequiresAuth: true};
       await expect(generateKey())
