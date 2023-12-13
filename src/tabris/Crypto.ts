@@ -241,12 +241,6 @@ class SubtleCrypto {
       if ('usageRequiresAuth' in options) {
         checkType(options.usageRequiresAuth, Boolean, {name: 'options.usageRequiresAuth'});
       }
-      if (options.inTee && algorithm.name !== 'ECDSA') {
-        throw new TypeError('options.inTee is only supported for ECDSA keys');
-      }
-      if (options.usageRequiresAuth && algorithm.name !== 'ECDSA') {
-        throw new TypeError('options.usageRequiresAuth is only supported for ECDSA keys');
-      }
       if (options.usageRequiresAuth && !options.inTee) {
         throw new TypeError('options.usageRequiresAuth is only supported for keys in TEE');
       }
