@@ -241,8 +241,8 @@ class SubtleCrypto {
       if ('usageRequiresAuth' in options) {
         checkType(options.usageRequiresAuth, Boolean, {name: 'options.usageRequiresAuth'});
       }
-      if (options.usageRequiresAuth && !options.inTee) {
-        throw new TypeError('options.usageRequiresAuth is only supported for keys in TEE');
+      if (options.usageRequiresAuth && !options.inTee && (tabris as any).device.platform !== 'Android') {
+        throw new TypeError('options.usageRequiresAuth is only supported for keys not in TEE on Android');
       }
     }
     const inTee = options?.inTee;

@@ -1124,12 +1124,21 @@ describe('Crypto', function() {
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
     });
 
-    it('rejects options.usageRequiresAuth when options.inTee is not set', async function() {
+    it('rejects options.usageRequiresAuth when options.inTee is not set and platform is not Android', async function() {
+      (tabris as any).device.platform = 'iOS';
       params[3] = {usageRequiresAuth: true};
       await expect(generateKey())
-        .rejectedWith(TypeError, 'options.usageRequiresAuth is only supported for keys in TEE');
+        .rejectedWith(TypeError, 'options.usageRequiresAuth is only supported for keys not in TEE on Android');
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
     });
+
+    it('does not reject options.usageRequiresAuth when options.inTee is not set and platform is Android',
+      async function() {
+        (tabris as any).device.platform = 'Android';
+        params[3] = {usageRequiresAuth: true};
+        await generateKey(param => param.onSuccess());
+        expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.be.greaterThan(0);
+      });
 
   });
 
