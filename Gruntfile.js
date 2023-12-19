@@ -10,7 +10,7 @@ module.exports = function(grunt) {
   let version = pkg.version;
   const release = grunt.option('release');
   if (!release) {
-    version += '-dev.' + grunt.template.today('yyyymmdd+HHMM');
+    version += '-dev.' + grunt.template.today('yyyymmdd.1+HHMM');
   }
   const banner = blockComment('Tabris.js ' + version + '\n\n' + grunt.file.read('LICENSE'));
 
