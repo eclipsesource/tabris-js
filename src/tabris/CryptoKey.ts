@@ -81,7 +81,9 @@ export class _CryptoKey extends NativeObject {
     baseKey: CryptoKey,
     derivedKeyAlgorithm: {name: string, length: number},
     extractable: boolean,
-    keyUsages: string[]
+    keyUsages: string[],
+    authPromptTitle?: string,
+    authPromptMessage?: string
   ): Promise<void> {
     return new Promise((onSuccess, onError) => {
       if (typeof algorithm === 'string') {
@@ -94,6 +96,8 @@ export class _CryptoKey extends NativeObject {
           derivedKeyAlgorithm,
           extractable,
           keyUsages,
+          authPromptTitle,
+          authPromptMessage,
           onSuccess,
           onError: wrapErrorCb(onError)
         });
@@ -104,6 +108,8 @@ export class _CryptoKey extends NativeObject {
           derivedKeyAlgorithm,
           extractable,
           keyUsages,
+          authPromptTitle,
+          authPromptMessage,
           onSuccess,
           onError: wrapErrorCb(onError)
         });

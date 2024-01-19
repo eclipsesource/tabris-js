@@ -319,7 +319,7 @@ describe('Crypto', function() {
     it('checks parameter length', async function() {
       params.pop();
       await expect(deriveKey())
-        .rejectedWith(TypeError, 'Expected 5 arguments, got 4');
+        .rejectedWith(TypeError, 'Expected at least 5 arguments, got 4');
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
     });
 
@@ -391,6 +391,20 @@ describe('Crypto', function() {
       await expect(deriveKey())
         .rejectedWith(TypeError, 'Expected derivedKeyAlgorithm.length to be a number, got string.');
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks options.authPromptTitle', async function() {
+      params[5] = {authPromptTitle: null};
+      await expect(deriveKey())
+        .rejectedWith(TypeError, 'Expected options.authPromptTitle to be a string, got null.');
+      expect(client.calls({op: 'call', method: 'subtleSign'}).length).to.equal(0);
+    });
+
+    it('checks options.authPromptMessage', async function() {
+      params[5] = {authPromptMessage: null};
+      await expect(deriveKey())
+        .rejectedWith(TypeError, 'Expected options.authPromptMessage to be a string, got null.');
+      expect(client.calls({op: 'call', method: 'subtleSign'}).length).to.equal(0);
     });
 
   });
@@ -502,7 +516,7 @@ describe('Crypto', function() {
 
     it('checks parameter length', async function() {
       params.pop();
-      await expect(deriveBits()).rejectedWith(TypeError, 'Expected 3 arguments, got 2');
+      await expect(deriveBits()).rejectedWith(TypeError, 'Expected at least 3 arguments, got 2');
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
     });
 
@@ -524,6 +538,20 @@ describe('Crypto', function() {
       await expect(deriveBits())
         .rejectedWith(TypeError, 'Expected baseKey to be of type CryptoKey, got null.');
       expect(client.calls({op: 'create', type: 'tabris.CryptoKey'}).length).to.equal(0);
+    });
+
+    it('checks options.authPromptTitle', async function() {
+      params[3] = {authPromptTitle: null};
+      await expect(deriveBits())
+        .rejectedWith(TypeError, 'Expected options.authPromptTitle to be a string, got null.');
+      expect(client.calls({op: 'call', method: 'subtleSign'}).length).to.equal(0);
+    });
+
+    it('checks options.authPromptMessage', async function() {
+      params[3] = {authPromptMessage: null};
+      await expect(deriveBits())
+        .rejectedWith(TypeError, 'Expected options.authPromptMessage to be a string, got null.');
+      expect(client.calls({op: 'call', method: 'subtleSign'}).length).to.equal(0);
     });
 
   });
@@ -1189,7 +1217,7 @@ describe('Crypto', function() {
     it('checks parameter length', async function() {
       params.pop();
       await expect(sign())
-        .rejectedWith(TypeError, 'Expected 3 arguments, got 2');
+        .rejectedWith(TypeError, 'Expected at least 3 arguments, got 2');
       expect(client.calls({op: 'call', method: 'subtleSign'}).length).to.equal(0);
     });
 
@@ -1220,6 +1248,21 @@ describe('Crypto', function() {
         .rejectedWith(TypeError, 'Expected data to be of type ArrayBuffer, got null');
       expect(client.calls({op: 'call', method: 'subtleSign'}).length).to.equal(0);
     });
+
+    it('checks options.authPromptTitle', async function() {
+      params[3] = {authPromptTitle: null};
+      await expect(sign())
+        .rejectedWith(TypeError, 'Expected options.authPromptTitle to be a string, got null.');
+      expect(client.calls({op: 'call', method: 'subtleSign'}).length).to.equal(0);
+    });
+
+    it('checks options.authPromptMessage', async function() {
+      params[3] = {authPromptMessage: null};
+      await expect(sign())
+        .rejectedWith(TypeError, 'Expected options.authPromptMessage to be a string, got null.');
+      expect(client.calls({op: 'call', method: 'subtleSign'}).length).to.equal(0);
+    });
+
   });
 
   describe('subtle.verify()', function() {
