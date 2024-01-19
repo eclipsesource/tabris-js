@@ -84,6 +84,16 @@
           {
             "name": "keyUsages",
             "type": "string[]"
+          },
+          {
+            "name": "options",
+            "optional": true,
+            "type": {
+              "map": {
+                "authPromptTitle": { "type": "string", "optional": true },
+                "authPromptMessage": { "type": "string", "optional": true }
+              }
+            }
           }
         ],
         "returns": {
@@ -193,6 +203,16 @@
           {
             "name": "length",
             "type": "number"
+          },
+          {
+            "name": "options",
+            "optional": true,
+            "type": {
+              "map": {
+                "authPromptTitle": { "type": "string", "optional": true },
+                "authPromptMessage": { "type": "string", "optional": true }
+              }
+            }
           }
         ],
         "returns": {
@@ -522,6 +542,16 @@
               "ArrayBuffer",
               "TypedArray"
             ]
+          }
+        },
+        {
+          "name": "options",
+          "optional": true,
+          "type": {
+            "map": {
+              "authPromptTitle": { "type": "string", "optional": true },
+              "authPromptMessage": { "type": "string", "optional": true }
+            }
           }
         }
       ],
