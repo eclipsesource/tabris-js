@@ -287,8 +287,7 @@
             "union": [
               "'spki'",
               "'pkcs8'",
-              "'raw'",
-              "'teeKeyHandle'"
+              "'raw'"
             ]
           }
         },
@@ -346,7 +345,7 @@
       }
     },
     "generateKey": {
-      "description": "Generates new keys. Currently only supports the Elliptic Curve Diffie-Hellman (ECDH) algorithm to generate key pairs.",
+      "description": "Generates new keys. Currently only supports the Elliptic Curve Diffie-Hellman (ECDH) and Elliptic Curve Digital Signature Algorithm (ECDSA) algorithms to generate key pairs. When `extractable` is set to `true`, the raw key material can be exported using `exportKey`. When `extractable` is set to `false`, for ECDSA and ECDH keys `exportKey` returns an opaque handle to the key in the device's trusted execution environment, and throws for other key formats.",
       "parameters": [
         {
           "name": "algorithm",
@@ -376,7 +375,6 @@
           "optional": true,
           "type": {
             "map": {
-              "inTee": { "type": "boolean", "optional": true },
               "usageRequiresAuth": { "type": "boolean", "optional": true }
             }
           }
@@ -491,15 +489,14 @@
       }
     },
     "exportKey": {
-      "description": "Converts a CryptoKey instances into a portable format. To export a key, the key must have extractable set to true. Supports the spki format or raw bytes.",
+      "description": "Converts `CryptoKey` instances into a portable format. If the key's `extractable` is set to `true`, returns the raw key material in SPKI format or as raw bytes. If the key's `extractable` is set to `false`, for ECDSA and ECDH keys returns an opaque handle to the key in the device's trusted execution environment, and throws for other key formats.",
       "parameters": [
         {
           "name": "format",
           "type": {
             "union": [
               "'raw'",
-              "'spki'",
-              "'teeKeyHandle'"
+              "'spki'"
             ]
           }
         },

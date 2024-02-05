@@ -83,7 +83,7 @@ class SubtleCrypto {
     if (arguments.length !== 5) {
       throw new TypeError(`Expected 5 arguments, got ${arguments.length}`);
     }
-    allowOnlyValues(format, ['spki', 'pkcs8', 'raw', 'teeKeyHandle'], 'format');
+    allowOnlyValues(format, ['spki', 'pkcs8', 'raw'], 'format');
     checkType(getBuffer(keyData), ArrayBuffer, {name: 'keyData'});
     if (typeof algorithm === 'string') {
       allowOnlyValues(algorithm, ['AES-GCM', 'HKDF'], 'algorithm');
@@ -220,13 +220,13 @@ class SubtleCrypto {
   }
 
   async exportKey(
-    format: 'raw' | 'spki' | 'teeKeyHandle',
+    format: 'raw' | 'spki',
     key: CryptoKey
   ): Promise<ArrayBuffer> {
     if (arguments.length !== 2) {
       throw new TypeError(`Expected 2 arguments, got ${arguments.length}`);
     }
-    allowOnlyValues(format, ['raw', 'spki', 'teeKeyHandle'], 'format');
+    allowOnlyValues(format, ['raw', 'spki'], 'format');
     checkType(key, CryptoKey, {name: 'key'});
     return new Promise((onSuccess, onReject) =>
       this._nativeObject.subtleExportKey(format, key, onSuccess, onReject)
@@ -248,21 +248,17 @@ class SubtleCrypto {
     checkType(extractable, Boolean, {name: 'extractable'});
     checkType(keyUsages, Array, {name: 'keyUsages'});
     if (options != null) {
-      allowOnlyKeys(options, ['inTee', 'usageRequiresAuth']);
-      if('inTee' in options) {
-        checkType(options.inTee, Boolean, {name: 'options.inTee'});
-      }
+      allowOnlyKeys(options, ['usageRequiresAuth']);
       if ('usageRequiresAuth' in options) {
         checkType(options.usageRequiresAuth, Boolean, {name: 'options.usageRequiresAuth'});
       }
-      if (options.usageRequiresAuth && !options.inTee && (tabris as any).device.platform !== 'Android') {
-        throw new TypeError('options.usageRequiresAuth is only supported for keys not in TEE on Android');
+      if (options.usageRequiresAuth && (extractable || !algorithm.name.startsWith('EC'))) {
+        throw new TypeError('options.usageRequiresAuth is only supported for non-extractable EC keys');
       }
     }
-    const inTee = options?.inTee;
     const usageRequiresAuth = options?.usageRequiresAuth;
     const nativeObject = new _CryptoKey();
-    await nativeObject.generate(algorithm, extractable, keyUsages, inTee, usageRequiresAuth);
+    await nativeObject.generate(algorithm, extractable, keyUsages, usageRequiresAuth);
     const nativePrivate = new _CryptoKey(nativeObject, 'private');
     const nativePublic = new _CryptoKey(nativeObject, 'public');
     return {
