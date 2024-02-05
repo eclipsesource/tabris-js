@@ -8,7 +8,7 @@ tabris.onLog(({message}) => stack.append(TextView({text: message})));
 (async () => {
   await importAndDerive();
   await generateDeriveEncryptAndDecrypt();
-  await generateDeriveEncryptAndDecrypt({inTee: true, usageRequiresAuth: true});
+  await generateDeriveEncryptAndDecrypt({extractable: false, usageRequiresAuth: true});
 })().catch(console.error);
 
 async function importAndDerive() {
@@ -103,7 +103,10 @@ async function importAndDerive() {
   }
 }
 
-async function generateDeriveEncryptAndDecrypt({inTee, usageRequiresAuth} = {inTee: false, usageRequiresAuth: false}) {
+async function generateDeriveEncryptAndDecrypt({extractable, usageRequiresAuth} = {
+  extractable: true,
+  usageRequiresAuth: false
+}) {
   const ecdhP256 = {name: 'ECDH' as const, namedCurve: 'P-256' as const};
   const aesGcm = {name: 'AES-GCM' as const};
 
@@ -111,7 +114,7 @@ async function generateDeriveEncryptAndDecrypt({inTee, usageRequiresAuth} = {inT
   const alicesKeyPair = await crypto.subtle.generateKey(ecdhP256, true, ['deriveBits']);
 
   // Generate Bob's ECDH key pair
-  const bobsKeyPair = await crypto.subtle.generateKey(ecdhP256, true, ['deriveBits'], {inTee, usageRequiresAuth});
+  const bobsKeyPair = await crypto.subtle.generateKey(ecdhP256, extractable, ['deriveBits'], {usageRequiresAuth});
 
   // Derive Alice's AES key
   const alicesAesKey = await deriveAesKey(bobsKeyPair.publicKey, alicesKeyPair.privateKey, 'encrypt');
