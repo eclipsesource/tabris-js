@@ -291,6 +291,8 @@ describe('Widget', function() {
         translationY: 0,
         translationZ: 0
       });
+      expect(widget.accessibilityHidden).to.be.false;
+      expect(widget.accessibilityLabel).to.equal('');
     });
 
     describe('data', function() {
