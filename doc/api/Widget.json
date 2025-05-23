@@ -149,6 +149,11 @@
       "returns": "boolean",
       "description": "Returns `true` if the widget has been disposed, otherwise `false`."
     },
+    "accessibilityFocus": {
+      "parameters": [],
+      "returns": "this",
+      "description": "Sets focus on the widget when accessibility services are enabled, helping screen readers highlight the element for improved navigation."
+    },
     "_setParent": {
       "protected": true,
       "parameters": [
@@ -351,6 +356,15 @@
     "data": {
       "type": "TData",
       "description": "A general-purpose property that may be set to any object. Unlike other properties, `data` forwards change events from the object it contains. As it is initialized with an empty instance of ${doc:ObservableData}, modifying this initial `data` object also causes a ${doc:PropertyChangedEvent} for `data` to be fired.\n\n**Important:** If `data` is assigned a plain object, that object will be converted to an ${doc:ObservableData} instance, *so the original object will not be identical with the new `data` value*. If set to any other object the new value will be the same instance.\n\n When set as an attribute (via JSX or a widget factory) it has a special treatment: Unlike other properties it is set *after* the listeners have been registered. This is so to allow passing a data change listener (via 'onDataChanged' attribute) that will be invoked for the initial data value immediately."
+    },
+    "accessibilityHidden": {
+      "type": "boolean",
+      "default": "false",
+      "description": "Hides the widget from accessibility services, preventing screen readers from announcing it when active."
+    },
+    "accessibilityLabel": {
+      "type": "string",
+      "description": "Provides a textual description of the widget for screen readers, describing its purpose or function to visually impaired users."
     }
   },
   "events": {

@@ -55,6 +55,8 @@ abstract class Widget<TData extends object = any> extends NativeObject {
   highlightOnTouch!: boolean;
   cornerRadius!: number;
   padding!: BoxDimensionsObject & number;
+  accessibilityHidden!: boolean;
+  accessibilityLabel!: string;
 
   onResize!: Listeners<{bounds: Bounds}>;
   onBoundsChanged!: Listeners<{bounds: Bounds}>;
@@ -138,6 +140,11 @@ abstract class Widget<TData extends object = any> extends NativeObject {
       return new WidgetCollection([]);
     }
     return this._parent._children((widget: Widget) => widget !== this).filter(selector);
+  }
+
+  accessibilityFocus() {
+    this._nativeCall('accessibilityFocus', {});
+    return this;
   }
 
   set class(value: string | undefined) {
@@ -450,6 +457,14 @@ NativeObject.defineProperties(Widget.prototype, {
   padding: {
     type: types.BoxDimensions,
     default: Object.freeze({left: 0, right: 0, top: 0, bottom: 0})
+  },
+  accessibilityHidden: {
+    type: types.boolean,
+    default: false
+  },
+  accessibilityLabel: {
+    type: types.string,
+    default: ''
   }
 });
 

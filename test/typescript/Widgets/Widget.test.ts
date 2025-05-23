@@ -58,6 +58,8 @@ let transform: Transformation;
 let visible: boolean;
 let width: Dimension|'auto';
 let data: object;
+let accessibilityHidden: boolean;
+let accessibilityLabel: string;
 const leftOffset: number = 0;
 const topOffset: number  = 0;
 background = widget.background;
@@ -89,6 +91,8 @@ transform = widget.transform;
 visible = widget.visible;
 width = widget.width;
 data = widget.data;
+accessibilityHidden = widget.accessibilityHidden;
+accessibilityLabel = widget.accessibilityLabel;
 widget.background = background;
 widget.background = backgroundImage;
 widget.background = backgroundColor;
@@ -116,6 +120,8 @@ widget.top = topMargin;
 widget.transform = transform;
 widget.visible = visible;
 widget.width = width;
+widget.accessibilityHidden = accessibilityHidden;
+widget.accessibilityLabel = accessibilityLabel;
 const properties: Properties<Widget> = {
   background,
   baseline,
@@ -139,7 +145,9 @@ const properties: Properties<Widget> = {
   top: topMargin,
   transform,
   visible,
-  width
+  width,
+  accessibilityHidden,
+  accessibilityLabel
 };
 widget.set(properties);
 // Methods
@@ -162,6 +170,7 @@ thisReturnValue = widget.detach();
 voidReturnValue = widget.dispose();
 thisReturnValue = widget.insertAfter(otherWidget);
 thisReturnValue = widget.insertBefore(otherWidget);
+thisReturnValue = widget.accessibilityFocus();
 bool = widget.isDisposed();
 composite = widget.parent();
 composite = widget.parent('#foo');
