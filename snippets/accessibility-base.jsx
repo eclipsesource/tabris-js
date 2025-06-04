@@ -52,21 +52,63 @@ contentView.append(
       <TextView text='Accessibility Properties (default labels)' font='bold 18px' textColor='navy' padding={8}/>
       <Button id='btn' text='Button'/>
       <TextView id='accessibility-btn' font='12px' textColor='gray' padding={4} text='Loading...'/>
-      <TextInput id='txt' message='TextInput'/>
+      <TextInput id='txt' message='TextInput' onTextChanged={({value}) => {
+        const txt = contentView.find('#txt').only();
+        txt.accessibilityValue = value;
+        updateAllAccessibilityTextViews();
+        logAccessibilityProps('txt', 'TextInput');
+      }}/>
       <TextView id='accessibility-txt' font='12px' textColor='gray' padding={4} text='Loading...'/>
-      <Switch id='switch'/>
+      <Switch id='switch' onSelect={({checked}) => {
+        const sw = contentView.find('#switch').only();
+        sw.accessibilityValue = checked ? 'on' : 'off';
+        sw.accessibilityHint = checked ? 'Switch is ON' : 'Switch is OFF';
+        updateAllAccessibilityTextViews();
+        logAccessibilityProps('switch', 'Switch');
+      }}/>
       <TextView id='accessibility-switch' font='12px' textColor='gray' padding={4} text='Loading...'/>
-      <Slider id='slider'/>
+      <Slider id='slider' onSelectionChanged={({value}) => {
+        const slider = contentView.find(Slider).only();
+        const progress = contentView.find(ProgressBar).only();
+        const min = slider.minimum ?? 0;
+        const max = slider.maximum ?? 100;
+        const normalized = (value - min) / (max - min);
+        slider.accessibilityValue = value.toFixed(0);
+        slider.accessibilityHint = `Slider at ${value.toFixed(0)}`;
+        if (progress) {
+          progress.minimum = min;
+          progress.maximum = max;
+          progress.selection = value;
+          progress.accessibilityValue = value.toFixed(0);
+          progress.accessibilityHint = `Progress at ${value.toFixed(0)}`;
+        }
+        updateAllAccessibilityTextViews();
+        logAccessibilityProps('slider', 'Slider');
+        logAccessibilityProps('progress', 'ProgressBar');
+      }}/>
       <TextView id='accessibility-slider' font='12px' textColor='gray' padding={4} text='Loading...'/>
-      <Picker id='picker' message='Picker' itemCount={2} itemText={i => ['One', 'Two'][i]}/>
+      <Picker id='picker' message='Picker' itemCount={2} itemText={i => ['One', 'Two'][i]}
+        onSelect={({index}) => {
+          const picker = contentView.find('#picker').only();
+          picker.accessibilityValue = ['One', 'Two'][index];
+          picker.accessibilityHint = `Selected ${['One', 'Two'][index]}`;
+          updateAllAccessibilityTextViews();
+          logAccessibilityProps('picker', 'Picker');
+        }}/>
       <TextView id='accessibility-picker' font='12px' textColor='gray' padding={4} text='Loading...'/>
-      <CheckBox id='chk' text='CheckBox'/>
+      <CheckBox id='chk' text='CheckBox' onSelect={({checked}) => {
+        const chk = contentView.find('#chk').only();
+        chk.accessibilityValue = checked ? 'checked' : 'unchecked';
+        chk.accessibilityHint = checked ? 'Checkbox is checked' : 'Checkbox is unchecked';
+        updateAllAccessibilityTextViews();
+        logAccessibilityProps('chk', 'CheckBox');
+      }}/>
       <TextView id='accessibility-chk' font='12px' textColor='gray' padding={4} text='Loading...'/>
       <TextView id='txtview' text='TextView'/>
       <TextView id='accessibility-txtview' font='12px' textColor='gray' padding={4} text='Loading...'/>
-      <ImageView id='img' image={{src: 'resources/landscape.jpg', width: 300, height: 200}}/>
+      <ImageView id='img' image={{src: 'resources/landscape.jpg'}}/>
       <TextView id='accessibility-img' font='12px' textColor='gray' padding={4} text='Loading...'/>
-      <ProgressBar id='progress' selection={50}/>
+      <ProgressBar id='progress' minimum={0} maximum={100} selection={50}/>
       <TextView id='accessibility-progress' font='12px' textColor='gray' padding={4} text='Loading...'/>
       <ActivityIndicator id='spinner'/>
       <TextView id='accessibility-spinner' font='12px' textColor='gray' padding={4} text='Loading...'/>
