@@ -460,11 +460,15 @@ NativeObject.defineProperties(Widget.prototype, {
   },
   accessibilityHidden: {
     type: types.boolean,
-    default: false
+    nocache: true
   },
   accessibilityLabel: {
     type: types.string,
-    default: ''
+    nocache: true
+  },
+  isAccessibilityElement: {
+    type: types.boolean,
+    nocache: true
   }
 });
 

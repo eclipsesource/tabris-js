@@ -365,6 +365,11 @@
     "accessibilityLabel": {
       "type": "string",
       "description": "Provides a textual description of the widget for screen readers, describing its purpose or function to visually impaired users."
+    },
+    "isAccessibilityElement": {
+      "type": "boolean",
+      "default": "false",
+      "description": "If true, this widget is treated as accessibility element by assistive technologies."
     }
   },
   "events": {
