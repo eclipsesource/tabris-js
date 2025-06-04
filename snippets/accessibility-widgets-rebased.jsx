@@ -65,9 +65,7 @@ contentView.append(
           accessibilityHint='Enter text.'
           accessibilityValue='42'
           accessibilityTraits={['text']}
-          onTextChanged={({value}) => {
-            const txt = contentView.find('#txt').only();
-            txt.accessibilityValue = value;
+          onTextChanged={() => {
             updateAllAccessibilityTextViews();
             logAccessibilityProps('txt', 'TextInput');
           }}/>
@@ -78,10 +76,7 @@ contentView.append(
           accessibilityHint='Toggles the magic.'
           accessibilityValue='on'
           accessibilityTraits={['switch']}
-          onSelect={({checked}) => {
-            const sw = contentView.find('#switch').only();
-            sw.accessibilityValue = checked ? 'on' : 'off';
-            sw.accessibilityHint = checked ? 'Switch is on.' : 'Switch is off.';
+          onSelect={() => {
             updateAllAccessibilityTextViews();
             logAccessibilityProps('switch', 'Switch');
           }}/>
@@ -97,15 +92,10 @@ contentView.append(
             const progress = contentView.find(ProgressBar).only();
             const min = slider.minimum ?? 0;
             const max = slider.maximum ?? 100;
-            const percent = Math.round(((value - min) / (max - min)) * 100);
-            slider.accessibilityValue = percent + '%';
-            slider.accessibilityHint = `Slider at ${percent}%`;
             if (progress) {
               progress.minimum = min;
               progress.maximum = max;
               progress.selection = value;
-              progress.accessibilityValue = percent + '%';
-              progress.accessibilityHint = `Progress at ${percent}%`;
             }
             updateAllAccessibilityTextViews();
             logAccessibilityProps('slider', 'Slider');
@@ -121,9 +111,7 @@ contentView.append(
           accessibilityHint='Opens a list.'
           accessibilityValue='One'
           accessibilityTraits={['picker']}
-          onSelect={({index}) => {
-            const picker = contentView.find('#picker').only();
-            picker.accessibilityValue = ['One', 'Two'][index];
+          onSelect={() => {
             updateAllAccessibilityTextViews();
             logAccessibilityProps('picker', 'Picker');
           }}/>
@@ -135,9 +123,7 @@ contentView.append(
           accessibilityHint='Toggles agreement.'
           accessibilityValue='checked'
           accessibilityTraits={['checkbox']}
-          onSelect={({checked}) => {
-            const chk = contentView.find('#chk').only();
-            chk.accessibilityValue = checked ? 'checked' : 'unchecked';
+          onSelect={() => {
             updateAllAccessibilityTextViews();
             logAccessibilityProps('chk', 'CheckBox');
           }}/>
