@@ -53,16 +53,12 @@ contentView.append(
       <Button id='btn' text='Button'/>
       <TextView id='accessibility-btn' font='12px' textColor='gray' padding={4} text='Loading...'/>
       <TextInput id='txt' message='TextInput' onTextChanged={({value}) => {
-        const txt = contentView.find('#txt').only();
-        txt.accessibilityValue = value;
         updateAllAccessibilityTextViews();
         logAccessibilityProps('txt', 'TextInput');
       }}/>
       <TextView id='accessibility-txt' font='12px' textColor='gray' padding={4} text='Loading...'/>
       <Switch id='switch' onSelect={({checked}) => {
         const sw = contentView.find('#switch').only();
-        sw.accessibilityValue = checked ? 'on' : 'off';
-        sw.accessibilityHint = checked ? 'Switch is ON' : 'Switch is OFF';
         updateAllAccessibilityTextViews();
         logAccessibilityProps('switch', 'Switch');
       }}/>
@@ -73,14 +69,10 @@ contentView.append(
         const min = slider.minimum ?? 0;
         const max = slider.maximum ?? 100;
         const normalized = (value - min) / (max - min);
-        slider.accessibilityValue = value.toFixed(0);
-        slider.accessibilityHint = `Slider at ${value.toFixed(0)}`;
         if (progress) {
           progress.minimum = min;
           progress.maximum = max;
           progress.selection = value;
-          progress.accessibilityValue = value.toFixed(0);
-          progress.accessibilityHint = `Progress at ${value.toFixed(0)}`;
         }
         updateAllAccessibilityTextViews();
         logAccessibilityProps('slider', 'Slider');
@@ -89,17 +81,11 @@ contentView.append(
       <TextView id='accessibility-slider' font='12px' textColor='gray' padding={4} text='Loading...'/>
       <Picker id='picker' message='Picker' itemCount={2} itemText={i => ['One', 'Two'][i]}
         onSelect={({index}) => {
-          const picker = contentView.find('#picker').only();
-          picker.accessibilityValue = ['One', 'Two'][index];
-          picker.accessibilityHint = `Selected ${['One', 'Two'][index]}`;
           updateAllAccessibilityTextViews();
           logAccessibilityProps('picker', 'Picker');
         }}/>
       <TextView id='accessibility-picker' font='12px' textColor='gray' padding={4} text='Loading...'/>
       <CheckBox id='chk' text='CheckBox' onSelect={({checked}) => {
-        const chk = contentView.find('#chk').only();
-        chk.accessibilityValue = checked ? 'checked' : 'unchecked';
-        chk.accessibilityHint = checked ? 'Checkbox is checked' : 'Checkbox is unchecked';
         updateAllAccessibilityTextViews();
         logAccessibilityProps('chk', 'CheckBox');
       }}/>
