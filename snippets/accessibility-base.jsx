@@ -1,6 +1,6 @@
 import {Button, TextInput, Switch, Slider, Picker, CheckBox, TextView, ImageView, ProgressBar, ActivityIndicator, Composite, ScrollView, Page, TabFolder, Tab, Canvas, WebView, CollectionView, contentView, drawer, StackLayout, RowLayout} from 'tabris';
 
-// Accessibility Properties Visualization Snippet
+// Accessibility Properties Visualization Snippet (base, now with all properties)
 
 function getAccessibilityPropsText(id) {
   const widget = contentView.find('#' + id).only();
@@ -10,24 +10,12 @@ function getAccessibilityPropsText(id) {
   return (
     id + ' props:\n' +
     'accessibilityLabel: ' + widget.accessibilityLabel + '\n' +
+    'accessibilityHint: ' + widget.accessibilityHint + '\n' +
+    'accessibilityValue: ' + widget.accessibilityValue + '\n' +
+    'accessibilityTraits: ' + (widget.accessibilityTraits ? widget.accessibilityTraits.join(', ') : '') + '\n' +
     'accessibilityHidden: ' + widget.accessibilityHidden + '\n' +
     'isAccessibilityElement: ' + widget.isAccessibilityElement
   );
-}
-
-function logAccessibilityProps(id, name) {
-  setTimeout(() => {
-    const widget = contentView.find('#' + id).only();
-    if (widget) {
-      console.log(`${name} [id=${id}]:`, {
-        accessibilityLabel: widget.accessibilityLabel,
-        accessibilityHidden: widget.accessibilityHidden,
-        isAccessibilityElement: widget.isAccessibilityElement
-      });
-    } else {
-      console.log(`${name} [id=${id}]: not found`);
-    }
-  }, 0);
 }
 
 function updateAllAccessibilityTextViews() {
@@ -40,10 +28,28 @@ function updateAllAccessibilityTextViews() {
   });
 }
 
+function logAccessibilityProps(id, name) {
+  setTimeout(() => {
+    const widget = contentView.find('#' + id).only();
+    if (widget) {
+      console.log(`${name} [id=${id}]:`, {
+        accessibilityLabel: widget.accessibilityLabel,
+        accessibilityHint: widget.accessibilityHint,
+        accessibilityValue: widget.accessibilityValue,
+        accessibilityTraits: widget.accessibilityTraits,
+        accessibilityHidden: widget.accessibilityHidden,
+        isAccessibilityElement: widget.isAccessibilityElement
+      });
+    } else {
+      console.log(`${name} [id=${id}]: not found`);
+    }
+  }, 0);
+}
+
 contentView.append(
   <ScrollView stretch>
     <Composite stretch layout={new StackLayout({alignment: 'stretchX', spacing: 12})} padding={16}>
-      <TextView text='Accessibility Properties (default values)' font='bold 18px' textColor='navy' padding={8}/>
+      <TextView text='Accessibility Properties (default labels)' font='bold 18px' textColor='navy' padding={8}/>
       <Button id='btn' text='Button'/>
       <TextView id='accessibility-btn' font='12px' textColor='gray' padding={4} text='Loading...'/>
       <TextInput id='txt' message='TextInput'/>
@@ -81,48 +87,26 @@ contentView.append(
         <TextView id='scroll5' background='purple' text='scroll 5' width={300}/>
       </ScrollView>
       <TextView id='accessibility-scrollh' font='12px' textColor='gray' padding={4} text='Loading...'/>
-      <Canvas id='canvas' width={100} height={50}
-        onResize={({target: canvas, width, height}) => {
-          const ctx = canvas.getContext('2d', width, height);
-          ctx.clearRect(0, 0, width, height);
-          ctx.fillStyle = '#e0e0e0';
-          ctx.fillRect(0, 0, width, height);
-          ctx.beginPath();
-          ctx.arc(20, 20, 15, 0, 2 * Math.PI);
-          ctx.fillStyle = '#fed100';
-          ctx.fill();
-          ctx.beginPath();
-          ctx.arc(60, 30, 10, Math.PI * 0.5, Math.PI * 1.5);
-          ctx.arc(70, 30, 10, Math.PI * 1.5, Math.PI * 0.5);
-          ctx.closePath();
-          ctx.fillStyle = '#b0c4de';
-          ctx.fill();
-          ctx.fillStyle = '#8dbd00';
-          ctx.fillRect(0, 40, width, 10);
-          ctx.font = 'bold 10px sans-serif';
-          ctx.fillStyle = '#333';
-          ctx.textAlign = 'center';
-          ctx.fillText('Canvas!', width / 2, height - 5);
-        }}/>
+      <Canvas id='canvas' width={100} height={50}/>
       <TextView id='accessibility-canvas' font='12px' textColor='gray' padding={4} text='Loading...'/>
       <WebView id='web' url='https://tabrisjs.com' width={320} height={240}/>
       <TextView id='accessibility-web' font='12px' textColor='gray' padding={4} text='Loading...'/>
       <CollectionView id='colview' width={320} height={120} itemCount={5} cellType={() => 'default'}
-        createCell={() => (
-          <Composite background='#f0f0f0' padding={8} cornerRadius={8} elevation={2}>
-            <TextView centerX centerY font='18px' textColor='#333'/>
-          </Composite>
-        )}
-        updateCell={(cell, index) => {
-          cell.find(TextView).only().text = `Item ${index + 1}`;
-          cell.background = ['#f0f0f0', '#e0f7fa', '#ffe0b2', '#c8e6c9', '#f8bbd0'][index % 5];
-        }}/>
+          createCell={() => (
+            <Composite background='#f0f0f0' padding={8} cornerRadius={8} elevation={2}>
+              <TextView centerX centerY font='18px' textColor='#333'/>
+            </Composite>
+          )}
+          updateCell={(cell, index) => {
+            cell.find(TextView).only().text = `Item ${index + 1}`;
+            cell.background = ['#f0f0f0', '#e0f7fa', '#ffe0b2', '#c8e6c9', '#f8bbd0'][index % 5];
+          }}/>
       <TextView id='accessibility-colview' font='12px' textColor='gray' padding={4} text='Loading...'/>
     </Composite>
   </ScrollView>
 );
 
-drawer.set({enabled: true});
+drawer.set({enabled: true, accessibilityLabel: 'Drawer'});
 
 setTimeout(updateAllAccessibilityTextViews, 0);
 

@@ -366,6 +366,18 @@
       "type": "string",
       "description": "Provides a textual description of the widget for screen readers, describing its purpose or function to visually impaired users."
     },
+    "accessibilityHint": {
+      "type": "string",
+      "description": "Provides a hint about what happens when the element is activated."
+    },
+    "accessibilityValue": {
+      "type": "string",
+      "description": "Provides the current value of the element, e.g., for sliders or progress bars."
+    },
+    "accessibilityTraits": {
+      "type": { "interface": "Array", "generics": ["string"] },
+      "description": "Describes the traits/characteristics of the element, e.g., 'button', 'header', 'link'."
+    },
     "isAccessibilityElement": {
       "type": "boolean",
       "default": "false",
