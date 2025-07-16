@@ -17,7 +17,7 @@ import {
   contentView,
   drawer,
   StackLayout,
-  RowLayout,
+  RowLayout
 } from 'tabris';
 
 // Accessibility Properties Visualization Snippet (base, now with all properties)
@@ -70,7 +70,7 @@ function logAccessibilityProps(id: string, name: string) {
         accessibilityValue: widget.accessibilityValue,
         accessibilityTraits: widget.accessibilityTraits,
         accessibilityHidden: widget.accessibilityHidden,
-        isAccessibilityElement: widget.isAccessibilityElement,
+        isAccessibilityElement: widget.isAccessibilityElement
       });
     } else {
       console.log(`${name} [id=${id}]: not found`);
@@ -81,243 +81,215 @@ function logAccessibilityProps(id: string, name: string) {
 contentView.append(
   <ScrollView stretch>
     <Composite
-      stretch
-      layout={new StackLayout({ alignment: 'stretchX', spacing: 12 })}
-      padding={16}
-    >
+        stretch
+        layout={new StackLayout({alignment: 'stretchX', spacing: 12})}
+        padding={16}>
       <TextView
-        text='Accessibility Properties (default labels)'
-        font='bold 18px'
-        textColor='navy'
-        padding={8}
-      />
-      <Button id='btn' text='Button' />
+          text='Accessibility Properties (default labels)'
+          font='bold 18px'
+          textColor='navy'
+          padding={8}/>
+      <Button id='btn' text='Button'/>
       <TextView
-        id='accessibility-btn'
-        font='12px'
-        textColor='gray'
-        padding={4}
-        text='Loading...'
-      />
+          id='accessibility-btn'
+          font='12px'
+          textColor='gray'
+          padding={4}
+          text='Loading...'/>
       <TextInput
-        id='txt'
-        message='TextInput'
-        onTextChanged={() => {
-          updateAllAccessibilityTextViews();
-          logAccessibilityProps('txt', 'TextInput');
-        }}
-      />
+          id='txt'
+          message='TextInput'
+          onTextChanged={() => {
+            updateAllAccessibilityTextViews();
+            logAccessibilityProps('txt', 'TextInput');
+          }}/>
       <TextView
-        id='accessibility-txt'
-        font='12px'
-        textColor='gray'
-        padding={4}
-        text='Loading...'
-      />
+          id='accessibility-txt'
+          font='12px'
+          textColor='gray'
+          padding={4}
+          text='Loading...'/>
       <Switch
-        id='switch'
-        onSelect={() => {
-          updateAllAccessibilityTextViews();
-          logAccessibilityProps('switch', 'Switch');
-        }}
-      />
+          id='switch'
+          onSelect={() => {
+            updateAllAccessibilityTextViews();
+            logAccessibilityProps('switch', 'Switch');
+          }}/>
       <TextView
-        id='accessibility-switch'
-        font='12px'
-        textColor='gray'
-        padding={4}
-        text='Loading...'
-      />
+          id='accessibility-switch'
+          font='12px'
+          textColor='gray'
+          padding={4}
+          text='Loading...'/>
       <Slider
-        id='slider'
-        onSelectionChanged={({ value }) => {
-          const slider = contentView.find(Slider).only();
-          const progress = contentView.find(ProgressBar).only();
-          const min = slider.minimum ?? 0;
-          const max = slider.maximum ?? 100;
-          if (progress) {
-            progress.minimum = min;
-            progress.maximum = max;
-            progress.selection = value;
-          }
-          updateAllAccessibilityTextViews();
-          logAccessibilityProps('slider', 'Slider');
-          logAccessibilityProps('progress', 'ProgressBar');
-        }}
-      />
+          id='slider'
+          onSelectionChanged={({value}) => {
+            const slider = contentView.find(Slider).only();
+            const progress = contentView.find(ProgressBar).only();
+            const min = slider.minimum ?? 0;
+            const max = slider.maximum ?? 100;
+            if (progress) {
+              progress.minimum = min;
+              progress.maximum = max;
+              progress.selection = value;
+            }
+            updateAllAccessibilityTextViews();
+            logAccessibilityProps('slider', 'Slider');
+            logAccessibilityProps('progress', 'ProgressBar');
+          }}/>
       <TextView
-        id='accessibility-slider'
-        font='12px'
-        textColor='gray'
-        padding={4}
-        text='Loading...'
-      />
+          id='accessibility-slider'
+          font='12px'
+          textColor='gray'
+          padding={4}
+          text='Loading...'/>
       <Picker
-        id='picker'
-        message='Picker'
-        itemCount={2}
-        itemText={(i) => ['One', 'Two'][i]}
-        onSelect={() => {
-          updateAllAccessibilityTextViews();
-          logAccessibilityProps('picker', 'Picker');
-        }}
-      />
+          id='picker'
+          message='Picker'
+          itemCount={2}
+          itemText={(i) => ['One', 'Two'][i]}
+          onSelect={() => {
+            updateAllAccessibilityTextViews();
+            logAccessibilityProps('picker', 'Picker');
+          }}/>
       <TextView
-        id='accessibility-picker'
-        font='12px'
-        textColor='gray'
-        padding={4}
-        text='Loading...'
-      />
+          id='accessibility-picker'
+          font='12px'
+          textColor='gray'
+          padding={4}
+          text='Loading...'/>
       <CheckBox
-        id='chk'
-        text='CheckBox'
-        onSelect={() => {
-          updateAllAccessibilityTextViews();
-          logAccessibilityProps('chk', 'CheckBox');
-        }}
-      />
+          id='chk'
+          text='CheckBox'
+          onSelect={() => {
+            updateAllAccessibilityTextViews();
+            logAccessibilityProps('chk', 'CheckBox');
+          }}/>
       <TextView
-        id='accessibility-chk'
-        font='12px'
-        textColor='gray'
-        padding={4}
-        text='Loading...'
-      />
-      <TextView id='txtview' text='TextView' />
+          id='accessibility-chk'
+          font='12px'
+          textColor='gray'
+          padding={4}
+          text='Loading...'/>
+      <TextView id='txtview' text='TextView'/>
       <TextView
-        id='accessibility-txtview'
-        font='12px'
-        textColor='gray'
-        padding={4}
-        text='Loading...'
-      />
-      <ImageView id='img' image={{ src: 'resources/landscape.jpg' }} />
+          id='accessibility-txtview'
+          font='12px'
+          textColor='gray'
+          padding={4}
+          text='Loading...'/>
+      <ImageView id='img' image={{src: 'resources/landscape.jpg'}}/>
       <TextView
-        id='accessibility-img'
-        font='12px'
-        textColor='gray'
-        padding={4}
-        text='Loading...'
-      />
-      <ProgressBar id='progress' minimum={0} maximum={100} selection={50} />
+          id='accessibility-img'
+          font='12px'
+          textColor='gray'
+          padding={4}
+          text='Loading...'/>
+      <ProgressBar id='progress' minimum={0} maximum={100} selection={50}/>
       <TextView
-        id='accessibility-progress'
-        font='12px'
-        textColor='gray'
-        padding={4}
-        text='Loading...'
-      />
-      <ActivityIndicator id='spinner' />
+          id='accessibility-progress'
+          font='12px'
+          textColor='gray'
+          padding={4}
+          text='Loading...'/>
+      <ActivityIndicator id='spinner'/>
       <TextView
-        id='accessibility-spinner'
-        font='12px'
-        textColor='gray'
-        padding={4}
-        text='Loading...'
-      />
+          id='accessibility-spinner'
+          font='12px'
+          textColor='gray'
+          padding={4}
+          text='Loading...'/>
       <Button
-        id='btn-spinner'
-        text='Start/Stop Spinner'
-        onSelect={() => {
-          const spinner = contentView.find('#spinner').only();
-          spinner.visible = !spinner.visible;
-          updateAllAccessibilityTextViews();
-        }}
-      />
-      <Composite id='comp' background='#eee' height={32} />
+          id='btn-spinner'
+          text='Start/Stop Spinner'
+          onSelect={() => {
+            const spinner = contentView.find('#spinner').only();
+            spinner.visible = !spinner.visible;
+            updateAllAccessibilityTextViews();
+          }}/>
+      <Composite id='comp' background='#eee' height={32}/>
       <TextView
-        id='accessibility-comp'
-        font='12px'
-        textColor='gray'
-        padding={4}
-        text='Loading...'
-      />
+          id='accessibility-comp'
+          font='12px'
+          textColor='gray'
+          padding={4}
+          text='Loading...'/>
       <ScrollView
-        id='scrollh'
-        stretchX
-        height={72}
-        layout={new RowLayout({ alignment: 'stretchY' })}
-        direction='horizontal'
-      >
-        <TextView id='scroll1' background='red' text='scroll 1' width={300} />
-        <TextView id='scroll2' background='green' text='scroll 2' width={300} />
-        <TextView id='scroll3' background='blue' text='scroll 3' width={300} />
+          id='scrollh'
+          stretchX
+          height={72}
+          layout={new RowLayout({alignment: 'stretchY'})}
+          direction='horizontal'>
+        <TextView id='scroll1' background='red' text='scroll 1' width={300}/>
+        <TextView id='scroll2' background='green' text='scroll 2' width={300}/>
+        <TextView id='scroll3' background='blue' text='scroll 3' width={300}/>
         <TextView
-          id='scroll4'
-          background='orange'
-          text='scroll 4'
-          width={300}
-        />
+            id='scroll4'
+            background='orange'
+            text='scroll 4'
+            width={300}/>
         <TextView
-          id='scroll5'
-          background='purple'
-          text='scroll 5'
-          width={300}
-        />
+            id='scroll5'
+            background='purple'
+            text='scroll 5'
+            width={300}/>
       </ScrollView>
       <TextView
-        id='accessibility-scrollh'
-        font='12px'
-        textColor='gray'
-        padding={4}
-        text='Loading...'
-      />
-      <Canvas id='canvas' width={100} height={50} />
+          id='accessibility-scrollh'
+          font='12px'
+          textColor='gray'
+          padding={4}
+          text='Loading...'/>
+      <Canvas id='canvas' width={100} height={50}/>
       <TextView
-        id='accessibility-canvas'
-        font='12px'
-        textColor='gray'
-        padding={4}
-        text='Loading...'
-      />
-      <WebView id='web' url='https://tabrisjs.com' width={320} height={240} />
+          id='accessibility-canvas'
+          font='12px'
+          textColor='gray'
+          padding={4}
+          text='Loading...'/>
+      <WebView id='web' url='https://tabrisjs.com' width={320} height={240}/>
       <TextView
-        id='accessibility-web'
-        font='12px'
-        textColor='gray'
-        padding={4}
-        text='Loading...'
-      />
+          id='accessibility-web'
+          font='12px'
+          textColor='gray'
+          padding={4}
+          text='Loading...'/>
       <CollectionView
-        id='colview'
-        width={320}
-        height={120}
-        itemCount={5}
-        cellType={() => 'default'}
-        createCell={() => (
-          <Composite
-            background='#f0f0f0'
-            padding={8}
-            cornerRadius={8}
-            elevation={2}
-          >
-            <TextView centerX centerY font='18px' textColor='#333' />
-          </Composite>
-        )}
-        updateCell={(cell, index) => {
-          cell.find(TextView).only().text = `Item ${index + 1}`;
-          cell.background = [
-            '#f0f0f0',
-            '#e0f7fa',
-            '#ffe0b2',
-            '#c8e6c9',
-            '#f8bbd0',
-          ][index % 5];
-        }}
-      />
+          id='colview'
+          width={320}
+          height={120}
+          itemCount={5}
+          cellType={() => 'default'}
+          createCell={() => (
+            <Composite
+                background='#f0f0f0'
+                padding={8}
+                cornerRadius={8}
+                elevation={2}>
+              <TextView centerX centerY font='18px' textColor='#333'/>
+            </Composite>
+          )}
+          updateCell={(cell, index) => {
+            cell.find(TextView).only().text = `Item ${index + 1}`;
+            cell.background = [
+              '#f0f0f0',
+              '#e0f7fa',
+              '#ffe0b2',
+              '#c8e6c9',
+              '#f8bbd0'
+            ][index % 5];
+          }}/>
       <TextView
-        id='accessibility-colview'
-        font='12px'
-        textColor='gray'
-        padding={4}
-        text='Loading...'
-      />
+          id='accessibility-colview'
+          font='12px'
+          textColor='gray'
+          padding={4}
+          text='Loading...'/>
     </Composite>
   </ScrollView>
 );
 
-drawer.set({ enabled: true, accessibilityLabel: 'Drawer' });
+drawer.set({enabled: true, accessibilityLabel: 'Drawer'});
 
 setTimeout(updateAllAccessibilityTextViews, 0);
 
