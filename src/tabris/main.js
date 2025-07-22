@@ -252,6 +252,7 @@ if (global.document) {
 } else {
   global.tabris = tabrisMain;
   global.tabris.tabris = tabrisMain;
+  global.JSX = tabrisMain.JSX;
   Object.assign(global, WHATWG, {$});
   addDOMDocument(global);
   addDOMEventTargetMethods(global);
@@ -305,7 +306,10 @@ tabrisMain.on('start', (options) => {
   // @ts-ignore
   global.secureStorage = tabrisMain.secureStorage;
   // @ts-ignore
-  global.crypto = tabrisMain.crypto;
+  // Only override crypto if not in Node.js test environment or if it doesn't exist
+  if (typeof process === 'undefined' || !global.crypto) {
+    global.crypto = tabrisMain.crypto;
+  }
   // @ts-ignore
   global.JSX = tabrisMain.JSX;
   if (!global.process) { // Prevent damaging test environment
