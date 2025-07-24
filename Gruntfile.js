@@ -122,10 +122,10 @@ module.exports = function(grunt) {
         cmd: 'npx eslint --color --f visualstudio --ext .js,.jsx,.ts,.tsx .'
       },
       bundle_tabris: {
-        cmd: 'node node_modules/rollup/bin/rollup --config rollup.tabris.js'
+        cmd: 'npx rollup --config rollup.tabris.js'
       },
       bundle_boot: {
-        cmd: 'node node_modules/rollup/bin/rollup --config rollup.boot.js'
+        cmd: 'npx rollup --config rollup.boot.js'
       },
       uglify_tabris: {
         cmd: 'node node_modules/uglify-es/bin/uglifyjs --mangle --keep-fnames --compress ' +
