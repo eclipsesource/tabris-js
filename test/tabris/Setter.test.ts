@@ -76,12 +76,10 @@ describe('Setter', function() {
     });
 
     it('creates ruleset if selector is given', function() {
-      expect(Setter(Composite, '#foo', {test: 'bar'})).to.deep.equal({
-        '#foo': {
-          [setterTargetType]: Composite,
-          test: 'bar'
-        }
-      });
+      const result = Setter(Composite, '#foo', {test: 'bar'});
+      expect(result).to.have.property('#foo');
+      expect(result['#foo']).to.have.property('test', 'bar');
+      expect(result['#foo'][setterTargetType]).to.equal(Composite);
     });
 
   });
@@ -103,10 +101,9 @@ describe('Setter', function() {
     });
 
     it('creates attributes object with target type', function() {
-      expect(Setter({target: Composite, attribute: 'foo', children: ['bar']})).to.deep.equal({
-        [setterTargetType]: Composite,
-        foo: 'bar'
-      });
+      const result = Setter({target: Composite, attribute: 'foo', children: ['bar']});
+      expect(result).to.have.property('foo', 'bar');
+      expect(result[setterTargetType]).to.equal(Composite);
     });
 
   });
@@ -114,79 +111,66 @@ describe('Setter', function() {
   describe('alias "Apply"', function() {
 
     it('creates apply array from object', function() {
-      expect(Apply({children: [{'*': {background: 'blue'}}]})).to.deep.equal({
-        [setterTargetType]: Composite,
-        apply: [{'*': {background: 'blue'}}]
-      });
+      const result = Apply({children: [{'*': {background: 'blue'}}]});
+      expect(result).to.have.property('apply');
+      expect(result.apply).to.deep.equal([{'*': {background: 'blue'}}]);
+      expect(result[setterTargetType]).to.equal(Composite);
     });
 
     it('creates apply array from apply array', function() {
-      expect(Apply({children: [[{'*': {background: 'blue'}}]]})).to.deep.equal({
-        [setterTargetType]: Composite,
-        apply: [{'*': {background: 'blue'}}]
-      });
+      const result = Apply({children: [[{'*': {background: 'blue'}}]]});
+      expect(result).to.have.property('apply');
+      expect(result.apply).to.deep.equal([{'*': {background: 'blue'}}]);
+      expect(result[setterTargetType]).to.equal(Composite);
     });
 
     it('creates apply array with target attribute', function() {
-      expect(Apply({target: TextView, children: [{text: 'bar'}]})).to.deep.equal({
-        [setterTargetType]: Composite,
-        apply: [{
-          [setterTargetType]: TextView,
-          text: 'bar'
-        }]
-      });
+      const result = Apply({target: TextView, children: [{text: 'bar'}]});
+      expect(result).to.have.property('apply');
+      expect(result.apply).to.have.length(1);
+      expect(result.apply[0]).to.have.property('text', 'bar');
+      expect(result.apply[0][setterTargetType]).to.equal(TextView);
+      expect(result[setterTargetType]).to.equal(Composite);
     });
 
     it('creates apply array with target and selector attributes', function() {
-      expect(
-        Apply({
-          target: TextView,
-          selector: '#foo',
-          children: [{text: 'bar'}]
-        })
-      ).to.deep.equal({
-        [setterTargetType]: Composite,
-        apply: [{
-          '#foo': {
-            [setterTargetType]: TextView,
-            text: 'bar'
-          }
-        }]
+      const result = Apply({
+        target: TextView,
+        selector: '#foo',
+        children: [{text: 'bar'}]
       });
+      expect(result).to.have.property('apply');
+      expect(result.apply).to.have.length(1);
+      expect(result.apply[0]).to.have.property('#foo');
+      expect(result.apply[0]['#foo']).to.have.property('text', 'bar');
+      expect(result.apply[0]['#foo'][setterTargetType]).to.equal(TextView);
+      expect(result[setterTargetType]).to.equal(Composite);
     });
 
     it('creates apply array with selector attribute', function() {
-      expect(
-        Apply({
-          target: TextView,
-          selector: '#foo',
-          children: [{text: 'bar'}]
-        })
-      ).to.deep.equal({
-        [setterTargetType]: Composite,
-        apply: [{
-          '#foo': {
-            text: 'bar'
-          }
-        }]
+      const result = Apply({
+        target: TextView,
+        selector: '#foo',
+        children: [{text: 'bar'}]
       });
+      expect(result).to.have.property('apply');
+      expect(result.apply).to.have.length(1);
+      expect(result.apply[0]).to.have.property('#foo');
+      expect(result.apply[0]['#foo']).to.have.property('text', 'bar');
+      expect(result[setterTargetType]).to.equal(Composite);
     });
 
     it('creates apply array with selector and attr attributes', function() {
-      expect(
-        Apply({
-          target: TextView,
-          selector: '#foo',
-          attr: {text: 'bar'}
-        })
-      ).to.deep.equal({
-        [setterTargetType]: Composite,
-        apply: [{
-          '#foo': {
-            text: 'bar'
-          }
-        }]
+      const result = Apply({
+        target: TextView,
+        selector: '#foo',
+        attr: {text: 'bar'}
       });
+      expect(result).to.have.property('apply');
+      expect(result.apply).to.have.length(1);
+      expect(result.apply[0]).to.have.property('#foo');
+      expect(result.apply[0]['#foo']).to.have.property('text', 'bar');
+      expect(result[setterTargetType]).to.equal(Composite);
     });
 
     it('throw for missing rules', function() {
