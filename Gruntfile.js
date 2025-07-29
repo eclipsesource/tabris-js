@@ -128,11 +128,13 @@ module.exports = function(grunt) {
         cmd: 'npx rollup --config rollup.boot.js'
       },
       uglify_tabris: {
-        cmd: 'node node_modules/uglify-es/bin/uglifyjs --mangle --keep-fnames --compress ' +
+        cmd: 'node node_modules/uglify-es/bin/uglifyjs ' +
+          '--mangle --keep-fnames --compress "collapse_vars=false,inline=false,passes=2" ' +
           '-o build/tabris/tabris.min.js build/tabris/tabris.js'
       },
       uglify_boot: {
-        cmd: 'node node_modules/uglify-es/bin/uglifyjs --mangle --compress ' +
+        cmd: 'node node_modules/uglify-es/bin/uglifyjs ' +
+          '--mangle --compress "collapse_vars=false,inline=false,passes=2" ' +
           '-o build/tabris/boot.min.js build/tabris/boot.js'
       }
     }
