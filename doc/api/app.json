@@ -145,6 +145,15 @@
       "platforms": {
         "ios": false
       }
+    },
+    "continueWebActivity": {
+      "description": "Fired when the app is launched via a universal link (iOS) or app link (Android). This event allows the app to handle universal/app links opened in another app.",
+      "parameters": {
+        "webpageURL": {
+          "description": "The URL that was used to launch or resume the app, including path and query parameters.",
+          "type": "string"
+        }
+      }
     }
   },
   "methods": {

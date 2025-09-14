@@ -234,7 +234,8 @@ NativeObject.defineEvents(App.prototype, {
   terminate: {native: true},
   keyPress: {native: true},
   backNavigation: {native: true},
-  certificatesReceived: {native: true}
+  certificatesReceived: {native: true},
+  continueWebActivity: {native: true}
 });
 
 export function create() {
