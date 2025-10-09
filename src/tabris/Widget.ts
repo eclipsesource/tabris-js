@@ -57,6 +57,9 @@ abstract class Widget<TData extends object = any> extends NativeObject {
   padding!: BoxDimensionsObject & number;
   accessibilityHidden!: boolean;
   accessibilityLabel!: string;
+  accessibilityHint!: string;
+  accessibilityValue!: string;
+  accessibilityTraits!: string[];
 
   onResize!: Listeners<{bounds: Bounds}>;
   onBoundsChanged!: Listeners<{bounds: Bounds}>;
@@ -460,11 +463,38 @@ NativeObject.defineProperties(Widget.prototype, {
   },
   accessibilityHidden: {
     type: types.boolean,
-    default: false
+    nocache: true
   },
   accessibilityLabel: {
     type: types.string,
-    default: ''
+    nocache: true
+  },
+  accessibilityHint: {
+    type: types.string,
+    nocache: true
+  },
+  accessibilityValue: {
+    type: types.string,
+    nocache: true
+  },
+  accessibilityTraits: {
+    type: {
+      convert(value) {
+        if (Array.isArray(value)) {
+          return value.map(String);
+        } else if (typeof value === 'string') {
+          return [value];
+        } else if (value == null) {
+          return [];
+        }
+        throw new Error('accessibilityTraits must be a string or array of strings');
+      }
+    },
+    nocache: true
+  },
+  isAccessibilityElement: {
+    type: types.boolean,
+    nocache: true
   }
 });
 

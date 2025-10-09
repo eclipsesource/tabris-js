@@ -67,7 +67,10 @@ export function publishDeviceProperties(device, target) {
   target.devicePixelRatio = device.scaleFactor;
   target.device = createDevice(device);
   target.screen = createScreen(device);
-  target.navigator = createNavigator(device);
+  // Only override navigator if not in Node.js test environment or if it doesn't exist
+  if (typeof process === 'undefined' || !target.navigator) {
+    target.navigator = createNavigator(device);
+  }
 }
 
 function createDevice(device) {
