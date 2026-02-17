@@ -10,7 +10,7 @@ node('master') {
   }
 
   /* Requires the Docker Pipeline plugin to be installed */
-  docker.image('node:10-alpine').inside {
+  docker.image('node:24-alpine').inside {
 
     def scmInfo
 
@@ -39,7 +39,7 @@ node('master') {
         withCredentials([
           string(credentialsId: 'TABRIS_NPM_REGISTRY_AUTH_TOKEN', variable: 'NPM_TOKEN'),
         ]) {
-          sh 'echo $NPM_TOKEN > $HOME/.npmrc'
+          sh 'npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN'
           sh 'cd build/tabris && npm publish --tag nightly'
         }
       }
